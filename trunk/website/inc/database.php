@@ -28,7 +28,7 @@ NO_END;
 }
 
 
-$__database = new ExtendedMysqli("127.0.0.1", "maplestats", "maplederp", "maplestats");
+$__database = new ExtendedMysqli("stats.craftnet.nl", "maplestats", "maplederp", "maplestats");
 if ($__database->connect_errno != 0) {
 	die("<strong>Failed to connect to the MySQL server: ".$__database->connect_error." (errno: ".$__database->connect_errno.")</strong>");
 }
