@@ -71,6 +71,7 @@ if ($_loggedin):
 ?>
 				  <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Welcome back, <?php echo $_logindata['full_name']; ?></a>
 				  <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+				    <li id="fat-menu"><a href="/me/">Profile</a></li>
 					<li id="fat-menu"><a href="/my-characters">My Characters</a></li>
 					<li id="fat-menu"><a href="/logoff">Log off</a></li>
 				  </ul>

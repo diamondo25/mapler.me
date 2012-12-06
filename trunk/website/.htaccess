@@ -37,6 +37,7 @@ allow from 108.13.70.117 # tyler
 allow from 66.226.101.105 # tyler 2
 allow from 172.162.105.234 # tyler 3
 allow from 70.167.157.226 # tyler 4
+allow from 184.255.164.38 # tyler 6 wat.
 
 allow from localhost
 allow from 127.0.0.1
