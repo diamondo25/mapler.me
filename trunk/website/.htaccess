@@ -1,23 +1,30 @@
 <IfModule mod_rewrite.c>
-   Options +FollowSymLinks
-   Options +Indexes
-   RewriteEngine On
-   RewriteCond %{REQUEST_FILENAME} !-d 
-   RewriteCond %{REQUEST_FILENAME}\.php -f 
-   RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
-   
-      
-   # page rewrites
-   
-   RewriteRule ^developers/ api.php
-   RewriteRule ^intro/ about.php
-   
-   #image / ranking rewrites
-   
-   RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
-   RewriteRule ^stat/([^/]*)$ /actions/character_stats.php?name=$1 [L]
-   RewriteRule ^test/([^/]*)$ /actions/character_test.php?name=$1 [L]
-   
+	Options +FollowSymLinks
+	Options +Indexes
+	RewriteEngine On
+	
+	# name.mapler.me rewrites
+	
+	RewriteCond %{HTTP_HOST} ^(.*)\.mapler\.me$ [NC]
+	RewriteCond %1 !^www$ [NC]
+	RewriteRule ^([^/]+)/?$ /me/index.php?username=%1&fakedirectory=$1 [L]
+	
+	RewriteCond %{REQUEST_FILENAME} !-d 
+	RewriteCond %{REQUEST_FILENAME}\.php -f 
+	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
+	
+	
+		
+	# page rewrites
+	
+	RewriteRule ^developers/ api.php
+	RewriteRule ^intro/ about.php
+	
+	#image / ranking rewrites
+	
+	RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
+	RewriteRule ^stat/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+	RewriteRule ^test/([^/]*)$ /actions/character_test.php?name=$1 [L]
 </IfModule>
 
 Options -Indexes
