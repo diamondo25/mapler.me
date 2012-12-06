@@ -1,4 +1,4 @@
-<?php include('inc/header.php'); ?>
+<?php include_once('inc/header.php'); ?>
 
 <?php
 if (!$_loggedin):
@@ -14,4 +14,4 @@ else:
 endif;
 ?>
       
-<?php include('inc/footer.php'); ?>
+<?php include_once('inc/footer.php'); ?>

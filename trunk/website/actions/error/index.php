@@ -1,4 +1,4 @@
-<?php include('../../inc/header.php'); ?>
+<?php include_once('../../inc/header.php'); ?>
 
 <center><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/blackmage.gif"/></center>
       <?php
@@ -70,4 +70,4 @@ echo($errordesc);
 
 ?>
       
-<?php include('../../inc/footer.php'); ?>
+<?php include_once('../../inc/footer.php'); ?>

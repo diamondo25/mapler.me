@@ -1,5 +1,5 @@
 <?php
-include('inc/header.php');
+include_once('inc/header.php');
 error_reporting(E_ALL);
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -51,5 +51,5 @@ else {
 	$form->End();
 }
 
-include('inc/footer.php');
+include_once('inc/footer.php');
 ?>

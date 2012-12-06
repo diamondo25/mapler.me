@@ -1,6 +1,6 @@
 <?php
-include('../inc/database.php');
-include("job_list.php");
+include_once('../inc/database.php');
+include_once("job_list.php");
 $is_include = isset($_HERP);
 
 if (!$is_include) {

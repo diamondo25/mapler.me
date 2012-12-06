@@ -1,7 +1,7 @@
 <?php
 session_start();
-include('functions.php');
-include('database.php');
+include_once('functions.php');
+include_once('database.php');
 
 
 // Initialize Login Data

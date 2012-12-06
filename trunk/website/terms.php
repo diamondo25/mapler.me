@@ -1,4 +1,4 @@
-<?php include('inc/header.php'); ?>
+<?php include_once('inc/header.php'); ?>
 
 	<div class="featurette">
         
@@ -73,4 +73,4 @@
     
           </div>
       
-<?php include('inc/footer.php'); ?>
+<?php include_once('inc/footer.php'); ?>

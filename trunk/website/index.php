@@ -1,4 +1,4 @@
-<?php include('inc/header.php'); ?>
+<?php include_once('inc/header.php'); ?>
       <div class="jumbotron">
         
         <div id="myCarousel" class="carousel slide">
@@ -23,4 +23,4 @@
 	<a class="btn btn-small" href="/register" role="button" style="">What are you waiting for? Sign up!</a>
       </div>
 
-<?php include('inc/footer.php'); ?>
+<?php include_once('inc/footer.php'); ?>

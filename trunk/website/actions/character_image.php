@@ -1,5 +1,5 @@
 <?php
-include('../inc/database.php');
+include_once('../inc/database.php');
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";
@@ -96,7 +96,7 @@ $id = uniqid();
 
 
 $_HERP = true;
-include('get_char_info.php');
+include_once('get_char_info.php');
 $json_data = json_decode($json_data, true);
 
 if ($debug)

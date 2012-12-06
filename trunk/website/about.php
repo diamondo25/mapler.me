@@ -1,4 +1,4 @@
-<?php include('inc/header.php'); ?>
+<?php include_once('inc/header.php'); ?>
 
 	<div class="featurette">
         <img class="featurette-image pull-right" src="http://i.imm.io/NXWz.png" width="50%">
@@ -23,4 +23,4 @@
 
       </div>
       
-<?php include('inc/footer.php'); ?>
+<?php include_once('inc/footer.php'); ?>

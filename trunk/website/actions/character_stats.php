@@ -1,6 +1,6 @@
 <?php
-include('../inc/database.php');
-include('job_list.php');
+include_once('../inc/database.php');
+include_once('job_list.php');
 
 $font = "arial.ttf";
 $font_size = "9.25";
