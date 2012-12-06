@@ -1,0 +1,50 @@
+<IfModule mod_rewrite.c>
+   Options +FollowSymLinks
+   Options +Indexes
+   RewriteEngine On
+   RewriteCond %{REQUEST_FILENAME} !-d 
+   RewriteCond %{REQUEST_FILENAME}\.php -f 
+   RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
+   
+      
+   # page rewrites
+   
+   RewriteRule ^developers/ api.php
+   RewriteRule ^intro/ about.php
+   
+   #image / ranking rewrites
+   
+   RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
+   RewriteRule ^stat/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+   RewriteRule ^test/([^/]*)$ /actions/character_test.php?name=$1 [L]
+   
+</IfModule>
+
+Options -Indexes
+
+
+order deny,allow
+deny from all
+allow from 70.167.157.226
+allow from 172.129.44.168
+allow from 184.231.111.128
+allow from 173.60.88.207
+allow from 173.58.231.23
+allow from 64.46.28.83
+allow from 83.80.148.175 # e.craftnet.nl
+allow from 82.93.95.86 # Erwin work
+allow from 108.13.70.117 # tyler
+allow from 66.226.101.105 # tyler 2
+allow from 172.162.105.234 # tyler 3
+
+allow from maplestory.nexon.net
+allow from nexon.net
+allow from forum2.nexon.net
+allow from forum2.maplestory.nexon.net
+allow from e.craftnet.nl
+
+ErrorDocument 400 /actions/error/index.php
+ErrorDocument 401 /actions/error/index.php
+ErrorDocument 403 /actions/error/index.php
+ErrorDocument 404 /actions/error/index.php
+ErrorDocument 500 /actions/error/index.php

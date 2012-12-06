@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+   Options +FollowSymLinks
+   Options +Indexes
+   RewriteEngine On
+   RewriteCond %{REQUEST_FILENAME} !-d 
+   RewriteCond %{REQUEST_FILENAME}\.php -f 
+   RewriteRule ^(.*)$ $1.php
+   RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
+</IfModule>
+
+Options -Indexes
