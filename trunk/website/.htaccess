@@ -7,6 +7,7 @@
 	
 	RewriteCond %{HTTP_HOST} ^(.*)\.mapler\.me$ [NC]
 	RewriteCond %1 !^www$ [NC]
+	RewriteCond %1 !^direct$ [NC]
 	RewriteRule ^([^/]+)/?$ /me/index.php?username=%1&fakedirectory=$1 [L]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d 
