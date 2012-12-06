@@ -1,4 +1,5 @@
 <?php
+include('../inc/database.php');
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";
@@ -50,22 +51,12 @@ function LoadPNG($imgname)
 }
 
 function calculateWidth($name) {
-	global $font;
-	global $font_size;
-	$width = 7;
-	$bbox = imagettfbbox($font_size, 0, $font, $name);
-	$width += abs($bbox[4] - $bbox[0]);
-	return $width;
-}
-
-function imagefillroundedrect($im, $x, $y, $cx, $cy, $rad, $col) {
-	imagefilledrectangle($im,$x,$y+$rad,$cx,$cy-$rad,$col);
-	imagefilledrectangle($im,$x+$rad,$y,$cx-$rad,$cy,$col);
-	$dia = $rad*2;
-	imagefilledellipse($im, $x+$rad, $y+$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $x+$rad, $cy-$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $cx-$rad, $cy-$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $cx-$rad, $y+$rad, $rad*2, $dia, $col);
+        global $font;
+        global $font_size;
+        $width = 7;
+        $bbox = imagettfbbox($font_size, 0, $font, $name);
+        $width += abs($bbox[4] - $bbox[0]);
+        return $width;
 }
 
 
@@ -90,17 +81,19 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-
-mysql_connect("127.0.0.1", "maplestats", "maplederp") or die("MYSQL ERROR: ".mysql_error());
-mysql_select_db("maplestats") or die("MYSQL ERROR: ".mysql_error());
-
-$q2 = mysql_query("SELECT id FROM cache WHERE charactername = '".mysql_real_escape_string($charname)."' AND type = 'info' AND DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW()");
-if (mysql_num_rows($q2) == 1) {
-	$row = mysql_fetch_assoc($q2);
-	readfile('../cache/'.$row['id'].'.png');
-	die();
+$q2 = $__database->query("SELECT id FROM cache WHERE charactername = '".$__database->real_escape_string($charname)."' AND type = 'info' AND DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW()");
+if ($q2->num_rows == 1) {
+	$row = $q2->fetch_assoc();
+	$filename = '../cache/'.$row['id'].'.png';
+	if (file_exists($filename)) {
+		readfile($filename);
+		die();
+	}
 }
 $id = uniqid();
+
+
+
 
 $_HERP = true;
 include('get_char_info.php');
@@ -136,11 +129,6 @@ if ($got_pet) {
 	$pet_image = LoadGif($json_data["images"]["Pet"]);
 
 	imagecopymerge($image, $pet_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
-	
-	//$petname = "DERP!";
-	//$startWidth = ($charpos_x + (96 / 2)) - calculateWidth($petname) / 2;
-	//$endWidth = ($charpos_x + (96 / 2)) + calculateWidth($petname) / 2;
-	//ImageTTFText($image, 9, 0, $startWidth, ($charpos_y + 96 + 190), imagecolorallocate($image, 255, 255, 255), $font, $petname);
 }
 
 $character_image = LoadGif($json_data["images"]["Character"]);
@@ -170,13 +158,9 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 
 
 
-if (!$debug) {
-	$filename = '../cache/'.$id.'.png';
+imagepng($image, '../cache/'.$id.'.png');
+imagedestroy($image);
 
-	imagepng($image, $filename);
-	imagedestroy($image);
+$__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charname)."', 'info', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()");
 
-	mysql_query("INSERT INTO cache VALUES ('".mysql_real_escape_string($charname)."', 'info', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()") or die(mysql_error());
-
-}
 ?>

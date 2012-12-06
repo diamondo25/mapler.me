@@ -1,4 +1,5 @@
 <?php
+include('../inc/database.php');
 include("job_list.php");
 $is_include = isset($_HERP);
 
@@ -10,9 +11,6 @@ $len = strlen($charname);
 if ($len < 4 || $len > 12) {
 	die();
 }
-
-mysql_connect("127.0.0.1", "maplestats", "maplederp") or die("MYSQL ERROR: ".mysql_error());
-mysql_select_db("maplestats") or die("MYSQL ERROR: ".mysql_error());
 
 function RequestData($rankingpage, $onlyrankdata = true) {
 	global $charname;
@@ -27,12 +25,8 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 
 	for ($i = 1; $i < sizeof($matches[0]); $i++) {
 		$match = $matches[0][$i];
-		//echo "----------\r\n";
-		//print_r($match);
+		
 		preg_match_all('/<td(.*?)>(.*?)<\/td>/s', $match, $columns);
-		
-		
-	//print_r($columns);
 		
 		$name = trim($columns[2][2]);
 		
@@ -41,9 +35,6 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 		
 		if ($onlyrankdata) {
 			if (strpos($rankingpage, "fame") !== false) {
-				//print_r($columns);
-				//preg_match('/<td class="level-move">(.*?)(?P<amount>\d*)(.*?)<\/div>/s', $columns[2][5], $rankdata);
-				//print_r($rankdata);
 				$ret = array(
 					"rank" => (int)$rank,
 					"amount" => (int)trim($columns[2][5]));
@@ -61,7 +52,6 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 		else {
 		
 			preg_match_all('/<img (.*?)src=\'(.*?)\'(.*?)\/>/s', $columns[2][1], $image_data);
-			//print_r($image_data);
 			
 			$image = array();
 			for ($j = 0; $j < sizeof($image_data[2]); $j++) {
@@ -83,10 +73,8 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 			
 			
 			preg_match('/(?P<level>\d+)<br\/>\((?P<exp>\d+)\)/s', trim($columns[2][5]), $leveldata);
-			//print_r($leveldata);
 			
 			preg_match('/<div class="rank-(?P<change>\w+)">(?P<rank>\d*)(.*?)<\/div>/s', $columns[2][5], $rankdata);
-			//print_r($rankdata);
 			
 			$ret = array(
 				"name" => $name,
@@ -99,7 +87,6 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 				"move_change" => $rankdata['change'],
 				"images" => $image);
 			
-			//print_r($columns);
 		}
 		break;
 	}
@@ -107,13 +94,13 @@ function RequestData($rankingpage, $onlyrankdata = true) {
 }
 
 function SaveData($result, $exists) {
-	global $is_include, $charname;
+	global $is_include, $charname, $__database;
 	
 	if ($exists) {
-		mysql_query("UPDATE info_requests SET last_check = NOW(), data = '".mysql_real_escape_string($result)."' WHERE charactername = '".mysql_real_escape_string($charname)."'") or die("MYSQL ERROR: ".mysql_error());
+		$__database->query("UPDATE info_requests SET last_check = NOW(), data = '".$__database->real_escape_string($result)."' WHERE charactername = '".$__database->real_escape_string($charname)."'");
 	}
 	else {
-		mysql_query("INSERT INTO info_requests VALUES ('".mysql_real_escape_string($charname)."', NOW(), 0, '".mysql_real_escape_string($result)."')") or die("MYSQL ERROR: ".mysql_error());
+		$__database->query("INSERT INTO info_requests VALUES ('".$__database->real_escape_string($charname)."', NOW(), 0, '".$__database->real_escape_string($result)."')");
 	}
 	if ($is_include) {
 		global $json_data;
@@ -125,14 +112,14 @@ function SaveData($result, $exists) {
 }
 
 // Check if there's a request done last day
-$q = mysql_query("SELECT data, blocked, DATE_ADD(last_check, INTERVAL 1 DAY) > NOW(), UNIX_TIMESTAMP(NOW()) FROM info_requests WHERE charactername = '".mysql_real_escape_string($charname)."' LIMIT 1") or die("MYSQL ERROR: ".mysql_error());
+$q = $__database->query("SELECT data, blocked, DATE_ADD(last_check, INTERVAL 1 DAY) > NOW(), UNIX_TIMESTAMP(NOW()) FROM info_requests WHERE charactername = '".$__database->real_escape_string($charname)."' LIMIT 1");
 
 $exists = false;
 $done = false;
 $last_update = time();
-if (mysql_num_rows($q) == 1) {
+if ($q->num_rows == 1) {
 	$exists = true;
-	$row = mysql_fetch_array($q);
+	$row = $q->fetch_array();
 	$last_update = $row[3];
 	if ($row[2] == 1) { // Not old enough
 		$result = "";
@@ -153,14 +140,14 @@ if (mysql_num_rows($q) == 1) {
 }
 
 if (!$done) {
-	$q = mysql_query("SELECT c.name, c.level, c.exp, c.job, c.fame, w.world_name AS worldname FROM characters c LEFT JOIN world_data w ON w.world_id = c.world_id WHERE c.name = '".mysql_real_escape_string($charname)."'");
+	$q = $__database->query("SELECT c.name, c.level, c.exp, c.job, c.fame, w.world_name AS worldname FROM characters c LEFT JOIN world_data w ON w.world_id = c.world_id WHERE c.name = '".$__database->real_escape_string($charname)."'");
 	
 	$overall = RequestData("overall-ranking/legendary", false);
 	
 	if (sizeof($overall) == 0) {
 		// Check DB for 'some' info
-		if (mysql_num_rows($q) > 0) {
-			$row = mysql_fetch_array($q);
+		if ($q->num_rows > 0) {
+			$row = $__database->fetch_array($q);
 			// Load values
 			$images = array(
 				"Character" => "img/no-character.gif",
@@ -201,8 +188,8 @@ if (!$done) {
 		$jobname = strtolower($overall["job"]);
 		
 		
-		if (mysql_num_rows($q) > 0) {
-			$row = mysql_fetch_array($q);
+		if ($q->num_rows > 0) {
+			$row = $__database->fetch_array($q);
 			$overall["job"] = $job_names[$row['job']]; // Correct jobname
 		}
 		

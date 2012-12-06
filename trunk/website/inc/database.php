@@ -1,4 +1,6 @@
 <?php
+if (isset($__database)) return;
+
 class ExtendedMysqli extends mysqli {
 	public $last_query = "";
 	public $query_count = 0;
