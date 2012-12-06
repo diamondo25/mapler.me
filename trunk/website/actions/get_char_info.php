@@ -189,7 +189,7 @@ if (!$done) {
 		
 		
 		if ($q->num_rows > 0) {
-			$row = $__database->fetch_array($q);
+			$row = $q->fetch_array();
 			$overall["job"] = $job_names[$row['job']]; // Correct jobname
 		}
 		
