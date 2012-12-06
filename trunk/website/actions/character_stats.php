@@ -41,7 +41,6 @@ if ($q->num_rows == 0) {
 	imagedestroy($im);
 	die();
 }
-$q->free();
 
 
 $q2 = $__database->query("SELECT id FROM cache WHERE charactername = '".$__database->real_escape_string($charname)."' AND type = 'stats' AND DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW()");
@@ -55,7 +54,7 @@ if ($q2->num_rows == 1) {
 }
 $q2->free();
 
-$row = $q2->fetch_assoc();
+$row = $q->fetch_assoc();
 
 $id = uniqid().($row['ID'] % 10);
 
@@ -98,6 +97,7 @@ $filename = '../cache/'.$id.'.png';
 imagepng($image, $filename);
 imagedestroy($image);
 
+$q->free();
 $__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charname)."', 'stats', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()");
 
 ?>
