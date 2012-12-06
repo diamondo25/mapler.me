@@ -147,7 +147,7 @@ if (!$done) {
 	if (sizeof($overall) == 0) {
 		// Check DB for 'some' info
 		if ($q->num_rows > 0) {
-			$row = $__database->fetch_array($q);
+			$row = $q->fetch_array();
 			// Load values
 			$images = array(
 				"Character" => "img/no-character.gif",
