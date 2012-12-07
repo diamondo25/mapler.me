@@ -1,4 +1,5 @@
-	<footer>
+	<div style="clear:both;"></div>
+	<footer style="">
         <p>
         <a href="/intro/">About</a>
         <a href="/developers/">Developers / API</a>

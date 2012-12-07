@@ -29,17 +29,6 @@
       .marketing p + h4 {
         margin-top: 28px;
       }
-      
-      .snow {
-	      position: fixed;
-	      bottom: -1px;
-	      left: -20px;
-	      right: -20px;
-	      width: 150%;
-	      background: url('http://puu.sh/1sB0L');
-	      height: 34px;
-	      z-index: 9001;
-	  }
 	  
 	  .login .controls {
 		  margin-left: 0px;

@@ -1,26 +1,13 @@
-<?php include_once('inc/header.php'); ?>
-      <div class="jumbotron">
-        
-        <div id="myCarousel" class="carousel slide">
-		  <!-- Carousel items -->
-		  <div class="carousel-inner">
-			<div class="active item"><h1>Are you ready to become a better mapler?</h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front1.gif" class="pull-right"/>Join hundreds of other maplers and keep track of your progress in-game, as well as socialize with your buddies in-game!</p>
-				</div>
-			<div class="item"><h1>Keep track of your own Maple 'Story'!</h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front3.gif" class="pull-left"/>Mapler.me records everything from your experience, stats, and even past looks!<br/>Never forget a past look again!</p>
-			 </div>
-			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="#">works.</a></h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
-					We are partnered with Nexon America, and is built with perfection.
-				</p></div>
-		  </div>
-		  <!-- Carousel nav -->
-		  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-		</div>
+<?php include_once('../inc/header.php'); ?>
 
-	<a class="btn btn-small" href="/register" role="button" style="">What are you waiting for? Sign up!</a>
-      </div>
+	<div class="row">
+	<div class="span2">
+	      <img src="http://msavatar1.nexon.net/Character/JAOLKKPKABLFHGLCGKHLEKMOBDJBKGEJOHFLABIFNENAOOFNHDBPHCDIOKEPKFKNDCCEBHGNHHAPKJDKMFECCHAPIBDBLBGE.gif" class="img-polaroid">
+	</div>
+	<div class="span10">
+	<p class="lead"><?php echo $_logindata['full_name']; ?> <span class="muted">(<?php echo $_logindata['nickname']; ?>)</span></p>
+	<?php echo $_logindata['bio']; ?>
+	</div>
+	</div>
 
-<?php include_once('inc/footer.php'); ?>
+<?php include_once('../inc/footer.php'); ?>

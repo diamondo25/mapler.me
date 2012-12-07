@@ -30,7 +30,7 @@ if (isset($_SESSION['login_data'])) {
         padding-top: 20px;
       }
     </style>
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/inc/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -41,7 +41,7 @@ if (isset($_SESSION['login_data'])) {
 
   <body>
 
-    <div class="container-narrow">
+    <div class="container">
 
 		<div class="navbar">
 		  <div class="navbar-inner">
@@ -72,7 +72,7 @@ if ($_loggedin):
 				  <a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Welcome back, <?php echo $_logindata['full_name']; ?></a>
 				  <ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
 				    <li id="fat-menu"><a href="/me/">Profile</a></li>
-					<li id="fat-menu"><a href="/my-characters">My Characters</a></li>
+					<li id="fat-menu"><a href="/me/my-characters">My Characters</a></li>
 					<li id="fat-menu"><a href="/logoff">Log off</a></li>
 				  </ul>
 <?php

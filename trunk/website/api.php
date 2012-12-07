@@ -9,7 +9,7 @@ if (!$_loggedin):
 <?php
 else:
 ?>
-
+hi
 <?php
 endif;
 ?>
