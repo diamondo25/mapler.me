@@ -3,8 +3,8 @@ include_once('../inc/header.php');
 ?>
 <script>
 function ChangeImage(id, name) {
-	document.getElementById('image_' + id).src = "http://<?php echo $domain; ?>/actions/character_image.php?name=" + name;
-	document.getElementById('stats_' + id).src = "http://<?php echo $domain; ?>/actions/character_stats.php?name=" + name;
+	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/actions/character_image.php?name=" + name;
+	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/actions/character_stats.php?name=" + name;
 }
 </script>
 <?php
@@ -68,8 +68,8 @@ while ($row = $q->fetch_row()) {
 ?>
 	<tr>
 		<td><?php echo $row[1]; ?></td>
-		<td><img src="actions/img/char_bg.png" alt="Image of <?php echo $row[1]; ?>" id="image_<?php echo $row[0]; ?>" width="271px" height="162px" /></td>
-		<td><img src="actions/img/stat_window.png" alt="Statistics of <?php echo $row[1]; ?>" id="stats_<?php echo $row[0]; ?>" width="192px" height="345px" /></td>
+		<td><img src="//<?php echo $domain; ?>/inc/img/char_bg.png" alt="Image of <?php echo $row[1]; ?>" id="image_<?php echo $row[0]; ?>" width="271px" height="162px" /></td>
+		<td><img src="//<?php echo $domain; ?>/inc/img/stat_window.png" alt="Statistics of <?php echo $row[1]; ?>" id="stats_<?php echo $row[0]; ?>" width="192px" height="345px" /></td>
 	</tr>
 <?php
 }

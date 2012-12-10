@@ -63,7 +63,7 @@ $image = imagecreatetruecolor(192, 345);
 imagealphablending($image, false);
 imagesavealpha($image, true);
 
-$bg_image = imagecreatefrompng("img/stat_window.png");
+$bg_image = imagecreatefrompng("../inc/img/stat_window.png");
 imagecopyresampled($image, $bg_image, 0, 0, 0, 0, 192, 345, 192, 345);
 imagealphablending($image, true);
 

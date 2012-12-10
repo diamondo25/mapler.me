@@ -2,6 +2,14 @@
 include_once('inc/header.php');
 error_reporting(E_ALL);
 $error = null;
+if ($_loggedin) {
+?>
+<meta http-equiv="refresh" content="3;URL='/'" />
+<p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+<?php
+	include_once('inc/footer.php');
+	die(); // Prevent error after login
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!isset($_POST['username'], $_POST['password'])) {
@@ -17,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$encrypted = GetPasswordHash($password, $row['salt']);
 			if ($encrypted == $row['password']) {
-				
-				ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strrpos($_SERVER['SERVER_NAME'], ".", -5)));
 				$_logindata = $_SESSION['login_data'] = $row;
 				
 				$_loggedin = true;
@@ -37,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($_loggedin) {
 ?>
 <meta http-equiv="refresh" content="3;URL='/'" />
-<p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
 }
 else {

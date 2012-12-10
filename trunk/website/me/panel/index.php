@@ -50,25 +50,25 @@ include_once('../../inc/header.php');
 		<p class="lead">Memberships <sup>(Badges and Memberships)</sup></p>
 		
 			<a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             
             <a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             
             <a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             
             <a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             <a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             <a href="#" class="thumbnail span2">
-            	<img data-src="http://placehold.it/140" src="http://placehold.it/140">
+            	<img data-src="//placehold.it/140" src="//placehold.it/140">
             </a>
             
 	</div>

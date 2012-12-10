@@ -54,14 +54,14 @@ $errorname = 'Error 500 - Server Configuration Error';
 $errordesc = '<h1>Server Configuration Error</h1>
   <h2>Error Type: 500</h2>
   <p>
-  The URL that you requested &#8212; <a href="http://'.$server_name.$requested_url.'">http://'.$server_name.$requested_url.'</a> &#8212; resulted in a server configuration error. It is possible that the condition causing the problem will be gone by the time you finish reading this.</p>';
+  The URL that you requested &#8212; <a href="//'.$server_name.$requested_url.'">http://'.$server_name.$requested_url.'</a> &#8212; resulted in a server configuration error. It is possible that the condition causing the problem will be gone by the time you finish reading this.</p>';
 break;
 
 # Unknown error
 default:
 $errorname = 'Unknown Error';
 $errordesc = '<h2>Unknown Error</h2>
-  <p>The URL that you requested &#8212; <a href="http://'.$server_name.$requested_url.'">http://'.$server_name.$requested_url.'</a> &#8212; resulted in an unknown error. It is possible that the condition causing the problem will be gone by the time you finish reading this. </p>';
+  <p>The URL that you requested &#8212; <a href="//'.$server_name.$requested_url.'">http://'.$server_name.$requested_url.'</a> &#8212; resulted in an unknown error. It is possible that the condition causing the problem will be gone by the time you finish reading this. </p>';
 
 }
 

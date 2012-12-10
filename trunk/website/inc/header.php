@@ -37,6 +37,7 @@ elseif (strpos($_SERVER['SERVER_NAME'], "website") !== false) {
 }
 
 $subdomain = trim($subdomain);
+echo $subdomain." - ".$domain;
 
 if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
 	// Try to get userdata... Else: error!
@@ -66,19 +67,19 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="http://<?php echo $domain; ?>/inc/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://<?php echo $domain; ?>/inc/css/style.css" rel="stylesheet">
-    <link href="http://thebluecorsair.com/includes/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="//<?php echo $domain; ?>/inc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//<?php echo $domain; ?>/inc/css/style.css" rel="stylesheet">
+    <link href="//thebluecorsair.com/includes/font-awesome/css/font-awesome.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 20px;
       }
     </style>
-    <link href="http://<?php echo $domain; ?>/inc/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="//<?php echo $domain; ?>/inc/css/bootstrap-responsive.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
   </head>
@@ -98,9 +99,9 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
 						<span class="icon-bar"></span>
 					</a>
 
-					<img src="http://<?php echo $domain; ?>/inc/img/logo.gif" class="pull-left" style="position:relative;right:10px;top:3px;"/>
+					<img src="//<?php echo $domain; ?>/inc/img/logo.gif" class="pull-left" style="position:relative;right:10px;top:3px;"/>
 					<!-- Be sure to leave the brand out there if you want it shown -->
-					<a class="brand" href="http://<?php echo $domain; ?>/"><strong>Mapler</strong>.me</a>
+					<a class="brand" href="//<?php echo $domain; ?>/"><strong>Mapler</strong>.me</a>
 
 					<!-- Everything you want hidden at 940px or less, place within here -->
 					<div class="nav-collapse collapse">
@@ -108,13 +109,13 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
 <?php
 if (isset($__url_userdata)):
 ?>
-						<li><a href="http://<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_userdata['nickname']; ?></a></li>
-						<li><a href="http://<?php echo $subdomain.".".$domain; ?>/my-characters">Characters</a></li>
+						<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_userdata['nickname']; ?></a></li>
+						<li><a href="//<?php echo $subdomain.".".$domain; ?>/my-characters">Characters</a></li>
 <?php
 else:
 ?>
-						<li><a href="http://<?php echo $domain; ?>/intro/">About</a></li>
-						<li><a href="http://<?php echo $domain; ?>/developers/">Developers</a></li>
+						<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
+						<li><a href="//<?php echo $domain; ?>/developers/">Developers</a></li>
 <?php
 endif;
 ?>
@@ -126,16 +127,16 @@ if ($_loggedin):
 ?>
 							<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Welcome back, <?php echo $_logindata['full_name']; ?></a>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-								<li id="fat-menu"><a href="http://<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>">Profile</a></li>
-								<li id="fat-menu"><a href="http://<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
-								<li id="fat-menu"><a href="http://<?php echo $domain; ?>/logoff">Log off</a></li>
+								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>">Profile</a></li>
+								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
 							</ul>
 <?php
 else:
 ?>
 							<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Login / Register<b class="caret"></b></a>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-								<form class="form-horizontal login" style="margin:10px;" action="http://<?php echo $domain; ?>/login" method="post">
+								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login" method="post">
 								<p>Login with your <b>Mapler.me</b> account!</p>
 								<div class="control-group">
 									<div class="controls">

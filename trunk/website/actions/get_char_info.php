@@ -15,7 +15,7 @@ if ($len < 4 || $len > 12) {
 function RequestData($rankingpage, $onlyrankdata = true) {
 	global $charname;
 	$ret = array();
-	$data = file_get_contents("http://maplestory.nexon.net/rankings/".$rankingpage."?pageIndex=1&character_name=".$charname."&search=true");
+	$data = @file_get_contents("http://maplestory.nexon.net/rankings/".$rankingpage."?pageIndex=1&character_name=".$charname."&search=true");
 
 
 
@@ -150,7 +150,7 @@ if (!$done) {
 			$row = $q->fetch_array();
 			// Load values
 			$images = array(
-				"Character" => "img/no-character.gif",
+				"Character" => "NOT-FOUND",
 				"Pet" => "HERP-HHJLHDFFEFDGELLNFOPOKJFPLJIJIOFJGKBFIENAOLFLCACMGPEDJLOKHBLCGMBN-ignore"
 			);
 			$overall = array(

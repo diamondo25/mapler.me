@@ -103,8 +103,10 @@ if ($debug)
 	print_r($json_data);
 
 $ok = !isset($json_data["error"]);
+if ($json_data["images"]["Character"] == "NOT-FOUND")
+	$json_data["images"]["Character"] = "../inc/img/no-character.gif";
 if (!$ok) {
-	$json_data["images"]["Character"] = "img/no-character.gif";
+	$json_data["images"]["Character"] = "../inc/img/no-character.gif";
 	$got_pet = false;
 }
 else {
@@ -115,7 +117,7 @@ $image = imagecreatetruecolor(271, 162);
 imagealphablending($image, false);
 imagesavealpha($image, true);
 
-$bg_image = imagecreatefrompng("img/char_bg.png");
+$bg_image = imagecreatefrompng("../inc/img/char_bg.png");
 imagecopyresampled($image, $bg_image, 0, 0, 0, 0, 271, 386, 271, 386);
 imagealphablending($image, true);
 
