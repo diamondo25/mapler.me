@@ -3,7 +3,7 @@ include_once('inc/header.php');
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (!CheckArrayOf($_POST, array("username", "password", "fullname", "email", "nickname"), $errorList)) {
+	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname"), $errorList)) {
 		$error = "The input you've entered has some errors. Please correct these errors and try again.";
 	}
 	else {
@@ -11,6 +11,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 			$error = "The email you entered is invalid.";
 			$errorList["email"] = true;
+		}
+		
+		if (count($errorList) == 0) {
+			// Check ToU
+			$notou = !isset($_POST['tou']);
+			if ($notou) {
+				$error = "You didn't accept the ToU";
+				$errorList['ToU'] = true;
+			}
+		}
+		
+		if (count($errorList) == 0) {
+			// Check passwords
+			if ($_POST['password'] != $_POST['password2']) {
+				$error = "Your passwords didn't match.";
+				$errorList['password'] = true;
+			}
 		}
 		
 		if (count($errorList) == 0) {
@@ -86,6 +103,7 @@ else {
 	$form = new Form('', 'form-horizontal');
 	$form->AddBlock('Username', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
+	$form->AddBlock('Password (again)', 'password2', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->AddEmptyBlock();
 	$form->AddBlock('Full name', 'fullname', (isset($errorList['fullname']) ? 'error' : ''), 'text', @$_POST['fullname']);
 	$form->AddBlock('Nickname', 'nickname', (isset($errorList['nickname']) ? 'error' : ''), 'text', @$_POST['nickname']);

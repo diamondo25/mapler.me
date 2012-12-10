@@ -3,14 +3,7 @@
 	Options +Indexes
 	RewriteEngine On
 	
-	# name.mapler.me rewrites
-	
-	RewriteCond %{HTTP_HOST} ^(.*)\.mapler\.me$ [NC]
-	RewriteCond %1 !^www$ [NC]
-	RewriteCond %1 !^direct$ [NC]
-	RewriteRule ^([^/]+)/?$ /me/index.php?username=%1&fakedirectory=$1 [L]
-	
-	RewriteCond %{REQUEST_FILENAME} !-d 
+	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME}\.php -f 
 	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
 	
@@ -31,6 +24,7 @@
 Options -Indexes
 
 
+
 order deny,allow
 deny from all
 allow from 70.167.157.226
@@ -41,6 +35,7 @@ allow from 173.58.231.23
 allow from 64.46.28.83
 allow from 83.80.148.175 # e.craftnet.nl
 allow from 82.93.95.86 # Erwin work
+allow from 94.210.57.36 # Erwin's friend
 allow from 108.13.70.117 # tyler
 allow from 66.226.101.105 # tyler 2
 allow from 172.162.105.234 # tyler 3

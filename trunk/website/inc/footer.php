@@ -1,8 +1,8 @@
 	<div style="clear:both;"></div>
 	<footer style="">
         <p>
-        <a href="/intro/">About</a>
-        <a href="/developers/">Developers / API</a>
+        <a href="http://<?php echo $domain; ?>/intro/">About</a>
+        <a href="http://<?php echo $domain; ?>/developers/">Developers / API</a>
         <span style="color:#333;">© 2012-2013 Mapler.me</span> – In partnership with <a href="http://nexon.net/" style="margin:0;">Nexon America</a>
 		</p>        
       </footer>
@@ -13,7 +13,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
-    <script src="http://stats.craftnet.nl/inc/js/bootstrapall.js"></script>
+    <script src="http://<?php echo $domain; ?>/inc/js/bootstrapall.js"></script>
 
 </body>
 </html>

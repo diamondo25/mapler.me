@@ -2,6 +2,7 @@
 include_once('inc/header.php');
 error_reporting(E_ALL);
 $error = null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!isset($_POST['username'], $_POST['password'])) {
 		$error = "Username or password not set";
@@ -16,6 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$encrypted = GetPasswordHash($password, $row['salt']);
 			if ($encrypted == $row['password']) {
+				
+				ini_set('session.cookie_domain', substr($_SERVER['SERVER_NAME'], strrpos($_SERVER['SERVER_NAME'], ".", -5)));
 				$_logindata = $_SESSION['login_data'] = $row;
 				
 				$_loggedin = true;
@@ -25,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		}
 		else {
-			$error = "Unknown account!";
+			$error = "Unknown username!";
 		}
 		$query->free(); // Clear dem mem up
 	}

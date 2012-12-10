@@ -158,6 +158,7 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 
 
 
+imagepng($image);
 imagepng($image, '../cache/'.$id.'.png');
 imagedestroy($image);
 
