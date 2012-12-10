@@ -86,8 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($_loggedin) {
 ?>
-<meta http-equiv="refresh" content="1;URL='/'" />
-You'll be redirected to the main page in 1 second. If not, <a href="/">click here</a>.
+<meta http-equiv="refresh" content="3;URL='/'" />
+<p class="lead alert alert-danger">You are already registered! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+
 <?php
 }
 else {

@@ -30,6 +30,12 @@ elseif (strpos($_SERVER['SERVER_NAME'], "mplr.e.craftnet.nl") !== false) {
 	$domain = "mplr.e.craftnet.nl";
 }
 
+elseif (strpos($_SERVER['SERVER_NAME'], "website") !== false) {
+	// SOMETHING.website << Local Testing Tyler
+	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".website:404"));
+	$domain = "website:404";
+}
+
 $subdomain = trim($subdomain);
 
 if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
