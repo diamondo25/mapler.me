@@ -36,7 +36,8 @@ LEFT JOIN
 WHERE 
 	acc.username = '".$__database->real_escape_string($__url_userdata['username'])."' 
 ORDER BY 
-	chr.world_id ASC
+	chr.world_id ASC,
+	chr.level DESC
 ");
 
 if ($q->num_rows == 0) {
