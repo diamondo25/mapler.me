@@ -129,6 +129,7 @@ if ($_loggedin):
 							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
 								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>">Profile</a></li>
 								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/panel/">Settings</a></li>
 								<li id="fat-menu"><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
 							</ul>
 <?php
