@@ -1,0 +1,61 @@
+# Test case @ home. note the session.cookie_domain
+# Don't forget NameVirtualHost
+
+NameVirtualHost *:80
+
+
+<VirtualHost *:80>
+	DocumentRoot P:/Mapler.me/trunk/website
+	ServerName mplr.e.craftnet.nl
+	ServerAlias mplr.e.craftnet.nl www.mplr.e.craftnet.nl
+	php_value session.cookie_domain .mplr.e.craftnet.nl
+	<Directory P:/Mapler.me/trunk/website/>
+		AllowOverride All
+		Options +Indexes
+		Order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+	DocumentRoot P:/Mapler.me/trunk/website/me/
+	ServerName test.mplr.e.craftnet.nl
+	ServerAlias *.mplr.e.craftnet.nl
+	php_value session.cookie_domain .mplr.e.craftnet.nl
+	<Directory P:/Mapler.me/trunk/website/me/>
+		AllowOverride All
+		Options +Indexes
+		Order allow,deny
+		Allow from all
+	</Directory>
+</VirtualHost>
+
+
+# ------------------------------------------------------------------------------ #
+# Live case @ mc.craftnet.nl / mapler.me / etc..
+
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+	DocumentRoot "/var/www/maplestats/"
+	CustomLog logs/maplestats common
+	ServerName mapler.me
+	ServerAlias www.mapler.me direct.mapler.me
+	php_value session.cookie_domain .mapler.me
+	<Directory "/var/www/maplestats/">
+		Allow from all
+		Options +Indexes
+	</Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+	DocumentRoot "/var/www/maplestats/me/"
+	CustomLog logs/maplestats common
+	ServerName test.mapler.me
+	ServerAlias *.mapler.me
+	php_value session.cookie_domain .mapler.me
+	<Directory "/var/www/maplestats/me/">
+		Allow from all
+		Options +Indexes
+	</Directory>
+</VirtualHost>

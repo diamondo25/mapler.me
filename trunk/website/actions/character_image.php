@@ -1,5 +1,6 @@
 <?php
 include_once('../inc/database.php');
+include_once('caching.php');
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";
@@ -81,17 +82,8 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-$q2 = $__database->query("SELECT id FROM cache WHERE charactername = '".$__database->real_escape_string($charname)."' AND type = 'info' AND DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW()");
-if ($q2->num_rows == 1) {
-	$row = $q2->fetch_assoc();
-	$filename = '../cache/'.$row['id'].'.png';
-	if (file_exists($filename)) {
-		readfile($filename);
-		die();
-	}
-}
-$id = uniqid();
-
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($charname, 'info');
 
 
 
@@ -161,9 +153,11 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 
 
 imagepng($image);
-imagepng($image, '../cache/'.$id.'.png');
-imagedestroy($image);
 
-$__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charname)."', 'info', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()");
+
+$id = uniqid().rand(0, 9);
+CacheImage($charname, 'info', $image, $id);
+
+imagedestroy($image);
 
 ?>

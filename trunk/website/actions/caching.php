@@ -1,0 +1,35 @@
+<?php
+
+function CacheImage($charactername, $type, $image, $id) {
+	global $__database;
+	
+	$filename = '../cache/'.$id.'.png';
+
+	imagepng($image, $filename);
+
+	$__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charactername)."', '".$type."', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()");
+}
+
+
+function ShowCachedImage($charactername, $type) {
+	global $__database;
+	
+	$q = $__database->query("SELECT id, DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW() FROM cache WHERE charactername = '".$__database->real_escape_string($charactername)."' AND type = '".$type."'");
+	if ($q->num_rows == 1) {
+		$row = $q->fetch_row();
+		$filename = '../cache/'.$row[0].'.png';
+		if (file_exists($filename)) {
+			if ($row[1] == 1) {
+				readfile($filename);
+				die();
+			}
+			else {
+				// Lol expired. Delete!
+				unlink($filename);
+			}
+		}
+	}
+	$q->free();
+}
+
+?>

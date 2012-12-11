@@ -1,6 +1,7 @@
 <?php
 include_once('../inc/database.php');
 include_once('job_list.php');
+include_once('caching.php');
 
 $font = "arial.ttf";
 $font_size = "9.25";
@@ -26,6 +27,9 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($charname, 'stats');
+
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	$im = imagecreatetruecolor (192, 345);
@@ -43,20 +47,8 @@ if ($q->num_rows == 0) {
 }
 
 
-$q2 = $__database->query("SELECT id FROM cache WHERE charactername = '".$__database->real_escape_string($charname)."' AND type = 'stats' AND DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW()");
-if ($q2->num_rows == 1) {
-	$row = $q2->fetch_assoc();
-	$filename = '../cache/'.$row['id'].'.png';
-	if (file_exists($filename)) {
-		readfile($filename);
-		die();
-	}
-}
-$q2->free();
-
 $row = $q->fetch_assoc();
 
-$id = uniqid().($row['ID'] % 10);
 
 
 $image = imagecreatetruecolor(192, 345);
@@ -92,12 +84,9 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 
 imagepng($image);
 
-$filename = '../cache/'.$id.'.png';
 
-imagepng($image, $filename);
+$id = uniqid().($row['ID'] % 10);
+CacheImage($charname, 'stats', $image, $id);
+
 imagedestroy($image);
-
-$q->free();
-$__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charname)."', 'stats', '".$id."', NOW()) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW()");
-
 ?>

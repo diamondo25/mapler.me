@@ -37,7 +37,6 @@ elseif (strpos($_SERVER['SERVER_NAME'], "website") !== false) {
 }
 
 $subdomain = trim($subdomain);
-echo $subdomain." - ".$domain;
 
 if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct") {
 	// Try to get userdata... Else: error!

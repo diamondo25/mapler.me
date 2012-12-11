@@ -113,6 +113,7 @@ $job_names = array(
   2111 => 'Aran',
   2112 => 'Aran',
   
+  2002 => 'Mercedes',
   2300 => 'Mercedes',
   2310 => 'Mercedes',
   2311 => 'Mercedes',
@@ -125,7 +126,13 @@ $job_names = array(
   2412 => 'Phantom',
   
   
+  2700 => 'Luminous',
+  2710 => 'Luminous', // Not sure...
+  2711 => 'Luminous',
+  2712 => 'Luminous',
+  
   3000 => 'Citizen',
+  3001 => 'Demon Slayer',
   3100 => 'Demon Slayer',
   3110 => 'Demon Slayer',
   3111 => 'Demon Slayer',

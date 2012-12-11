@@ -121,7 +121,7 @@ if ($q->num_rows == 1) {
 	$exists = true;
 	$row = $q->fetch_array();
 	$last_update = $row[3];
-	if ($row[2] == 1) { // Not old enough
+	if (!isset($_GET['NO_CACHING']) && $row[2] == 1) { // Not old enough
 		$result = "";
 		if ($row[1] == 1) { // Blocked
 			$result = json_encode(array("error" => "Info request blocked for this charactername."));
@@ -157,7 +157,7 @@ if (!$done) {
 				"name" => $row['name'],
 				"level" => (int)$row['level'],
 				"exp" => (int)$row['exp'],
-				"job" => $job_names[$row['job']],
+				"job" => isset($job_names[$row['job']]) ? $job_names[$row['job']] : $row['job'].'(?)',
 				"world" => ucfirst($row['worldname']),
 				"rank" => '????',
 				"fame" => $row['fame'],
@@ -190,7 +190,7 @@ if (!$done) {
 		
 		if ($q->num_rows > 0) {
 			$row = $q->fetch_array();
-			$overall["job"] = $job_names[$row['job']]; // Correct jobname
+			$overall["job"] = isset($job_names[$row['job']]) ? $job_names[$row['job']] : $row['job'].'(?)'; // Correct jobname
 		}
 		
 		if ($jobname == "beginner" || $jobname == "warrior" || $jobname == "magician" || $jobname == "bowman" || $jobname == "thief" || $jobname == "pirate") {
