@@ -23,7 +23,8 @@ Options -Indexes
 
 ### BASIC PASSWORD PROTECTION
 AuthName "Mapler.me Development"
-AuthUserFile .htpasswd
+AuthUserFile /var/www/maplestats_svn/website/.htpasswd
+AuthGroupFile /dev/null
 AuthType basic
 Require valid-user
 
