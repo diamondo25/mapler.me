@@ -44,6 +44,42 @@ include_once('../../inc/header.php');
 	
 	<div id="notifications" class="collapse">
 		<p class="lead">Notifications <sup>(Notification Settings)</sup></p>
+		<p>Control how notifications are displayed and sent regarding..
+		<form class="form-horizontal">
+  <div class="control-group">
+   <label class="control-label" for="inputEmail">Buddy Requests? </label>
+    <div class="controls">
+      		<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> Email
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> Mapler.me
+    </div>
+  </div>
+  
+    <div class="control-group">
+   <label class="control-label" for="inputEmail">New comments / likes? </label>
+    <div class="controls">
+      		<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> Email
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> Mapler.me
+    </div>
+  </div>
+  
+    <div class="control-group">
+   <label class="control-label" for="inputEmail">Memberships? </label>
+    <div class="controls">
+      		<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> Email
+</label>
+<label class="checkbox inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> Mapler.me
+    </div>
+  </div>
+</form>
+
 	</div>
 	
 	<div id="memberships" class="collapse">
@@ -75,8 +111,18 @@ include_once('../../inc/header.php');
 	
 	<div id="privacy" class="collapse">
 		<p class="lead">Privacy <sup>(Privacy settings and security)</sup></p>
+		
+		<div class="controls controls-row">
+		<label>Change your password:</label>
+			<input class="span3" type="password" placeholder="••••••">
+			<input class="span3" type="password" placeholder="••••••">
+		</div>
 	</div>
 	
+	</div>
+	
+	<div class="span1">
+	<input data-spy="affix" data-offset-top="60" class="btn btn-primary panel_confirm" type="submit" value="Confirm!"/>
 	</div>
 	
 	</div>
