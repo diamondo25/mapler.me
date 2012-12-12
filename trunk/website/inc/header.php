@@ -24,6 +24,11 @@ elseif (strpos($_SERVER['SERVER_NAME'], "mapler.me") !== false) {
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mapler.me"));
 	$domain = "mapler.me";
 }
+elseif (strpos($_SERVER['SERVER_NAME'], "mplrtest.craftnet.nl") !== false) {
+	// SOMETHING.mplrtest.craftnet.nl << Test Case Server
+	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mplrtest.craftnet.nl"));
+	$domain = "mplrtest.craftnet.nl";
+}
 elseif (strpos($_SERVER['SERVER_NAME'], "mplr.e.craftnet.nl") !== false) {
 	// SOMETHING.mplr.e.craftnet.nl << Test Case Erwin
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mplr.e.craftnet.nl"));
