@@ -1,4 +1,6 @@
 <?php
+include_once('inc/header.php');
+
 function RunCMD($cmd) {
 	$descriptorspec = array(
 	   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
@@ -24,20 +26,28 @@ function RunCMD($cmd) {
 }
 ?>
 
-<pre>
+<p class="lead">Use the form below to update Mapler.me to the current revision.</p>
+
+<pre style="font-size:12px;">
 <?php
 $rows = explode("\n", RunCMD('svn info /var/www/maplestats_svn/ 2>&1'));
+
 echo $rows[7]." - ".$rows[8]." - ".$rows[9];
 ?>
 </pre>
 
 <form action="" method="post">
-<input type="password" name="ihewfihewfewf" />
-<input type="submit" />
+<div class="input-append">
+  <input class="span11" id="appendedInputButton" name="ihewfihewfewf" type="password" placeholder="Type the development password here.">
+  <input type="submit" class="btn" value="Update!"/>
+</div>
 </form>
+
 <pre>
 <?php
 //echo shell_exec('ls -lart');
+
+echo 'Result:<br/>';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312') {
 	$username = "maplerme-website";
@@ -46,5 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312
 	echo RunCMD('svn up --non-interactive --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' /var/www/maplestats_svn/ 2>&1');
 
 }
+echo '</pre>';
+
+include_once('inc/footer.php');
 ?>
-</pre>
