@@ -140,27 +140,16 @@ function RequestData($rankingpage, $onlyrankdata = true) {
             <div class='span3'>
             <div class='well'>
             
-            <!-- Basic view -->
-            <ul class='unstyled'>
-            	<li>Name: ".$row['name']."</li>
-            	<li>Level: ".$row['name']."</li>
-            	<hr/>
-            	<li>STR: ".$row['str']."</li>
-            	<li>DEX: ".$row['dex']."</li>
-            	<li>INT: ".$row['int']."</li>
-            	<li>LUK: ".$row['luk']."</li>
-            	<hr/>
-            	<li>Gender: ".$gendertxt."</li>
-            	
-            	
-            </ul>
+            <!-- Stats -->
+           
+            -insert character stats image here please-
             
             </div>
             </div>
             
             <div class='span9'>
             <div class='well'>
-            lol
+            <p class='lead'>Items</p>
             </div>
             </div>
             
@@ -178,119 +167,6 @@ if (sizeof($overall) == 0) {
 }
 else {   
 }
-
-						echo '
-						<div class="row">
-						
-						<img src=\'' .$url. '\' class=\'pull-left thumbnail\'>';
-            echo "<div class='span9'><p class='lead'><b>" .$row['name']. "</b>
-            
-            <sup>
-            	<span class='label label-inverse'>" . $row['level'] . " </span>
-            </sup>
-            <br/>
-            A <span style='text-transform:capitalize;'>" .$job. "</span> from
-            
-            <span style='text-transform:capitalize;'>" .$world. "</span>…</p></div>
-            </div><hr/>
-            <div class='row'>
-            
-            <div class='span3'>
-            <div class='well'>
-            <script>
-function ChangeImage(id, name) {
-	document.getElementById('image_' + id).src = '//<?php echo $domain; ?>/actions/character_image.php?name=' + name;
-	document.getElementById('stats_' + id).src = '//<?php echo $domain; ?>/actions/character_stats.php?name=' + name;
-}
-</script>
-
-$q = $__database->query('
-SELECT 
-	chr.id, 
-	chr.name, 
-	w.world_name 
-FROM 
-	characters chr 
-LEFT JOIN 
-	users usr 
-	ON 
-		usr.ID = chr.userid 
-LEFT JOIN 
-	accounts acc 
-	ON 
-		acc.id = usr.account_id 
-LEFT JOIN 
-	world_data w 
-	ON 
-		w.world_id = chr.world_id 
-
-WHERE 
-	chr.name = '".$_GET['character']."' 
-ORDER BY 
-	chr.world_id ASC,
-	chr.level DESC
-');
-
-if ($q->num_rows == 0) {
-?>
-
-<?php
-}
-
-	
-$last_world = NULL;
-while ($row = $q->fetch_row()) {
-	if ($last_world != $row[2]) {
-		if ($last_world != NULL) {
-?>
-</table>
-</fieldset>
-<?php
-		}
-?>
-<fieldset>
-<legend><button class='btn' data-toggle='collapse' data-target='#<?php echo $row[2]; ?>' href='#<?php echo $row[2]; ?>'><?php echo $row[2]; ?></button></legend>
-<div id='<?php echo $row[2]; ?>' class='collapse accordion-body'>
-<table width='100%'>
-
-<?php
-		$last_world = $row[2];
-	}
-?>
-	<tr>
-		<td><?php echo $row[1]; ?></td>
-		<td><img src='//<?php echo $domain; ?>/inc/img/char_bg.png' alt='Image of <?php echo $row[1]; ?>' id='image_<?php echo $row[0]; ?>' width='271px' height='162px' /></td>
-		<td><img src='//<?php echo $domain; ?>/inc/img/stat_window.png' alt='Statistics of <?php echo $row[1]; ?>' id='stats_<?php echo $row[0]; ?>' width='192px' height='345px' /></td>
-	</tr>
-<?php
-}
-
-$q->data_seek(0);
-?>
-</table>
-</div>
-</fieldset>
-<script>
-<?php
-	while ($row = $q->fetch_row()) {
-?>
-ChangeImage(<?php echo $row[0]; ?>, '<?php echo $row[1]; ?>');
-<?php
-	
-	}
-?>
-</script>
-            </div>
-            </div>
-            
-            <div class='span9'>
-            <div class='well'>
-            <p class='lead'>Items:</p>
-            </div>
-            </div>
-            
-            </div>
-            ";
 ?>
 
 <?php
