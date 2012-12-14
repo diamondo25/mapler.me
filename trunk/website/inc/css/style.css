@@ -78,3 +78,8 @@
     
 
 .panel_confirm.affix {position:fixed;top:20px;}
+
+.label {
+	font-weight: 200;
+	letter-spacing: 1px;
+}

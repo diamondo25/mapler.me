@@ -1,6 +1,9 @@
 <?php include_once('inc/header.php'); ?>
+
+<?php
+if (!$_loggedin):
+?>
       <div class="jumbotron">
-        
         <div id="myCarousel" class="carousel slide">
 		  <!-- Carousel items -->
 		  <div class="carousel-inner">
@@ -21,6 +24,14 @@
 		</div>
 
 	<a class="btn btn-small" href="/register" role="button" style="">What are you waiting for? Sign up!</a>
+	
+<?php
+else:
+?>
+
+<?php
+endif;
+?>
       </div>
 
 <?php include_once('inc/footer.php'); ?>

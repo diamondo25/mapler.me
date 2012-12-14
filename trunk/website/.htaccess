@@ -18,6 +18,7 @@
 	
 	RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
 	RewriteRule ^stat/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+	RewriteRule ^player/([^/]*)$ /me/character-loader.php?character=$1 [L]
 </IfModule>
 
 Options -Indexes
@@ -55,3 +56,4 @@ allow from 66.226.101.105 # tyler 2
 allow from 172.162.105.234 # tyler 3
 allow from 70.167.157.226 # tyler 4
 allow from 184.255.164.38 # tyler 6 wat.
+allow from 68.24.131.160 # tyler7
