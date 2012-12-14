@@ -141,6 +141,7 @@ function RequestData($rankingpage, $onlyrankdata = true) {
             <div class='well'>
             
             <!-- Stats -->
+            <p class='lead'>Stats</p>
            
             -insert character stats image here please-
             
