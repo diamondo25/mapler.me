@@ -1,4 +1,7 @@
-<?php include_once('../inc/header.php'); ?>
+<?php
+include_once('../inc/header.php');
+include_once('../actions/job_list.php');
+ ?>
 
 <?php
 if (!$_loggedin):
@@ -128,24 +131,21 @@ function RequestData($rankingpage, $onlyrankdata = true) {
             echo "<div class='span9'><p class='lead'><b>" .$row['name']. "</b>
             
             <sup>
-            	<span class='label label-inverse'>" . (int)$leveldata['level'] . " </span>
+            	<span class='label label-inverse'>" .$row['level']. " </span>
             </sup>
             <br/>
-            A <span style='text-transform:capitalize;'>" .$job. "</span> from
+            A <span style='text-transform:capitalize;'>" .$job_names[$row["job"]]. "</span> from
             
             <span style='text-transform:capitalize;'>" .$world. "</span>…</p></div>
             </div><hr/>
             <div class='row'>
             
-            <div class='span3'>
-            <div class='well'>
+            <div class='well pull-left'>
             
             <!-- Stats -->
             <p class='lead'>Stats</p>
            
-            -insert character stats image here please-
-            
-            </div>
+           <img src='".$domain."/stat/".$charname."'/>
             </div>
             
             <div class='span9'>
