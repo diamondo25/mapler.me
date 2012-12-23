@@ -136,7 +136,26 @@ function RequestData($rankingpage, $onlyrankdata = true) {
             <br/>
             A <span style='text-transform:capitalize;'>" .$job_names[$row["job"]]. "</span> from
             
-            <span style='text-transform:capitalize;'>" .$world. "</span>…</p></div>
+            <span style='text-transform:capitalize;'>" .$world. "</span>…</p>
+            
+            <!-- medals -->
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            <img src='//dl.dropbox.com/u/22875564/mapler.me.resources/medal.png'/>
+            
+            <script type='text/javascript'>
+            $('.medal').tooltip({
+    selector: 'a[rel=tooltip]'
+})​
+            </script>";
+            
+            echo '<a href="#" rel="tooltip" title="A nice tooltip" class="tooltip-test">test</a><br> <script> // tooltip demo $(".tooltip-test").tooltip() </script>';
+            
+            echo "
+            </div>
             </div><hr/>
             <div class='row'>
             

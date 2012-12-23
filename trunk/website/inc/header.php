@@ -38,7 +38,7 @@ elseif (strpos($_SERVER['SERVER_NAME'], "mplr.e.craftnet.nl") !== false) {
 elseif (strpos($_SERVER['SERVER_NAME'], "website") !== false) {
 	// SOMETHING.website << Local Testing Tyler
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".website:404"));
-	$domain = "website.me:404";
+	$domain = "website:404";
 }
 
 $subdomain = trim($subdomain);
