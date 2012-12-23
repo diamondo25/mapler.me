@@ -21,7 +21,7 @@ if ($len < 4 || $len > 12) {
 
 	/* Output an error message */
 	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
-	imagestring ($im, 1, 5, 20, "No data found", $tc);
+	imagestring ($im, 1, 5, 20, "Incorrect Charname", $tc);
 	imagepng($im);
 	imagedestroy($im);
 	die();
