@@ -13,6 +13,8 @@
 	
 	RewriteRule ^developers/ api.php
 	RewriteRule ^intro/ about.php
+	RewriteRule ^login/ login.php
+	RewriteRule ^register/ register.php
 	
 	#image / ranking rewrites
 	

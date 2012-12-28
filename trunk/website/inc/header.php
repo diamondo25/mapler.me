@@ -140,7 +140,7 @@ else:
 ?>
 							<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Login / Register<b class="caret"></b></a>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login" method="post">
+								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 								<p>Login with your <b>Mapler.me</b> account!</p>
 								<div class="control-group">
 									<div class="controls">
@@ -155,8 +155,8 @@ else:
 								<div class="control-group">
 									<div class="controls">
 										<button type="submit" class="btn" style="margin-right:2px;">Sign in</button>
-										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/lost-account'" class="btn btn-mini">Forgot?</button>
-										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register'" class="btn pull-right">Register?</button>
+										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/lost-account/'" class="btn btn-mini">Forgot?</button>
+										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right">Register?</button>
 									</div>
 								</div>
 								</form>

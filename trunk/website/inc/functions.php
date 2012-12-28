@@ -42,7 +42,7 @@ END;
 	public function Agreement() {
 		$this->output .= '
 <div class="control-group">
-	<label class="control-label" for="input">Do you agree to our <a href="#">Terms of Use?</a></label>
+	<label class="control-label" for="input">Do you agree to our <a href="/terms">Terms of Use?</a></label>
 	<div class="controls">
 		<input type="checkbox" name="tou" />
 	</div>
