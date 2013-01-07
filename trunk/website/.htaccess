@@ -51,3 +51,4 @@ allow from 83.80.148.175 # e.craftnet.nl
 allow from 82.93.95.86 # Erwin work
 allow from 94.210.57.36 # Erwin's friend
 allow from 68.230.107.47 # Tyler
+allow from 70.167.157.226

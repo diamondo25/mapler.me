@@ -108,4 +108,8 @@ function IsInBetween($vals) {
 function GetPasswordHash($password, $salt) {
 	return substr(md5($salt.$password), 0, 28);
 }
+
+function Staff($staff) {
+	
+}
 ?>
