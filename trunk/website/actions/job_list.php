@@ -158,6 +158,11 @@ $job_names = array(
   5111 => 'Mihile',
   5112 => 'Mihile',
   
+  6500 => 'Angelic Buster',
+  6510 => 'Angelic Buster',
+  6511 => 'Angelic Buster',
+  6512 => 'Angelic Buster',
+  
   //Additional Jobs + Special
   
   1337 => 'Advisor' // WAT
