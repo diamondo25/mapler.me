@@ -59,7 +59,7 @@ while ($row = $q->fetch_row()) {
 		}
 ?>
 <fieldset>
-<legend><button class="btn" data-toggle="collapse" data-target="#<?php echo $row[2]; ?>" href="#<?php echo $row[2]; ?>"><?php echo $row[2]; ?></button></legend>
+<legend><button class="btn" data-toggle="collapse" data-target="#<?php echo $row[2]; ?>" href="#<?php echo $row[2]; ?>"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row[2]; ?>.png" /> <?php echo $row[2]; ?></button></legend>
 <div id="<?php echo $row[2]; ?>" class="collapse accordion-body">
 <table width="100%">
 
