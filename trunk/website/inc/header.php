@@ -2,13 +2,13 @@
 session_start();
 include_once('functions.php');
 include_once('database.php');
-
+include_once('ranks.php');
 
 // Initialize Login Data
 $_loggedin = false;
 if (isset($_SESSION['login_data'])) {
 	$_logindata = $_SESSION['login_data'];
-	$_loggedin = true;
+	$_loggedin = (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE);
 }
 
 $__url_userdata = null;
@@ -130,9 +130,18 @@ if ($_loggedin):
 ?>
 							<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Welcome back, <?php echo $_logindata['full_name']; ?></a>
 							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
-								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>">Profile</a></li>
+								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/">Profile</a></li>
 								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
 								<li id="fat-menu"><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/panel/">Settings</a></li>
+<?php
+if ($_logindata['account_rank'] == RANK_ADMIN):
+?>
+								<li class="divider"></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/repo/">Update Website</a></li>
+<?php
+endif;
+?>
+								<li class="divider"></li>
 								<li id="fat-menu"><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
 							</ul>
 <?php

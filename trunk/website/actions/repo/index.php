@@ -45,7 +45,6 @@ echo $rows[7]." - ".$rows[8]." - ".$rows[9];
 
 <pre>
 <?php
-//echo shell_exec('ls -lart');
 
 echo 'Result:<br/>';
 
