@@ -162,8 +162,8 @@ else:
 								</div>
 								<div class="control-group">
 									<div class="controls">
-										<button type="submit" class="btn btn-success" style="margin-right:2px;width:125px;">Sign in</button>
-										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right">Register?</button>
+										<button type="submit" class="btn btn-success" style="margin-right:2px;width:220px;">Sign in</button>
+										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 									</div>
 								</div>
 								</form>

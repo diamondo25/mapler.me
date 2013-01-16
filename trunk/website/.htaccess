@@ -6,8 +6,6 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME}\.php -f 
 	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
-	
-	
 		
 	# page rewrites
 	
@@ -20,35 +18,13 @@
 	
 	RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
 	RewriteRule ^stat/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+	
 </IfModule>
 
 Options -Indexes
-
-
 
 ErrorDocument 400 /actions/error/index.php
 ErrorDocument 401 /actions/error/index.php
 ErrorDocument 403 /actions/error/index.php
 ErrorDocument 404 /actions/error/index.php
 ErrorDocument 500 /actions/error/index.php
-
-order deny,allow
-deny from all
-
-# Names + Domains
-allow from localhost
-allow from 127.0.0.1
-allow from maplestory.nexon.net
-allow from nexon.net
-allow from forum2.nexon.net
-allow from forum2.maplestory.nexon.net
-allow from thebluecorsair.com
-allow from craftnet.nl
-allow from e.craftnet.nl
-
-# IPs + Developers
-allow from 83.80.148.175 # e.craftnet.nl
-allow from 82.93.95.86 # Erwin work
-allow from 94.210.57.36 # Erwin's friend
-allow from 68.230.107.47 # Tyler
-allow from 70.167.157.226

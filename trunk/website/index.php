@@ -13,7 +13,7 @@ if (!$_loggedin):
 			<div class="item"><h1>Keep track of your own Maple 'Story'!</h1>
 				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front3.gif" class="pull-left"/>Mapler.me records everything from your experience, stats, and even past looks!<br/>Never forget a past look again!</p>
 			 </div>
-			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro">works.</a></h1>
+			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro/">works.</a></h1>
 				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
 					We are partnered with Nexon America, and is built with perfection.
 				</p></div>
@@ -23,7 +23,7 @@ if (!$_loggedin):
 		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 		</div>
 
-	<a class="btn btn-small" href="/register" role="button" style="">What are you waiting for? Sign up!</a>
+	<a class="btn btn-small" href="/register" role="button" style="display:none;">What are you waiting for? Sign up!</a>
 	
 <?php
 else:
