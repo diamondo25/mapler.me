@@ -3,9 +3,10 @@ include_once('../inc/database.php');
 
 $font = "arial.ttf";
 $font_size = "9.25";
+error_reporting(0);
+ini_set('display_errors', 0);
 
 if (!isset($_GET['debug'])) {
-	error_reporting(E_NONE);
 	header('Content-Type: image/png');
 }
 
@@ -243,8 +244,13 @@ else {
 	// Coordinates for the hair
 	if (isset($hair)) {
 		$hairarray = get_data($hair);
-		$backhairx = -$hairarray['default_hairBelowBody_origin_X'] - $hairarray['default_hairBelowBody_map_brow_X'];
-		$backhairy = -$hairarray['default_hairBelowBody_origin_Y'] - $hairarray['default_hairBelowBody_map_brow_Y'];
+		if (in_array('default_hairBelowBody_origin_X', $hairarray)) {
+			$backhairx = -$hairarray['default_hairBelowBody_origin_X'] - $hairarray['default_hairBelowBody_map_brow_X'];
+			$backhairy = -$hairarray['default_hairBelowBody_origin_Y'] - $hairarray['default_hairBelowBody_map_brow_Y'];
+		}
+		else {
+			$backhairx = $backhairy = 0;
+		}
 		$shadehairx = -$hairarray['default_hairShade_0_origin_X'] - $hairarray['default_hairShade_0_map_brow_X'];
 		$shadehairy = -$hairarray['default_hairShade_0_origin_Y'] - $hairarray['default_hairShade_0_map_brow_Y'];
 		$hairx = -$hairarray['default_hair_origin_X'] - $hairarray['default_hair_map_brow_X'];
@@ -282,23 +288,39 @@ else {
 		$vslot = $hatarray['info_vslot'];
 		$hatx = -$hatarray['default_default_origin_X'] - $hatarray['default_default_map_brow_X'];
 		$haty = -$hatarray['default_default_origin_Y'] - $hatarray['default_default_map_brow_Y'];
-		$zhatx = -$hatarray['default_defaultAc_origin_X'] - $hatarray['default_defaultAc_map_brow_X'];
-		$zhaty = -$hatarray['default_defaultAc_origin_Y'] - $hatarray['default_defaultAc_map_brow_Y'];
+		if (in_array('default_defaultAc_origin_X', $hatarray)) {
+			$zhatx = -$hatarray['default_defaultAc_origin_X'] - $hatarray['default_defaultAc_map_brow_X'];
+			$zhaty = -$hatarray['default_defaultAc_origin_Y'] - $hatarray['default_defaultAc_map_brow_Y'];
+		}
+		else {
+			$zhatx = $zhaty = 0;
+		}
 	}
 	
 	// Cape
 	if (isset($cape)) {
 		$capearray = get_data($cape);
-		if($stand == 2) {
-			$cape2x = -$capearray['stand2_0_cape_origin_X'] - $capearray['stand2_0_cape_map_navel_X'];
-			$cape2y = -$capearray['stand2_0_cape_origin_Y'] - $capearray['stand2_0_cape_map_navel_Y'];
+		if (!isset($capearray['stand1_0_cape_origin_X'])) {
+			unset($cape);
 		}
-		$capex = -$capearray['stand1_0_cape_origin_X'] - $capearray['stand1_0_cape_map_navel_X'];
-		$capey = -$capearray['stand1_0_cape_origin_Y'] - $capearray['stand1_0_cape_map_navel_Y'];
-		$capez = $capearray['stand1_0_cape_z'];
-		if (in_array('stand'.$stand.'_0_capeArm_origin_X',$capearray)) {
-			$zcapex = -$capearray['stand'.$stand.'_0_capeArm_origin_X'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_X'];
-			$zcapey = -$capearray['stand'.$stand.'_0_capeArm_origin_Y'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_Y'];
+		else {
+			if ($stand == 2) {
+				$cape2x = -$capearray['stand2_0_cape_origin_X'] - $capearray['stand2_0_cape_map_navel_X'];
+				$cape2y = -$capearray['stand2_0_cape_origin_Y'] - $capearray['stand2_0_cape_map_navel_Y'];
+			}
+			else {
+				$cape2x = $cape2y = 0;
+			}
+			$capex = -$capearray['stand1_0_cape_origin_X'] - $capearray['stand1_0_cape_map_navel_X'];
+			$capey = -$capearray['stand1_0_cape_origin_Y'] - $capearray['stand1_0_cape_map_navel_Y'];
+			$capez = $capearray['stand1_0_cape_z'];
+			if (in_array('stand'.$stand.'_0_capeArm_origin_X', $capearray)) {
+				$zcapex = -$capearray['stand'.$stand.'_0_capeArm_origin_X'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_X'];
+				$zcapey = -$capearray['stand'.$stand.'_0_capeArm_origin_Y'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_Y'];
+			}
+			else {
+				$zcapex = $zcapey = 0;
+			}
 		}
 	}
 	
@@ -336,10 +358,13 @@ else {
 	
 	// Pants
 	if (isset($pants)) {
-		$pantsarray=get_data($pants);
+		$pantsarray = get_data($pants);
 		if($stand == 2) {
 			$pants2x = -$pantsarray['stand2_0_pants_origin_X'] - $pantsarray['stand2_0_pants_map_navel_X'];
 			$pants2y = -$pantsarray['stand2_0_pants_origin_Y'] - $pantsarray['stand2_0_pants_map_navel_Y'];
+		}
+		else {
+			$pants2x = $pants2y = 0;
 		}
 		$pantsx = -$pantsarray['stand1_0_pants_origin_X'] - $pantsarray['stand1_0_pants_map_navel_X'];
 		$pantsy = -$pantsarray['stand1_0_pants_origin_Y'] - $pantsarray['stand1_0_pants_map_navel_Y'];	
@@ -439,7 +464,7 @@ else {
 	}
 	
 	// Create back hair and cape
-	if($capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
+	if ($capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 		$bhair_location = "$characterwz/Hair/000".$hair.".img/default.hairBelowBody.png";
 		add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 	}
@@ -709,6 +734,10 @@ else {
 	// imagepng($im, "images/characters/" . $character_id . ".png");
 	imagepng($im);
 	imagedestroy($im);
+	
+	if (isset($_GET['debug'])) {
+		var_dump($GLOBALS);
+	}
 }
 
 // Function to phrase data into an array
