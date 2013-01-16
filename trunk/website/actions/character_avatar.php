@@ -318,13 +318,11 @@ else {
 	// Glove
 	if (isset($glove)) {
 		$glovearray = get_data($glove);
-		echo 'Glove: '.$glove."<br />";
-		print_r($glove);
 		if ($stand == 1) {
-		$lglove1x = -$glovearray['stand1_0_lGlove_origin_X'] - $glovearray['stand1_0_lGlove_map_navel_X'];
-		$lglove1y = -$glovearray['stand1_0_lGlove_origin_Y'] - $glovearray['stand1_0_lGlove_map_navel_Y'];
-		$rglove1x = -$glovearray['stand1_0_rGlove_origin_X'] - $glovearray['stand1_0_rGlove_map_navel_X'];
-		$rglove1y = -$glovearray['stand1_0_rGlove_origin_Y'] - $glovearray['stand1_0_rGlove_map_navel_Y'];
+			$lglove1x = -$glovearray['stand1_0_lGlove_origin_X'] - $glovearray['stand1_0_lGlove_map_navel_X'];
+			$lglove1y = -$glovearray['stand1_0_lGlove_origin_Y'] - $glovearray['stand1_0_lGlove_map_navel_Y'];
+			$rglove1x = -$glovearray['stand1_0_rGlove_origin_X'] - $glovearray['stand1_0_rGlove_map_navel_X'];
+			$rglove1y = -$glovearray['stand1_0_rGlove_origin_Y'] - $glovearray['stand1_0_rGlove_map_navel_Y'];
 		}
 		elseif ($stand == 2) {
 			$lglove2x = -$glovearray['stand2_0_lGlove_origin_X'] - $glovearray['stand2_0_lGlove_map_navel_X'];
