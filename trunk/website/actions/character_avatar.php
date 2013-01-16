@@ -255,7 +255,7 @@ else {
 	// Coordinates for the hair
 	if (isset($hair)) {
 		$hairarray = get_data($hair);
-		if (in_array('default_hairBelowBody_origin_X', $hairarray)) {
+		if (isset($hairarray['default_hairBelowBody_origin_X'])) {
 			$backhairx = -$hairarray['default_hairBelowBody_origin_X'] - $hairarray['default_hairBelowBody_map_brow_X'];
 			$backhairy = -$hairarray['default_hairBelowBody_origin_Y'] - $hairarray['default_hairBelowBody_map_brow_Y'];
 		}
@@ -299,7 +299,7 @@ else {
 		$vslot = $hatarray['info_vslot'];
 		$hatx = -$hatarray['default_default_origin_X'] - $hatarray['default_default_map_brow_X'];
 		$haty = -$hatarray['default_default_origin_Y'] - $hatarray['default_default_map_brow_Y'];
-		if (in_array('default_defaultAc_origin_X', $hatarray)) {
+		if (isset($hatarray['default_defaultAc_origin_X'])) {
 			$zhatx = -$hatarray['default_defaultAc_origin_X'] - $hatarray['default_defaultAc_map_brow_X'];
 			$zhaty = -$hatarray['default_defaultAc_origin_Y'] - $hatarray['default_defaultAc_map_brow_Y'];
 		}
@@ -325,7 +325,7 @@ else {
 			$capex = -$capearray['stand1_0_cape_origin_X'] - $capearray['stand1_0_cape_map_navel_X'];
 			$capey = -$capearray['stand1_0_cape_origin_Y'] - $capearray['stand1_0_cape_map_navel_Y'];
 			$capez = $capearray['stand1_0_cape_z'];
-			if (in_array('stand'.$stand.'_0_capeArm_origin_X', $capearray)) {
+			if (isset($capearray['stand'.$stand.'_0_capeArm_origin_X'])) {
 				$zcapex = -$capearray['stand'.$stand.'_0_capeArm_origin_X'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_X'];
 				$zcapey = -$capearray['stand'.$stand.'_0_capeArm_origin_Y'] - $capearray['stand'.$stand.'_0_capeArm_map_navel_Y'];
 			}
