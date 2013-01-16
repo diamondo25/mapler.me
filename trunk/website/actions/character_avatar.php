@@ -4,8 +4,10 @@ include_once('../inc/database.php');
 $font = "arial.ttf";
 $font_size = "9.25";
 
-if (!isset($_GET['debug']))
+if (!isset($_GET['debug'])) {
+	error_reporting(E_NONE);
 	header('Content-Type: image/png');
+}
 
 
 $charname = isset($_GET['name']) ? $_GET['name'] : 'RoboticOil';
@@ -736,7 +738,7 @@ function add_image($location, $x, $y) {
 		$image = imagecreatefrompng($location);
 		imagecopy($im, $image, $x, $y, 0, 0, imagesx($image), imagesy($image));
 	}
-	else {
+	elseif (isset($_GET['debug'])) {
 		echo "-- Could not find ".$location." -- <br />";
 	}
 }
