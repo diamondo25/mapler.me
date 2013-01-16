@@ -54,6 +54,7 @@ while ($row = $q->fetch_row()) {
 		if ($last_world != NULL) {
 ?>
 </table>
+</div>
 </fieldset>
 <?php
 		}
