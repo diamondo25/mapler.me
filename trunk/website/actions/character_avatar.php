@@ -26,16 +26,27 @@ if ($len < 4 || $len > 12) {
 	imagestring ($im, 1, 5, 20, "Incorrect Charname", $tc);
 	imagepng($im);
 	imagedestroy($im);
-	die('x');
+	die();
 }
 
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
-	die('fur');
+	$im = imagecreatetruecolor (96, 96);
+	$bgc = imagecolorallocate ($im, 255, 255, 255);
+	$tc = imagecolorallocate ($im, 0, 0, 0);
+
+	imagefilledrectangle ($im, 0, 0, 96, 96, $bgc);
+
+	/* Output an error message */
+	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
+	imagestring ($im, 1, 5, 20, "Not found.", $tc);
+	imagepng($im);
+	imagedestroy($im);
+	die();
 }
 
 // Create blank template
-$im = imagecreatetruecolor(96,96);
+$im = imagecreatetruecolor(96, 96);
 imagesavealpha($im, true);
 $trans = imagecolorallocatealpha($im, 0, 0, 0, 127);
 imagefill($im, 0, 0, $trans);
@@ -66,20 +77,20 @@ $q->free();
 
 // Get character equipment
 $character_equipment = $__database->query("
-							SELECT 
-								* 
-							FROM 
-								`items` 
-							WHERE 
-								`character_id` = " . $character_id . " 
-							AND 
-								`slot` < 0 
-							AND 
-								`inventory` = 0 
-							ORDER BY 
-								`slot` 
-							DESC"
-							);
+SELECT 
+	* 
+FROM 
+	`items` 
+WHERE 
+	`character_id` = " . $character_id . " 
+AND 
+	`slot` < 0 
+AND 
+	`inventory` = 0 
+ORDER BY 
+	`slot` 
+DESC"
+);
 
 
 while($row2 = $character_equipment->fetch_assoc()) {
