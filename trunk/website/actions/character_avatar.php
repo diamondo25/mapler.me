@@ -605,7 +605,7 @@ else {
 	$faces = array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
 	
 	// Create face
-	$face_location = "$characterwz/Face/000".$face.".img/".$faces[rand(0, count($faces)].".0.face.png";
+	$face_location = "$characterwz/Face/000".$face.".img/".$faces[rand(0, count($faces))].".0.face.png";
 	add_image($face_location, $mainx + $facex, $mainy + $facey);
 	
 	// Create mask
