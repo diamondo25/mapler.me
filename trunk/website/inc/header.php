@@ -178,3 +178,4 @@ endif;
 			</div>
 		</div>
 	</div>
+	<p class="lead alert alert-error">&nbsp;Mapler.me is currently in private development. <b>Registration is closed.</b></p>
