@@ -245,11 +245,17 @@ else {
 	}
 	$vslot = "";
 	
+	
+	$faces = array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
+	
+	// Create face
+	$chosenface = $faces[rand(0, count($faces))];
+	
 	// Coordinates for the face
 	if (isset($face)) {
 		$facearray = get_data($face);
-		$facex = -$facearray['blink_0_face_origin_X'] - $facearray['blink_0_face_map_brow_X'];
-		$facey = -$facearray['blink_0_face_origin_Y'] - $facearray['blink_0_face_map_brow_Y'];
+		$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
+		$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
 	}
 	
 	// Coordinates for the hair
@@ -273,9 +279,9 @@ else {
 	// Eyes
 	if (isset($eyes)) {
 		$eyesarray = get_data($eyes);
-		$eyesx = -$eyesarray['default_default_origin_X'] - $eyesarray['default_default_map_brow_X'];
-		$eyesy = -$eyesarray['default_default_origin_Y'] - $eyesarray['default_default_map_brow_Y'];
-		$eyesz = $eyesarray['default_default_z'];
+		$eyesx = -$eyesarray[$chosenface.'_0_default_origin_X'] - $eyesarray[$chosenface.'_0_default_map_brow_X'];
+		$eyesy = -$eyesarray[$chosenface.'_0_default_origin_Y'] - $eyesarray[$chosenface.'_0_default_map_brow_Y'];
+		$eyesz = $eyesarray[$chosenface.'_0_default_z'];
 	}
 	
 	// Mask
@@ -462,49 +468,49 @@ else {
 	// Create weaponBelowBody
 	if($weaponz == 'weaponBelowBody') {
 		if($wepnum)
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
 		else
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
 		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
 	
 	// Create top cap
 	if (isset($cap)) {
-		$cap_location = "$characterwz/Cap/0".$hat.".img/default.defaultAc.png";
+		$cap_location = $characterwz."/Cap/0".$hat.".img/default.defaultAc.png";
 		add_image($cap_location, $mainx + $zhatx, $mainy + $zhaty);
 	}
 	
 	// Create back hair and cape
 	if ($capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
-		$bhair_location = "$characterwz/Hair/000".$hair.".img/default.hairBelowBody.png";
+		$bhair_location = $characterwz."/Hair/000".$hair.".img/default.hairBelowBody.png";
 		add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 	}
 
-	if(file_exists("$characterwz/Cape/0".$cape.".img/stand2.0.cape.png") && $stand == 2)
-		add_image("$characterwz/Cape/0".$cape.".img/stand2.0.cape.png", $mainx + $cape2x, $necky + $cape2y);
+	if(file_exists($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png") && $stand == 2)
+		add_image($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png", $mainx + $cape2x, $necky + $cape2y);
 
-	elseif(file_exists("$characterwz/Cape/0".$cape.".img/stand1.0.cape.png"))
-		add_image("$characterwz/Cape/0".$cape.".img/stand1.0.cape.png", $mainx + $capex, $necky + $capey);
+	elseif(file_exists($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png"))
+		add_image($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png", $mainx + $capex, $necky + $capey);
 
 	if($capez != 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
-		$bhair_location = "$characterwz/Hair/000".$hair.".img/default.hairBelowBody.png";
+		$bhair_location = $characterwz."/Hair/000".$hair.".img/default.hairBelowBody.png";
 		add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 	}
 	
 	// Create shield
 	if (isset($shield)) {
-		$shield_location = "$characterwz/Shield/0".$shield.".img/stand1.0.shield.png";
+		$shield_location = $characterwz."/Shield/0".$shield.".img/stand1.0.shield.png";
 		add_image($shield_location, $mainx + $shieldx, $necky + $shieldy);
 	}
 	
 	// Create body 
 	if($stand == "")
 		$stand = 1;
-	add_image("$characterwz/0000".$skin.".img/stand".$stand.".0.body.png", ($mainx + $stand) - 9, $mainy + 21);
+	add_image($characterwz."/0000".$skin.".img/stand".$stand.".0.body.png", ($mainx + $stand) - 9, $mainy + 21);
 
 	// Create shoes: under
 	if (isset($shoe)) {
-		$shoe_location = "$characterwz/Shoes/0" . $shoe . ".img/stand1.0.shoes.png";
+		$shoe_location = $characterwz."/Shoes/0" . $shoe . ".img/stand1.0.shoes.png";
 		if ($shoe_pos > $other_pos) {
 			add_image($shoe_location, $mainx + $shoesx, $necky + $shoesy);
 		}
@@ -512,21 +518,21 @@ else {
 	
 	// Create stand1 left glove
 	if (isset($glove) && $stand == 1){
-		$glove_location = "$characterwz/Glove/0".$glove.".img/stand1.0.lGlove.png";
+		$glove_location = $characterwz."/Glove/0".$glove.".img/stand1.0.lGlove.png";
 		add_image($glove_location, $mainx + $lglove1x, $necky + $lglove1y);
 	}
 	
 	// Clothe the naked
 	if(!isset($pants) || !isset($overall)) {
 		if ($gender == 0)
-			add_image("$characterwz/Pants/01060026.img/stand1.0.pants.png", $mainx - 3, $necky + 1);
+			add_image($characterwz."/Pants/01060026.img/stand1.0.pants.png", $mainx - 3, $necky + 1);
 		elseif ($gender == 1) 
-			add_image("$characterwz/Pants/01061039.img/stand1.0.pants.png", $mainx - 3, $necky + 1);
+			add_image($characterwz."/Pants/01061039.img/stand1.0.pants.png", $mainx - 3, $necky + 1);
 	}
 	
 	// Create pants
 	if (isset($pants)) {
-		$pants_location = "$characterwz/Pants/0".$pants.".img/stand";
+		$pants_location = $characterwz."/Pants/0".$pants.".img/stand";
 		if(file_exists($pants_location."2.0.pants.png") && $stand == 2)
 			add_image($pants_location."2.0.pants.png", $mainx + $pants2x, $necky + $pants2y);
 		elseif(file_exists($pants_location."1.0.pants.png"))
@@ -535,7 +541,7 @@ else {
 	
 	// Create top
 	if (isset($top)) {
-		$top_location = "$characterwz/Coat/0".$top.".img/stand";
+		$top_location = $characterwz."/Coat/0".$top.".img/stand";
 		if(file_exists($top_location."2.0.mail.png") && $stand == 2)
 			add_image($top_location."2.0.mail.png", $mainx + $mail2x, $necky + $mail2y);
 		elseif(file_exists($top_location."1.0.mail.png"))
@@ -544,7 +550,7 @@ else {
 	
 	// Create overall
 	if (isset($overall)) {
-		$overall_location = "$characterwz/Longcoat/0".$overall.".img/stand";
+		$overall_location = $characterwz."/Longcoat/0".$overall.".img/stand";
 		if(file_exists($overall_location."2.0.mail.png") && $stand == 2)
 			add_image($overall_location."2.0.mail.png", $mainx + $mail2x, $necky + $mail2y);
 		elseif(file_exists($overall_location."1.0.mail.png"))
@@ -554,7 +560,7 @@ else {
 	// Create shoes
 	if (isset($shoe)) {
 		if ($shoe_pos < $other_pos) {
-			$shoe_location = "$characterwz/Shoes/0".$shoe.".img/stand1.0.shoes.png";
+			$shoe_location = $characterwz."/Shoes/0".$shoe.".img/stand1.0.shoes.png";
 			add_image($shoe_location, $mainx + $shoesx, $necky + $shoesy);
 		}
 	}
@@ -562,162 +568,160 @@ else {
 	// Clothe the naked
 	if(!($top || $overall)) {
 		if ($gender == 0)
-			add_image("$characterwz/Coat/01040036.img/stand1.0.mail.png", $mainx - 3, $necky - 9);
+			add_image($characterwz."/Coat/01040036.img/stand1.0.mail.png", $mainx - 3, $necky - 9);
 		elseif ($gender == 1)
-			add_image("$characterwz/Coat/01041046.img/stand1.0.mail.png", $mainx - 3, $necky - 9);
+			add_image($characterwz."/Coat/01041046.img/stand1.0.mail.png", $mainx - 3, $necky - 9);
 	}
 	
 	// Create armBelowHeadOverMailChest
 	if($weaponz == 'armBelowHeadOverMailChest') {
 		if($wepnum)
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
 		else
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
 		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
 	
 	// Create capeArm
-	if(file_exists("$characterwz/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png"))
-		add_image("$characterwz/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png", $mainx + $zcapex, $necky + $zcapey);
+	if(file_exists($characterwz."/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png"))
+		add_image($characterwz."/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png", $mainx + $zcapex, $necky + $zcapey);
 		
 	// Create head
 	$head = $skin + 10000;
-	add_image("$characterwz/000".$head.".img/front.head.png", $mainx - 15, $mainy - 12);
+	add_image($characterwz."/000".$head.".img/front.head.png", $mainx - 15, $mainy - 12);
 	
 	// Create earring
 	if (isset($ears)) {
-		$ear_location = "$characterwz/Accessory/0".$ears.".img/default.default.png";
+		$ear_location = $characterwz."/Accessory/0".$ears.".img/default.default.png";
 		add_image($ear_location, $mainx + $earsx, $mainy + $earsy);
 	}
 	
 	// Create shade hair
 	if (substr_count($vslot, 'H1H2H3H4H5H6') != 1) {
-		$shair_location = "$characterwz/Hair/000".$hair.".img/default.hairShade.".$hairshade.".png";
+		$shair_location = $characterwz."/Hair/000".$hair.".img/default.hairShade.".$hairshade.".png";
 		add_image($shair_location, $mainx + $shadehairx, $mainy + $shadehairy);
 	}
 	
 	// Create mask
 	if (isset($mask) && $maskz == "accessoryFaceBelowFace") {
-		$mask_location = "$characterwz/Accessory/0".$mask.".img/default.default.png";
+		$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
 		add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 	}
 	
-	$faces = array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
-	
 	// Create face
-	$face_location = "$characterwz/Face/000".$face.".img/".$faces[rand(0, count($faces))].".0.face.png";
+	$face_location = $characterwz."/Face/000".$face.".img/".$chosenface.".0.face.png";
 	add_image($face_location, $mainx + $facex, $mainy + $facey);
 	
 	// Create mask
 	if (isset($maskz) && $maskz == "accessoryFace") {
-		$mask_location = "$characterwz/Accessory/0".$mask.".img/default.default.png";
+		$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
 		add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 	}
 	
 	// Create eyes item
 	if (isset($eyes) && $eyesz == "accessoryEye") {
-		$eyes_location = "$characterwz/Accessory/0".$eyes.".img/default.default.png";
+		$eyes_location = $characterwz."/Accessory/0".$eyes.".img/default.default.png";
 		add_image($eyes_location, $mainx + $eyesx, $mainy + $eyesy);
 	}
 
 	// Create hair
 	if (isset($hair) && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
-		$hair_location = "$characterwz/Hair/000".$hair.".img/default.hair.png";
+		$hair_location = $characterwz."/Hair/000".$hair.".img/default.hair.png";
 		add_image($hair_location, $mainx + $hairx, $mainy + $hairy);
 	}
 	
 	// Create accessoryFaceOverFaceBelowCap
 	if (isset($maskz) && $maskz == "accessoryFaceOverFaceBelowCap") {
-		$mask_location = "$characterwz/Accessory/0".$mask.".img/default.default.png";
+		$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
 		add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 	}
 	
 	// Create hairoverhead or hat
 	if (isset($hat) && ($vslot == "Cp" || $vslot == "CpH5")) {
-		$hat_location = "$characterwz/Hair/000".$hair.".img/default.hairOverHead.png";
+		$hat_location = $characterwz."/Hair/000".$hair.".img/default.hairOverHead.png";
 		add_image($hat_location, $mainx + $overhairx, $mainy + $overhairy);
 	}
 	
 	// Create hat
 	if (isset($hat)) {
-		$cap_location = "$characterwz/Cap/0".$hat.".img/default.default.png";
+		$cap_location = $characterwz."/Cap/0".$hat.".img/default.default.png";
 		add_image($cap_location, $mainx + $hatx, $mainy + $haty);
 	}
 	else {
 		// Create top hair
-		$thair_location = "$characterwz/Hair/000".$hair.".img/default.hairOverHead.png";
+		$thair_location = $characterwz."/Hair/000".$hair.".img/default.hairOverHead.png";
 		add_image($thair_location, $mainx + $overhairx, $mainy + $overhairy);
 	}
 	
 	// Create accessoryEyeOverCap
 	if (isset($eyes) && $eyesz == "accessoryEyeOverCap") {
-		$eyes_location = "$characterwz/Accessory/0".$eyes.".img/default.default.png";
+		$eyes_location = $characterwz."/Accessory/0".$eyes.".img/default.default.png";
 		add_image($eyes_location, $mainx + $eyesx, $mainy + $eyesy);
 	}
 	
 	// Create weapon - stand 1
 	if ($weaponz == 'weapon' && $stand == 1) {
 		if (isset($wepnum))
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
 		else
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
 		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
 	
 	// Create arm
-	$arm_location = "$characterwz/0000".$skin.".img/stand".$stand.".0.arm.png";
+	$arm_location = $characterwz."/0000".$skin.".img/stand".$stand.".0.arm.png";
 	add_image($arm_location, $mainx + (($stand == 1) ? 8 : 4), $mainy + 23);
 	
 	// create coatArm - top
 	if (isset($top)) {
-		$coatarm_location = "$characterwz/Coat/0".$top.".img/stand" . $stand . ".0.mailArm.png";
+		$coatarm_location = $characterwz."/Coat/0".$top.".img/stand" . $stand . ".0.mailArm.png";
 		add_image($coatarm_location, $mainx + (($stand == 1) ? $mailax : $maila2x), $necky + (($stand == 1) ? $mailay : $maila2y));
 	}
 	
 	// create coatArm - overall
 	if (isset($overall)) {
-		$coatarm_location = "$characterwz/Longcoat/0".$overall.".img/stand" . $stand . ".0.mailArm.png";
+		$coatarm_location = $characterwz."/Longcoat/0".$overall.".img/stand" . $stand . ".0.mailArm.png";
 		add_image($coatarm_location, $mainx + (($stand == 1) ? $mailax : $maila2x), $necky + (($stand == 1) ? $mailay : $maila2y));
 	}
 
 	// Create weaponOverArm
 	if($weaponz == 'weaponOverArm') {	
 		if($wepnum)
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
 		else
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
-		add_image($wep_location,  $wepx + $weaponx, $wepy + $weapony);
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
+		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
 
 	// Create hand2
 	if ($stand == 2) {
-		$hand2_location = "$characterwz/0000".$skin.".img/stand2.0.hand.png";
-		add_image($hand2_location,  $mainx - 10, $mainy + 26);
+		$hand2_location = $characterwz."/0000".$skin.".img/stand2.0.hand.png";
+		add_image($hand2_location, $mainx - 10, $mainy + 26);
 	}
 
 	if ((isset($glove)) && $stand == 2) {
 		// Create lglove2
-		$lglove2_location = "$characterwz/Glove/0".$glove.".img/stand2.0.lGlove.png";
-		add_image($lglove2_location,  $mainx + $lglove2x, $necky + $lglove2y);
+		$lglove2_location = $characterwz."/Glove/0".$glove.".img/stand2.0.lGlove.png";
+		add_image($lglove2_location, $mainx + $lglove2x, $necky + $lglove2y);
 		
 		// Create rglove2		
-		$rglove2_location = "$characterwz/Glove/0".$glove.".img/stand2.0.rGlove.png";
-		add_image($lglove2_location,  $mainx + $rglove2x, $necky + $rglove2y);
+		$rglove2_location = $characterwz."/Glove/0".$glove.".img/stand2.0.rGlove.png";
+		add_image($lglove2_location, $mainx + $rglove2x, $necky + $rglove2y);
 	}
 	
 	if ((isset($glove)) && $stand == 1) {
 		//create rglove1
-		$rglove1_location = "$characterwz/Glove/0".$glove.".img/stand1.0.rGlove.png";
-		add_image($rglove1_location,  $mainx + $rglove1x, $necky + $rglove1y);
+		$rglove1_location = $characterwz."/Glove/0".$glove.".img/stand1.0.rGlove.png";
+		add_image($rglove1_location, $mainx + $rglove1x, $necky + $rglove1y);
 	}
 	
 	// Create weaponOverGlove
 	if($weaponz == 'weaponOverGlove' || $weaponz == 'weaponOverHand') {
 		if (isset($wepnum))
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/".$wepnum.".stand".$stand.".0.weapon.png";
 		else
-			$wep_location = "$characterwz/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
-		add_image($wep_location,  $wepx + $weaponx, $wepy + $weapony);
+			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
+		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
 	
 	// Write hash to the character variables
