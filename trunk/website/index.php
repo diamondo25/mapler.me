@@ -15,7 +15,6 @@ if (!$_loggedin):
 			 </div>
 			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro/">works.</a></h1>
 				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
-					We are partnered with Nexon America, and is built with perfection.
 				</p></div>
 		  </div>
 		  <!-- Carousel nav -->
