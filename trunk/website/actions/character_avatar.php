@@ -162,6 +162,8 @@ while($row2 = $character_equipment->fetch_assoc()) {
 	}
 }
 
+$character_equipment->free();
+
 // Create a hash to check against to save time and resources
 $hash = sha1($skin.$face.$hair.$hat.$mask.$eyes.$ears.$top.$pants.$overall.$shoe.$glove.$cape.$shield.$wep.$nxwep);
 
@@ -254,7 +256,7 @@ else {
 	$faces = array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
 	
 	// Create face
-	$chosenface = $faces[rand(0, count($faces))];
+	$chosenface = $faces[rand(0, count($faces) - 1)];
 	
 	// Coordinates for the face
 	if (isset($face)) {
