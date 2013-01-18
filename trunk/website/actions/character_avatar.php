@@ -3,11 +3,16 @@ include_once('../inc/database.php');
 
 $font = "arial.ttf";
 $font_size = "9.25";
-error_reporting(0);
-ini_set('display_errors', 0);
 
 if (!isset($_GET['debug'])) {
+	error_reporting(0);
+	ini_set('display_errors', 0);
 	header('Content-Type: image/png');
+}
+else {
+
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 }
 
 
