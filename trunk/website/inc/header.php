@@ -118,7 +118,6 @@ if (isset($__url_userdata)):
 else:
 ?>
 						<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
-						<li><a href="//<?php echo $domain; ?>/developers/">Developers</a></li>
 <?php
 endif;
 ?>
@@ -178,4 +177,13 @@ endif;
 			</div>
 		</div>
 	</div>
-	<p class="lead alert alert-error">&nbsp;Mapler.me is currently in private development. <b>Registration is closed.</b></p>
+	
+	<?php
+if (!$_loggedin):
+?>
+
+	<p class="lead alert alert-error">&nbsp;Mapler.me is currently in private development. <b>Check back later!</b></p>
+	
+	<?php
+endif;
+?>	
