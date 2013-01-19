@@ -36,7 +36,7 @@ LIMIT 0, 1");
 // printing table rows
 while ($row = $q->fetch_row()) {
 ?>
-<img src="<?php echo $domain; ?>/avatar/<?php echo $row['1'];?>" class="img-polaroid"/>
+<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['1'];?>" class="img-polaroid"/>
 <?php
 }
 ?>
