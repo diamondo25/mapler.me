@@ -28,6 +28,46 @@ if (!$_loggedin):
 else:
 ?>
 
+<p class="lead">
+
+<?php
+
+$q = $__database->query("SELECT 
+	chr.id, 
+	chr.name, 
+	w.world_name 
+FROM 
+	characters chr 
+LEFT JOIN 
+	users usr 
+	ON 
+		usr.ID = chr.userid 
+LEFT JOIN 
+	accounts acc 
+	ON 
+		acc.id = usr.account_id 
+LEFT JOIN 
+	world_data w 
+	ON 
+		w.world_id = chr.world_id 
+
+WHERE 
+	acc.username = '".$__database->real_escape_string($_logindata['username'])."' 
+ORDER BY 
+	chr.world_id ASC,
+	chr.level DESC
+LIMIT 0, 1");
+
+// printing table rows
+while ($row = $q->fetch_row()) {
+?>
+<img src="<?php echo $domain; ?>/avatar/<?php echo $row['1'];?>" class="img-polaroid"/>
+<?php
+}
+?>
+
+<?php echo $_logindata['full_name']; ?>'s Stream – <b>Work In Progress</b></p>
+
 <?php
 endif;
 ?>
