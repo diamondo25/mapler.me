@@ -1,6 +1,7 @@
 <?php
 session_start();
 include_once('functions.php');
+include_once('domains.php');
 include_once('database.php');
 include_once('ranks.php');
 
@@ -12,36 +13,6 @@ if (isset($_SESSION['login_data'])) {
 }
 
 $__url_userdata = null;
-$subdomain = "";
-$domain = "";
-if (strpos($_SERVER['SERVER_NAME'], "direct.mapler.me") !== false) {
-	// SOMETHING.direct.mapler.me
-	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".direct.mapler.me"));
-	$domain = "direct.mapler.me";
-}
-elseif (strpos($_SERVER['SERVER_NAME'], "mapler.me") !== false) {
-	// SOMETHING.mapler.me
-	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mapler.me"));
-	$domain = "mapler.me";
-}
-elseif (strpos($_SERVER['SERVER_NAME'], "mplrtest.craftnet.nl") !== false) {
-	// SOMETHING.mplrtest.craftnet.nl << Test Case Server
-	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mplrtest.craftnet.nl"));
-	$domain = "mplrtest.craftnet.nl";
-}
-elseif (strpos($_SERVER['SERVER_NAME'], "mplr.e.craftnet.nl") !== false) {
-	// SOMETHING.mplr.e.craftnet.nl << Test Case Erwin
-	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".mplr.e.craftnet.nl"));
-	$domain = "mplr.e.craftnet.nl";
-}
-
-elseif (strpos($_SERVER['SERVER_NAME'], "website") !== false) {
-	// SOMETHING.website << Local Testing Tyler
-	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".website:404"));
-	$domain = "website:404";
-}
-
-$subdomain = trim($subdomain);
 
 if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "social") {
 	// Try to get userdata... Else: error!

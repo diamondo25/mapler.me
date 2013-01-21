@@ -1,5 +1,6 @@
 <?php
 include_once('../inc/database.php');
+include_once('../inc/domains.php');
 include_once('caching.php');
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
@@ -125,9 +126,12 @@ if ($got_pet) {
 	imagecopymerge($image, $pet_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
 }
 
-$character_image = LoadGif($json_data["images"]["Character"]);
+//$character_image = LoadPNG("http://".$domain."/avatar/".$charname);
+$character_image = LoadPNG("http://mapler.me/avatar/".$charname);
+ // LoadGif($json_data["images"]["Character"]);
 
-imagecopymerge($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
+imagecopyresampled($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 96, 96);
+//imagecopymerge($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
 
 // SET NAMETAG
 $name = $ok ? $json_data["name"] : $charname;
