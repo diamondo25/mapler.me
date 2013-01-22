@@ -64,6 +64,7 @@ if (isset($__url_userdata)):
 else:
 ?>
 						<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
+						<li><a href="//<?php echo $domain; ?>/todo">To-do</a></li>
 <?php
 endif;
 ?>
