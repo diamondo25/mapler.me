@@ -70,6 +70,8 @@ while ($row = $q->fetch_row()) {
 ?>
 	<tr>
 		<td><?php echo $row[1]; ?></td>
+		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $row[1]; ?>" alt="Avatar of <?php echo $row[1]; ?>"/><br/><br/>
+		<pre style="width: 280px;">http://<?php echo $domain; ?>/avatar/<?php echo $row[1]; ?></pre></td>
 		<td><img src="//<?php echo $domain; ?>/inc/img/char_bg.png" alt="Image of <?php echo $row[1]; ?>" id="image_<?php echo $row[0]; ?>" width="271px" height="162px" /><br/><br/>
 		<pre style="width: 280px;">http://<?php echo $domain; ?>/card/<?php echo $row[1]; ?></pre></td>
 		<td><img src="//<?php echo $domain; ?>/inc/img/stat_window.png" alt="Statistics of <?php echo $row[1]; ?>" id="stats_<?php echo $row[0]; ?>" width="192px" height="345px" /><br/><br/>
