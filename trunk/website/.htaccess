@@ -18,7 +18,8 @@
 	
 	RewriteRule ^card/([^/]*)$ /actions/character_image.php?name=$1 [L]
 	RewriteRule ^avatar/([^/]*)$ /actions/character_avatar.php?name=$1 [L]
-	RewriteRule ^info/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+	RewriteRule ^infopic/([^/]*)$ /actions/character_stats.php?name=$1 [L]
+	RewriteRule ^info/([^/]*)$ /character.php?name=$1
 	
 </IfModule>
 
