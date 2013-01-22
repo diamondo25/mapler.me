@@ -1,12 +1,6 @@
 <?php
 include_once('../inc/header.php');
 
-?>
-
-	<div class="row">
-	<div class="span2">
-	      <?php
-
 $q = $__database->query("
 SELECT 
 	chr.id, 
@@ -42,9 +36,16 @@ while ($row = $q->fetch_row()) {
 }
 $q->free();
 
+
+
+?>
+
+	<div class="row">
+	<div class="span2">
+<?php
 if (count($cache) > 0) {
 ?>
-<img src="//<?php echo $domain; ?>/avatar/<?php echo $cache[1];?>" class="img-polaroid"/>
+<img src="//<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>" class="img-polaroid"/>
 <?php
 }
 ?>
@@ -60,8 +61,8 @@ if (count($cache) > 0) {
 
 <script>
 function ChangeImage(id, name) {
-	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/actions/character_image.php?name=" + name;
-	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/actions/character_stats.php?name=" + name;
+	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/actions/card/" + name;
+	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/actions/infopic/" + name;
 }
 </script>
 <?php
