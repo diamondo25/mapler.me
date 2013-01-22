@@ -49,7 +49,7 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="/" style="margin-top: 8px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);"><img src="http://website:404/inc/img/logo.gif" style="float:left;position:relative;bottom:5px;right:5px;"/>Mapler.me</a>
+				<a class="brand" href="//<?php echo $domain; ?>" style="margin-top: 8px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);"><img src="http://website:404/inc/img/logo.gif" style="float:left;position:relative;bottom:5px;right:5px;"/>Mapler.me</a>
 			<div class="nav-collapse">
 				<ul class="nav hidden-phone">
 					 <li class="dropdown">

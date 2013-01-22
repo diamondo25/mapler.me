@@ -17,9 +17,6 @@ if (!$_loggedin):
 				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
 				</p></div>
 		  </div>
-		  <!-- Carousel nav -->
-		  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-		  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
 		</div>
 
 	<a class="btn btn-small" href="/register" role="button" style="display:none;">What are you waiting for? Sign up!</a>
