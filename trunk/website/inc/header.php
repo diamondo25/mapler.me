@@ -104,12 +104,12 @@ else:
 						<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 								<div class="control-group">
 									<div class="controls">
-										<input type="text" id="inputUsername" name="username" placeholder="Username" />
+										<input type="text" id="inputUsername" name="username" placeholder="Username" style="width: 222px;"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<div class="controls">
-										<input type="password" id="inputPassword" name="password" placeholder="Password" />
+										<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
 									</div>
 								</div>
 								<div class="control-group">
@@ -118,6 +118,7 @@ else:
 										<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 									</div>
 								</div>
+						</form>
 						</ul>
 <?php
 endif;
@@ -166,12 +167,12 @@ else:
 						<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 								<div class="control-group">
 									<div class="controls">
-										<input type="text" id="inputUsername" name="username" placeholder="Username" />
+										<input type="text" id="inputUsername" name="username" placeholder="Username" style="width: 222px;"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<div class="controls">
-										<input type="password" id="inputPassword" name="password" placeholder="Password" />
+										<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
 									</div>
 								</div>
 								<div class="control-group">
