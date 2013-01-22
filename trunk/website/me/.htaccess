@@ -10,29 +10,3 @@
 </IfModule>
 
 Options -Indexes
-
-order deny,allow
-deny from all
-
-allow from localhost
-allow from 127.0.0.1
-allow from maplestory.nexon.net
-allow from nexon.net
-allow from forum2.nexon.net
-allow from forum2.maplestory.nexon.net
-allow from e.craftnet.nl
-
-allow from 70.167.157.226
-allow from 172.129.44.168
-allow from 184.231.111.128
-allow from 173.60.88.207
-allow from 173.58.231.23
-allow from 64.46.28.83
-allow from 83.80.148.175 # e.craftnet.nl
-allow from 82.93.95.86 # Erwin work
-allow from 94.210.57.36 # Erwin's friend
-allow from 108.13.70.117 # tyler
-allow from 66.226.101.105 # tyler 2
-allow from 172.162.105.234 # tyler 3
-allow from 70.167.157.226 # tyler 4
-allow from 184.255.164.38 # tyler 6 wat.
