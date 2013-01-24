@@ -37,12 +37,26 @@ else {
 	
 	$internal_id = $row['internal_id'];
 	
+	$stat_addition = GetCorrectStat($internal_id);
+	
 ?>
 <h2><?php echo $row['name']; ?>'s Info</h2>
 <img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" />
 <table>
 <?php
-	foreach ($row as $columnname => $value) {
+	foreach ($row as $columnname => $value) {	
+		if ($columnname == 'map') {
+			$tmp = GetMapleStoryString("map", $value, "name");
+			$subname = GetMapleStoryString("map", $value, "street");
+			if ($subname != NULL) {
+				$tmp = $subname." - ".$tmp;
+			}
+			$value = $tmp;
+		}
+		elseif (isset($stat_addition[$columnname])) {
+			$value =($value + $stat_addition[$columnname])." (".$value." + ".$stat_addition[$columnname].")";
+		}
+		
 ?>
 	<tr>
 		<th><?php echo $columnname; ?></th>
@@ -52,6 +66,7 @@ else {
 	}
 ?>
 </table>
+<hr />
 <?php
 
 	$q->free();
@@ -62,12 +77,36 @@ SELECT
 FROM
 	skills
 WHERE
-	character_id = ".$internal_id."");
+	character_id = ".$internal_id."
+ORDER BY
+	skillid / 1000 ASC
+	");
 	
-?>
-<table border="1">
-<?php
+	$lastgroup = -1;
+
 	while ($row = $q->fetch_assoc()) {
+		$name = GetMapleStoryString("skill", $row['skillid'], "name");
+		if ($name == NULL) continue;
+		$block = floor($row['skillid'] / 10000);
+		if ($lastgroup != $block) {
+			if ($lastgroup != -1) {
+?>
+</table>
+<?php
+			}
+			$lastgroup = $block;
+?>
+<h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
+<table border="1" cellspacing="2" cellpadding="8" width="500px">
+	<tr>
+		<th>Skill Name</th>
+		<th>Level</th>
+		<th>Max Level</th>
+		<th>Expires at</th>
+	</tr>
+<?php
+		}
+		
 		if ($row['maxlevel'] == NULL) {
 			$row['maxlevel'] = '-';
 		}
@@ -75,11 +114,11 @@ WHERE
 			$row['expires'] = '-';
 		}
 		else {
-			$row['expires'] = date("Y-m-d h:i:s", $row['expires']);
+			$row['expires'] = GetSystemTimeFromFileTime($row['expires']);
 		}
 ?>
 	<tr>
-		<td><?php echo $row['skillid']; ?></td>
+		<td><?php echo $name; ?></td>
 		<td><?php echo $row['level']; ?></td>
 		<td><?php echo $row['maxlevel']; ?></td>
 		<td><?php echo $row['expires']; ?></td>
@@ -90,6 +129,60 @@ WHERE
 </table>
 <?php
 
+
+
+
+	$q = $__database->query("
+SELECT
+	inventory, itemid, slot, amount, cashid
+FROM
+	items
+WHERE
+	character_id = ".$internal_id."
+ORDER BY
+	inventory ASC,
+	slot ASC
+	");
+	
+	$lastgroup = -1;
+
+	while ($row = $q->fetch_assoc()) {
+		$name = GetMapleStoryString("item", $row['itemid'], "name");
+		$cash = $row['cashid'] != 0;
+		$block = $row['inventory'];
+		if ($lastgroup != $block) {
+			if ($lastgroup != -1) {
+?>
+</table>
+<?php
+			}
+			$lastgroup = $block;
+?>
+<h4><?php echo GetInventoryName($lastgroup); ?></h4>
+<table border="1" cellspacing="2" cellpadding="8" width="500px">
+	<tr>
+		<th>Itemname</th>
+		<th>Slot</th>
+		<th>Amount</th>
+	</tr>
+<?php
+		}
+		
+		if ($cash) {
+			$name = '<em>'.$name.'</em>';
+		}
+		
+?>
+	<tr>
+		<td><?php echo $name; ?></td>
+		<td><?php echo $row['slot']; ?></td>
+		<td><?php echo $row['amount']; ?></td>
+	</tr>
+<?php
+	}
+?>
+</table>
+<?php
 	
 }
 

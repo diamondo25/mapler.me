@@ -109,7 +109,50 @@ function GetPasswordHash($password, $salt) {
 	return substr(md5($salt.$password), 0, 28);
 }
 
-function Staff($staff) {
+function GetMapleStoryString($type, $id, $key) {
+	global $__database;
 	
+	if (strlen($key) > 5) {
+		// Yea...
+		$key = substr($key, 0, 5);
+	}
+	
+	$q = $__database->query("SELECT `value` FROM `strings` WHERE `objecttype` = '".$__database->real_escape_string($type)."' AND `objectid` = ".intval($id)." AND `key` = '".$__database->real_escape_string($key)."'");
+	if ($q->num_rows >= 1) {
+		$row = $q->fetch_array();
+		$tmp = $row[0];
+		$q->free();
+		return $tmp;
+	}
+	$q->free();
+	return NULL;
+}
+
+function GetInventoryName($id) {
+	switch ($id) {
+		case 0: return "Equipment";
+		case 1: return "Usage";
+		case 2: return "Set-Up";
+		case 3: return "Etc";
+		case 4: return "Cash";
+	}
+}
+
+function GetSystemTimeFromFileTime($time) {
+	return date("Y-m-d h:i:s", $time);
+}
+
+
+function GetCorrectStat($internal_id) {
+	global $__database;
+	
+	$q = $__database->query("SELECT SUM(`str`) AS `str`, SUM(`dex`) AS `dex`, SUM(`int`) AS `int`, SUM(`luk`) AS `luk`, SUM(`maxhp`) AS `mhp`, SUM(`maxmp`) AS `mmp` FROM `items` WHERE `character_id` = ".intval($internal_id)." AND slot < 0");
+	if ($q->num_rows >= 1) {
+		$tmp = $q->fetch_assoc();
+		$q->free();
+		return $tmp;
+	}
+	$q->free();
+	return NULL;
 }
 ?>
