@@ -139,6 +139,7 @@ function GetInventoryName($id) {
 }
 
 function GetSystemTimeFromFileTime($time) {
+	date_default_timezone_set('America/Los_Angeles');
 	return date("Y-m-d h:i:s", $time);
 }
 
