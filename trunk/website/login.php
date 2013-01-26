@@ -13,7 +13,7 @@ if ($_loggedin) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!isset($_POST['username'], $_POST['password'])) {
-		$error = "Username or password not set";
+		$error = "Opps! Your username or password was not included.";
 	}
 	else {
 		$username = $__database->real_escape_string($_POST['username']);
@@ -30,13 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$_loggedin = true;
 			}
 			else {
-				$error = "Incorrect password entered.";
+				$error = "Opps! Your username or password provided was incorrect.";
 			}
 		}
 		else {
-			$error = "Unknown username!";
+			$error = "Opps! Your username or password provided was incorrect.";
 		}
-		$query->free(); // Clear dem mem up
+		$query->free(); // Clear memory after finished
 	}
 }
 
