@@ -167,3 +167,8 @@ $job_names = array(
   
   1337 => 'Advisor' // WAT
 );
+
+function GetJobname($id) {
+	if (!isset($job_names[$id])) return 'Unknown ('.$id.')';
+	return $job_names[$id];
+}
