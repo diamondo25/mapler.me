@@ -3,27 +3,11 @@ include_once('inc/header.php');
 
 $q = $__database->query("
 SELECT 
-	chr.*, 
-	w.world_name 
+	*
 FROM 
-	characters chr 
-LEFT JOIN 
-	users usr 
-	ON 
-		usr.ID = chr.userid 
-LEFT JOIN 
-	accounts acc 
-	ON 
-		acc.id = usr.account_id 
-LEFT JOIN 
-	world_data w 
-	ON 
-		w.world_id = chr.world_id 
-
+	`characters`
 WHERE 
-	acc.username = '".$__database->real_escape_string($__url_userdata['username'])."'
-	AND
-	chr.name = '".$__database->real_escape_string($_GET['name'])."'
+	name = '".$__database->real_escape_string($_GET['name'])."'
 ");
 
 if ($q->num_rows == 0) {
