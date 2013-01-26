@@ -61,6 +61,23 @@ namespace MPLRServer
 
                                 break;
                             }
+                        case "request_screenshots":
+                            {
+                                MasterThread.Instance.AddCallback(a =>
+                                {
+                                    var tmp = new List<ClientConnection>(Clients);
+                                    foreach (var client in tmp)
+                                    {
+                                        using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFE))
+                                        {
+                                            pack.SwitchOver();
+                                            client.SendPacket(pack);
+                                        }
+                                    }
+                                });
+
+                                break;
+                            }
                         case "testsession":
                             {
                                 var verp = new MSBLoader();

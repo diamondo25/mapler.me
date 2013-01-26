@@ -54,7 +54,7 @@ else {
 			$value = $tmp;
 		}
 		elseif (isset($stat_addition[$columnname])) {
-			$value =($value + $stat_addition[$columnname])." (".$value." + ".$stat_addition[$columnname].")";
+			$value = ($value + $stat_addition[$columnname])." (".$value." + ".$stat_addition[$columnname].")";
 		}
 		
 ?>

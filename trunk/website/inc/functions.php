@@ -156,4 +156,14 @@ function GetCorrectStat($internal_id) {
 	$q->free();
 	return NULL;
 }
+
+function MakeStatAddition($name, $value, $statarray) {
+	$add = $statarray[$name];
+	if ($add > 0) {
+		return ($value + $add).' ('.$value.' + '.$add.')';
+	}
+	else {
+		return $value;
+	}
+}
 ?>

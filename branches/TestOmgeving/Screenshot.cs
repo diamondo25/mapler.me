@@ -46,10 +46,12 @@ namespace Mapler_Client
             Image img = new Bitmap((int)width, (int)height);
             Graphics graph = Graphics.FromImage(img);
             graph.CopyFromScreen(rect.left, rect.top, 0, 0, new Size((int)width, (int)height));
-            img.Save(pScreenshotName, ImageFormat.Png);
+            img.Save(pScreenshotName, ImageFormat.Jpeg);
 
             img.Dispose();
             graph.Dispose();
+
+            Logger.WriteLine("Created screenshot @ {0} (Filesize: {1} bytes)", pScreenshotName, (new System.IO.FileInfo(pScreenshotName)).Length);
 
             return true;
         }

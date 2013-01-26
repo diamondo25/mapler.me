@@ -1,5 +1,6 @@
 <?php
 include_once('../inc/database.php');
+include_once('../inc/functions.php');
 include_once('job_list.php');
 include_once('caching.php');
 
@@ -50,6 +51,8 @@ if ($q->num_rows == 0) {
 $row = $q->fetch_assoc();
 
 
+$stat_addition = GetCorrectStat($row['internal_id']);
+
 
 $image = imagecreatetruecolor(192, 345);
 imagealphablending($image, false);
@@ -70,8 +73,8 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourlevel']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourexp']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, ""); // Guild
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["chp"]." / ".$row["mhp"]); // Seems strange, but MS updates MP/SP after logging in. -.-'
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["cmp"]." / ".$row["mmp"]);
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["chp"]." / ".($row["mhp"] + $stat_addition['mhp'])); // Seems strange, but MS updates MP/SP after logging in. -.-'
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["cmp"]." / ".($row["mmp"] + $stat_addition['mmp']));
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["fame"]);
 $base_y += 23;
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["ap"]);

@@ -13,8 +13,8 @@ namespace System
         private Socket _socket;
         private byte[] _sendKey = null, _receiveKey = null;
         private byte[] _receiveBuffer;
-        private ushort _receivePosition;
-        private ushort _receiveLength;
+        private int _receivePosition;
+        private int _receiveLength;
         private bool _header = true;
 
         public MESession() { }
@@ -22,7 +22,7 @@ namespace System
         public MESession(Socket pSocket)
         {
             _socket = pSocket;
-            StartReceive(2, false);
+            StartReceive(4, false);
         }
 
         public MESession(string pHostname, ushort pPort)
@@ -60,7 +60,7 @@ namespace System
                 throw new Exception(string.Format("Unable to connect to remote host @ {0}:{1}", lastHost, pPort), lastException);
             }
 
-            StartReceive(2, false);
+            StartReceive(4, false);
         }
 
         ~MESession()
@@ -99,7 +99,7 @@ namespace System
         public virtual void OnPacket(MaplePacket pPacket) { }
         public virtual void OnDisconnect() { }
 
-        public void StartReceive(ushort pLength, bool pIsContinue)
+        public void StartReceive(int pLength, bool pIsContinue)
         {
             if (_receiveBuffer == null)
                 _receiveBuffer = new byte[1024];
@@ -140,7 +140,7 @@ namespace System
                     return;
                 }
 
-                _receivePosition += (ushort)dataLength;
+                _receivePosition += dataLength;
 
                 if (_receivePosition == _receiveLength)
                 {
@@ -148,7 +148,7 @@ namespace System
                     if (_header)
                     {
                         // Get length
-                        ushort newlen = BitConverter.ToUInt16(_receiveBuffer, 0);
+                        int newlen = BitConverter.ToInt32(_receiveBuffer, 0);
                         _header = false;
                         StartReceive(newlen, false);
                     }
@@ -173,7 +173,7 @@ namespace System
 
 
                         _header = true;
-                        StartReceive(2, false);
+                        StartReceive(4, false);
                     }
                 }
                 else
@@ -198,7 +198,7 @@ namespace System
         {
             try
             {
-                _socket.Send(BitConverter.GetBytes((ushort)pPacket.Length), 0, 2, SocketFlags.None);
+                _socket.Send(BitConverter.GetBytes(pPacket.Length), 0, 4, SocketFlags.None);
 
                 byte[] data = pPacket.ToArray();
                 if (_sendKey != null)

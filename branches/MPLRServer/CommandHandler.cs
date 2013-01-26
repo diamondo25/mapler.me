@@ -54,6 +54,7 @@ namespace MPLRServer
                                 pConnection.LastReportID = MySQL_Connection.Instance.GetLastInsertId();
                                 using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFE))
                                 {
+                                    pack.SwitchOver();
                                     pConnection.SendPacket(pack);
                                 }
                             }
