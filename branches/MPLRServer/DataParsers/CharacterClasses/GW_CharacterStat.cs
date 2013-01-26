@@ -70,7 +70,6 @@ namespace MPLRServer
 
         public void Decode(MaplePacket pPacket)
         {
-            Logger.PWrite("{0}------------ GW_CharacterStat::Decoded --------------{0}", Environment.NewLine);
             this.ID = pPacket.ReadInt();
             this.Name = pPacket.ReadString(13);
 
@@ -100,14 +99,15 @@ namespace MPLRServer
             short a1 = this.JobID;
 
             if (a1 / 1000 == 3 ||
-                a1 / 100 == 22 || a1 == 2001 ||
-                a1 / 100 == 23 || a1 == 2002 ||
-                a1 / 100 == 24 || a1 == 2003 ||
-                a1 / 100 == 51 || a1 == 5000 ||
-                a1 / 100 == 27 || a1 == 2004 ||
-                a1 / 100 == 61 || a1 == 6000 ||
-                a1 / 100 == 65 || a1 == 6001 ||
-                a1 / 10 == 57 || a1 == 508)
+                a1 / 100 == 22 || a1 == 2001 || // Evan
+                a1 / 100 == 23 || a1 == 2002 || // Mercedes
+                a1 / 100 == 24 || a1 == 2003 || // Phantom
+                a1 / 100 == 27 || a1 == 2004 || // Luminous
+                a1 / 100 == 51 || a1 == 5000 || // Mihile
+                a1 / 100 == 61 || a1 == 6000 || // Kaiser
+                a1 / 100 == 65 || a1 == 6001 || // Angelic Buster
+                a1 / 10 == 57 || a1 == 508      // Jett
+                )
             {
                 SPData = new List<KeyValuePair<byte, int>>();
                 byte amnt = pPacket.ReadByte();
@@ -165,7 +165,6 @@ namespace MPLRServer
             pPacket.Skip(9); // wat
 
 
-            //Logger.PWrite("{0}------------ DUR --------------{0}", Environment.NewLine);
 
             pPacket.ReadByte();
             pPacket.ReadInt();
@@ -177,13 +176,11 @@ namespace MPLRServer
             this.BattlePoints = pPacket.ReadInt();
             this.BattleRank = pPacket.ReadByte();
 
-            //Logger.WriteLine("PVPEXP {0}; PVPRANK {1}; BPOINTS {2}; BRANK {3}", PVPExp, PVPRank, BattlePoints, BattleRank);
 
             pPacket.ReadInt();
             pPacket.ReadInt();
             pPacket.ReadByte();
 
-            //Logger.PWrite("{0}------------ DUR --------------{0}", Environment.NewLine);
 
             for (int j = 0; j < 6; j++)
             {
@@ -195,9 +192,6 @@ namespace MPLRServer
             long filetime = 0;
             filetime += (long)(pPacket.ReadInt() >> 32);
             filetime += (long)pPacket.ReadInt();
-            DateTime dt = DateTime.Now; // DateTime.FromFileTime(filetime);
-
-            Logger.PWrite("{0}---------------- END  {1}              --------------{0}", Environment.NewLine, dt);
         }
 
         public void DecodeMesos(MaplePacket pPacket)

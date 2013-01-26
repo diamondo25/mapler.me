@@ -40,7 +40,7 @@ namespace Mapler_Client
                 name = "GB";
                 val /= 1024;
             }
-            return val.ToString("0,0.00") + " " + name;
+            return val.ToString("#,0.00") + " " + name;
         }
 
         private void tmUpdateLabels_Tick(object sender, EventArgs e)

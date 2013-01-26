@@ -115,6 +115,10 @@ namespace MPLRServer
             {
                 try
                 {
+                    if (_exporter != null)
+                        _exporter.AddPacket(pPacket);
+
+
                     MaplePacket.CommunicationType type = (MaplePacket.CommunicationType)pPacket.ReadByte();
                     ushort header = pPacket.ReadUShort();
 
@@ -131,8 +135,6 @@ namespace MPLRServer
                                 {
                                     if (action.CanHandle == null || action.CanHandle(this))
                                     {
-                                        if (_exporter != null)
-                                            _exporter.AddPacket(pPacket);
                                         action.Handle(this, pPacket);
                                     }
                                 }
