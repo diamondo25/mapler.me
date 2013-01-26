@@ -1,5 +1,5 @@
 <?php
-include_once('../inc/header.php');
+include_once('inc/header.php');
 
 $q = $__database->query("
 SELECT 
@@ -186,5 +186,5 @@ ORDER BY
 	
 }
 
-include_once('../inc/footer.php');
+include_once('inc/footer.php');
 ?>
