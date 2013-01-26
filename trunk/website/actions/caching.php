@@ -20,13 +20,21 @@ function ShowCachedImage($charactername, $type) {
 		$filename = '../cache/'.$row[0].'.png';
 		if (file_exists($filename)) {
 			if ($row[1] == 1) {
+				if (isset($_GET['debug']))
+					echo 'found file<br />';
 				readfile($filename);
 				die();
 			}
 			else {
 				// Lol expired. Delete!
+				if (isset($_GET['debug']))
+					echo 'Expired<br />';
 				unlink($filename);
 			}
+		}
+		else {
+			if (isset($_GET['debug']))
+				echo 'Not found<br />';
 		}
 	}
 	$q->free();
