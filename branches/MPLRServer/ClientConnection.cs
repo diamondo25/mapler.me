@@ -85,25 +85,36 @@ namespace MPLRServer
             base.SendPacket(pPacket);
         }
 
-        public void Save()
+        public void Save(bool pReset)
         {
             Logger.WriteLine("Trying to save...");
             if (_exporter != null)
             {
-                string filename = "Savefile.msb";
+                string filename;
                 if (CharData != null)
                 {
                     filename = "Savefile-" + CharData.Stats.Name + "-" + CharData.Stats.DateThing + ".msb";
                 }
+                else
+                {
+                    filename = "Savefile_" + MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") + ".msb";
+                }
                 Logger.WriteLine("Saving under {0}", filename);
                 _exporter.Save(filename, MapleVersion);
-                _exporter = null;
+                if (pReset)
+                {
+                    _exporter = new MSBExporter();
+                }
+                else
+                {
+                    _exporter = null;
+                }
             }
         }
 
         public override void OnDisconnect()
         {
-            Save();
+            Save(false);
             Logger.WriteLine("Client Disconnected.");
             Clear();
             Program.Clients.Remove(this);

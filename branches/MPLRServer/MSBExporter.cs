@@ -36,6 +36,7 @@ namespace MPLRServer
                 Data = new byte[pPacket.Length - 3];
                 Buffer.BlockCopy(pPacket.ToArray(), 3, Data, 0, Data.Length); // byte + short (header)
                 ArrivalTime = MasterThread.CurrentDate;
+                pPacket.Reset();
             }
 
             public byte[] Dump()

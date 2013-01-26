@@ -17,6 +17,8 @@ namespace System
         private int _receiveLength;
         private bool _header = true;
 
+        private bool _disconnected = false;
+
         public MESession() { }
 
         public MESession(Socket pSocket)
@@ -27,6 +29,7 @@ namespace System
 
         public MESession(string pHostname, ushort pPort)
         {
+            _disconnected = true;
             IPAddress[] addies;
             try
             {
@@ -59,7 +62,7 @@ namespace System
             {
                 throw new Exception(string.Format("Unable to connect to remote host @ {0}:{1}", lastHost, pPort), lastException);
             }
-
+            _disconnected = false;
             StartReceive(4, false);
         }
 
@@ -84,8 +87,9 @@ namespace System
 
         public void Disconnect()
         {
-            if (_socket != null)
+            if (!_disconnected && _socket != null)
             {
+                _disconnected = true;
                 if (_socket.Connected)
                 {
                     _socket.Disconnect(false);
@@ -101,6 +105,7 @@ namespace System
 
         public void StartReceive(int pLength, bool pIsContinue)
         {
+            if (_disconnected) return;
             if (_receiveBuffer == null)
                 _receiveBuffer = new byte[1024];
             if (!pIsContinue)
@@ -123,6 +128,7 @@ namespace System
 
         private void EndReceive(IAsyncResult pIAR)
         {
+            if (_disconnected) return;
             try
             {
                 int dataLength = 0;
@@ -196,6 +202,7 @@ namespace System
 
         public virtual void SendPacket(MaplePacket pPacket)
         {
+            if (_disconnected) return;
             try
             {
                 _socket.Send(BitConverter.GetBytes(pPacket.Length), 0, 4, SocketFlags.None);
