@@ -53,18 +53,11 @@ if (count($cache) > 0) {
 	<div class="span10">
 	<p class="lead"><?php echo $__url_userdata['full_name']; ?> <span class="muted">(<?php echo $__url_userdata['nickname']; ?>)</span></p>
 	<?php echo $__url_userdata['bio']; ?>
-	
 	<hr/>
 	
 	<!-- Character Display -->
 	<div class="span10">
 
-<script>
-function ChangeImage(id, name) {
-	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/card/" + name;
-	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/infopic/" + name;
-}
-</script>
 <?php
 
 
@@ -77,46 +70,48 @@ if (count($cache) == 0) {
 
 	
 $last_world = NULL;
+$i = 0;
 foreach ($cache as $row) {
 	if ($last_world != $row[2]) {
 		if ($last_world != NULL) {
+			$i = 0;
 ?>
-</table>
+			</tr>
+		</table>
+	</div>
 </fieldset>
 <?php
 		}
 ?>
 <fieldset>
-<legend><button class="btn" data-toggle="collapse" data-target="#<?php echo $row[2]; ?>" href="#<?php echo $row[2]; ?>"><?php echo $row[2]; ?></button></legend>
-<div id="<?php echo $row[2]; ?>" class="collapse accordion-body">
-<table width="100%">
-
+	<legend><button class="btn" data-toggle="collapse" data-target="#<?php echo $row[2]; ?>" href="#<?php echo $row[2]; ?>"><?php echo $row[2]; ?></button></legend>
+	<div id="<?php echo $row[2]; ?>" class="collapse accordion-body">
+		<table width="100%">
+			<tr>
 <?php
 		$last_world = $row[2];
 	}
+	if ($i != 0 && $i % 5 == 0) {
 ?>
-	<tr>
-		<td><?php echo $row[1]; ?></td>
-		<td><img src="//<?php echo $domain; ?>/inc/img/char_bg.png" alt="Image of <?php echo $row[1]; ?>" id="image_<?php echo $row[0]; ?>" width="271px" height="162px" /></td>
-		<td><img src="//<?php echo $domain; ?>/inc/img/stat_window.png" alt="Statistics of <?php echo $row[1]; ?>" id="stats_<?php echo $row[0]; ?>" width="192px" height="345px" /></td>
 	</tr>
+	<tr>
 <?php
+	}
+?>
+				<td>
+					<img src="//<?php echo $domain; ?>/avatar/<?php echo $row[1]; ?>" class="img-polaroid" />
+					<br />
+					<center><?php echo $row[1]; ?></center>
+				</td>
+<?php
+	$i++;
 }
 
 ?>
-</table>
-</div>
+			</tr>
+		</table>
+	</div>
 </fieldset>
-<script>
-<?php
-foreach ($cache as $row) {
-?>
-ChangeImage(<?php echo $row[0]; ?>, '<?php echo $row[1]; ?>');
-<?php
-	
-}
-?>
-</script>
 	
 	</div>
 	</div>

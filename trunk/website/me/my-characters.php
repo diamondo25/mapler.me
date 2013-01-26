@@ -9,10 +9,6 @@ function ChangeImage(id, name) {
 </script>
 <?php
 
-
-
-
-
 $q = $__database->query("
 SELECT 
 	chr.id, 

@@ -87,6 +87,7 @@ namespace MPLRServer
 
         public void Save()
         {
+            Logger.WriteLine("Trying to save...");
             if (_exporter != null)
             {
                 string filename = "Savefile.msb";
@@ -94,6 +95,7 @@ namespace MPLRServer
                 {
                     filename = "Savefile-" + CharData.Stats.Name + "-" + CharData.Stats.DateThing + ".msb";
                 }
+                Logger.WriteLine("Saving under {0}", filename);
                 _exporter.Save(filename, MapleVersion);
                 _exporter = null;
             }

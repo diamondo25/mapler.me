@@ -1,6 +1,7 @@
 <?php
 $subdomain = "";
 $domain = "";
+
 if (strpos($_SERVER['SERVER_NAME'], "direct.mapler.me") !== false) {
 	// SOMETHING.direct.mapler.me
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], ".direct.mapler.me"));
@@ -28,6 +29,6 @@ elseif (strpos($_SERVER['SERVER_NAME'], "maplerme") !== false) {
 	$domain = "maplerme";
 }
 
-$subdomain = trim($subdomain);
+$subdomain = strtolower(trim($subdomain));
 
 ?>

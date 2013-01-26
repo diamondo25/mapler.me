@@ -1,4 +1,5 @@
 <?php
+include_once "domains.php";
 
 class Form {
 	public $output;
@@ -165,5 +166,14 @@ function MakeStatAddition($name, $value, $statarray) {
 	else {
 		return $value;
 	}
+}
+
+function IsLoggedin() {
+	return isset($_SESSION['login_data']);
+}
+
+function IsOwnAccount() {
+	global $subdomain;
+	return (IsLoggedin() && $subdomain == $_SESSION['login_data']['name']);
 }
 ?>
