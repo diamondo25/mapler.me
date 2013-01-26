@@ -72,7 +72,7 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["exp"]);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourlevel']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourexp']);
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, ""); // Guild
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, "-"); // Guild
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["chp"]." / ".($row["mhp"] + $stat_addition['mhp'])); // Seems strange, but MS updates MP/SP after logging in. -.-'
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["cmp"]." / ".($row["mmp"] + $stat_addition['mmp']));
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row["fame"]);
@@ -92,4 +92,5 @@ $id = uniqid().($row['ID'] % 10);
 CacheImage($charname, 'stats', $image, $id);
 
 imagedestroy($image);
+$q->free();
 ?>

@@ -2,6 +2,7 @@
 include_once('../inc/database.php');
 include_once('../inc/domains.php');
 include_once('caching.php');
+include_once('job_list.php');
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";
@@ -86,25 +87,12 @@ if ($len < 4 || $len > 12) {
 if (!isset($_GET['NO_CACHING']))
 	ShowCachedImage($charname, 'info');
 
-
-
-$_HERP = true;
-include_once('get_char_info.php');
-$json_data = json_decode($json_data, true);
-
-if ($debug)
-	print_r($json_data);
-
-$ok = !isset($json_data["error"]);
-if ($json_data["images"]["Character"] == "NOT-FOUND")
-	$json_data["images"]["Character"] = "../inc/img/no-character.gif";
-if (!$ok) {
-	$json_data["images"]["Character"] = "../inc/img/no-character.gif";
-	$got_pet = false;
+$q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
+if ($q->num_rows == 0) {
+	die("character not found");
 }
-else {
-	$got_pet = strpos($json_data["images"]["Pet"], "HHJLHDFFEFDGELLNFOPOKJFPLJIJIOFJGKBFIENAOLFLCACMGPEDJLOKHBLCGMBN") == FALSE;
-}
+$row = $q->fetch_assoc();
+	
 
 $image = imagecreatetruecolor(271, 162);
 imagealphablending($image, false);
@@ -119,22 +107,13 @@ imagealphablending($image, true);
 $charpos_x = 10;
 $charpos_y = 20;
 
-if ($got_pet) {
-	// LOAD PET
-	$pet_image = LoadGif($json_data["images"]["Pet"]);
-
-	imagecopymerge($image, $pet_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
-}
-
 //$character_image = LoadPNG("http://".$domain."/avatar/".$charname);
 $character_image = LoadPNG("http://mapler.me/avatar/".$charname);
- // LoadGif($json_data["images"]["Character"]);
 
 imagecopyresampled($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 96, 96);
-//imagecopymerge($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 100);
 
 // SET NAMETAG
-$name = $ok ? $json_data["name"] : $charname;
+$name = $row['name'];
 
 $x = ($charpos_x + (96 / 2));
 $y = ($charpos_y + 10 + 96);
@@ -148,9 +127,9 @@ $base_x = 152;
 $base_y = 55;
 $step = 18;
 
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 0),  imagecolorallocate($image, 0, 0, 0), $font, $ok ? $json_data["level"] : '???');
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 1),  imagecolorallocate($image, 0, 0, 0), $font, $ok ? $json_data["job"] : '???');
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($image, 0, 0, 0), $font, $ok ? $json_data["fame"] : '???');
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 0),  imagecolorallocate($image, 0, 0, 0), $font, $row['level']);
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 1),  imagecolorallocate($image, 0, 0, 0), $font, $row['job']);
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($image, 0, 0, 0), $font, $job_names[$row['fame']]);
 //ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 3), imagecolorallocate($image, 0, 0, 0), $font, "HAX!");
 //ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 4), imagecolorallocate($image, 0, 0, 0), $font, "HAXCLANZ");
 
