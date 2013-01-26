@@ -74,6 +74,11 @@ $i = 0;
 foreach ($cache as $row) {
 	if ($last_world != $row[2]) {
 		if ($last_world != NULL) {
+			for ($i %= 5; $i < 5; $i++) {
+?>
+				<td width="200px">&nbsp;</td>
+<?php
+			}
 			$i = 0;
 ?>
 			</tr>
@@ -93,13 +98,13 @@ foreach ($cache as $row) {
 	}
 	if ($i != 0 && $i % 5 == 0) {
 ?>
-	</tr>
-	<tr>
+			</tr>
+			<tr>
 <?php
 	}
 ?>
-				<td>
-					<img src="//<?php echo $domain; ?>/avatar/<?php echo $row[1]; ?>" class="img-polaroid" />
+				<td width="200px">
+					<center><img src="//<?php echo $domain; ?>/avatar/<?php echo $row[1]; ?>" class="img-polaroid" /></center>
 					<br />
 					<center><?php echo $row[1]; ?></center>
 				</td>
@@ -107,6 +112,11 @@ foreach ($cache as $row) {
 	$i++;
 }
 
+for ($i %= 5; $i < 5; $i++) {
+?>
+				<td width="200px">&nbsp;</td>
+<?php
+}
 ?>
 			</tr>
 		</table>
