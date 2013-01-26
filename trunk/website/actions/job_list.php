@@ -169,6 +169,7 @@ $job_names = array(
 );
 
 function GetJobname($id) {
+	global $job_names;
 	if (!isset($job_names[$id])) return 'Unknown ('.$id.')';
 	return $job_names[$id];
 }
