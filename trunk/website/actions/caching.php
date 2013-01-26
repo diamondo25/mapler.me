@@ -11,10 +11,10 @@ function CacheImage($charactername, $type, $image, $id) {
 }
 
 
-function ShowCachedImage($charactername, $type) {
+function ShowCachedImage($charactername, $type, $alivetime = '1 DAY') {
 	global $__database;
 	
-	$q = $__database->query("SELECT id, DATE_ADD(`added`, INTERVAL 1 DAY) >= NOW() FROM cache WHERE charactername = '".$__database->real_escape_string($charactername)."' AND type = '".$type."'");
+	$q = $__database->query("SELECT id, DATE_ADD(`added`, INTERVAL ".$alivetime.") >= NOW() FROM cache WHERE charactername = '".$__database->real_escape_string($charactername)."' AND type = '".$type."'");
 	if ($q->num_rows == 1) {
 		$row = $q->fetch_row();
 		$filename = '../cache/'.$row[0].'.png';

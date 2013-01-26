@@ -34,6 +34,9 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($charname, 'avatar', '5 MINUTE');
+
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	$im = imagecreatetruecolor (96, 96);
@@ -164,33 +167,7 @@ while($row2 = $character_equipment->fetch_assoc()) {
 
 $character_equipment->free();
 
-// Create a hash to check against to save time and resources
-$hash = sha1($skin.$face.$hair.$hat.$mask.$eyes.$ears.$top.$pants.$overall.$shoe.$glove.$cape.$shield.$wep.$nxwep);
 
-// Get hash
-/*
-$hash_query = mysql_query(
-	"SELECT * FROM
-		`character_variables`
-	WHERE
-		`charid` = " . $character_id . " AND
-		`key` = 'image_hash'"
-);
-*/
-// If the hash matches, then we will just grab the image
-//$hash_data = mysql_fetch_array($hash_query);
-//if ($hash == $hash_data['value']) {	
-if (false) {
-	// Get image
-	add_image("images/characters/" . $character_id . ".png", 0, 0);
-	
-	// Output image
-	imagepng($im);
-	imagedestroy($im);
-	
-	die();
-}
-else {
 	// This section determines which stand to use based on the weapon you have
 	// Credit goes to zOmgnO1 for improved code
 	if ($wep) {
@@ -730,38 +707,18 @@ else {
 			$wep_location = $characterwz."/Weapon/0".$nxwep.".img/stand".$stand.".0.weapon.png";
 		add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 	}
-	
-	// Write hash to the character variables
-	/*
-	if (mysql_num_rows($hash_query) == 0) {
-		mysql_query(
-			"INSERT INTO 
-				`character_variables`
-			VALUES 
-					('" . $character_id . "', 'image_hash', '".$hash."')"
-		);
-	}
-	else {
-		mysql_query(
-			"UPDATE 
-				`character_variables` 
-			SET 
-				`value` = '" . $hash . "' 
-			WHERE 
-				`charid` = '" . $character_id . "' AND 
-				`key` = 'image_hash'"
-		);
-	}
-	*/
-	
-	// Output image
-	// imagepng($im, "images/characters/" . $character_id . ".png");
+
 	imagepng($im);
+	
+	
+	$id = uniqid().rand(0, 9);
+	CacheImage($charname, 'avatar', $im, $id);
+	
+	
 	imagedestroy($im);
 	
-	if (isset($_GET['debug'])) {
-		var_dump($GLOBALS);
-	}
+	
+	
 }
 
 // Function to phrase data into an array
