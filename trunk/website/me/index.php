@@ -38,7 +38,7 @@ $q->free();
 ?>
 
 	<div id="profile" class="row">
-		<div id="header" class="span4" style="background: url('inc/img/back_panel.png') repeat top center">
+		<div id="header" class="span4" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
         	<div id="meta-nav">
             	<div class="row">
                 	<div class="span4">
@@ -71,8 +71,10 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
                    </div>
                </div>
            </div>
+         </div>
 	
 	<!-- Character Display -->
+   <div class="row">
 	<div class="span8">
 
 <?php
@@ -80,6 +82,11 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
 
 if (count($cache) == 0) {
 ?>
+	
+	</div>
+	</div>
+
+<?php include_once('../inc/footer.php'); ?>
 <p class="lead alert-error alert"><?php echo $__url_userdata['username']; ?> hasn't added any characters yet!</p>
 
 <?php
@@ -138,9 +145,5 @@ for ($i %= 5; $i < 5; $i++) {
 			</tr>
 		</table>
 	</div>
+    </div>
 </fieldset>
-	
-	</div>
-	</div>
-
-<?php include_once('../inc/footer.php'); ?>
