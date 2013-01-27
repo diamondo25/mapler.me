@@ -58,6 +58,7 @@
     <Compile Include="DataParsers\Guild.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="Internal Storage\Store.cs" />
+    <Compile Include="InternalPacketHandler.cs" />
     <Compile Include="MasterThread.cs" />
     <Compile Include="MSBExporter.cs" />
     <Compile Include="MSBLoader.cs" />

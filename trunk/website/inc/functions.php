@@ -174,6 +174,6 @@ function IsLoggedin() {
 
 function IsOwnAccount() {
 	global $subdomain;
-	return (IsLoggedin() && $subdomain == $_SESSION['login_data']['name']);
+	return (IsLoggedin() && strtolower($subdomain) == strtolower($_SESSION['login_data']['username']));
 }
 ?>

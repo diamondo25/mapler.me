@@ -40,6 +40,11 @@ namespace Mapler_Client
                 name = "GB";
                 val /= 1024;
             }
+            if (val > 1024)
+            {
+                name = "TB"; // Really?
+                val /= 1024;
+            }
             return val.ToString("#,0.00") + " " + name;
         }
 
@@ -47,8 +52,8 @@ namespace Mapler_Client
         {
             lblReceivedData.Text = GetHumanReadableAmount(Program.RECV_DATA);
             lblSentData.Text = GetHumanReadableAmount(Program.SENT_DATA);
-            lblReceivedPackets.Text = Program.RECV_PACKETS.ToString("0,0");
-            lblSentPackets.Text = Program.SENT_PACKETS.ToString("0,0");
+            lblReceivedPackets.Text = Program.RECV_PACKETS.ToString("#,0");
+            lblSentPackets.Text = Program.SENT_PACKETS.ToString("#,0");
         }
     }
 }

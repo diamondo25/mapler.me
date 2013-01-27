@@ -11,6 +11,9 @@ using System.Windows;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
+using System.Web;
+using System.Net;
+
 namespace Mapler_Client
 {
     class Screenshot
@@ -54,6 +57,19 @@ namespace Mapler_Client
             Logger.WriteLine("Created screenshot @ {0} (Filesize: {1} bytes)", pScreenshotName, (new System.IO.FileInfo(pScreenshotName)).Length);
 
             return true;
+        }
+
+        public static void Upload(string pURL, int pID, string pFilename)
+        {
+            WebClient wc = new WebClient();
+            wc.Headers.Add("Content-Type", "binary/octet-stream");
+            wc.Headers.Add("X-Report-ID", pID.ToString());
+            wc.UploadFileCompleted += (a, b) =>
+            {
+                Logger.WriteLine("File Uploaded");
+            };
+
+            wc.UploadFileAsync(new Uri(pURL), pFilename);
         }
     }
 }

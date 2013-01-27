@@ -96,7 +96,6 @@ namespace MPLRServer
                     if (result.Read())
                     {
                         pConnection.AccountID = result.GetInt32(0);
-                        Logger.WriteLine("Creating user for accountID {0}", pConnection.AccountID);
                     }
                 }
             };
@@ -130,6 +129,8 @@ namespace MPLRServer
                 // Check if exists in users_weblogin
 
                 getWebLoginID();
+
+                Logger.WriteLine("Creating user for accountID {0}", pConnection.AccountID);
 
                 // Adding user!
 

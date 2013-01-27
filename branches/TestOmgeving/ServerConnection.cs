@@ -73,11 +73,17 @@ namespace Mapler_Client
                 {
                     // Create screenshot and send to server
 
+                    string url = pPacket.ReadString();
+                    int id = pPacket.ReadInt();
+
                     string filename = System.IO.Path.GetTempFileName();
 
                     bool done = Screenshot.MakeScreenshotOfMaple(filename);
                     if (done)
                     {
+                        Screenshot.Upload(url, id, filename);
+
+                        /*
                         using (MaplePacket packet = new MaplePacket(0xFFFE))
                         {
                             using (System.IO.BinaryReader br = new System.IO.BinaryReader(System.IO.File.OpenRead(filename)))
@@ -90,6 +96,7 @@ namespace Mapler_Client
 
                             ForwardPacket(MaplePacket.CommunicationType.Internal, packet);
                         }
+                        */
                     }
                 }
             }

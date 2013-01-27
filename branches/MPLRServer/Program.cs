@@ -215,22 +215,9 @@ namespace MPLRServer
                 var tmp = new Dictionary<ushort, Handler>();
 
                 // Client got connection or lost connection
-                tmp.Add(0x0000, new Handler((pClient, pPacket) =>
-                {
-                    bool got = pPacket.ReadBool();
-                    if (got)
-                    {
-                        string ip = pPacket.ReadString();
-                        ushort port = pPacket.ReadUShort();
-                        Logger.WriteLine("Client got connection with MapleStory server @ {0}:{1}", ip, port);
-                    }
-                    else
-                    {
-                        Logger.WriteLine("Client lost connection with MapleStory server");
-                        pClient.Save(true);
-                    }
-                }, null));
+                tmp.Add(0x0000, new Handler(InternalPacketHandler.HandleServerConnectionStatus, null));
 
+                /*
                 tmp.Add(0xFFFE, new Handler((pClient, pPacket) =>
                 {
                     if (pClient.LastReportID == -1) return;
@@ -260,6 +247,7 @@ namespace MPLRServer
                     pClient.LastReportID = -1;
 
                 }, null));
+                */
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.Internal] = tmp;
             }

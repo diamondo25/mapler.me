@@ -44,16 +44,18 @@ namespace MPLRServer
                     {
                         using (InsertQueryBuilder iqb = new InsertQueryBuilder("reports"))
                         {
-                            iqb.AddColumns(false, "id", "name", "reported_by", "reported_when", "mapid");
-                            iqb.AddRow(null, name, pConnection.CharacterInternalID, new MySQL_Connection.NowType(), pConnection.CharData.Stats.MapID);
+                            iqb.AddColumns(false, "id", "name", "reported_by", "reported_when", "mapid", "screenshot");
+                            iqb.AddRow(null, name, pConnection.CharacterInternalID, new MySQL_Connection.NowType(), pConnection.CharData.Stats.MapID, null);
 
                             int result = (int)MySQL_Connection.Instance.RunQuery(iqb.ToString());
                             if (result != 0)
                             {
                                 Logger.WriteLine("Reported {0} (by {1}). Requesting Screenshot...", name, pConnection.CharData.Stats.Name);
-                                pConnection.LastReportID = MySQL_Connection.Instance.GetLastInsertId();
+
                                 using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFE))
                                 {
+                                    pack.WriteString("http://mapler.me/actions/upload_report.php");
+                                    pack.WriteInt(MySQL_Connection.Instance.GetLastInsertId());
                                     pack.SwitchOver();
                                     pConnection.SendPacket(pack);
                                 }
