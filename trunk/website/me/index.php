@@ -77,18 +77,18 @@ if (count($cache) > 0) {
 //<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>
 <?php
 }
-?>" style="display: inline-block;"> </a><br/>
-                    <span id="cat"><?php echo $cache[0][1]; ?></span> </div> </div> </div> </div> </div>
+?>" alt="<?php echo $cache[0][1]; ?>" style="display: inline-block;"> </a>
+</div> </div> </div> </div> </div>
 	
 	<!-- Character Display -->
-	<div class="span8">
+	<div class="span12">
 
 <?php
 
 
 if (count($cache) == 0) {
 ?>
-<p class="lead alert-error alert"><?php echo $__url_userdata['username']; ?> hasn't added any characters yet!</p>
+<p class="lead alert-error alert"><?php echo $__url_userdata['nickname']; ?> hasn't added any characters yet!</p>
 
 <?php
 }
