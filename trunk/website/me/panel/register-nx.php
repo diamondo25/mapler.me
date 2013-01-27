@@ -100,7 +100,7 @@ SELECT
 FROM 
 	users
 WHERE
-	account_id = ".$_SESSION['login_data']['id']."
+	account_id = ".$__url_userdata['id']."
 ");
 
 ?>
