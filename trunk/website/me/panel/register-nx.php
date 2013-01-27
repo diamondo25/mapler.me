@@ -9,8 +9,8 @@ if (!IsOwnAccount()) {
 }
 
 $maycheck = true;
-if ($_SESSION['login_data']['last_account_addition'] != '0000-00-00 00:00:00') {
-	$tmp = strtotime($_SESSION['login_data']['last_account_addition']);
+if ($__url_userdata['last_account_addition'] != '0000-00-00 00:00:00') {
+	$tmp = strtotime($__url_userdata['last_account_addition']);
 	$tmp += 5 * 60; // 5 minutes
 	
 	if (time() < $tmp) { // 5 minutes
@@ -28,7 +28,7 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 	$_SESSION['login_data']['last_account_addition'] = date("Y-m-d H:i:s");
 	echo $_SESSION['login_data']['last_account_addition'];
 	
-	$__database->query("UPDATE accounts SET last_account_addition = NOW() WHERE id = ".$_SESSION['login_data']['id']);
+	$__database->query("UPDATE accounts SET last_account_addition = NOW() WHERE id = ".$__url_userdata['id']);
 
 	$post_values = array(
 		'userID' => $_POST['username'], 
@@ -83,7 +83,7 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 <?php
 			}
 			
-			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$_SESSION['login_data']['id'].", '".$__database->real_escape_string($real_username)."')");
+			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$__url_userdata['id'].", '".$__database->real_escape_string($real_username)."')");
 		
 ?>
 <p class="lead alert-success alert">Your MapleStory account has been successfully added to your Mapler.me account!</p>

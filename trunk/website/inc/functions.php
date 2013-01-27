@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('America/Los_Angeles');
 include_once "domains.php";
 include_once "ranks.php";
 
@@ -141,7 +142,6 @@ function GetInventoryName($id) {
 }
 
 function GetSystemTimeFromFileTime($time) {
-	date_default_timezone_set('America/Los_Angeles');
 	return date("Y-m-d h:i:s", $time);
 }
 
