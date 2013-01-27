@@ -38,7 +38,7 @@ $q->free();
 ?>
 
 	<div id="profile" class="row">
-		<div id="header" class="span4" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
+		<div id="header" class="span4" style="background: url('inc/img/back_panel.png') repeat top center">
         	<div id="meta-nav">
             	<div class="row">
                 	<div class="span4">
@@ -60,7 +60,7 @@ $q->free();
           	 <div class="row">
             	<div class="span4">
                 	<div id="user-about" class="center">
-                    	<h2><?php echo $__url_userdata['full_name']; ?></h2>
+                    	<h2><?php echo $__url_userdata['nickname']; ?></h2>
                         
                         <ul id="user-external">
                         	<li><span style="color: rgb(255, 255, 255); text-shadow: rgb(102, 102, 102) 1px 0px 3px;">
@@ -71,10 +71,19 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
                    </div>
                </div>
            </div>
-         </div>
+           
+           <div class="row">
+           		<div class="span4 center">
+                	<a href=""> <img id="default" src="<?php
+if (count($cache) > 0) {
+?>
+<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>
+<?php
+}
+?>" style="display: inline-block;"> </a><br/>
+                    <span id="cat"><?php echo $cache[0][1]; ?></span> </div> </div> </div> </div> </div>
 	
 	<!-- Character Display -->
-   <div class="row">
 	<div class="span8">
 
 <?php
@@ -82,11 +91,6 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
 
 if (count($cache) == 0) {
 ?>
-	
-	</div>
-	</div>
-
-<?php include_once('../inc/footer.php'); ?>
 <p class="lead alert-error alert"><?php echo $__url_userdata['username']; ?> hasn't added any characters yet!</p>
 
 <?php
@@ -146,3 +150,8 @@ for ($i %= 5; $i < 5; $i++) {
 		</table>
 	</div>
 </fieldset>
+	
+	</div>
+	</div>
+
+<?php include_once('../inc/footer.php'); ?>
