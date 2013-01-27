@@ -60,7 +60,7 @@ $q->free();
           	 <div class="row">
             	<div class="span4">
                 	<div id="user-about" class="center">
-                    	<h2><?php echo $__url_userdata['full_name']; ?> <span class="muted">(<?php echo $__url_userdata['nickname']; ?>)</span></h2>
+                    	<h2><?php echo $__url_userdata['full_name']; ?></h2>
                         
                         <ul id="user-external">
                         	<li><span style="color: rgb(255, 255, 255); text-shadow: rgb(102, 102, 102) 1px 0px 3px;">
@@ -145,5 +145,4 @@ for ($i %= 5; $i < 5; $i++) {
 			</tr>
 		</table>
 	</div>
-    </div>
 </fieldset>
