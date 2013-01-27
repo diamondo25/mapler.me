@@ -175,6 +175,6 @@ function IsLoggedin() {
 
 function IsOwnAccount() {
 	global $subdomain;
-	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_SESSION['login_data']['username']) || $_SESSION['login_data']['rank'] >= RANK_MODERATOR));
+	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_SESSION['login_data']['username']) || $_SESSION['login_data']['account_rank'] >= RANK_MODERATOR));
 }
 ?>
