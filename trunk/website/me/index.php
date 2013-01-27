@@ -38,19 +38,16 @@ $q->free();
 ?>
 
 	<div id="profile" class="row">
-		<div id="header" class="span4" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
+		<div id="header" class="span12" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
         	<div id="meta-nav">
             	<div class="row">
-                	<div class="span4">
-                    	<ul id="nav-left" class="span4" style="margin-left:40px;">
+                	<div class="span12">
+                    	<ul id="nav-left">
                         	<li><a id="posts" href="#"><span class="sprite icon post"></span><span class="count">18</span> <span class="item">Characters</span></a></li>
                             <li><a id="likes" href="#"><span class="sprite icon badgestar"></span><span class="count">3</span> <span class="item">Achievements</span></a></li>
                             </ul>
                             
-                        <ul id="nav-right" style="display:none;">
-                            	<li><a id="followers" href="#"><span class="sprite icon follower"></span><span class="item">Followers</span><span class="count">4</span></a></li>
-                                <li><a id="following" href="#"><span class="sprite icon following"></span><span class="item">Following</span><span class="count">1</span></a></li>
-                                <li><a id="badges" href="#"><span class="sprite icon badgestar"></span><span class="item">Badges</span><span class="count">4</span></a></li>
+                        <ul id="nav-right">
                         </ul>
                    </div>
               </div>
@@ -58,7 +55,7 @@ $q->free();
           
           <div id="profile-user-details">
           	 <div class="row">
-            	<div class="span4">
+            	<div class="span6 offset3">
                 	<div id="user-about" class="center">
                     	<h2><?php echo $__url_userdata['nickname']; ?></h2>
                         
@@ -73,7 +70,7 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
            </div>
            
            <div class="row">
-           		<div class="span4 center">
+           		<div class="span2 offset5 center">
                 	<a href=""> <img id="default" src="<?php
 if (count($cache) > 0) {
 ?>
