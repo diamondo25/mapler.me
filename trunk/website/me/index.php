@@ -35,28 +35,45 @@ while ($row = $q->fetch_row()) {
 	$cache[] = $row;
 }
 $q->free();
-
-
-
 ?>
 
-	<div class="row">
-	<div class="span2">
-<?php
-if (count($cache) > 0) {
-?>
-<img src="//<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>" class="img-polaroid"/>
-<?php
-}
-?>
-	</div>
-	<div class="span10">
-	<p class="lead"><?php echo $__url_userdata['full_name']; ?> <span class="muted">(<?php echo $__url_userdata['nickname']; ?>)</span></p>
-	<?php echo $__url_userdata['bio']; ?>
-	<hr/>
+	<div id="profile" class="row">
+		<div id="header" class="span4" style="background: url('inc/img/back_panel.png') repeat top center">
+        	<div id="meta-nav">
+            	<div class="row">
+                	<div class="span4">
+                    	<ul id="nav-left" class="span4" style="margin-left:40px;">
+                        	<li><a id="posts" href="#"><span class="sprite icon post"></span><span class="count">18</span> <span class="item">Characters</span></a></li>
+                            <li><a id="likes" href="#"><span class="sprite icon badgestar"></span><span class="count">3</span> <span class="item">Achievements</span></a></li>
+                            </ul>
+                            
+                        <ul id="nav-right" style="display:none;">
+                            	<li><a id="followers" href="#"><span class="sprite icon follower"></span><span class="item">Followers</span><span class="count">4</span></a></li>
+                                <li><a id="following" href="#"><span class="sprite icon following"></span><span class="item">Following</span><span class="count">1</span></a></li>
+                                <li><a id="badges" href="#"><span class="sprite icon badgestar"></span><span class="item">Badges</span><span class="count">4</span></a></li>
+                        </ul>
+                   </div>
+              </div>
+          </div>
+          
+          <div id="profile-user-details">
+          	 <div class="row">
+            	<div class="span4">
+                	<div id="user-about" class="center">
+                    	<h2><?php echo $__url_userdata['full_name']; ?> <span class="muted">(<?php echo $__url_userdata['nickname']; ?>)</span></h2>
+                        
+                        <ul id="user-external">
+                        	<li><span style="color: rgb(255, 255, 255); text-shadow: rgb(102, 102, 102) 1px 0px 3px;">
+                        	<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png" style="position: relative;
+top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
+                            
+                        </ul>
+                   </div>
+               </div>
+           </div>
 	
 	<!-- Character Display -->
-	<div class="span10">
+	<div class="span8">
 
 <?php
 
