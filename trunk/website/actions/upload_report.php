@@ -14,7 +14,7 @@ $q = $__database->query("SELECT id FROM reports WHERE id = ".$id." AND screensho
 
 if ($q->num_rows != 0) die('Already reported');
 
-$uploadfile = uniqid().rand(0, 9)).'.png';
+$uploadfile = uniqid(rand(0, 9)).'.png';
 
 if (!move_uploaded_file($_FILES['file']['tmp_name'], $screenshot_location.$uploadfile)) die('Failure in move-it move-it');
 

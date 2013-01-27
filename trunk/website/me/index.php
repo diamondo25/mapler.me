@@ -55,7 +55,7 @@ $q->free();
           
           <div id="profile-user-details">
           	 <div class="row">
-            	<div class="span6 offset3">
+            	<div class="span6 offset3" style="margin-bottom:70px;">
                 	<div id="user-about" class="center">
                     	<h2><?php echo $__url_userdata['nickname']; ?></h2>
                         
@@ -70,14 +70,22 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
            </div>
            
            <div class="row">
-           		<div class="span2 offset5 center">
+           		<div class="span2 offset5 center" style="margin-bottom: -70px;">
                 	<a href=""> <img id="default" src="<?php
 if (count($cache) > 0) {
 ?>
-//<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>
+//mapler.me/avatar/<?php echo $cache[0][1]; ?>
 <?php
 }
-?>" alt="<?php echo $cache[0][1]; ?>" style="display: inline-block;"> </a>
+?>" alt="<?php echo $cache[0][1]; ?>" style="display:inline-block;background: rgb(255, 255, 255);
+border-radius: 150px;
+margin-bottom: -30px;
+box-sizing: border-box;
+-webkit-box-shadow: rgba(0, 0, 0, 0.298039) 0px 0px 4px 0px;
+box-shadow: rgba(0, 0, 0, 0.298039) 0px 0px 4px 0px;
+border: 8px solid rgb(255, 255, 255);
+border-image: initial;
+text-align: center;"> </a>
 </div> </div> </div> </div> </div>
 	
 	<!-- Character Display -->

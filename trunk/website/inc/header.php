@@ -54,12 +54,24 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 				<div class="nav-collapse">
 					<ul class="nav hidden-phone">
 						 <li class="dropdown">
+<?php
+if (!isset($__url_userdata)):
+?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
+                            
+<?php
+else:
+?>
+
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_userdata['nickname']; ?>  <b class="caret"></b></a>                         
+<?php
+endif;
+?>                      
 							<ul class="dropdown-menu">
 <?php
 if (isset($__url_userdata)):
 ?>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_userdata['nickname']; ?></a></li>
+								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/my-characters">Characters</a></li>
 <?php
 else:
@@ -83,7 +95,7 @@ if ($_loggedin):
 ?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Welcome back! <?php echo $_logindata['full_name']; ?> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/">Profile</a></li>
+								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
 								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/panel/">Settings</a></li>
 						
