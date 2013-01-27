@@ -38,7 +38,7 @@ $q->free();
 ?>
 
 	<div id="profile" class="row">
-		<div id="header" class="span4" style="background: url('inc/img/back_panel.png') repeat top center">
+		<div id="header" class="span4" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
         	<div id="meta-nav">
             	<div class="row">
                 	<div class="span4">
@@ -77,7 +77,7 @@ top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
                 	<a href=""> <img id="default" src="<?php
 if (count($cache) > 0) {
 ?>
-<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>
+//<?php echo $domain; ?>/avatar/<?php echo $cache[0][1]; ?>
 <?php
 }
 ?>" style="display: inline-block;"> </a><br/>
