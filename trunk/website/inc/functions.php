@@ -1,5 +1,6 @@
 <?php
 include_once "domains.php";
+include_once "ranks.php";
 
 class Form {
 	public $output;
@@ -174,6 +175,6 @@ function IsLoggedin() {
 
 function IsOwnAccount() {
 	global $subdomain;
-	return (IsLoggedin() && strtolower($subdomain) == strtolower($_SESSION['login_data']['username']));
+	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_SESSION['login_data']['username'] || $_SESSION['login_data']['rank'] >= RANK_MODERATOR)));
 }
 ?>
