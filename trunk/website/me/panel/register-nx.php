@@ -9,8 +9,8 @@ if (!IsOwnAccount()) {
 }
 
 $maycheck = true;
-if ($__url_userdata['last_account_addition'] != '0000-00-00 00:00:00') {
-	$tmp = strtotime($__url_userdata['last_account_addition']);
+if ($_SESSION['login_data']['last_account_addition'] != '0000-00-00 00:00:00') {
+	$tmp = strtotime($_SESSION['login_data']['last_account_addition']);
 	$tmp += 5 * 60; // 5 minutes
 	
 	if (time() < $tmp) { // 5 minutes
@@ -26,9 +26,8 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 	$maycheck = false;
 	$minutes_timeout = 5;
 	$_SESSION['login_data']['last_account_addition'] = date("Y-m-d H:i:s");
-	echo $_SESSION['login_data']['last_account_addition'];
 	
-	$__database->query("UPDATE accounts SET last_account_addition = NOW() WHERE id = ".$__url_userdata['id']);
+	$__database->query("UPDATE accounts SET last_account_addition = NOW() WHERE id = ".$_SESSION['login_data']['id']);
 
 	$post_values = array(
 		'userID' => $_POST['username'], 
