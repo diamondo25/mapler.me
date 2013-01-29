@@ -1,10 +1,10 @@
 <?php
-include_once('../../inc/header.php');
+include_once('../inc/header.php');
 if (!IsOwnAccount()) {
 ?>
 	This is not your account.
 <?php
-	include_once('../../inc/footer.php');
+	include_once('../inc/footer.php');
 	die();
 }
 
@@ -139,5 +139,5 @@ WHERE
 <?php endif; ?>
 
 <?php
-include_once('../../inc/footer.php');
+include_once('../inc/footer.php');
 ?>

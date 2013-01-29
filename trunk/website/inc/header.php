@@ -97,7 +97,7 @@ if ($_loggedin):
 							<ul class="dropdown-menu">
 								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
-								<li><a href="//<?php echo $_logindata['username']; ?>.<?php echo $domain; ?>/panel/">Settings</a></li>
+								<li><a href="//<?php echo $domain; ?>/panel/">Settings</a></li>
 						
 <?php
 if ($_logindata['account_rank'] == RANK_ADMIN):
@@ -143,7 +143,8 @@ endif;
 if (!$_loggedin):
 ?>	
 					<ul class="nav pull-right hidden-phone">
-						<li id="nav-signup-btn"><a href="/signup/">Request Invite</a></li>
+						<li id="nav-signup-btn" style="text-decoration:line-through;"><a href="#">
+                        Request Invite</a></li>
 					</ul>
 <?php
 endif;
@@ -206,10 +207,3 @@ endif;
 	</div>
 
 	<div class="container">
-<?php
-if (!$_loggedin):
-?>
-	<p class="lead alert alert-error">&nbsp;Mapler.me is currently in private development. <b>Check back later!</b></p>
-<?php
-endif;
-?>	
