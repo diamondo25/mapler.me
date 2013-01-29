@@ -11,8 +11,8 @@
 
 Options -Indexes
 
-ErrorDocument 400 /error/_error_document_.php
-ErrorDocument 401 /error/_error_document_.php
-ErrorDocument 403 /error/_error_document_.php
-ErrorDocument 404 /error/_error_document_.php
-ErrorDocument 500 /error/_error_document_.php
+ErrorDocument 400 /errors/_error_document_.php
+ErrorDocument 401 /errors/_error_document_.php
+ErrorDocument 403 /errors/_error_document_.php
+ErrorDocument 404 /errors/_error_document_.php
+ErrorDocument 500 /errors/_error_document_.php
