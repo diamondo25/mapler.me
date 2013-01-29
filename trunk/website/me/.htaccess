@@ -10,3 +10,9 @@
 </IfModule>
 
 Options -Indexes
+
+ErrorDocument 400 /actions/error/index.php
+ErrorDocument 401 /actions/error/index.php
+ErrorDocument 403 /actions/error/index.php
+ErrorDocument 404 /actions/error/index.php
+ErrorDocument 500 /actions/error/index.php
