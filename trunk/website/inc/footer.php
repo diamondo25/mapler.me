@@ -12,7 +12,9 @@
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/bootstrapall.js"></script>
+	<script src="//<?php echo $domain; ?>/inc/js/scripts.js"></script>
+    <script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js"></script>
 
 </body>
 </html>
+

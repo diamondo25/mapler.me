@@ -4,7 +4,6 @@
 if (!$_loggedin):
 ?>
       <div class="jumbotron">
-        <div id="myCarousel" class="carousel slide">
 		  <!-- Carousel items -->
 		  <div class="carousel-inner">
 			<div class="active item"><h1>Are you ready to become a better mapler?</h1>
@@ -16,7 +15,6 @@ if (!$_loggedin):
 			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro/">works.</a></h1>
 				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
 				</p></div>
-		  </div>
 		</div>
 
 	<a class="btn btn-small" href="/register" role="button" style="display:none;">What are you waiting for? Sign up!</a>

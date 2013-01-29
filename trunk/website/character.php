@@ -1,6 +1,27 @@
 <?php
 include_once('inc/header.php');
+?>
 
+<?php
+if (!$_loggedin) {
+?>
+
+<p class="lead alert-error alert">Plese login to view this page.</p>
+<?php die; ?>
+<?php
+}
+?>
+
+<?php
+if (!$_logindata['account_rank'] == RANK_ADMIN):
+?>
+<p class="lead alert-error alert">You are not an admin.</p>
+<?php die; ?>
+<?php
+endif;
+?>
+
+<?php
 $q = $__database->query("
 SELECT 
 	*
