@@ -80,6 +80,12 @@ $necky = $mainy + 31;
 $hairshade = $character_data['skin'];
 $gender = $character_data['gender'];
 
+$ds_mark = $character_data['demonmark'];
+
+if ($ds_mask != 0) {
+	$mask = $ds_mark;
+}
+
 // Determine which items are visible
 // Credit goes to zOmgnO1 for improved code
 
