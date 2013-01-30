@@ -87,6 +87,9 @@ if ($len < 4 || $len > 12) {
 if (!isset($_GET['NO_CACHING']))
 	ShowCachedImage($charname, 'info');
 
+$id = uniqid().rand(0, 9);
+AddCacheImage($charname, 'info', $id);
+
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	die("character not found");
@@ -138,7 +141,6 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 imagepng($image);
 
 
-$id = uniqid().rand(0, 9);
 CacheImage($charname, 'info', $image, $id);
 
 imagedestroy($image);

@@ -11,7 +11,6 @@ if (!isset($_GET['debug'])) {
 	header('Content-Type: image/png');
 }
 else {
-
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 }
@@ -37,6 +36,8 @@ if ($len < 4 || $len > 12) {
 
 if (!isset($_GET['NO_CACHING']))
 	ShowCachedImage($charname, 'avatar', '5 MINUTE');
+$id = uniqid().rand(0, 9);
+AddCacheImage($charname, 'avatar', $id);
 
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
@@ -239,8 +240,14 @@ $chosenface = $faces[rand(0, count($faces) - 1)];
 // Coordinates for the face
 if (isset($face)) {
 	$facearray = get_data($face);
-	$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
-	$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
+	if (!isset($facearray[$chosenface.'_0_face_origin_X'])) {
+		$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
+		$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
+	}
+	else {
+		$facex = -$facearray['default_default_origin_X'] - $facearray['default_default_map_brow_X'];
+		$facey = -$facearray['default_default_origin_Y'] - $facearray['default_default_map_brow_Y'];
+	}
 }
 
 // Coordinates for the hair
@@ -594,7 +601,7 @@ if (isset($mask) && $maskz == "accessoryFaceBelowFace") {
 }
 
 // Create face
-$face_location = $characterwz."/Face/000".$face.".img/".$chosenface.".0.face.png";
+$face_location = $characterwz."/Face/000".$face.".img/".($chosenface == 'default' ? $chosenface : $chosenface.'.0').".face.png";
 add_image($face_location, $mainx + $facex, $mainy + $facey);
 
 // Create mask
