@@ -3,33 +3,6 @@
 date_default_timezone_set('America/Los_Angeles');
 include_once "domains.php";
 include_once "ranks.php";
-include_once "database.php";
-
-// Initialize Login Data
-$_loggedin = false;
-if (isset($_SESSION['login_data'])) {
-	$_logindata = $_SESSION['login_data'];
-	$_loggedin = (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE);
-}
-
-// Set to null by default
-$__url_userdata = null;
-
-if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "social") {
-	// Tries to recieve userdata for the subdomain. If it fails, results in a 404.
-	
-	$username = $__database->real_escape_string($subdomain);
-	$q = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
-	if ($q->num_rows > 0) {
-		$__url_userdata = $q->fetch_assoc();
-	}
-	else {
-		// User Not Found Results In 404
-		header("HTTP/1.1 404 File Not Found", 404); exit;
-	}
-	$q->free();
-	
-}
 
 class Form {
 	public $output;
