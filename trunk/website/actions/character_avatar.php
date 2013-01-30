@@ -82,7 +82,7 @@ $gender = $character_data['gender'];
 
 $ds_mark = $character_data['demonmark'];
 
-if ($ds_mask != 0) {
+if ($ds_mark != 0) {
 	$mask = $ds_mark;
 }
 
@@ -453,7 +453,7 @@ $positions = array(
 	"pantsBelowShoes",
 	"shoes"
 );
-$other = (isset($pants)) ? $pantsz : $mailz;
+$other = isset($pants) ? $pantsz : $mailz;
 $shoe_pos = array_search($shoesz, $positions);
 $other_pos = array_search($other, $positions);
 
