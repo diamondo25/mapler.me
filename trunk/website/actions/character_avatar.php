@@ -720,7 +720,7 @@ imagepng($im);
 
 
 $id = uniqid().rand(0, 9);
-CacheImage($charname, 'avatar', $im, $id);
+SaveCacheImage($charname, 'avatar', $im, $id);
 
 
 imagedestroy($im);

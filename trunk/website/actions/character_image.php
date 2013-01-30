@@ -141,7 +141,7 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 imagepng($image);
 
 
-CacheImage($charname, 'info', $image, $id);
+SaveCacheImage($charname, 'info', $image, $id);
 
 imagedestroy($image);
 

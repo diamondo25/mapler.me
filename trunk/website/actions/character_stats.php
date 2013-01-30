@@ -102,7 +102,7 @@ imagepng($image);
 
 
 $id = uniqid().($row['ID'] % 10);
-CacheImage($charname, 'stats', $image, $id);
+SaveCacheImage($charname, 'stats', $image, $id);
 
 imagedestroy($image);
 $q->free();
