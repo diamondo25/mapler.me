@@ -1,39 +1,10 @@
 <?php
 session_start();
 include_once('functions.php');
-include_once('domains.php');
-include_once('database.php');
-include_once('ranks.php');
-
-// Initialize Login Data
-$_loggedin = false;
-if (isset($_SESSION['login_data'])) {
-	$_logindata = $_SESSION['login_data'];
-	$_loggedin = (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE);
-}
-
-$__url_userdata = null;
-
-if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "social") {
-	// Try to get userdata... Else: error!
-	
-	$username = $__database->real_escape_string($subdomain);
-	$q = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
-	if ($q->num_rows > 0) {
-		$__url_userdata = $q->fetch_assoc();
-	}
-	else {
-		// User not found.
-		header('Location: http://'.$domain.'/?error=user-not-found');
-		die();
-	}
-	$q->free();
-	
-}
-
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
+<head>    
 	<title>Mapler.me &middot; MapleStory Social Network</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -55,11 +26,13 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 					<ul class="nav hidden-phone">
 						 <li class="dropdown">
 <?php
+// Not a subdomain
 if (!isset($__url_userdata)):
 ?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
                             
 <?php
+// Is a subdomain
 else:
 ?>
 
@@ -69,11 +42,13 @@ endif;
 ?>                      
 							<ul class="dropdown-menu">
 <?php
+// Display subdomain pages related to the user
 if (isset($__url_userdata)):
 ?>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/my-characters">Characters</a></li>
 <?php
+// Display normal pages if not a subdomain
 else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
@@ -128,7 +103,7 @@ else:
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right:2px;width:220px;">Sign in</button>
+											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
 											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 										</div>
 									</div>
@@ -189,7 +164,7 @@ else:
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right:2px;width:220px;">Sign in</button>
+											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
 											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 										</div>
 									</div>

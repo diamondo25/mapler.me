@@ -4,18 +4,20 @@
 if (!$_loggedin):
 ?>
       <div class="jumbotron">
-		  <!-- Carousel items -->
-		  <div class="carousel-inner">
-			<div class="active item"><h1>Are you ready to become a better mapler?</h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front1.gif" class="pull-right"/>Join hundreds of other maplers and keep track of your progress in-game, as well as socialize with your buddies in-game!</p>
+      	<h1 style="font-size:60px;font-weight:200;" class="span12">What is Mapler.me?</h1>
+        <br/><br/>
+			<div class="row">
+			<div class="span4"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front1.gif" class="pull-right"/><h1>Are you ready to become a better mapler?</h1>
+				<p class="lead">Join hundreds of other maplers and keep track of your progress in-game, as well as socialize with your buddies in-game!</p>
 				</div>
-			<div class="item"><h1>Keep track of your own Maple 'Story'!</h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front3.gif" class="pull-left"/>Mapler.me records everything from your experience, stats, and even past looks!<br/>Never forget a past look again!</p>
+			<div class="span4"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front3.gif" class="pull-right"/><h1>Keep track of your own Maple 'Story'!</h1>
+				<p class="lead">Mapler.me records everything from your experience, stats, and even past looks!<br/>Never forget a past look again!</p>
 			 </div>
-			<div class="item"><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro/">works.</a></h1>
-				<p class="lead"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/>Mapler.me keeps all player information confidential and secure!<br/>
-				</p></div>
-		</div>
+			<div class="span4"><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/front2.gif" class="pull-right"/><h1>Safe, fast, and secure.<br/>It just <a href="//<?php echo $domain; ?>/intro/">works.</a></h1>
+				<p class="lead">Mapler.me keeps all player information confidential and secure!<br/>
+				</p>
+			</div>
+       </div>
 
 	<a class="btn btn-small" href="/register" role="button" style="display:none;">What are you waiting for? Sign up!</a>
 	
