@@ -29,7 +29,7 @@ function ShowCachedImage($charactername, $type, $alivetime = '1 DAY') {
 		$row = $q->fetch_row();
 		$filename = '../cache/'.$row[0].'.png';
 		
-		while ($row[3] == 0) {
+		for ($i = 0; $row[3] == 0 && $i < 10; $i++) {
 			$q->free();
 			sleep(1); // Wait till it's loaded.
 			$q = $__database->query($query);
