@@ -232,7 +232,7 @@ else {
 $vslot = "";
 
 
-$faces = array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
+$faces = array("hot"); // array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
 
 // Create face
 $chosenface = $faces[rand(0, count($faces) - 1)];
@@ -240,14 +240,8 @@ $chosenface = $faces[rand(0, count($faces) - 1)];
 // Coordinates for the face
 if (isset($face)) {
 	$facearray = get_data($face);
-	if (!isset($facearray[$chosenface.'_0_face_origin_X'])) {
-		$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
-		$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
-	}
-	else {
-		$facex = -$facearray['default_default_origin_X'] - $facearray['default_default_map_brow_X'];
-		$facey = -$facearray['default_default_origin_Y'] - $facearray['default_default_map_brow_Y'];
-	}
+	$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
+	$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
 }
 
 // Coordinates for the hair
