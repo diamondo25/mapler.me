@@ -1,8 +1,6 @@
 <?php
 session_start();
-include_once('domains.php');
-include_once('database.php');
-include_once('ranks.php');
+include_once('functions.php');
 
 // Initialize Login Data
 $_loggedin = false;
@@ -31,6 +29,7 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 }
 
 ?>
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>    

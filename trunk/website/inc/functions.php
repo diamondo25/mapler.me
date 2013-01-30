@@ -1,8 +1,9 @@
 <?php
 //Default set to Pacific Time (MapleStory Time)
 date_default_timezone_set('America/Los_Angeles');
-include_once "domains.php";
-include_once "ranks.php";
+include_once('domains.php');
+include_once('database.php');
+include_once('ranks.php');
 
 class Form {
 	public $output;
