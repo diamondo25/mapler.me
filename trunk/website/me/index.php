@@ -38,8 +38,8 @@ while ($row = $q->fetch_assoc()) {
 $q->free();
 
 $has_characters = count($cache) != 0;
-$main_character_info = $cache[0];
-$main_character_name = $has_characters ? $main_caracter_info['name'] : '';
+$main_character_info = $has_characters ? $cache[0] : null;
+$main_character_name = $has_characters ? $main_character_info['name'] : '';
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 ?>
 
