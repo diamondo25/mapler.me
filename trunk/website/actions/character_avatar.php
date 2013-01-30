@@ -578,7 +578,7 @@ add_image($characterwz."/000".$head.".img/front.head.png", $mainx - 15, $mainy -
 
 // Create earring
 if (isset($ears)) {
-	$ear_location = $characterwz."/Accessory/0".$ears.".img/default.default.png";
+	$ear_location = $characterwz."/Accessory/0".$ears.".img/".$chosenface.".0.default.png";
 	add_image($ear_location, $mainx + $earsx, $mainy + $earsy);
 }
 
@@ -590,23 +590,23 @@ if (substr_count($vslot, 'H1H2H3H4H5H6') != 1) {
 
 // Create mask
 if (isset($mask) && $maskz == "accessoryFaceBelowFace") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
 // Create face
-$face_location = $characterwz."/Face/000".$face.".img/".($chosenface == 'default' ? $chosenface : $chosenface.'.0').".face.png";
+$face_location = $characterwz."/Face/000".$face.".img/".$chosenface.".0.face.png";
 add_image($face_location, $mainx + $facex, $mainy + $facey);
 
 // Create mask
 if (isset($maskz) && $maskz == "accessoryFace") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
 // Create eyes item
 if (isset($eyes) && $eyesz == "accessoryEye") {
-	$eyes_location = $characterwz."/Accessory/0".$eyes.".img/default.default.png";
+	$eyes_location = $characterwz."/Accessory/0".$eyes.".img/".$chosenface.".0.default.png";
 	add_image($eyes_location, $mainx + $eyesx, $mainy + $eyesy);
 }
 
@@ -618,7 +618,7 @@ if (isset($hair) && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 
 // Create accessoryFaceOverFaceBelowCap
 if (isset($maskz) && $maskz == "accessoryFaceOverFaceBelowCap") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/default.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
