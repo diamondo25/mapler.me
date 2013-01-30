@@ -161,6 +161,21 @@ function GetCorrectStat($internal_id) {
 	return NULL;
 }
 
+
+function GetCharacterName($id) {
+	global $__database;
+	
+	$q = $__database->query("SELECT name FROM characters WHERE id = '".intval($id)."'");
+	if ($q->num_rows >= 1) {
+		$tmp = $q->fetch_row();
+		$q->free();
+		return $tmp[0];
+	}
+	$q->free();
+	return 'Unknown Character';
+}
+
+
 function MakeStatAddition($name, $value, $statarray) {
 	$add = $statarray[$name];
 	if ($add > 0) {

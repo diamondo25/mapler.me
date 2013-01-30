@@ -1,27 +1,22 @@
 <?php
 include_once('inc/header.php');
-?>
-
-<?php
 if (!$_loggedin) {
 ?>
-
-<p class="lead alert-error alert">Plese login to view this page.</p>
-<?php die; ?>
+<p class="lead alert-error alert">Please login to view this page.</p>
 <?php
+
+	include_once('inc/footer.php');
+	die();
 }
-?>
-
-<?php
-if (!$_logindata['account_rank'] == RANK_ADMIN):
+elseif ($_logindata['account_rank'] != RANK_ADMIN) {
 ?>
 <p class="lead alert-error alert">You are not an admin.</p>
-<?php die; ?>
 <?php
-endif;
-?>
 
-<?php
+	include_once('inc/footer.php');
+	die();
+}
+
 $q = $__database->query("
 SELECT 
 	*
@@ -114,6 +109,9 @@ ORDER BY
 		
 		if ($row['maxlevel'] == NULL) {
 			$row['maxlevel'] = '-';
+		}
+		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
+			$row['level'] = 'Bound with: '.GetCharacterName($row['level']);
 		}
 		if ($row['expires'] == 3439756800) {
 			$row['expires'] = '-';
