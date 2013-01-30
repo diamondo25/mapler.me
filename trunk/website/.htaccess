@@ -20,10 +20,6 @@
 	RewriteRule ^avatar/([^\./]*) /actions/character_avatar.php?name=$1 [L]
 	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L]
 	
-	#RewriteRule ^card/([^/]*)$ /actions/character_image.php?name=$1 [L]
-	#RewriteRule ^avatar/([^/]*)$ /actions/character_avatar.php?name=$1 [L]
-	#RewriteRule ^infopic/([^/]*)$ /actions/character_stats.php?name=$1 [L]
-	
 	# character / player rewrites
 	RewriteRule ^stats/([^/]*)$ /character.php?name=$1
 	
