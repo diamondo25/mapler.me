@@ -101,7 +101,6 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 imagepng($image);
 
 
-$id = uniqid().($row['ID'] % 10);
 SaveCacheImage($charname, 'stats', $image, $id);
 
 imagedestroy($image);

@@ -713,7 +713,6 @@ if($weaponz == 'weaponOverGlove' || $weaponz == 'weaponOverHand') {
 imagepng($im);
 
 
-$id = uniqid().rand(0, 9);
 SaveCacheImage($charname, 'avatar', $im, $id);
 
 
