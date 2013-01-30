@@ -31,7 +31,7 @@ function ShowCachedImage($charactername, $type, $alivetime = '1 DAY') {
 		
 		for ($i = 0; $row[2] == 0 && $i < 10; $i++) {
 			$q->free();
-			sleep(1); // Wait till it's loaded.
+			sleep(2); // Wait till it's loaded.
 			$q = $__database->query($query);
 			$row = $q->fetch_row();
 		}
