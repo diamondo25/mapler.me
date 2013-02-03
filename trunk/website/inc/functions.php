@@ -1,9 +1,13 @@
 <?php
+session_start();
+
 //Default set to Pacific Time (MapleStory Time)
 date_default_timezone_set('America/Los_Angeles');
-include_once('domains.php');
-include_once('database.php');
-include_once('ranks.php');
+
+require_once 'database.php';
+require_once 'class_account.php';
+require_once 'domains.php';
+require_once 'ranks.php';
 
 class Form {
 	public $output;
@@ -187,11 +191,61 @@ function MakeStatAddition($name, $value, $statarray) {
 }
 
 function IsLoggedin() {
-	return isset($_SESSION['login_data']);
+	return isset($_SESSION['username']);
 }
 
 function IsOwnAccount() {
 	global $subdomain;
-	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_SESSION['login_data']['username']) || $_SESSION['login_data']['account_rank'] >= RANK_MODERATOR));
+	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
+
+
+
+
+
+
+
+// Initialize more stuffs
+
+
+
+// Initialize Login Data
+$_loggedin = false;
+if (isset($_SESSION['username'])) {
+	$username = $_SESSION['username'];
+	$_loggedin = (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE);
+	$_loginaccount = Account::Load($username);
+}
+
+// Set to null by default
+$__url_useraccount = null;
+
+if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "social") {
+	// Tries to recieve userdata for the subdomain. If it fails, results in a 404.
+	
+	$__url_useraccount = Account::Load($subdomain);
+	if ($__url_useraccount == null) {
+		// User Not Found Results In 404
+		header("HTTP/1.1 404 File Not Found", 404);
+		exit;
+	}
+	
+	/*
+	
+	$username = $__database->real_escape_string($subdomain);
+	$q = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
+	if ($q->num_rows > 0) {
+		$__url_userdata = $q->fetch_assoc();
+	}
+	else {
+		// User Not Found Results In 404
+		header("HTTP/1.1 404 File Not Found", 404);
+		exit;
+	}
+	$q->free();
+	*/
+}
+
+
+
 ?>

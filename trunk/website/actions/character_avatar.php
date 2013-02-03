@@ -1,6 +1,6 @@
 <?php
-include_once('../inc/database.php');
-include_once('caching.php');
+require_once '../inc/database.php';
+require_once 'caching.php';
 
 $font = "arial.ttf";
 $font_size = "9.25";

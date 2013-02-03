@@ -1,5 +1,5 @@
 <?php
-include_once('../inc/header.php');
+require_once '../inc/header.php';
 ?>
 <script>
 function ChangeImage(id, name) {
@@ -30,7 +30,7 @@ LEFT JOIN
 		w.world_id = chr.world_id 
 
 WHERE 
-	acc.username = '".$__database->real_escape_string($__url_userdata['username'])."' 
+	acc.username = '".$__database->real_escape_string($__url_useraccount->GetUsername())."' 
 ORDER BY 
 	chr.world_id ASC,
 	chr.level DESC
@@ -38,7 +38,7 @@ ORDER BY
 
 if ($q->num_rows == 0) {
 ?>
-<p class="lead alert-error alert">There are no character records for <?php echo $__url_userdata['username']; ?></p>
+<p class="lead alert-error alert">There are no character records for <?php echo $__url_useraccount->GetUsername(); ?></p>
 
 <?php
 }
@@ -93,5 +93,5 @@ ChangeImage(<?php echo $row[0]; ?>, '<?php echo $row[1]; ?>');
 </script>
 <?php
 
-include_once('../inc/footer.php');
+require_once '../inc/footer.php';
 ?>

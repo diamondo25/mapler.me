@@ -23,9 +23,13 @@ NO_END;
 		$error_msg = str_replace("{ERROR_DATA_HERE}", $this->error." (errno. ".$this->errno.")\r\n".base64_encode($this->last_query), $error_msg);
 		return $error_msg;
 	}
+	
+	public function QueriesRan() {
+		return $this->query_count;
+	}
 }
 
-
+// Connect to the database
 $__database = new ExtendedMysqli("stats.craftnet.nl", "maplestats", "maplederp", "maplestats");
 if ($__database->connect_errno != 0) {
 	die("<strong>Failed to connect to the MySQL server: ".$__database->connect_error." (errno: ".$__database->connect_errno.")</strong>");

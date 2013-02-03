@@ -1,4 +1,4 @@
-<?php include_once('inc/header.php'); ?>
+<?php require_once 'inc/header.php'; ?>
 
 <?php
 if (!$_loggedin):
@@ -48,4 +48,4 @@ endif;
 ?>
       </div>
 
-<?php include_once('inc/footer.php'); ?>
+<?php require_once 'inc/footer.php'; ?>

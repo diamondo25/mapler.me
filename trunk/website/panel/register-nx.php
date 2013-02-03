@@ -1,10 +1,10 @@
 <?php
-include_once('../inc/header.php');
+require_once '../inc/header.php';
 if (!IsOwnAccount()) {
 ?>
 	This is not your account.
 <?php
-	include_once('../inc/footer.php');
+	require_once '../inc/footer.php';
 	die();
 }
 
@@ -82,7 +82,7 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 <?php
 			}
 			
-			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$__url_userdata['id'].", '".$__database->real_escape_string($real_username)."')");
+			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$__url_useraccount->GetId().", '".$__database->real_escape_string($real_username)."')");
 		
 ?>
 <p class="lead alert-success alert">Your MapleStory account has been successfully added to your Mapler.me account!</p>
@@ -100,7 +100,7 @@ SELECT
 FROM 
 	users
 WHERE
-	account_id = ".$__url_userdata['id']."
+	account_id = ".$__url_useraccount->GetId()."
 ");
 
 ?>
@@ -139,5 +139,5 @@ WHERE
 <?php endif; ?>
 
 <?php
-include_once('../inc/footer.php');
+require_once '../inc/footer.php';
 ?>

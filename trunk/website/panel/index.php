@@ -1,5 +1,5 @@
 <?php
-include_once('../inc/header.php');
+require_once '../inc/header.php';
 ?>
 
 <style type="text/css">
@@ -25,7 +25,7 @@ include_once('../inc/header.php');
 			  <div class="control-group">
 				<label class="control-label" for="inputEmail">Name (Full Name)</label>
 				<div class="controls">
-				  <input type="text" id="inputEmail" placeholder="<?php echo $_logindata['full_name']; ?>">
+				  <input type="text" id="inputEmail" placeholder="<?php echo $_loginaccount->GetFullName(); ?>">
 				</div>
 			  </div>
 			  <div class="control-group">
@@ -127,4 +127,4 @@ include_once('../inc/header.php');
 		<input data-spy="affix" data-offset-top="60" class="btn btn-primary panel_confirm" type="submit" value="Confirm!"/>
 	</div>
 
-<?php include_once('../inc/footer.php'); ?>
+<?php require_once '../inc/footer.php'; ?>

@@ -4,8 +4,8 @@
 if (!isset($_SERVER['X-Report-ID'], $_FILES['file']['tmp_name'])) die('Invalid Headers');
 if (!is_uploaded_file($_FILES['file']['tmp_name'])) die('Shoo!');
 
-include_once('../inc/database.php');
-include_once('../inc/domains.php');
+require_once '../inc/database.php';
+require_once '../inc/domains.php';
 
 $id = intval($_SERVER['X-Report-ID']);
 $screenshot_location = 'reports/';

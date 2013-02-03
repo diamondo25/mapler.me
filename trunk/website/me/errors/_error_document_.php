@@ -1,3 +1,3 @@
 <?php
-include_once '../../actions/error/index.php';
+require_once '../../actions/error/index.php';
 ?>

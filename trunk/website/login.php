@@ -1,13 +1,14 @@
 <?php
-include_once('inc/header.php');
+require_once 'inc/header.php';
 error_reporting(E_ALL);
 $error = null;
-if ($_loggedin) {
+
+if (IsLoggedin()) {
 ?>
 <meta http-equiv="refresh" content="3;URL='/'" />
 <p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
-	include_once('inc/footer.php');
+	require_once 'inc/footer.php';
 	die(); // Prevent error after login
 }
 
@@ -25,16 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$encrypted = GetPasswordHash($password, $row['salt']);
 			if ($encrypted == $row['password']) {
-				$_logindata = $_SESSION['login_data'] = $row;
+				$_SESSION['username'] = $row['username'];
+				$_loginaccount = new Account($row);
 				
 				$_loggedin = true;
 			}
 			else {
-				$error = "Opps! Your username or password provided was incorrect.";
+				$error = "Oops! Your username or password provided was incorrect.";
 			}
 		}
 		else {
-			$error = "Opps! Your username or password provided was incorrect.";
+			$error = "Oops! Your username or password provided was incorrect.";
 		}
 		$query->free(); // Clear memory after finished
 	}
@@ -60,5 +62,5 @@ else {
 	$form->End();
 }
 
-include_once('inc/footer.php');
+require_once 'inc/footer.php';
 ?>

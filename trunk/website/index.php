@@ -1,4 +1,4 @@
-<?php include_once('inc/header.php'); ?>
+<?php require_once 'inc/header.php'; ?>
 
 <?php
 if (!$_loggedin):
@@ -47,7 +47,7 @@ else:
 			w.world_id = chr.world_id 
 
 	WHERE 
-		acc.username = '".$__database->real_escape_string($_logindata['username'])."' 
+		acc.username = '".$__database->real_escape_string($_loginaccount->GetUsername())."' 
 	ORDER BY 
 		chr.world_id ASC,
 		chr.level DESC
@@ -60,10 +60,10 @@ else:
 <?php
 	}
 ?>
-<?php echo $_logindata['full_name']; ?>'s Stream – <b>Work In Progress</b>
+<?php echo $_loginaccount->GetUsername(); ?>'s Stream – <b>Work In Progress</b>
 
 </p>
 <?php
 endif;
 ?>
-<?php include_once('inc/footer.php'); ?>
+<?php require_once 'inc/footer.php'; ?>

@@ -1,19 +1,19 @@
 <?php
-include_once('inc/header.php');
+require_once 'inc/header.php';
 if (!$_loggedin) {
 ?>
 <p class="lead alert-error alert">Please login to view this page.</p>
 <?php
 
-	include_once('inc/footer.php');
+	require_once 'inc/footer.php';
 	die();
 }
-elseif ($_logindata['account_rank'] != RANK_ADMIN) {
+elseif ($_loginaccount->GetAccountRank() != RANK_ADMIN) {
 ?>
 <p class="lead alert-error alert">You are not an admin.</p>
 <?php
 
-	include_once('inc/footer.php');
+	require_once 'inc/footer.php';
 	die();
 }
 
@@ -189,5 +189,5 @@ ORDER BY
 	
 }
 
-include_once('inc/footer.php');
+require_once 'inc/footer.php';
 ?>

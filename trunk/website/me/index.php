@@ -1,5 +1,5 @@
 <?php
-include_once('../inc/header.php');
+require_once '../inc/header.php';
 
 $q = $__database->query("
 SELECT 
@@ -22,7 +22,7 @@ LEFT JOIN
 		w.world_id = chr.world_id 
 
 WHERE 
-	acc.username = '".$__database->real_escape_string($__url_userdata['username'])."' 
+	acc.username = '".$__database->real_escape_string($__url_useraccount->GetUsername())."' 
 ORDER BY 
 	chr.world_id ASC,
 	chr.level DESC
@@ -63,13 +63,14 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
           	 <div class="row">
             	<div class="span6 offset3" style="margin-bottom:70px;">
                 	<div id="user-about" class="center">
-                    	<h2><?php echo $__url_userdata['nickname']; ?></h2>
-                        
+                    	<h2><?php echo $__url_useraccount->GetNickname(); ?></h2>
+<?php if ($__url_useraccount->GetBio() != null): ?>
                         <ul id="user-external">
                         	<li><span style="color: rgb(255, 255, 255); text-shadow: rgb(102, 102, 102) 1px 0px 3px;">
-                        	<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png" style="position: relative; top: 4px;"/> <?php echo $__url_userdata['bio']; ?></span></li>
+                        	<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png" style="position: relative; top: 4px;"/> <?php echo $__url_useraccount->GetBio(); ?></span></li>
                             
                         </ul>
+<?php endif; ?>
                    </div>
                </div>
            </div>
@@ -97,7 +98,7 @@ text-align: center;" /> </a>
 <?php
 if (count($cache) == 0) {
 ?>
-		<p class="lead alert-error alert"><?php echo $__url_userdata['nickname']; ?> hasn't added any characters yet!</p>
+		<p class="lead alert-error alert"><?php echo $__url_useraccount->GetUsername(); ?> hasn't added any characters yet!</p>
 <?php
 }
 
@@ -119,4 +120,4 @@ foreach ($cache as $row) {
 
 	</div>
 
-<?php include_once('../inc/footer.php'); ?>
+<?php require_once '../inc/footer.php'; ?>
