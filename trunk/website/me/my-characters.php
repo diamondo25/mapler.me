@@ -83,12 +83,11 @@ $q->data_seek(0);
 </fieldset>
 <script>
 <?php
-	while ($row = $q->fetch_row()) {
+while ($row = $q->fetch_row()) {
 ?>
 ChangeImage(<?php echo $row[0]; ?>, '<?php echo $row[1]; ?>');
 <?php
-	
-	}
+}
 ?>
 </script>
 <?php

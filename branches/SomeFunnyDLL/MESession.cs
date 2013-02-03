@@ -184,7 +184,7 @@ namespace System
                 }
                 else
                 {
-                    StartReceive((ushort)(_receiveLength - _receivePosition), true);
+                    StartReceive(_receiveLength - _receivePosition, true);
                 }
             }
             catch (Exception ex)

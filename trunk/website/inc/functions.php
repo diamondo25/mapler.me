@@ -6,6 +6,7 @@ date_default_timezone_set('America/Los_Angeles');
 
 require_once 'database.php';
 require_once 'class_account.php';
+require_once 'class_inventory.php';
 require_once 'domains.php';
 require_once 'ranks.php';
 
@@ -121,15 +122,32 @@ function GetPasswordHash($password, $salt) {
 function GetMapleStoryString($type, $id, $key) {
 	global $__database;
 	
+	$apcinstalled = function_exists("apc_add");
+	
 	if (strlen($key) > 5) {
 		// Yea...
 		$key = substr($key, 0, 5);
+	}
+	
+	if ($apcinstalled && !apc_exists("data_cache")) {
+		apc_add("data_cache", array());
+	}
+	
+	$temp = apc_fetch("data_cache");
+	if ($apcinstalled && isset($temp[$type.'|'.$id.'|'.$key])) {
+		return $temp[$type.'|'.$id.'|'.$key];
 	}
 	
 	$q = $__database->query("SELECT `value` FROM `strings` WHERE `objecttype` = '".$__database->real_escape_string($type)."' AND `objectid` = ".intval($id)." AND `key` = '".$__database->real_escape_string($key)."'");
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 		$tmp = $row[0];
+		
+		if ($apcinstalled) {
+			$temp[$type.'|'.$id.'|'.$key] = $tmp;
+			apc_store("data_cache", $temp);
+		}
+		
 		$q->free();
 		return $tmp;
 	}
@@ -199,9 +217,108 @@ function IsOwnAccount() {
 	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
 
+function GetItemType($id) {
+	return floor($id / 10000);
+}
 
+function GetWZItemTypeName($id) {
+	$tmp = GetItemType($id);
+	
+	switch ($tmp) {
+		case 100: return "Cap";
+		case 104: return "Coat";
+		case 105: return "Longcoat";
+		case 106: return "Pants";
+		case 107: return "Shoes";
+		case 108: return "Glove";
+		case 109: return "Shield";
+		case 110: return "Cape";
+		case 111: return "Ring";
+		case 117: return "MonsterBook";
+		case 120: return "Totem";
+		
+		
+		case 101:
+		case 102:
+		case 103:
+		case 112:
+		case 113:
+		case 114:
+		case 115:
+		case 116:
+		case 118:
+		case 119:
+			return "Accessory";
+		
+		
+		case 121:
+		case 122:
+		case 130:
+		case 131:
+		case 132:
+		case 133:
+		case 134:
+		case 135:
+		case 136:
+		case 137:
+		case 138:
+		case 139: // FISTFIGHT!!! (sfx: barehands, only 1 item: 1392000)
+		case 140:
+		case 141:
+		case 142:
+		case 143:
+		case 144:
+		case 145:
+		case 146:
+		case 147:
+		case 148:
+		case 149:
+		case 150:
+		case 151:
+		case 152:
+		case 153:
+		case 160:
+		case 170:
+			return "Weapon";
+		
+		case 161: 
+		case 162: 
+		case 163: 
+		case 164: 
+		case 165: 
+			return "Mechanic";
+			
+		case 180: 
+		case 181: 
+			return "PetEquip";
+		
+		case 190: 
+		case 191: 
+		case 192: 
+		case 193: 
+		case 198: 
+		case 199: 
+			return "TamingMob";
 
+		case 194:
+		case 195:
+		case 196:
+		case 197:
+			return "Dragon";
+			
+		
+		case 166: 
+		case 167: 
+			return "Android";
+			
+		case 996: return "Familiar";
+	}
+}
 
+function GetItemIcon($id) {
+	$name = GetWZItemTypeName($id);
+	return $name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon.png';
+}
 
 
 

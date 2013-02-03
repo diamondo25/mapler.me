@@ -33,18 +33,18 @@ if ($q->num_rows == 0) {
 <?php
 }
 else {
-	$row = $q->fetch_assoc();
+	$character_info = $q->fetch_assoc();
 	
-	$internal_id = $row['internal_id'];
+	$internal_id = $character_info['internal_id'];
 	
 	$stat_addition = GetCorrectStat($internal_id);
 	
 ?>
-<h2><?php echo $row['name']; ?>'s Info</h2>
-<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" />
+<h2><?php echo $character_info['name']; ?>'s Info</h2>
+<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
 <table>
 <?php
-	foreach ($row as $columnname => $value) {	
+	foreach ($character_info as $columnname => $value) {	
 		if ($columnname == 'map') {
 			$tmp = GetMapleStoryString("map", $value, "name");
 			$subname = GetMapleStoryString("map", $value, "street");
@@ -185,6 +185,53 @@ ORDER BY
 	}
 ?>
 </table>
+
+<?php
+
+$inventory = new InventoryData($character_info['internal_id']);
+
+
+?>
+
+<div class="row">
+<?php
+for ($inv = 0; $inv < 5; $inv++):
+	$inv1 = $inventory->GetInventory($inv);
+?>
+<table border="1" class="span2">
+<?php
+	for ($i = 0; $i < count($inv1); $i += 4):
+?>
+	<tr height="50px">
+<?php
+		for ($j = $i; $j < $i + 4; $j++):
+?>
+		<td width="50px" align="center" valign="middle">
+		<?php if (isset($inv1[$j])): ?>
+			<img src="//static_images.mapler.me/character/<?php echo GetItemIcon($inv1[$j]->itemid); ?>" alt="<?php echo GetMapleStoryString("item", $inv1[$j]->itemid, "name"); ?>" />
+		<?php endif; ?>
+		</td>
+<?php
+		endfor;
+?>
+	</tr>
+<?php
+	endfor;
+?>
+</table>
+<?php
+endfor;
+?>
+</div>
+
+
+
+
+
+
+
+
+
 <?php
 	
 }
