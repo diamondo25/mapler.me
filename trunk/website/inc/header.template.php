@@ -124,7 +124,7 @@ if ($_loggedin):
 ?>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
+								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
 						
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
