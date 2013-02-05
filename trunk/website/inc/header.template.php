@@ -4,6 +4,9 @@
 	<title>Mapler.me &middot; MapleStory Social Network</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+ 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me" />
 	<meta name="description" content="Mapler.me is a MapleStory social network, with innovative features!" />
@@ -110,17 +113,6 @@ endif;
 	?>
 						</li>
 					</ul>
-<?php
-if (!$_loggedin):
-?>	
-					<ul class="nav pull-right hidden-phone">
-						<li id="nav-signup-btn" style="text-decoration:line-through;"><a href="#">
-                        Request Invite</a></li>
-					</ul>
-<?php
-endif;
-?>
-
 		
 					<ul class="nav mobile pull-right">
 						<li class="menu dropdown">
@@ -130,7 +122,7 @@ endif;
 <?php
 if ($_loggedin):
 ?>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">Profile</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
 						

@@ -2,8 +2,8 @@
 		<footer style="">
 			<p>
 				<a href="//<?php echo $domain; ?>/intro/">About</a>
-				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> <span style="display:none;">– In partnership with <a href="//nexon.net/" style="margin:0;">Nexon America</a></span>
-				Queries Ran: <?php echo $__database->QueriesRan(); ?>
+				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> <span style="display:none;">– In partnership with <a href="//nexon.net/" style="margin:0;">Nexon America</a></span> – 
+				<?php echo $__database->QueriesRan(); ?> queries ran.
 			</p>
 		</footer>
 
