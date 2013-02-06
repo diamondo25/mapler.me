@@ -93,7 +93,7 @@ text-align: center;" /> </a>
 </div>
 	
 	<!-- Character Display -->
-	<div class="span12">
+	<div id="character-wall">
 
 <?php
 if (count($cache) == 0) {
@@ -105,12 +105,14 @@ if (count($cache) == 0) {
 // printing table rows
 foreach ($cache as $row) {
 ?>
-		<div class="span2">
+		<div class="span2 character-brick" style="min-width:174px;">
+		<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 			<center>
+				<br/>
 				<a href="//<?php echo $domain; ?>/stats/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
 				<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/>
-				<p><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></p>
 				</a>
+				<br/>
 			</center>
         </div>
         
