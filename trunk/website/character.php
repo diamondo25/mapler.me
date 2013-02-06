@@ -142,7 +142,7 @@ $inventory = new InventoryData($character_info['internal_id']);
 for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-<table border="1" class="span2">
+<table border="1" class="span2 character-brick">
 <?php
 	for ($i = 0; $i < count($inv1); $i += 4):
 ?>
