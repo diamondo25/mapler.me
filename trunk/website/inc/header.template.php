@@ -4,12 +4,9 @@
 	<title>Mapler.me &middot; MapleStory Social Network</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
- 
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me" />
-	<meta name="description" content="Mapler.me is a MapleStory social network, with innovative features!" />
+	<meta name="description" content="Mapler.me is a MapleStory community and service providing innovative features to enhance your gaming experience!" />
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />

@@ -1,9 +1,13 @@
 @media (min-width: 768px) and (max-width: 979px) { 
-
 .span2 {
 width: 206px;
 }
+}
 
+@media (min-width: 380px) {
+.phone {
+margin:0px !important;
+}
 }
 
 /* Custom container */

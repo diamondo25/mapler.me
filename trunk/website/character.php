@@ -132,62 +132,6 @@ ORDER BY
 </table>
 <?php
 
-
-
-
-	$q = $__database->query("
-SELECT
-	inventory, itemid, slot, amount, cashid
-FROM
-	items
-WHERE
-	character_id = ".$internal_id."
-ORDER BY
-	inventory ASC,
-	slot ASC
-	");
-	
-	$lastgroup = -1;
-
-	while ($row = $q->fetch_assoc()) {
-		$name = GetMapleStoryString("item", $row['itemid'], "name");
-		$cash = $row['cashid'] != 0;
-		$block = $row['inventory'];
-		if ($lastgroup != $block) {
-			if ($lastgroup != -1) {
-?>
-</table>
-<?php
-			}
-			$lastgroup = $block;
-?>
-<h4><?php echo GetInventoryName($lastgroup); ?></h4>
-<table border="1" cellspacing="2" cellpadding="8" width="500px">
-	<tr>
-		<th>Itemname</th>
-		<th>Slot</th>
-		<th>Amount</th>
-	</tr>
-<?php
-		}
-		
-		if ($cash) {
-			$name = '<em>'.$name.'</em>';
-		}
-		
-?>
-	<tr>
-		<td><?php echo $name; ?></td>
-		<td><?php echo $row['slot']; ?></td>
-		<td><?php echo $row['amount']; ?></td>
-	</tr>
-<?php
-	}
-?>
-</table>
-
-<?php
-
 $inventory = new InventoryData($character_info['internal_id']);
 
 
