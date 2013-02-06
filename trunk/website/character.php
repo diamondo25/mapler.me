@@ -42,7 +42,7 @@ else {
 ?>
 <h2><?php echo $character_info['name']; ?>'s Info</h2>
 <img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
-<table>
+<table class="character-brick">
 <?php
 	foreach ($character_info as $columnname => $value) {	
 		if ($columnname == 'map') {
@@ -97,7 +97,7 @@ ORDER BY
 			$lastgroup = $block;
 ?>
 <h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
-<table border="1" cellspacing="2" cellpadding="8" width="500px">
+<table border="1" cellspacing="2" cellpadding="8" width="500px" class="character-brick">
 	<tr>
 		<th>Skill Name</th>
 		<th>Level</th>
@@ -142,7 +142,7 @@ $inventory = new InventoryData($character_info['internal_id']);
 for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-<table border="1" class="span2 character-brick">
+<table border="1" class="span2 character-brick" style="padding:15px !important;">
 <?php
 	for ($i = 0; $i < count($inv1); $i += 4):
 ?>
