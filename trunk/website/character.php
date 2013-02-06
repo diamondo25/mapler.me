@@ -40,9 +40,22 @@ else {
 	$stat_addition = GetCorrectStat($internal_id);
 	
 ?>
-<h2><?php echo $character_info['name']; ?>'s Info</h2>
-<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
-<table class="character-brick">
+
+	<div id="profile" class="row">
+		<div id="header" class="span12" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center" >
+          <div id="profile-user-details">
+          	 <div class="row">
+            	<div class="span6 offset3">
+                	<div id="user-about" class="center">
+                    	<h2><?php echo $character_info['name']; ?></h2>
+						<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
+                   </div>
+               </div>
+           </div>
+		</div>
+	</div>
+</div>
+<table>
 <?php
 	foreach ($character_info as $columnname => $value) {	
 		if ($columnname == 'map') {
