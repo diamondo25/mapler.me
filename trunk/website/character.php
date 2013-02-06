@@ -208,7 +208,7 @@ for ($inv = 0; $inv < 5; $inv++):
 ?>
 		<td width="50px" align="center" valign="middle">
 		<?php if (isset($inv1[$j])): ?>
-			<img src="//static_images.mapler.me/character/<?php echo GetItemIcon($inv1[$j]->itemid); ?>" alt="<?php echo GetMapleStoryString("item", $inv1[$j]->itemid, "name"); ?>" />
+			<img src="<?php echo GetItemIcon($inv1[$j]->itemid); ?>" alt="<?php echo GetMapleStoryString("item", $inv1[$j]->itemid, "name"); ?>" />
 		<?php endif; ?>
 		</td>
 <?php

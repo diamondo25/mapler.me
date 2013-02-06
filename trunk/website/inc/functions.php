@@ -221,6 +221,10 @@ function GetItemType($id) {
 	return floor($id / 10000);
 }
 
+function GetItemInventory($id) {
+	return floor($id / 1000000);
+}
+
 function GetWZItemTypeName($id) {
 	$tmp = GetItemType($id);
 	
@@ -316,8 +320,31 @@ function GetWZItemTypeName($id) {
 }
 
 function GetItemIcon($id) {
-	$name = GetWZItemTypeName($id);
-	return $name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon.png';
+	$domain = '//static_images.mapler.me/';
+	$inv = GetItemInventory($id);
+	if ($inv == 1) {
+		$name = GetWZItemTypeName($id);
+		$url = $domain.'character/'.$name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon.png';
+	}
+	else {
+		$type = GetItemType($id);
+		if ($type == 500) {
+			$url = $domain.'inventory/Pet/'.$id.'.img/info.icon.png';
+		}
+		else {
+			$typeid = str_pad($type, 4, '0', STR_PAD_LEFT).'.img';
+			$typename = '';
+			switch (floor($type / 100)) {
+				case 2: $typename = 'Consume'; break;
+				case 3: $typename = 'Install'; break;
+				case 4: $typename = 'Etc'; break;
+				case 5: $typename = 'Cash'; break;
+			}
+			$url = $domain.'inventory/'.$typename.'/'.$typeid.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'/info.icon.png';
+		}
+	}
+	
+	return $url;
 }
 
 
