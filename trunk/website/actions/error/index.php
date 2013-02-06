@@ -42,7 +42,7 @@ break;
 case 404:
 $errorname = 'Error 404 - Page Not Found';
 $errordesc = '
-<div class="character-brick">
+<div class="character-brick span12">
 <div class="caption">Oh no, 404! <small>(that page doesn\'t exist)</small></div><br/>
 <center><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/blackmage.gif"/>
   <p>
