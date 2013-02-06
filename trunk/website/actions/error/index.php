@@ -1,6 +1,5 @@
 <?php require_once '../../inc/header.php'; ?>
 
-<center><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/blackmage.gif"/></center>
       <?php
 
 // Get Variables
@@ -42,10 +41,13 @@ break;
 # Error 404 - Page Not Found
 case 404:
 $errorname = 'Error 404 - Page Not Found';
-$errordesc = '<div class="page-header"><h1>Oh no, 404! <small>(that page doesn\'t exist)</small></h1></div>
+$errordesc = '
+<div class="character-brick">
+<div class="caption">Oh no, 404! <small>(that page doesn\'t exist)</small></div>
+<center><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/blackmage.gif"/>
   <p>
   Ooops! <b>http://'.$server_name.$requested_url.'</b> &#8212; cannot be found!</p>
-  <p>Please use the menu above to return to another page. ♥</p>';
+  <p>Please use the menu above to return to another page. ♥</p></center>';
 break;
 
 # Error 500 - Server Configuration Error
