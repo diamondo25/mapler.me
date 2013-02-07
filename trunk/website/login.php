@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$_loginaccount = new Account($row);
 				
 				$_loggedin = true;
+				
+				$__database->query("UPDATE accounts SET last_loggedin = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = '".$_loginaccount->GetID()."'");
 			}
 			else {
 				$error = "Oops! Your username or password provided was incorrect.";
