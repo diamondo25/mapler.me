@@ -52,6 +52,10 @@ WHERE
 	}
 	
 	
+	public function GetID() {
+		return $this->_id;
+	}
+	
 	public function GetUsername() {
 		return $this->_username;
 	}
