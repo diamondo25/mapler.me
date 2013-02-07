@@ -29,7 +29,7 @@ WHERE
 if ($q->num_rows == 0) {
 	$q->free();
 ?>
-<p class="lead alert-error alert">Character not found</p>
+<p class="lead alert-error alert">Character not found! The character may have been removed or mispelled.</p>
 <?php
 }
 else {
