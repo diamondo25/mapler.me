@@ -4,6 +4,12 @@ width: 206px;
 }
 }
 
+.nav-tabs.nav-stacked{
+border-bottom:0;
+background: #FFF;
+border-radius: 5px;
+}
+
 /* Custom container */
       .container-narrow {
         margin: 0 auto;
