@@ -1,7 +1,8 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick'], $_POST['email'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick'], $_POST['bio'], $_POST['email'])) {
 	$_loginaccount->SetFullname($_POST['name']);
 	$_loginaccount->SetNickname($_POST['nick']);
+	$_loginaccount->SetBio($_POST['bio']);
 	$_loginaccount->SetEmail($_POST['email']);
 	$_loginaccount->Save();
 }
@@ -22,6 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 					<label class="control-label" for="inputNick">Nickname</label>
 					<div class="controls">
 						<input type="text" name="nick" id="inputNick" value="<?php echo $_loginaccount->GetNickname(); ?>" />
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputNick">Bio</label>
+					<div class="controls">
+						<textarea class="span2" style="height:40px;" type="text" name="bio" id="inputBio" value="<?php echo $_loginaccount->GetBio(); ?>" /><?php echo $_loginaccount->GetBio(); ?></textarea>
 					</div>
 				</div>
 				<div class="control-group">
