@@ -135,7 +135,9 @@ function GetMapleStoryString($type, $id, $key) {
 	
 	$temp = apc_fetch("data_cache");
 	if ($apcinstalled && isset($temp[$type.'|'.$id.'|'.$key])) {
-		return $temp[$type.'|'.$id.'|'.$key];
+		$tmp = $temp[$type.'|'.$id.'|'.$key];
+		
+		return $tmp;
 	}
 	
 	$q = $__database->query("SELECT `value` FROM `strings` WHERE `objecttype` = '".$__database->real_escape_string($type)."' AND `objectid` = ".intval($id)." AND `key` = '".$__database->real_escape_string($key)."'");
@@ -153,6 +155,95 @@ function GetMapleStoryString($type, $id, $key) {
 	}
 	$q->free();
 	return NULL;
+}
+
+function IGTextToWeb($data) {
+	// Fix newlines
+	$data = str_replace('\\\\', '\\', $data);
+	$data = str_replace(array('\r', '\n'), array("\r", "\n"), $data);
+	// Replace all newlines to <br />'s
+	$data = nl2br($data);
+	// Remove newlines
+	$data = str_replace(array("\r", "\n"), array('', ''), $data);
+	
+	// Ingame things
+	
+	$endTag = '';
+	$result = '';
+	for ($i = 0; $i < strlen($data); $i++) {
+		$end = ($i + 1 == strlen($data));
+		$c = $data[$i];
+		if ($c == '#') {
+			if ($end) continue;
+			$nc = $data[$i + 1];
+			$i++;
+			if ($nc == 'w') { // no typewriting; ignore
+				// CutoutText($data, $i, 2);
+			}
+			elseif ($nc == 'e') { // Bold
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<strong>';
+				$endTag = '</strong>';
+			}
+			elseif ($nc == 'r') { // Red
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: red;">';
+				$endTag = '</span>';
+			}
+			elseif ($nc == 'b') { // Blue
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: blue;">';
+				$endTag = '</span>';
+			}
+			elseif ($nc == 'g') { // Green
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: green;">';
+				$endTag = '</span>';
+			}
+			elseif ($nc == 'k') { // Black
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: black;">';
+				$endTag = '</span>';
+			}
+			elseif ($nc == 'c') { // Orange?
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: darkorange;">';
+				$endTag = '</span>';
+			}
+			elseif ($nc == 'd') { // Purple
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '<span style="color: purple;">';
+				$endTag = '</span>';
+			}
+			else {
+				// Break current one!
+				if ($endTag != '') {
+					$result .= $endTag;
+					$endTag = '';
+				}
+				$i--;
+			}
+		}
+		else {
+			$result .= $c;
+		}
+	}
+	
+	return $result;
 }
 
 function GetInventoryName($id) {
@@ -389,7 +480,4 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 	$q->free();
 	*/
 }
-
-
-
 ?>
