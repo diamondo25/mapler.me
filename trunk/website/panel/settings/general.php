@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 				<div class="control-group">
 					<label class="control-label" for="inputNick">Bio</label>
 					<div class="controls">
-						<textarea class="span2" style="height:210px;width:210px;max-height:210px;max-width:210px;" type="text" name="bio" id="inputBio" value="<?php echo $_loginaccount->GetBio(); ?>" /><?php echo $_loginaccount->GetBio(); ?></textarea>
+						<textarea class="span2" style="width:210px;max-width:210px;" type="text" name="bio" id="inputBio" value="<?php echo $_loginaccount->GetBio(); ?>" /><?php echo $_loginaccount->GetBio(); ?></textarea>
 					</div>
 				</div>
 				<div class="control-group">

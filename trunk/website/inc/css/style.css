@@ -4,7 +4,7 @@ width: 206px;
 }
 }
 
-.nav-tabs.nav-stacked{
+.nav-tabs.nav-stacked > li > a{
 border-bottom:0;
 background: #FFF;
 border-radius: 5px;

@@ -39,7 +39,11 @@ echo $rows[7]." - ".$rows[8]." - ".$rows[9];
 <form action="" method="post">
 <div class="input-append">
   <input class="span11" id="appendedInputButton" name="ihewfihewfewf" type="password" placeholder="Type the development password here.">
-  <input type="submit" class="btn" value="Update!"/>
+  <input type="submit" class="btn" style="position: relative;
+right: 1px;
+height: 36px;
+border-radius: 0px;
+width: 115px;" value="Update!"/>
 </div>
 </form>
 
