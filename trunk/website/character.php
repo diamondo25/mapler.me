@@ -28,7 +28,7 @@ if ($q->num_rows == 0) {
 else {
 	$character_info = $q->fetch_assoc();
 	
-	if ($_loginaccount->GetID() != $character_info['account_id'] && $_loginaccount->GetAccountRank() != RANK_ADMIN) {
+	if ($_loginaccount->GetID() != $character_info['account_id'] && $_loginaccount->GetAccountRank() < RANK_DEVELOPER) {
 	?>
 	<p class="lead alert-error alert">You are not allowed to view this page.</p>
 	<?php
