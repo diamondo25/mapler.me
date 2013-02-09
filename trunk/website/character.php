@@ -136,7 +136,10 @@ ORDER BY
 		}
 ?>
 	<tr>
-		<td><?php echo $name; ?></td>
+		<td>
+		<img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /><br />
+		<?php echo $name; ?>
+		</td>
 		<td><?php echo $row['level']; ?></td>
 		<td><?php echo $row['maxlevel']; ?></td>
 		<td><?php echo $row['expires']; ?></td>

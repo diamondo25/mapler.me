@@ -72,7 +72,14 @@ $mainx = 44;
 $mainy = 34;
 
 // Some other variables
-$characterwz = "/var/www/maplestory_images/character";
+$characterwz = "/var/www/maplestory_images/Character";
+if (!is_dir($characterwz)) {
+	$characterwz = 'P:/Result/Character';
+	if (!is_dir($characterwz)) {
+		// your call
+	}
+}
+
 $skin = $character_data['skin'] + 2000;
 $face = $character_data['eyes'];
 $hair = $character_data['hair'];
@@ -253,19 +260,19 @@ if (isset($face)) {
 // Coordinates for the hair
 if (isset($hair)) {
 	$hairarray = get_data($hair);
-	if (isset($hairarray['default_hairBelowBody_origin_X'])) {
-		$backhairx = -$hairarray['default_hairBelowBody_origin_X'] - $hairarray['default_hairBelowBody_map_brow_X'];
-		$backhairy = -$hairarray['default_hairBelowBody_origin_Y'] - $hairarray['default_hairBelowBody_map_brow_Y'];
+	if (isset($hairarray['stand'.$stand.'_0_hairBelowBody_origin_X'])) {
+		$backhairx = -$hairarray['stand'.$stand.'_0_hairBelowBody_origin_X'] - $hairarray['stand'.$stand.'_0_hairBelowBody_map_brow_X'];
+		$backhairy = -$hairarray['stand'.$stand.'_0_hairBelowBody_origin_Y'] - $hairarray['stand'.$stand.'_0_hairBelowBody_map_brow_Y'];
 	}
 	else {
 		$backhairx = $backhairy = 0;
 	}
-	$shadehairx = -$hairarray['default_hairShade_0_origin_X'] - $hairarray['default_hairShade_0_map_brow_X'];
-	$shadehairy = -$hairarray['default_hairShade_0_origin_Y'] - $hairarray['default_hairShade_0_map_brow_Y'];
-	$hairx = -$hairarray['default_hair_origin_X'] - $hairarray['default_hair_map_brow_X'];
-	$hairy = -$hairarray['default_hair_origin_Y'] - $hairarray['default_hair_map_brow_Y'];
-	$overhairx = -$hairarray['default_hairOverHead_origin_X'] - $hairarray['default_hairOverHead_map_brow_X'];
-	$overhairy = -$hairarray['default_hairOverHead_origin_Y'] - $hairarray['default_hairOverHead_map_brow_Y'];
+	$shadehairx = -$hairarray['stand'.$stand.'_0_hairShade_0_origin_X'] - $hairarray['stand'.$stand.'_0_hairShade_0_map_brow_X'];
+	$shadehairy = -$hairarray['stand'.$stand.'_0_hairShade_0_origin_Y'] - $hairarray['stand'.$stand.'_0_hairShade_0_map_brow_Y'];
+	$hairx = -$hairarray['stand'.$stand.'_0_hair_origin_X'] - $hairarray['stand'.$stand.'_0_hair_map_brow_X'];
+	$hairy = -$hairarray['stand'.$stand.'_0_hair_origin_Y'] - $hairarray['stand'.$stand.'_0_hair_map_brow_Y'];
+	$overhairx = -$hairarray['stand'.$stand.'_0_hairOverHead_origin_X'] - $hairarray['stand'.$stand.'_0_hairOverHead_map_brow_X'];
+	$overhairy = -$hairarray['stand'.$stand.'_0_hairOverHead_origin_Y'] - $hairarray['stand'.$stand.'_0_hairOverHead_map_brow_Y'];
 }
 
 // Eyes
@@ -303,6 +310,13 @@ if (isset($hat)) {
 	}
 	else {
 		$zhatx = $zhaty = 0;
+	}
+	if (isset($hatarray['default_defaultBelowBody_origin_X'])) {
+		$bbhatx = -$hatarray['default_defaultBelowBody_origin_X'] - $hatarray['default_defaultBelowBody_map_brow_X'];
+		$bbhaty = -$hatarray['default_defaultBelowBody_origin_Y'] - $hatarray['default_defaultBelowBody_map_brow_Y'];
+	}
+	else {
+		$bbhatx = $bbhaty = 0;
 	}
 }
 
@@ -467,13 +481,16 @@ if($weaponz == 'weaponBelowBody') {
 }
 
 // Create top cap
-if (isset($cap)) {
+if (isset($hap)) {
+	$cap_location = $characterwz."/Cap/0".$hat.".img/default.default.defaultBelowBody.png";
+	add_image($cap_location, $mainx + $bbhatx, $mainy + $bbhaty);
+	
 	$cap_location = $characterwz."/Cap/0".$hat.".img/default.defaultAc.png";
 	add_image($cap_location, $mainx + $zhatx, $mainy + $zhaty);
 }
 
 // Create back hair and cape
-if ($capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
+if (isset($capez) && $capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 	$bhair_location = $characterwz."/Hair/000".$hair.".img/default.hairBelowBody.png";
 	add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 }
@@ -484,7 +501,7 @@ if(file_exists($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png") && $stand 
 elseif(file_exists($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png"))
 	add_image($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png", $mainx + $capex, $necky + $capey);
 
-if($capez != 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
+if (isset($capez) && $capez != 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 	$bhair_location = $characterwz."/Hair/000".$hair.".img/default.hairBelowBody.png";
 	add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 }
@@ -584,7 +601,7 @@ add_image($characterwz."/000".$head.".img/front.head.png", $mainx - 15, $mainy -
 
 // Create earring
 if (isset($ears)) {
-	$ear_location = $characterwz."/Accessory/0".$ears.".img/".$chosenface.".0.default.png";
+	$ear_location = $characterwz."/Accessory/0".$ears.".img/default.default.png";
 	add_image($ear_location, $mainx + $earsx, $mainy + $earsy);
 }
 
@@ -724,8 +741,7 @@ SaveCacheImage($charname, 'avatar', $im, $id);
 
 imagedestroy($im);
 
-	
-	
+if (isset($_GET['debug'])) var_dump($GLOBALS);
 
 // Function to phrase data into an array
 function get_data($itemid) {
@@ -743,6 +759,7 @@ function get_data($itemid) {
 	while ($data = $query->fetch_assoc()) {
 		$item_info[$data['key']] = ($data['value']);
 	}
+	$item_info['ITEMID'] = $itemid;
 	$query->free();
 	return $item_info;
 }

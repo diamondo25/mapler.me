@@ -324,12 +324,12 @@ function GetItemIcon($id) {
 	$inv = GetItemInventory($id);
 	if ($inv == 1) {
 		$name = GetWZItemTypeName($id);
-		$url = $domain.'character/'.$name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon.png';
+		$url = $domain.'Character/'.$name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon.png';
 	}
 	else {
 		$type = GetItemType($id);
 		if ($type == 500) {
-			$url = $domain.'inventory/Pet/'.$id.'.img/info.icon.png';
+			$url = $domain.'Inventory/Pet/'.$id.'.img/info.icon.png';
 		}
 		else {
 			$typeid = str_pad($type, 4, '0', STR_PAD_LEFT).'.img';
@@ -340,7 +340,7 @@ function GetItemIcon($id) {
 				case 4: $typename = 'Etc'; break;
 				case 5: $typename = 'Cash'; break;
 			}
-			$url = $domain.'inventory/'.$typename.'/'.$typeid.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'/info.icon.png';
+			$url = $domain.'Inventory/'.$typename.'/'.$typeid.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'/info.icon.png';
 		}
 	}
 	
