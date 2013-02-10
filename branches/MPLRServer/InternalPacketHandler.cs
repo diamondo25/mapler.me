@@ -19,7 +19,6 @@ namespace MPLRServer
             else
             {
                 Logger.WriteLine("- Client lost connection with MapleStory server");
-                pConnection.Save(true);
             }
         }
     }

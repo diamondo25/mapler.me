@@ -42,10 +42,16 @@ namespace MPLRServer
 
                     byte[] buffer = new byte[3 + size];
                     buffer[0] = (byte)(outbound ? MaplePacket.CommunicationType.ClientPacket : MaplePacket.CommunicationType.ServerPacket);
+                    if (opcode >= 0xEE00)
+                    {
+                        opcode |= 0xEE00;
+                        buffer[0] = (byte)MaplePacket.CommunicationType.Internal;
+                    }
                     Buffer.BlockCopy(BitConverter.GetBytes(opcode), 0, buffer, 1, 2);
                     Buffer.BlockCopy(reader.ReadBytes(size), 0, buffer, 3, size);
 
 
+                    Logger.WriteLine("Emulating {0:X4} ({1})", opcode, size);
                     MaplePacket packet = new MaplePacket(buffer);
                     try
                     {

@@ -17,6 +17,9 @@ namespace MPLRServer
 
         public int LastReportID { get; set; }
 
+        public string LastLoggedName = "Unknown";
+        public string LastLoggedDate = null;
+
         public CharacterData CharData { get; set; }
 
         public ushort MapleVersion { get; set; }
@@ -90,15 +93,8 @@ namespace MPLRServer
             Logger.WriteLine("Trying to save...");
             if (_exporter != null)
             {
-                string filename;
-                if (CharData != null)
-                {
-                    filename = "Savefile-" + CharData.Stats.Name + "-" + CharData.Stats.DateThing + ".msb";
-                }
-                else
-                {
-                    filename = "Savefile_" + MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") + ".msb";
-                }
+                string filename = "Savefile_" + LastLoggedName + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
+
                 Logger.WriteLine("Saving under {0}", filename);
                 _exporter.Save(filename, MapleVersion);
                 if (pReset)
@@ -153,6 +149,10 @@ namespace MPLRServer
                                 {
                                     Logger.ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", header, type, ex.ToString());
                                 }
+                            }
+                            else
+                            {
+                                Logger.WriteLine("No action for {0:X4}", header);
                             }
                         }
                         else

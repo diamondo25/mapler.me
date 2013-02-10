@@ -38,8 +38,8 @@ namespace MPLRServer
 
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
-                pPacket.ReadString();
-                pPacket.ReadString();
+                pPacket.ReadString(); // 1NX1702337
+                pPacket.ReadString(); // '1' or '0 ' ?!
             }
 
             var hurr = pPacket.ReadByte(); // ?
@@ -53,7 +53,19 @@ namespace MPLRServer
 
                 CultureInfo provider = CultureInfo.InvariantCulture;
 
-                Done.Add(id, DateTime.ParseExact(date.ToString(), "yyMMddHHmm", provider).ToFileTime());
+                long ft = 0;
+                DateTime temp;
+                if (DateTime.TryParseExact(date.ToString(), "yyMMddHHmm", provider, DateTimeStyles.None, out temp))
+                {
+                    ft = temp.ToFileTime();
+                }
+                else
+                {
+                    Logger.WriteLine("Unable to parse {0} as date. GG nexon. Quest ID: {1}", date, id);
+                    ft = 150842304000000000L; // GG Nexon.
+                }
+
+                Done.Add(id, ft);
 
             }
 
