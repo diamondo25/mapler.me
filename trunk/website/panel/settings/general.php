@@ -1,9 +1,14 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick'], $_POST['bio'], $_POST['email'])) {
-	$_loginaccount->SetFullname($_POST['name']);
-	$_loginaccount->SetNickname($_POST['nick']);
-	$_loginaccount->SetBio($_POST['bio']);
-	$_loginaccount->SetEmail($_POST['email']);
+	$name = htmlentities($_POST['name']);
+	$nick = htmlentities($_POST['nick']);
+	$bio = htmlentities($_POST['bio']);
+	$email = htmlentities($_POST['email']);
+	
+	$_loginaccount->SetFullname($name);
+	$_loginaccount->SetNickname($nick);
+	$_loginaccount->SetBio($bio);
+	$_loginaccount->SetEmail($email);
 	$_loginaccount->Save();
 }
 
