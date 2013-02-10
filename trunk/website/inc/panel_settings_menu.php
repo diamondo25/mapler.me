@@ -10,5 +10,6 @@ function IsActive($name) {
 				<li<?php IsActive('/panel/settings/notifications/'); ?>><a href="/panel/settings/notifications/">Notifications</a></li>
 				<li<?php IsActive('/panel/settings/memberships/'); ?>><a href="/panel/settings/memberships/">Memberships</a></li>
 				<li<?php IsActive('/panel/settings/privacy/'); ?>><a href="/panel/settings/privacy/">Privacy</a></li>
+				<li<?php IsActive('/panel/settings/accounts/'); ?>><a href="/panel/settings/accounts/">Accounts</a></li>
 			</ul>
 		</div>

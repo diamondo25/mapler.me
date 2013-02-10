@@ -53,7 +53,7 @@ class ItemBase {
 		$this->inventory = $row['inventory'];
 		$this->slot = $row['slot'];
 		$this->itemid = $row['itemid'];
-		// $this->expires = $row['expires']; // Missing
+		$this->expires = $row['expires'];
 		$this->cashid = $row['cashid'];
 		$this->amount = $row['amount'];
 	}
