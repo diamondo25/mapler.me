@@ -111,7 +111,7 @@ ORDER BY
 			}
 			$lastgroup = $block;
 ?>
-<h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
+<br/><h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
 <table border="1" cellspacing="2" cellpadding="8" class="character-brick" style="width: 500px">
 	<tr>
 		<th style="width: 250px">Skill Name</th>
@@ -153,14 +153,13 @@ $inventory = new InventoryData($character_info['internal_id']);
 
 
 ?>
-
-<select onchange="ChangeInventory(this.value)">
-	<option value="1">Equipments</option>
+<br/>
+<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
+	<option value="1">Equipment</option>
 	<option value="2">Use</option>
 	<option value="3">Set-up</option>
-	<option value="4">ETC</option>
+	<option value="4">Etc</option>
 	<option value="5">Cash</option>
-
 <select>
 
 <div class="row">
@@ -241,12 +240,16 @@ endfor;
 
 <style type="text/css">
 #item_info {
-	outline: 3px solid blue;
-	border: 2px dotted black;
-	background-color: rgb(255, 255, 12);
+	border: 1px solid rgba(0,0,0,0.6);
+	border-radius:5px;
+	background-color: rgb(255,255,255,0.95);
 	padding: 5px;
 	position: absolute;
 	width: 200px;
+	transition: all 2s;
+	-moz-transition: all 2s; /* Firefox 4 */
+	-webkit-transition: all 2s; /* Safari and Chrome */
+	-o-transition: all 2s; /* Opera */
 }
 
 #item_info #item_info_description {
