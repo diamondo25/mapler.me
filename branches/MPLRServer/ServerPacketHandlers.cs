@@ -485,7 +485,7 @@ namespace MPLRServer
                         itemsTable.AddColumn("inventory", false);
                         itemsTable.AddColumn("slot", false);
                         itemsTable.AddColumn("checksum", true);
-                        itemsTable.AddColumns(true, "cashid", "amount", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
+                        itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
 
                         if (item is ItemEquip)
                         {
@@ -499,6 +499,7 @@ namespace MPLRServer
                                 equip.GetChecksum(),
                                 equip.CashID,
                                 equip.Amount,
+                                equip.Expires,
                                 equip.Slots, equip.Scrolls,
                                 equip.Str, equip.Dex, equip.Int, equip.Luk,
                                 equip.HP, equip.MP,
@@ -524,6 +525,7 @@ namespace MPLRServer
                                 (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
                                 item.CashID,
                                 item.Amount,
+                                item.Expires,
                                 null, null,
                                 null, null, null, null,
                                 null, null,

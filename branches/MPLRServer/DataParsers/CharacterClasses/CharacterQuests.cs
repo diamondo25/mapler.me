@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Globalization;
+
 namespace MPLRServer
 {
     class CharacterQuests
@@ -15,7 +17,7 @@ namespace MPLRServer
 
         public void Decode(MaplePacket pPacket)
         {
-            pPacket.ReadByte(); // ?
+            var v = pPacket.ReadByte(); // ?
 
 
             Running = new Dictionary<ushort, string>();
@@ -26,17 +28,41 @@ namespace MPLRServer
                 Running.Add(pPacket.ReadUShort(), pPacket.ReadString());
             }
 
+            if (v == 0)
+            {
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadShort(); // UNK lol
+                }
+            }
+
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
                 pPacket.ReadString();
                 pPacket.ReadString();
             }
 
-            pPacket.ReadByte(); // ?
+            var hurr = pPacket.ReadByte(); // ?
 
+            // ADDED IN v.128 !!!!
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
-                Done.Add(pPacket.ReadUShort(), pPacket.ReadLong());
+                // New method of creating dates...
+                var id = pPacket.ReadUShort();
+                var date = pPacket.ReadInt();
+
+                CultureInfo provider = CultureInfo.InvariantCulture;
+
+                Done.Add(id, DateTime.ParseExact(date.ToString(), "yyMMddHHmm", provider).ToFileTime());
+
+            }
+
+            if (hurr == 0)
+            {
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    Done.Add(pPacket.ReadUShort(), pPacket.ReadLong());
+                }
             }
         }
 
