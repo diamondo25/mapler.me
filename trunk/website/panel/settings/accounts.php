@@ -19,7 +19,6 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 	$maycheck = false;
 	$minutes_timeout = 5;
 	$_loginaccount->SetConfigurationOption('last_account_addition', date("Y-m-d H:i:s"));
-	$_loginaccount->Save();
 
 	$post_values = array(
 		'userID' => $_POST['username'], 

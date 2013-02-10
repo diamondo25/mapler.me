@@ -33,21 +33,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (count($errorList) == 0) {
 			// Check username
 			$username = $__database->real_escape_string($_POST['username']);
-			$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
-			if ($result->num_rows == 1) {
-				$error = "This username has already been taken.";
+			$len = strlen($username);
+			if ($len < 4 || $len > 20) {
+				$error = "Username must be at least 4 and at max 20 characters long.";
 				$errorList['username'] = true;
 			}
-			$result->free();
+			else {
+				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
+				if ($result->num_rows == 1) {
+					$error = "This username has already been taken.";
+					$errorList['username'] = true;
+				}
+				$result->free();
+			}
 		}
 		
 		if (count($errorList) == 0) {
 			// Check nickname
 			$nickname = $__database->real_escape_string($_POST['nickname']);
-			$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$nickname."'");
-			if ($result->num_rows == 1) {
-				$error = "This nickname has already been taken.";
+			$len = strlen($nickname);
+			if ($len < 4 || $len > 20) {
+				$error = "Nickname must be at least 4 and at max 20 characters long.";
 				$errorList['nickname'] = true;
+			}
+			else {
+			
+				$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$nickname."'");
+				if ($result->num_rows == 1) {
+					$error = "This nickname has already been taken.";
+					$errorList['nickname'] = true;
+				}
+				$result->free();
+			}
+		}
+		
+		if (count($errorList) == 0) {
+			// Check beta key
+			$key = $__database->real_escape_string($_POST['key']);
+			$result = $__database->query("SELECT 1 FROM beta_invite_keys WHERE invite_key = '".$key."' AND assigned_to IS NULL");
+			if ($result->num_rows == 1) {
+				$__database->query("UPDATE beta_invite_keys SET assigned_to = '".$username."' WHERE invite_key = '".$key."'");
+			}
+			else {
+				$error = "This beta key has already been used."; // Default response!
+				$errorList['key'] = true;
 			}
 			$result->free();
 		}
@@ -76,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$statement->execute();
 			
 			if ($statement->affected_rows == 1) {
-				echo 'Created!';
+?>
+<p class="lead alert-info alert">Your account has been successfully created!</p>
+<?php
 			}
 		}
 		// echo $encryptedpassword;
@@ -109,6 +140,7 @@ else {
 	$form->AddBlock('Full name', 'fullname', (isset($errorList['fullname']) ? 'error' : ''), 'text', @$_POST['fullname']);
 	$form->AddBlock('Nickname', 'nickname', (isset($errorList['nickname']) ? 'error' : ''), 'text', @$_POST['nickname']);
 	$form->AddBlock('E-mail', 'email', (isset($errorList['email']) ? 'error' : ''), 'text', @$_POST['email']);
+	$form->AddBlock('Beta Key', 'key', (isset($errorList['key']) ? 'key' : ''), 'text', @$_POST['key']);
 	$form->Agreement();
 	$form->MakeSubmit('Register');
 	

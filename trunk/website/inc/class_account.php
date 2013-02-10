@@ -122,10 +122,10 @@ WHERE
 	
 	public function SetConfigurationOption($name, $value, $save = true) {
 		global $__database;
-		$this->configuration[$name] = $value;
+		$this->_configuration[$name] = $value;
 		
 		if ($save) {
-			$__database->query("UPDATE accounts SET configuration = '".$__database->real_escape_string(json_encode($this->configuration))."' WHERE id = ".$this->id);
+			$__database->query("UPDATE accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
 		}
 	}
 }
