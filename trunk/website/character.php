@@ -242,7 +242,7 @@ endfor;
 #item_info {
 	border: 1px solid rgba(0,0,0,0.6);
 	border-radius:5px;
-	background-color: rgb(255,255,255,0.95);
+	background-color: rgba(255,255,255,0.95);
 	padding: 5px;
 	position: absolute;
 	width: 200px;
