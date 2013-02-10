@@ -257,6 +257,8 @@ function GetInventoryName($id) {
 }
 
 function GetSystemTimeFromFileTime($time) {
+	if ($time == 3439756800)
+		return '';
 	return date("Y-m-d h:i:s", $time);
 }
 

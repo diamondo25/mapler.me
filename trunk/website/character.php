@@ -128,20 +128,12 @@ ORDER BY
 		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
 			$row['level'] = 'Bound with: '.GetCharacterName($row['level']);
 		}
-		if ($row['expires'] == 3439756800) {
-			$row['expires'] = '-';
-		}
-		else {
-			$row['expires'] = GetSystemTimeFromFileTime($row['expires']);
-		}
 ?>
 	<tr>
-		<td>
-		<img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /> <?php echo $name; ?>
-		</td>
+		<td><img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /> <?php echo $name; ?></td>
 		<td><?php echo $row['level']; ?></td>
 		<td><?php echo $row['maxlevel']; ?></td>
-		<td><?php echo $row['expires']; ?></td>
+		<td><?php echo GetSystemTimeFromFileTime($row['expires']); ?></td>
 	</tr>
 <?php
 	}
@@ -215,7 +207,7 @@ for ($inv = 0; $inv < 5; $inv++):
 				else 
 					$arguments .= '0,';
 			}
-			$arguments .= "descriptions[".$item->itemid."]);";
+			$arguments .= "descriptions[".$item->itemid."], '".GetSystemTimeFromFileTime($item->expires)."');";
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
 				<img src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmouseout="HideItemInfo()" />
@@ -276,6 +268,11 @@ endfor;
 #item_info .item_stats {
 	clear: both;
 }
+
+#item_info #item_info_expires {
+	display: block;
+	color: red;
+}
 </style>
 
 <script>
@@ -286,7 +283,7 @@ foreach ($optionlist as $option) {
 	echo $option.", ";
 }
 ?>
-description) {
+description, expires) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
@@ -306,6 +303,7 @@ foreach ($optionlist as $option) {
 	document.getElementById('item_info').style.top = event.pageY + 10 + 'px';
 	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 	
+	document.getElementById('item_info_expires').innerHTML = expires;
 	if (description != '') {
 		document.getElementById('item_info_description').style.display = '';
 		document.getElementById('item_info_description').innerHTML = description;
@@ -333,6 +331,7 @@ ChangeInventory(1);
 
 <div id="item_info" style="display: none;">
 	<div id="item_info_title"></div>
+	<div id="item_info_expires"></div>
 	<div class="icon_holder"><img id="item_info_icon" src="" title="" /></div>
 	<div id="item_info_description"></div>
 	<div class="item_stats">

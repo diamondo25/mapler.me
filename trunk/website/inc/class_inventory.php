@@ -19,7 +19,7 @@ class InventoryData {
 		
 		$q->free();
 		
-		$q = $__database->query("SELECT * FROM items WHERE character_id = ".$character_id);
+		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id);
 		
 		while ($row = $q->fetch_assoc()) {
 			$inv = $row['inventory'];
