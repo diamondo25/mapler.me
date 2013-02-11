@@ -51,7 +51,7 @@ else:
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
 								<li><a href="//<?php echo $domain; ?>/todo">To-do</a></li>
 								<li class="divider"></li>
-								<li><a href="//<?php echo $domain; ?>/terms">Terms of Service</a></li>
+								<li><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></li>
 <?php
 endif;
 ?>

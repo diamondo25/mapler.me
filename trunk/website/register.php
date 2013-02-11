@@ -3,21 +3,22 @@ include_once('inc/header.php');
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname"), $errorList)) {
-		$error = "The input you've entered has some errors. Please correct these errors and try again.";
+	if (!CheckArrayOf($_POST, array('username', 'password', 'password2', 'fullname', 'email', 'nickname', 'key'), $errorList)) {
+		$error = 'The input you've entered has some errors. Please correct these errors and try again.';
 	}
 	else {
 		// Validate email
+		$email = $__database->real_escape_string($_POST['email']);
 		if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-			$error = "The email you entered is invalid.";
-			$errorList["email"] = true;
+			$error = 'The email you entered is invalid.';
+			$errorList['email'] = true;
 		}
 		
 		if (count($errorList) == 0) {
 			// Check ToU
 			$notou = !isset($_POST['tou']);
 			if ($notou) {
-				$error = "You didn't accept the ToU";
+				$error = 'You didn't accept the ToU';
 				$errorList['ToU'] = true;
 			}
 		}
@@ -25,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (count($errorList) == 0) {
 			// Check passwords
 			if ($_POST['password'] != $_POST['password2']) {
-				$error = "Your passwords didn't match.";
+				$error = 'Your passwords didn't match.';
 				$errorList['password'] = true;
 			}
 		}
@@ -35,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$username = $__database->real_escape_string($_POST['username']);
 			$len = strlen($username);
 			if ($len < 4 || $len > 20) {
-				$error = "Username must be at least 4 and at max 20 characters long.";
+				$error = 'Username must be at least 4 and at max 20 characters long.';
 				$errorList['username'] = true;
 			}
 			else {
-				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
+				$result = $__database->query('SELECT id FROM accounts WHERE username = ''.$username.''');
 				if ($result->num_rows == 1) {
-					$error = "This username has already been taken.";
+					$error = 'This username has already been taken.';
 					$errorList['username'] = true;
 				}
 				$result->free();
@@ -53,14 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			$len = strlen($nickname);
 			if ($len < 4 || $len > 20) {
-				$error = "Nickname must be at least 4 and at max 20 characters long.";
+				$error = 'Nickname must be at least 4 and at max 20 characters long.';
 				$errorList['nickname'] = true;
 			}
 			else {
 			
-				$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$nickname."'");
+				$result = $__database->query('SELECT id FROM accounts WHERE nickname = ''.$nickname.''');
 				if ($result->num_rows == 1) {
-					$error = "This nickname has already been taken.";
+					$error = 'This nickname has already been taken.';
 					$errorList['nickname'] = true;
 				}
 				$result->free();
@@ -70,12 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (count($errorList) == 0) {
 			// Check beta key
 			$key = $__database->real_escape_string($_POST['key']);
-			$result = $__database->query("SELECT 1 FROM beta_invite_keys WHERE invite_key = '".$key."' AND assigned_to IS NULL");
+			$result = $__database->query('SELECT 1 FROM beta_invite_keys WHERE invite_key = ''.$key.'' AND assigned_to IS NULL');
 			if ($result->num_rows == 1) {
-				$__database->query("UPDATE beta_invite_keys SET assigned_to = '".$username."' WHERE invite_key = '".$key."'");
+				$__database->query('UPDATE beta_invite_keys SET assigned_to = ''.$username.'' WHERE invite_key = ''.$key.''');
 			}
 			else {
-				$error = "This beta key has already been used."; // Default response!
+				$error = 'Incorrect beta code, or it was already used!'; // Default response!
 				$errorList['key'] = true;
 			}
 			$result->free();
@@ -92,11 +93,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
 			
 			$ip_address = $_SERVER['REMOTE_ADDR'];
-			$fullname = $__database->real_escape_string($_POST["fullname"]);
+			$fullname = $__database->real_escape_string($_POST['fullname']);
 			
-			$statement = $__database->prepare("INSERT INTO accounts 
+			$statement = $__database->prepare('INSERT INTO accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip) VALUES
-				(NULL,?,?,?,?,?,?,NOW(),?)");
+				(NULL,?,?,?,?,?,?,NOW(),?)');
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 
 				$__database->real_escape_string($salt), $fullname, 
 				$__database->real_escape_string($_POST['email']), $__database->real_escape_string($_POST['nickname']),
@@ -105,8 +106,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$statement->execute();
 			
 			if ($statement->affected_rows == 1) {
+			
+$to  = '$email'; // note the comma
+
+// subject
+$subject = 'Mapler.me - Welcome!';
+
+$messagestuffz = '
 ?>
-<p class="lead alert-info alert">Your account has been successfully created!</p>
+<table cellspacing='0' border='0' height='100%' bgcolor='#ffffff' cellpadding='0' width='100%'><tbody><tr><td align='center' valign='top'>
+            <br/><table cellspacing='0' cellpadding='0' width='500' style='border:1px solid #ddd;border-radius:4px'><tbody><tr><td align='left' style='padding:40px 0 30px 30px'>
+                        <font size='4' color='#333' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:24px;line-height:32px'>Thanks for signing up!</font><br><br><font size='4' color='#333' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:15px;line-height:21px'>
+                            
+                            <strong>Hello <?php echo $nickname; ?>, and welcome to Mapler.me.</strong> Your account has now been registered and you can login with the information you provided.
+                            <br/><br/>
+                           We appreciate your consideration in being a beta tester and this will not be forgotten. When the site is finalized, you will be recognized for your help.
+                        </font>
+                    </td>
+                    <td align='right' style='padding:30px 30px 0 0'>
+                        <img src='https://dl.dropbox.com/u/22875564/mapler.me.resources/front1.gif' width='100' height='100' style='float:right;padding-left:20px;'></td>
+                </tr><tr><td align='center' height='100' colspan='2' style='border-top:1px solid #ddd;background:#fff'>
+                        <a href='http://mapler.me/' style='padding:16px 25px 15px;border-radius:4px;text-decoration:none;background:#dd3b0e;border:1px solid #b9310b' target='_blank'>
+                            <font size='4' color='#fff' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:18px;line-height:25px;font-weight:bold'>Start your adventure!</font></a>
+                </td>
+                </tr></tbody></table><table width='500'><tbody><tr><td height='80'>
+                        <font color='#777' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:12px;line-height:1.5'>If you have any questions or concerns, please <a href='mailto:tyler@thebluecorsair.com' style='color:#222;text-decoration:none'>send us an email!</a>
+                    </font></td>
+                </tr></tbody></table></td>
+    </tr></tbody></table>
+
+<?php
+';
+
+// message
+$message = '$messagestuffz';
+
+// To send HTML mail, the Content-type header must be set
+$headers  = 'MIME-Version: 1.0' . '\r\n';
+$headers .= 'Content-type: text/html; charset=iso-8859-1' . '\r\n';
+$headers .= 'From: Mapler.me <no-reply@mapler.me>' . '\r\n';
+
+// Mail it
+mail($to, $subject, $message, $headers);
+?>
+<p class='lead alert-info alert'>Welcome to Mapler.me, $nickname! Check your email for more information!</p>
 <?php
 			}
 		}
@@ -117,19 +160,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($_loggedin) {
 ?>
-<meta http-equiv="refresh" content="3;URL='/'" />
-<p class="lead alert alert-danger">You are already registered! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+<meta http-equiv='refresh' content='3;URL='/'' />
+<p class='lead alert alert-danger'>You are already signed up! You'll be redirected to the main page in 3 seconds. If not, <a href='/'>click here</a>.</p>
 
 <?php
 }
 else {
 	if ($error != null) {
 ?>
-<p class="lead alert-error alert"><?php echo $error;?></p>
+<p class='lead alert-error alert'><?php echo $error;?></p>
 <?php
 	}
 ?>
-<p class="lead">Register for a Mapler.me account</p><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/>
+<p class='lead'>Sign up for a Mapler.me account</p><span class='pull-right'><img src='https://dl.dropbox.com/u/22875564/Random/lulzbean.png'/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!<br/><br/><a href='#Beta' role='button' data-toggle='modal'>Click here for an explanation.</a></p></span>
 <?php
 	
 	$form = new Form('', 'form-horizontal');
@@ -150,3 +193,13 @@ else {
 
 include_once('inc/footer.php');
 ?>
+
+<div id='Beta' class='modal hide fade' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' style='color: rgb(0, 0, 0); display: none;'>
+  <div class='modal-header'>
+    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+    <h3 id='myModalLabel' style='font-weight:200;'>Our Beta Program:</h3>
+  </div>
+  <div class='modal-body'>
+    <p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better then the best Rising Sun Pendent.</p>
+  </div>
+</div>
