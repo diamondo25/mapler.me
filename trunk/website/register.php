@@ -146,7 +146,11 @@ else {
 <?php
 	}
 ?>
-<p class="lead">Sign up for a Mapler.me account</p><span class="pull-right"><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!<br/><br/><a href='#Beta' role='button' data-toggle='modal'>Click here for an explanation.</a></p></span>
+<p class="lead">Sign up for a Mapler.me account</p>
+
+<div class="pull-right"><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!</p>
+
+<p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better then the best Rising Sun Pendent.</p></div>
 <?php
 	
 	$form = new Form('', 'form-horizontal');
@@ -159,7 +163,7 @@ else {
 	$form->AddBlock('E-mail', 'email', (isset($errorList['email']) ? 'error' : ''), 'text', @$_POST['email']);
 	$form->AddBlock('Beta Key', 'key', (isset($errorList['key']) ? 'key' : ''), 'text', @$_POST['key']);
 	$form->Agreement();
-	$form->MakeSubmit('Register');
+	$form->MakeSubmit('Sign up!');
 	
 	$form->End();
 	
@@ -167,13 +171,3 @@ else {
 
 include_once('inc/footer.php');
 ?>
-
-<div id="Beta" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="color: rgb(0, 0, 0); display: none;">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel" style="font-weight:200;">Our Beta Program:</h3>
-  </div>
-  <div class="modal-body">
-    <p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better then the best Rising Sun Pendent.</p>
-  </div>
-</div>
