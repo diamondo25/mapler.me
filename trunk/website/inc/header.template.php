@@ -11,11 +11,22 @@
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
+	
+	<style>
+	.mapletop {
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.7);
+		background: rgba(255,255,255,0.7);
+		height:100px;
+	}
+	</style>
 </head>
 
 <body>
 
 	<div class="navbar navbar-fixed-top">
+	<div class="mapletop">
+	c65600
+	</div>
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="brand" href="//<?php echo $domain; ?>" style="margin-top: 6px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);font-size:25px !important;"><img src="//<?php echo $domain; ?>/inc/img/logo.gif" style="float:left;position:relative;bottom:5px;right:5px;"/>Mapler.me</a>
