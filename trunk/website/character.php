@@ -159,23 +159,23 @@ $inventory = new InventoryData($character_info['internal_id']);
 
 
 $optionlist = array();
-$optionlist[] = 'slots';
-$optionlist[] = 'scrolls';
-$optionlist[] = 'str';
-$optionlist[] = 'dex';
-$optionlist[] = 'int';
-$optionlist[] = 'luk';
-$optionlist[] = 'maxhp';
-$optionlist[] = 'maxmp';
-$optionlist[] = 'weaponatt';
-$optionlist[] = 'weapondef';
-$optionlist[] = 'magicatt';
-$optionlist[] = 'magicdef';
-$optionlist[] = 'acc';
-$optionlist[] = 'avo';
-$optionlist[] = 'hands';
-$optionlist[] = 'jump';
-$optionlist[] = 'speed';
+$optionlist['str'] = 'STR: ';
+$optionlist['dex'] = 'DEX: ';
+$optionlist['int'] = 'INT: ';
+$optionlist['luk'] = 'LUK: ';
+$optionlist['maxhp'] = 'MaxHP: ';
+$optionlist['maxmp'] = 'MaxMP: ';
+$optionlist['weaponatt'] = 'Weapon Attack: ';
+$optionlist['weapondef'] = 'Weapon Def.: ';
+$optionlist['magicatt'] = 'Magic Attack: ';
+$optionlist['magicdef'] = 'Magic Def.: ';
+$optionlist['acc'] = 'Accuracy: ';
+$optionlist['avo'] = 'Avoidability: ';
+$optionlist['hands'] = 'Hands: ';
+$optionlist['jump'] = 'Jump: ';
+$optionlist['speed'] = 'Speed: ';
+$optionlist['slots'] = 'Number of upgrades available: ';
+$optionlist['scrolls'] = 'Number of upgrades done: ';
 
 $IDlist = array();
 
@@ -185,29 +185,33 @@ for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
 <table border="1" class="span3 character-brick" style="padding:15px !important; display: none;" id="inventory_<?php echo $inv; ?>">
-<?php
-	for ($i = 0; $i < count($inv1); $i += 4):
-?>
+<?php for ($i = 0; $i < count($inv1); $i += 4): ?>
 	<tr>
-<?php
-		for ($j = $i; $j < $i + 4; $j++):
-?>
+<?php 	for ($j = $i; $j < $i + 4; $j++): ?>
 		<td style="width: 50px; height: 50px;" align="center" valign="middle">
 <?php 
 		if (isset($inv1[$j])) {
+			$isequip = $inv == 0;
 			$item = $inv1[$j];
 			if (!isset($IDlist[$item->itemid]))
 				$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
 			
 			$arguments = "SetItemInfo(event, this, ";
 			
-			foreach ($optionlist as $option) {
-				if ($inv == 0) 
+			foreach ($optionlist as $option => $desc) {
+				if ($isequip) 
 					eval('$arguments .= $item->'.$option.'.", ";'); // Fugly
 				else 
-					$arguments .= '0,';
+					$arguments .= '0, ';
 			}
-			$arguments .= "descriptions[".$item->itemid."], '".GetSystemTimeFromFileTime($item->expires)."');";
+			$arguments .= "descriptions[".$item->itemid."], ";
+			$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
+			$arguments .= ($isequip ? $item->HasLock() : 0).", ";
+			$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
+			$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
+			$arguments .= ($isequip ? $item->TradeBlocked() : 0).", ";
+			$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
+			$arguments .= $item->itemid.");";
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
 				<img src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmouseout="HideItemInfo()" />
@@ -217,17 +221,11 @@ for ($inv = 0; $inv < 5; $inv++):
 		}
 ?>
 		</td>
-<?php
-		endfor;
-?>
+<?php	endfor; ?>
 	</tr>
-<?php
-	endfor;
-?>
+<?php endfor; ?>
 </table>
-<?php
-endfor;
-?>
+<?php endfor; ?>
 </div>
 
 <style type="text/css">
@@ -242,6 +240,12 @@ endfor;
 	-moz-transition: all 2s; /* Firefox 4 */
 	-webkit-transition: all 2s; /* Safari and Chrome */
 	-o-transition: all 2s; /* Opera */
+}
+
+#item_info #item_info_extra span {
+	text-align: center;
+	display: block;
+	font-size: 12px;
 }
 
 #item_info #item_info_description {
@@ -269,9 +273,8 @@ endfor;
 	clear: both;
 }
 
-#item_info #item_info_expires {
-	display: block;
-	color: red;
+#item_info .item_stats > table {
+	font-size: 11px;
 }
 </style>
 
@@ -279,16 +282,17 @@ endfor;
 var descriptions = <?php echo json_encode($IDlist); ?>;
 
 function SetItemInfo(event, obj, <?php
-foreach ($optionlist as $option) {
+foreach ($optionlist as $option => $desc) {
 	echo $option.", ";
 }
 ?>
-description, expires) {
+description, expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, f_karmad, itemid) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
 <?php
-foreach ($optionlist as $option) {
+foreach ($optionlist as $option => $desc) {
+	if ($option == 'scrolls') continue;
 ?>
 	if (<?php echo $option; ?> != 0 && <?php echo $option; ?> != '') {
 		document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = '';
@@ -303,7 +307,6 @@ foreach ($optionlist as $option) {
 	document.getElementById('item_info').style.top = event.pageY + 10 + 'px';
 	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 	
-	document.getElementById('item_info_expires').innerHTML = expires;
 	if (description != '') {
 		document.getElementById('item_info_description').style.display = '';
 		document.getElementById('item_info_description').innerHTML = description;
@@ -311,6 +314,28 @@ foreach ($optionlist as $option) {
 	else {
 		document.getElementById('item_info_description').style.display = 'none';
 	}
+	
+	var extrainfo = '';
+	
+	if (f_lock)
+		extrainfo += '<span>Sealed untill ' + expires + '</span>';
+	else if (expires != '')
+		extrainfo += '<span>Expires on ' + expires + '</span>';
+	if (f_spikes)
+		extrainfo += '<span>Prevents slipping</span>';
+	if (f_coldprotection)
+		extrainfo += '<span>Cold prevention</span>';
+	if (f_tradeblock)
+		extrainfo += '<span>Untradable</span>';
+	if (f_karmad)
+		extrainfo += '<span>1 time trading (karma\'d)</span>';
+
+	extrainfo += '<span>ITEMID ' + itemid + '</span>';
+	
+	
+	document.getElementById('item_info_extra').innerHTML = extrainfo;
+	document.getElementById('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
+	
 	document.getElementById('item_info').style.display = 'block';
 }
 
@@ -331,17 +356,18 @@ ChangeInventory(1);
 
 <div id="item_info" style="display: none;">
 	<div id="item_info_title"></div>
-	<div id="item_info_expires"></div>
+	<div id="item_info_extra"></div>
 	<div class="icon_holder"><img id="item_info_icon" src="" title="" /></div>
 	<div id="item_info_description"></div>
 	<div class="item_stats">
 		<table border="0">
 
 <?php
-foreach ($optionlist as $option) {
+foreach ($optionlist as $option => $desc) {
+	if ($option == 'scrolls') continue;
 ?>
 			<tr id="item_info_row_<?php echo strtolower($option); ?>">
-				<td><?php echo $option; ?></td>
+				<td><?php echo $desc; ?></td>
 				<td id="item_info_<?php echo strtolower($option); ?>"></td>
 			</tr>
 <?php

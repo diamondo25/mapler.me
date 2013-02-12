@@ -59,6 +59,17 @@ class ItemBase {
 	}
 }
 
+class ItemRechargable extends ItemBase {
+	public $crafter, $flags;
+	
+	public function __construct($row) {
+		parent::__construct($row);
+		
+		$this->crafter = $row['name'];
+		$this->flags = $row['flags'];
+	}
+}
+
 class ItemEquip extends ItemBase {
 	public $slots;
 	public $scrolls;
@@ -124,5 +135,24 @@ class ItemEquip extends ItemBase {
 		$this->socket3 = $row['socket3'];
 	}
 
+	public function HasLock() {
+		return ($this->flags & 0x01) == 0x01 ? 1 : 0;
+	}
+
+	public function HasSpikes() {
+		return ($this->flags & 0x02) == 0x02 ? 1 : 0;
+	}
+
+	public function HasColdProtection() {
+		return ($this->flags & 0x04) == 0x04 ? 1 : 0;
+	}
+
+	public function TradeBlocked() {
+		return ($this->flags & 0x08) == 0x08 ? 1 : 0;
+	}
+
+	public function IsKarmad() {
+		return ($this->flags & 0x10) == 0x10 ? 1 : 0;
+	}
 }
 ?>
