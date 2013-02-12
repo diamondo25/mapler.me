@@ -30,7 +30,7 @@ class Account {
 		$this->_accountrank = $row['account_rank'];
 		$this->_premiumtill = $row['premium_till'];
 		$this->_bio = $row['bio'];
-		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration']);
+		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration'], true);
 	}
 	
 	public function Save() {

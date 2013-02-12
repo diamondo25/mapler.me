@@ -189,9 +189,8 @@ namespace MPLRServer
                 pPacket.ReadInt();
             }
 
-            long filetime = 0;
-            filetime += (long)(pPacket.ReadInt() >> 32);
-            filetime += (long)pPacket.ReadInt();
+            pPacket.ReadInt();
+            pPacket.ReadInt();
         }
 
         public void DecodeMesos(MaplePacket pPacket)
