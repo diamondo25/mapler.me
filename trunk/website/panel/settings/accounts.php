@@ -51,7 +51,7 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 	}
 	elseif ($matches[1] != '200') {
 ?>
-<p class="lead alert-error alert">Invalid username or password entered</p>
+<p class="lead alert-error alert">The login details provided was incorrect, try again?</p>
 <?php
 	}
 	else {
@@ -96,15 +96,19 @@ WHERE
 
 ?>
 
-<h3>Currently registered MapleStory accounts</h3>
+<h3>Your Accounts</h3>
+<p>In order to connect your account to Mapler.me, you must login to your account below. All confidential information is discarded after connecting an account.</p>
 <p class="alert-info alert">Note that if you are using your e-mail address to login into MapleStory, your username shown on this page will not be the same.</p>
 <ul>
 <?php while ($row = $q->fetch_assoc()): ?>
-	<li><?php echo $row['username']; ?></li>
+<div class="btn-group">
+  <button class="btn"><?php echo $row['username']; ?></button>
+</div>
+	
 <?php endwhile; ?>
 </ul>
-
-<h3>Register a MapleStory account</h3>
+<div style="clear:both;"></div>
+<h3>Connect an account:</h3>
 <?php if (!$maycheck): ?>
 <p class="lead alert-error alert">You have to wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?>...</p>
 <?php else: ?>

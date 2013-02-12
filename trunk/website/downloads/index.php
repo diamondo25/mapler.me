@@ -1,7 +1,12 @@
 <?php require_once '../inc/header.php'; ?>
+<?php
+if (!$_loggedin):
+?>
+
+<p class="lead alert-error alert">Please login to view this page.</p>
 
 <?php
-
+else:
 ?>
 	<div class="row">
 		<div class="span6">
@@ -33,5 +38,9 @@ border-radius: 6px;"
 			<h1>Client Updates:</h1>
 			<p><?php include('info.txt'); ?></p>
 		</div>
+		
+<?php
+endif;
+?>
       
 <?php require_once '../inc/footer.php'; ?>
