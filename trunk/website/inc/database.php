@@ -1,11 +1,11 @@
 <?php
 class ExtendedMysqli extends mysqli {
 	public $last_query = "";
-	public $query_count = 0;
+	public $queries = array();
 	
 	public function query($pQuery) {
 		$this->last_query = $pQuery;
-		$this->query_count++;
+		$this->queries[] = $pQuery;
 		
 		$result = parent::query($pQuery) or die($this->get_debug_info());
 		return $result;
@@ -24,8 +24,20 @@ NO_END;
 		return $error_msg;
 	}
 	
+	public function getqueries() {
+?>
+<pre>
+<?php
+foreach ($this->queries as $query) {
+	echo $query."\r\n";
+}
+?>
+</pre>
+<?php
+	}
+	
 	public function QueriesRan() {
-		return $this->query_count;
+		return count($this->queries);
 	}
 }
 

@@ -10,6 +10,9 @@ require_once 'class_inventory.php';
 require_once 'domains.php';
 require_once 'ranks.php';
 
+// Check for APC
+$apcinstalled = function_exists("apc_add") == 1;
+
 class Form {
 	public $output;
 
@@ -120,9 +123,7 @@ function GetPasswordHash($password, $salt) {
 }
 
 function GetMapleStoryString($type, $id, $key) {
-	global $__database;
-	
-	$apcinstalled = function_exists("apc_add");
+	global $__database, $apcinstalled;
 	
 	if (strlen($key) > 5) {
 		// Yea...
@@ -133,11 +134,15 @@ function GetMapleStoryString($type, $id, $key) {
 		apc_add("data_cache", array());
 	}
 	
-	$temp = apc_fetch("data_cache");
-	if ($apcinstalled && isset($temp[$type.'|'.$id.'|'.$key])) {
-		$tmp = $temp[$type.'|'.$id.'|'.$key];
-		
-		return $tmp;
+	$temp = null;
+	if ($apcinstalled) {
+		$temp = apc_fetch("data_cache");
+		if ($temp == null) {
+			$temp = array();
+		}
+		if (isset($temp[$type.'|'.$id.'|'.$key])) {
+			return  $temp[$type.'|'.$id.'|'.$key];
+		}
 	}
 	
 	$q = $__database->query("SELECT `value` FROM `strings` WHERE `objecttype` = '".$__database->real_escape_string($type)."' AND `objectid` = ".intval($id)." AND `key` = '".$__database->real_escape_string($key)."'");
@@ -157,9 +162,50 @@ function GetMapleStoryString($type, $id, $key) {
 	return NULL;
 }
 
-function IGTextToWeb($data) {
+
+function GetItemDefaultStats($id) {
+	global $__database, $apcinstalled;
+	
+	if ($apcinstalled && !apc_exists("data_iteminfo_cache")) {
+		apc_add("data_iteminfo_cache", array());
+	}
+	
+	$temp = null;
+	if ($apcinstalled) {
+		$temp = apc_fetch("data_iteminfo_cache");
+		if ($temp == null) {
+			$temp = array();
+		}
+		if (isset($temp[$id])) {
+			return  $temp[$id];
+		}
+	}
+	
+	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".$id);
+	if ($q->num_rows >= 1) {
+		$row = $q->fetch_array();
+		$tmp = $row;
+		
+		if ($apcinstalled) {
+			$temp[$id] = $tmp;
+			apc_store("data_iteminfo_cache", $temp);
+		}
+		
+		$q->free();
+		return $tmp;
+	}
+	$q->free();
+	return NULL;
+}
+
+
+function IGTextToWeb($data, $extraOptions = array()) {
+	// Escape quotes
+	$data = str_replace(array('"', "'"), array('&quot;', '&#39;'), $data); // Single quote = &#39; -.-
+
 	// Fix newlines
-	$data = str_replace('\\\\', '\\', $data);
+	$data = str_replace('\\\\', '\\', $data); // Triple slashes
+	$data = str_replace('\\\\', '\\', $data); // Double slashes
 	$data = str_replace(array('\r', '\n'), array("\r", "\n"), $data);
 	// Replace all newlines to <br />'s
 	$data = nl2br($data);
@@ -167,6 +213,17 @@ function IGTextToWeb($data) {
 	$data = str_replace(array("\r", "\n"), array('', ''), $data);
 	
 	// Ingame things
+	
+	// For 'extra' options, like #incrDAM and such
+	if (count($extraOptions) > 0) {
+		$_from = array();
+		$_to = array();
+		foreach ($extraOptions as $from => $to) {
+			$_from[] = $form;
+			$_to[] = $to;
+		}
+		$data = str_replace($_from, $_to, $data);
+	}
 	
 	$endTag = '';
 	$result = '';
@@ -234,6 +291,9 @@ function IGTextToWeb($data) {
 				if ($endTag != '') {
 					$result .= $endTag;
 					$endTag = '';
+				}
+				else {
+					$result .= $c;
 				}
 				$i--;
 			}
@@ -440,7 +500,9 @@ function GetItemIcon($id) {
 	return $url;
 }
 
-
+function ValueOrDefault($what, $default) {
+	return isset($what) ? $what : $default;
+}
 
 // Initialize more stuffs
 
@@ -466,20 +528,5 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 		header("HTTP/1.1 404 File Not Found", 404);
 		exit;
 	}
-	
-	/*
-	
-	$username = $__database->real_escape_string($subdomain);
-	$q = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
-	if ($q->num_rows > 0) {
-		$__url_userdata = $q->fetch_assoc();
-	}
-	else {
-		// User Not Found Results In 404
-		header("HTTP/1.1 404 File Not Found", 404);
-		exit;
-	}
-	$q->free();
-	*/
 }
 ?>

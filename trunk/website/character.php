@@ -159,23 +159,32 @@ $inventory = new InventoryData($character_info['internal_id']);
 
 
 $optionlist = array();
-$optionlist['str'] = 'STR: ';
-$optionlist['dex'] = 'DEX: ';
-$optionlist['int'] = 'INT: ';
-$optionlist['luk'] = 'LUK: ';
-$optionlist['maxhp'] = 'MaxHP: ';
-$optionlist['maxmp'] = 'MaxMP: ';
-$optionlist['weaponatt'] = 'Weapon Attack: ';
-$optionlist['weapondef'] = 'Weapon Def.: ';
-$optionlist['magicatt'] = 'Magic Attack: ';
-$optionlist['magicdef'] = 'Magic Def.: ';
-$optionlist['acc'] = 'Accuracy: ';
-$optionlist['avo'] = 'Avoidability: ';
-$optionlist['hands'] = 'Hands: ';
-$optionlist['jump'] = 'Jump: ';
-$optionlist['speed'] = 'Speed: ';
-$optionlist['slots'] = 'Number of upgrades available: ';
-$optionlist['scrolls'] = 'Number of upgrades done: ';
+$optionlist['str'] = 'STR : ';
+$optionlist['dex'] = 'DEX : ';
+$optionlist['int'] = 'INT : ';
+$optionlist['luk'] = 'LUK : ';
+$optionlist['maxhp'] = 'MaxHP : ';
+$optionlist['maxmp'] = 'MaxMP : ';
+$optionlist['weaponatt'] = 'Weapon Attack : ';
+$optionlist['weapondef'] = 'Weapon Def. : ';
+$optionlist['magicatt'] = 'Magic Attack : ';
+$optionlist['magicdef'] = 'Magic Def. : ';
+$optionlist['acc'] = 'Accuracy : ';
+$optionlist['avo'] = 'Avoidability : ';
+$optionlist['hands'] = 'Hands : ';
+$optionlist['jump'] = 'Jump : ';
+$optionlist['speed'] = 'Speed : ';
+$optionlist['slots'] = 'Upgrades available : ';
+$optionlist['scrolls'] = 'Number of upgrades done : ';
+
+
+$reqlist = array();
+$reqlist['reqlevel'] = 'REQ LEV : ';
+$reqlist['reqstr'] = 'REQ STR : ';
+$reqlist['reqdex'] = 'REQ DEX : ';
+$reqlist['reqint'] = 'REQ INT : ';
+$reqlist['reqluk'] = 'REQ LUK : ';
+$reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
 
 $IDlist = array();
 
@@ -184,7 +193,7 @@ $IDlist = array();
 for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-<table border="1" class="span3 character-brick" style="padding:15px !important; display: none;" id="inventory_<?php echo $inv; ?>">
+<table border="1" class="span3 character-brick" style="padding:15px !important; display: none; max-height: 350px; overflow-y: scroll;" id="inventory_<?php echo $inv; ?>">
 <?php for ($i = 0; $i < count($inv1); $i += 4): ?>
 	<tr>
 <?php 	for ($j = $i; $j < $i + 4; $j++): ?>
@@ -193,10 +202,45 @@ for ($inv = 0; $inv < 5; $inv++):
 		if (isset($inv1[$j])) {
 			$isequip = $inv == 0;
 			$item = $inv1[$j];
-			if (!isset($IDlist[$item->itemid]))
+			if (!isset($IDlist[$item->itemid])) {
 				$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
+			}
+			
+			$stats = GetItemDefaultStats($item->itemid);
+			
+			$tradeblock = 0;
+			if ($stats['tradeblock'] == 1) {
+				if ($stats['accountsharetag'] == 1) { // Account shareable
+					$tradeblock = 0x10;
+				}
+				elseif ($stats['tradeavailable'] == 1) { // Karma
+					$tradeblock = 0x20;
+				}
+				elseif ($stats['tradeavailable'] == 2) { // Plat Karma
+					$tradeblock = 0x21;
+				}
+				elseif ($stats['equiptradeblock'] == 1) { // Blocked when equipped
+					$tradeblock = 0x30;
+				}
+			}
+			
+			$reqlevel = ValueOrDefault($stats['reqlevel'], 0);
+			$reqstr = ValueOrDefault($stats['reqstr'], 0);
+			$reqdex = ValueOrDefault($stats['reqdex'], 0);
+			$reqint = ValueOrDefault($stats['reqint'], 0);
+			$reqluk = ValueOrDefault($stats['reqluk'], 0);
+			$reqpop = ValueOrDefault($stats['reqpop'], "'-'");
 			
 			$arguments = "SetItemInfo(event, this, ";
+			$arguments .= $item->itemid.",".($isequip ? 1 : 0).", ";
+			$arguments .= ValueOrDefault($stats['reqjob'], 0).", ";
+			
+			foreach ($reqlist as $option => $desc) {
+				if ($isequip) 
+					eval('$arguments .= $'.$option.'.", ";'); // Fugly
+				else 
+					$arguments .= '0, ';
+			}
 			
 			foreach ($optionlist as $option => $desc) {
 				if ($isequip) 
@@ -204,14 +248,12 @@ for ($inv = 0; $inv < 5; $inv++):
 				else 
 					$arguments .= '0, ';
 			}
-			$arguments .= "descriptions[".$item->itemid."], ";
 			$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
 			$arguments .= ($isequip ? $item->HasLock() : 0).", ";
 			$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
 			$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
-			$arguments .= ($isequip ? $item->TradeBlocked() : 0).", ";
-			$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
-			$arguments .= $item->itemid.");";
+			$arguments .= $tradeblock.", ";
+			$arguments .= ($isequip ? $item->IsKarmad() : 0).");";
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
 				<img src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmouseout="HideItemInfo()" />
@@ -276,20 +318,49 @@ for ($inv = 0; $inv < 5; $inv++):
 #item_info .item_stats > table {
 	font-size: 11px;
 }
+
+#item_info .item_req_stats {
+	float: right;
+	width: 120px;
+}
+#item_info .item_req_stats > table {
+	font-size: 11px;
+}
+
+#item_info .req_job {
+	font-size: 11px;
+	color: black;
+}
+
+#item_info .needed_job {
+	color: red;
+}
 </style>
 
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
 
-function SetItemInfo(event, obj, <?php
+function SetItemInfo(event, obj, itemid, isequip, reqjob, <?php
+foreach ($reqlist as $option => $desc) {
+	echo $option.", ";
+}
 foreach ($optionlist as $option => $desc) {
 	echo $option.", ";
 }
 ?>
-description, expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, f_karmad, itemid) {
+expires, 
+
+f_lock, f_spikes, f_coldprotection, f_tradeblock, f_karmad) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
+<?php
+foreach ($reqlist as $option => $desc) {
+?>
+	document.getElementById('item_info_req_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
+<?php
+}
+?>
 <?php
 foreach ($optionlist as $option => $desc) {
 	if ($option == 'scrolls') continue;
@@ -298,14 +369,14 @@ foreach ($optionlist as $option => $desc) {
 		document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = '';
 		document.getElementById('item_info_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
 	}
-	else {
-		document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = 'none';
-	}
+	else document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = 'none';
 <?php
 }
 ?>
 	document.getElementById('item_info').style.top = event.pageY + 10 + 'px';
 	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
+	
+	var description = descriptions[itemid];
 	
 	if (description != '') {
 		document.getElementById('item_info_description').style.display = '';
@@ -325,8 +396,17 @@ foreach ($optionlist as $option => $desc) {
 		extrainfo += '<span>Prevents slipping</span>';
 	if (f_coldprotection)
 		extrainfo += '<span>Cold prevention</span>';
-	if (f_tradeblock)
-		extrainfo += '<span>Untradable</span>';
+	if (f_tradeblock) {
+		var tradeInfo = '';
+		switch (f_tradeblock) {
+			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
+			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
+			case 0x21: tradeInfo = 'Use the Platinum Scissors of Karma to enable an item to be traded one time'; break;
+			case 0x30: tradeInfo = 'Trade disabled when equipped'; break;
+			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
+		}
+		extrainfo += '<span>' + tradeInfo + '</span>';
+	}
 	if (f_karmad)
 		extrainfo += '<span>1 time trading (karma\'d)</span>';
 
@@ -336,7 +416,26 @@ foreach ($optionlist as $option => $desc) {
 	document.getElementById('item_info_extra').innerHTML = extrainfo;
 	document.getElementById('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
 	
+	// Classes
+	
+	if (reqjob == 0) reqjob = 255; // All classes
+	SetJob(0, reqjob, 0x80); // Beginner
+	SetJob(1, reqjob, 0x01); // Warrior
+	SetJob(2, reqjob, 0x02); // Magician
+	SetJob(3, reqjob, 0x04); // Bowman
+	SetJob(4, reqjob, 0x08); // Thief
+	SetJob(5, reqjob, 0x10); // Pirate
+	
+	
 	document.getElementById('item_info').style.display = 'block';
+}
+
+function SetJob(id, flag, neededflag) {
+	var correct = (flag & neededflag) == neededflag;
+	if (neededflag == 0x80 && flag != 255) 
+		correct = false;
+	document.getElementById('item_info_reqjob_' + id).setAttribute("class", "req_job" + (correct ? ' needed_job' : ''));
+	
 }
 
 function HideItemInfo() {
@@ -357,17 +456,41 @@ ChangeInventory(1);
 <div id="item_info" style="display: none;">
 	<div id="item_info_title"></div>
 	<div id="item_info_extra"></div>
-	<div class="icon_holder"><img id="item_info_icon" src="" title="" /></div>
+	<div class="icon_holder"><img id="item_info_icon" src="" title="" width="50" height="50" /></div>
 	<div id="item_info_description"></div>
+	<div class="item_req_stats">
+		<table border="0" tablepadding="3" tablespacing="3">
+
+<?php
+foreach ($reqlist as $option => $desc) {
+?>
+			<tr id="item_info_req_row_<?php echo strtolower($option); ?>">
+				<td align="center"><?php echo $desc; ?></td>
+				<td id="item_info_req_<?php echo strtolower($option); ?>"></td>
+			</tr>
+<?php
+}
+?>
+		</table>
+
+	</div>
+	<div style="clear: both"></div>
+	<span class="req_job" id="item_info_reqjob_0">Beginner</span>
+	<span class="req_job" id="item_info_reqjob_1">Warrior</span>
+	<span class="req_job" id="item_info_reqjob_2">Magician</span>
+	<span class="req_job" id="item_info_reqjob_3">Bowman</span>
+	<span class="req_job" id="item_info_reqjob_4">Thief</span>
+	<span class="req_job" id="item_info_reqjob_5">Pirate</span>
+	<hr />
 	<div class="item_stats">
-		<table border="0">
+		<table border="0" tablepadding="3" tablespacing="3">
 
 <?php
 foreach ($optionlist as $option => $desc) {
 	if ($option == 'scrolls') continue;
 ?>
 			<tr id="item_info_row_<?php echo strtolower($option); ?>">
-				<td><?php echo $desc; ?></td>
+				<td align="center"><?php echo $desc; ?></td>
 				<td id="item_info_<?php echo strtolower($option); ?>"></td>
 			</tr>
 <?php
