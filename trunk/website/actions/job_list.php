@@ -141,11 +141,19 @@ $job_names = array(
 
 	3000 => 'Citizen',
 	3001 => 'Demon Slayer',
+	3002 => 'Xenon',
+	
 	3100 => 'Demon Slayer',
+	3101 => 'Demon Avenger'
+	
 	3110 => 'Demon Slayer',
 	3111 => 'Demon Slayer',
 	3112 => 'Demon Slayer',
-
+	
+	3120 => 'Demon Avenger',
+	3121 => 'Demon Avenger',
+	3122 => 'Demon Avenger',
+	
 	3200 => 'Battle Mage',
 	3210 => 'Battle Mage',
 	3211 => 'Battle Mage',
@@ -160,7 +168,18 @@ $job_names = array(
 	3510 => 'Mechanic',
 	3511 => 'Mechanic',
 	3512 => 'Mechanic',
-
+	
+	3600 => 'Xenon',
+	3610 => 'Xenon',
+	3611 => 'Xenon',
+	3612 => 'Xenon',
+	
+	4002 => 'Kanna',
+	4200 => 'Kanna',
+	4210 => 'Kanna',
+	4211 => 'Kanna',
+	4212 => 'Kanna',
+	
 	5100 => 'Mihile',
 	5110 => 'Mihile',
 	5111 => 'Mihile',
