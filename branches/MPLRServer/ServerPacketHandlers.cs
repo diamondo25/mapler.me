@@ -227,13 +227,17 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x10))
             {
-                pConnection.CharData.Stats.Level = pPacket.ReadByte();
-                Logger.WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, pConnection.CharData.Stats.Level);
+                var level = pPacket.ReadByte();
+                Timeline.Instance.PushLevelUP(pConnection.CharacterInternalID, level);
+                pConnection.CharData.Stats.Level = level;
+                Logger.WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, level);
             }
             if (CheckFlag(updateFlag, 0x20))
             {
-                pConnection.CharData.Stats.JobID = pPacket.ReadShort();
-                Logger.WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, pConnection.CharData.Stats.JobID);
+                var jobid = pPacket.ReadShort();
+                Timeline.Instance.PushJobUP(pConnection.CharacterInternalID, (ushort)jobid);
+                pConnection.CharData.Stats.JobID = jobid;
+                Logger.WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, jobid);
             }
             if (CheckFlag(updateFlag, 0x40))
             {
@@ -305,7 +309,9 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x20000))
             {
-                pConnection.CharData.Stats.Fame = pPacket.ReadInt();
+                int fame = pPacket.ReadInt();
+                Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame);
+                pConnection.CharData.Stats.Fame = fame;
             }
             if (CheckFlag(updateFlag, 0x40000))
             {
@@ -421,6 +427,8 @@ namespace MPLRServer
                         int masterlevel = pPacket.ReadInt();
                         long expiration = pPacket.ReadLong();
 
+                        Timeline.Instance.PushSkillUP(pConnection.CharacterInternalID, skillid, level);
+
                         skillTable.AddRow(pConnection.CharacterInternalID, skillid, level, masterlevel == 0 ? null : (object)masterlevel, expiration);
                     }
 
@@ -441,300 +449,303 @@ namespace MPLRServer
             CharacterInventory inventory = pConnection.CharData.Inventory;
 
             byte type1 = pPacket.ReadByte();
-            byte type2 = pPacket.ReadByte();
+            byte items = pPacket.ReadByte();
             byte type3 = pPacket.ReadByte();
-            if (type2 == 1 && type3 == 0) // Add or update item
+            if (type3 == 0) // Add or update item
             {
-                byte type4 = pPacket.ReadByte();
-                
-                if (type4 == 0) // New Item
+                for (var amnt = 0; amnt < items; amnt++)
                 {
-                    byte inv = pPacket.ReadByte();
-                    short slot = pPacket.ReadShort();
-                    inv -= 1;
+                    byte type4 = pPacket.ReadByte();
 
-                    ItemBase item = ItemBase.DecodeItemData(pPacket);
-
-                    if (inv == 0)
+                    if (type4 == 0) // New Item
                     {
-                        // Equip
-                        byte internalInventory = CharacterInventory.GetEquipInventoryFromSlot(slot);
-                        slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
+                        byte inv = pPacket.ReadByte();
+                        short slot = pPacket.ReadShort();
+                        inv -= 1;
 
-                        if (!inventory.EquipmentItems[internalInventory].ContainsKey(slot))
-                            inventory.EquipmentItems[internalInventory].Add(slot, item as ItemEquip);
-                        else
-                            inventory.EquipmentItems[internalInventory][slot] = item as ItemEquip;
-                    }
-                    else
-                    {
-                        if (!inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
-                            inventory.InventoryItems[inv - 1].Add((byte)slot, item);
-                        else
-                            inventory.InventoryItems[inv - 1][(byte)slot] = item;
-                    }
+                        ItemBase item = ItemBase.DecodeItemData(pPacket);
 
-
-                    Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
-
-                    using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
-                    {
-                        itemsTable.OnDuplicateUpdate = true;
-                        itemsTable.AddColumn("character_id", false);
-                        itemsTable.AddColumn("itemid", true);
-                        itemsTable.AddColumn("inventory", false);
-                        itemsTable.AddColumn("slot", false);
-                        itemsTable.AddColumn("checksum", true);
-                        itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
-
-                        if (item is ItemEquip)
+                        if (inv == 0)
                         {
-                            var equip = item as ItemEquip;
+                            // Equip
+                            byte internalInventory = CharacterInventory.GetEquipInventoryFromSlot(slot);
+                            slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
 
-                            itemsTable.AddRow(
-                                pConnection.CharacterInternalID,
-                                equip.ItemID,
-                                0,
-                                slot,
-                                equip.GetChecksum(),
-                                equip.CashID,
-                                equip.Amount,
-                                equip.Expires,
-                                equip.Slots, equip.Scrolls,
-                                equip.Str, equip.Dex, equip.Int, equip.Luk,
-                                equip.HP, equip.MP,
-                                equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
-                                equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
-                                equip.Name, equip.Flags,
-                                equip.ViciousHammer,
-                                equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
-                                equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
-                            );
+                            if (!inventory.EquipmentItems[internalInventory].ContainsKey(slot))
+                                inventory.EquipmentItems[internalInventory].Add(slot, item as ItemEquip);
+                            else
+                                inventory.EquipmentItems[internalInventory][slot] = item as ItemEquip;
                         }
                         else
                         {
-
-                            string name = item is ItemRechargable ? (item as ItemRechargable).CraftName : null;
-                            int flags = item is ItemRechargable ? (item as ItemRechargable).Flags : 0;
-
-                            itemsTable.AddRow(
-                                pConnection.CharacterInternalID,
-                                item.ItemID,
-                                inv,
-                                slot,
-                                (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
-                                item.CashID,
-                                item.Amount,
-                                item.Expires,
-                                null, null,
-                                null, null, null, null,
-                                null, null,
-                                null, null, null, null,
-                                null, null, null, null, null,
-                                name, flags,
-                                null,
-                                null, null, null, null, null,
-                                null, null, null, null
-                                );
-
+                            if (!inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
+                                inventory.InventoryItems[inv - 1].Add((byte)slot, item);
+                            else
+                                inventory.InventoryItems[inv - 1][(byte)slot] = item;
                         }
 
-                        {
-                            string q2 = itemsTable.ToString();
-                            System.IO.File.WriteAllText("insert-item-packet.sql", q2);
-                            int result = (int)MySQL_Connection.Instance.RunQuery(q2);
-                            Logger.WriteLine("Result Item Addition: {0}", result);
-                        }
 
-                        if (item is ItemPet)
+                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
+
+                        using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
                         {
-                            var pet = item as ItemPet;
-                            using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
+                            itemsTable.OnDuplicateUpdate = true;
+                            itemsTable.AddColumn("character_id", false);
+                            itemsTable.AddColumn("itemid", true);
+                            itemsTable.AddColumn("inventory", false);
+                            itemsTable.AddColumn("slot", false);
+                            itemsTable.AddColumn("checksum", true);
+                            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
+
+                            if (item is ItemEquip)
                             {
-                                petTable.OnDuplicateUpdate = true;
-                                petTable.AddColumn("cashid", false);
-                                petTable.AddColumn("name", true);
-                                petTable.AddColumn("closeness", true);
-                                petTable.AddColumn("fullness", true);
-                                petTable.AddColumn("level", true);
+                                var equip = item as ItemEquip;
 
-                                petTable.AddRow(pet.CashID, pet.Petname, pet.Closeness, pet.Fullness, pet.Level);
+                                itemsTable.AddRow(
+                                    pConnection.CharacterInternalID,
+                                    equip.ItemID,
+                                    0,
+                                    slot,
+                                    equip.GetChecksum(),
+                                    equip.CashID,
+                                    equip.Amount,
+                                    equip.Expires,
+                                    equip.Slots, equip.Scrolls,
+                                    equip.Str, equip.Dex, equip.Int, equip.Luk,
+                                    equip.HP, equip.MP,
+                                    equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
+                                    equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
+                                    equip.Name, equip.Flags,
+                                    equip.ViciousHammer,
+                                    equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
+                                    equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
+                                );
+                            }
+                            else
+                            {
 
-                                string q = petTable.ToString();
-                                System.IO.File.WriteAllText("insert-item-pet-packet.sql", q);
-                                int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                                Logger.WriteLine("Result Pets: {0}", result);
+                                string name = item is ItemRechargable ? (item as ItemRechargable).CraftName : null;
+                                int flags = item is ItemRechargable ? (item as ItemRechargable).Flags : 0;
+
+                                itemsTable.AddRow(
+                                    pConnection.CharacterInternalID,
+                                    item.ItemID,
+                                    inv,
+                                    slot,
+                                    (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
+                                    item.CashID,
+                                    item.Amount,
+                                    item.Expires,
+                                    null, null,
+                                    null, null, null, null,
+                                    null, null,
+                                    null, null, null, null,
+                                    null, null, null, null, null,
+                                    name, flags,
+                                    null,
+                                    null, null, null, null, null,
+                                    null, null, null, null
+                                    );
+
+                            }
+
+                            {
+                                string q2 = itemsTable.ToString();
+                                System.IO.File.WriteAllText("insert-item-packet.sql", q2);
+                                int result = (int)MySQL_Connection.Instance.RunQuery(q2);
+                                Logger.WriteLine("Result Item Addition: {0}", result);
+                            }
+
+                            if (item is ItemPet)
+                            {
+                                var pet = item as ItemPet;
+                                using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
+                                {
+                                    petTable.OnDuplicateUpdate = true;
+                                    petTable.AddColumn("cashid", false);
+                                    petTable.AddColumn("name", true);
+                                    petTable.AddColumn("closeness", true);
+                                    petTable.AddColumn("fullness", true);
+                                    petTable.AddColumn("level", true);
+
+                                    petTable.AddRow(pet.CashID, pet.Petname, pet.Closeness, pet.Fullness, pet.Level);
+
+                                    string q = petTable.ToString();
+                                    System.IO.File.WriteAllText("insert-item-pet-packet.sql", q);
+                                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                                    Logger.WriteLine("Result Pets: {0}", result);
+                                }
                             }
                         }
                     }
-                }
-                else if (type4 == 1) // Update amount
-                {
-                    byte inv = pPacket.ReadByte();
-                    short slot = pPacket.ReadShort();
-                    short amount = pPacket.ReadShort();
-                    inv -= 1; // 1 (strange counting of Nexon) + 1 (no equip inventory)
-
-                    ItemBase item = inventory.InventoryItems[inv - 1][(byte)slot];
-                    item.Amount = amount;
-
-                    Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
-
-                    using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                    else if (type4 == 1) // Update amount
                     {
-                        itemTable.SetColumn("amount", amount);
-                        itemTable.SetColumn("checksum", item.GetChecksum());
-                        itemTable.SetWhereColumn("inventory", inv);
-                        itemTable.SetWhereColumn("slot", slot);
-                        itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+                        byte inv = pPacket.ReadByte();
+                        short slot = pPacket.ReadShort();
+                        short amount = pPacket.ReadShort();
+                        inv -= 1; // 1 (strange counting of Nexon) + 1 (no equip inventory)
 
+                        ItemBase item = inventory.InventoryItems[inv - 1][(byte)slot];
+                        item.Amount = amount;
 
-                        string q = itemTable.ToString();
-                        System.IO.File.WriteAllText("update-item-packet.sql", q);
-                        int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                        Logger.WriteLine("Result Item Amount Update: {0}", result);
+                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
 
-                    }
-
-
-                }
-                else if (type4 == 2) // Swap
-                {
-                    byte inv = pPacket.ReadByte();
-                    short slotfrom = pPacket.ReadShort();
-                    short slotto = pPacket.ReadShort();
-                    inv -= 1;
-
-                    bool founditem = false;
-
-                    if (inv == 0)
-                    {
-                        // Equips!
-                        byte internalInventoryFrom = CharacterInventory.GetEquipInventoryFromSlot(slotfrom);
-                        byte internalInventoryTo = CharacterInventory.GetEquipInventoryFromSlot(slotto);
-                        slotfrom = CharacterInventory.CorrectEquipSlot(internalInventoryFrom, slotfrom);
-                        slotto = CharacterInventory.CorrectEquipSlot(internalInventoryTo, slotto);
-
-                        // Switch Equips
-                        ItemEquip item = inventory.EquipmentItems[internalInventoryFrom][slotfrom];
-                        if (inventory.EquipmentItems[internalInventoryTo].ContainsKey(slotto))
-                        {
-                            inventory.EquipmentItems[internalInventoryFrom][slotfrom] =
-                                inventory.EquipmentItems[internalInventoryTo][slotto];
-
-                            inventory.EquipmentItems[internalInventoryTo].Remove(slotto); // Remove item
-                            founditem = true;
-                        }
-                        else
-                        {
-                            inventory.EquipmentItems[internalInventoryFrom].Remove(slotfrom);
-                        }
-                        inventory.EquipmentItems[internalInventoryTo].Add(slotto, item);
-                    }
-                    else
-                    {
-                        // Switch Items
-                        ItemBase item = inventory.InventoryItems[inv - 1][(byte)slotfrom];
-                        if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slotto))
-                        {
-                            inventory.InventoryItems[inv - 1][(byte)slotfrom] =
-                                inventory.InventoryItems[inv - 1][(byte)slotto];
-                            inventory.InventoryItems[inv - 1].Remove((byte)slotto); // Remove item
-                            founditem = true;
-                        }
-                        else
-                        {
-                            inventory.InventoryItems[inv - 1].Remove((byte)slotfrom);
-                        }
-                        inventory.InventoryItems[inv - 1][(byte)slotto] = item;
-
-                    }
-
-                    if (founditem) // New slot contained item
-                    {
                         using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
                         {
-                            itemTable.SetColumn("slot", slotfrom + 3000);
+                            itemTable.SetColumn("amount", amount);
+                            itemTable.SetColumn("checksum", item.GetChecksum());
                             itemTable.SetWhereColumn("inventory", inv);
-                            itemTable.SetWhereColumn("slot", slotto);
+                            itemTable.SetWhereColumn("slot", slot);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
 
                             string q = itemTable.ToString();
                             System.IO.File.WriteAllText("update-item-packet.sql", q);
                             int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                            Logger.WriteLine("Result Item Slot Switch FIX1: {0}", result);
+                            Logger.WriteLine("Result Item Amount Update: {0}", result);
+
                         }
+
+
                     }
-
-                    using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                    else if (type4 == 2) // Swap
                     {
-                        itemTable.SetColumn("slot", slotto);
-                        itemTable.SetWhereColumn("inventory", inv);
-                        itemTable.SetWhereColumn("slot", slotfrom);
-                        itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+                        byte inv = pPacket.ReadByte();
+                        short slotfrom = pPacket.ReadShort();
+                        short slotto = pPacket.ReadShort();
+                        inv -= 1;
+
+                        bool founditem = false;
+
+                        if (inv == 0)
+                        {
+                            // Equips!
+                            byte internalInventoryFrom = CharacterInventory.GetEquipInventoryFromSlot(slotfrom);
+                            byte internalInventoryTo = CharacterInventory.GetEquipInventoryFromSlot(slotto);
+                            slotfrom = CharacterInventory.CorrectEquipSlot(internalInventoryFrom, slotfrom);
+                            slotto = CharacterInventory.CorrectEquipSlot(internalInventoryTo, slotto);
+
+                            // Switch Equips
+                            ItemEquip item = inventory.EquipmentItems[internalInventoryFrom][slotfrom];
+                            if (inventory.EquipmentItems[internalInventoryTo].ContainsKey(slotto))
+                            {
+                                inventory.EquipmentItems[internalInventoryFrom][slotfrom] =
+                                    inventory.EquipmentItems[internalInventoryTo][slotto];
+
+                                inventory.EquipmentItems[internalInventoryTo].Remove(slotto); // Remove item
+                                founditem = true;
+                            }
+                            else
+                            {
+                                inventory.EquipmentItems[internalInventoryFrom].Remove(slotfrom);
+                            }
+                            inventory.EquipmentItems[internalInventoryTo].Add(slotto, item);
+                        }
+                        else
+                        {
+                            // Switch Items
+                            ItemBase item = inventory.InventoryItems[inv - 1][(byte)slotfrom];
+                            if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slotto))
+                            {
+                                inventory.InventoryItems[inv - 1][(byte)slotfrom] =
+                                    inventory.InventoryItems[inv - 1][(byte)slotto];
+                                inventory.InventoryItems[inv - 1].Remove((byte)slotto); // Remove item
+                                founditem = true;
+                            }
+                            else
+                            {
+                                inventory.InventoryItems[inv - 1].Remove((byte)slotfrom);
+                            }
+                            inventory.InventoryItems[inv - 1][(byte)slotto] = item;
+
+                        }
+
+                        if (founditem) // New slot contained item
+                        {
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom + 3000);
+                                itemTable.SetWhereColumn("inventory", inv);
+                                itemTable.SetWhereColumn("slot", slotto);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
 
-                        string q = itemTable.ToString();
-                        System.IO.File.WriteAllText("update-item-packet.sql", q);
-                        int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                        Logger.WriteLine("Result Item Slot Switch: {0}", result);
-                    }
+                                string q = itemTable.ToString();
+                                System.IO.File.WriteAllText("update-item-packet.sql", q);
+                                int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                                Logger.WriteLine("Result Item Slot Switch FIX1: {0}", result);
+                            }
+                        }
 
-                    if (founditem) // Fix other slot
-                    {
                         using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
                         {
-                            itemTable.SetColumn("slot", slotfrom);
+                            itemTable.SetColumn("slot", slotto);
                             itemTable.SetWhereColumn("inventory", inv);
-                            itemTable.SetWhereColumn("slot", slotfrom + 3000);
+                            itemTable.SetWhereColumn("slot", slotfrom);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
 
                             string q = itemTable.ToString();
                             System.IO.File.WriteAllText("update-item-packet.sql", q);
                             int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                            Logger.WriteLine("Result Item Slot Switch FIX2: {0}", result);
+                            Logger.WriteLine("Result Item Slot Switch: {0}", result);
                         }
-                    }
-                }
-                else if (type4 == 3)
-                {
-                    // Drop item.
-                    byte inv = pPacket.ReadByte();
-                    short slot = pPacket.ReadShort();
-                    inv -= 1;
 
-                    if (inv == 0)
-                    {
-                        // Equips!
-                        byte internalInventory = CharacterInventory.GetEquipInventoryFromSlot(slot);
-                        slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
-
-                        if (inventory.EquipmentItems[internalInventory].ContainsKey(slot))
+                        if (founditem) // Fix other slot
                         {
-                            inventory.EquipmentItems[internalInventory].Remove(slot);
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom);
+                                itemTable.SetWhereColumn("inventory", inv);
+                                itemTable.SetWhereColumn("slot", slotfrom + 3000);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+
+                                string q = itemTable.ToString();
+                                System.IO.File.WriteAllText("update-item-packet.sql", q);
+                                int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                                Logger.WriteLine("Result Item Slot Switch FIX2: {0}", result);
+                            }
                         }
                     }
-                    else
+                    else if (type4 == 3)
                     {
-                        if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
+                        // Drop item.
+                        byte inv = pPacket.ReadByte();
+                        short slot = pPacket.ReadShort();
+                        inv -= 1;
+
+                        if (inv == 0)
                         {
-                            inventory.InventoryItems[inv - 1].Remove((byte)slot);
+                            // Equips!
+                            byte internalInventory = CharacterInventory.GetEquipInventoryFromSlot(slot);
+                            slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
+
+                            if (inventory.EquipmentItems[internalInventory].ContainsKey(slot))
+                            {
+                                inventory.EquipmentItems[internalInventory].Remove(slot);
+                            }
                         }
-                    }
+                        else
+                        {
+                            if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
+                            {
+                                inventory.InventoryItems[inv - 1].Remove((byte)slot);
+                            }
+                        }
 
-                    using (DeleteQueryBuilder itemTable = new DeleteQueryBuilder("items"))
-                    {
-                        itemTable.SetWhereColumn("inventory", inv);
-                        itemTable.SetWhereColumn("slot", slot);
-                        itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+                        using (DeleteQueryBuilder itemTable = new DeleteQueryBuilder("items"))
+                        {
+                            itemTable.SetWhereColumn("inventory", inv);
+                            itemTable.SetWhereColumn("slot", slot);
+                            itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
 
-                        string q = itemTable.ToString();
-                        System.IO.File.WriteAllText("delete-item-packet.sql", q);
-                        int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                        Logger.WriteLine("Result Item Slot Removal: {0}", result);
+                            string q = itemTable.ToString();
+                            System.IO.File.WriteAllText("delete-item-packet.sql", q);
+                            int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                            Logger.WriteLine("Result Item Slot Removal: {0}", result);
+                        }
                     }
                 }
             }

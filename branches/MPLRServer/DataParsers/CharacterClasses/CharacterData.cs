@@ -82,34 +82,34 @@ namespace MPLRServer
                 UnknownIntegerListNumber3.Add(pPacket.ReadInt(), pPacket.ReadLong());
             }
 
-                UnknownIntegerListNumber4 = new Dictionary<long, long>();
-                for (int i = pPacket.ReadInt(); i > 0; i--)
+            UnknownIntegerListNumber4 = new Dictionary<long, long>();
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+            {
+                UnknownIntegerListNumber4.Add(pPacket.ReadLong(), pPacket.ReadLong());
+            }
+
+
+            while (true)
+            {
+
+                byte val = pPacket.ReadByte();
+                if (val == 0) break;
                 {
-                    UnknownIntegerListNumber4.Add(pPacket.ReadLong(), pPacket.ReadLong());
+                    pPacket.ReadInt();
+                    pPacket.ReadByte();
+                    pPacket.ReadByte();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadByte();
+                    pPacket.ReadInt();
+                    pPacket.ReadLong();
+                    pPacket.ReadLong();
+                    pPacket.ReadLong();
+                    pPacket.ReadLong();
                 }
-
-
-                while (true)
-                {
-
-                    byte val = pPacket.ReadByte();
-                    if (val == 0) break;
-                    {
-                        pPacket.ReadInt();
-                        pPacket.ReadByte();
-                        pPacket.ReadByte();
-                        pPacket.ReadInt();
-                        pPacket.ReadInt();
-                        pPacket.ReadInt();
-                        pPacket.ReadInt();
-                        pPacket.ReadByte();
-                        pPacket.ReadInt();
-                        pPacket.ReadLong();
-                        pPacket.ReadLong();
-                        pPacket.ReadLong();
-                        pPacket.ReadLong();
-                    }
-                }
+            }
 
 
             Skills = new CharacterSkills();
@@ -259,7 +259,9 @@ namespace MPLRServer
                 Stats.EXP, Stats.Fame, Stats.MapID, Stats.MapPos,
                 Stats.HonourLevel, Stats.HonourExp, Stats.Mesos, Stats.DemonMark,
                 Stats.Gender, Stats.Skin,
-                Stats.Face, Stats.Hair);
+                Stats.Face, Stats.Hair,
+                Inventory.InventorySlots, BlessingOfTheFairy, BlessingOfEmpress, UltimateExplorer
+                );
         }
 
         public void SaveData(ClientConnection pConnection)

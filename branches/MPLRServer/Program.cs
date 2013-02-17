@@ -33,6 +33,7 @@ namespace MPLRServer
             MasterThread.Load("MPLRServer");
 
             CommandHandler.Initialize();
+            Timeline.Init();
 
             Random = new System.Random();
 
@@ -174,11 +175,16 @@ namespace MPLRServer
                 //tmp.Add(0x0015, null); // Login Packet
                 tmp.Add(0x0014, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
 
-                // Select World
-                tmp.Add(0x001C, new Handler((pClient, pPacket) =>
+                // Select Channel
+                tmp.Add(0x001B, new Handler((pClient, pPacket) =>
                 {
+                    pPacket.ReadByte(); // 2
                     pClient.WorldID = pPacket.ReadByte();
-                }, onlywhenloggedin));
+                    byte channel = pPacket.ReadByte(); // Channel ID
+                    pPacket.ReadInt(); // Internal IP 0.0?
+
+                    Logger.WriteLine("User selected World {0} Channel {1}", pClient.WorldID, channel);
+                }, null));
 
                 // Pong
                 tmp.Add(0x002D, new Handler((pClient, pPacket) =>

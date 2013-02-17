@@ -13,7 +13,9 @@ namespace MPLRServer
             int pEXP, int pFame, int pMap, byte pMapPos,
             int pHonourLevel, int pHonourEXP, int pMesos, int pDemonMark,
             byte pGender, byte pSkin,
-            int pEyes, int pHair
+            int pEyes, int pHair,
+
+            byte[] pSlots, string pBoF, string pBoE, string pUE
             )
         {
             if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(pID) &&
@@ -52,6 +54,16 @@ namespace MPLRServer
                     query.SetColumn("mesos", pMesos);
                     query.SetColumn("demonmark", pDemonMark);
 
+                    query.SetColumn("eqp_slots", pSlots[0]);
+                    query.SetColumn("use_slots", pSlots[1]);
+                    query.SetColumn("setup_slots", pSlots[2]);
+                    query.SetColumn("etc_slots", pSlots[3]);
+                    query.SetColumn("cash_slots", pSlots[4]);
+
+                    query.SetColumn("blessingoffairy", pBoF);
+                    query.SetColumn("blessingofempress", pBoF);
+                    query.SetColumn("ultimateexplorer", pUE);
+
                     query.SetWhereColumn("internal_id", internal_id);
 
                     string q = query.ToString();
@@ -78,6 +90,8 @@ namespace MPLRServer
                     query.AddColumn("name");
                     query.AddColumns(true, new string[] { "userid", "world_id", "level", "job", "str", "dex", "int", "luk", "chp", "mhp", "cmp", "mmp", "ap", "sp", "exp", "fame", "map", "pos", "gender", "skin", "eyes", "hair" });
                     query.AddColumns(true, new string[] { "honourlevel", "honourexp", "mesos", "demonmark" });
+                    query.AddColumns(true, new string[] { "eqp_slots", "use_slots", "setup_slots", "etc_slots", "cash_slots" });
+                    query.AddColumns(true, new string[] { "blessingoffairy", "blessingofempress", "ultimateexplorer" });
                     query.AddColumn("last_update", true);
 
 
@@ -86,7 +100,11 @@ namespace MPLRServer
                         pHP, pMaxHP, pMP, pMaxMP, pAP, pSP,
                         pEXP, pFame, pMap, pMapPos, pGender, pSkin,
                         pHonourLevel, pHonourEXP, pMesos, pDemonMark,
-                        pEyes, pHair, new MySQL_Connection.NowType());
+                        pEyes, pHair,
+                        pSlots[0], pSlots[1], pSlots[2], pSlots[3], pSlots[4], 
+                        pBoF, pBoE, pUE,
+                        
+                        new MySQL_Connection.NowType());
 
                     string q = query.ToString();
 

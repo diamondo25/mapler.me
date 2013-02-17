@@ -180,12 +180,14 @@ $job_names = array(
 	4211 => 'Kanna',
 	4212 => 'Kanna',
 	
+	5000 => 'Mihile',
 	5100 => 'Mihile',
 	5110 => 'Mihile',
 	5111 => 'Mihile',
 	5112 => 'Mihile',
 
 	6000 => 'Kaiser',
+	6100 => 'Kaiser',
 	6110 => 'Kaiser',
 	6111 => 'Kaiser',
 	6112 => 'Kaiser',

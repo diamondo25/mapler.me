@@ -68,6 +68,7 @@
     <Compile Include="Queries.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ServerPacketHandlers.cs" />
+    <Compile Include="Timeline.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SomeFunnyDLL\AHA.csproj">

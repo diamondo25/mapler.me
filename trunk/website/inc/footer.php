@@ -14,8 +14,8 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
 	<script src="//<?php echo $domain; ?>/inc/js/scripts.js" type="text/javascript"></script>
-    <script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
+	<script src="//isotope.metafizzy.co/jquery.isotope.min.js" type="text/javascript"></script>
 	
 	<script>
     $(document).ready(function() {

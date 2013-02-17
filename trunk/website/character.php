@@ -97,6 +97,8 @@ ORDER BY
 	skillid / 1000 ASC
 	");
 	
+	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
+	
 	$lastgroup = -1;
 
 	while ($row = $q->fetch_assoc()) {
