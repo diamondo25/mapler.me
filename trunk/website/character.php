@@ -274,7 +274,8 @@ for ($inv = 0; $inv < 5; $inv++):
 			$arguments .= ($isequip ? $item->potential2 : 0).", ";
 			$arguments .= ($isequip ? $item->potential3 : 0).", ";
 			$arguments .= ($isequip ? $item->potential4 : 0).", ";
-			$arguments .= ($isequip ? $item->potential5 : 0).");";
+			$arguments .= ($isequip ? $item->potential5 : 0).", ";
+			$arguments .= ValueOrDefault($stats['only'], 0).");";
 			
 			$potential = 0;
 			if ($isequip && $item->socket3 == 1)
@@ -386,23 +387,23 @@ for ($inv = 0; $inv < 5; $inv++):
 }
 
 .potential1 {
-	border: 1px solid rgba(255, 0, 102, 1) !important;
+	border: 1px solid #FF0066 !important;
 }
 
 .potential2 {
-	border: 1px solid rgba(85, 170, 255, 1) !important;
+	border: 1px solid #5CA1FF !important;
 }
 
 .potential3 {
-	border: 1px solid rgba(204, 102, 255, 1) !important;
+	border: 1px solid #C261FF !important;
 }
 
 .potential4 {
-	border: 1px solid rgba(0, 0, 255, 1) !important;
+	border: 1px solid #FFCC00 !important;
 }
 
 .potential5 {
-	border: 1px solid rgba(0, 0, 255, 1) !important;
+	border: 1px solid #00FF00 !important;
 }
 </style>
 
@@ -418,7 +419,7 @@ foreach ($optionlist as $option => $desc) {
 	echo $option.", ";
 }
 ?>
-expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5) {
+expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5, one) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
@@ -455,6 +456,9 @@ foreach ($optionlist as $option => $desc) {
 	}
 	
 	var extrainfo = '';
+	
+	if (one)
+		extrainfo += '<span>One of a Kind</span>';
 	
 	if (questitem)
 		extrainfo += '<span>Quest item</span>';
