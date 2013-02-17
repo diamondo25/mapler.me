@@ -269,16 +269,26 @@ for ($inv = 0; $inv < 5; $inv++):
 			$arguments .= $tradeblock.", ";
 			$arguments .= ValueOrDefault($stats['quest'], 0).", ";
 			$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
+			$arguments .= ($isequip ? $item->socket3 : 0).", "; // Seems to be sort of potential flag (1 = locked, 12 = unlocked)
 			$arguments .= ($isequip ? $item->potential1 : 0).", ";
 			$arguments .= ($isequip ? $item->potential2 : 0).", ";
 			$arguments .= ($isequip ? $item->potential3 : 0).", ";
 			$arguments .= ($isequip ? $item->potential4 : 0).", ";
 			$arguments .= ($isequip ? $item->potential5 : 0).");";
 			
-			$potential = $isequip && $item->potential1 != 0;
+			$potential = 0;
+			if ($isequip && $item->socket3 == 1)
+				$potential = 1; // Default color
+			else {
+				if ($isequip && $item->potential1 != 0) $potential++;
+				if ($isequip && $item->potential2 != 0) $potential++;
+				if ($isequip && $item->potential3 != 0) $potential++;
+				if ($isequip && $item->potential4 != 0) $potential++;
+				if ($isequip && $item->potential5 != 0) $potential++;
+			}
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
-				<img class="item-icon<?php echo $potential ? ' potential' : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon<?php echo $potential != 0 ? ' potential'.$potential : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 				<div style="position: absolute; bottom: 0; right: 0; color: black;"><?php echo $inv != 0 ? $item->amount : ''; ?></div>
 			</div>
 <?php 
@@ -375,8 +385,24 @@ for ($inv = 0; $inv < 5; $inv++):
 	display: none;
 }
 
-.potential {
-	border: 1px solid rgba(0,0,255,0.6) !important;
+.potential1 {
+	border: 1px solid rgba(255, 0, 102, 1) !important;
+}
+
+.potential2 {
+	border: 1px solid rgba(85, 170, 255, 1) !important;
+}
+
+.potential3 {
+	border: 1px solid rgba(204, 102, 255, 1) !important;
+}
+
+.potential4 {
+	border: 1px solid rgba(0, 0, 255, 1) !important;
+}
+
+.potential5 {
+	border: 1px solid rgba(0, 0, 255, 1) !important;
 }
 </style>
 
@@ -392,7 +418,7 @@ foreach ($optionlist as $option => $desc) {
 	echo $option.", ";
 }
 ?>
-expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potential1, potential2, potential3, potential4, potential5) {
+expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
@@ -475,6 +501,11 @@ foreach ($optionlist as $option => $desc) {
 	
 	var potentiallevel = Math.floor(reqlevel / 10);
 	
+	if (potentialflag == 1) { // 12 = unlocked
+		var row = document.getElementById('potentials').insertRow(-1);
+		row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
+	}
+	
 <?php
 for ($i = 1; $i <= 5; $i++) {
 ?>
@@ -497,8 +528,8 @@ for ($i = 1; $i <= 5; $i++) {
 	
 	document.getElementById('item_info_potentials').style.display = document.getElementById('potentials').innerHTML == '' ? 'none' : 'block';
 	
-	var hasPotential = obj.getAttribute('class').indexOf('potential') != -1;
-	document.getElementById('item_info').setAttribute('class', hasPotential ? 'potential' : '');
+	var hasPotential = obj.getAttribute('class').indexOf('potential');
+	document.getElementById('item_info').setAttribute('class', hasPotential != -1 ? obj.getAttribute('class').substr(hasPotential) : '');
 	
 	
 	document.getElementById('item_info').style.display = 'block';
