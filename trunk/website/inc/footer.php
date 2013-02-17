@@ -19,10 +19,10 @@
 	
 	<script>
     $(document).ready(function() {
-        var $container = $('#character-wall');
+        var container = $('#character-wall');
 
         if (Modernizr.touch) {
-            $container.masonry({
+            container.masonry({
                 itemSelector : '.character-brick',
                 gutterWidth: 20,
                 
@@ -30,10 +30,11 @@
                 
                 isAnimated: false
             }).imagesLoaded(function() {
-                $container.masonry('reload');
+                container.masonry('reload');
             });
-        } else {
-            $container.masonry({
+        }
+		else {
+            container.masonry({
                 itemSelector : '.character',
                 gutterWidth: 14,
                 
@@ -41,9 +42,16 @@
                 
                 isAnimated: true
             }).imagesLoaded(function() {
-                $container.masonry('reload');
+                container.masonry('reload');
             });
         }
+		
+		container.isotope({
+		  // options
+		  itemSelector : '.item',
+		  layoutMode : 'fitRows'
+		});
+
     });
 </script>
 

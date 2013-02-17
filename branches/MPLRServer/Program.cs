@@ -159,6 +159,7 @@ namespace MPLRServer
                 }, null));
 
                 tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
+                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
                 tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
                 tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
                 tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));

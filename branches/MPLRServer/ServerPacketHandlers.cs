@@ -201,20 +201,26 @@ namespace MPLRServer
             long updateFlag = pPacket.ReadLong();
             if (updateFlag == 0) return; // Fake Update -.- / Unstuck
 
+            bool didsomething = false;
+
             if (CheckFlag(updateFlag, 1)) // Skin
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Skin = pPacket.ReadByte();
             }
             if (CheckFlag(updateFlag, 2)) // Eyes
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Face = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 4)) // Eyes
             {
+                didsomething = true;
                pConnection.CharData.Stats.Hair =  pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 8))
             {
+                didsomething = true;
                pConnection.CharData.Stats.Pets[0] = pPacket.ReadLong();
             }
             if (CheckFlag(updateFlag, 0x80000))
@@ -227,6 +233,7 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x10))
             {
+                didsomething = true;
                 var level = pPacket.ReadByte();
                 Timeline.Instance.PushLevelUP(pConnection.CharacterInternalID, level);
                 pConnection.CharData.Stats.Level = level;
@@ -234,6 +241,7 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x20))
             {
+                didsomething = true;
                 var jobid = pPacket.ReadShort();
                 Timeline.Instance.PushJobUP(pConnection.CharacterInternalID, (ushort)jobid);
                 pConnection.CharData.Stats.JobID = jobid;
@@ -241,42 +249,52 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x40))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Str = pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x80))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Dex = pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x100))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Int =  pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x200))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Luk = pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x400))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.HP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x800))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.MaxHP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x1000))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.MP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x2000))
             {
+                didsomething = true;
                pConnection.CharData.Stats.MaxMP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x4000))
             {
+                didsomething = true;
                pConnection.CharData.Stats.AP =  pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x8000))
             {
+                didsomething = true;
                 short a1 = pConnection.CharData.Stats.JobID;
 
                 if (a1 / 1000 == 3 ||
@@ -305,16 +323,19 @@ namespace MPLRServer
             }
             if (CheckFlag(updateFlag, 0x10000))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.EXP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x20000))
             {
+                didsomething = true;
                 int fame = pPacket.ReadInt();
                 Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame);
                 pConnection.CharData.Stats.Fame = fame;
             }
             if (CheckFlag(updateFlag, 0x40000))
             {
+                didsomething = true;
                 pConnection.CharData.Stats.Mesos = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x200000))
@@ -380,7 +401,8 @@ namespace MPLRServer
                 pPacket.ReadInt();
             }
 
-            pConnection.CharData.SaveCharacterInfo(pConnection);
+            if (didsomething)
+                pConnection.CharData.SaveCharacterInfo(pConnection);
         }
 
 
@@ -442,6 +464,30 @@ namespace MPLRServer
 
                 }
             }
+        }
+
+        public static void HandleInventorySlotsUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            CharacterInventory inventory = pConnection.CharData.Inventory;
+            byte inv = pPacket.ReadByte();
+            byte newslots = pPacket.ReadByte();
+            if (inv < 1 || inv > 5) return;
+            if (newslots < 24 || newslots > 96) return; // Just to be sure
+            inventory.InventorySlots[inv - 1] = newslots;
+
+            string slotname = "";
+
+            switch (inv)
+            {
+                case 1: slotname = "eqp"; break;
+                case 2: slotname = "use"; break;
+                case 3: slotname = "setup"; break;
+                case 4: slotname = "etc"; break;
+                case 5: slotname = "cash"; break;
+            }
+
+            string query = string.Format("UPDATE characters SET {0}_slots = {1} WHERE internal_id = {2}", slotname, newslots, pConnection.CharacterInternalID);
+            MySQL_Connection.Instance.RunQuery(query);
         }
 
         public static void HandleInventoryUpdate(ClientConnection pConnection, MaplePacket pPacket)

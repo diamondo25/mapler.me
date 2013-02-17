@@ -251,7 +251,7 @@ namespace MPLRServer
 
         public virtual int GetChecksum()
         {
-            return ItemID + (int)CashID + Amount;
+            return ItemID + (int)CashID + Amount + (int)Expires + (int)(Expires << 32);
         }
     }
 
@@ -332,6 +332,12 @@ namespace MPLRServer
             pPacket.ReadByte();
             pPacket.ReadByte();
 
+
+            this.SocketState = pPacket.ReadShort();
+            this.Socket1 = pPacket.ReadShort();
+            this.Socket2 = pPacket.ReadShort();
+            this.Socket3 = pPacket.ReadShort();
+
             this.Potential1 = pPacket.ReadShort();
             this.Potential2 = pPacket.ReadShort();
             this.Potential3 = pPacket.ReadShort();
@@ -339,11 +345,6 @@ namespace MPLRServer
             this.Potential5 = pPacket.ReadShort();
 
             pPacket.ReadShort(); // New?
-
-            this.SocketState = pPacket.ReadShort();
-            this.Socket1 = pPacket.ReadShort();
-            this.Socket2 = pPacket.ReadShort();
-            this.Socket3 = pPacket.ReadShort();
 
             pPacket.ReadLong();
             pPacket.ReadLong(); // V.126
