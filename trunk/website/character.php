@@ -189,6 +189,7 @@ $reqlist['reqluk'] = 'REQ LUK : ';
 $reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
 
 $IDlist = array();
+$PotentialList = array();
 
 
 
@@ -207,6 +208,16 @@ for ($inv = 0; $inv < 5; $inv++):
 			if (!isset($IDlist[$item->itemid])) {
 				$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
 			}
+			if ($isequip && $item->potential1 != 0 && !isset($PotentialList[$item->potential1])) 
+				$PotentialList[$item->potential1] = GetPotentialInfo($item->potential1);
+			if ($isequip && $item->potential2 != 0 && !isset($PotentialList[$item->potential2])) 
+				$PotentialList[$item->potential2] = GetPotentialInfo($item->potential2);
+			if ($isequip && $item->potential3 != 0 && !isset($PotentialList[$item->potential3])) 
+				$PotentialList[$item->potential3] = GetPotentialInfo($item->potential3);
+			if ($isequip && $item->potential4 != 0 && !isset($PotentialList[$item->potential4])) 
+				$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
+			if ($isequip && $item->potential5 != 0 && !isset($PotentialList[$item->potential5])) 
+				$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
 			
 			$stats = GetItemDefaultStats($item->itemid);
 			
@@ -256,7 +267,13 @@ for ($inv = 0; $inv < 5; $inv++):
 			$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
 			$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
 			$arguments .= $tradeblock.", ";
-			$arguments .= ($isequip ? $item->IsKarmad() : 0).");";
+			$arguments .= ValueOrDefault($stats['quest'], 0).", ";
+			$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
+			$arguments .= ($isequip ? $item->potential1 : 0).", ";
+			$arguments .= ($isequip ? $item->potential2 : 0).", ";
+			$arguments .= ($isequip ? $item->potential3 : 0).", ";
+			$arguments .= ($isequip ? $item->potential4 : 0).", ";
+			$arguments .= ($isequip ? $item->potential5 : 0).");";
 			
 			$potential = $isequip && $item->potential1 != 0;
 ?>
@@ -316,11 +333,11 @@ for ($inv = 0; $inv < 5; $inv++):
 	float: left;
 }
 
-#item_info .item_stats {
+#item_info .item_stats, #item_info .item_potential_stats {
 	clear: both;
 }
 
-#item_info .item_stats > table {
+#item_info .item_stats > table, #item_info .item_potential_stats > table {
 	font-size: 11px;
 }
 
@@ -354,6 +371,10 @@ for ($inv = 0; $inv < 5; $inv++):
 	margin: 5px 0;
 }
 
+#item_info #item_potential_stats {
+	display: none;
+}
+
 .potential {
 	border: 1px solid rgba(0,0,255,0.6) !important;
 }
@@ -361,6 +382,7 @@ for ($inv = 0; $inv < 5; $inv++):
 
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
+var potentialDescriptions = <?php echo json_encode($PotentialList); ?>;
 
 function SetItemInfo(event, obj, itemid, isequip, reqjob, <?php
 foreach ($reqlist as $option => $desc) {
@@ -370,9 +392,7 @@ foreach ($optionlist as $option => $desc) {
 	echo $option.", ";
 }
 ?>
-expires, 
-
-f_lock, f_spikes, f_coldprotection, f_tradeblock, f_karmad) {
+expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potential1, potential2, potential3, potential4, potential5) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
@@ -409,6 +429,9 @@ foreach ($optionlist as $option => $desc) {
 	}
 	
 	var extrainfo = '';
+	
+	if (questitem)
+		extrainfo += '<span>Quest item</span>';
 	
 	if (f_lock)
 		extrainfo += '<span>Sealed untill ' + expires + '</span>';
@@ -448,7 +471,31 @@ foreach ($optionlist as $option => $desc) {
 	SetJob(4, reqjob, 0x08); // Thief
 	SetJob(5, reqjob, 0x10); // Pirate
 	
+	document.getElementById('potentials').innerHTML = ""; // Clear potentials
 	
+	var potentiallevel = Math.floor(reqlevel / 10);
+	
+<?php
+for ($i = 1; $i <= 5; $i++) {
+?>
+	if (potential<?php echo $i;?> != 0) {
+		var potentialinfo = potentialDescriptions[potential<?php echo $i;?>];
+		var leveldata = potentialinfo.levels[potentiallevel];
+		
+		var result = potentialinfo.name;
+		for (var leveloption in leveldata) {
+			result = result.replace('#' + leveloption, leveldata[leveloption]);
+		}
+		
+		
+		var row = document.getElementById('potentials').insertRow(-1);
+		row.innerHTML = '<tr> <td width="150px">' + result + '</td> </tr>';
+	}
+<?php
+}
+?>
+	
+	document.getElementById('item_info_potentials').style.display = document.getElementById('potentials').innerHTML == '' ? 'none' : 'block';
 	
 	var hasPotential = obj.getAttribute('class').indexOf('potential') != -1;
 	document.getElementById('item_info').setAttribute('class', hasPotential ? 'potential' : '');
@@ -520,7 +567,7 @@ foreach ($reqlist as $option => $desc) {
 		<span class="req_job" id="item_info_reqjob_3">Bowman</span>
 		<span class="req_job" id="item_info_reqjob_4">Thief</span>
 		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
-	<hr />
+		<hr />
 	</div>
 	<div class="item_stats">
 		<table border="0" tablepadding="3" tablespacing="3">
@@ -538,6 +585,11 @@ foreach ($optionlist as $option => $desc) {
 ?>
 		</table>
 
+	</div>
+	<div class="item_potential_stats" id="item_info_potentials">
+		<hr />
+		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
+		</table>
 	</div>
 
 </div>

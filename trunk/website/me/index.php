@@ -77,7 +77,7 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
            
            <div class="row">
            		<div class="span2 offset5 center" style="margin-bottom: -70px;">
-                	<a href=""> <img id="default" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>" style="display:inline-block;background: rgb(255, 255, 255);
+                	<a href="//<?php echo $domain; ?>/stats/<?php echo $row['name']; ?>"><img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>" style="display:inline-block;background: rgb(255, 255, 255);
 border-radius: 150px;
 margin-bottom: -30px;
 box-sizing: border-box;

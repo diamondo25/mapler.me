@@ -141,7 +141,7 @@ function GetMapleStoryString($type, $id, $key) {
 			$temp = array();
 		}
 		if (isset($temp[$type.'|'.$id.'|'.$key])) {
-			return  $temp[$type.'|'.$id.'|'.$key];
+			return $temp[$type.'|'.$id.'|'.$key];
 		}
 	}
 	
@@ -177,7 +177,7 @@ function GetItemDefaultStats($id) {
 			$temp = array();
 		}
 		if (isset($temp[$id])) {
-			return  $temp[$id];
+			return $temp[$id];
 		}
 	}
 	
@@ -198,6 +198,53 @@ function GetItemDefaultStats($id) {
 	return NULL;
 }
 
+
+function GetPotentialInfo($id) {
+	global $__database, $apcinstalled;
+	
+	if ($apcinstalled && !apc_exists("data_itemoptions_cache")) {
+		apc_add("data_itemoptions_cache", array());
+	}
+	
+	$temp = null;
+	if ($apcinstalled) {
+		$temp = apc_fetch("data_itemoptions_cache");
+		if ($temp == null) {
+			$temp = array();
+		}
+		if (isset($temp[$id])) {
+			return $temp[$id];
+		}
+	}
+	
+	$data = array();
+	
+	$data['name'] = GetMapleStoryString('item_option', $id, 'desc');
+	
+	
+	$q = $__database->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".$id);
+	while ($row = $q->fetch_array()) {
+		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
+	}
+	
+	if ($apcinstalled) {
+		$temp[$id] = $data;
+		apc_store("data_itemoptions_cache", $temp);
+	}
+	
+	return $data;
+}
+
+function Explode2($seperator, $subseperator, $value) {
+	$result = array();
+	foreach (explode($seperator, $value) as $chunk) {
+		$pos = strpos($chunk, $subseperator);
+		$key = substr($chunk, 0, $pos);
+		$value = substr($chunk, $pos + 1);
+		$result[$key] = $value;
+	}
+	return $result;
+}
 
 function IGTextToWeb($data, $extraOptions = array()) {
 	// Escape quotes
