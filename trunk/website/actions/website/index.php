@@ -87,6 +87,9 @@ if (isset($_GET['clear_cache'])) {
 ?>
 <p class="lead alert info-danger">Deleted <?php echo $i; ?> cachefiles!</p>
 <?php
+
+	// Clear data caches
+	apc_clear_cache();
 }
 
 
