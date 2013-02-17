@@ -144,7 +144,7 @@ $job_names = array(
 	3002 => 'Xenon',
 	
 	3100 => 'Demon Slayer',
-	3101 => 'Demon Avenger'
+	3101 => 'Demon Avenger',
 	
 	3110 => 'Demon Slayer',
 	3111 => 'Demon Slayer',
