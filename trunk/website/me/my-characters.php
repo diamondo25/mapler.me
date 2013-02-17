@@ -3,8 +3,8 @@ require_once '../inc/header.php';
 ?>
 <script>
 function ChangeImage(id, name) {
-	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/actions/character_image.php?name=" + name;
-	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/actions/character_stats.php?name=" + name;
+	document.getElementById('image_' + id).src = "//<?php echo $domain; ?>/card/" + name;
+	document.getElementById('stats_' + id).src = "//<?php echo $domain; ?>/infopic/" + name;
 }
 </script>
 <?php

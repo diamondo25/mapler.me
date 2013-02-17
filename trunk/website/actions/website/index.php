@@ -1,5 +1,15 @@
 <?php
+require_once '../../inc/functions.php';
+
+// SHOO
+if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
+	header('Location: /');
+	die();
+}
+
 require_once '../../inc/header.php';
+
+
 
 function RunCMD($cmd) {
 	$descriptorspec = array(
@@ -60,6 +70,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312
 
 }
 echo '</pre>';
+
+?>
+<hr />
+<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button>
+<?php
+if (isset($_GET['clear_cache'])) {
+	$files = glob('../../cache/*');
+	$i = 0;
+	foreach($files as $file){
+		if (is_file($file)) {
+			unlink($file);
+			$i++;
+		}
+	}
+?>
+<p class="lead alert info-danger">Deleted <?php echo $i; ?> cachefiles!</p>
+<?php
+}
+
+
+
 
 require_once '../../inc/footer.php';
 ?>

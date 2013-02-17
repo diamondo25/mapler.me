@@ -224,6 +224,7 @@ for ($inv = 0; $inv < 5; $inv++):
 				elseif ($stats['equiptradeblock'] == 1) { // Blocked when equipped
 					$tradeblock = 0x30;
 				}
+				else $tradeblock = 1;
 			}
 			
 			$reqlevel = ValueOrDefault($stats['reqlevel'], 0);
@@ -256,9 +257,11 @@ for ($inv = 0; $inv < 5; $inv++):
 			$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
 			$arguments .= $tradeblock.", ";
 			$arguments .= ($isequip ? $item->IsKarmad() : 0).");";
+			
+			$potential = $isequip && $item->potential1 != 0;
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
-				<img src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmouseout="HideItemInfo()" />
+				<img class="item-icon<?php echo $potential ? ' potential' : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 				<div style="position: absolute; bottom: 0; right: 0; color: black;"><?php echo $inv != 0 ? $item->amount : ''; ?></div>
 			</div>
 <?php 
@@ -275,15 +278,15 @@ for ($inv = 0; $inv < 5; $inv++):
 <style type="text/css">
 #item_info {
 	border: 1px solid rgba(0,0,0,0.6);
-	border-radius:5px;
+	border-radius: 5px;
 	background-color: rgba(255,255,255,0.95);
 	padding: 5px;
 	position: absolute;
-	width: 200px;
-	transition: all 2s;
-	-moz-transition: all 2s; /* Firefox 4 */
-	-webkit-transition: all 2s; /* Safari and Chrome */
-	-o-transition: all 2s; /* Opera */
+	width: 285px;
+}
+
+#item_info #item_info_extra, #item_info #item_info_description {
+	margin-bottom: 5px;
 }
 
 #item_info #item_info_extra span {
@@ -323,7 +326,7 @@ for ($inv = 0; $inv < 5; $inv++):
 
 #item_info .item_req_stats {
 	float: right;
-	width: 120px;
+	width: 170px;
 }
 #item_info .item_req_stats > table {
 	font-size: 11px;
@@ -331,11 +334,28 @@ for ($inv = 0; $inv < 5; $inv++):
 
 #item_info .req_job {
 	font-size: 11px;
-	color: black;
+	color: white;
+	
+	padding: 2px;
+	border-radius: 3px;
+	background-color: rgba(0,0,0,1);
 }
 
 #item_info .needed_job {
 	color: red;
+}
+
+#item_info #req_job_list {
+	clear: both;
+	padding-top: 10px;
+}
+
+#item_info #req_job_list hr {
+	margin: 5px 0;
+}
+
+.potential {
+	border: 1px solid rgba(0,0,255,0.6) !important;
 }
 </style>
 
@@ -359,24 +379,24 @@ f_lock, f_spikes, f_coldprotection, f_tradeblock, f_karmad) {
 <?php
 foreach ($reqlist as $option => $desc) {
 ?>
+	document.getElementById('item_info_req_row_<?php echo strtolower($option); ?>').style.display = (!isequip && (<?php echo $option; ?> == '' || <?php echo $option; ?> == 0)) ? 'none' : '';
 	document.getElementById('item_info_req_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
+	
 <?php
 }
 ?>
+
+
 <?php
 foreach ($optionlist as $option => $desc) {
 	if ($option == 'scrolls') continue;
 ?>
-	if (<?php echo $option; ?> != 0 && <?php echo $option; ?> != '') {
-		document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = '';
-		document.getElementById('item_info_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
-	}
-	else document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = 'none';
+	document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = (<?php echo $option; ?> == 0 || <?php echo $option; ?> == '') ? 'none' : '';
+	document.getElementById('item_info_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
+	
 <?php
 }
 ?>
-	document.getElementById('item_info').style.top = event.pageY + 10 + 'px';
-	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 	
 	var description = descriptions[itemid];
 	
@@ -399,7 +419,7 @@ foreach ($optionlist as $option => $desc) {
 	if (f_coldprotection)
 		extrainfo += '<span>Cold prevention</span>';
 	if (f_tradeblock) {
-		var tradeInfo = '';
+		var tradeInfo = 'Untradable';
 		switch (f_tradeblock) {
 			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
 			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
@@ -412,7 +432,7 @@ foreach ($optionlist as $option => $desc) {
 	if (f_karmad)
 		extrainfo += '<span>1 time trading (karma\'d)</span>';
 
-	extrainfo += '<span>ITEMID ' + itemid + '</span>';
+	//extrainfo += '<span>ITEMID ' + itemid + '</span>';
 	
 	
 	document.getElementById('item_info_extra').innerHTML = extrainfo;
@@ -429,7 +449,14 @@ foreach ($optionlist as $option => $desc) {
 	SetJob(5, reqjob, 0x10); // Pirate
 	
 	
+	
+	var hasPotential = obj.getAttribute('class').indexOf('potential') != -1;
+	document.getElementById('item_info').setAttribute('class', hasPotential ? 'potential' : '');
+	
+	
 	document.getElementById('item_info').style.display = 'block';
+	document.getElementById('req_job_list').style.display = isequip ? 'block' : 'none';
+	MoveWindow(event);
 }
 
 function SetJob(id, flag, neededflag) {
@@ -442,6 +469,16 @@ function SetJob(id, flag, neededflag) {
 
 function HideItemInfo() {
 	document.getElementById('item_info').style.display = 'none';
+}
+
+function MoveWindow(event) {
+	var expectedTop = event.pageY + 10;
+	var expectedBottom = expectedTop + parseInt(document.getElementById('item_info').clientHeight);
+	if (document.body.clientHeight < expectedBottom) {
+		expectedTop -= (expectedBottom - document.body.clientHeight) + 10;
+	}
+	document.getElementById('item_info').style.top = expectedTop + 'px';
+	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 }
 
 var lastid = -1;
@@ -467,7 +504,7 @@ ChangeInventory(1);
 foreach ($reqlist as $option => $desc) {
 ?>
 			<tr id="item_info_req_row_<?php echo strtolower($option); ?>">
-				<td align="center"><?php echo $desc; ?></td>
+				<td><?php echo $desc; ?></td>
 				<td id="item_info_req_<?php echo strtolower($option); ?>"></td>
 			</tr>
 <?php
@@ -476,14 +513,15 @@ foreach ($reqlist as $option => $desc) {
 		</table>
 
 	</div>
-	<div style="clear: both"></div>
-	<span class="req_job" id="item_info_reqjob_0">Beginner</span>
-	<span class="req_job" id="item_info_reqjob_1">Warrior</span>
-	<span class="req_job" id="item_info_reqjob_2">Magician</span>
-	<span class="req_job" id="item_info_reqjob_3">Bowman</span>
-	<span class="req_job" id="item_info_reqjob_4">Thief</span>
-	<span class="req_job" id="item_info_reqjob_5">Pirate</span>
+	<div id="req_job_list">
+		<span class="req_job" id="item_info_reqjob_0">Beginner</span>
+		<span class="req_job" id="item_info_reqjob_1">Warrior</span>
+		<span class="req_job" id="item_info_reqjob_2">Magician</span>
+		<span class="req_job" id="item_info_reqjob_3">Bowman</span>
+		<span class="req_job" id="item_info_reqjob_4">Thief</span>
+		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
 	<hr />
+	</div>
 	<div class="item_stats">
 		<table border="0" tablepadding="3" tablespacing="3">
 
@@ -492,7 +530,7 @@ foreach ($optionlist as $option => $desc) {
 	if ($option == 'scrolls') continue;
 ?>
 			<tr id="item_info_row_<?php echo strtolower($option); ?>">
-				<td align="center"><?php echo $desc; ?></td>
+				<td width="150px"><?php echo $desc; ?></td>
 				<td id="item_info_<?php echo strtolower($option); ?>"></td>
 			</tr>
 <?php

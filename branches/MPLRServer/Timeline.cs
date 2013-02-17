@@ -49,7 +49,7 @@ namespace MPLRServer
             string type = pType.ToString();
             type = type.Substring(type.LastIndexOf('.') + 1).ToLower();
 
-            string query = string.Format("INSERT INTO timeline VALUES (NULL, {0}, NOW(), {1}, '{2}')", (byte)pType, pObjectID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData));
+            string query = string.Format("INSERT INTO timeline VALUES (NULL, '{0}', NOW(), {1}, '{2}')", type, pObjectID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData));
             MySQL_Connection.Instance.RunQuery(query);
         }
 

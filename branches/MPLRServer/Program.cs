@@ -162,7 +162,7 @@ namespace MPLRServer
                 tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
                 tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
                 tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
-                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
+                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
                 tmp.Add(0x00ED, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
                 tmp.Add(0x00EE, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
                 tmp.Add(0x0122, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));

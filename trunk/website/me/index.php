@@ -108,11 +108,11 @@ foreach ($cache as $row) {
 		<div class="span2 character-brick" style="min-width:174px;margin-left: 20px;">
 		<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 			<center>
-				<br/>
+				<br />
 				<a href="//<?php echo $domain; ?>/stats/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-				<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/>
+					<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
 				</a>
-				<br/>
+				<br />
 			</center>
         </div>
         

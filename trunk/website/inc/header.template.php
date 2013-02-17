@@ -73,10 +73,10 @@ if ($_loggedin):
 								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
 						
 <?php
-if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
+if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/repo/">Update Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Manage Website</a></li>
 <?php
 endif;
 ?>
