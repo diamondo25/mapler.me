@@ -1,6 +1,8 @@
 <?php
 require_once '../inc/header.php';
 
+$char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+
 $q = $__database->query("
 SELECT 
 	chr.id, 
@@ -13,16 +15,11 @@ LEFT JOIN
 	ON 
 		usr.ID = chr.userid 
 LEFT JOIN 
-	accounts acc 
-	ON 
-		acc.id = usr.account_id 
-LEFT JOIN 
 	world_data w 
 	ON 
 		w.world_id = chr.world_id 
-
 WHERE 
-	acc.username = '".$__database->real_escape_string($__url_useraccount->GetUsername())."' 
+	usr.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' 
 ORDER BY 
 	chr.world_id ASC,
 	chr.level DESC
@@ -32,14 +29,22 @@ ORDER BY
 
 $cache = array();
 
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
+
 while ($row = $q->fetch_assoc()) {
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
+			continue;
+		}
+	}
 	$cache[] = $row;
 }
 $q->free();
 
 $has_characters = count($cache) != 0;
 $main_character_info = $has_characters ? $cache[0] : null;
-$main_character_name = $has_characters ? $main_character_info['name'] : '';
+$main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 ?>
 
@@ -51,8 +56,7 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
                     	<ul id="nav-left">
                         	<li><a id="posts" href="#"><span class="sprite icon post"></span><span class="count"><?php echo count($cache); ?></span> <span class="item">Characters</span></a></li>
                             <li><a id="likes" href="#"><span class="sprite icon badgestar"></span><span class="count">#</span> <span class="item">Achievements</span></a></li>
-                            </ul>
-                            
+                        </ul>
                         <ul id="nav-right">
                         </ul>
                    </div>
@@ -77,7 +81,7 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
            
            <div class="row">
            		<div class="span2 offset5 center" style="margin-bottom: -70px;">
-                	<a href="//<?php echo $domain; ?>/stats/<?php echo $row['name']; ?>"><img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>" style="display:inline-block;background: rgb(255, 255, 255);
+                	<a href="//<?php echo $domain; ?>/stats/<?php echo $main_character_name; ?>"><img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>" style="display:inline-block;background: rgb(255, 255, 255);
 border-radius: 150px;
 margin-bottom: -30px;
 box-sizing: border-box;
