@@ -40,10 +40,12 @@ $q->free();
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
+	$char_options = $_POST['char_shown_option'];
+	$main_char = $_POST['main_character'];
 	$error = '';
 	
 	// Lets see if the 'new' main selected exists
-	$found = in_array($_POST['main_character'], $characternames);
+	$found = in_array($main_char, $characternames);
 	
 	if (!$found) {
 		$error = 'An error occurred while selecting the main character.';
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 	else {
 		// Check if all characters under char_shown_option exist
 
-		foreach ($_POST['char_shown_option'] as $charname => $value) {
+		foreach ($char_options as $charname => $value) {
 			$v = intval($value);
 			if (!in_array($charname, $characternames) || $v < 0 || $v > 3) {
 				$found = false;
@@ -60,12 +62,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 		}
 		
 		if (!$found) {
-			$error = 'An error occurred. Try again.';
+			$error = 'An error occurred. Try again. Error code 1';
+		}
+		elseif (!isset($char_options[$main_char])) {
+			// lolwat.
+			$error = 'An error occurred. Try again. Error code 2';
+		}
+		elseif ($char_options[$main_char] != 0) { // Hiding your main character? NO WAY DUUUDE
+			$error = 'Heh, you cannot hide your main character!';
 		}
 		else {
-			$char_config['main_character'] = $_POST['main_character'];
+			$char_config['main_character'] = $main_char;
 			
-			foreach ($_POST['char_shown_option'] as $charname => $value) {
+			foreach ($char_options as $charname => $value) {
 				if (!in_array($charname, $characternames)) {
 					$found = false;
 					break;
