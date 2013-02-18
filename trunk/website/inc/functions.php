@@ -159,6 +159,11 @@ function GetMapleStoryString($type, $id, $key) {
 		return $tmp;
 	}
 	$q->free();
+	
+	if ($apcinstalled) {
+		$temp[$type.'|'.$id.'|'.$key] = NULL;
+		apc_store("data_cache", $temp);
+	}
 	return NULL;
 }
 
@@ -195,6 +200,11 @@ function GetItemDefaultStats($id) {
 		return $tmp;
 	}
 	$q->free();
+	
+	if ($apcinstalled) {
+		$temp[$id] = NULL;
+		apc_store("data_iteminfo_cache", $temp);
+	}
 	return NULL;
 }
 

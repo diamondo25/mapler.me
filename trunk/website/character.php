@@ -141,23 +141,13 @@ ORDER BY
 	}
 ?>
 </table>
+<hr />
+
 <?php
+
+/******************* DRAGONS BE HERE ****************************/
 
 $inventory = new InventoryData($character_info['internal_id']);
-
-
-?>
-<br/>
-<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
-	<option value="1">Equipment</option>
-	<option value="2">Use</option>
-	<option value="3">Set-up</option>
-	<option value="4">Etc</option>
-	<option value="5">Cash</option>
-<select>
-
-<div class="row">
-<?php
 
 
 $optionlist = array();
@@ -191,6 +181,309 @@ $reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
 $IDlist = array();
 $PotentialList = array();
 
+$inv_pos_offx = 7;
+$inv_pos_offy = 23;
+
+
+function InventoryPosCalc($row, $col) {
+	global $inv_pos_offx, $inv_pos_offy;
+?>
+	top: <?php echo ($row * 33) + $inv_pos_offy; ?>px;
+	left: <?php echo ($col * 34) + $inv_pos_offx; ?>px;
+<?php
+}
+
+function GetItemDialogInfo($item, $isequip) {
+	global $PotentialList, $IDlist, $reqlist, $optionlist;
+	
+	if (!isset($IDlist[$item->itemid])) {
+		$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
+	}
+	
+	if ($isequip && $item->potential1 != 0 && !isset($PotentialList[$item->potential1])) 
+		$PotentialList[$item->potential1] = GetPotentialInfo($item->potential1);
+	if ($isequip && $item->potential2 != 0 && !isset($PotentialList[$item->potential2])) 
+		$PotentialList[$item->potential2] = GetPotentialInfo($item->potential2);
+	if ($isequip && $item->potential3 != 0 && !isset($PotentialList[$item->potential3])) 
+		$PotentialList[$item->potential3] = GetPotentialInfo($item->potential3);
+	if ($isequip && $item->potential4 != 0 && !isset($PotentialList[$item->potential4])) 
+		$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
+	if ($isequip && $item->potential5 != 0 && !isset($PotentialList[$item->potential5])) 
+		$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
+	
+	$stats = GetItemDefaultStats($item->itemid);
+	
+	$tradeblock = 0;
+	if ($stats['tradeblock'] == 1) {
+		if ($stats['accountsharetag'] == 1) { // Account shareable
+			$tradeblock = 0x10;
+		}
+		elseif ($stats['tradeavailable'] == 1) { // Karma
+			$tradeblock = 0x20;
+		}
+		elseif ($stats['tradeavailable'] == 2) { // Plat Karma
+			$tradeblock = 0x21;
+		}
+		elseif ($stats['equiptradeblock'] == 1) { // Blocked when equipped
+			$tradeblock = 0x30;
+		}
+		else $tradeblock = 1;
+	}
+	
+	$reqlevel = ValueOrDefault($stats['reqlevel'], 0);
+	$reqstr = ValueOrDefault($stats['reqstr'], 0);
+	$reqdex = ValueOrDefault($stats['reqdex'], 0);
+	$reqint = ValueOrDefault($stats['reqint'], 0);
+	$reqluk = ValueOrDefault($stats['reqluk'], 0);
+	$reqpop = ValueOrDefault($stats['reqpop'], "'-'");
+	
+	$arguments = "SetItemInfo(event, this, ";
+	$arguments .= $item->itemid.",".($isequip ? 1 : 0).", ";
+	$arguments .= ValueOrDefault($stats['reqjob'], 0).", ";
+	
+	foreach ($reqlist as $option => $desc) {
+		if ($isequip) 
+			eval('$arguments .= $'.$option.'.", ";'); // Fugly
+		else 
+			$arguments .= '0, ';
+	}
+	
+	foreach ($optionlist as $option => $desc) {
+		if ($isequip) 
+			eval('$arguments .= $item->'.$option.'.", ";'); // Fugly
+		else 
+			$arguments .= '0, ';
+	}
+	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
+	$arguments .= ($isequip ? $item->HasLock() : 0).", ";
+	$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
+	$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
+	$arguments .= $tradeblock.", ";
+	$arguments .= ValueOrDefault($stats['quest'], 0).", ";
+	$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
+	$arguments .= ($isequip ? $item->socket3 : 0).", "; // Seems to be sort of potential flag (1 = locked, 12 = unlocked)
+	$arguments .= ($isequip ? $item->potential1 : 0).", ";
+	$arguments .= ($isequip ? $item->potential2 : 0).", ";
+	$arguments .= ($isequip ? $item->potential3 : 0).", ";
+	$arguments .= ($isequip ? $item->potential4 : 0).", ";
+	$arguments .= ($isequip ? $item->potential5 : 0).", ";
+	$arguments .= ValueOrDefault($stats['only'], 0).");";
+	
+	$potential = 0;
+	if ($isequip && $item->socket3 == 1)
+		$potential = 1; // Default color
+	else {
+		if ($isequip && $item->potential1 != 0) $potential++;
+		if ($isequip && $item->potential2 != 0) $potential++;
+		if ($isequip && $item->potential3 != 0) $potential++;
+		if ($isequip && $item->potential4 != 0) $potential++;
+		if ($isequip && $item->potential5 != 0) $potential++;
+	}
+	
+	return array('mouseover' => $arguments, 'potentials' => $potential);
+}
+
+
+?>
+<style type="text/css">
+.character_equips_holder {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/equips_background.png');
+	width: 184px;
+	height: 290px;
+	position: relative;
+}
+
+.character_equips_holder img {
+	position: absolute;
+}
+
+/* monster book */
+.character_equips .slot55 {
+<?php InventoryPosCalc(0, 0); ?>
+}
+
+/* medal */
+.character_equips .slot49 {
+<?php InventoryPosCalc(1, 0); ?>
+}
+
+/* pocket  */
+.character_equips .slot52 {
+<?php InventoryPosCalc(2, 0); ?>
+}
+
+/* mantle */
+.character_equips .slot9 {
+<?php InventoryPosCalc(3, 0); ?>
+}
+
+/* gloves */
+.character_equips .slot8 {
+<?php InventoryPosCalc(4, 0); ?>
+}
+
+/* taming mob */
+.character_equips .slot18 {
+<?php InventoryPosCalc(6, 0); ?>
+}
+
+
+
+
+
+
+
+
+/* cap */
+.character_equips .slot1 {
+<?php InventoryPosCalc(0, 1); ?>
+}
+
+/* face */
+.character_equips .slot2 {
+<?php InventoryPosCalc(1, 1); ?>
+}
+
+/* clothes */
+.character_equips .slot5 {
+<?php InventoryPosCalc(3, 1); ?>
+}
+
+/* pants */
+.character_equips .slot6 {
+<?php InventoryPosCalc(4, 1); ?>
+}
+
+/* saddle */
+.character_equips .slot19 {
+<?php InventoryPosCalc(6, 1); ?>
+}
+
+
+
+
+
+
+
+/* badge */
+.character_equips .slot56 {
+<?php InventoryPosCalc(0, 2); ?>
+}
+
+/* pendant */
+.character_equips .slot17 {
+<?php InventoryPosCalc(3, 2); ?>
+}
+
+/* belt */
+.character_equips .slot50 {
+<?php InventoryPosCalc(4, 2); ?>
+}
+
+/* shoes */
+.character_equips .slot7 {
+<?php InventoryPosCalc(5, 2); ?>
+}
+
+
+
+
+
+
+/* android */
+.character_equips .slot53 {
+<?php InventoryPosCalc(0, 3); ?>
+}
+
+/* ring 3 */
+.character_equips .slot15 {
+<?php InventoryPosCalc(1, 3); ?>
+}
+
+/* ear acc */
+.character_equips .slot4 {
+<?php InventoryPosCalc(2, 3); ?>
+}
+
+/* weapon */
+.character_equips .slot11 {
+<?php InventoryPosCalc(3, 3); ?>
+}
+
+/* ring 1 */
+.character_equips .slot12 {
+<?php InventoryPosCalc(4, 3); ?>
+}
+
+
+
+
+
+
+
+/* ring 4 */
+.character_equips .slot16 {
+<?php InventoryPosCalc(1, 4); ?>
+}
+
+/* shoulder */
+.character_equips .slot51 {
+<?php InventoryPosCalc(2, 4); ?>
+}
+
+/* orb / shield */
+.character_equips .slot10 {
+<?php InventoryPosCalc(3, 4); ?>
+}
+
+/* ring 2 */
+.character_equips .slot13 {
+<?php InventoryPosCalc(4, 4); ?>
+}
+
+
+
+
+</style>
+
+<?php
+$equips = $inventory->GetEquips();
+
+?>
+
+<div class="character_equips">
+	<div class="character_equips_holder">
+
+<?php
+foreach ($equips as $slot => $item) {
+	if ($slot <= -100) continue; // Cash equips etc...
+	$slot = abs($slot);
+	
+	$info = GetItemDialogInfo($item, true);
+	
+?>
+<img class="item-icon slot<?php echo $slot; ?><?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+
+?>
+	</div>
+</div>
+
+<hr />
+<br/>
+<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
+	<option value="1">Equipment</option>
+	<option value="2">Use</option>
+	<option value="3">Set-up</option>
+	<option value="4">Etc</option>
+	<option value="5">Cash</option>
+</select>
+
+<div class="row">
+<?php
+
+
 
 
 for ($inv = 0; $inv < 5; $inv++):
@@ -205,91 +498,11 @@ for ($inv = 0; $inv < 5; $inv++):
 		if (isset($inv1[$j])) {
 			$isequip = $inv == 0;
 			$item = $inv1[$j];
-			if (!isset($IDlist[$item->itemid])) {
-				$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
-			}
-			if ($isequip && $item->potential1 != 0 && !isset($PotentialList[$item->potential1])) 
-				$PotentialList[$item->potential1] = GetPotentialInfo($item->potential1);
-			if ($isequip && $item->potential2 != 0 && !isset($PotentialList[$item->potential2])) 
-				$PotentialList[$item->potential2] = GetPotentialInfo($item->potential2);
-			if ($isequip && $item->potential3 != 0 && !isset($PotentialList[$item->potential3])) 
-				$PotentialList[$item->potential3] = GetPotentialInfo($item->potential3);
-			if ($isequip && $item->potential4 != 0 && !isset($PotentialList[$item->potential4])) 
-				$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
-			if ($isequip && $item->potential5 != 0 && !isset($PotentialList[$item->potential5])) 
-				$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
+			$info = GetItemDialogInfo($item, $isequip);
 			
-			$stats = GetItemDefaultStats($item->itemid);
-			
-			$tradeblock = 0;
-			if ($stats['tradeblock'] == 1) {
-				if ($stats['accountsharetag'] == 1) { // Account shareable
-					$tradeblock = 0x10;
-				}
-				elseif ($stats['tradeavailable'] == 1) { // Karma
-					$tradeblock = 0x20;
-				}
-				elseif ($stats['tradeavailable'] == 2) { // Plat Karma
-					$tradeblock = 0x21;
-				}
-				elseif ($stats['equiptradeblock'] == 1) { // Blocked when equipped
-					$tradeblock = 0x30;
-				}
-				else $tradeblock = 1;
-			}
-			
-			$reqlevel = ValueOrDefault($stats['reqlevel'], 0);
-			$reqstr = ValueOrDefault($stats['reqstr'], 0);
-			$reqdex = ValueOrDefault($stats['reqdex'], 0);
-			$reqint = ValueOrDefault($stats['reqint'], 0);
-			$reqluk = ValueOrDefault($stats['reqluk'], 0);
-			$reqpop = ValueOrDefault($stats['reqpop'], "'-'");
-			
-			$arguments = "SetItemInfo(event, this, ";
-			$arguments .= $item->itemid.",".($isequip ? 1 : 0).", ";
-			$arguments .= ValueOrDefault($stats['reqjob'], 0).", ";
-			
-			foreach ($reqlist as $option => $desc) {
-				if ($isequip) 
-					eval('$arguments .= $'.$option.'.", ";'); // Fugly
-				else 
-					$arguments .= '0, ';
-			}
-			
-			foreach ($optionlist as $option => $desc) {
-				if ($isequip) 
-					eval('$arguments .= $item->'.$option.'.", ";'); // Fugly
-				else 
-					$arguments .= '0, ';
-			}
-			$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
-			$arguments .= ($isequip ? $item->HasLock() : 0).", ";
-			$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
-			$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
-			$arguments .= $tradeblock.", ";
-			$arguments .= ValueOrDefault($stats['quest'], 0).", ";
-			$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
-			$arguments .= ($isequip ? $item->socket3 : 0).", "; // Seems to be sort of potential flag (1 = locked, 12 = unlocked)
-			$arguments .= ($isequip ? $item->potential1 : 0).", ";
-			$arguments .= ($isequip ? $item->potential2 : 0).", ";
-			$arguments .= ($isequip ? $item->potential3 : 0).", ";
-			$arguments .= ($isequip ? $item->potential4 : 0).", ";
-			$arguments .= ($isequip ? $item->potential5 : 0).", ";
-			$arguments .= ValueOrDefault($stats['only'], 0).");";
-			
-			$potential = 0;
-			if ($isequip && $item->socket3 == 1)
-				$potential = 1; // Default color
-			else {
-				if ($isequip && $item->potential1 != 0) $potential++;
-				if ($isequip && $item->potential2 != 0) $potential++;
-				if ($isequip && $item->potential3 != 0) $potential++;
-				if ($isequip && $item->potential4 != 0) $potential++;
-				if ($isequip && $item->potential5 != 0) $potential++;
-			}
 ?>
 			<div style="position: relative; width: 50px; height: 50px;">
-				<img class="item-icon<?php echo $potential != 0 ? ' potential'.$potential : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $arguments; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 				<div style="position: absolute; bottom: 0; right: 0; color: black;"><?php echo $inv != 0 ? $item->amount : ''; ?></div>
 			</div>
 <?php 
@@ -370,7 +583,7 @@ for ($inv = 0; $inv < 5; $inv++):
 }
 
 #item_info .needed_job {
-	color: red;
+	color: orange;
 }
 
 #item_info #req_job_list {
@@ -504,6 +717,7 @@ foreach ($optionlist as $option => $desc) {
 	document.getElementById('potentials').innerHTML = ""; // Clear potentials
 	
 	var potentiallevel = Math.floor(reqlevel / 10);
+	if (potentiallevel == 0) potentiallevel = 1;
 	
 	if (potentialflag == 1) { // 12 = unlocked
 		var row = document.getElementById('potentials').insertRow(-1);
@@ -515,16 +729,18 @@ for ($i = 1; $i <= 5; $i++) {
 ?>
 	if (potential<?php echo $i;?> != 0) {
 		var potentialinfo = potentialDescriptions[potential<?php echo $i;?>];
-		var leveldata = potentialinfo.levels[potentiallevel];
-		
-		var result = potentialinfo.name;
-		for (var leveloption in leveldata) {
-			result = result.replace('#' + leveloption, leveldata[leveloption]);
+		if (potentialinfo.name != null) {
+			var leveldata = potentialinfo.levels[potentiallevel];
+			
+			var result = potentialinfo.name;
+			for (var leveloption in leveldata) {
+				result = result.replace('#' + leveloption, leveldata[leveloption]);
+			}
+			
+			
+			var row = document.getElementById('potentials').insertRow(-1);
+			row.innerHTML = '<tr> <td>' + result + '</td> </tr>';
 		}
-		
-		
-		var row = document.getElementById('potentials').insertRow(-1);
-		row.innerHTML = '<tr> <td width="150px">' + result + '</td> </tr>';
 	}
 <?php
 }

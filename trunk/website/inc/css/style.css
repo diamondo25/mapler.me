@@ -1,7 +1,7 @@
 @media (min-width: 768px) and (max-width: 979px) { 
-.span2 {
-width: 206px;
-}
+	.span2 {
+		width: 206px;
+	}
 }
 
 .hidden {
@@ -9,110 +9,113 @@ width: 206px;
 }
 
 .nav-tabs.nav-stacked > li > a{
-border-bottom:0;
-background: #FFF;
-border-radius: 5px;
+	border-bottom:0;
+	background: #FFF;
+	border-radius: 5px;
 }
 
 /* Custom container */
-      .container-narrow {
-        margin: 0 auto;
-        max-width: 900px;
-        margin-bottom:100px;
-      }
-      .container-narrow > hr {
-        margin: 30px 0;
-      }
-	  
-	  legend {
-		  border:none !important;
-	  }
+.container-narrow {
+	margin: 0 auto;
+	max-width: 900px;
+	margin-bottom:100px;
+}
+.container-narrow > hr {
+	margin: 30px 0;
+}
 
-      /* Main marketing message and sign up button */
-      .jumbotron {
-        margin: 60px 0;
-        text-align: center;
-      }
-      .jumbotron .btn {
-        font-size: 21px;
-        padding: 14px 24px;
-      }
+legend {
+	border: none !important;
+}
 
-      /* Supporting marketing content */
-      .marketing {
-        margin: 60px 0;
-      }
-      .marketing p + h4 {
-        margin-top: 28px;
-      }
-	  
-	  .login .controls {
-		  margin-left: 0px !important;
-	  }
-	  
-	  .form-horizontal .control-group {
-		  margin-bottom: 10px !important;
-	  }
-	  
-	 featurette-divider {
-      margin: 80px 0; /* Space out the Bootstrap <hr> more */
-    }
-    .featurette {
-      padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
-      overflow: hidden; /* Vertically center images part 2: clear their floats. */
-    }
-    .featurette-image {
-      margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
-    }
+/* Main marketing message and sign up button */
+.jumbotron {
+	margin: 60px 0;
+	text-align: center;
+}
+.jumbotron .btn {
+	font-size: 21px;
+	padding: 14px 24px;
+}
 
-    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
-    .featurette-image.pull-left {
-      margin-right: 40px;
-    }
-    .featurette-image.pull-right {
-      margin-left: 40px;
-    }
+/* Supporting marketing content */
+.marketing {
+	margin: 60px 0;
+}
+.marketing p + h4 {
+	margin-top: 28px;
+}
 
-    /* Thin out the marketing headings */
-    .featurette-heading {
-      font-size: 50px;
-      font-weight: 300;
-      line-height: 1;
-      letter-spacing: -1px;
-    }
+.login .controls {
+	margin-left: 0px !important;
+}
+
+.form-horizontal .control-group {
+	margin-bottom: 10px !important;
+}
+
+featurette-divider {
+	margin: 80px 0; /* Space out the Bootstrap <hr> more */
+}
+.featurette {
+	padding-top: 120px; /* Vertically center images part 1: add padding above and below text. */
+	overflow: hidden; /* Vertically center images part 2: clear their floats. */
+}
+.featurette-image {
+	margin-top: -120px; /* Vertically center images part 3: negative margin up the image the same amount of the padding to center it. */
+}
+
+/* Give some space on the sides of the floated elements so text doesn't run right into it. */
+.featurette-image.pull-left {
+	margin-right: 40px;
+}
+.featurette-image.pull-right {
+	margin-left: 40px;
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+	font-size: 50px;
+	font-weight: 300;
+	line-height: 1;
+	letter-spacing: -1px;
+}
+
+footer {
+	padding: 40px 0;
+	text-align: center;
+	margin-top: 40px;
+	color: #777;
+}
+
+footer a {
+	margin: 0 1.5em;
+}
     
-    footer {
-    padding: 40px 0;
-    text-align: center;
-    margin-top: 40px;
-    color: #777;
-    }
-    
-    footer a {
-	    margin: 0 1.5em;
-    }
-    
 
-.panel_confirm.affix {position:fixed;top:20px;}
+.panel_confirm.affix {
+	position: fixed;
+	top: 20px;
+}
 
 .label {
 	font-weight: 200;
 	letter-spacing: 1px;
 }
 
-		.navbar .nav {
-			position: relative;
-			left: 0;
-			display: block;
-			float: left;
-			margin: 12px 10px 0 0;
-			}
-		
-		.navbar-inner {
-			background: url('/inc/img/navbar.png') repeat-x !important;
-			}
-			
-			.hidden {
+.navbar .nav {
+	position: relative;
+	left: 0;
+	display: block;
+	float: left;
+	margin: 12px 10px 0 0;
+}
+
+.navbar-inner {
+	background: url('/inc/img/navbar.png') repeat-x !important;
+}
+
+.hidden {
   display: none;
   visibility: hidden;
 }

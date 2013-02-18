@@ -41,8 +41,8 @@ class InventoryData {
 		return $this->inventories[$inventory];
 	}
 	
-	public function GetEquips($inventory) {
-		return $this->inventories[$inventory];
+	public function GetEquips() {
+		return $this->equips;
 	}
 }
 

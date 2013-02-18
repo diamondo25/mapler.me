@@ -9,6 +9,12 @@ if (!$_loggedin):
 <?php
 else:
 ?>
+<style type="text/css">
+.done {
+	text-decoration: line-through;
+}
+</style>
+
 	<p class="lead">To-do List:</b>
 	<ul class="span3">
 	<b>General</b>
@@ -37,7 +43,7 @@ else:
 	<b>Still needing to be stored. (OR SHOWN)</b>
 	<li>Medals</li>
 	<li>Traits</li>
-	<li>Enhancements on Items</li>
+	<li class="done">Enhancements on Items</li>
 	<li>Married?</li>
 	</ul>
 
