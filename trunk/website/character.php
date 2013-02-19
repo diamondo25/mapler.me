@@ -1,5 +1,6 @@
 <?php
 require_once 'inc/header.php';
+require_once 'actions/job_list.php';
 if (!$_loggedin) {
 ?>
 <p class="lead alert-error alert">Please login to view this page.</p>
@@ -12,9 +13,15 @@ if (!$_loggedin) {
 $q = $__database->query("
 SELECT 
 	*,
+	w.world_name,
 	`GetCharacterAccountID`(id) AS account_id
-FROM 
-	`characters`
+	
+FROM
+	`characters` chr
+LEFT JOIN 
+	world_data w
+	ON
+		w.world_id = chr.world_id
 WHERE 
 	name = '".$__database->real_escape_string($_GET['name'])."'
 ");
@@ -43,107 +50,31 @@ else {
 	
 ?>
 
-	<div id="profile" class="row">
-		<div id="header" class="span12" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center" >
-          <div id="profile-user-details">
-          	 <div class="row">
-            	<div class="span6 offset3">
-                	<div id="user-about" class="center">
-                    	<h2><?php echo $character_info['name']; ?></h2>
-						<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
-                   </div>
-               </div>
-           </div>
-		</div>
-	</div>
-</div>
-<table>
-<?php
-	foreach ($character_info as $columnname => $value) {	
+		<div class="row">
+		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
+		<h2 class="span10"><?php echo $character_info['name']; ?> • Level <?php echo $character_info['level']; ?>
+		<?php echo GetJobname($character_info['job']); ?><br/>
+		
+		<?php
+		foreach ($character_info as $columnname => $value) {	
 		if ($columnname == 'map') {
 			$tmp = GetMapleStoryString("map", $value, "name");
 			$subname = GetMapleStoryString("map", $value, "street");
 			if ($subname != NULL) {
 				$tmp = $subname." - ".$tmp;
 			}
-			$value = $tmp;
+			$map = $tmp;
 		}
-		elseif (isset($stat_addition[$columnname])) {
-			$value = ($value + $stat_addition[$columnname])." (".$value." + ".$stat_addition[$columnname].")";
 		}
+		?>
 		
-?>
-	<tr>
-		<th><?php echo $columnname; ?></th>
-		<td><?php echo $value; ?></td>
-	</tr>
-<?php
-	}
-?>
-</table>
-<hr />
-<?php
-
-	$q->free();
-	
-	$q = $__database->query("
-SELECT
-	skillid, level, maxlevel, ceil((expires/10000000) - 11644473600) as expires
-FROM
-	skills
-WHERE
-	character_id = ".$internal_id."
-ORDER BY
-	skillid / 1000 ASC
-	");
-	
-	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
-	
-	$lastgroup = -1;
-
-	while ($row = $q->fetch_assoc()) {
-		$name = GetMapleStoryString("skill", $row['skillid'], "name");
-		if ($name == NULL) continue;
-		$block = floor($row['skillid'] / 10000);
-		if ($lastgroup != $block) {
-			if ($lastgroup != -1) {
-?>
-</table>
-<?php
-			}
-			$lastgroup = $block;
-?>
-<br/><h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
-<table border="1" cellspacing="2" cellpadding="8" class="character-brick" style="width: 500px">
-	<tr>
-		<th style="width: 250px">Skill Name</th>
-		<th>Level</th>
-		<th>Max Level</th>
-		<th>Expires at</th>
-	</tr>
-<?php
-		}
+		<small><i>last seen in <?php echo $map; ?>, <?php echo $character_info['world_name']; ?></small></h2>
+		</div>
 		
-		if ($row['maxlevel'] == NULL) {
-			$row['maxlevel'] = '-';
-		}
-		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
-			$row['level'] = 'Bound with: '.GetCharacterName($row['level']);
-		}
-?>
-	<tr>
-		<td><img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /> <?php echo $name; ?></td>
-		<td><?php echo $row['level']; ?></td>
-		<td><?php echo $row['maxlevel']; ?></td>
-		<td><?php echo GetSystemTimeFromFileTime($row['expires']); ?></td>
-	</tr>
-<?php
-	}
-?>
-</table>
-<hr />
-
-<?php
+		<div class="row">
+		<p class="lead">Equipment & Items</p>
+		
+		<?php
 
 /******************* DRAGONS BE HERE ****************************/
 
@@ -375,6 +306,11 @@ function GetItemDialogInfo($item, $isequip) {
 <?php InventoryPosCalc(3, 2); ?>
 }
 
+/* 2nd pendent (cash) - Note to Erwin: There's a different UI that this requires (but should be fine without it anyway) */
+.character_equips .slot65 {
+<?php InventoryPosCalc(2, 2); ?>
+}
+
 /* belt */
 .character_equips .slot50 {
 <?php InventoryPosCalc(4, 2); ?>
@@ -393,6 +329,11 @@ function GetItemDialogInfo($item, $isequip) {
 /* android */
 .character_equips .slot53 {
 <?php InventoryPosCalc(0, 3); ?>
+}
+
+/* android heart */
+.character_equips .slot54 {
+<?php InventoryPosCalc(0, 4); ?>
 }
 
 /* ring 3 */
@@ -451,6 +392,8 @@ $equips = $inventory->GetEquips();
 
 ?>
 
+<div class="row">
+<div class="span3">
 <div class="character_equips">
 	<div class="character_equips_holder">
 
@@ -469,6 +412,7 @@ foreach ($equips as $slot => $item) {
 ?>
 	</div>
 </div>
+</div>
 
 <hr />
 <br/>
@@ -480,7 +424,6 @@ foreach ($equips as $slot => $item) {
 	<option value="5">Cash</option>
 </select>
 
-<div class="row">
 <?php
 
 
@@ -844,6 +787,74 @@ foreach ($optionlist as $option => $desc) {
 	</div>
 
 </div>
+
+		
+		<img src="//mapler.me/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
+	
+<hr />
+
+<p class="lead">Skills, Mounts, and more</p>
+<?php
+
+	$q->free();
+	
+	$q = $__database->query("
+SELECT
+	skillid, level, maxlevel, ceil((expires/10000000) - 11644473600) as expires
+FROM
+	skills
+WHERE
+	character_id = ".$internal_id."
+ORDER BY
+	skillid / 1000 ASC
+	");
+	
+	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
+	
+	$lastgroup = -1;
+
+	while ($row = $q->fetch_assoc()) {
+		$name = GetMapleStoryString("skill", $row['skillid'], "name");
+		if ($name == NULL) continue;
+		$block = floor($row['skillid'] / 10000);
+		if ($lastgroup != $block) {
+			if ($lastgroup != -1) {
+?>
+</table>
+<?php
+			}
+			$lastgroup = $block;
+?>
+<br/><h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
+<table border="1" cellspacing="2" cellpadding="8" class="character-brick" style="width: 500px">
+	<tr>
+		<th style="width: 250px">Skill Name</th>
+		<th>Level</th>
+		<th>Max Level</th>
+		<th>Expires at</th>
+	</tr>
+<?php
+		}
+		
+		if ($row['maxlevel'] == NULL) {
+			$row['maxlevel'] = '-';
+		}
+		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
+			$row['level'] = 'Bound with: '.GetCharacterName($row['level']);
+		}
+?>
+	<tr>
+		<td><img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /> <?php echo $name; ?></td>
+		<td><?php echo $row['level']; ?></td>
+		<td><?php echo $row['maxlevel']; ?></td>
+		<td><?php echo GetSystemTimeFromFileTime($row['expires']); ?></td>
+	</tr>
+<?php
+	}
+?>
+</table>
+<hr />
+
 
 
 
