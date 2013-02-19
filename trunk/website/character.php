@@ -399,7 +399,7 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
     height: 32px;
     width: 32px;
 	position: absolute;
-	outline: 1px solid lightgray;
+	border: 1px solid lightgray;
 	z-index: 1;
 }
 
@@ -591,23 +591,23 @@ for ($inv = 0; $inv < 5; $inv++):
 }
 
 .potential1 {
-	outline: 1px solid #FF0066 !important;
+	border: 1px solid #FF0066 !important;
 }
 
 .potential2 {
-	outline: 1px solid #5CA1FF !important;
+	border: 1px solid #5CA1FF !important;
 }
 
 .potential3 {
-	outline: 1px solid #C261FF !important;
+	border: 1px solid #C261FF !important;
 }
 
 .potential4 {
-	outline: 1px solid #FFCC00 !important;
+	border: 1px solid #FFCC00 !important;
 }
 
 .potential5 {
-	outline: 1px solid #00FF00 !important;
+	border: 1px solid #00FF00 !important;
 }
 </style>
 
@@ -739,8 +739,8 @@ for ($i = 1; $i <= 5; $i++) {
 	
 	document.getElementById('item_info_potentials').style.display = document.getElementById('potentials').innerHTML == '' ? 'none' : 'block';
 	
-	var hasPotential = obj.getAttribute('class').indexOf('potential');
-	document.getElementById('item_info').setAttribute('class', hasPotential != -1 ? obj.getAttribute('class').substr(hasPotential) : '');
+	var potentialName = obj.getAttribute('potential');
+	document.getElementById('item_info').setAttribute('class', potentialName != null ? 'potential' + potentialName : '');
 	
 	
 	document.getElementById('item_info').style.display = 'block';
