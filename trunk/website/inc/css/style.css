@@ -8,6 +8,8 @@
 	display: none !important;
 }
 
+.nobreak { white-space: nowrap; }
+
 .nav-tabs.nav-stacked > li > a{
 	border-bottom:0;
 	background: #FFF;

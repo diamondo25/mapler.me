@@ -32,42 +32,11 @@ if (!$_loggedin):
 else:
 ?>
 <p class="lead">
-<?php
-
-	$q = $__database->query("SELECT 
-		chr.id, 
-		chr.name, 
-		w.world_name 
-	FROM 
-		characters chr 
-	LEFT JOIN 
-		users usr 
-		ON 
-			usr.ID = chr.userid 
-	LEFT JOIN 
-		accounts acc 
-		ON 
-			acc.id = usr.account_id 
-	LEFT JOIN 
-		world_data w 
-		ON 
-			w.world_id = chr.world_id 
-
-	WHERE 
-		acc.username = '".$__database->real_escape_string($_loginaccount->GetUsername())."' 
-	ORDER BY 
-		chr.world_id ASC,
-		chr.level DESC
-	LIMIT 0, 1");
-
-	// printing table rows
-	while ($row = $q->fetch_row()) {
-?>
-<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['1'];?>" class="img-polaroid"/>
+<img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
 <?php
 	}
 ?>
-<?php echo $_loginaccount->GetUsername(); ?>'s Stream – <b>Work In Progress</b>
+<?php echo $_loginaccount->GetUsername(); ?>'s Stream
 
 </p>
 <?php

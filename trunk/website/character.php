@@ -52,8 +52,8 @@ else {
 
 		<div class="row">
 		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
-		<h2 class="span10"><?php echo $character_info['name']; ?> • Level <?php echo $character_info['level']; ?>
-		<?php echo GetJobname($character_info['job']); ?><br/>
+		<h2 class="span10"><?php echo $character_info['name']; ?> • <span class="nobreak">Level <?php echo $character_info['level']; ?>
+		<?php echo GetJobname($character_info['job']); ?></span><br/>
 		
 		<?php
 		foreach ($character_info as $columnname => $value) {	
