@@ -24,7 +24,7 @@ NO_END;
 		return $error_msg;
 	}
 	
-	public function getqueries() {
+	public function GetRanQueries() {
 ?>
 <pre>
 <?php

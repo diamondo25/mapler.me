@@ -134,15 +134,18 @@ function GetMapleStoryString($type, $id, $key) {
 		apc_add("data_cache", array());
 	}
 	
-	$temp = null;
+	$temp = NULL;
 	if ($apcinstalled) {
 		$temp = apc_fetch("data_cache");
-		if ($temp == null) {
+		if ($temp == NULL) {
 			$temp = array();
 		}
-		if (isset($temp[$type.'|'.$id.'|'.$key])) {
+		if (array_key_exists($type.'|'.$id.'|'.$key, $temp)) {
 			return $temp[$type.'|'.$id.'|'.$key];
 		}
+	}
+	else {
+		$temp = array();
 	}
 	
 	$q = $__database->query("SELECT `value` FROM `strings` WHERE `objecttype` = '".$__database->real_escape_string($type)."' AND `objectid` = ".intval($id)." AND `key` = '".$__database->real_escape_string($key)."'");
@@ -161,7 +164,7 @@ function GetMapleStoryString($type, $id, $key) {
 	$q->free();
 	
 	if ($apcinstalled) {
-		$temp[$type.'|'.$id.'|'.$key] = NULL;
+		$temp[$type.'|'.$id.'|'.$key] = NULL; // Ai
 		apc_store("data_cache", $temp);
 	}
 	return NULL;
@@ -175,15 +178,18 @@ function GetItemDefaultStats($id) {
 		apc_add("data_iteminfo_cache", array());
 	}
 	
-	$temp = null;
+	$temp = NULL;
 	if ($apcinstalled) {
 		$temp = apc_fetch("data_iteminfo_cache");
-		if ($temp == null) {
+		if ($temp == NULL) {
 			$temp = array();
 		}
-		if (isset($temp[$id])) {
+		if (array_key_exists($id, $temp)) {
 			return $temp[$id];
 		}
+	}
+	else {
+		$temp = array();
 	}
 	
 	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".$id);
@@ -216,15 +222,18 @@ function GetPotentialInfo($id) {
 		apc_add("data_itemoptions_cache", array());
 	}
 	
-	$temp = null;
+	$temp = NULL;
 	if ($apcinstalled) {
 		$temp = apc_fetch("data_itemoptions_cache");
-		if ($temp == null) {
+		if ($temp == NULL) {
 			$temp = array();
 		}
-		if (isset($temp[$id])) {
+		if (array_key_exists($id, $temp)) {
 			return $temp[$id];
 		}
+	}
+	else {
+		$temp = array();
 	}
 	
 	$data = array();
@@ -243,6 +252,53 @@ function GetPotentialInfo($id) {
 	}
 	
 	return $data;
+}
+
+// Only for X Y and some special stuff!!!
+function GetItemWZInfo($itemid) {
+	global $__database, $apcinstalled;
+	
+	if ($apcinstalled && !apc_exists("data_characterwz_cache")) {
+		apc_add("data_characterwz_cache", array());
+	}
+	
+	$temp = NULL;
+	if ($apcinstalled) {
+		$temp = apc_fetch("data_characterwz_cache");
+		if ($temp == NULL) {
+			$temp = array();
+		}
+		if (array_key_exists($itemid, $temp)) {
+			return $temp[$itemid];
+		}
+	}
+	else {
+		$temp = array();
+	}
+	
+	
+	
+	$query = $__database->query("
+SELECT 
+	* 
+FROM 
+	`phpVana_characterwz` 
+WHERE 
+	`itemid` = ".$itemid);
+	$item_info = array();
+	while ($data = $query->fetch_assoc()) {
+		$item_info[$data['key']] = $data['value'];
+	}
+	$item_info['ITEMID'] = $itemid;
+	$query->free();
+	
+	
+	if ($apcinstalled) {
+		$temp[$itemid] = $item_info;
+		apc_store("data_characterwz_cache", $temp);
+	}
+	
+	return $item_info;
 }
 
 function Explode2($seperator, $subseperator, $value) {

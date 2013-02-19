@@ -1,6 +1,6 @@
-<?php require_once 'inc/header.php'; ?>
+<?php 
+require_once 'inc/header.php';
 
-<?php
 if (!$_loggedin):
 ?>
       <div class="jumbotron">
@@ -29,13 +29,29 @@ if (!$_loggedin):
 	
 <?php
 else:
+
+	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+
+	$has_characters = !empty($char_config['main_character']);
+
 ?>
 <p class="lead">
-<img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
-<?php echo $_loginaccount->GetUsername(); ?>'s Stream
+<?php 
+	if ($has_characters):
+		$main_character_name = $char_config['main_character'];
+		$main_character_image = '//'.$domain.'/avatar/'.$main_character_name;
+
+?>
+	<img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
+<?php
+	endif;
+?>
+	<?php echo $_loginaccount->GetUsername(); ?>'s Stream
 
 </p>
 <?php
 endif;
+
+require_once 'inc/footer.php';
+
 ?>
-<?php require_once 'inc/footer.php'; ?>

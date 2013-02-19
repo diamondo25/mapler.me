@@ -58,10 +58,8 @@ width: 115px;" value="Update!"/>
 </form>
 
 <pre>
+Result:<br />
 <?php
-
-echo 'Result:<br/>';
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312') {
 	$username = "maplerme-website";
 	$password = "#FMO@JF)JNRWGO$@Ngf9hwref923@R#@";
@@ -69,9 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312
 	echo RunCMD('svn up --non-interactive --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' /var/www/maplestats_svn/ 2>&1');
 
 }
-echo '</pre>';
-
 ?>
+</pre>
 <hr />
 <button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button>
 <?php
@@ -89,7 +86,9 @@ if (isset($_GET['clear_cache'])) {
 <?php
 
 	// Clear data caches
-	apc_clear_cache();
+	apc_delete('data_cache');
+	apc_delete('data_iteminfo_cache');
+	apc_delete('data_itemoptions_cache');
 }
 
 

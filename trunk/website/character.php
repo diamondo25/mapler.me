@@ -51,32 +51,27 @@ else {
 ?>
 
 		<div class="row">
-		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
-		<h2 class="span10"><?php echo $character_info['name']; ?> • <span class="nobreak">Level <?php echo $character_info['level']; ?>
-		<?php echo GetJobname($character_info['job']); ?></span><br/>
-		
-		<?php
-		foreach ($character_info as $columnname => $value) {	
-		if ($columnname == 'map') {
-			$tmp = GetMapleStoryString("map", $value, "name");
-			$subname = GetMapleStoryString("map", $value, "street");
-			if ($subname != NULL) {
-				$tmp = $subname." - ".$tmp;
-			}
-			$map = $tmp;
-		}
-		}
-		?>
-		
-		<small><i>last seen in <?php echo $map; ?>, <?php echo $character_info['world_name']; ?></small></h2>
+			<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
+			<h2 class="span10"><?php echo $character_info['name']; ?> &middot; <span class="nobreak">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></span><br/>
+			
+<?php
+
+$map = GetMapleStoryString("map", $character_info['map'], "name");
+$subname = GetMapleStoryString("map", $character_info['map'], "street");
+if ($subname != NULL) {
+	$map = $subname." - ".$map;
+}
+
+?>
+			
+			<small><i>Last seen in <?php echo $map; ?>, <?php echo $character_info['world_name']; ?></i></small></h2>
 		</div>
 		
 		<hr/>
 		
 		<div class="row">
 		<p class="lead">Equipment & statistics...</p>
-		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
-		<?php
+<?php
 
 /******************* DRAGONS BE HERE ****************************/
 
@@ -114,17 +109,6 @@ $reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
 $IDlist = array();
 $PotentialList = array();
 
-$inv_pos_offx = 7;
-$inv_pos_offy = 23;
-
-
-function InventoryPosCalc($row, $col) {
-	global $inv_pos_offx, $inv_pos_offy;
-?>
-	top: <?php echo ($row * 33) + $inv_pos_offy; ?>px;
-	left: <?php echo ($col * 34) + $inv_pos_offx; ?>px;
-<?php
-}
 
 function GetItemDialogInfo($item, $isequip) {
 	global $PotentialList, $IDlist, $reqlist, $optionlist;
@@ -216,6 +200,19 @@ function GetItemDialogInfo($item, $isequip) {
 	return array('mouseover' => $arguments, 'potentials' => $potential);
 }
 
+
+
+$inv_pos_offx = 10;
+$inv_pos_offy = 28;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+function InventoryPosCalc($row, $col) {
+	global $inv_pos_offx, $inv_pos_offy;
+	global $inv_extra_offx, $inv_extra_offy;
+?>
+top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?php echo ($col * (33 + $inv_extra_offx)) + $inv_pos_offx; ?>px; margin-bottom: <?php echo $inv_extra_offy; ?>px;
+<?php
+}
 
 ?>
 <style type="text/css">
@@ -385,7 +382,31 @@ function GetItemDialogInfo($item, $isequip) {
 }
 
 
+.character_equips_holder div {
+    height: 32px;
+    width: 32px;
+}
 
+.inventory {
+	position: relative;
+	width: 170px;
+	height: 195px;
+	overflow-y: scroll;
+	
+}
+
+.inventory div {
+    height: 32px;
+    width: 32px;
+	position: absolute;
+	outline: 1px solid lightgray;
+	z-index: 1;
+}
+
+.inventory img {
+	position: absolute;
+	z-index: 2;
+}
 
 </style>
 
@@ -395,9 +416,9 @@ $equips = $inventory->GetEquips();
 ?>
 
 <div class="row">
-<div class="span3">
-<div class="character_equips">
-	<div class="character_equips_holder">
+	<div class="span3">
+		<div class="character_equips">
+			<div class="character_equips_holder">
 
 <?php
 foreach ($equips as $slot => $item) {
@@ -406,59 +427,83 @@ foreach ($equips as $slot => $item) {
 	
 	$info = GetItemDialogInfo($item, true);
 	
+	$itemwzinfo = GetItemWZInfo($item->itemid);
+	
+	
+	if ($info['potentials'] != 0) {
 ?>
-<img class="item-icon slot<?php echo $slot; ?><?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
-
 ?>
+			</div>
+		</div>
 	</div>
-</div>
-</div>
 
-<div class="span4">
-<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
-	<option value="1">Equipment</option>
-	<option value="2">Use</option>
-	<option value="3">Set-up</option>
-	<option value="4">Etc</option>
-	<option value="5">Cash</option>
-</select>
-<br/>
+	<div class="span4">
+		<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
+			<option value="1">Equipment</option>
+			<option value="2">Use</option>
+			<option value="3">Set-up</option>
+			<option value="4">Etc</option>
+			<option value="5">Cash</option>
+		</select>
+		<br />
 <?php
 
 
+$inv_pos_offx = 5; // Diff offsets
+$inv_pos_offy = 5;
+$inv_extra_offx = $inv_extra_offy = 5;
 
 
 for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-<table border="1" class="span3 character-brick" style="padding:15px !important; display: none; max-height: 350px; overflow-y: scroll;" id="inventory_<?php echo $inv; ?>">
+		<div class="span3 character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
 <?php for ($i = 0; $i < count($inv1); $i += 4): ?>
-	<tr>
 <?php 	for ($j = $i; $j < $i + 4; $j++): ?>
-		<td style="width: 50px; height: 50px;" align="center" valign="middle">
 <?php 
+		$row = floor($j / 4);
+		$col = $j % 4;
 		if (isset($inv1[$j])) {
 			$isequip = $inv == 0;
 			$item = $inv1[$j];
 			$info = GetItemDialogInfo($item, $isequip);
-			
+
+
+			$itemwzinfo = GetItemWZInfo($item->itemid);
+	
+	
+	
 ?>
-			<div style="position: relative; width: 50px; height: 50px;">
-				<img class="item-icon<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-				<div style="position: absolute; bottom: 0; right: 0; color: black;"><?php echo $inv != 0 ? $item->amount : ''; ?></div>
-			</div>
+			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+			<img class="item-icon" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+
 <?php 
 		}
+		else {
 ?>
-		</td>
+			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+<?php
+		}
+?>
 <?php	endfor; ?>
-	</tr>
 <?php endfor; ?>
-</table>
+		</div>
 <?php endfor; ?>
-</div>
+
+
+	</div>
+	<div class="span3">
+		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" />
+	</div>
+	
+
 </div>
 
 <style type="text/css">
@@ -469,6 +514,7 @@ for ($inv = 0; $inv < 5; $inv++):
 	padding: 5px;
 	position: absolute;
 	width: 285px;
+	z-index: 100;
 }
 
 #item_info #item_info_extra, #item_info #item_info_description {
@@ -545,23 +591,23 @@ for ($inv = 0; $inv < 5; $inv++):
 }
 
 .potential1 {
-	border: 1px solid #FF0066 !important;
+	outline: 1px solid #FF0066 !important;
 }
 
 .potential2 {
-	border: 1px solid #5CA1FF !important;
+	outline: 1px solid #5CA1FF !important;
 }
 
 .potential3 {
-	border: 1px solid #C261FF !important;
+	outline: 1px solid #C261FF !important;
 }
 
 .potential4 {
-	border: 1px solid #FFCC00 !important;
+	outline: 1px solid #FFCC00 !important;
 }
 
 .potential5 {
-	border: 1px solid #00FF00 !important;
+	outline: 1px solid #00FF00 !important;
 }
 </style>
 
@@ -863,6 +909,9 @@ ORDER BY
 <?php
 	
 }
+
+
+// $__database->GetRanQueries();
 
 require_once 'inc/footer.php';
 ?>
