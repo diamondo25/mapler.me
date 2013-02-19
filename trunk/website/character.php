@@ -52,6 +52,7 @@ else {
 
 		<div class="row">
 		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
+		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
 		<h2 class="span10"><?php echo $character_info['name']; ?> • Level <?php echo $character_info['level']; ?>
 		<?php echo GetJobname($character_info['job']); ?><br/>
 		
@@ -71,8 +72,10 @@ else {
 		<small><i>last seen in <?php echo $map; ?>, <?php echo $character_info['world_name']; ?></small></h2>
 		</div>
 		
+		<hr/>
+		
 		<div class="row">
-		<p class="lead">Equipment & Items</p>
+		<p class="lead">Equipment & statistics...</p>
 		
 		<?php
 
@@ -414,8 +417,7 @@ foreach ($equips as $slot => $item) {
 </div>
 </div>
 
-<hr />
-<br/>
+<div class="span4">
 <select onchange="ChangeInventory(this.value)" style="height:35px !important;">
 	<option value="1">Equipment</option>
 	<option value="2">Use</option>
@@ -423,7 +425,7 @@ foreach ($equips as $slot => $item) {
 	<option value="4">Etc</option>
 	<option value="5">Cash</option>
 </select>
-
+<br/>
 <?php
 
 
@@ -457,6 +459,7 @@ for ($inv = 0; $inv < 5; $inv++):
 <?php endfor; ?>
 </table>
 <?php endfor; ?>
+</div>
 </div>
 
 <style type="text/css">
@@ -787,13 +790,10 @@ foreach ($optionlist as $option => $desc) {
 	</div>
 
 </div>
-
-		
-		<img src="//mapler.me/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
 	
 <hr />
 
-<p class="lead">Skills, Mounts, and more</p>
+<p class="lead">Skills, Mounts, and more...</p>
 <?php
 
 	$q->free();
