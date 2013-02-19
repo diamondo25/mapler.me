@@ -52,7 +52,6 @@ else {
 
 		<div class="row">
 		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
-		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
 		<h2 class="span10"><?php echo $character_info['name']; ?> • Level <?php echo $character_info['level']; ?>
 		<?php echo GetJobname($character_info['job']); ?><br/>
 		
@@ -76,7 +75,7 @@ else {
 		
 		<div class="row">
 		<p class="lead">Equipment & statistics...</p>
-		
+		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" class="pull-right" />
 		<?php
 
 /******************* DRAGONS BE HERE ****************************/
