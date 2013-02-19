@@ -7,7 +7,6 @@ if (!$_loggedin):
       
       <div class="row">
 		  <div class="span12">
-		  	<img src="//<?php echo $domain; ?>/inc/img/tempwelcome.png"/>
             <h1>Mapler.me is a MapleStory community and service providing innovative features to enhance your gaming experience!</h1>
 			<h2>Real-time avatars, character progress, and more is just a click away..</h2><br/>
 			<p><a href="#" class="btn btn-primary btn-action">Beta testing is coming soon!</a></p> 
@@ -33,9 +32,6 @@ else:
 ?>
 <p class="lead">
 <img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
-<?php
-	}
-?>
 <?php echo $_loginaccount->GetUsername(); ?>'s Stream
 
 </p>
