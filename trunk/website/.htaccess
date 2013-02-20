@@ -26,7 +26,7 @@
 	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L]
 	
 	# character / player rewrites
-	RewriteRule ^stats/([^/]*)$ /character.php?name=$1
+	RewriteRule ^player/([^/]*)$ /character.php?name=$1
 	
 </IfModule>
 

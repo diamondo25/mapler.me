@@ -919,12 +919,15 @@ ORDER BY
 </table>
 <hr />
 
-
-
-
-
-
-
+<p class="lead">Realtime Avatars:</p>
+		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" alt="Avatar of <?php echo $character_info['name']; ?>"/><br/><br/>
+		<pre style="width: 280px;">http://<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?></pre></td>
+		
+		<td><img src="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>" alt="Image of <?php echo $character_info['name']; ?>" width="271px" height="162px" /><br/><br/>
+		<pre style="width: 280px;">http://<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?></pre></td>
+		
+		<td><img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" alt="Statistics of <?php echo $character_info['name']; ?>" width="192px" height="345px" /><br/><br/>
+		<pre style="width: 280px;">http://<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?></pre></td>
 <?php
 	
 }
