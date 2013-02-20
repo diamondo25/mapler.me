@@ -435,7 +435,7 @@ $equips = $inventory->GetEquips();
 ?>
 
 <div class="row">
-
+	<div class="span3">
 		<div class="character_equips">
 			<div class="character_equips_holder">
 
@@ -460,6 +460,7 @@ foreach ($equips as $slot => $item) {
 }
 ?>
 			</div>
+		</div>
 	</div>
 
 	<div class="span4" id="inventories">
@@ -517,7 +518,7 @@ for ($inv = 0; $inv < 5; $inv++):
 
 
 	</div>
-	<div class="span3">
+	<div class="span3" style="margin-left: 20px !important;">
 		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" />
 	</div>
 	
