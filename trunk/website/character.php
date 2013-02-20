@@ -798,6 +798,18 @@ function ChangeInventory(id) {
 	document.getElementById('inventory_' + lastid).style.display = 'block';
 }
 ChangeInventory(1);
+
+var lastidskill = -1;
+function ChangeSkillList(id) {
+	if (lastidskill != -1) {
+		document.getElementById('bookname_' + lastidskill).style.display = 'none';
+		document.getElementById('skilllist_' + lastidskill).style.display = 'none';
+	}
+	lastidskill = id;
+	document.getElementById('bookname_' + lastidskill).style.display = 'block';
+	document.getElementById('skilllist_' + lastidskill).style.display = 'block';
+}
+ChangeInventory(1);
 </script>
 
 <div id="item_info" style="display: none;">
@@ -876,27 +888,115 @@ ORDER BY
 	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
 	
 	$lastgroup = -1;
+?>
+<style type="text/css">
+#skill_list {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
+	width: 174px;
+	height: 299px;
+	position: relative;
+}
 
+#skill_list > * {
+	margin-left: 10px;
+}
+
+.skill_job {
+	width: 157px;
+	height: 155px;
+	overflow-y: scroll;
+	top: 92px;
+	position: absolute;
+}
+
+.skill_line {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/line.png');
+	width: 140px;
+	height: 1px;
+	margin: 2px 0;
+}
+
+.skill {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/skill.png');
+	width: 140px;
+	height: 35px;
+	position: relative;
+	font-size: 10px;
+}
+
+.skill .skill_icon {
+	float: left;
+	margin-left: 1px;
+}
+
+.skill_bookname {
+	color: white;
+	font-size: 16px;
+	top: 54px;
+	position: absolute;
+	padding-left: 5px;
+	width: 157px;
+}
+
+.book_title {
+    color: white;
+    font-size: 12px;
+    left: 37px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+	top: 5px;
+}
+
+.skill .skill_title {
+	position: absolute;
+	left: 41px;
+	white-space: nowrap;
+}
+
+.skill .skill_level {
+	position: absolute;
+	left: 41px;
+	top: 16px;
+}
+
+.skilllist_selector {
+	height: 20px;
+	margin-bottom: 0;
+	padding: 0;
+	position: absolute;
+	top: 24px;
+	width: 155px;
+}
+</style>
+
+<div id="skill_list">
+<?php
+	$first_skill = true;
+	
+	$groups = array();
+	$i = 0;
+	
 	while ($row = $q->fetch_assoc()) {
 		$name = GetMapleStoryString("skill", $row['skillid'], "name");
 		if ($name == NULL) continue;
 		$block = floor($row['skillid'] / 10000);
 		if ($lastgroup != $block) {
+			$first_skill = true;
 			if ($lastgroup != -1) {
 ?>
-</table>
+	</div>
 <?php
 			}
 			$lastgroup = $block;
+			$book = GetMapleStoryString("skill", $lastgroup, "bname");
+			$groups[++$i] = $book;
 ?>
-<br/><h4><?php echo GetMapleStoryString("skill", $lastgroup, "bname"); ?></h4>
-<table border="1" cellspacing="2" cellpadding="8" class="character-brick" style="width: 500px">
-	<tr>
-		<th style="width: 250px">Skill Name</th>
-		<th>Level</th>
-		<th>Max Level</th>
-		<th>Expires at</th>
-	</tr>
+	<div id="bookname_<?php echo $i; ?>" class="skill_bookname" style="display: none;">
+		<img class="book_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/info.icon.png" />
+		<span class="book_title"><?php echo $book; ?></span>
+	</div>
+	<div id="skilllist_<?php echo $i; ?>" class="skill_job" style="display: none;">
 <?php
 		}
 		
@@ -904,19 +1004,46 @@ ORDER BY
 			$row['maxlevel'] = '-';
 		}
 		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
-			$row['level'] = 'Bound with: '.GetCharacterName($row['level']);
+			$playername = GetCharacterName($row['level']);
+			$row['level'] = '<a href="/player/'.$playername.'">'.$playername.'</a>';
 		}
+		elseif (strpos($name, 'Blessing of the Fairy') !== FALSE && strlen($character_info['blessingoffairy']) > 1) {
+			// BOF
+			$row['level'] .= ' - <a href="/player/'.$character_info['blessingoffairy'].'">'.$character_info['blessingoffairy'].'</a>';
+		}
+		elseif (strpos($name, 'Empress\'s Blessing') !== FALSE && strlen($character_info['blessingofempress']) > 1) {
+			// BOF
+			$row['level'] .= ' - <a href="/player/'.$character_info['blessingofempress'].'">'.$character_info['blessingofempress'].'</a>';
+		}
+		
+		// GetSystemTimeFromFileTime($row['expires']);
+		if (!$first_skill) {
 ?>
-	<tr>
-		<td><img src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" /> <?php echo $name; ?></td>
-		<td><?php echo $row['level']; ?></td>
-		<td><?php echo $row['maxlevel']; ?></td>
-		<td><?php echo GetSystemTimeFromFileTime($row['expires']); ?></td>
-	</tr>
+		<div class="skill_line"></div>
+<?php
+		}
+		$first_skill = false;
+?>
+		<div class="skill">
+			<img class="skill_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" />
+			<span class="skill_title"><?php echo $name; ?></span>
+			<span class="skill_level"><?php echo $row['level'].($row['maxlevel'] == '-' ? '' : ' / '.$row['maxlevel']); ?></span>
+		</div>
+
 <?php
 	}
 ?>
-</table>
+	</div>
+	<select onchange="ChangeSkillList(this.value)" class="skilllist_selector">
+<?php foreach ($groups as $id => $name): ?>
+		<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+<?php endforeach; ?>
+	</select>
+</div>
+
+<script type="text/javascript">
+ChangeSkillList(1);
+</script>
 <hr />
 
 <p class="lead">Realtime Avatars:</p>
