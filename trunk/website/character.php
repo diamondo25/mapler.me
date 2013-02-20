@@ -389,10 +389,12 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 
 .inventory {
 	position: relative;
-	width: 170px;
-	height: 195px;
+	width: 160px;
+	height: 213px;
 	overflow-y: scroll;
-	
+	margin-left: 5px;
+	background: transparent;
+	margin-top: 6px;
 }
 
 .inventory div {
@@ -401,11 +403,28 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	position: absolute;
 	border: 1px solid lightgray;
 	z-index: 1;
+	
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/item_bg.png');
 }
 
 .inventory img {
 	position: absolute;
 	z-index: 2;
+}
+
+#inventories {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
+	width: 172px;
+	height: 293px;
+}
+
+#inventories select {
+    height: 20px !important;
+    margin-bottom: 0;
+    margin-left: 8px;
+    margin-top: 27px;
+    padding: 0;
+    width: 156px;
 }
 
 </style>
@@ -444,8 +463,8 @@ foreach ($equips as $slot => $item) {
 		</div>
 	</div>
 
-	<div class="span4">
-		<select onchange="ChangeInventory(this.value)" style="height:35px !important;">
+	<div class="span4" id="inventories">
+		<select onchange="ChangeInventory(this.value)">
 			<option value="1">Equipment</option>
 			<option value="2">Use</option>
 			<option value="3">Set-up</option>
@@ -456,15 +475,15 @@ foreach ($equips as $slot => $item) {
 <?php
 
 
-$inv_pos_offx = 5; // Diff offsets
-$inv_pos_offy = 5;
-$inv_extra_offx = $inv_extra_offy = 5;
+$inv_pos_offx = 2; // Diff offsets
+$inv_pos_offy = 2;
+$inv_extra_offx = $inv_extra_offy = 2;
 
 
 for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-		<div class="span3 character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
+		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
 <?php for ($i = 0; $i < count($inv1); $i += 4): ?>
 <?php 	for ($j = $i; $j < $i + 4; $j++): ?>
 <?php 
