@@ -435,7 +435,7 @@ $equips = $inventory->GetEquips();
 ?>
 
 <div class="row">
-	<div class="span3">
+	<div class="span3" style="width: 175px;">
 		<div class="character_equips">
 			<div class="character_equips_holder">
 
