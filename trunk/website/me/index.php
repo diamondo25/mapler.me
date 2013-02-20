@@ -109,7 +109,7 @@ if (count($cache) == 0) {
 // printing table rows
 foreach ($cache as $row) {
 ?>
-		<div class="span2 character-brick" style="min-width:174px;margin-left: 20px;">
+		<div class="character-brick profilec">
 		<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 			<center>
 				<br />
