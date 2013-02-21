@@ -18,6 +18,7 @@
 	RewriteRule ^login/ login.php
 	RewriteRule ^signup/ register.php
 	RewriteRule ^terms/ terms.php
+	RewriteRule ^todo/ todo.php
 	
 	# image / ranking rewrites
 	
