@@ -25,10 +25,20 @@ else:
 
 	<div class="row">
 	<p class="lead">Mapler.me Completion List</b>
+	
+	<ul class="span12">
+	<b>Before Beta:</b><br/><br/>
+	<li>Make sure email notification works when signing up.</li>
+	<li>Add password change in settings.</li>
+	<li>Add temporary content to front page when logged in until stream is actively being worked on.</li>
+	<li>Add a private chat for beta testers to chat in as well as gathering info on bugs / glitches. Make all messages logged. (Will be removed after testing).</li>
+	<li>Change usernames -> email, and profile username -> nickname.</li>
+	</ul>
+	
 	<ul class="span10">
 	<b>General</b><br/><br/>
 	<li>Add "progress" to character page once finished by Erwin.</li>
-	<li>Panel (front-page while logged in)</li>
+	<li>Stream (front-page while logged in)</li>
 	<li class="done">Create a download page for the Client / any other downloads. (Wallpapers? lol)</li>
 	<li class="done">Finish Settings page.</li>
 	<li>Add email notifications (can be set on and off in settings)</li>
