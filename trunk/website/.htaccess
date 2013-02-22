@@ -19,6 +19,7 @@
 	RewriteRule ^signup/ register.php
 	RewriteRule ^terms/ terms.php
 	RewriteRule ^todo/ todo.php
+	RewriteRule ^contest/ contest.php
 	
 	# image / ranking rewrites
 	
