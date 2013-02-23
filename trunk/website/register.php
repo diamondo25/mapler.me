@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 				// message
 				
-				$message = file_get_contents('inc/email_signup.php');
+				$message = file_get_contents('inc/email_signup.template.php');
 				$message = str_replace("{NICK}", $nickname, $message);
 
 				// To send HTML mail, the Content-type header must be set

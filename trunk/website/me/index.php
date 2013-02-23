@@ -25,8 +25,6 @@ ORDER BY
 	chr.level DESC
 ");
 
-// printing table rows
-
 $cache = array();
 
 $selected_main_character = $char_config['main_character'];
@@ -107,18 +105,32 @@ if (count($cache) == 0) {
 }
 
 // printing table rows
+
+$characters_per_row = 4;
+$i = 0;
 foreach ($cache as $row) {
+	if ($i % $characters_per_row == 0) {
+		if ($i > 0) {
 ?>
-		<div class="character-brick profilec">
-		<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
-			<center>
-				<br />
-				<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-					<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
-				</a>
-				<br />
-			</center>
-        </div>
+		</div>
+<?php
+		}
+?>
+		<div class="row">
+<?php
+	}
+	$i++;
+?>
+			<div class="character-brick profilec span3">
+			<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
+				<center>
+					<br />
+					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
+					</a>
+					<br />
+				</center>
+			</div>
         
 <?php       
 }

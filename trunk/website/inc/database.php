@@ -20,7 +20,7 @@ The server made a boo-boo! Our technical Coolie Zombies are after this problem. 
 -->
 NO_END;
 
-		$error_msg = str_replace("{ERROR_DATA_HERE}", $this->error." (errno. ".$this->errno.")\r\n".base64_encode($this->last_query), $error_msg);
+		$error_msg = str_replace("{ERROR_DATA_HERE}", $this->error." (errno. ".$this->errno.")\r\n".$this->last_query, $error_msg);
 		return $error_msg;
 	}
 	
