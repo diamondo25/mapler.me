@@ -341,8 +341,9 @@ function IGTextToWeb($data, $extraOptions = array()) {
 	
 	$endTag = '';
 	$result = '';
-	for ($i = 0; $i < strlen($data); $i++) {
-		$end = ($i + 1 == strlen($data));
+	$datalen = strlen($data);
+	for ($i = 0; $i < $datalen; $i++) {
+		$end = ($i + 1 == $datalen);
 		$c = $data[$i];
 		if ($c == '#') {
 			if ($end) continue;

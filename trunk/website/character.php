@@ -113,19 +113,19 @@ $PotentialList = array();
 function GetItemDialogInfo($item, $isequip) {
 	global $PotentialList, $IDlist, $reqlist, $optionlist;
 	
-	if (!isset($IDlist[$item->itemid])) {
+	if (!array_key_exists($item->itemid, $IDlist)) {
 		$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
 	}
 	
-	if ($isequip && $item->potential1 != 0 && !isset($PotentialList[$item->potential1])) 
+	if ($isequip && $item->potential1 != 0 && !array_key_exists($item->potential1, $PotentialList)) 
 		$PotentialList[$item->potential1] = GetPotentialInfo($item->potential1);
-	if ($isequip && $item->potential2 != 0 && !isset($PotentialList[$item->potential2])) 
+	if ($isequip && $item->potential2 != 0 && !array_key_exists($item->potential2, $PotentialList))
 		$PotentialList[$item->potential2] = GetPotentialInfo($item->potential2);
-	if ($isequip && $item->potential3 != 0 && !isset($PotentialList[$item->potential3])) 
+	if ($isequip && $item->potential3 != 0 && !array_key_exists($item->potential3, $PotentialList))
 		$PotentialList[$item->potential3] = GetPotentialInfo($item->potential3);
-	if ($isequip && $item->potential4 != 0 && !isset($PotentialList[$item->potential4])) 
+	if ($isequip && $item->potential4 != 0 && !array_key_exists($item->potential4, $PotentialList))
 		$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
-	if ($isequip && $item->potential5 != 0 && !isset($PotentialList[$item->potential5])) 
+	if ($isequip && $item->potential5 != 0 && !array_key_exists($item->potential5, $PotentialList))
 		$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
 	
 	$stats = GetItemDefaultStats($item->itemid);
@@ -158,19 +158,37 @@ function GetItemDialogInfo($item, $isequip) {
 	$arguments .= $item->itemid.",".($isequip ? 1 : 0).", ";
 	$arguments .= ValueOrDefault($stats['reqjob'], 0).", ";
 	
-	foreach ($reqlist as $option => $desc) {
-		if ($isequip) 
-			eval('$arguments .= $'.$option.'.", ";'); // Fugly
-		else 
-			$arguments .= '0, ';
-	}
 	
-	foreach ($optionlist as $option => $desc) {
-		if ($isequip) 
-			eval('$arguments .= $item->'.$option.'.", ";'); // Fugly
-		else 
-			$arguments .= '0, ';
+	//  All options.
+	if ($isequip)  {
+		$arguments .= $reqlevel.', ';
+		$arguments .= $reqstr.', ';
+		$arguments .= $reqdex.', ';
+		$arguments .= $reqint.', ';
+		$arguments .= $reqluk.', ';
+		$arguments .= $reqpop.', ';
+		$arguments .= $item->str.', ';
+		$arguments .= $item->dex.', ';
+		$arguments .= $item->int.', ';
+		$arguments .= $item->luk.', ';
+		$arguments .= $item->maxhp.', ';
+		$arguments .= $item->maxmp.', ';
+		$arguments .= $item->weaponatt.', ';
+		$arguments .= $item->weapondef.', ';
+		$arguments .= $item->magicatt.', ';
+		$arguments .= $item->magicdef.', ';
+		$arguments .= $item->acc.', ';
+		$arguments .= $item->avo.', ';
+		$arguments .= $item->hands.', ';
+		$arguments .= $item->jump.', ';
+		$arguments .= $item->speed.', ';
+		$arguments .= $item->slots.', ';
+		$arguments .= $item->scrolls.', ';
 	}
+	else {
+		$arguments .= '0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,';
+	}
+
 	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
 	$arguments .= ($isequip ? $item->HasLock() : 0).", ";
 	$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
