@@ -210,8 +210,7 @@ function InventoryPosCalc($row, $col) {
 	global $inv_pos_offx, $inv_pos_offy;
 	global $inv_extra_offx, $inv_extra_offy;
 ?>
-top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?php echo ($col * (33 + $inv_extra_offx)) + $inv_pos_offx; ?>px; margin-bottom: <?php echo $inv_extra_offy; ?>px;
-<?php
+top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?php echo ($col * (33 + $inv_extra_offx)) + $inv_pos_offx; ?>px; margin-bottom: <?php echo $inv_extra_offy; ?>px;<?php
 }
 
 ?>
@@ -223,9 +222,27 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	position: relative;
 }
 
-.character_equips_holder img {
+.character_equips > div > img, .character_pets_holder > div > img {
 	position: absolute;
 }
+
+.character_equips > div > div, .character_pets_holder > div > div {
+    height: 32px;
+    width: 32px;
+}
+
+.character_pets_holder {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/pet_equip.png');
+	width: 151px;
+	height: 220px;
+	position: relative;
+}
+
+.character_pets_holder > div > img {
+	position: absolute;
+}
+
+
 
 /* monster book */
 .character_equips .slot55 {
@@ -381,11 +398,55 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <?php InventoryPosCalc(4, 4); ?>
 }
 
+<?php
+$inv_pos_offx = 8; // Diff offsets
+$inv_pos_offy = 22;
+$inv_extra_offx = $inv_extra_offy = 1;
+?>
 
-.character_equips_holder div {
-    height: 32px;
-    width: 32px;
+/* pet thingies */
+
+/* HP POC */
+.character_equips .slot24 {
+<?php InventoryPosCalc(0, 0); ?>
 }
+
+/* MP POC */
+.character_equips .slot25 {
+<?php InventoryPosCalc(0, 2); ?>
+}
+
+/* Item pouch */
+.character_equips .slot22 {
+<?php InventoryPosCalc(1, 0); ?>
+}
+
+/* Meso Magnet */
+.character_equips .slot23 {
+<?php InventoryPosCalc(2, 1); ?>
+}
+
+/* Wing Boots */
+.character_equips .slot26 {
+<?php InventoryPosCalc(2, 2); ?>
+}
+
+/* Equip */
+.character_equips .slot14 {
+<?php InventoryPosCalc(2, 3); ?>
+}
+
+/* Binocular */
+.character_equips .slot27 {
+<?php InventoryPosCalc(4, 0); ?>
+}
+
+/* Magic Scales */
+.character_equips .slot28 {
+<?php InventoryPosCalc(3, 1); ?>
+}
+
+
 
 .inventory {
 	position: relative;
@@ -451,6 +512,62 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <?php
 $equips = $inventory->GetEquips();
 
+$petequip_slots = array();
+$petequip_slots[24] = array(0, -1); // Auto HP
+$petequip_slots[25] = array(0, -1); // Auto MP
+
+// Pet 1
+$petequip_slots[14] = array(0, -1);
+//$petequip_slots[20] = array(0, -1); // Collar?
+$petequip_slots[21] = array(0, -1); // Item pouch, other slots = quote ring
+$petequip_slots[22] = array(0, -1);
+$petequip_slots[23] = array(0, -1);
+$petequip_slots[26] = array(0, -1);
+$petequip_slots[27] = array(0, -1);
+$petequip_slots[28] = array(0, -1);
+$petequip_slots[29] = array(0, -1);
+$petequip_slots[46] = array(0, -1); // Item Ignore 1
+
+// Pet 2
+$petequip_slots[30] = array(1, 14);
+$petequip_slots[31] = array(1, 20);
+$petequip_slots[32] = array(1, 29); // Flipped w/ 21
+$petequip_slots[33] = array(1, 22);
+$petequip_slots[34] = array(1, 23);
+$petequip_slots[35] = array(1, 26);
+$petequip_slots[36] = array(1, 27);
+$petequip_slots[37] = array(1, 21); // Flipped w/ 29
+$petequip_slots[47] = array(1, -1); // Item Ignore 2
+
+// Pet 3
+$petequip_slots[38] = array(2, 14);
+$petequip_slots[39] = array(2, 20);
+$petequip_slots[40] = array(2, 29); // Flipped w/ 21
+$petequip_slots[41] = array(2, 22);
+$petequip_slots[42] = array(2, 23);
+$petequip_slots[43] = array(2, 26);
+$petequip_slots[44] = array(2, 27);
+$petequip_slots[45] = array(2, 21); // Flipped w/ 29
+$petequip_slots[48] = array(2, -1); // Item Ignore 2
+
+$petequips = array();
+$petequips[0] = array();
+$petequips[1] = array();
+$petequips[2] = array();
+
+foreach ($equips as $slot => $item) {
+	$slot = abs($slot);
+	if ($slot > 100) $slot -= 100;
+	
+	if (!array_key_exists($slot, $petequip_slots)) continue;
+	$block = $petequip_slots[$slot][0];
+	$display_slot = $petequip_slots[$slot][1];
+	if ($display_slot == -1)
+		$display_slot = $slot;
+	
+	$petequips[$block][$display_slot] = $item;
+}
+
 ?>
 
 <div class="row">
@@ -460,8 +577,11 @@ $equips = $inventory->GetEquips();
 
 <?php
 foreach ($equips as $slot => $item) {
+	break;
 	if ($slot <= -100) continue; // Cash equips etc...
 	$slot = abs($slot);
+	if ($slot >= 20 && $slot <= 48) continue; // Pet equips.
+	if ($slot == 14) continue; // Old ass pet equip slot
 	
 	$info = GetItemDialogInfo($item, true);
 	
@@ -483,12 +603,48 @@ foreach ($equips as $slot => $item) {
 	</div>
 	<div class="span3" style="width: 175px;">
 		<div class="character_equips">
+			<div class="character_pets_holder">
+
+<?php
+for ($i = 0; $i < 3; $i++) {
+?>
+				<div class="pet_inventory" display="none">
+<?php
+	foreach ($petequips[$i] as $slot => $item) {
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($item->itemid);
+		
+		
+		if ($info['potentials'] != 0) {
+?>
+					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+		}
+?>
+					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+?>
+				</div>
+<?php
+}
+?>
+			</div>
+		</div>
+	</div>
+	<div class="span3" style="width: 175px;">
+		<div class="character_equips">
 			<div class="character_equips_holder">
 
 <?php
 foreach ($equips as $slot => $item) {
+	break;
 	if ($slot < -200 || $slot > -100) continue; // Cash equips etc...
 	$slot = abs($slot + 100);
+	if ($slot >= 20 && $slot <= 48) continue; // Pet equips.
+	if ($slot == 14) continue; // Old ass pet equip slot
 	
 	$info = GetItemDialogInfo($item, true);
 	
@@ -548,12 +704,12 @@ for ($inv = 0; $inv < 5; $inv++):
 		
 ?>
 			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"></div>
-			<img class="item-icon" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $j; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php 
 				if (!$isequip) {
 					// Woop
 ?>
-			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>"><?php echo $item->amount; ?></span>
+			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
 <?php
 				}
 
