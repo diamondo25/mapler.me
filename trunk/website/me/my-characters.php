@@ -8,6 +8,7 @@ function ChangeImage(id, name) {
 }
 </script>
 <?php
+$char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 $q = $__database->query("
 SELECT 
@@ -43,9 +44,15 @@ if ($q->num_rows == 0) {
 <?php
 }
 
-	
+$character_display_options = $char_config['characters'];
+
 $last_world = NULL;
-while ($row = $q->fetch_row()) {
+while ($row = $q->fetch_array()) {
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
+			continue;
+		}
+	}
 	if ($last_world != $row[2]) {
 		if ($last_world != NULL) {
 ?>

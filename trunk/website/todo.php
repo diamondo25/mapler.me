@@ -29,7 +29,7 @@ else:
 	<ul class="span12">
 	<b>Before Beta:</b><br/><br/>
 	<li>Make sure email notification works when signing up.</li>
-	<li>Add password change in settings.</li>
+	<li class="done">Add password change in settings.</li>
 	<li>Add temporary content to front page when logged in until stream is actively being worked on.</li>
 	<li>Add a private chat for beta testers to chat in as well as gathering info on bugs / glitches. Make all messages logged. (Will be removed after testing).</li>
 	<li>Change usernames -> email, and profile username -> nickname.</li>

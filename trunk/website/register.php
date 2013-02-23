@@ -94,40 +94,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			
 			$ip_address = $_SERVER['REMOTE_ADDR'];
 			$fullname = $__database->real_escape_string($_POST["fullname"]);
+			$email = $__database->real_escape_string($_POST['email']);
+			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
 			$statement = $__database->prepare("INSERT INTO accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip) VALUES
 				(NULL,?,?,?,?,?,?,NOW(),?)");
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 
 				$__database->real_escape_string($salt), $fullname, 
-				$__database->real_escape_string($_POST['email']), $__database->real_escape_string($_POST['nickname']),
+				$email, $nickname,
 				$ip_address);
 	
 			$statement->execute();
 			
 			if ($statement->affected_rows == 1) {
 			
-$to  = '$email'; // note the comma
+				$to = $email;
 
-// subject
-$subject = 'Mapler.me - Welcome!';
+				// subject
+				$subject = 'Mapler.me - Welcome!';
 
-// message
-$message = require_once('actions/email_signup.php');
+				// message
+				
+				$message = file_get_contents('inc/email_signup.php');
+				$message = str_replace("{NICK}", $nickname, $message);
 
-// To send HTML mail, the Content-type header must be set
-$headers  = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-$headers .= 'From: Mapler.me <no-reply@mapler.me>' . "\r\n";
+				// To send HTML mail, the Content-type header must be set
+				$headers  = 'MIME-Version: 1.0' . "\r\n";
+				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+				$headers .= 'From: Mapler.me <no-reply@mapler.me>' . "\r\n";
 
-// Mail it
-mail($to, $subject, $message, $headers);
+				// Mail it
+				mail($to, $subject, $message, $headers);
 ?>
-<p class="lead alert-info alert">Welcome to Mapler.me, $nickname! Check your email for more information!</p>
+<p class="lead alert-info alert">Welcome to Mapler.me, <?php echo $nickname; ?>! Check your email (<?php echo $email; ?>) for more information!</p>
 <?php
 			}
 		}
-		// echo $encryptedpassword;
 	}
 }
 

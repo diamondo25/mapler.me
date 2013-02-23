@@ -2,7 +2,7 @@
             <br/><table cellspacing='0' cellpadding='0' width='500' style='border:1px solid #ddd;border-radius:4px'><tbody><tr><td align='left' style='padding:40px 0 30px 30px'>
                         <font size='4' color='#333' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:24px;line-height:32px'>Thanks for Registering!</font><br><br><font size='4' color='#333' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:15px;line-height:21px'>
                             
-                            <strong>Hello <?php echo $nickname ?>, and welcome to Mapler.me.</strong> Your account has now been registered and you can login with the information you provided.
+                            <strong>Hello {NICK}, and welcome to Mapler.me.</strong> Your account has now been registered and you can login with the information you provided.
                             <br/><br/>
                            We appreciate your consideration in being a beta tester and this will not be forgotten. When the site is finalized, you will be recognized for your help.
                         </font>

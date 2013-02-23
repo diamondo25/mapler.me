@@ -47,6 +47,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 						<button type="submit" class="btn btn-primary">Save</button>
 					</div>
 				</div>
-				</div>
 			</form>
 		</div>

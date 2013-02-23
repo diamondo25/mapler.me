@@ -412,6 +412,25 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	z-index: 2;
 }
 
+.inventory .item-amount {
+	position: absolute;
+	display: block;
+	text-align: right;
+	width: 32px;
+	margin-top: 16px;
+	z-index: 3;
+	color: black;
+	font-size: 12px;
+	font-family: Arial;
+	font-weight: strong;
+	
+	text-shadow:
+	-1px -1px 0 #fff,
+	1px -1px 0 #fff,
+	-1px 1px 0 #fff,
+	1px 1px 0 #fff;
+}
+
 #inventories {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
 	width: 172px;
@@ -462,6 +481,33 @@ foreach ($equips as $slot => $item) {
 			</div>
 		</div>
 	</div>
+	<div class="span3" style="width: 175px;">
+		<div class="character_equips">
+			<div class="character_equips_holder">
+
+<?php
+foreach ($equips as $slot => $item) {
+	if ($slot < -200 || $slot > -100) continue; // Cash equips etc...
+	$slot = abs($slot + 100);
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($item->itemid);
+	
+	
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+			</div>
+		</div>
+	</div>
 
 	<div class="span4" id="inventories">
 		<select onchange="ChangeInventory(this.value)">
@@ -484,37 +530,46 @@ for ($inv = 0; $inv < 5; $inv++):
 	$inv1 = $inventory->GetInventory($inv);
 ?>
 		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
-<?php for ($i = 0; $i < count($inv1); $i += 4): ?>
-<?php 	for ($j = $i; $j < $i + 4; $j++): ?>
 <?php 
-		$row = floor($j / 4);
-		$col = $j % 4;
-		if (isset($inv1[$j])) {
-			$isequip = $inv == 0;
-			$item = $inv1[$j];
-			$info = GetItemDialogInfo($item, $isequip);
+	for ($i = 0; $i < count($inv1); $i += 4):
+		for ($j = $i; $j < $i + 4; $j++):
+ 
+			$row = floor($j / 4);
+			$col = $j % 4;
+			if (isset($inv1[$j])) {
+				$isequip = $inv == 0;
+				$item = $inv1[$j];
+				$info = GetItemDialogInfo($item, $isequip);
 
 
-			$itemwzinfo = GetItemWZInfo($item->itemid);
-	
-	
-	
+				$itemwzinfo = GetItemWZInfo($item->itemid);
+		
+		
+		
 ?>
 			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"></div>
 			<img class="item-icon" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-
 <?php 
-		}
-		else {
+				if (!$isequip) {
+					// Woop
+?>
+			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>"><?php echo $item->amount; ?></span>
+<?php
+				}
+
+			}
+			else {
 ?>
 			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
 <?php
-		}
+			}
+		endfor;
+	endfor;
 ?>
-<?php	endfor; ?>
-<?php endfor; ?>
 		</div>
-<?php endfor; ?>
+<?php
+endfor;
+?>
 
 
 	</div>
