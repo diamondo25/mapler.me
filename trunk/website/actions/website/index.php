@@ -9,6 +9,10 @@ if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
 
 require_once '../../inc/header.php';
 
+$username = "maplerme-website";
+$password = "#FMO@JF)JNRWGO$@Ngf9hwref923@R#@";
+
+$svn_arguments = '--non-interactive --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' /var/www/maplestats_svn/ 2>&1';
 
 
 function RunCMD($cmd) {
@@ -40,7 +44,7 @@ function RunCMD($cmd) {
 
 <pre style="font-size:12px;">
 <?php
-$rows = RunCMD('svn log -r COMMITTED /var/www/maplestats_svn/ 2>&1');
+$rows = RunCMD('svn log -r COMMITTED '.$svn_arguments);
 
 echo $rows;
 ?>
@@ -61,10 +65,7 @@ width: 115px;" value="Update!"/>
 Result:<br />
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312') {
-	$username = "maplerme-website";
-	$password = "#FMO@JF)JNRWGO$@Ngf9hwref923@R#@";
-
-	echo RunCMD('svn up --non-interactive --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' /var/www/maplestats_svn/ 2>&1');
+	echo RunCMD('svn up '.$svn_arguments);
 
 }
 ?>
