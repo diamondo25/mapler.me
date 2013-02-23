@@ -243,6 +243,15 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 }
 
 
+.character_pets_holder select {
+    bottom: -2px;
+    height: 20px !important;
+    left: 8px;
+    padding: 0;
+    position: absolute;
+    width: 135px;
+}
+
 
 /* monster book */
 .character_equips .slot55 {
@@ -399,9 +408,9 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 }
 
 <?php
-$inv_pos_offx = 8; // Diff offsets
+$inv_pos_offx = 10; // Diff offsets
 $inv_pos_offy = 22;
-$inv_extra_offx = $inv_extra_offy = 1;
+$inv_extra_offx = $inv_extra_offy = 0;
 ?>
 
 /* pet thingies */
@@ -555,17 +564,38 @@ $petequips[0] = array();
 $petequips[1] = array();
 $petequips[2] = array();
 
-foreach ($equips as $slot => $item) {
-	$slot = abs($slot);
+$normalequips = array();
+$cashequips = array();
+$cashequips['Coordinate'] = array();
+$cashequips['Totem'] = array();
+$cashequips['Android'] = array();
+$cashequips['Mechanic'] = array();
+$cashequips['Evan'] = array();
+$cashequips['normal'] = array();
+
+foreach ($equips as $orislot => $item) {
+	$slot = abs($orislot);
 	if ($slot > 100) $slot -= 100;
 	
-	if (!array_key_exists($slot, $petequip_slots)) continue;
-	$block = $petequip_slots[$slot][0];
-	$display_slot = $petequip_slots[$slot][1];
-	if ($display_slot == -1)
-		$display_slot = $slot;
-	
-	$petequips[$block][$display_slot] = $item;
+	if (array_key_exists($slot, $petequip_slots)) {
+		$block = $petequip_slots[$slot][0];
+		$display_slot = $petequip_slots[$slot][1];
+		if ($display_slot == -1)
+			$display_slot = $slot;
+		
+		$petequips[$block][$display_slot] = $item;
+	}
+	else {
+		if ($orislot > -100) {
+			$normalequips[$orislot] = $item;
+		}
+		elseif ($orislot <= -1400) $cashequips['Coordinate'][$orislot] = $item;
+		elseif ($orislot <= -1300) $cashequips['Totem'][$orislot] = $item;
+		elseif ($orislot <= -1200) $cashequips['Android'][$orislot] = $item;
+		elseif ($orislot <= -1100) $cashequips['Mechanic'][$orislot] = $item;
+		elseif ($orislot <= -1000) $cashequips['Evan'][$orislot] = $item;
+		elseif ($orislot <= -100) $cashequips['normal'][$orislot] = $item;
+	}
 }
 
 ?>
@@ -576,12 +606,8 @@ foreach ($equips as $slot => $item) {
 			<div class="character_equips_holder">
 
 <?php
-foreach ($equips as $slot => $item) {
-	break;
-	if ($slot <= -100) continue; // Cash equips etc...
+foreach ($normalequips as $slot => $item) {
 	$slot = abs($slot);
-	if ($slot >= 20 && $slot <= 48) continue; // Pet equips.
-	if ($slot == 14) continue; // Old ass pet equip slot
 	
 	$info = GetItemDialogInfo($item, true);
 	
@@ -601,14 +627,19 @@ foreach ($equips as $slot => $item) {
 			</div>
 		</div>
 	</div>
-	<div class="span3" style="width: 175px;">
+	<div class="span3" style="width: 151px;">
 		<div class="character_equips">
 			<div class="character_pets_holder">
+				<select onchange="ChangePet(this.value)">
+					<option value="0">Pet 1</option>
+					<option value="1">Pet 2</option>
+					<option value="2">Pet 3</option>
+				</select>
 
 <?php
 for ($i = 0; $i < 3; $i++) {
 ?>
-				<div class="pet_inventory" display="none">
+				<div class="pet_inventory" style="display: none;" id="pet_<?php echo $i; ?>">
 <?php
 	foreach ($petequips[$i] as $slot => $item) {
 		
@@ -639,12 +670,8 @@ for ($i = 0; $i < 3; $i++) {
 			<div class="character_equips_holder">
 
 <?php
-foreach ($equips as $slot => $item) {
-	break;
-	if ($slot < -200 || $slot > -100) continue; // Cash equips etc...
-	$slot = abs($slot + 100);
-	if ($slot >= 20 && $slot <= 48) continue; // Pet equips.
-	if ($slot == 14) continue; // Old ass pet equip slot
+foreach ($cashequips['normal'] as $slot => $item) {
+	$slot = abs($slot) - 100;
 	
 	$info = GetItemDialogInfo($item, true);
 	
@@ -681,50 +708,44 @@ $inv_pos_offx = 2; // Diff offsets
 $inv_pos_offy = 2;
 $inv_extra_offx = $inv_extra_offy = 2;
 
-
-for ($inv = 0; $inv < 5; $inv++):
+for ($inv = 0; $inv < 5; $inv++) {
 	$inv1 = $inventory->GetInventory($inv);
 ?>
 		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
 <?php 
-	for ($i = 0; $i < count($inv1); $i += 4):
-		for ($j = $i; $j < $i + 4; $j++):
- 
-			$row = floor($j / 4);
-			$col = $j % 4;
-			if (isset($inv1[$j])) {
-				$isequip = $inv == 0;
-				$item = $inv1[$j];
-				$info = GetItemDialogInfo($item, $isequip);
+	for ($i = 0; $i < count($inv1); $i++) {
+
+		$row = floor($i / 4);
+		$col = $i % 4;
+		if (isset($inv1[$i])) {
+			$isequip = $inv == 0;
+			$item = $inv1[$i];
+			$info = GetItemDialogInfo($item, $isequip);
 
 
-				$itemwzinfo = GetItemWZInfo($item->itemid);
-		
-		
-		
+			$itemwzinfo = GetItemWZInfo($item->itemid);
+
 ?>
 			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"></div>
-			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $j; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php 
-				if (!$isequip) {
-					// Woop
+			if (!$isequip) {
+				// Woop
 ?>
-			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $j; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
+			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
 <?php
-				}
-
 			}
-			else {
+		}
+		else {
 ?>
 			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
 <?php
-			}
-		endfor;
-	endfor;
+		}
+	}
 ?>
 		</div>
 <?php
-endfor;
+}
 ?>
 
 
@@ -1020,7 +1041,15 @@ function ChangeSkillList(id) {
 	document.getElementById('bookname_' + lastidskill).style.display = 'block';
 	document.getElementById('skilllist_' + lastidskill).style.display = 'block';
 }
-ChangeInventory(1);
+
+var lastpet = -1;
+function ChangePet(id) {
+	if (lastpet != -1) {
+		document.getElementById('pet_' + lastpet).style.display = 'none';
+	}
+	lastpet = id;
+	document.getElementById('pet_' + lastpet).style.display = 'block';
+}
 </script>
 
 <div id="item_info" style="display: none;">
@@ -1254,6 +1283,7 @@ ORDER BY
 
 <script type="text/javascript">
 ChangeSkillList(1);
+ChangePet(0);
 </script>
 <hr />
 
