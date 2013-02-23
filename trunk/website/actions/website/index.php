@@ -40,9 +40,9 @@ function RunCMD($cmd) {
 
 <pre style="font-size:12px;">
 <?php
-$rows = explode("\n", RunCMD('svn log -r COMMITTED /var/www/maplestats_svn/ 2>&1'));
+$rows = RunCMD('svn log -r COMMITTED /var/www/maplestats_svn/ 2>&1');
 
-echo $rows[7]." - ".$rows[8]." - ".$rows[9];
+echo $rows;
 ?>
 </pre>
 
