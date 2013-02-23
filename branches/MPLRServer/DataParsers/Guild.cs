@@ -44,8 +44,8 @@ namespace MPLRServer
                 pPacket.ReadInt(); // Level OR -1
                 pPacket.ReadInt(); // Guild Rank
                 pPacket.ReadInt(); // Online
-                pPacket.ReadInt();
                 pPacket.ReadInt(); // Alliance Rank
+                pPacket.ReadInt(); // Contribution
             }
 
             Capacity = (byte)pPacket.ReadInt();
@@ -57,6 +57,8 @@ namespace MPLRServer
             Notice = pPacket.ReadString();
 
             Points = pPacket.ReadInt();
+            pPacket.ReadInt(); // Today's points
+            pPacket.ReadInt(); // Today's ranking
             AllianceID = pPacket.ReadInt();
         }
 

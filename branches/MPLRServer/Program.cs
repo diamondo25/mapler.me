@@ -102,6 +102,9 @@ namespace MPLRServer
                                 });
                                 break;
                             }
+                        default:
+                            Console.WriteLine("Command not found");
+                            break;
                     }
                 }
             }

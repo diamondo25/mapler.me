@@ -185,6 +185,8 @@ namespace MPLRServer
                     Guild guild = new Guild();
                     guild.Decode(pPacket);
                     guild.Save(pConnection.WorldID);
+
+                    Logger.WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedName, guild.Name);
                 }
             }
         }
@@ -845,13 +847,16 @@ namespace MPLRServer
 
                 CharacterData data = new CharacterData();
                 data.Decode(pPacket);
-                Logger.WriteLine("!!! {0} Buddysize: {1}", data.Stats.Name, data.BuddylistSize);
 
                 data.SaveData(pConnection);
 
                 pConnection.CharData = data;
 
-                Logger.WriteLine("Saved Character Info");
+                Logger.WriteLine("--------- Saved Character Info ----------");
+
+
+                pConnection.LastLoggedName = pConnection.CharData.Stats.Name;
+                pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
 
             }
             else
