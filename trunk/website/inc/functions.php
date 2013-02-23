@@ -441,14 +441,94 @@ function GetSystemTimeFromFileTime($time) {
 function GetCorrectStat($internal_id) {
 	global $__database;
 	
+	// Item buffs
+	$tmp = NULL;
 	$q = $__database->query("SELECT SUM(`str`) AS `str`, SUM(`dex`) AS `dex`, SUM(`int`) AS `int`, SUM(`luk`) AS `luk`, SUM(`maxhp`) AS `mhp`, SUM(`maxmp`) AS `mmp` FROM `items` WHERE `character_id` = ".intval($internal_id)." AND slot < 0");
 	if ($q->num_rows >= 1) {
 		$tmp = $q->fetch_assoc();
-		$q->free();
-		return $tmp;
 	}
 	$q->free();
-	return NULL;
+	
+	return $tmp;
+}
+
+function GetItemPotentialBuffs($internal_id) {
+	global $__database;
+	
+	$q = $__database->query("
+SELECT 
+	i.itemid,
+	i.potential1, 
+	i.potential2, 
+	i.potential3, 
+	i.potential4, 
+	i.potential5,
+	ii.reqlevel
+FROM 
+	`items` i
+LEFT JOIN
+	`phpVana_iteminfo` ii
+		ON
+	ii.itemid = i.itemid
+WHERE 
+	i.`character_id` = ".intval($internal_id)." 
+		AND 
+	slot < 0
+");
+	$temp = array();
+	while ($row = $q->fetch_assoc()) {
+		$level = round($row['reqlevel'] / 10);
+		if ($level == 0) $level = 1;
+		$temp[$row['itemid']] = array();
+		for ($i = 1; $i <= 5; $i++) {
+			if ($row['potential'.$i] == 0) continue;
+			$potentialinfo = GetPotentialInfo($row['potential'.$i]);
+			
+			$temp[$row['itemid']] = array_merge($temp[$row['itemid']], $potentialinfo['levels'][$level]);
+		}
+	}
+	$q->free();
+	return $temp;
+}
+
+function CalculateSkillValue($what, $x) {
+	$what = str_replace(
+		array("u", "d", "x"), // u(x/2) = ceil(x/2)
+		array("ceil", "floor", $x), // d(x/2) = floor(x/2)
+		$what
+	);
+	
+	eval('$value = intval('.$what.');'); // ohboy...
+	return $value;
+}
+
+function GetSkillBuffs($internal_id) {
+	global $__database;
+	
+	$q = $__database->query("
+SELECT 
+	s.skillid,
+	s.level,
+	st.value
+FROM 
+	`skills` s
+LEFT JOIN
+	`strings` st
+		ON
+	st.objectid = s.skillid
+		AND
+	st.key = 'buff'
+WHERE 
+	s.`character_id` = ".intval($internal_id)."
+		AND
+	st.value IS NOT NULL
+");
+	$temp = array();
+	while ($row = $q->fetch_assoc()) {
+		$temp[$row['skillid']] = array('level' => $row['level'], 'data' => Explode2(';', '=', $row['value']));
+	}
+	$q->free();
+	return $temp;
 }
 
 
@@ -469,7 +549,7 @@ function GetCharacterName($id) {
 function MakeStatAddition($name, $value, $statarray) {
 	$add = $statarray[$name];
 	if ($add > 0) {
-		return ($value + $add).' ('.$value.' + '.$add.')';
+		return ($value + $add);
 	}
 	else {
 		return $value;

@@ -976,7 +976,7 @@ foreach ($optionlist as $option => $desc) {
 	
 	document.getElementById('potentials').innerHTML = ""; // Clear potentials
 	
-	var potentiallevel = Math.floor(reqlevel / 10);
+	var potentiallevel = Math.round(reqlevel / 10);
 	if (potentiallevel == 0) potentiallevel = 1;
 	
 	if (potentialflag == 1) { // 12 = unlocked
