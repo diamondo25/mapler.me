@@ -275,7 +275,10 @@ namespace MPLRServer
             itemsTable.AddColumn("inventory", false);
             itemsTable.AddColumn("slot", false);
             itemsTable.AddColumn("checksum", true);
-            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
+            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", 
+                 "itemlevel", "itemexp",
+                "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", 
+                "socket1", "socket2", "socket3");
 
             InsertQueryBuilder petTable = new InsertQueryBuilder("pets");
             petTable.OnDuplicateUpdate = true;
@@ -343,6 +346,7 @@ namespace MPLRServer
                                 equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
                                 equip.Name, equip.Flags,
                                 equip.ViciousHammer,
+                                equip.ItemLevel, equip.ItemEXP,
                                 equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
                                 equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
                                 );
@@ -398,6 +402,7 @@ namespace MPLRServer
                                 null, null, null, null, null,
                                 name, flags,
                                 null,
+                                null, null,
                                 null, null, null, null, null,
                                 null, null, null, null
                                 );
@@ -477,6 +482,7 @@ namespace MPLRServer
                             equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
                             equip.Name, equip.Flags,
                             equip.ViciousHammer,
+                            equip.ItemLevel, equip.ItemEXP,
                             equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
                             equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
                             );
@@ -511,6 +517,7 @@ namespace MPLRServer
                             null, null, null, null, null,
                             name, flags,
                             null,
+                            null, null,
                             null, null, null, null, null,
                             null, null, null, null
                             );

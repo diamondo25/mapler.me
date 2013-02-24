@@ -13,12 +13,15 @@ namespace Mapler_Client
 {
     public partial class frmMain : Form
     {
+        public static frmMain Instance { get; private set; }
+
         private frmStats _statScreen = null;
         private string _mapleEXE = null;
 
         public frmMain()
         {
             InitializeComponent();
+            Instance = this;
         }
 
         private void Form1_Load(object sender, EventArgs e)

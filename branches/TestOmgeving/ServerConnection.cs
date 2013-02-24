@@ -82,22 +82,15 @@ namespace Mapler_Client
                     if (done)
                     {
                         Screenshot.Upload(url, id, filename);
-
-                        /*
-                        using (MaplePacket packet = new MaplePacket(0xFFFE))
-                        {
-                            using (System.IO.BinaryReader br = new System.IO.BinaryReader(System.IO.File.OpenRead(filename)))
-                            {
-                                packet.WriteInt((int)br.BaseStream.Length);
-                                packet.WriteBytes(br.ReadBytes((int)br.BaseStream.Length));
-                            }
-                            
-                            packet.SwitchOver();
-
-                            ForwardPacket(MaplePacket.CommunicationType.Internal, packet);
-                        }
-                        */
                     }
+                }
+                else if (header == 0xFFFD)
+                {
+                    string charname = pPacket.ReadString();
+                    frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                    {
+                        frmMain.Instance.lblLastUpdate.Text = string.Format("{0} (Character: {1})", DateTime.Now, charname);
+                    });
                 }
             }
 

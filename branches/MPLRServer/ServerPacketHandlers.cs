@@ -404,7 +404,11 @@ namespace MPLRServer
             }
 
             if (didsomething)
+            {
                 pConnection.CharData.SaveCharacterInfo(pConnection);
+
+                pConnection.SendTimeUpdate();
+            }
         }
 
 
@@ -462,6 +466,8 @@ namespace MPLRServer
                         System.IO.File.WriteAllText("insert-update-skills-packet.sql", q);
                         int result = (int)MySQL_Connection.Instance.RunQuery(q);
                         Logger.WriteLine("Result Skills: {0}", result);
+
+                        pConnection.SendTimeUpdate();
                     }
 
                 }
@@ -490,6 +496,8 @@ namespace MPLRServer
 
             string query = string.Format("UPDATE characters SET {0}_slots = {1} WHERE internal_id = {2}", slotname, newslots, pConnection.CharacterInternalID);
             MySQL_Connection.Instance.RunQuery(query);
+
+            pConnection.SendTimeUpdate();
         }
 
         public static void HandleInventoryUpdate(ClientConnection pConnection, MaplePacket pPacket)
@@ -543,7 +551,10 @@ namespace MPLRServer
                             itemsTable.AddColumn("inventory", false);
                             itemsTable.AddColumn("slot", false);
                             itemsTable.AddColumn("checksum", true);
-                            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", "socket1", "socket2", "socket3");
+                            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", 
+                                "itemlevel", "itemexp",
+                                "potential1", "potential2", "potential3", "potential4", "potential5", 
+                                "socketstate", "socket1", "socket2", "socket3");
 
                             if (item is ItemEquip)
                             {
@@ -565,6 +576,7 @@ namespace MPLRServer
                                     equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
                                     equip.Name, equip.Flags,
                                     equip.ViciousHammer,
+                                    equip.ItemLevel, equip.ItemEXP,
                                     equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
                                     equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
                                 );
@@ -591,6 +603,7 @@ namespace MPLRServer
                                     null, null, null, null, null,
                                     name, flags,
                                     null,
+                                    null, null,
                                     null, null, null, null, null,
                                     null, null, null, null
                                     );
@@ -797,6 +810,7 @@ namespace MPLRServer
                     }
                 }
             }
+            pConnection.SendTimeUpdate();
         }
 
 
@@ -882,16 +896,14 @@ namespace MPLRServer
                 MySQL_Connection.Instance.RunQuery(string.Format("UPDATE characters SET chp = {0}, map = {1}, pos = {2} WHERE internal_id = {3}", hp, mapid, mappos, pConnection.CharacterInternalID));
             }
 
-            if (!isConnecting) // Temp
-            {
-                DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
-                Logger.WriteLine("Servertime: {0}", servertime.ToString());
-                pPacket.ReadInt(); // 100?
-                pPacket.ReadByte(); // 0
-                pPacket.ReadByte(); // 0
-                pPacket.ReadByte(); // 1
-            }
+            DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
+            Logger.WriteLine("Servertime: {0}", servertime.ToString());
+            pPacket.ReadInt(); // 100?
+            pPacket.ReadByte(); // 0
+            pPacket.ReadByte(); // 0
+            pPacket.ReadByte(); // 1
 
+            pConnection.SendTimeUpdate();
         }
     }
 }

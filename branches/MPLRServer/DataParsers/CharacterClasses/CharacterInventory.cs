@@ -278,7 +278,8 @@ namespace MPLRServer
         public string Name { get; private set; }
         public short Flags { get; private set; }
 
-        public byte Level { get; private set; }
+        public byte ItemLevel { get; private set; }
+        public int ItemEXP { get; private set; }
 
         public int ViciousHammer { get; private set; }
 
@@ -321,9 +322,10 @@ namespace MPLRServer
             this.Flags = pPacket.ReadShort();
 
             pPacket.ReadByte(); // Increases Skill
-            this.Level = pPacket.ReadByte();
 
-            pPacket.ReadInt();
+            this.ItemLevel = pPacket.ReadByte();
+            this.ItemEXP = pPacket.ReadInt();
+
             pPacket.ReadInt(); // 
             this.ViciousHammer = pPacket.ReadInt();
 
@@ -361,6 +363,7 @@ namespace MPLRServer
                 Slots + Scrolls + Str + Dex + Int + Luk + HP + MP + 
                 Watk + Wdef + Matk + Mdef + Acc + Avo + Hands + Jump + 
                 Speed + Flags + ViciousHammer + 
+                ItemLevel + ItemEXP +
                 Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + 
                 SocketState + Socket1 + Socket2 + Socket3;
         }

@@ -32,13 +32,15 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.btnLaunch = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblLastUpdate = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.panel1.Location = new System.Drawing.Point(344, 12);
+            this.panel1.Location = new System.Drawing.Point(278, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(40, 40);
             this.panel1.TabIndex = 1;
@@ -52,25 +54,45 @@
             this.richTextBox1.Location = new System.Drawing.Point(12, 12);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(160, 54);
+            this.richTextBox1.Size = new System.Drawing.Size(186, 40);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "This client is currently in BETA.\n\nLogging in will update your character.";
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(12, 72);
+            this.btnLaunch.Location = new System.Drawing.Point(12, 58);
             this.btnLaunch.Name = "btnLaunch";
-            this.btnLaunch.Size = new System.Drawing.Size(372, 25);
+            this.btnLaunch.Size = new System.Drawing.Size(306, 25);
             this.btnLaunch.TabIndex = 3;
             this.btnLaunch.Text = "Launch MapleStory!";
             this.btnLaunch.UseVisualStyleBackColor = true;
             this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 86);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(69, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Last update: ";
+            // 
+            // lblLastUpdate
+            // 
+            this.lblLastUpdate.AutoSize = true;
+            this.lblLastUpdate.Location = new System.Drawing.Point(87, 86);
+            this.lblLastUpdate.Name = "lblLastUpdate";
+            this.lblLastUpdate.Size = new System.Drawing.Size(35, 13);
+            this.lblLastUpdate.TabIndex = 5;
+            this.lblLastUpdate.Text = "label1";
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(396, 109);
+            this.ClientSize = new System.Drawing.Size(330, 108);
+            this.Controls.Add(this.lblLastUpdate);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.btnLaunch);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.panel1);
@@ -81,6 +103,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -89,6 +112,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Button btnLaunch;
+        private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.Label lblLastUpdate;
     }
 }
 

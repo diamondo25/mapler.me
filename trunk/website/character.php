@@ -997,7 +997,6 @@ for ($i = 1; $i <= 5; $i++) {
 				result = result.replace('#' + leveloption, leveldata[leveloption]);
 			}
 			
-			
 			var row = document.getElementById('potentials').insertRow(-1);
 			row.innerHTML = '<tr> <td>' + result + '</td> </tr>';
 		}

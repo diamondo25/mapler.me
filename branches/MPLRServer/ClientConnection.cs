@@ -116,6 +116,15 @@ namespace MPLRServer
             Program.Clients.Remove(this);
         }
 
+        public void SendTimeUpdate()
+        {
+            using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.Internal, 0xFFFD))
+            {
+                packet.WriteString(LastLoggedName);
+                SendPacket(packet);
+            }
+        }
+
         public override void OnPacket(MaplePacket pPacket)
         {
             MasterThread.Instance.AddCallback((a) =>
