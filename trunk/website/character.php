@@ -1098,9 +1098,9 @@ foreach ($reqlist as $option => $desc) {
 		<span class="req_job" id="item_info_reqjob_3">Bowman</span>
 		<span class="req_job" id="item_info_reqjob_4">Thief</span>
 		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
-		<hr />
 	</div>
 	<div class="item_stats">
+		<hr />
 		<table border="0" tablepadding="3" tablespacing="3">
 
 <?php

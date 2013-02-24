@@ -164,7 +164,7 @@ $row['dex'] = $row['dex'].' ('.$before['dex'].' + '.($row['dex'] - $before['dex'
 $row['int'] = $row['int'].' ('.$before['int'].' + '.($row['int'] - $before['int']).')';
 $row['luk'] = $row['luk'].' ('.$before['luk'].' + '.($row['luk'] - $before['luk']).')';
 
-$row['mhp'] = $row['mhp'].' ('.$before['mhp'].' + '.($row['mhp'] - $before['mhp']).')';
+//$row['mhp'] = $row['mhp'].' ('.$before['mhp'].' + '.($row['mhp'] - $before['mhp']).')';
 //$row['mmp'] = $row['mmp'].' ('.$before['mmp'].' + '.($row['mmp'] - $before['mmp']).')';
 
 

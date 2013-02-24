@@ -98,6 +98,7 @@ namespace MPLRServer
 
             short a1 = this.JobID;
 
+            SPData = new List<KeyValuePair<byte, int>>();
             if (a1 / 1000 == 3 ||
                 a1 / 100 == 22 || a1 == 2001 || // Evan
                 a1 / 100 == 23 || a1 == 2002 || // Mercedes
@@ -109,7 +110,6 @@ namespace MPLRServer
                 a1 / 10 == 57 || a1 == 508      // Jett
                 )
             {
-                SPData = new List<KeyValuePair<byte, int>>();
                 byte amnt = pPacket.ReadByte();
                 for (int j = 0; j < amnt; j++)
                 {
@@ -120,7 +120,7 @@ namespace MPLRServer
             }
             else
             {
-                this.SP = pPacket.ReadShort();
+                SPData.Add(new KeyValuePair<byte, int>(0, pPacket.ReadShort()));
             }
 
             this.EXP = pPacket.ReadInt();
