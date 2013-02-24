@@ -69,9 +69,11 @@ namespace MPLRServer
             _rows.Add(MySQL_Connection.QueryQuery(pColumns));
         }
 
+        public bool HasRows() { return _rows.Count > 0; }
+
         public override string ToString()
         {
-            if (_rows.Count == 0) throw new Exception("Row count = 0");
+            if (!HasRows()) throw new Exception("Row count = 0");
 
             string query = "INSERT INTO\r\n\t`" + this.TableName + "`\r\n\t(";
             string[] columnlist = new string[_columns.Count];

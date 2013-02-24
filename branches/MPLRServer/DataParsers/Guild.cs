@@ -5,8 +5,23 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class Guild
+    public class Guild
     {
+        public class GuildSkill {
+            public int SkillID { get; set; }
+            public short Level { get; set; }
+            public long BoughtAt { get; set; }
+            public string BoughtBy { get; set; }
+            public string Unknown { get; set; }
+        }
+
+        public class GuildMember
+        {
+            public int CharacterID { get; set; }
+            public byte Rank { get; set; }
+            public int Contribution { get; set; }
+        }
+
         public int ID { get; private set; }
         public int Points { get; private set; }
         public int AllianceID { get; private set; }
@@ -21,6 +36,10 @@ namespace MPLRServer
         public byte BackgroundColor { get; private set; }
         public short Foreground { get; private set; }
         public byte ForegroundColor { get; private set; }
+
+        public List<GuildSkill> Skills { get; private set; }
+
+        public List<GuildMember> Members { get; private set; }
 
         public Guild()
         {
@@ -37,15 +56,25 @@ namespace MPLRServer
 
             Players = pPacket.ReadByte();
 
+            Members = new List<GuildMember>();
             for (byte i = 0; i < Players; i++)
             {
+                var id = pPacket.ReadInt(); // Player ID
+
+                Members.Add(new GuildMember() { CharacterID = id });
+            }
+
+            for (byte i = 0; i < Players; i++)
+            {
+                GuildMember tmp = Members[i];
+
                 pPacket.ReadString(13); // Name
                 pPacket.ReadInt(); // Job ID
                 pPacket.ReadInt(); // Level OR -1
-                pPacket.ReadInt(); // Guild Rank
+                tmp.Rank = (byte)pPacket.ReadInt(); // Guild Rank
                 pPacket.ReadInt(); // Online
                 pPacket.ReadInt(); // Alliance Rank
-                pPacket.ReadInt(); // Contribution
+                tmp.Contribution = pPacket.ReadInt(); // Contribution
             }
 
             Capacity = (byte)pPacket.ReadInt();
@@ -58,8 +87,26 @@ namespace MPLRServer
 
             Points = pPacket.ReadInt();
             pPacket.ReadInt(); // Today's points
-            pPacket.ReadInt(); // Today's ranking
             AllianceID = pPacket.ReadInt();
+
+            pPacket.ReadByte(); // Unk
+            pPacket.ReadShort(); // Herp
+
+            Skills = new List<GuildSkill>();
+            var skills = pPacket.ReadShort(); // Buffs
+            for (var i = 0; i < skills; i++)
+            {
+                GuildSkill gb = new GuildSkill()
+                {
+                    SkillID = pPacket.ReadInt(),
+                    Level = pPacket.ReadShort(),
+                    BoughtAt = pPacket.ReadLong(),
+                    BoughtBy = pPacket.ReadString(),
+                    Unknown = pPacket.ReadString()
+                };
+
+                Skills.Add(gb);
+            }
         }
 
         public void Save(byte pWorldID)
@@ -84,7 +131,7 @@ namespace MPLRServer
                 guildTable.AddColumn("points", true);
                 guildTable.AddColumn("alliance_id", true);
 
-                guildTable.AddRow(ID, pWorldID, Name, 
+                guildTable.AddRow(ID, pWorldID, Name,
                     Notice,
                     Ranks[0],
                     Ranks[1],
@@ -100,7 +147,56 @@ namespace MPLRServer
                     AllianceID
                     );
 
-                MySQL_Connection.Instance.RunQuery(guildTable.ToString());
+                if (guildTable.RowCount > 0)
+                    MySQL_Connection.Instance.RunQuery(guildTable.ToString());
+            }
+
+            using (InsertQueryBuilder guildMembersTable = new InsertQueryBuilder("guild_members"))
+            {
+                guildMembersTable.OnDuplicateUpdate = true;
+                guildMembersTable.AddColumn("guild_id", true);
+                guildMembersTable.AddColumn("character_id", false); // Switching guild huh?
+                guildMembersTable.AddColumn("rank", true);
+                guildMembersTable.AddColumn("contribution", true);
+
+                foreach (var member in Members)
+                {
+                    guildMembersTable.AddRow(
+                        ID,
+                        member.CharacterID,
+                        member.Rank,
+                        member.Contribution
+                        );
+                }
+
+                if (guildMembersTable.RowCount > 0)
+                    MySQL_Connection.Instance.RunQuery(guildMembersTable.ToString());
+            }
+
+            using (InsertQueryBuilder guildSkillsTable = new InsertQueryBuilder("guild_skills"))
+            {
+                guildSkillsTable.OnDuplicateUpdate = true;
+                guildSkillsTable.AddColumn("guild_id", false);
+                guildSkillsTable.AddColumn("skill_id", false);
+                guildSkillsTable.AddColumn("level", true);
+                guildSkillsTable.AddColumn("bought_by", true);
+                guildSkillsTable.AddColumn("bought_at", true);
+                guildSkillsTable.AddColumn("unk", true);
+
+                foreach (var skill in Skills)
+                {
+                    guildSkillsTable.AddRow(
+                        ID,
+                        skill.SkillID,
+                        skill.Level,
+                        skill.BoughtBy,
+                        skill.BoughtAt,
+                        skill.Unknown
+                        );
+                }
+
+                if (guildSkillsTable.RowCount > 0)
+                    MySQL_Connection.Instance.RunQuery(guildSkillsTable.ToString());
             }
         }
     }
