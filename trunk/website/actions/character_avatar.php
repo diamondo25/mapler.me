@@ -484,7 +484,7 @@ if($weaponz == 'weaponBelowBody') {
 }
 
 // Create top cap
-if (isset($hap)) {
+if (isset($hat)) {
 	$cap_location = $characterwz."/Cap/0".$hat.".img/default.default.defaultBelowBody.png";
 	add_image($cap_location, $mainx + $bbhatx, $mainy + $bbhaty);
 	
@@ -498,13 +498,13 @@ if (isset($capez) && $capez == 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H
 	add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 }
 
-if(file_exists($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png") && $stand == 2)
+if (isset($cape) && file_exists($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png") && $stand == 2)
 	add_image($characterwz."/Cape/0".$cape.".img/stand2.0.cape.png", $mainx + $cape2x, $necky + $cape2y);
 
-elseif(file_exists($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png"))
+elseif (isset($cape) && file_exists($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png"))
 	add_image($characterwz."/Cape/0".$cape.".img/stand1.0.cape.png", $mainx + $capex, $necky + $capey);
 
-if (isset($capez) && $capez != 'capeBelowBody' && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
+if (((isset($capez) && $capez != 'capeBelowBody') || true) && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 	$bhair_location = $characterwz."/Hair/000".$hair.".img/default.hairBelowBody.png";
 	add_image($bhair_location, $mainx + $backhairx, $mainy + $backhairy);
 }
@@ -595,7 +595,7 @@ if($weaponz == 'armBelowHeadOverMailChest') {
 }
 
 // Create capeArm
-if(file_exists($characterwz."/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png"))
+if (isset($cape) && file_exists($characterwz."/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png"))
 	add_image($characterwz."/Cape/0".$cape.".img/stand" . $stand . ".0.capeArm.png", $mainx + $zcapex, $necky + $zcapey);
 	
 // Create head

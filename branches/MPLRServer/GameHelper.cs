@@ -122,7 +122,7 @@ namespace MPLRServer
         public static bool is_skill_need_master_level(int pSkillID)
         {
             if (is_ignore_master_level_for_common(pSkillID)) return false;
-            if (pSkillID / 1000000 == 92 && pSkillID % 10000 == 0) return false;
+            if (pSkillID / 1000000 == 92) return false;
 
             int tmp = 10000 * pSkillID / 10000;
 
