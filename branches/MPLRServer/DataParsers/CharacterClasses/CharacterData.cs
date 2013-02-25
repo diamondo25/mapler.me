@@ -71,7 +71,14 @@ namespace MPLRServer
                 UnknownIntegerList.Add(vals);
             }
 
-            pPacket.ReadInt(); // V.126
+            for (int i = pPacket.ReadInt(); i > 0; i--) // V.126
+            {
+                pPacket.ReadInt(); // Potion pot ID
+                pPacket.ReadInt(); // Max value
+                pPacket.ReadInt(); // HP
+                pPacket.ReadInt(); // ??? (Not max value of MP)
+                pPacket.ReadInt(); // MP
+            }
 
             Inventory = new CharacterInventory();
             Inventory.Decode(pPacket);

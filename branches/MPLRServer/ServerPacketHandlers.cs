@@ -896,12 +896,15 @@ namespace MPLRServer
                 MySQL_Connection.Instance.RunQuery(string.Format("UPDATE characters SET chp = {0}, map = {1}, pos = {2} WHERE internal_id = {3}", hp, mapid, mappos, pConnection.CharacterInternalID));
             }
 
-            DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
-            Logger.WriteLine("Servertime: {0}", servertime.ToString());
-            pPacket.ReadInt(); // 100?
-            pPacket.ReadByte(); // 0
-            pPacket.ReadByte(); // 0
-            pPacket.ReadByte(); // 1
+            if (!isConnecting)
+            {
+                DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
+                Logger.WriteLine("Servertime: {0}", servertime.ToString());
+                pPacket.ReadInt(); // 100?
+                pPacket.ReadByte(); // 0
+                pPacket.ReadByte(); // 0
+                pPacket.ReadByte(); // 1
+            }
 
             pConnection.SendTimeUpdate();
         }
