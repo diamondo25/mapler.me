@@ -121,7 +121,7 @@ foreach ($cache as $row) {
 	}
 	$i++;
 ?>
-			<div class="character-brick profilec span3">
+			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 			<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 				<center>
 					<br />

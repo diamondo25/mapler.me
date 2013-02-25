@@ -16,6 +16,15 @@
 	margin-bottom: 10px;
 }
 
+.clickable-brick {
+	outline: none;
+	cursor: pointer;
+}
+
+.clickable-brick:hover {
+	outline: 1px solid gray;
+}
+
 #profile {
 margin-bottom: 30px;
 }
