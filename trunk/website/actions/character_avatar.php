@@ -245,16 +245,19 @@ else {
 $vslot = "";
 
 
-$faces = array("hot"); // array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
+//$faces = array("hot"); // array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
+$faces = array('default');
 
 // Create face
 $chosenface = $faces[rand(0, count($faces) - 1)];
+$chosenface_info = $chosenface == 'default' ? $chosenface : $chosenface.'_0';
+$chosenface_img = $chosenface == 'default' ? $chosenface : $chosenface.'.0';
 
 // Coordinates for the face
 if (isset($face)) {
 	$facearray = get_data($face);
-	$facex = -$facearray[$chosenface.'_0_face_origin_X'] - $facearray[$chosenface.'_0_face_map_brow_X'];
-	$facey = -$facearray[$chosenface.'_0_face_origin_Y'] - $facearray[$chosenface.'_0_face_map_brow_Y'];
+	$facex = -$facearray[$chosenface_info.'_face_origin_X'] - $facearray[$chosenface_info.'_face_map_brow_X'];
+	$facey = -$facearray[$chosenface_info.'_face_origin_Y'] - $facearray[$chosenface_info.'_face_map_brow_Y'];
 }
 
 // Coordinates for the hair
@@ -278,9 +281,9 @@ if (isset($hair)) {
 // Eyes
 if (isset($eyes)) {
 	$eyesarray = get_data($eyes);
-	$eyesx = -$eyesarray[$chosenface.'_0_default_origin_X'] - $eyesarray[$chosenface.'_0_default_map_brow_X'];
-	$eyesy = -$eyesarray[$chosenface.'_0_default_origin_Y'] - $eyesarray[$chosenface.'_0_default_map_brow_Y'];
-	$eyesz = $eyesarray[$chosenface.'_0_default_z'];
+	$eyesx = -$eyesarray[$chosenface_info.'_default_origin_X'] - $eyesarray[$chosenface_info.'_default_map_brow_X'];
+	$eyesy = -$eyesarray[$chosenface_info.'_default_origin_Y'] - $eyesarray[$chosenface_info.'_default_map_brow_Y'];
+	$eyesz = $eyesarray[$chosenface_info.'_default_z'];
 }
 
 // Mask
@@ -613,23 +616,23 @@ if (substr_count($vslot, 'H1H2H3H4H5H6') != 1) {
 
 // Create mask
 if (isset($mask) && $maskz == "accessoryFaceBelowFace") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface_img.".default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
 // Create face
-$face_location = $characterwz."/Face/000".$face.".img/".$chosenface.".0.face.png";
+$face_location = $characterwz."/Face/000".$face.".img/".$chosenface_img.".face.png";
 add_image($face_location, $mainx + $facex, $mainy + $facey);
 
 // Create mask
 if (isset($maskz) && $maskz == "accessoryFace") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface_img.".default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
 // Create eyes item
 if (isset($eyes) && $eyesz == "accessoryEye") {
-	$eyes_location = $characterwz."/Accessory/0".$eyes.".img/".$chosenface.".0.default.png";
+	$eyes_location = $characterwz."/Accessory/0".$eyes.".img/".$chosenface_img.".default.png";
 	add_image($eyes_location, $mainx + $eyesx, $mainy + $eyesy);
 }
 
@@ -641,7 +644,7 @@ if (isset($hair) && (substr_count($vslot, 'H1H2H3H4H5H6') != 1)) {
 
 // Create accessoryFaceOverFaceBelowCap
 if (isset($maskz) && $maskz == "accessoryFaceOverFaceBelowCap") {
-	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface.".0.default.png";
+	$mask_location = $characterwz."/Accessory/0".$mask.".img/".$chosenface_img.".default.png";
 	add_image($mask_location, $mainx + $maskx, $mainy + $masky);
 }
 
