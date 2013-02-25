@@ -1,5 +1,6 @@
-<?php require_once '../inc/header.php'; ?>
 <?php
+require_once '../inc/header.php';
+
 if (!$_loggedin):
 ?>
 
@@ -14,9 +15,9 @@ else:
 			<p>All official Mapler.me downloads including our client!</p>
 			<br/>
 			
-			<h1>Mapler.me Client</h1>
+			<h1>Mapler.me Client Installer</h1>
 			<p>Simplistic, easy to use, and always there for you, the Mapler.me client is used to update your characters, items, and more.</p>
-			<a href="//<?php echo $domain; ?>/downloads/client/MaplerMe.exe" class="btn btn-success btn-large"
+			<a href="//<?php echo $domain; ?>/downloads/client/setup.exe" class="btn btn-success btn-large"
 			style="display: block;
 width: auto;
 padding: 19px 24px;
@@ -27,7 +28,7 @@ text-align: center;
 -webkit-border-radius: 6px;
 -moz-border-radius: 6px;
 border-radius: 6px;"
-			>Download the latest client!</a>
+			>Download the latest client installer!</a>
 		</div>
 
 		<div class="span4 offset2">
@@ -41,6 +42,5 @@ border-radius: 6px;"
 		
 <?php
 endif;
+require_once '../inc/footer.php';
 ?>
-      
-<?php require_once '../inc/footer.php'; ?>
