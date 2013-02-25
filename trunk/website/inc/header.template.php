@@ -116,7 +116,7 @@ endif;
 		
 					<ul class="nav mobile pull-right">
 						<li class="menu dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu">•••</span></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
 
 							<ul class="dropdown-menu">
 <?php
