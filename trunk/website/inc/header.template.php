@@ -91,7 +91,7 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="inputUsername" name="username" placeholder="Username" style="width: 222px;"/>
+											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
@@ -115,7 +115,7 @@ endif;
 		
 					<ul class="nav mobile pull-right">
 						<li class="menu dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu">•••</span></a>
 
 							<ul class="dropdown-menu">
 <?php
@@ -141,7 +141,7 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="inputUsername" name="username" placeholder="Username" style="width: 222px;"/>
+											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">

@@ -8,7 +8,7 @@
                         </font>
                     </td>
                     <td align='right' style='padding:30px 30px 0 0'>
-                        <img src='https://dl.dropbox.com/u/22875564/mapler.me.resources/front1.gif' width='100' height='100' style='float:right;padding-left:20px;'></td>
+                        <img src='http://mapler.me/inc/img/icon.png' width='100' height='100' style='float:right;padding-left:20px;'></td>
                 </tr><tr><td align='center' height='100' colspan='2' style='border-top:1px solid #ddd;background:#fff'>
                         <a href='http://mapler.me/' style='padding:16px 25px 15px;border-radius:4px;text-decoration:none;background:#dd3b0e;border:1px solid #b9310b' target='_blank'>
                             <font size='4' color='#fff' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:18px;line-height:25px;font-weight:bold'>Start your adventure!</font></a>
