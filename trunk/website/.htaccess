@@ -20,6 +20,7 @@
 	RewriteRule ^terms/ terms.php
 	RewriteRule ^todo/ todo.php
 	RewriteRule ^contest/ contest.php
+	RewriteRule ^chat/ irc.php
 	
 	# image / ranking rewrites
 	

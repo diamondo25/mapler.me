@@ -3,13 +3,33 @@ require_once 'inc/header.php';
 
 if (!$_loggedin):
 ?>
+
+	<?php
+	$q = $__database->query("
+	SELECT 
+		assigned_to
+	FROM
+		`beta_invite_keys`
+	WHERE 
+		invite_key = 'BETADQ3A'
+	");
+
+	$check = $q->fetch_assoc();
+
+if (!isset($check['assigned_to'])) {
+?>
+<p class="lead alert alert-info">Contest: We're giving away one beta key! <a href="/contest/">Click here for more information.</a></p>
+<?php
+}
+?>
+	
       <div class="jumbotron">
       
       <div class="row">
 		  <div class="span12">
             <h1>Mapler.me is a MapleStory community and service providing innovative features to enhance your gaming experience!</h1>
 			<h2>Real-time avatars, character progress, and more is just a click away..</h2><br/>
-			<p><a href="#" class="btn btn-primary btn-action">Beta testing is coming soon!</a></p> 
+			<p><a href="/signup/" class="btn btn-primary btn-action">Sign up now! (Beta Testers)</a></p> 
 		  </div>
 		</div>	  		  
 		</div>
@@ -45,8 +65,8 @@ else:
 	<pre>Important: If you would to hide your character, go to Settings then click on the "Characters" tab.</pre></p>
 	<hr/>
 	<h2>You're all set!</h2>
-	<p>Features will continue to be added during the beta period and will be posted on this page! As this is testing, errors or issues are bound to spring up from the depths of El Nath. We will be adding a private chat shortly to allow for reporting of bugs, issues, or any other concerns.</p>
-	<p>For the time being, please email support@mapler.me with any questions.</p>
+	<p>Features will continue to be added during the beta period and will be posted on this page! As this is testing, errors or issues are bound to spring up from the depths of El Nath. You can discuss Mapler.me, as well as report bugs or issues in our <a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></p>
+	<p>If you prefer email, please contact support@mapler.me with any questions.</p>
 	<br/>
 	<p>- Mapler.me Team</p>
 	<br/>
