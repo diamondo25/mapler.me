@@ -1,8 +1,7 @@
 		<div style="clear:both;"></div>	
-		<footer style="">
+		<footer>
 			<p>
-				<a href="//<?php echo $domain; ?>/intro/">About</a>
-				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> <span style="display:none;">– In partnership with <a href="//nexon.net/" style="margin:0;">Nexon America</a></span> – 
+				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> – 
 				<?php echo $__database->QueriesRan(); ?> queries ran.
 			</p>
 		</footer>

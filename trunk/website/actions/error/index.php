@@ -33,31 +33,31 @@ break;
 # Error 403 - Access Forbidden
 case 403:
 $errorname = 'Error 403 - Access Forbidden';
-$errordesc = '<div class="page-header"><h1>Access Forbidden <small>(erm, *glares*)</small></h1></div>
+$errordesc = '<center><img src="http://mapler.me/inc/img/icon.png"/>
   <p>
-  <b>Access to the URL that you requested is forbidden.</b></p>';
+  Ooops! <b>http://'.$server_name.$requested_url.'</b> &#8212; is forbidden!</p>
+  <p>Please use the menu above to return to another page. ♥</p></center>';
 break;
 
 # Error 404 - Page Not Found
 case 404:
 $errorname = 'Error 404 - Page Not Found';
 $errordesc = '
-<div class="character-brick span12">
-<div class="caption">Oh no, 404! <small>(that page doesn\'t exist)</small></div><br/>
-<center><img src="https://dl.dropbox.com/u/22875564/mapler.me.resources/blackmage.gif"/>
+<center><img src="http://mapler.me/inc/img/icon.png"/>
   <p>
   Ooops! <b>http://'.$server_name.$requested_url.'</b> &#8212; cannot be found!</p>
   <p>Please use the menu above to return to another page. ♥</p></center>
-</div>';
+';
 break;
 
 # Error 500 - Server Configuration Error
 case 500:
 $errorname = 'Error 500 - Server Configuration Error';
-$errordesc = '<h1>Server Configuration Error</h1>
-  <h2>Error Type: 500</h2>
+$errordesc = '<center><img src="http://mapler.me/inc/img/icon.png"/>
   <p>
-  The URL that you requested &#8212; <a href="//'.$server_name.$requested_url.'">http://'.$server_name.$requested_url.'</a> &#8212; resulted in a server configuration error. It is possible that the condition causing the problem will be gone by the time you finish reading this.</p>';
+  Ooops! Something internally went wrong or the page had a boo-boo! Report this if this happens frequently.</p>
+  <p>Please use the menu above to return to another page. ♥</p></center>
+';
 break;
 
 # Unknown error
