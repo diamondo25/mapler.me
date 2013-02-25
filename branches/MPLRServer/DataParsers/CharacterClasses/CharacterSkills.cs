@@ -46,7 +46,14 @@ namespace MPLRServer
 
                     Logger.WriteLine("Found skill {0}, level {1}", skill.ID, skill.Level);
 
-                    SkillList.Add(skill.ID, skill);
+                    if (SkillList.ContainsKey(skill.ID)) // NEXON
+                    {
+                        Logger.WriteLine("Found duplicate skill!!!");
+                    }
+                    else
+                    {
+                        SkillList.Add(skill.ID, skill);
+                    }
                 }
             }
             else

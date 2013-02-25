@@ -49,7 +49,7 @@ namespace MPLRServer
             {
                 // New method of creating dates...
                 var id = pPacket.ReadUShort();
-                var date = pPacket.ReadInt();
+                var date = pPacket.ReadUInt();
 
                 CultureInfo provider = CultureInfo.InvariantCulture;
 
@@ -65,7 +65,10 @@ namespace MPLRServer
                     ft = 150842304000000000L; // GG Nexon.
                 }
 
-                Done.Add(id, ft);
+                if (!Done.ContainsKey(id))
+                    Done.Add(id, ft);
+                else
+                    Logger.WriteLine("Duplicate Quest (Done): {0}", id);
 
             }
 
@@ -85,7 +88,10 @@ namespace MPLRServer
             {
                 ushort id = pPacket.ReadUShort();
                 string value = pPacket.ReadString();
-                PartyQuestsRunning.Add(id, value);
+                if (!PartyQuestsRunning.ContainsKey(id))
+                    PartyQuestsRunning.Add(id, value);
+                else
+                    Logger.WriteLine("Duplicate PQ (Running): {0}", id);
             }
         }
 
@@ -96,7 +102,10 @@ namespace MPLRServer
             {
                 ushort id = pPacket.ReadUShort();
                 long time = pPacket.ReadLong();
-                PartyQuestsDone.Add(id, time);
+                if (!PartyQuestsDone.ContainsKey(id))
+                    PartyQuestsDone.Add(id, time);
+                else
+                    Logger.WriteLine("Duplicate PQ (Done): {0}", id);
             }
         }
     }

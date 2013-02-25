@@ -1,8 +1,6 @@
 <?php
 require_once 'inc/header.php';
-?>
 
-<?php
 $q = $__database->query("
 SELECT 
 	assigned_to
@@ -13,12 +11,13 @@ WHERE
 ");
 
 $check = $q->fetch_assoc();
-?>
 
-<?php
 if (isset($check['assigned_to'])) {
-	echo '<p class="lead alert alert-danger">Too late! Someone has won the contest!</p>';
+?>
+<p class="lead alert alert-danger">Too late! Someone has won the contest!</p>
+<?php
 }
+else {
 ?>
 
 <center><img src="//<?php echo $domain; ?>/inc/img/contest.png"/>
@@ -36,14 +35,19 @@ width: 115px;" value="Go!"/>
 </div>
 </form>
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['beta'] == 'BETADQ3A') {
-	echo '<p class="lead alert alert-success">Congrats! You\'ve guessed correctly. Go <a href="//'.$domain.'/signup/"/>sign up now!</a></p>';
-}
 
-else if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['beta'] !== 'BETADQ3A') {
-	echo '<p class="lead alert alert-danger">Opps! You\'ve guessed incorrectly. Try again!</p>';
-}
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['beta'])) {
+		if ($_POST['beta'] === 'BETADQ3A') {
 ?>
+<p class="lead alert alert-success">Congrats! You've guessed correctly. Go <a href="//<?php echo $domain; ?>/signup/">sign up now!</a></p>
 <?php
+		}
+		else {
+?>
+<p class="lead alert alert-danger">Opps! You've guessed incorrectly. Try again!</p>
+<?php
+		}
+	}
+}
 require_once 'inc/footer.php';
 ?>
