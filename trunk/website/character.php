@@ -318,6 +318,11 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <?php InventoryPosCalc(1, 1); ?>
 }
 
+/* Eye acc */
+.character_equips .slot3 {
+<?php InventoryPosCalc(2, 1); ?>
+}
+
 /* clothes */
 .character_equips .slot5 {
 <?php InventoryPosCalc(3, 1); ?>
