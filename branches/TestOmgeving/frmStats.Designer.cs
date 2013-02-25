@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lblSentData = new System.Windows.Forms.Label();
             this.lblSentPackets = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.lblSentData = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.lblReceivedPackets = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -57,24 +57,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Sent";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Amount of data:";
-            // 
-            // lblSentData
-            // 
-            this.lblSentData.AutoSize = true;
-            this.lblSentData.Location = new System.Drawing.Point(145, 16);
-            this.lblSentData.Name = "lblSentData";
-            this.lblSentData.Size = new System.Drawing.Size(22, 13);
-            this.lblSentData.TabIndex = 1;
-            this.lblSentData.Text = "0 b";
-            // 
             // lblSentPackets
             // 
             this.lblSentPackets.AutoSize = true;
@@ -92,6 +74,24 @@
             this.label4.Size = new System.Drawing.Size(49, 13);
             this.label4.TabIndex = 2;
             this.label4.Text = "Packets:";
+            // 
+            // lblSentData
+            // 
+            this.lblSentData.AutoSize = true;
+            this.lblSentData.Location = new System.Drawing.Point(145, 16);
+            this.lblSentData.Name = "lblSentData";
+            this.lblSentData.Size = new System.Drawing.Size(22, 13);
+            this.lblSentData.TabIndex = 1;
+            this.lblSentData.Text = "0 b";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(82, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Amount of data:";
             // 
             // groupBox2
             // 

@@ -54,13 +54,14 @@
             this.richTextBox1.Location = new System.Drawing.Point(12, 12);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(186, 40);
+            this.richTextBox1.Size = new System.Drawing.Size(260, 70);
             this.richTextBox1.TabIndex = 2;
-            this.richTextBox1.Text = "This client is currently in BETA.\n\nLogging in will update your character.";
+            this.richTextBox1.Text = "This client is currently in BETA.\n\nLogging in or changing channels will update yo" +
+    "ur character. More instructions are avalible on the site!";
             // 
             // btnLaunch
             // 
-            this.btnLaunch.Location = new System.Drawing.Point(12, 58);
+            this.btnLaunch.Location = new System.Drawing.Point(12, 88);
             this.btnLaunch.Name = "btnLaunch";
             this.btnLaunch.Size = new System.Drawing.Size(306, 25);
             this.btnLaunch.TabIndex = 3;
@@ -71,7 +72,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 86);
+            this.label3.Location = new System.Drawing.Point(12, 118);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 13);
             this.label3.TabIndex = 4;
@@ -80,26 +81,26 @@
             // lblLastUpdate
             // 
             this.lblLastUpdate.AutoSize = true;
-            this.lblLastUpdate.Location = new System.Drawing.Point(87, 86);
+            this.lblLastUpdate.Location = new System.Drawing.Point(87, 118);
             this.lblLastUpdate.Name = "lblLastUpdate";
-            this.lblLastUpdate.Size = new System.Drawing.Size(35, 13);
+            this.lblLastUpdate.Size = new System.Drawing.Size(136, 13);
             this.lblLastUpdate.TabIndex = 5;
-            this.lblLastUpdate.Text = "label1";
+            this.lblLastUpdate.Text = "(will appear once logged in)";
             // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(330, 108);
+            this.ClientSize = new System.Drawing.Size(330, 140);
             this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnLaunch);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmMain";
-            this.Text = "Mapler.me Client";
+            this.Text = "Mapler.me - v1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
