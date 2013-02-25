@@ -16,10 +16,11 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
 	<script src="//isotope.metafizzy.co/jquery.isotope.min.js" type="text/javascript"></script>
 	
-	<script type="text/javascript">
+<script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-36861298-1']);
+  _gaq.push(['_setDomainName', 'mapler.me']);
   _gaq.push(['_trackPageview']);
 
   (function() {
