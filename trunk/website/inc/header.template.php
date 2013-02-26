@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    
+<head>
+	<?php
+		if (!isset($__url_useraccount)):
+	?>
 	<title>Mapler.me &middot; MapleStory Social Network</title>
+	<?php
+		else:
+	?>
+	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
+	<?php
+		endif;
+	?>  
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me, Mapler Me, Mapler.me, Nexon, Nexon America,
-	henesys, leafre, southperry, maplestory rankings, maplestory" />
-	<meta name="description" content="Mapler.me is a MapleStory community and service providing innovative features to enhance your gaming experience!" />
+	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS, 
+	
+	<?php
+		if (isset($__url_useraccount)):
+	?>
+	<?php echo $__url_useraccount->GetNickname(); ?>, <?php echo $__url_useraccount->GetNickname(); ?>'s Mapler.me
+	<?php
+		endif;
+	?>
+	" />
+	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
+	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico">
 </head>
 
 <body>
@@ -49,9 +69,9 @@ if (isset($__url_useraccount)):
 else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
-								<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
+								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li>
+								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li><?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></li>
 <?php
