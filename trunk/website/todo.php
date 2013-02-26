@@ -31,8 +31,8 @@ else:
 	<li>Make sure email notification works when signing up.</li>
 	<li class="done">Add password change in settings.</li>
 	<li class="done">Add temporary content to front page when logged in until stream is actively being worked on.</li>
-	<li>Add a private chat for beta testers to chat in as well as gathering info on bugs / glitches. Make all messages logged. (Will be removed after testing).</li>
-	<li>Change usernames -> email, and profile username -> nickname.</li>
+	<li class="done">Add a private chat for beta testers to chat in as well as gathering info on bugs / glitches. Make all messages logged. (Will be removed after testing).</li>
+	<li class="done">Change usernames -> email, and profile username -> nickname.</li>
 	</ul>
 	</div>
 	
@@ -44,13 +44,13 @@ else:
 	<li>Stream (front-page while logged in)</li>
 	<li class="done">Create a download page for the Client / any other downloads. (Wallpapers? lol)</li>
 	<li class="done">Finish Settings page.</li>
-	<li>Add email notifications (can be set on and off in settings)</li>
+	<li class="done">Add email notifications (can be set on and off in settings)</li>
 	<li>Contact site/community developers to use our service in place of Nexon's rankings. Form partnerships.</li>
 	</ul>
 	
 	<ul class="span2">
 	<b>Client</b><br/><br/>
-	<li>Finalize the client for Beta members. Remove local logging, have any exceptions / issue create a remote log file.</li>
+	<li class="done">Finalize the client for Beta members. Remove local logging, have any exceptions / issue create a remote log file.</li>
 	</ul>
 	</div>
 	

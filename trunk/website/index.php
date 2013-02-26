@@ -53,6 +53,8 @@ else:
 <?php
 	endif;
 ?>
+	<div class="row">
+	<div class="span9">
 	<h1>Welcome,<?php echo $_loginaccount->GetFullName(); ?>!</h1>
 	<p>This page includes some simple steps on how to get started!</p>
 	
@@ -71,6 +73,33 @@ else:
 	<p>- Mapler.me Team</p>
 	<br/>
 	<blockquote class="pull-right">P.S: Your main character will display at the top of the page when added!</blockquote>
+	</div>
+	
+	<div class="span3">
+		<h1>Known Issues:</h1>
+		<ul>
+		<h3>General:</h3>
+		<li>There is not an option to hide individual items or inventories. This will be added soon.</li>
+		<li>Hiding a character does not hide it's page (still viewable), although safe unless known. This will be fixed asap.</li>
+		<li>Hiding a character does not disable it's image codes (avatar, card, and stats). This will be a toggle-able option.</li>
+		
+		<h3>Client:</h3>
+		<li>Available is misspelled on the client.</li>
+		
+		<h3>Potential:</h3>
+		<li>Potential on items isn't accurate.</li>
+		<li>Bonus potential counts as normal potential.</li>
+		</ul>
+	</div>
+	
+	<div class="span3">
+	<h1>Planned Features:</h1>
+		<ul>
+		<li>The ability to hide portions of a character page completely. (Equipment, Stats, or Skills).</li>
+		</ul>
+	</div>
+	
+	</div>
 
 </p>
 <?php
