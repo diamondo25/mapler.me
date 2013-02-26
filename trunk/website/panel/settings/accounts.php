@@ -102,7 +102,7 @@ WHERE
 <ul>
 <?php while ($row = $q->fetch_assoc()): ?>
 <div class="btn-group">
-  <button class="btn"><?php echo $row['username']; ?></button>
+  <button class="btn"><?php echo $row['name']; ?></button>
 </div>
 	
 <?php endwhile; ?>
