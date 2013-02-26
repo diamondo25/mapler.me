@@ -30,7 +30,7 @@
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
-	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico">
+	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.gif">
 </head>
 
 <body>
