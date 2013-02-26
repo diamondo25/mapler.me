@@ -87,9 +87,9 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 
 $q = $__database->query("
 SELECT 
-	username
+	name
 FROM 
-	users
+	users_weblogin
 WHERE
 	account_id = ".$_loginaccount->GetId()."
 ");
