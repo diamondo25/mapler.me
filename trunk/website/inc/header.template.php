@@ -191,3 +191,14 @@ endif;
 	</div>
 
 	<div class="container">
+	
+	<?php
+	$ip = "mc.craftnet.nl";
+	$onlinetext = "Mapler.me's servers are currently online!" ;
+	$offlinetext = "Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled." ;
+	$port = "23710";
+
+	if(!@fsockopen($ip,$port,$errno,$errstr,1)) {
+		echo "<p class='lead alert alert-danger'>".$offlinetext."</p>";
+		}
+	?>
