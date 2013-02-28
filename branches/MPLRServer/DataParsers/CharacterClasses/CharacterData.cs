@@ -71,6 +71,7 @@ namespace MPLRServer
                 UnknownIntegerList.Add(vals);
             }
 
+            // Magical potion pots!!!
             for (int i = pPacket.ReadInt(); i > 0; i--) // V.126
             {
                 pPacket.ReadInt(); // Potion pot ID
@@ -78,6 +79,9 @@ namespace MPLRServer
                 pPacket.ReadInt(); // HP
                 pPacket.ReadInt(); // ??? (Not max value of MP)
                 pPacket.ReadInt(); // MP
+
+                pPacket.ReadLong(); // Start date O.o?
+                pPacket.ReadLong(); // End date O.o?
             }
 
             Inventory = new CharacterInventory();

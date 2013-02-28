@@ -11,11 +11,13 @@ namespace MPLRServer
     class Acceptor
     {
         TcpListener _listener;
+        Action<Socket> _action;
 
-        public Acceptor(ushort pPort)
+        public Acceptor(ushort pPort, Action<Socket> pAction = null)
         {
             _listener = new TcpListener(IPAddress.Any, pPort);
             _listener.Start();
+            _action = pAction;
             StartAccept();
         }
 
@@ -27,7 +29,8 @@ namespace MPLRServer
         void EndAccept(IAsyncResult pIAR)
         {
             Socket sock = _listener.EndAcceptSocket(pIAR);
-            new ClientConnection(sock);
+            if (_action != null)
+                _action(sock);
             StartAccept();
         }
     }

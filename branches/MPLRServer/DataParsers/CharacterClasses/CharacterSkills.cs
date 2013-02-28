@@ -44,6 +44,12 @@ namespace MPLRServer
                         skill.MasterLevel = -1;
                     }
 
+                    // Added V.129
+                    if (skill.ID == 40020002 || skill.ID == 80000004)
+                    {
+                        Logger.WriteLine("[Skill] V.129 addition value: {0}", pPacket.ReadInt()); // Probably maxlevel xd
+                    }
+
                     Logger.WriteLine("Found skill {0}, level {1}", skill.ID, skill.Level);
 
                     if (SkillList.ContainsKey(skill.ID)) // NEXON

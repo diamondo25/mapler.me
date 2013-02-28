@@ -43,8 +43,15 @@ namespace MPLRServer
 
             Clients = new List<ClientConnection>();
 
-            Acceptor accept = new Acceptor(23710);
-            accept.StartAccept();
+            // For clients
+            Acceptor accept = new Acceptor(23710, sock =>
+            {
+                new ClientConnection(sock);
+            });
+
+            // For online check!
+            Acceptor acceptCheck = new Acceptor(23711, null);
+
             while (true)
             {
                 string cmd = Console.ReadLine();

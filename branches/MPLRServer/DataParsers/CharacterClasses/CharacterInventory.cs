@@ -17,8 +17,8 @@ namespace MPLRServer
                 Items = new Dictionary<byte, ItemBase>();
             }
         }
-
-        public const byte EQUIP_INVENTORIES = 8; // DAFUCK PEOPLE
+        // V.129: +1 (Kanna/Hayato)
+        public const byte EQUIP_INVENTORIES = 9; // DAFUCK PEOPLE
         public const byte NORMAL_INVENTORIES = 4;
         public const byte INVENTORIES = NORMAL_INVENTORIES + 1;
 

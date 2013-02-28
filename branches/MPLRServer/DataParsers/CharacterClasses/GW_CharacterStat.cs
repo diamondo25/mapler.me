@@ -107,7 +107,8 @@ namespace MPLRServer
                 a1 / 100 == 51 || a1 == 5000 || // Mihile
                 a1 / 100 == 61 || a1 == 6000 || // Kaiser
                 a1 / 100 == 65 || a1 == 6001 || // Angelic Buster
-                a1 / 10 == 57 || a1 == 508      // Jett
+                a1 / 10 == 57  || a1 == 508  || // Jett
+                a1 / 1000 == 4 // JMS specials: Kanna and Hayato
                 )
             {
                 byte amnt = pPacket.ReadByte();

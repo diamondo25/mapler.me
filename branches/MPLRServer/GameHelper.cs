@@ -130,7 +130,19 @@ namespace MPLRServer
                 (tmp / 1000000 == 92) && tmp % 10000 == 0) return false;
 
             tmp = pSkillID / 10000;
-            if (tmp == 8000) return false;
+            if (tmp == 8000
+              || (tmp % 1000) == 0
+              || tmp == 2001
+              || tmp == 2002
+              || tmp == 3001
+              || tmp == 2003
+              || tmp == 5000
+              || tmp == 2004
+              || tmp == 6000
+              || tmp == 6001
+              || tmp == 4001 // Added!
+              || tmp == 4002 
+                ) return false;
 
             if (IsBeginnerJob(tmp)) return false;
             
