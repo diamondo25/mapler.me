@@ -20,3 +20,23 @@ else:
 <?php
 	endif;
 ?>
+
+Contest display / check if something is null.
+	<?php
+	$q = $__database->query("
+	SELECT 
+		assigned_to
+	FROM
+		`beta_invite_keys`
+	WHERE 
+		invite_key = 'BETADQ3A'
+	");
+
+	$check = $q->fetch_assoc();
+
+if (!isset($check['assigned_to'])) {
+?>
+<p class="lead alert alert-info">Contest: We're giving away one beta key! <a href="/contest/">Click here for more information.</a></p>
+<?php
+}
+?>

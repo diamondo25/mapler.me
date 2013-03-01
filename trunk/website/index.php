@@ -2,27 +2,7 @@
 require_once 'inc/header.php';
 
 if (!$_loggedin):
-?>
-
-	<?php
-	$q = $__database->query("
-	SELECT 
-		assigned_to
-	FROM
-		`beta_invite_keys`
-	WHERE 
-		invite_key = 'BETADQ3A'
-	");
-
-	$check = $q->fetch_assoc();
-
-if (!isset($check['assigned_to'])) {
-?>
-<p class="lead alert alert-info">Contest: We're giving away one beta key! <a href="/contest/">Click here for more information.</a></p>
-<?php
-}
-?>
-	
+?>	
       <div class="jumbotron">
       
       <div class="row">
@@ -42,20 +22,88 @@ else:
 	$has_characters = !empty($char_config['main_character']);
 
 ?>
+
+    <?php
+    
+$q = $__database->query("
+SELECT
+	*
+FROM
+	social_statuses");
+	
+$cache = array();
+while ($row = $q->fetch_assoc()) {
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
+			continue;
+		}
+	}
+	$cache[] = $row;
+}
+
+$q->free();
+$status = $q->fetch_assoc();
+
+// What the fuck is broken?.. (relevent time script)
+// $ptime = $status['timestamp'];
+// function time_elapsed_string($ptime) {
+//    $etime = abs(time() - $ptime);
+//    
+//    if ($etime < 1) {
+//        return '0 seconds';
+//    }
+//    
+//    $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
+//                30 * 24 * 60 * 60       =>  'month',
+//                24 * 60 * 60            =>  'day',
+//                60 * 60                 =>  'hour',
+//                60                      =>  'minute',
+//                1                       =>  'second'
+//                );
+//    
+//    foreach ($a as $secs => $str) {
+//        $d = $etime / $secs;
+//        if ($d >= 1) {
+//            $r = round($d);
+//            return $r . ' ' . $str . ($r > 1 ? 's' : '');
+//        }
+//    }
+// }
+
+?>
+<div class="row">
+<?php
+
+// printing table rows
+
+foreach ($cache as $row) {
+
+?>
+			<div class="status span6">
+			<div class="header"><?php echo $row['nickname']; ?> said: <span class="pull-right">		
+				<?php // echo time_elapsed_string($ptime); ?>
+			</span></div>
+				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
+					<?php echo $row['content']; ?>
+			</div>
+        
+<?php       
+}
+?>
+</div>
 <p class="lead">
-<?php 
+	<div class="row">
+	<div class="span9">
+	<h1>Welcome,<?php echo $_loginaccount->GetFullName(); ?>!<?php 
 	if ($has_characters):
 		$main_character_name = $char_config['main_character'];
 		$main_character_image = '//'.$domain.'/avatar/'.$main_character_name;
 
 ?>
-	<center><img id="default_character" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/></center>
+	<center><img id="default_character" class="pull-right" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/></center>
 <?php
 	endif;
-?>
-	<div class="row">
-	<div class="span9">
-	<h1>Welcome,<?php echo $_loginaccount->GetFullName(); ?>!</h1>
+?></h1>
 	<p>This page includes some simple steps on how to get started!</p>
 	
 	<p>Step 1) To begin using Mapler.me, first head to <button class="btn"><a href="//<?php echo $domain; ?>/panel/settings/accounts/">Settings -> Accounts</a></button> and connect your Nexon America account with Mapler.me. When logging into
@@ -72,7 +120,7 @@ else:
 	<br/>
 	<p>- Mapler.me Team</p>
 	<br/>
-	<blockquote class="pull-right">P.S: Your main character will display at the top of the page when added!</blockquote>
+	<blockquote class="pull-right">P.S: Your main character will display at the right of the page when added!</blockquote>
 	</div>
 	
 	<div class="span3">

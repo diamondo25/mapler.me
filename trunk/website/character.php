@@ -26,8 +26,23 @@ WHERE
 	name = '".$__database->real_escape_string($_GET['name'])."'
 ");
 
+$cache = array();
+
+$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
+while ($character_info = $q->fetch_assoc()) {
+	if (isset($character_display_options[$character_info['name']])) {
+		if ($character_display_options[$character_info['name']] == 2) { // Always hide... :)
+			continue;
+		}
+	}
+	$cache[] = $row;
+}
+
 if ($q->num_rows == 0) {
-	$q->free();
+$q->free();
 ?>
 <p class="lead alert-error alert">Character not found! The character may have been removed or misspelled.</p>
 <?php
@@ -354,6 +369,11 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <?php InventoryPosCalc(3, 2); ?>
 }
 
+/* Emblem */
+.character_equips .slot61 {
+<?php InventoryPosCalc(5, 1); ?>
+}
+
 /* 2nd pendent (cash) - Note to Erwin: There's a different UI that this requires (but should be fine without it anyway) */
 .character_equips .slot65 {
 <?php InventoryPosCalc(2, 2); ?>
@@ -476,6 +496,11 @@ $inv_extra_offx = $inv_extra_offy = 0;
 /* Magic Scales */
 .character_equips .slot28 {
 <?php InventoryPosCalc(3, 1); ?>
+}
+
+/* Smart Pet Pouch */
+.character_equips .slot62 {
+<?php InventoryPosCalc(4, 1); ?>
 }
 
 
@@ -839,7 +864,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 }
 
 #item_info .req_job {
-	font-size: 11px;
+	font-size: 10px;
 	color: white;
 	
 	padding: 2px;

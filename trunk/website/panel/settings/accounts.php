@@ -4,9 +4,9 @@
 $maycheck = true;
 if ($_loginaccount->GetConfigurationOption('last_account_addition', 0) != 0) {
 	$tmp = strtotime($_loginaccount->GetConfigurationOption('last_account_addition'));
-	$tmp += 5 * 60; // 5 minutes
+	$tmp += 4 * 60; // 3 minutes
 	
-	if (time() < $tmp) { // 5 minutes
+	if (time() < $tmp) { // 3 minutes
 		$maycheck = false;
 		$minutes_timeout = ceil(($tmp - time()) / 60);
 	}
@@ -17,7 +17,7 @@ if ($_loginaccount->GetConfigurationOption('last_account_addition', 0) != 0) {
 if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'], $_POST['password'])) {
 	// Oh jolly
 	$maycheck = false;
-	$minutes_timeout = 5;
+	$minutes_timeout = 3;
 	$_loginaccount->SetConfigurationOption('last_account_addition', date("Y-m-d H:i:s"));
 
 	$post_values = array(
@@ -59,10 +59,10 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 		$real_username = $matches[1];
 		
 		
-		$q = $__database->query("SELECT 1 FROM users WHERE username = '".$__database->real_escape_string($real_username)."' UNION SELECT 1 FROM users_weblogin WHERE name = '".$__database->real_escape_string($real_username)."'");
+		$q = $__database->query("SELECT 1 FROM users_weblogin WHERE name = '".$__database->real_escape_string($real_username)."'");
 		if ($q->num_rows != 0) {
 ?>
-<p class="lead alert-error alert">This account has already been added to a Mapler.me account!</p>
+<p class="lead alert-error alert">This account has already been added to a Mapler.me account! If the account is not shown above and you are still encountering this error, please contact support!</p>
 <?php
 		
 		}
@@ -110,7 +110,8 @@ WHERE
 <div style="clear:both;"></div>
 <h3>Connect an account:</h3>
 <?php if (!$maycheck): ?>
-<p class="lead alert-error alert">You have to wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?>...</p>
+<p class="lead alert-error alert">Error: You have to wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?> before trying again...</p>
+<p>Reason: When you connect a Nexon account, you are logged in through Nexon's login API which can use up their resources. Additionally, to allow Nexon to track players connecting their accounts to Mapler.me, it also states that the login came from here. To prevent abuse or damage, we permit one attempt every three minutes.
 <?php else: ?>
 		<form class="form-horizontal" action="" method="post">
 			<div class="control-group">
@@ -127,7 +128,7 @@ WHERE
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<button type="submit" class="btn">Sign in</button>
+					<button type="submit" class="btn btn-primary">Connect this account to Mapler.me</button>
 				</div>
 			</div>
 		</form>

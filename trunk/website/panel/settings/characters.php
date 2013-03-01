@@ -103,9 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 
 			<p class="lead">Characters <sub>(Main character and character settings)</sub></p>
 			<form class="form-horizontal" method="post">
-			<div class="control-group">
-					<button type="submit" class="btn">Save</button>
-			</div>
 <?php
 foreach ($cache as $row) {
 	if ($char_config['main_character'] == null) {
@@ -137,5 +134,8 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
+			<div class="control-group">
+					<button type="submit" class="btn btn-primary">Save changes?</button>
+			</div>
 			</form>
 		</div>
