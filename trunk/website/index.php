@@ -27,9 +27,11 @@ else:
     
 $q = $__database->query("
 SELECT
-	*
+	*,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
-	social_statuses");
+	social_statuses
+");
 	
 $fixugh = '0';
 	
@@ -46,30 +48,27 @@ while ($row = $q->fetch_assoc()) {
 $q->free();
 
 // What the fuck is broken?.. (relevent time script)
-// $ptime = $status['timestamp'];
-// function time_elapsed_string($ptime) {
-//    $etime = abs(time() - $ptime);
-//    
-//    if ($etime < 1) {
-//        return '0 seconds';
-//    }
-//    
-//    $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
-//                30 * 24 * 60 * 60       =>  'month',
-//                24 * 60 * 60            =>  'day',
-//                60 * 60                 =>  'hour',
-//                60                      =>  'minute',
-//                1                       =>  'second'
-//                );
-//    
-//    foreach ($a as $secs => $str) {
-//        $d = $etime / $secs;
-//        if ($d >= 1) {
-//            $r = round($d);
-//            return $r . ' ' . $str . ($r > 1 ? 's' : '');
-//        }
-//    }
-// }
+function time_elapsed_string($etime) {
+   if ($etime < 1) {
+       return '0 seconds';
+   }
+   
+   $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
+               30 * 24 * 60 * 60       =>  'month',
+               24 * 60 * 60            =>  'day',
+               60 * 60                 =>  'hour',
+               60                      =>  'minute',
+               1                       =>  'second'
+               );
+   
+   foreach ($a as $secs => $str) {
+       $d = $etime / $secs;
+       if ($d >= 1) {
+           $r = round($d);
+           return $r . ' ' . $str . ($r > 1 ? 's' : '');
+       }
+   }
+}
 
 ?>
 <div class="row">
@@ -82,7 +81,7 @@ foreach ($cache as $row) {
 ?>
 			<div class="status span6">
 			<div class="header"><?php echo $row['nickname']; ?> said: <span class="pull-right">		
-				<?php // echo time_elapsed_string($ptime); ?>
+				<?php echo time_elapsed_string($row['secs_since']); ?> ago
 			</span></div>
 				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
 					<?php echo $row['content']; ?>
@@ -95,7 +94,8 @@ foreach ($cache as $row) {
 <p class="lead">
 	<div class="row">
 	<div class="span9">
-	<h1>Welcome,<?php echo $_loginaccount->GetFullName(); ?>!<?php 
+	<h1>Welcome, <?php echo $_loginaccount->GetFullName(); ?>!
+<?php 
 	if ($has_characters):
 		$main_character_name = $char_config['main_character'];
 		$main_character_image = '//'.$domain.'/avatar/'.$main_character_name;

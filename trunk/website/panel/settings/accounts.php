@@ -69,11 +69,11 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 		else {
 			if (strtolower($real_username) != strtolower($post_values['userID'])) { 
 ?>
-<p class="lead alert-info alert">Your 'real' username is <strong><?php echo $real_username; ?></strong>. You can use this instead of your e-mail address to login on MapleStory!</p>
+<p class="lead alert-info alert">TIP: Your 'real' username is <strong><?php echo $real_username; ?></strong>. You can use this instead of your e-mail address to login on MapleStory!</p>
 <?php
 			}
 			
-			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$_loginaccount->GetId().", '".$__database->real_escape_string($real_username)."')");
+			$__database->query("INSERT INTO users_weblogin VALUES (NULL, ".$_loginaccount->GetId().", '".$__database->real_escape_string($real_username)."', '".$__database->real_escape_string($_POST['username'])."')");
 		
 ?>
 <p class="lead alert-success alert">Your MapleStory account has been successfully added to your Mapler.me account!</p>
@@ -86,10 +86,19 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 
 
 $q = $__database->query("
-SELECT 
+SELECT
 	name
 FROM 
 	users_weblogin
+WHERE
+	account_id = ".$_loginaccount->GetId()."
+	
+UNION
+
+SELECT
+	username
+FROM 
+	users
 WHERE
 	account_id = ".$_loginaccount->GetId()."
 ");
@@ -100,11 +109,10 @@ WHERE
 <p>In order to connect your account to Mapler.me, you must login to your account below. All confidential information is discarded after connecting an account.</p>
 <p class="alert-info alert">Note that if you are using your e-mail address to login into MapleStory, your username shown on this page will not be the same.</p>
 <ul>
-<?php while ($row = $q->fetch_assoc()): ?>
+<?php while ($row = $q->fetch_row()): ?>
 <div class="btn-group">
-  <button class="btn"><?php echo $row['name']; ?></button>
+  <button class="btn" onclick="?removeid=<?php echo $row[1]; ?>"><?php echo $row[2] != '' ? ($row[2].' ('.$row[1].')') : $row[1]; ?></button>
 </div>
-	
 <?php endwhile; ?>
 </ul>
 <div style="clear:both;"></div>

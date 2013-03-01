@@ -189,7 +189,15 @@ namespace MPLRServer
                 // Select Channel
                 tmp.Add(0x001B, new Handler((pClient, pPacket) =>
                 {
-                    pPacket.ReadByte(); // 2
+                    byte requestType = pPacket.ReadByte();
+                    if (requestType == 1)
+                    {
+                        // Logging in via web.... D:
+                        pPacket.ReadString(); // Login key
+                        pPacket.Skip(16); // CC key
+                        pPacket.Skip(4); // Unknown, 0? Prolly login mode
+                        pPacket.Skip(1); // ...?
+                    }
                     pClient.WorldID = pPacket.ReadByte();
                     byte channel = pPacket.ReadByte(); // Channel ID
                     pPacket.ReadInt(); // Internal IP 0.0?

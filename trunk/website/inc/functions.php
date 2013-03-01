@@ -629,6 +629,8 @@ function GetWZItemTypeName($id) {
 		case 151:
 		case 152:
 		case 153:
+		case 154: // 1542061 is the only wep, 1532061 is missing... NEXON
+		case 155: // Fans of the wall, oh wait
 		case 160:
 		case 170:
 			return "Weapon";
