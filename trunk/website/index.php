@@ -32,6 +32,11 @@ FROM
 	social_statuses");
 	
 $cache = array();
+
+$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
 while ($row = $q->fetch_assoc()) {
 	if (isset($character_display_options[$row['name']])) {
 		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
@@ -42,7 +47,6 @@ while ($row = $q->fetch_assoc()) {
 }
 
 $q->free();
-$status = $q->fetch_assoc();
 
 // What the fuck is broken?.. (relevent time script)
 // $ptime = $status['timestamp'];
