@@ -250,6 +250,16 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
 }
 
+
+<?php
+
+// PET STUFF
+$inv_pos_offx = 10; // Diff offsets
+$inv_pos_offy = 22;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+?>
+
 </style>
 
 <?php
