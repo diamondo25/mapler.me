@@ -12,10 +12,10 @@ function BuildURL($name, $url) {
 
 		<div class="span2">
 			<ul class="nav nav-tabs nav-stacked">
-				<?php BuildURL('General', '/panel/settings/general/'); ?>
-				<?php BuildURL('Privacy', '/panel/settings/privacy/'); ?>
-				<?php BuildURL('Accounts', '/panel/settings/accounts/'); ?>
-				<?php BuildURL('Characters', '/panel/settings/characters/'); ?>
+				<?php BuildURL('General', '/settings/general/'); ?>
+				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
+				<?php BuildURL('Accounts', '/settings/accounts/'); ?>
+				<?php BuildURL('Characters', '/settings/characters/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>
 				<?php //BuildURL('Memberships', '/panel/settings/memberships/'); ?>
 			</ul>

@@ -134,9 +134,9 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
-	<br/>
-			<div class="control-group">
-					<button type="submit" class="btn btn-primary">Save changes?</button>
+	
+			<div class="control-group span2" style="clear:both;">
+					<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>
 			</div>
 			</form>
 		</div>

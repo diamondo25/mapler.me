@@ -5,7 +5,7 @@ if (!IsLoggedin() || !isset($_GET['page'], $_GET['type'])) {
 	header('Location: http://'.$domain.'/');
 }
 
-$page = '../panel/'.($_GET['type'] == '' ? '' : stripslashes($_GET['type']).'/').stripslashes($_GET['page']).'.php';
+$page = '../settings/'.($_GET['type'] == '' ? '' : stripslashes($_GET['type']).'/').stripslashes($_GET['page']).'.php';
 if (!file_exists($page)) {
 	header('Location: http://'.$domain.'/');
 	die();
@@ -13,7 +13,7 @@ if (!file_exists($page)) {
 
 require_once 'header.template.php';
 
-if ($_GET['type'] == 'settings') {
+if ($_GET['type'] == '') {
 	require_once 'panel_settings_menu.php';
 }
 

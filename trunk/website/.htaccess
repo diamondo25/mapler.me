@@ -4,8 +4,8 @@
 	RewriteEngine On
 	
 	
-	RewriteRule ^panel/settings/([^.]*)/ /inc/handle_panel.php?page=$1&type=settings [L]
-	RewriteRule ^panel/([^.]*)/ /inc/handle_panel.php?page=$1&type= [L]
+	RewriteRule ^/settings/([^.]*)/ /inc/handle_panel.php?page=$1&type=settings [L]
+	RewriteRule ^settings/([^.]*)/ /inc/handle_panel.php?page=$1&type= [L]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME}\.php -f 

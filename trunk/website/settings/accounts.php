@@ -1,4 +1,6 @@
 		<div class="span7">
+		
+		<p class="lead alert alert-danger">Notice: Connecting accounts currently disabled. Check back later.</p>
 <?php
 
 $maycheck = true;
@@ -89,16 +91,15 @@ $q = $__database->query("
 SELECT
 	name
 FROM 
-	users_weblogin
+	`users_weblogin`
 WHERE
 	account_id = ".$_loginaccount->GetId()."
-	
 UNION
 
 SELECT
 	username
 FROM 
-	users
+	`users`
 WHERE
 	account_id = ".$_loginaccount->GetId()."
 ");
@@ -109,9 +110,9 @@ WHERE
 <p>In order to connect your account to Mapler.me, you must login to your account below. All confidential information is discarded after connecting an account.</p>
 <p class="alert-info alert">Note that if you are using your e-mail address to login into MapleStory, your username shown on this page will not be the same.</p>
 <ul>
-<?php while ($row = $q->fetch_row()): ?>
+<?php while ($row = $q->fetch_assoc()): ?>
 <div class="btn-group">
-  <button class="btn" onclick="?removeid=<?php echo $row[1]; ?>"><?php echo $row[2] != '' ? ($row[2].' ('.$row[1].')') : $row[1]; ?></button>
+  <button class="btn" onclick="?removeid=<?php echo $row[1]; ?>"><?php echo $row['name'] != '' ? ($row['name'].' ('.$row['username'].')') : $row[1]; ?></button>
 </div>
 <?php endwhile; ?>
 </ul>
