@@ -1,0 +1,451 @@
+
+/************* INVENTORY AND SUCH *************/
+.character_equips_holder {
+	width: 184px;
+	height: 290px;
+	position: relative;
+}
+
+.character_equips > div > img, .character_pets_holder > div > img {
+	position: absolute;
+}
+
+.character_equips > div > div, .character_pets_holder > div > div {
+    height: 32px;
+    width: 32px;
+}
+
+.character_pets_holder {
+	width: 151px;
+	height: 220px;
+	position: relative;
+}
+
+.character_pets_holder > div > img {
+	position: absolute;
+}
+
+
+.character_pets_holder select {
+    bottom: -2px;
+    height: 20px !important;
+    left: 8px;
+    padding: 0;
+    position: absolute;
+    width: 135px;
+}
+
+
+/* monster book */
+.character_equips .slot55 {
+top: 28px; left: 10px; margin-bottom: 0px;}
+
+/* medal */
+.character_equips .slot49 {
+top: 61px; left: 10px; margin-bottom: 0px;}
+
+/* pocket  */
+.character_equips .slot52 {
+top: 94px; left: 10px; margin-bottom: 0px;}
+
+/* mantle */
+.character_equips .slot9 {
+top: 127px; left: 10px; margin-bottom: 0px;}
+
+/* gloves */
+.character_equips .slot8 {
+top: 160px; left: 10px; margin-bottom: 0px;}
+
+/* taming mob */
+.character_equips .slot18 {
+top: 226px; left: 10px; margin-bottom: 0px;}
+
+
+
+
+
+
+
+
+/* cap */
+.character_equips .slot1 {
+top: 28px; left: 43px; margin-bottom: 0px;}
+
+/* face */
+.character_equips .slot2 {
+top: 61px; left: 43px; margin-bottom: 0px;}
+
+/* Eye acc */
+.character_equips .slot3 {
+top: 94px; left: 43px; margin-bottom: 0px;}
+
+/* clothes */
+.character_equips .slot5 {
+top: 127px; left: 43px; margin-bottom: 0px;}
+
+/* pants */
+.character_equips .slot6 {
+top: 160px; left: 43px; margin-bottom: 0px;}
+
+/* saddle */
+.character_equips .slot19 {
+top: 226px; left: 43px; margin-bottom: 0px;}
+
+
+
+
+
+
+
+/* badge */
+.character_equips .slot56 {
+top: 28px; left: 76px; margin-bottom: 0px;}
+
+/* pendant */
+.character_equips .slot17 {
+top: 127px; left: 76px; margin-bottom: 0px;}
+
+/* 2nd pendent (cash) - Note to Erwin: There's a different UI that this requires (but should be fine without it anyway) */
+.character_equips .slot65 {
+top: 94px; left: 76px; margin-bottom: 0px;}
+
+/* belt */
+.character_equips .slot50 {
+top: 160px; left: 76px; margin-bottom: 0px;}
+
+/* shoes */
+.character_equips .slot7 {
+top: 193px; left: 76px; margin-bottom: 0px;}
+
+
+
+
+
+
+/* android */
+.character_equips .slot53 {
+top: 28px; left: 109px; margin-bottom: 0px;}
+
+/* android heart */
+.character_equips .slot54 {
+top: 28px; left: 142px; margin-bottom: 0px;}
+
+/* ring 3 */
+.character_equips .slot15 {
+top: 61px; left: 109px; margin-bottom: 0px;}
+
+/* ear acc */
+.character_equips .slot4 {
+top: 94px; left: 109px; margin-bottom: 0px;}
+
+/* weapon */
+.character_equips .slot11 {
+top: 127px; left: 109px; margin-bottom: 0px;}
+
+/* ring 1 */
+.character_equips .slot12 {
+top: 160px; left: 109px; margin-bottom: 0px;}
+
+
+
+
+
+
+
+/* ring 4 */
+.character_equips .slot16 {
+top: 61px; left: 142px; margin-bottom: 0px;}
+
+/* shoulder */
+.character_equips .slot51 {
+top: 94px; left: 142px; margin-bottom: 0px;}
+
+/* orb / shield */
+.character_equips .slot10 {
+top: 127px; left: 142px; margin-bottom: 0px;}
+
+/* ring 2 */
+.character_equips .slot13 {
+top: 160px; left: 142px; margin-bottom: 0px;}
+
+
+/* pet thingies */
+
+/* HP POC */
+.character_equips .slot24 {
+top: 22px; left: 10px; margin-bottom: 0px;}
+
+/* MP POC */
+.character_equips .slot25 {
+top: 22px; left: 76px; margin-bottom: 0px;}
+
+/* Item pouch */
+.character_equips .slot22 {
+top: 55px; left: 10px; margin-bottom: 0px;}
+
+/* Meso Magnet */
+.character_equips .slot23 {
+top: 88px; left: 43px; margin-bottom: 0px;}
+
+/* Wing Boots */
+.character_equips .slot26 {
+top: 88px; left: 76px; margin-bottom: 0px;}
+
+/* Equip */
+.character_equips .slot14 {
+top: 88px; left: 109px; margin-bottom: 0px;}
+
+/* Binocular */
+.character_equips .slot27 {
+top: 154px; left: 10px; margin-bottom: 0px;}
+
+/* Magic Scales */
+.character_equips .slot28 {
+top: 121px; left: 43px; margin-bottom: 0px;}
+
+
+
+.inventory {
+	position: relative;
+	width: 160px;
+	height: 213px;
+	overflow-y: scroll;
+	margin-left: 5px;
+	background: transparent;
+	margin-top: 6px;
+}
+
+.inventory div {
+    height: 32px;
+    width: 32px;
+	position: absolute;
+	border: 1px solid lightgray;
+	z-index: 1;
+}
+
+.inventory img {
+	position: absolute;
+	z-index: 2;
+}
+
+.inventory .item-amount {
+	position: absolute;
+	display: block;
+	text-align: right;
+	width: 32px;
+	margin-top: 16px;
+	z-index: 3;
+	color: black;
+	font-size: 12px;
+	font-family: Arial;
+	font-weight: strong;
+	
+	text-shadow:
+	-1px -1px 0 #fff,
+	1px -1px 0 #fff,
+	-1px 1px 0 #fff,
+	1px 1px 0 #fff;
+}
+
+#inventories {
+	width: 172px;
+	height: 293px;
+}
+
+#inventories select {
+    height: 20px !important;
+    margin-bottom: 0;
+    margin-left: 8px;
+    margin-top: 27px;
+    padding: 0;
+    width: 156px;
+}
+
+
+
+
+/************* ITEM STATS *************/
+
+
+
+
+#item_info {
+	border: 1px solid rgba(0,0,0,0.6);
+	border-radius: 5px;
+	background-color: rgba(255,255,255,0.95);
+	padding: 5px;
+	position: absolute;
+	width: 285px;
+	z-index: 100;
+}
+
+#item_info #item_info_extra, #item_info #item_info_description {
+	margin-bottom: 5px;
+}
+
+#item_info #item_info_extra span {
+	text-align: center;
+	display: block;
+	font-size: 12px;
+}
+
+#item_info #item_info_description {
+	margin-left: 70px;
+}
+
+#item_info #item_info_title {
+	text-align: center;
+	margin-bottom: 5px;
+	font-size: 15px;
+}
+
+#item_info .icon_holder {
+	margin: 0 auto;
+	border: 1px solid black;
+	background-color: lightgray;
+	padding: 3px;
+	width: 50px;
+	height: 50px;
+	margin-right: 5px;
+	float: left;
+}
+
+#item_info .item_stats, #item_info .item_potential_stats {
+	clear: both;
+}
+
+#item_info .item_stats > table, #item_info .item_potential_stats > table {
+	font-size: 11px;
+}
+
+#item_info .item_req_stats {
+	float: right;
+	width: 170px;
+}
+#item_info .item_req_stats > table {
+	font-size: 11px;
+}
+
+#item_info .req_job {
+	font-size: 11px;
+	color: white;
+	
+	padding: 2px;
+	border-radius: 3px;
+	background-color: rgba(0,0,0,1);
+}
+
+#item_info .needed_job {
+	color: orange;
+}
+
+#item_info #req_job_list {
+	clear: both;
+	padding-top: 10px;
+}
+
+#item_info #req_job_list hr {
+	margin: 5px 0;
+}
+
+#item_info #item_potential_stats {
+	display: none;
+}
+
+.potential1 {
+	border: 1px solid #FF0066 !important;
+}
+
+.potential2 {
+	border: 1px solid #5CA1FF !important;
+}
+
+.potential3 {
+	border: 1px solid #C261FF !important;
+}
+
+.potential4 {
+	border: 1px solid #FFCC00 !important;
+}
+
+.potential5 {
+	border: 1px solid #00FF00 !important;
+}
+
+
+/*********** SKILLS ***********/
+#skill_list {
+	width: 174px;
+	height: 299px;
+	position: relative;
+}
+
+#skill_list > * {
+	margin-left: 10px;
+}
+
+.skill_job {
+	width: 157px;
+	height: 155px;
+	overflow-y: scroll;
+	top: 92px;
+	position: absolute;
+}
+
+.skill_line {
+	width: 140px;
+	height: 1px;
+	margin: 2px 0;
+}
+
+.skill {
+	width: 140px;
+	height: 35px;
+	position: relative;
+	font-size: 10px;
+}
+
+.skill .skill_icon {
+	float: left;
+	margin-left: 1px;
+}
+
+.skill_bookname {
+	color: white;
+	font-size: 16px;
+	top: 54px;
+	position: absolute;
+	padding-left: 5px;
+	width: 157px;
+}
+
+.book_title {
+    color: white;
+    font-size: 12px;
+    left: 37px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+	top: 5px;
+}
+
+.skill .skill_title {
+	position: absolute;
+	left: 41px;
+	white-space: nowrap;
+}
+
+.skill .skill_level {
+	position: absolute;
+	left: 41px;
+	top: 16px;
+}
+
+.skilllist_selector {
+	height: 20px;
+	margin-bottom: 0;
+	padding: 0;
+	position: absolute;
+	top: 24px;
+	width: 155px;
+}

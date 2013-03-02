@@ -16,22 +16,20 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me, Mapler Me, Mapler.me, Nexon, Nexon America,
-	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS, 
-	
-	<?php
+	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS, <?php
 		if (isset($__url_useraccount)):
-	?>
-	<?php echo $__url_useraccount->GetNickname(); ?>, <?php echo $__url_useraccount->GetNickname(); ?>'s Mapler.me
-	<?php
+		echo $__url_useraccount->GetNickname().', '.$__url_useraccount->GetNickname()."'s Mapler.me";
 		endif;
-	?>
-	" />
+	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
-	<link rel="shortcut icon" href="favicon.ico" >
-	<link rel="icon" href="favicon.ico" type="image/x-icon" >
+<?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
+<?php endif; ?>
+	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
+	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
 </head>
 
 <body>

@@ -70,7 +70,7 @@ if ($subname != NULL) {
 		<hr/>
 		
 		<div class="row">
-		<p class="lead">Equipment & statistics...</p>
+		<p class="lead">Equipment &amp; statistics...</p>
 <?php
 
 /******************* DRAGONS BE HERE ****************************/
@@ -235,308 +235,19 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <style type="text/css">
 .character_equips_holder {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/equips_background.png');
-	width: 184px;
-	height: 290px;
-	position: relative;
-}
-
-.character_equips > div > img, .character_pets_holder > div > img {
-	position: absolute;
-}
-
-.character_equips > div > div, .character_pets_holder > div > div {
-    height: 32px;
-    width: 32px;
 }
 
 .character_pets_holder {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/pet_equip.png');
-	width: 151px;
-	height: 220px;
-	position: relative;
 }
 
-.character_pets_holder > div > img {
-	position: absolute;
-}
-
-
-.character_pets_holder select {
-    bottom: -2px;
-    height: 20px !important;
-    left: 8px;
-    padding: 0;
-    position: absolute;
-    width: 135px;
-}
-
-
-/* monster book */
-.character_equips .slot55 {
-<?php InventoryPosCalc(0, 0); ?>
-}
-
-/* medal */
-.character_equips .slot49 {
-<?php InventoryPosCalc(1, 0); ?>
-}
-
-/* pocket  */
-.character_equips .slot52 {
-<?php InventoryPosCalc(2, 0); ?>
-}
-
-/* mantle */
-.character_equips .slot9 {
-<?php InventoryPosCalc(3, 0); ?>
-}
-
-/* gloves */
-.character_equips .slot8 {
-<?php InventoryPosCalc(4, 0); ?>
-}
-
-/* taming mob */
-.character_equips .slot18 {
-<?php InventoryPosCalc(6, 0); ?>
-}
-
-
-
-
-
-
-
-
-/* cap */
-.character_equips .slot1 {
-<?php InventoryPosCalc(0, 1); ?>
-}
-
-/* face */
-.character_equips .slot2 {
-<?php InventoryPosCalc(1, 1); ?>
-}
-
-/* Eye acc */
-.character_equips .slot3 {
-<?php InventoryPosCalc(2, 1); ?>
-}
-
-/* clothes */
-.character_equips .slot5 {
-<?php InventoryPosCalc(3, 1); ?>
-}
-
-/* pants */
-.character_equips .slot6 {
-<?php InventoryPosCalc(4, 1); ?>
-}
-
-/* saddle */
-.character_equips .slot19 {
-<?php InventoryPosCalc(6, 1); ?>
-}
-
-
-
-
-
-
-
-/* badge */
-.character_equips .slot56 {
-<?php InventoryPosCalc(0, 2); ?>
-}
-
-/* pendant */
-.character_equips .slot17 {
-<?php InventoryPosCalc(3, 2); ?>
-}
-
-/* 2nd pendent (cash) - Note to Erwin: There's a different UI that this requires (but should be fine without it anyway) */
-.character_equips .slot65 {
-<?php InventoryPosCalc(2, 2); ?>
-}
-
-/* belt */
-.character_equips .slot50 {
-<?php InventoryPosCalc(4, 2); ?>
-}
-
-/* shoes */
-.character_equips .slot7 {
-<?php InventoryPosCalc(5, 2); ?>
-}
-
-
-
-
-
-
-/* android */
-.character_equips .slot53 {
-<?php InventoryPosCalc(0, 3); ?>
-}
-
-/* android heart */
-.character_equips .slot54 {
-<?php InventoryPosCalc(0, 4); ?>
-}
-
-/* ring 3 */
-.character_equips .slot15 {
-<?php InventoryPosCalc(1, 3); ?>
-}
-
-/* ear acc */
-.character_equips .slot4 {
-<?php InventoryPosCalc(2, 3); ?>
-}
-
-/* weapon */
-.character_equips .slot11 {
-<?php InventoryPosCalc(3, 3); ?>
-}
-
-/* ring 1 */
-.character_equips .slot12 {
-<?php InventoryPosCalc(4, 3); ?>
-}
-
-
-
-
-
-
-
-/* ring 4 */
-.character_equips .slot16 {
-<?php InventoryPosCalc(1, 4); ?>
-}
-
-/* shoulder */
-.character_equips .slot51 {
-<?php InventoryPosCalc(2, 4); ?>
-}
-
-/* orb / shield */
-.character_equips .slot10 {
-<?php InventoryPosCalc(3, 4); ?>
-}
-
-/* ring 2 */
-.character_equips .slot13 {
-<?php InventoryPosCalc(4, 4); ?>
-}
-
-<?php
-$inv_pos_offx = 10; // Diff offsets
-$inv_pos_offy = 22;
-$inv_extra_offx = $inv_extra_offy = 0;
-?>
-
-/* pet thingies */
-
-/* HP POC */
-.character_equips .slot24 {
-<?php InventoryPosCalc(0, 0); ?>
-}
-
-/* MP POC */
-.character_equips .slot25 {
-<?php InventoryPosCalc(0, 2); ?>
-}
-
-/* Item pouch */
-.character_equips .slot22 {
-<?php InventoryPosCalc(1, 0); ?>
-}
-
-/* Meso Magnet */
-.character_equips .slot23 {
-<?php InventoryPosCalc(2, 1); ?>
-}
-
-/* Wing Boots */
-.character_equips .slot26 {
-<?php InventoryPosCalc(2, 2); ?>
-}
-
-/* Equip */
-.character_equips .slot14 {
-<?php InventoryPosCalc(2, 3); ?>
-}
-
-/* Binocular */
-.character_equips .slot27 {
-<?php InventoryPosCalc(4, 0); ?>
-}
-
-/* Magic Scales */
-.character_equips .slot28 {
-<?php InventoryPosCalc(3, 1); ?>
-}
-
-
-
-.inventory {
-	position: relative;
-	width: 160px;
-	height: 213px;
-	overflow-y: scroll;
-	margin-left: 5px;
-	background: transparent;
-	margin-top: 6px;
-}
 
 .inventory div {
-    height: 32px;
-    width: 32px;
-	position: absolute;
-	border: 1px solid lightgray;
-	z-index: 1;
-	
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/item_bg.png');
-}
-
-.inventory img {
-	position: absolute;
-	z-index: 2;
-}
-
-.inventory .item-amount {
-	position: absolute;
-	display: block;
-	text-align: right;
-	width: 32px;
-	margin-top: 16px;
-	z-index: 3;
-	color: black;
-	font-size: 12px;
-	font-family: Arial;
-	font-weight: strong;
-	
-	text-shadow:
-	-1px -1px 0 #fff,
-	1px -1px 0 #fff,
-	-1px 1px 0 #fff,
-	1px 1px 0 #fff;
 }
 
 #inventories {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
-	width: 172px;
-	height: 293px;
-}
-
-#inventories select {
-    height: 20px !important;
-    margin-bottom: 0;
-    margin-left: 8px;
-    margin-top: 27px;
-    padding: 0;
-    width: 156px;
 }
 
 </style>
@@ -780,115 +491,14 @@ for ($inv = 0; $inv < 5; $inv++) {
 
 </div>
 
-<style type="text/css">
-#item_info {
-	border: 1px solid rgba(0,0,0,0.6);
-	border-radius: 5px;
-	background-color: rgba(255,255,255,0.95);
-	padding: 5px;
-	position: absolute;
-	width: 285px;
-	z-index: 100;
-}
-
-#item_info #item_info_extra, #item_info #item_info_description {
-	margin-bottom: 5px;
-}
-
-#item_info #item_info_extra span {
-	text-align: center;
-	display: block;
-	font-size: 12px;
-}
-
-#item_info #item_info_description {
-	margin-left: 70px;
-}
-
-#item_info #item_info_title {
-	text-align: center;
-	margin-bottom: 5px;
-	font-size: 15px;
-}
-
-#item_info .icon_holder {
-	margin: 0 auto;
-	border: 1px solid black;
-	background-color: lightgray;
-	padding: 3px;
-	width: 50px;
-	height: 50px;
-	margin-right: 5px;
-	float: left;
-}
-
-#item_info .item_stats, #item_info .item_potential_stats {
-	clear: both;
-}
-
-#item_info .item_stats > table, #item_info .item_potential_stats > table {
-	font-size: 11px;
-}
-
-#item_info .item_req_stats {
-	float: right;
-	width: 170px;
-}
-#item_info .item_req_stats > table {
-	font-size: 11px;
-}
-
-#item_info .req_job {
-	font-size: 11px;
-	color: white;
-	
-	padding: 2px;
-	border-radius: 3px;
-	background-color: rgba(0,0,0,1);
-}
-
-#item_info .needed_job {
-	color: orange;
-}
-
-#item_info #req_job_list {
-	clear: both;
-	padding-top: 10px;
-}
-
-#item_info #req_job_list hr {
-	margin: 5px 0;
-}
-
-#item_info #item_potential_stats {
-	display: none;
-}
-
-.potential1 {
-	border: 1px solid #FF0066 !important;
-}
-
-.potential2 {
-	border: 1px solid #5CA1FF !important;
-}
-
-.potential3 {
-	border: 1px solid #C261FF !important;
-}
-
-.potential4 {
-	border: 1px solid #FFCC00 !important;
-}
-
-.potential5 {
-	border: 1px solid #00FF00 !important;
-}
-</style>
-
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
 var potentialDescriptions = <?php echo json_encode($PotentialList); ?>;
+<?php
 
+if (false): // set to true to print this stuff
+
+?>
 function SetItemInfo(event, obj, itemid, isequip, reqjob, <?php
 foreach ($reqlist as $option => $desc) {
 	echo $option.", ";
@@ -1043,6 +653,13 @@ function MoveWindow(event) {
 	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 }
 
+
+<?php
+
+endif;
+
+?>
+
 var lastid = -1;
 function ChangeInventory(id) {
 	id -= 1;
@@ -1154,81 +771,14 @@ ORDER BY
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
-	width: 174px;
-	height: 299px;
-	position: relative;
-}
-
-#skill_list > * {
-	margin-left: 10px;
-}
-
-.skill_job {
-	width: 157px;
-	height: 155px;
-	overflow-y: scroll;
-	top: 92px;
-	position: absolute;
 }
 
 .skill_line {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/line.png');
-	width: 140px;
-	height: 1px;
-	margin: 2px 0;
 }
 
 .skill {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/skill.png');
-	width: 140px;
-	height: 35px;
-	position: relative;
-	font-size: 10px;
-}
-
-.skill .skill_icon {
-	float: left;
-	margin-left: 1px;
-}
-
-.skill_bookname {
-	color: white;
-	font-size: 16px;
-	top: 54px;
-	position: absolute;
-	padding-left: 5px;
-	width: 157px;
-}
-
-.book_title {
-    color: white;
-    font-size: 12px;
-    left: 37px;
-    position: absolute;
-    right: 10px;
-    text-align: center;
-	top: 5px;
-}
-
-.skill .skill_title {
-	position: absolute;
-	left: 41px;
-	white-space: nowrap;
-}
-
-.skill .skill_level {
-	position: absolute;
-	left: 41px;
-	top: 16px;
-}
-
-.skilllist_selector {
-	height: 20px;
-	margin-bottom: 0;
-	padding: 0;
-	position: absolute;
-	top: 24px;
-	width: 155px;
 }
 </style>
 

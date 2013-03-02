@@ -4,8 +4,8 @@
 	RewriteEngine On
 	
 	
-	RewriteRule ^/settings/([^.]*)/ /inc/handle_panel.php?page=$1&type=settings [L]
-	RewriteRule ^settings/([^.]*)/ /inc/handle_panel.php?page=$1&type= [L]
+	RewriteRule ^/settings/([^.]*)/ /inc/handle_panel.php?page=$1&type=settings [L,QSA]
+	RewriteRule ^settings/([^.]*)/ /inc/handle_panel.php?page=$1&type= [L,QSA]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME}\.php -f 
@@ -24,9 +24,9 @@
 	
 	# image / ranking rewrites
 	
-	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L]
-	RewriteRule ^avatar/([^\./]*) /actions/character_avatar.php?name=$1 [L]
-	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L]
+	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]
+	RewriteRule ^avatar/([^\./]*) /actions/character_avatar.php?name=$1 [L,QSA]
+	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L,QSA]
 	
 	# character / player rewrites
 	RewriteRule ^player/([^/]*)$ /character.php?name=$1
