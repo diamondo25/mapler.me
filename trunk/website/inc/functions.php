@@ -394,6 +394,14 @@ function IGTextToWeb($data, $extraOptions = array()) {
 				$result .= '<span style="color: darkorange;">';
 				$endTag = '</span>';
 			}
+			elseif ($nc == '*') { // Orange? | * == Nebulite info -.-
+				if ($endTag != '') {
+					$result .= $endTag;
+				}
+				$result .= '*';
+				$result .= '<span style="color: darkorange;">';
+				$endTag = '</span>';
+			}
 			elseif ($nc == 'd') { // Purple
 				if ($endTag != '') {
 					$result .= $endTag;
@@ -667,6 +675,16 @@ function GetWZItemTypeName($id) {
 			
 		case 996: return "Familiar";
 	}
+}
+
+function GetItemIconID($id) {
+	$type = GetItemType($id);
+	if ($type != 306) return $id;
+	
+	$nebtype = ($id / 1000) % 5;
+	$main_id = 3800274;
+	
+	return $main_id + $nebtype;
 }
 
 function GetItemIcon($id) {
