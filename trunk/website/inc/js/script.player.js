@@ -1,5 +1,4 @@
-
-function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqdex, reqint, reqluk, reqpop, str, dex, int, luk, maxhp, maxmp, weaponatt, weapondef, magicatt, magicdef, acc, avo, hands, jump, speed, slots, scrolls, expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5, one) {
+function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqdex, reqint, reqluk, reqpop, itemlevel, itemexp, str, dex, int, luk, maxhp, maxmp, weaponatt, weapondef, magicatt, magicdef, acc, avo, hands, jump, speed, slots, scrolls, expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5, one) {
 	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
 	document.getElementById('item_info_icon').src = obj.src;
 	
@@ -20,6 +19,12 @@ function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqd
 	
 	document.getElementById('item_info_req_row_reqpop').style.display = (!isequip && (reqpop == '' || reqpop == 0)) ? 'none' : '';
 	document.getElementById('item_info_req_reqpop').innerHTML = reqpop;
+	
+	document.getElementById('item_info_req_row_itemlevel').style.display = (!isequip && (itemlevel == '' || itemlevel == 0)) ? 'none' : '';
+	document.getElementById('item_info_req_itemlevel').innerHTML = itemlevel;
+	
+	document.getElementById('item_info_req_row_itemexp').style.display = (!isequip && (itemexp == '' || itemexp == 0)) ? 'none' : '';
+	document.getElementById('item_info_req_itemexp').innerHTML = itemexp;
 	
 
 
@@ -133,7 +138,7 @@ function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqd
 	var potentiallevel = Math.round(reqlevel / 10);
 	if (potentiallevel == 0) potentiallevel = 1;
 	
-	if (potentialflag == 1) { // 12 = unlocked
+	if (potentialflag == 1) { // 12 = unlocked...?
 		var row = document.getElementById('potentials').insertRow(-1);
 		row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
 	}
@@ -219,6 +224,7 @@ function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqd
 	document.getElementById('req_job_list').style.display = isequip ? 'block' : 'none';
 	MoveWindow(event);
 }
+
 
 function SetJob(id, flag, neededflag) {
 	var correct = (flag & neededflag) == neededflag;

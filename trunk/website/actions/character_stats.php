@@ -1,7 +1,8 @@
 <?php
 require_once '../inc/database.php';
 require_once '../inc/functions.php';
-require_once 'job_list.php';
+require_once '../inc/job_list.php';
+require_once '../inc/exp_table.php';
 require_once 'caching.php';
 
 $font = "arial.ttf";
@@ -166,6 +167,10 @@ $row['luk'] = $row['luk'].' ('.$before['luk'].' + '.($row['luk'] - $before['luk'
 
 //$row['mhp'] = $row['mhp'].' ('.$before['mhp'].' + '.($row['mhp'] - $before['mhp']).')';
 //$row['mmp'] = $row['mmp'].' ('.$before['mmp'].' + '.($row['mmp'] - $before['mmp']).')';
+
+// Get EXP percentage
+$nextlevelexp = $__exp_table[$row['level']];
+$row['exp'] .= ' ('.round($row['exp'] / $nextlevelexp * 100).'%)';
 
 
 $image = imagecreatetruecolor(192, 345);

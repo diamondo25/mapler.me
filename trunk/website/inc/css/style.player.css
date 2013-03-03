@@ -381,20 +381,25 @@
 .skill_bookname {
 	color: white;
 	font-size: 16px;
-	top: 54px;
+	top: 50px;
 	position: absolute;
 	padding-left: 5px;
 	width: 157px;
 }
 
-.book_title {
-    color: white;
-    font-size: 12px;
-    left: 37px;
-    position: absolute;
-    right: 10px;
-    text-align: center;
-	top: 5px;
+.skill_bookname .book_title {
+	color: white;
+	font-size: 12px;
+	display: block;
+	text-align: center;
+	margin-left: 10px;
+	margin-right: 10px;
+	height: 35px;
+}
+
+.skill_bookname .book_icon {
+	float: left;
+	margin-top: 3px;
 }
 
 .skill .skill_title {
@@ -407,6 +412,7 @@
 	position: absolute;
 	left: 41px;
 	top: 16px;
+	white-space: nowrap;
 }
 
 .skilllist_selector {

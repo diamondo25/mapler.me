@@ -91,6 +91,8 @@ class ItemEquip extends ItemBase {
 	public $name;
 	public $flags;
 	public $hammers;
+	public $itemlevel;
+	public $itemexp;
 	public $potential1;
 	public $potential2;
 	public $potential3;
@@ -124,6 +126,8 @@ class ItemEquip extends ItemBase {
 		$this->name = $row['name'];
 		$this->flags = $row['flags'];
 		$this->hammers = $row['hammers'];
+		$this->itemlevel = $row['itemlevel'];
+		$this->itemexp = $row['itemexp'];
 		$this->potential1 = $row['potential1'];
 		$this->potential2 = $row['potential2'];
 		$this->potential3 = $row['potential3'];

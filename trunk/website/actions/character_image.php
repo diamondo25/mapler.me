@@ -1,8 +1,8 @@
 <?php
 require_once '../inc/database.php';
 require_once '../inc/domains.php';
+require_once '../inc/job_list.php';
 require_once 'caching.php';
-require_once 'job_list.php';
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";

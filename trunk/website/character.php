@@ -1,6 +1,7 @@
 <?php
 require_once 'inc/header.php';
-require_once 'actions/job_list.php';
+require_once 'inc/job_list.php';
+require_once 'inc/exp_table.php';
 if (!$_loggedin) {
 ?>
 <p class="lead alert-error alert">Please login to view this page.</p>
@@ -105,6 +106,8 @@ $reqlist['reqdex'] = 'REQ DEX : ';
 $reqlist['reqint'] = 'REQ INT : ';
 $reqlist['reqluk'] = 'REQ LUK : ';
 $reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
+$reqlist['itemlevel'] = 'ITEM LEV : ';
+$reqlist['itemexp'] = 'ITEM EXP : ';
 
 $IDlist = array();
 $PotentialList = array();
@@ -167,6 +170,8 @@ function GetItemDialogInfo($item, $isequip) {
 		$arguments .= $reqint.', ';
 		$arguments .= $reqluk.', ';
 		$arguments .= $reqpop.', ';
+		$arguments .= ($item->itemlevel == NULL ? "'-'" : $item->itemlevel).', ';
+		$arguments .= ($item->itemexp == NULL ? "'-'" : "'".round(GetExpPercentage($item->itemlevel + 1, $item->itemexp))."%'").', ';
 		$arguments .= $item->str.', ';
 		$arguments .= $item->dex.', ';
 		$arguments .= $item->int.', ';
@@ -186,7 +191,7 @@ function GetItemDialogInfo($item, $isequip) {
 		$arguments .= $item->scrolls.', ';
 	}
 	else {
-		$arguments .= '0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,';
+		$arguments .= '0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,';
 	}
 
 	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
@@ -301,7 +306,7 @@ $petequip_slots[42] = array(2, 23);
 $petequip_slots[43] = array(2, 26);
 $petequip_slots[44] = array(2, 27);
 $petequip_slots[45] = array(2, 21); // Flipped w/ 29
-$petequip_slots[48] = array(2, -1); // Item Ignore 2
+$petequip_slots[48] = array(2, -1); // Item Ignore 3
 
 $petequips = array();
 $petequips[0] = array();
@@ -333,7 +338,7 @@ foreach ($equips as $orislot => $item) {
 		if ($orislot > -100) {
 			$normalequips[$orislot] = $item;
 		}
-		elseif ($orislot <= -1400) $cashequips['Coordinate'][$orislot] = $item;
+		elseif ($orislot <= -5000) $cashequips['Coordinate'][$orislot] = $item;
 		elseif ($orislot <= -1300) $cashequips['Totem'][$orislot] = $item;
 		elseif ($orislot <= -1200) $cashequips['Android'][$orislot] = $item;
 		elseif ($orislot <= -1100) $cashequips['Mechanic'][$orislot] = $item;
@@ -604,7 +609,7 @@ foreach ($optionlist as $option => $desc) {
 	var potentiallevel = Math.round(reqlevel / 10);
 	if (potentiallevel == 0) potentiallevel = 1;
 	
-	if (potentialflag == 1) { // 12 = unlocked
+	if (potentialflag == 1) { // 12 = unlocked...?
 		var row = document.getElementById('potentials').insertRow(-1);
 		row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
 	}
@@ -800,10 +805,11 @@ ORDER BY
 	$i = 0;
 	
 	while ($row = $q->fetch_assoc()) {
-		$name = GetMapleStoryString("skill", $row['skillid'], "name");
+		$name = GetMapleStoryString('skill', $row['skillid'], 'name');
 		if ($name == NULL) continue;
+		$potentialMaxLevel = GetMapleStoryString('skill', $row['skillid'], 'mlvl');
 		$block = floor($row['skillid'] / 10000);
-		if ($lastgroup != $block) {
+		if ($lastgroup != $block && $lastgroup < 9200) {
 			$first_skill = true;
 			if ($lastgroup != -1) {
 ?>
@@ -811,19 +817,21 @@ ORDER BY
 <?php
 			}
 			$lastgroup = $block;
-			$book = GetMapleStoryString("skill", $lastgroup, "bname");
+			$book = $block > 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname");
 			$groups[++$i] = $book;
 ?>
 	<div id="bookname_<?php echo $i; ?>" class="skill_bookname" style="display: none;">
 		<img class="book_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/info.icon.png" />
-		<span class="book_title"><?php echo $book; ?></span>
+		<div class="book_title"><?php echo $book; ?></div>
 	</div>
 	<div id="skilllist_<?php echo $i; ?>" class="skill_job" style="display: none;">
 <?php
 		}
 		
+		$extra = '';
+		
 		if ($row['maxlevel'] == NULL) {
-			$row['maxlevel'] = '-';
+			$row['maxlevel'] = ($potentialMaxLevel == NULL ? '-' : $potentialMaxLevel);
 		}
 		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
 			$playername = GetCharacterName($row['level']);
@@ -831,11 +839,11 @@ ORDER BY
 		}
 		elseif (strpos($name, 'Blessing of the Fairy') !== FALSE && strlen($character_info['blessingoffairy']) > 1) {
 			// BOF
-			$row['level'] .= ' - <a href="/player/'.$character_info['blessingoffairy'].'">'.$character_info['blessingoffairy'].'</a>';
+			$extra = ' - <a href="/player/'.$character_info['blessingoffairy'].'">'.$character_info['blessingoffairy'].'</a>';
 		}
 		elseif (strpos($name, 'Empress\'s Blessing') !== FALSE && strlen($character_info['blessingofempress']) > 1) {
-			// BOF
-			$row['level'] .= ' - <a href="/player/'.$character_info['blessingofempress'].'">'.$character_info['blessingofempress'].'</a>';
+			// Empress Blessing
+			$extra = ' - <a href="/player/'.$character_info['blessingofempress'].'">'.$character_info['blessingofempress'].'</a>';
 		}
 		
 		// GetSystemTimeFromFileTime($row['expires']);
@@ -849,7 +857,7 @@ ORDER BY
 		<div class="skill">
 			<img class="skill_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" />
 			<span class="skill_title"><?php echo $name; ?></span>
-			<span class="skill_level"><?php echo $row['level'].($row['maxlevel'] == '-' ? '' : ' / '.$row['maxlevel']); ?></span>
+			<span class="skill_level"><?php echo $row['level'].($row['maxlevel'] == '-' ? '' : ' / '.$row['maxlevel']).$extra; ?></span>
 		</div>
 
 <?php
