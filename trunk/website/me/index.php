@@ -94,6 +94,11 @@ while ($row = $x->fetch_assoc()) {
 	}
 	$caches[] = $row;
 }
+
+$has_characters = count($caches) != 0;
+$main_character_info = $has_characters ? $cache[0] : null;
+$main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
+$main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
                         	?>
                         	
                         	<?php echo count($caches); ?></span> <span class="item">Characters</span></a></li>
