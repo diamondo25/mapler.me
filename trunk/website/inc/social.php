@@ -62,7 +62,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 ?>
 
 <?php if (!$antispam): ?>
-<p class="lead alert-error alert">Please wait <?php echo $minutes_timeout; ?> minute<?php echo $seconds_timeout > 1 ? 's' : ''; ?> before posting another message. :)</p>
+<p class="lead alert-error alert">Please wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?> before posting another message. :)</p>
 <?php else: ?>
 
 <div class="row">
