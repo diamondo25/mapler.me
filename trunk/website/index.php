@@ -36,6 +36,8 @@ FROM
 	social_statuses
 WHERE
 	account_id = '".$_loginaccount->GetId()."' OR override = '1'
+ORDER BY
+secs_since ASC
 ");
 	
 $fixugh = '0';

@@ -1,4 +1,8 @@
 	<div class="span3">
+	<div class="fb-like-box" data-href="http://www.facebook.com/maplerme" data-width="292" data-show-faces="false" data-stream="false" data-header="false"></div>
+	</div>
+	
+	<div class="span3">
 		<h2>New in Revision 277:</h2>
 		<ul>
 		<h3>Important:</h3>

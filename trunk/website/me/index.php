@@ -11,8 +11,8 @@ FROM
 	social_statuses
 WHERE 
 	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' 
-ORDER BY 
-	timestamp ASC
+ORDER BY
+	secs_since ASC
 ");
 
 $fixugh = '0';
