@@ -95,7 +95,7 @@ foreach ($cache as $row) {
 				
 				<?php
 				if ($badgepls == $_loginaccount->GetId()) { ?>
-					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')"> //show delete button only if post owner = deleter
+					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')">
 					delete?
 				</a>
 				<?php } 
