@@ -573,15 +573,6 @@ function IsOwnAccount() {
 	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
 
-function IsStaffBadge($badgepls) {
-	if ($badgepls == ['3']) {
-		echo "<sup>(staff)</sup>";
-	}
-	else {
-		echo "<sup>(mapler)</sup>";
-	}
-}
-
 function GetItemType($id) {
 	return floor($id / 10000);
 }

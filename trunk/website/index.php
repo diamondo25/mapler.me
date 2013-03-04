@@ -90,7 +90,6 @@ foreach ($cache as $row) {
 			echo $row['nickname'];
 			$badgepls = $row['account_id'];
 			$id = $row['id'];
-			echo IsStaffBadge($badgepls);
 			?> said: <span class="pull-right">
 				<?php echo time_elapsed_string($row['secs_since']); ?> ago 
 				
