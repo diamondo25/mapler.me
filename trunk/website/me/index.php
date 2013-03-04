@@ -58,7 +58,7 @@ function time_elapsed_string($etime) {
             	<div class="row">
                 	<div class="span12">
                     	<ul id="nav-left">
-                        	<li><a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters"><span class="sprite icon post"></span><span class="count">
+                        	<li><a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters"><img src="//<?php echo $domain; ?>/inc/img/icons/user.png"/ style="position:relative;top:2px;"> <span class="count">
                         	
                         	<?php
                         	$x = $__database->query("
@@ -105,7 +105,7 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
                         	?>
                         	
                         	<?php echo count($caches); ?></span> <span class="item">Characters</span></a></li>
-                            <li><a id="likes" href="#"><span class="sprite icon badgestar"></span><span class="count">#</span> <span class="item">Achievements</span></a></li>
+                            <li><a id="likes" href="#"><img src="//<?php echo $domain; ?>/inc/img/icons/star.png"/ style="position:relative;top:2px;"> <span class="count"></span> <span class="item">Achievements</span></a></li>
                         </ul>
                         <ul id="nav-right">
                         </ul>
@@ -176,6 +176,9 @@ foreach ($cache as $row) {
 				<?php echo time_elapsed_string($row['secs_since']); ?> ago 
 				
 				<?php
+				if ($_loggedin):
+				?>
+				<?php
 				if ($playerid == $_loginaccount->GetId()) { ?>
 					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')">
 					delete?
@@ -186,6 +189,7 @@ foreach ($cache as $row) {
 					echo '- <a href="#"></a>'; //will be report button
 				}	
 				?>
+				<?php endif; ?>
 				
 				
 			</span></div>
