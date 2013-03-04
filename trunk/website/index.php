@@ -90,13 +90,14 @@ foreach ($cache as $row) {
 			<div class="header">
 			<?php
 			echo $row['nickname'];
-			$badgepls = $row['account_id'];
+			$playerid = $row['account_id'];
 			$id = $row['id'];
+			$bb = $row['content'];
 			?> said: <span class="pull-right">
 				<?php echo time_elapsed_string($row['secs_since']); ?> ago 
 				
 				<?php
-				if ($badgepls == $_loginaccount->GetId()) { ?>
+				if ($playerid == $_loginaccount->GetId()) { ?>
 					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')">
 					delete?
 				</a>
@@ -110,7 +111,7 @@ foreach ($cache as $row) {
 				
 			</span></div>
 				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
-					<?php echo $row['content']; ?>
+					<?php echo bb_parse($bb); ?>
 			</div>
         
 <?php       

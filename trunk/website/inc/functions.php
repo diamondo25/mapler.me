@@ -117,6 +117,35 @@ function IsInBetween($vals) {
 	return true;
 }
 
+// define what $bb is somewhere. example: $bb = $row['content'];
+function bb_parse($bb) { 
+        $tags = 'b|i|size|color|center|quote|url|img'; 
+        while (preg_match_all('`\[('.$tags.')=?(.*?)\](.+?)\[/\1\]`', $bb, $matches)) foreach ($matches[0] as $key => $match) { 
+            list($tag, $param, $innertext) = array($matches[1][$key], $matches[2][$key], $matches[3][$key]); 
+            switch ($tag) { 
+                case 'b': $replacement = "<strong>$innertext</strong>"; break; 
+                case 'i': $replacement = "<em>$innertext</em>"; break; 
+                case 'size': $replacement = "<span style=\"font-size: $param;\">$innertext</span>"; break; 
+                case 'color': $replacement = "<span style=\"color: $param;\">$innertext</span>"; break; 
+                case 'center': $replacement = "<div class=\"centered\">$innertext</div>"; break; 
+                case 'quote': $replacement = "<blockquote>$innertext</blockquote>" . $param? "<cite>$param</cite>" : ''; break; 
+                case 'url': $replacement = '<a href="' . ($param? $param : $innertext) . "\">$innertext</a>"; break; 
+                case 'img': 
+                    list($width, $height) = preg_split('`[Xx]`', $param); 
+                    $replacement = "<img src=\"$innertext\" " . (is_numeric($width)? "width=\"$width\" " : '') . (is_numeric($height)? "height=\"$height\" " : '') . '/>'; 
+                break; 
+                case 'video': 
+                    $videourl = parse_url($innertext); 
+                    parse_str($videourl['query'], $videoquery); 
+                    if (strpos($videourl['host'], 'youtube.com') !== FALSE) $replacement = '<embed src="http://www.youtube.com/v/' . $videoquery['v'] . '" type="application/x-shockwave-flash" width="425" height="344"></embed>'; 
+                    if (strpos($videourl['host'], 'google.com') !== FALSE) $replacement = '<embed src="http://video.google.com/googleplayer.swf?docid=' . $videoquery['docid'] . '" width="400" height="326" type="application/x-shockwave-flash"></embed>'; 
+                break; 
+            } 
+            $bb = str_replace($match, $replacement, $bb); 
+        } 
+        return $bb; 
+    } 
+
 
 // Password = 28 characters in DB, but uses MD5 (32) characters to confuse hackers. And has a salt aswell.
 function GetPasswordHash($password, $salt) {
@@ -718,10 +747,6 @@ function GetItemIcon($id) {
 function ValueOrDefault($what, $default) {
 	return isset($what) ? $what : $default;
 }
-
-// Initialize more stuffs
-
-
 
 // Initialize Login Data
 $_loggedin = false;
