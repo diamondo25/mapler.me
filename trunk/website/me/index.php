@@ -82,21 +82,24 @@ ORDER BY
 	chr.world_id ASC,
 	chr.level DESC
 ");
-	
-$fixughs = '0';
-	
+
 $caches = array();
+
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
+
 while ($row = $x->fetch_assoc()) {
-	if (isset($fixughs)) {
-		if ($fixughs == 2) { // Always hide... :)
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
 			continue;
 		}
 	}
 	$caches[] = $row;
 }
+$x->free();
 
 $has_characters = count($caches) != 0;
-$main_character_info = $has_characters ? $cache[0] : null;
+$main_character_info = $has_characters ? $caches[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
                         	?>
