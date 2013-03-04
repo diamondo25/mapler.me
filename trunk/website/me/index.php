@@ -58,7 +58,7 @@ function time_elapsed_string($etime) {
             	<div class="row">
                 	<div class="span12">
                     	<ul id="nav-left">
-                        	<li><a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters/"><span class="sprite icon post"></span><span class="count">
+                        	<li><a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters"><span class="sprite icon post"></span><span class="count">
                         	
                         	<?php
                         	$x = $__database->query("

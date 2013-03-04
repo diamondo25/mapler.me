@@ -62,7 +62,7 @@ endif;
 if (isset($__url_useraccount)):
 ?>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters/">Characters</a></li>
+								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
 <?php
 // Display normal pages if not a subdomain
 else:
@@ -142,7 +142,7 @@ endif;
 if ($_loggedin):
 ?>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/my-characters">My Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
 								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
 						
 <?php
