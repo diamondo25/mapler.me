@@ -162,7 +162,6 @@ foreach ($cache as $row) {
 			<?php
 			echo $row['nickname'];
 			$badgepls = $row['account_id'];
-			echo IsStaffBadge($badgepls);
 			?> said: <span class="pull-right">		
 				<?php echo time_elapsed_string($row['secs_since']); ?> ago
 			</span></div>
