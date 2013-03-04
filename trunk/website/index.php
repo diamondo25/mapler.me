@@ -23,6 +23,9 @@ else:
 
 ?>
 
+<p>What do you want to say, <?php echo $_loginaccount->GetFullName(); ?>?</p>
+<?php include('inc/social.php'); ?>
+
     <?php
     
 $q = $__database->query("
@@ -31,6 +34,8 @@ SELECT
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
+WHERE
+	account_id = '".$_loginaccount->GetId()."' OR override = '1'
 ");
 	
 $fixugh = '0';
@@ -47,7 +52,6 @@ while ($row = $q->fetch_assoc()) {
 
 $q->free();
 
-// What the fuck is broken?.. (relevent time script)
 function time_elapsed_string($etime) {
    if ($etime < 1) {
        return '0 seconds';
@@ -71,17 +75,38 @@ function time_elapsed_string($etime) {
 }
 
 ?>
-<div class="row">
-<?php
+	<div class="row">
+	<div class="span9">
+	<?php
 
 // printing table rows
 
 foreach ($cache as $row) {
 
 ?>
-			<div class="status span6">
-			<div class="header"><?php echo $row['nickname']; ?> said: <span class="pull-right">		
-				<?php echo time_elapsed_string($row['secs_since']); ?> ago
+			<div class="status">
+			<div class="header">
+			<?php
+			echo $row['nickname'];
+			$badgepls = $row['account_id'];
+			$id = $row['id'];
+			echo IsStaffBadge($badgepls);
+			?> said: <span class="pull-right">
+				<?php echo time_elapsed_string($row['secs_since']); ?> ago 
+				
+				<?php
+				if ($badgepls == $_loginaccount->GetId()) { ?>
+					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')"> //show delete button only if post owner = deleter
+					delete?
+				</a>
+				<?php } 
+					
+				else {
+					echo '- <a href="#"></a>'; //will be report button
+				}	
+				?>
+				
+				
 			</span></div>
 				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
 					<?php echo $row['content']; ?>
@@ -90,10 +115,7 @@ foreach ($cache as $row) {
 <?php       
 }
 ?>
-</div>
-<p class="lead">
-	<div class="row">
-	<div class="span9">
+	<hr />
 	<h1>Welcome, <?php echo $_loginaccount->GetFullName(); ?>!
 <?php 
 	if ($has_characters):
@@ -124,29 +146,7 @@ foreach ($cache as $row) {
 	<blockquote class="pull-right">P.S: Your main character will display at the right of the page when added!</blockquote>
 	</div>
 	
-	<div class="span3">
-		<h1>Known Issues:</h1>
-		<ul>
-		<h3>General:</h3>
-		<li>There is not an option to hide individual items or inventories. This will be added soon.</li>
-		<li>Hiding a character does not hide it's page (still viewable), although safe unless known. This will be fixed asap.</li>
-		<li>Hiding a character does not disable it's image codes (avatar, card, and stats). This will be a toggle-able option.</li>
-		
-		<h3>Client:</h3>
-		<li>Available is misspelled on the client.</li>
-		
-		<h3>Potential:</h3>
-		<li>Potential on items isn't accurate.</li>
-		<li>Bonus potential counts as normal potential.</li>
-		</ul>
-	</div>
-	
-	<div class="span3">
-	<h1>Planned Features:</h1>
-		<ul>
-		<li>The ability to hide portions of a character page completely. (Equipment, Stats, or Skills).</li>
-		</ul>
-	</div>
+	<?php include('inc/sidebar.php'); ?>
 	
 	</div>
 

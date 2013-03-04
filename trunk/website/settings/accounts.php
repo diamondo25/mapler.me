@@ -25,7 +25,7 @@ if ($_loginaccount->GetConfigurationOption('last_account_addition', 0) != 0) {
 if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'], $_POST['password'])) {
 	// Oh jolly
 	$maycheck = false;
-	$minutes_timeout = 3;
+	$minutes_timeout = 4;
 	$_loginaccount->SetConfigurationOption('last_account_addition', date("Y-m-d H:i:s"));
 
 	$post_values = array(
@@ -98,7 +98,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 	$__database->query("DELETE FROM users WHERE username = '".$username."' AND account_id = ".$_loginaccount->GetId());
 	$__database->query("DELETE FROM users_weblogin WHERE name = '".$username."' AND account_id = ".$_loginaccount->GetId());
 ?>
-<p class="lead alert-info alert">Deleted this account from Mapler.me :(</p>
+<p class="lead alert-info alert">Deleted this account from Mapler.me! :(</p>
 <?php
 }
 

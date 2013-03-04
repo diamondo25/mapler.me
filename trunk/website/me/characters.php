@@ -4,64 +4,6 @@ require_once '../inc/header.php';
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 $q = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE 
-	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' 
-ORDER BY 
-	timestamp ASC
-");
-
-$fixugh = '0';
-	
-$cache = array();
-while ($row = $q->fetch_assoc()) {
-	if (isset($fixugh)) {
-		if ($fixugh == 2) { // Always hide... :)
-			continue;
-		}
-	}
-	$cache[] = $row;
-}
-
-$q->free();
-
-function time_elapsed_string($etime) {
-   if ($etime < 1) {
-       return '0 seconds';
-   }
-   
-   $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
-               30 * 24 * 60 * 60       =>  'month',
-               24 * 60 * 60            =>  'day',
-               60 * 60                 =>  'hour',
-               60                      =>  'minute',
-               1                       =>  'second'
-               );
-   
-   foreach ($a as $secs => $str) {
-       $d = $etime / $secs;
-       if ($d >= 1) {
-           $r = round($d);
-           return $r . ' ' . $str . ($r > 1 ? 's' : '');
-       }
-   }
-}
-
-?>
-	<div id="profile" class="row">
-		<div id="header" class="span12" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
-        	<div id="meta-nav">
-            	<div class="row">
-                	<div class="span12">
-                    	<ul id="nav-left">
-                        	<li><a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters/"><span class="sprite icon post"></span><span class="count">
-                        	
-                        	<?php
-                        	$x = $__database->query("
 SELECT 
 	chr.id, 
 	chr.name, 
@@ -82,21 +24,35 @@ ORDER BY
 	chr.world_id ASC,
 	chr.level DESC
 ");
-	
-$fixughs = '0';
-	
-$caches = array();
-while ($row = $x->fetch_assoc()) {
-	if (isset($fixughs)) {
-		if ($fixughs == 2) { // Always hide... :)
+
+$cache = array();
+
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
+
+while ($row = $q->fetch_assoc()) {
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
 			continue;
 		}
 	}
-	$caches[] = $row;
+	$cache[] = $row;
 }
-                        	?>
-                        	
-                        	<?php echo count($caches); ?></span> <span class="item">Characters</span></a></li>
+$q->free();
+
+$has_characters = count($cache) != 0;
+$main_character_info = $has_characters ? $cache[0] : null;
+$main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
+$main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
+?>
+
+	<div id="profile" class="row">
+		<div id="header" class="span12" style="background: url('//<?php echo $domain; ?>/inc/img/back_panel.png') repeat top center">
+        	<div id="meta-nav">
+            	<div class="row">
+                	<div class="span12">
+                    	<ul id="nav-left">
+                        	<li><a id="posts" href="#"><span class="sprite icon post"></span><span class="count"><?php echo count($cache); ?></span> <span class="item">Characters</span></a></li>
                             <li><a id="likes" href="#"><span class="sprite icon badgestar"></span><span class="count">#</span> <span class="item">Achievements</span></a></li>
                         </ul>
                         <ul id="nav-right">
@@ -144,30 +100,36 @@ text-align: center;" /> </a>
 <?php
 if (count($cache) == 0) {
 ?>
-		<p class="lead alert-error alert"><?php echo $__url_useraccount->GetNickName(); ?> hasn't posted anything!</p>
+		<p class="lead alert-error alert"><?php echo $__url_useraccount->GetUsername(); ?> hasn't added any characters yet!</p>
 <?php
 }
-?>
-		</div>
-		<div class="row">
-	<?php
 
 // printing table rows
 
+$characters_per_row = 4;
+$i = 0;
 foreach ($cache as $row) {
-
+	if ($i % $characters_per_row == 0) {
+		if ($i > 0) {
 ?>
-			<div class="status span4">
-			<div class="header">
-			<?php
-			echo $row['nickname'];
-			$badgepls = $row['account_id'];
-			echo IsStaffBadge($badgepls);
-			?> said: <span class="pull-right">		
-				<?php echo time_elapsed_string($row['secs_since']); ?> ago
-			</span></div>
-				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
-					<?php echo $row['content']; ?>
+		</div>
+<?php
+		}
+?>
+		<div class="row">
+<?php
+	}
+	$i++;
+?>
+			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
+			<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
+				<center>
+					<br />
+					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
+					</a>
+					<br />
+				</center>
 			</div>
         
 <?php       

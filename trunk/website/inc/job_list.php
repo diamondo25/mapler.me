@@ -200,7 +200,7 @@ $job_names = array(
 
 	//Additional Jobs + Special
 
-	1337 => 'Advisor' // WAT
+	1337 => 'System' // WAT
 );
 
 function GetJobname($id) {

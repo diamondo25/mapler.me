@@ -151,7 +151,7 @@ else {
 ?>
 <p class="lead">Sign up for a Mapler.me account</p>
 
-<div class="pull-right"><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!</p>
+<div class="pull-right" style="clear:both;"><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!</p>
 
 <p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better than the best Rising Sun Pendant.</p></div>
 <?php

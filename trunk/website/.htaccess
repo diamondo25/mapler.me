@@ -21,6 +21,7 @@
 	RewriteRule ^todo/ todo.php
 	RewriteRule ^contest/ contest.php
 	RewriteRule ^chat/ irc.php
+	RewriteRule ^characters/ characters.php
 	
 	# image / ranking rewrites
 	
