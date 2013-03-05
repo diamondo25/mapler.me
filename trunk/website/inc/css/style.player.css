@@ -229,6 +229,12 @@
     width: 156px;
 }
 
+#inventories #mesos {
+	float: right;
+	font-size: 10px;
+	margin-right: 46px;
+}
+
 
 
 
@@ -422,4 +428,11 @@
 	position: absolute;
 	top: 24px;
 	width: 155px;
+}
+
+.skill_sp {
+	bottom: 29px;
+	font-size: 12px;
+	position: absolute;
+	right: 12px;
 }

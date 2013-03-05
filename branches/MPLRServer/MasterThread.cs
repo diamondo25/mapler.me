@@ -77,8 +77,6 @@ namespace MPLRServer
 
         private Thread _mainThread;
 
-        List<ulong> _performanceCounter = new List<ulong>();
-
         public MasterThread(string pServerName, ulong pTicksBeforeSleep)
         {
             ServerName = pServerName;
@@ -87,7 +85,7 @@ namespace MPLRServer
 
         }
 
-        public static void Load(string pServerName, ulong pTicksBeforeSleep = 500)
+        public static void Load(string pServerName, ulong pTicksBeforeSleep = 200)
         {
             Instance = new MasterThread(pServerName, pTicksBeforeSleep);
             Instance.Init();
@@ -98,7 +96,7 @@ namespace MPLRServer
             _mainThread = new Thread(Run);
             _mainThread.IsBackground = true;
             _mainThread.Name = "MasterThread - thread";
-            _mainThread.Priority = ThreadPriority.AboveNormal;
+            _mainThread.Priority = ThreadPriority.Normal;
             _mainThread.Start();
         }
 

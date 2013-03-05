@@ -502,7 +502,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 <?php
 }
 ?>
-
+		<span id="mesos"><?php echo number_format($character_info['mesos']); ?></span>
 
 	</div>
 	<div class="span3" style="margin-left: 20px !important;">
@@ -696,10 +696,12 @@ function ChangeSkillList(id) {
 	if (lastidskill != -1) {
 		document.getElementById('bookname_' + lastidskill).style.display = 'none';
 		document.getElementById('skilllist_' + lastidskill).style.display = 'none';
+		document.getElementById('skillsp_' + lastidskill).style.display = 'none';
 	}
 	lastidskill = id;
 	document.getElementById('bookname_' + lastidskill).style.display = 'block';
 	document.getElementById('skilllist_' + lastidskill).style.display = 'block';
+	document.getElementById('skillsp_' + lastidskill).style.display = 'block';
 }
 
 var lastpet = -1;
@@ -770,25 +772,6 @@ foreach ($optionlist as $option => $desc) {
 <hr />
 
 <p class="lead">Skills, Mounts, and more...</p>
-<?php
-
-	$q->free();
-	
-	$q = $__database->query("
-SELECT
-	skillid, level, maxlevel, ceil((expires/10000000) - 11644473600) as expires
-FROM
-	skills
-WHERE
-	character_id = ".$internal_id."
-ORDER BY
-	skillid / 1000 ASC
-	");
-	
-	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
-	
-	$lastgroup = -1;
-?>
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -805,10 +788,47 @@ ORDER BY
 
 <div id="skill_list">
 <?php
+	
+	// Initialize SP
+	
+	$q = $__database->query("
+SELECT
+	slot, amount
+FROM
+	sp_data
+WHERE
+	character_id = ".$internal_id."
+	");
+	
+	$spdata = array();
+	while ($row = $q->fetch_assoc()) {
+		$spdata[$row['slot']] = $row['amount'];
+	}
+	$q->free();
+	
+	
+	$q = $__database->query("
+SELECT
+	skillid, level, maxlevel, ceil((expires/10000000) - 11644473600) as expires
+FROM
+	skills
+WHERE
+	character_id = ".$internal_id."
+ORDER BY
+	skillid / 1000 ASC
+	");
+	
+	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
+	
+	$lastgroup = -1;
 	$first_skill = true;
+	
+	
+	
 	
 	$groups = array();
 	$i = 0;
+	$jobtreeid = 0;
 	
 	while ($row = $q->fetch_assoc()) {
 		$name = GetMapleStoryString('skill', $row['skillid'], 'name');
@@ -825,11 +845,25 @@ ORDER BY
 			$lastgroup = $block;
 			$book = $block > 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname");
 			$groups[++$i] = $book;
+			
+			$sp = 0;
+			
+			if (!IsRealJob($block)) {
+				$sp = '-';
+			}
+			else {
+				$jobtreeid++;
+				if (isset($spdata[0])) $sp = $spdata[0]; // Global SP (old jobs)
+				elseif (isset($spdata[$jobtreeid])) $sp = $spdata[$jobtreeid]; // Job SP
+			}
+			
+			
 ?>
 	<div id="bookname_<?php echo $i; ?>" class="skill_bookname" style="display: none;">
 		<img class="book_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/info.icon.png" />
 		<div class="book_title"><?php echo $book; ?></div>
 	</div>
+	<span id="skillsp_<?php echo $i; ?>" class="skill_sp" style="display: none;"><?php echo $sp; ?></span>
 	<div id="skilllist_<?php echo $i; ?>" class="skill_job" style="display: none;">
 <?php
 		}

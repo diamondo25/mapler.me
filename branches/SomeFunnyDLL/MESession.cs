@@ -92,7 +92,7 @@ namespace System
                 _disconnected = true;
                 if (_socket.Connected)
                 {
-                    _socket.Disconnect(false);
+                    _socket.Shutdown(SocketShutdown.Both);
                 }
                 _socket.Close();
                 _socket = null;

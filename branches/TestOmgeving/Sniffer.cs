@@ -150,7 +150,7 @@ namespace Mapler_Client
                         }
                     });
 
-                    Logger.WriteLine("[CON] New connection found!");
+                    Logger.WriteLine("[CON] New connection found on {0}!", e.Device.Description);
                     if (cache != 0)
                     {
                         _currentSession.SetOutboundSequence(cache);

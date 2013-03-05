@@ -50,7 +50,11 @@ namespace MPLRServer
             });
 
             // For online check!
-            Acceptor acceptCheck = new Acceptor(23711, null);
+            Acceptor acceptCheck = new Acceptor(23711, sock =>
+            {
+                sock.Shutdown(System.Net.Sockets.SocketShutdown.Both);
+                sock.Close();
+            });
 
             while (true)
             {

@@ -208,3 +208,48 @@ function GetJobname($id) {
 	if (!isset($job_names[$id])) return 'Unknown ('.$id.')';
 	return $job_names[$id];
 }
+
+
+function IsRealJob($id) { // Beginner and mining etc is not a real job! :@
+	switch ($id) {
+		case 0:
+		case 1000:
+		
+		case 2000:
+		case 2001:
+		case 2002:
+		case 2003:
+		case 2004:
+		
+		case 3000:
+		case 3001:
+		case 3002:
+		
+		case 4002:
+		
+		case 5000:
+		
+		case 6000:
+		case 6001:
+		
+		
+		// All non-jobs
+		case 7000:
+		case 7100:
+		
+		case 8000:
+		
+		case 9000:
+		case 9100:
+		case 9200:
+		case 9201:
+		case 9202:
+		case 9203:
+		case 9204:
+		
+		
+			return false;
+	}
+	
+	return true;
+}
