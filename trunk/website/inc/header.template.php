@@ -5,7 +5,7 @@
 	<title>Mapler.me &middot; MapleStory Social Network</title>
 <?php else: ?>
 	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
-<?php endif; ?>  
+<?php endif; ?>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -17,7 +17,7 @@
 		endif;
 	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
-	
+
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css?refresh=<?php echo time(); ?>" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
@@ -45,16 +45,16 @@
 if (!isset($__url_useraccount)):
 ?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
-                            
+
 <?php
 // Is a subdomain
 else:
 ?>
 
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>                         
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>
 <?php
 endif;
-?>                      
+?>
 							<ul class="dropdown-menu">
 <?php
 // Display subdomain pages related to the user
@@ -80,8 +80,8 @@ endif;
 					 		</ul>
 						</li>
 					</ul>
-				
-					<!-- Login / Main Menu -->	
+
+					<!-- Login / Main Menu -->
 					<ul class="nav hidden-phone pull-right">
 						<li class="dropdown">
 <?php
@@ -92,7 +92,7 @@ if ($_loggedin):
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
-						
+
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
@@ -133,7 +133,7 @@ endif;
 	?>
 						</li>
 					</ul>
-		
+
 					<ul class="nav mobile pull-right">
 						<li class="menu dropdown">
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
@@ -145,7 +145,7 @@ if ($_loggedin):
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
-						
+
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
 ?>
@@ -180,7 +180,7 @@ else:
 <?php
 endif;
 ?>
-					 			
+
 					 		</ul>
 						</li>
 					</ul>
@@ -190,7 +190,7 @@ endif;
 	</div>
 
 	<div class="container">
-	
+
 <?php
 $ip = "mc.craftnet.nl";
 $port = 23711;

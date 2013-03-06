@@ -1,4 +1,4 @@
-		<div style="clear:both;"></div>	
+		<div style="clear:both;"></div>
 		<footer>
 			<p>
 				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> – <?php echo $__database->QueriesRan(); ?> queries ran.
@@ -15,7 +15,7 @@
 <?php endif; ?>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
 	<script src="//isotope.metafizzy.co/jquery.isotope.min.js" type="text/javascript"></script>
-	
+
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -41,7 +41,7 @@
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 	</script>
-		
+
 	<script type="text/javascript">
     $(document).ready(function() {
         var container = $('#character-wall');
@@ -50,9 +50,9 @@
             container.masonry({
                 itemSelector : '.character-brick',
                 gutterWidth: 20,
-                
+
                     isFitWidth: true,
-                
+
                 isAnimated: false
             }).imagesLoaded(function() {
                 container.masonry('reload');
@@ -62,15 +62,15 @@
             container.masonry({
                 itemSelector : '.character',
                 gutterWidth: 14,
-                
+
                     isFitWidth: true,
-                
+
                 isAnimated: true
             }).imagesLoaded(function() {
                 container.masonry('reload');
             });
         }
-		
+
 		container.isotope({
 		  // options
 		  itemSelector : '.item',

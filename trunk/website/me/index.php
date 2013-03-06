@@ -92,23 +92,23 @@ if (count($social_cache) == 0) {
 foreach ($social_cache as $row) {
 ?>
 		<div class="status span4">
-			<div class="header"><?php echo $row['nickname'];?> said: 
+			<div class="header"><?php echo $row['nickname'];?> said:
 				<span class="pull-right">
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
-				
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
+
 <?php
 	if ($_loggedin) {
-		if (IsOwnAccount()) { 
+		if (IsOwnAccount()) {
 ?>
 					- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>)">delete?</a>
 <?php
-		}	
+		}
 		else {
 			// Report button
 ?>
 					- <a href="#"></a>
 <?php
-		}	
+		}
 	}
 ?>
 				</span>

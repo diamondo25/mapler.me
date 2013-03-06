@@ -56,7 +56,7 @@ $job_names = array(
 		510 => 'Brawler',
 		511 => 'Marauder',
 		512 => 'Buccaneer',
-		
+
 		520 => 'Gunslinger',
 		521 => 'Outlaw',
 		522 => 'Corsair',
@@ -142,18 +142,18 @@ $job_names = array(
 	3000 => 'Citizen',
 	3001 => 'Demon Slayer',
 	3002 => 'Xenon',
-	
+
 	3100 => 'Demon Slayer',
 	3101 => 'Demon Avenger',
-	
+
 	3110 => 'Demon Slayer',
 	3111 => 'Demon Slayer',
 	3112 => 'Demon Slayer',
-	
+
 	3120 => 'Demon Avenger',
 	3121 => 'Demon Avenger',
 	3122 => 'Demon Avenger',
-	
+
 	3200 => 'Battle Mage',
 	3210 => 'Battle Mage',
 	3211 => 'Battle Mage',
@@ -168,18 +168,18 @@ $job_names = array(
 	3510 => 'Mechanic',
 	3511 => 'Mechanic',
 	3512 => 'Mechanic',
-	
+
 	3600 => 'Xenon',
 	3610 => 'Xenon',
 	3611 => 'Xenon',
 	3612 => 'Xenon',
-	
+
 	4002 => 'Kanna',
 	4200 => 'Kanna',
 	4210 => 'Kanna',
 	4211 => 'Kanna',
 	4212 => 'Kanna',
-	
+
 	5000 => 'Mihile',
 	5100 => 'Mihile',
 	5110 => 'Mihile',
@@ -214,31 +214,31 @@ function IsRealJob($id) { // Beginner and mining etc is not a real job! :@
 	switch ($id) {
 		case 0:
 		case 1000:
-		
+
 		case 2000:
 		case 2001:
 		case 2002:
 		case 2003:
 		case 2004:
-		
+
 		case 3000:
 		case 3001:
 		case 3002:
-		
+
 		case 4002:
-		
+
 		case 5000:
-		
+
 		case 6000:
 		case 6001:
-		
-		
+
+
 		// All non-jobs
 		case 7000:
 		case 7100:
-		
+
 		case 8000:
-		
+
 		case 9000:
 		case 9100:
 		case 9200:
@@ -246,10 +246,10 @@ function IsRealJob($id) { // Beginner and mining etc is not a real job! :@
 		case 9202:
 		case 9203:
 		case 9204:
-		
-		
+
+
 			return false;
 	}
-	
+
 	return true;
 }

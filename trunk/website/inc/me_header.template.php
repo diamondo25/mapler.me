@@ -5,7 +5,7 @@
 					<div class="span12">
 						<ul id="nav-left">
 							<li>
-								<a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters"><img src="//<?php echo $domain; ?>/inc/img/icons/user.png"/ style="position:relative;top:2px;"> 
+								<a id="posts" href="//<?php echo $subdomain.".".$domain; ?>/characters"><img src="//<?php echo $domain; ?>/inc/img/icons/user.png"/ style="position:relative;top:2px;">
 									<span class="count"><?php echo count($cache); ?></span> <span class="item">Characters</span>
 								</a>
 							</li>

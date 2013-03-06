@@ -33,15 +33,15 @@ function GetMapleStoryString($type, $id, $key) {
 	}
 
 	$q = $__database->query("
-SELECT 
-	`value` 
-FROM 
-	`strings` 
-WHERE 
-	`objecttype` = '".$__database->real_escape_string($type)."' 
-		AND 
-	`objectid` = ".intval($id)." 
-		AND 
+SELECT
+	`value`
+FROM
+	`strings`
+WHERE
+	`objecttype` = '".$__database->real_escape_string($type)."'
+		AND
+	`objectid` = ".intval($id)."
+		AND
 	`key` = '".$__database->real_escape_string($key)."'
 ");
 	if ($q->num_rows >= 1) {

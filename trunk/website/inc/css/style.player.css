@@ -207,7 +207,7 @@
 	font-size: 12px;
 	font-family: Arial;
 	font-weight: strong;
-	
+
 	text-shadow:
 	-1px -1px 0 #fff,
 	1px -1px 0 #fff,
@@ -303,7 +303,7 @@
 #item_info .req_job {
 	font-size: 11px;
 	color: white;
-	
+
 	padding: 2px;
 	border-radius: 3px;
 	background-color: rgba(0,0,0,1);

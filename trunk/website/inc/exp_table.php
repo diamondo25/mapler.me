@@ -27,9 +27,9 @@ $__exp_table = array(
 
 function GetExpPercentage($level, $currentEXP) {
 	global $__exp_table;
-	
+
 	if ($level == 0 || $level == 200) return 0;
-	
+
 	return ($currentEXP / $__exp_table[$level] * 100);
 }
 

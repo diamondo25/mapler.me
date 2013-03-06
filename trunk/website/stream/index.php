@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once '../inc/header.php';
 if (!$_loggedin):
 ?>
@@ -15,7 +15,7 @@ else:
 <p><b>Stream</b> | What do you want to say, <?php echo $_loginaccount->GetFullName(); ?>?</p>
 <?php
 include('../inc/social.php');
-    
+
 $q = $__database->query("
 SELECT
 	*,
@@ -28,7 +28,7 @@ ORDER BY
 	secs_since ASC
 ");
 
-	
+
 $social_cache = array();
 while ($row = $q->fetch_assoc()) {
 	$social_cache[] = $row;
@@ -46,23 +46,23 @@ $q->free();
 foreach ($social_cache as $row) {
 ?>
 		<div class="status">
-			<div class="header"><?php echo $row['nickname'];?> said: 
+			<div class="header"><?php echo $row['nickname'];?> said:
 				<span class="pull-right">
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
-				
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
+
 <?php
 	if ($_loggedin) {
-		if (IsOwnAccount()) { 
+		if (IsOwnAccount()) {
 ?>
 					- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>)">delete?</a>
 <?php
-		}	
+		}
 		else {
 			// Report button
 ?>
 					- <a href="#"></a>
 <?php
-		}	
+		}
 	}
 ?>
 				</span>
@@ -77,7 +77,7 @@ foreach ($social_cache as $row) {
 ?>
 	<hr />
 	<h1>Welcome, <?php echo $_loginaccount->GetFullName(); ?>!
-<?php 
+<?php
 	if ($has_characters):
 		$main_character_name = $char_config['main_character'];
 		$main_character_image = '//'.$domain.'/avatar/'.$main_character_name;
@@ -88,7 +88,7 @@ foreach ($social_cache as $row) {
 	endif;
 ?></h1>
 	<p>This page includes some simple steps on how to get started!</p>
-	
+
 	<p>Step 1) To begin using Mapler.me, first head to <button class="btn"><a href="//<?php echo $domain; ?>/panel/settings/accounts/">Settings -> Accounts</a></button> and connect your Nexon America account with Mapler.me. When logging into
 	MapleStory it will check if the account is connected to any Mapler.me account. If so, it will then be able to work properly.</p>
 	<p>Step 2) Download the Mapler.me client! It will first check for a secure connection between your client and Mapler.me, then appear! Click on "Launch MapleStory" to show the Game Launcher and launch the game.<br/>
@@ -105,9 +105,9 @@ foreach ($social_cache as $row) {
 	<br/>
 	<blockquote class="pull-right">P.S: Your main character will display at the right of the page when added!</blockquote>
 	</div>
-	
+
 	<?php include('../inc/stream.sidebar.template.php'); ?>
-	
+
 	</div>
 
 </p>

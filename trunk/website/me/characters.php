@@ -4,23 +4,23 @@ require_once '../inc/header.php';
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 $q = $__database->query("
-SELECT 
-	chr.id, 
-	chr.name, 
-	w.world_name 
-FROM 
-	characters chr 
-LEFT JOIN 
-	users usr 
-	ON 
-		usr.ID = chr.userid 
-LEFT JOIN 
-	world_data w 
-	ON 
-		w.world_id = chr.world_id 
-WHERE 
-	usr.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' 
-ORDER BY 
+SELECT
+	chr.id,
+	chr.name,
+	w.world_name
+FROM
+	characters chr
+LEFT JOIN
+	users usr
+	ON
+		usr.ID = chr.userid
+LEFT JOIN
+	world_data w
+	ON
+		w.world_id = chr.world_id
+WHERE
+	usr.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
+ORDER BY
 	chr.world_id ASC,
 	chr.level DESC
 ");
@@ -49,7 +49,7 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
 require_once '../inc/me_header.template.php';
 
 ?>
-	
+
 	<!-- Character Display -->
 	<div id="character-wall">
 
@@ -87,8 +87,8 @@ foreach ($cache as $row) {
 					<br />
 				</center>
 			</div>
-        
-<?php       
+
+<?php
 }
 ?>
 
