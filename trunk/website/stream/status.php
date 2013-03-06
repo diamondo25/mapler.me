@@ -105,6 +105,7 @@ foreach ($cache as $row) {
 				<a href="//<?php echo $domain; ?>/stream/status/<?php echo $statusid; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
 				
 				<?php
+				if ($_loggedin) {
 				if ($playerid == $_loginaccount->GetId()) { ?>
 					- <a href="#" onclick="RemoveStatus('<?php echo $statusid; ?>')">
 					delete?
@@ -113,7 +114,8 @@ foreach ($cache as $row) {
 					
 				else {
 					echo '<a href="#"></a>'; //will be report button
-				}	
+				}
+				}
 				?>
 				
 				
