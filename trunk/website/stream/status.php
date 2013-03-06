@@ -3,6 +3,30 @@ require_once '../inc/header.php';
 $statusid = htmlentities($_GET['id']);
 ?>
 
+<script type="text/javascript">
+function RemoveStatus(id) {
+	if (confirm("Are you sure you want to delete this status?")) {
+		document.location.href = '?removeid=' + id;
+	}
+}
+</script>
+<?php
+
+// Preventing spamming of form.
+
+// If antispam passes, push status
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
+	// Removing status
+	
+	$id = $__database->real_escape_string($_GET['removeid']);
+	
+	$__database->query("DELETE FROM social_statuses WHERE id = '".$id."' AND account_id = ".$_loginaccount->GetId());
+?>
+<p class="lead alert-info alert">The status was successfully deleted.</p>
+<?php
+}
+
+?>
     <?php
     
 $q = $__database->query("
@@ -57,6 +81,13 @@ function time_elapsed_string($etime) {
 ?>
 	<div class="row">
 	<div class="span12">
+
+<?php
+if (count($cache) == 0) {
+echo '<p class="lead alert-info alert">404! Status not found. (The status was deleted or removed)</p>';
+}
+?>
+	
 	<?php
 
 // printing table rows

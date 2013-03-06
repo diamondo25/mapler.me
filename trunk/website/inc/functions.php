@@ -760,7 +760,7 @@ if (isset($_SESSION['username'])) {
 $__url_useraccount = null;
 
 if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "social") {
-	// Tries to recieve userdata for the subdomain. If it fails, results in a 404.
+	// Tries to receive userdata for the subdomain. If it fails, results in a 404.
 	
 	$__url_useraccount = Account::Load($subdomain);
 	if ($__url_useraccount == null) {

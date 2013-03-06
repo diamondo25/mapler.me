@@ -37,7 +37,11 @@
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="//<?php echo $domain; ?>" style="margin-top: 6px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);font-size:25px !important;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:5px;width:60px;"/>Mapler.me</a>
+				<a class="brand" href="
+				<?php if ($_loggedin): ?>
+				//<?php echo $domain; ?>/stream/
+				<?php else: ?>
+				//<?php echo $domain; ?><?php endif; ?>"  style="margin-top: 6px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);font-size:25px !important;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:5px;width:60px;"/>Mapler.me</a>
 				<div class="nav-collapse">
 					<ul class="nav hidden-phone">
 						 <li class="dropdown">
