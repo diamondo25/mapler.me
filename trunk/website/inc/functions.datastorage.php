@@ -14,22 +14,10 @@ function GetMapleStoryString($type, $id, $key) {
 		$key = substr($key, 0, 5);
 	}
 
-	if ($apcinstalled && !apc_exists("data_cache")) {
-		apc_add("data_cache", array());
-	}
-
-	$temp = NULL;
-	if ($apcinstalled) {
-		$temp = apc_fetch("data_cache");
-		if ($temp == NULL) {
-			$temp = array();
-		}
-		if (array_key_exists($type.'|'.$id.'|'.$key, $temp)) {
-			return $temp[$type.'|'.$id.'|'.$key];
-		}
-	}
-	else {
-		$temp = array();
+	$key_name = "data_cache_".$type.'|'.$id.'|'.$key;
+	
+	if ($apcinstalled && apc_exists($key_name)) {
+		return apc_fetch($key_name);
 	}
 
 	$q = $__database->query("
@@ -46,104 +34,65 @@ WHERE
 ");
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
-		$tmp = $row[0];
+		$value = $row[0];
 
 		if ($apcinstalled) {
-			$temp[$type.'|'.$id.'|'.$key] = $tmp;
-			apc_store("data_cache", $temp);
+			apc_add($key_name, $value);
 		}
 
 		$q->free();
-		return $tmp;
+		return $value;
 	}
 	$q->free();
 
-	if ($apcinstalled) {
-		$temp[$type.'|'.$id.'|'.$key] = NULL; // Ai
-		apc_store("data_cache", $temp);
-	}
 	return NULL;
 }
-
 
 function GetItemDefaultStats($id) {
 	global $__database, $apcinstalled;
 
-	if ($apcinstalled && !apc_exists("data_iteminfo_cache")) {
-		apc_add("data_iteminfo_cache", array());
+	$key_name = "data_iteminfo_cache_".$id;
+	
+	if ($apcinstalled && apc_exists($key_name)) {
+		return apc_fetch($key_name);
 	}
-
-	$temp = NULL;
-	if ($apcinstalled) {
-		$temp = apc_fetch("data_iteminfo_cache");
-		if ($temp == NULL) {
-			$temp = array();
-		}
-		if (array_key_exists($id, $temp)) {
-			return $temp[$id];
-		}
-	}
-	else {
-		$temp = array();
-	}
-
+	
 	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".$id);
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
-		$tmp = $row;
 
 		if ($apcinstalled) {
-			$temp[$id] = $tmp;
-			apc_store("data_iteminfo_cache", $temp);
+			apc_add($key_name, $row);
 		}
 
 		$q->free();
-		return $tmp;
+		return $row;
 	}
 	$q->free();
 
-	if ($apcinstalled) {
-		$temp[$id] = NULL;
-		apc_store("data_iteminfo_cache", $temp);
-	}
 	return NULL;
 }
 
 
 function GetPotentialInfo($id) {
 	global $__database, $apcinstalled;
-
-	if ($apcinstalled && !apc_exists("data_itemoptions_cache")) {
-		apc_add("data_itemoptions_cache", array());
-	}
-
-	$temp = NULL;
-	if ($apcinstalled) {
-		$temp = apc_fetch("data_itemoptions_cache");
-		if ($temp == NULL) {
-			$temp = array();
-		}
-		if (array_key_exists($id, $temp)) {
-			return $temp[$id];
-		}
-	}
-	else {
-		$temp = array();
+	
+	$key_name = "data_itemoptions_cache".$id;
+	
+	if ($apcinstalled && apc_exists($key_name)) {
+		return apc_fetch($key_name);
 	}
 
 	$data = array();
-
 	$data['name'] = GetMapleStoryString('item_option', $id, 'desc');
 
-
 	$q = $__database->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".$id);
-	while ($row = $q->fetch_array()) {
+	while ($row = $q->fetch_row()) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
-
+	
 	if ($apcinstalled) {
-		$temp[$id] = $data;
-		apc_store("data_itemoptions_cache", $temp);
+		apc_add($key_name, $data);
 	}
 
 	return $data;
@@ -152,47 +101,36 @@ function GetPotentialInfo($id) {
 // Only for X Y and some special stuff!!!
 function GetItemWZInfo($itemid) {
 	global $__database, $apcinstalled;
-
-	if ($apcinstalled && !apc_exists("data_characterwz_cache")) {
-		apc_add("data_characterwz_cache", array());
+	
+	$key_name = "data_characterwz_cache".$itemid;
+	
+	if ($apcinstalled && apc_exists($key_name)) {
+		return apc_fetch($key_name);
 	}
-
-	$temp = NULL;
-	if ($apcinstalled) {
-		$temp = apc_fetch("data_characterwz_cache");
-		if ($temp == NULL) {
-			$temp = array();
-		}
-		if (array_key_exists($itemid, $temp)) {
-			return $temp[$itemid];
-		}
-	}
-	else {
-		$temp = array();
-	}
-
-
-
-	$query = $__database->query("
+	
+	$q = $__database->query("
 SELECT
-	*
+	`key`,
+	`value`
 FROM
 	`phpVana_characterwz`
 WHERE
-	`itemid` = ".$itemid);
+	`itemid` = ".$itemid
+);
+
 	$item_info = array();
-	while ($data = $query->fetch_assoc()) {
-		$item_info[$data['key']] = $data['value'];
+	while ($data = $q->fetch_row()) {
+		$item_info[$data[0]] = $data[1];
 	}
 	$item_info['ITEMID'] = $itemid;
-	$query->free();
+	
 
-
+	$q->free();
+	
 	if ($apcinstalled) {
-		$temp[$itemid] = $item_info;
-		apc_store("data_characterwz_cache", $temp);
+		apc_add($key_name, $item_info);
 	}
-
+	
 	return $item_info;
 }
 
