@@ -85,7 +85,7 @@ echo $rows;
 		Result:<br />
 		<pre>
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_POST['ihewfihewfewf'] == 'HURR1312') {
 	echo RunCMD('svn up '.$svn_arguments);
 }
 ?>
