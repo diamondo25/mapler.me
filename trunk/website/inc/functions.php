@@ -131,7 +131,7 @@ function bb_parse($bb) {
                 case 'quote': $replacement = "<blockquote>$innertext</blockquote>" . $param? "<cite>$param</cite>" : ''; break; 
                 case 'url': $replacement = '<a href="' . ($param? $param : $innertext) . "\">$innertext</a>"; break; 
                 case 'img':
-                    $replacement = "<img src=\"$innertext\"/>; 
+                    $replacement = "<img src=\"$innertext\"/>"; 
                 break; 
                 case 'video': 
                     $videourl = parse_url($innertext); 
