@@ -13,9 +13,8 @@ else:
 ?>
 
 <p><b>Stream</b> | What do you want to say, <?php echo $_loginaccount->GetFullName(); ?>?</p>
-<?php include('../inc/social.php'); ?>
-
-    <?php
+<?php
+include('../inc/social.php');
     
 $q = $__database->query("
 SELECT
@@ -24,46 +23,18 @@ SELECT
 FROM
 	social_statuses
 WHERE
-	account_id = '".$_loginaccount->GetId()."' OR override = '1'
+	override = 1
 ORDER BY
-secs_since ASC
+	secs_since ASC
 ");
+
 	
-$fixugh = '0';
-	
-$cache = array();
+$social_cache = array();
 while ($row = $q->fetch_assoc()) {
-	if (isset($fixugh)) {
-		if ($fixugh == 2) { // Always hide... :)
-			continue;
-		}
-	}
-	$cache[] = $row;
+	$social_cache[] = $row;
 }
 
 $q->free();
-
-function time_elapsed_string($etime) {
-   if ($etime < 1) {
-       return '0 seconds';
-   }
-   
-   $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
-               30 * 24 * 60 * 60       =>  'month',
-               24 * 60 * 60            =>  'day',
-               60 * 60                 =>  'hour',
-               60                      =>  'minute',
-               1                       =>  'second'
-               );
-   
-   foreach ($a as $secs => $str) {
-       $d = $etime / $secs;
-       if ($d >= 1) {
-           $r = round($d);
-           return $r . ' ' . $str . ($r > 1 ? 's' : '');
-       }
-   }
-}
 
 ?>
 	<div class="row">
@@ -72,39 +43,36 @@ function time_elapsed_string($etime) {
 
 // printing table rows
 
-foreach ($cache as $row) {
-
+foreach ($social_cache as $row) {
 ?>
-			<div class="status">
-			<div class="header">
-			<?php
-			echo $row['nickname'];
-			$playerid = $row['account_id'];
-			$id = $row['id'];
-			$bb = $row['content'];
-			?> said: <span class="pull-right">
-				<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
-
+		<div class="status">
+			<div class="header"><?php echo $row['nickname'];?> said: 
+				<span class="pull-right">
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
 				
-				<?php
-				if ($playerid == $_loginaccount->GetId()) { ?>
-					- <a href="#" onclick="RemoveStatus('<?php echo $row['id']; ?>')">
-					delete?
-				</a>
-				<?php } 
-					
-				else {
-					echo '- <a href="#"></a>'; //will be report button
-				}	
-				?>
-				
-				
-			</span></div>
-				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
-					<?php echo bb_parse($bb); ?>
+<?php
+	if ($_loggedin) {
+		if (IsOwnAccount()) { 
+?>
+					- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>)">delete?</a>
+<?php
+		}	
+		else {
+			// Report button
+?>
+					- <a href="#"></a>
+<?php
+		}	
+	}
+?>
+				</span>
 			</div>
-        
-<?php       
+			<br />
+			<img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right" />
+			<?php echo bb_parse($row['content']); ?>
+		</div>
+
+<?php
 }
 ?>
 	<hr />

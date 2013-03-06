@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php
-		if (!isset($__url_useraccount)):
-	?>
+<?php if (!isset($__url_useraccount)): ?>
 	<title>Mapler.me &middot; MapleStory Social Network</title>
-	<?php
-		else:
-	?>
+<?php else: ?>
 	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
-	<?php
-		endif;
-	?>  
+<?php endif; ?>  
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -24,9 +19,9 @@
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css?refresh=<?php echo time(); ?>" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css?refresh=<?php echo time(); ?>" type="text/css" />
 <?php endif; ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
@@ -72,9 +67,11 @@ if (isset($__url_useraccount)):
 else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
-								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
+	<?php if ($_loggedin): ?>
+								<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li><?php endif; ?>
+								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li>
+	<?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></li>
 <?php
@@ -115,18 +112,18 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
+											<input type="text" id="username" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
+											<input type="password" id="password" name="password" placeholder="Password" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
-											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
+											<button type="submit" class="btn btn-success" style="margin-right: 2px;width: 240px;">Sign in</button>
+											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display: none;">Register?</button>
 										</div>
 									</div>
 								</form>
@@ -147,13 +144,13 @@ if ($_loggedin):
 ?>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
-								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
+								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
 						
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/repo/">Update Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Update Website</a></li>
 <?php
 endif;
 ?>
@@ -165,17 +162,17 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
+											<input type="text" id="username" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
+											<input type="password" id="password" name="password" placeholder="Password" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
+											<button type="submit" class="btn btn-success" style="margin-right: 2px; width: 240px;">Sign in</button>
 											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 										</div>
 									</div>
