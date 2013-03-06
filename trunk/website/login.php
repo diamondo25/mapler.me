@@ -5,7 +5,7 @@ $error = null;
 
 if (IsLoggedin()) {
 ?>
-<meta http-equiv="refresh" content="3;URL='/'" />
+<meta http-equiv="refresh" content="3;URL='/stream/'" />
 <p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
 	require_once 'inc/footer.php';
@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 if ($_loggedin) {
 ?>
-<meta http-equiv="refresh" content="0;URL='/'" />
-<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 1 second. If not, <a href="/">click here</a>.</p>
+<meta http-equiv="refresh" content="3;URL='/stream/'" />
+<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
 }
 else {

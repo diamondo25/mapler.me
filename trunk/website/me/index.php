@@ -173,7 +173,7 @@ foreach ($cache as $row) {
 			$id = $row['id'];
 			$bb = $row['content'];
 			?> said: <span class="pull-right">
-				<?php echo time_elapsed_string($row['secs_since']); ?> ago 
+				<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
 				
 				<?php
 				if ($_loggedin):

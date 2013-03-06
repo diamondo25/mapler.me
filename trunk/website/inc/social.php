@@ -66,19 +66,15 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 <?php else: ?>
 
 <div class="row">
-	<div class="span4">
+	
 			<form method="post">
-			<div class="input-append">
-					<textarea name="content" id="appendedInputButton" style="height:37px;max-height:37px;"></textarea>
-					<button type="submit" class="btn btn-large" style="padding:16px;">Post!</button>
+					<div class="span9">
+					<textarea name="content" class="span9 status" style="height:100px;max-height:100px;max-width:888px;padding-right:50px;" placeholder="Type your status here!"></textarea>
 					</div>
+				<button type="submit" class="btn btn-large" style="padding:16px;position:relative;top:15px;">Post!</button>		
 			</form>
-		</div>
-	<div class="span8">
-	<p class="lead">New: Status updates now implemented.<br/>
-		<sub>Temporarily, messages can only be sent once a minute.</sub>
-	</p>
-	</div>
+			
+		
 </div>
 
 <?php endif; ?>

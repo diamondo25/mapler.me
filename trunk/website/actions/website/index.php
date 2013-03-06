@@ -73,6 +73,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['ihewfihewfewf'] == 'HURR1312
 }
 ?>
 </pre>
+
+<h4>Update the sidebar:</h4>
+
+<form method="post">
+					<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php include('sidebar.txt'); ?> </textarea>
+					<button type="submit" class="btn">Update!</button>
+			</form>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['updatetxt'] !== '') {
+	$updatetxt = $_POST['updatetxt']; //not protected from sql injection to prevent html / php added from derping.
+	
+	$filename = 'sidebar.txt';
+	$somecontent = $updatetxt;
+
+	if (is_writable($filename)) {
+
+    if (!$handle = fopen($filename, 'w')) {
+         echo '<p class="alert info-danger">Could not open the sidebar. Protected?</p>';
+         exit;
+    }
+
+    // Write $somecontent to our opened file.
+    if (fwrite($handle, $somecontent) === FALSE) {
+        echo '<p class="alert info-danger">Could not write to sidebar.</p>';
+        exit;
+    }
+
+    echo '<p class="alert info-sucess">Successfully updated sidebar!</p>';
+
+    fclose($handle);
+
+} else {
+    echo '<p class="alert info-danger">Error: The sidebar is not writable.</p>';
+}
+	
+	
+}
+?>
+
+
+
 </div>
 <div class="span4">
 <h4>Various functions and information:</h4>
@@ -90,8 +132,6 @@ if (isset($_GET['clear_cache'])) {
 	}
 ?>
 <p class="alert info-danger">Notice: <?php echo $i; ?> cached files were deleted! </p>
-</div>
-</div>
 <?php
 
 	// Clear data caches
@@ -99,5 +139,11 @@ if (isset($_GET['clear_cache'])) {
 	apc_delete('data_iteminfo_cache');
 	apc_delete('data_itemoptions_cache');
 }
+?>
+
+</div>
+</div>
+
+<?php
 require_once '../../inc/footer.php';
 ?>
