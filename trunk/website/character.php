@@ -846,7 +846,7 @@ ORDER BY
 <?php
 			}
 			$lastgroup = $block;
-			$book = $block > 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname");
+			$book = $block >= 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname");
 			$groups[++$i] = $book;
 			
 			$sp = 0;
