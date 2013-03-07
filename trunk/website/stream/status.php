@@ -128,7 +128,6 @@ foreach ($cache as $row) {
 			<div id="disqus_thread"></div>
 			<script type="text/javascript">
 				var disqus_shortname = 'maplerme';
-				var disqus_url = '<?php echo $_SERVER['REQUEST_URI']; ?>';
 				(function() {
 				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
