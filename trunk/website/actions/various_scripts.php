@@ -40,3 +40,14 @@ if (!isset($check['assigned_to'])) {
 <?php
 }
 ?>
+
+notifications menu I'll eventually add.
+<?php if ($_loggedin): ?>
+					<ul class="nav hidden-phone pull-right">
+						<li class="dropdown">
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">notifications</b></a>
+							<ul class="dropdown-menu">
+							</ul>
+			</li>
+					</ul>
+<?php endif; ?>

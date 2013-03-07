@@ -23,7 +23,7 @@ SELECT
 FROM
 	social_statuses
 WHERE
-	override = 1
+	override = 1 OR account_id = '".$__database->real_escape_string($_loginaccount->GetID())."'
 ORDER BY
 	secs_since ASC
 ");

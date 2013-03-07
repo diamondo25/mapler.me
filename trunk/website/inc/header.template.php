@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<?php if (!isset($__url_useraccount)): ?>
+	<?php
+		if (!isset($__url_useraccount)):
+	?>
 	<title>Mapler.me &middot; MapleStory Social Network</title>
-<?php else: ?>
+	<?php
+		else:
+	?>
 	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
-<?php endif; ?>
-
+	<?php
+		endif;
+	?>  
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -17,11 +22,11 @@
 		endif;
 	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
-
+	
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css?refresh=<?php echo time(); ?>" type="text/css" />
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css?refresh=<?php echo time(); ?>" type="text/css" />
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
 <?php endif; ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
@@ -33,10 +38,11 @@
 		<div class="navbar-inner">
 			<div class="container">
 				<a class="brand" href="
-				<?php if ($_loggedin): ?>
-				//<?php echo $domain; ?>/stream/
-				<?php else: ?>
-				//<?php echo $domain; ?><?php endif; ?>"  style="margin-top: 6px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);font-size:25px !important;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:5px;width:60px;"/>Mapler.me</a>
+					<?php if ($_loggedin): ?>
+						//<?php echo $domain; ?>/stream/
+					<?php else: ?>
+						//<?php echo $domain; ?>
+					<?php endif; ?>" style="margin-top: 6px;opacity: 1;color: #fff3e4;text-decoration: none;text-shadow: 0 -1px 0 rgba(0,0,0,0.25);font-size:25px !important;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:5px;width:60px;"/>Mapler.me</a>
 				<div class="nav-collapse">
 					<ul class="nav hidden-phone">
 						 <li class="dropdown">
@@ -45,16 +51,16 @@
 if (!isset($__url_useraccount)):
 ?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
-
+                            
 <?php
 // Is a subdomain
 else:
 ?>
 
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>                         
 <?php
 endif;
-?>
+?>                      
 							<ul class="dropdown-menu">
 <?php
 // Display subdomain pages related to the user
@@ -67,11 +73,9 @@ if (isset($__url_useraccount)):
 else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
-	<?php if ($_loggedin): ?>
-								<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
+								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li>
-	<?php endif; ?>
+								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li><?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></li>
 <?php
@@ -80,19 +84,19 @@ endif;
 					 		</ul>
 						</li>
 					</ul>
-
-					<!-- Login / Main Menu -->
+				
+					<!-- Login / Main Menu -->	
 					<ul class="nav hidden-phone pull-right">
 						<li class="dropdown">
 <?php
 if ($_loggedin):
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Welcome back! <?php echo $_loginaccount->GetFullName(); ?> <b class="caret"></b></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><?php echo $_loginaccount->GetFullName(); ?> <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
-
+						
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
@@ -112,18 +116,18 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="username" name="username" placeholder="Email" style="width: 222px;"/>
+											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<input type="password" id="password" name="password" placeholder="Password" style="width: 222px;"/>
+											<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right: 2px;width: 240px;">Sign in</button>
-											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display: none;">Register?</button>
+											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
+											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 										</div>
 									</div>
 								</form>
@@ -133,7 +137,7 @@ endif;
 	?>
 						</li>
 					</ul>
-
+		
 					<ul class="nav mobile pull-right">
 						<li class="menu dropdown">
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
@@ -144,13 +148,13 @@ if ($_loggedin):
 ?>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
-								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
-
+								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
+						
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Update Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/repo/">Update Website</a></li>
 <?php
 endif;
 ?>
@@ -162,17 +166,17 @@ else:
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
-											<input type="text" id="username" name="username" placeholder="Email" style="width: 222px;"/>
+											<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<input type="password" id="password" name="password" placeholder="Password" style="width: 222px;"/>
+											<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<div class="controls">
-											<button type="submit" class="btn btn-success" style="margin-right: 2px; width: 240px;">Sign in</button>
+											<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
 											<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
 										</div>
 									</div>
@@ -180,7 +184,7 @@ else:
 <?php
 endif;
 ?>
-
+					 			
 					 		</ul>
 						</li>
 					</ul>
@@ -190,7 +194,7 @@ endif;
 	</div>
 
 	<div class="container">
-
+	
 <?php
 $ip = "mc.craftnet.nl";
 $port = 23711;
