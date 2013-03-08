@@ -121,7 +121,7 @@ foreach ($cache as $row) {
 				
 			</span></div>
 				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
-					<?php echo bb_parse($bb); ?>
+					<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
 			</div>
 			
 			<div class="status">

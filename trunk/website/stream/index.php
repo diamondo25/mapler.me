@@ -72,7 +72,7 @@ foreach ($social_cache as $row) {
 			</div>
 			<br />
 			<img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right" />
-			<?php echo bb_parse($row['content']); ?>
+			<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
 		</div>
 
 <?php
