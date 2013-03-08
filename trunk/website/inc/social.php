@@ -28,6 +28,8 @@ if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['content']) {
 	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 	
 	$content = htmlentities($_POST['content']);
+	$contentfix = strip_tags($content);
+	$contentfix2 = stripslashes($contentfix);
 	
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 	$has_characters = !empty($char_config['main_character']);
@@ -42,7 +44,7 @@ if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['content']) {
 	$chr = '';
 	endif;
 	
-	$__database->query("INSERT INTO social_statuses VALUES (NULL, '".$accid."', '".$nicknm."', '".$chr."', '".$content."', 0, NOW(), 0)");
+	$__database->query("INSERT INTO social_statuses VALUES (NULL, '".$accid."', '".$nicknm."', '".$chr."', '".$contentfix2."', 0, NOW(), 0)");
 ?>
 <p class="lead alert-success alert">Sending to Maple Admin.. checking.. success! Status posted.</p>
 <?php	

@@ -129,9 +129,11 @@ function bb_parse($bb) {
 			case 'center': $replacement = '<div class="centered">'.$innertext.'</div>'; break;
 			case 'quote': $replacement = '<blockquote>'.$innertext.'</blockquote>' . ($param ? '<cite>'.$param.'</cite>' : ''); break;
 			case 'url': $replacement = '<a href="' . ($param ? $param : $innertext) . '">'.$innertext.'</a>'; break;
-			case 'img':
-				$replacement = '<img src="'.$innertext.'" />';
-			break;
+			case 'img': $replacement = '<img src="'.$innertext.'" />'; break;
+			// mapler.me bbcode
+			case 'player': $replacement = '<img src="//'.$domain.'/player/'.$innertext.'" />'; break;
+			case 'card': $replacement = '<img src="//'.$domain.'/card/'.$innertext.'" />'; break;
+			case 'stats': $replacement = '<img src="//'.$domain.'/infopic/'.$innertext.'" />'; break;
 			case 'video':
 				$videourl = parse_url($innertext);
 				parse_str($videourl['query'], $videoquery);
