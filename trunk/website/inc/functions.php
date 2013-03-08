@@ -17,7 +17,7 @@ $parser = new JBBCode\Parser();
 $parser->loadDefaultCodes();
 
 //Images
-$parser->addBBCode("avatar", '<img src="//'.$domain.'/player/{param}"/>');
+$parser->addBBCode("avatar", '<img src="//'.$domain.'/avatar/{param}"/>');
 $parser->addBBCode("card", '<img src="//'.$domain.'/card/{param}"/>');
 $parser->addBBCode("stats", '<img src="//'.$domain.'/infopic/{param}"/>');
 
