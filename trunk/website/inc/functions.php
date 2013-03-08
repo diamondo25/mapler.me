@@ -25,6 +25,9 @@ $parser->addBBCode("stats", '<img src="//'.$domain.'/infopic/{param}"/>');
 $parser->addBBCode("mention", '<a href="//{param}.'.$domain.'/">@{param}</a>');
 $parser->addBBCode("player", '<a href="//'.$domain.'/player/{param}">{param}<sup>(character)</sup></a>');
 
+//Various
+$parser->addBBCode("br", '<br/>');
+
 class Form {
 	public $output;
 
