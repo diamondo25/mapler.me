@@ -57,7 +57,7 @@
             this.richTextBox1.Size = new System.Drawing.Size(260, 70);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "This client is currently in BETA.\n\nLogging in or changing channels will update yo" +
-    "ur character. More instructions are avalible on the site!";
+    "ur character. More instructions are available on the site!";
             // 
             // btnLaunch
             // 
