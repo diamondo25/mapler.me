@@ -20,8 +20,11 @@ namespace Mapler_Client
 
         public frmMain()
         {
+
             InitializeComponent();
             Instance = this;
+
+            this.Text += Application.ProductVersion;
         }
 
         private void Form1_Load(object sender, EventArgs e)

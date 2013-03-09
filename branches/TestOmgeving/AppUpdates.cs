@@ -17,12 +17,12 @@ namespace CraftNetTools
         public static void Check()
         {
             string ApplicationName = Application.ProductName;
-            int ApplicationVersion = int.Parse(Application.ProductVersion.Replace(".", ""));
+            string ApplicationVersion = Application.ProductVersion;
             try
             {
                 if (File.Exists("noupdate.txt")) return;
 
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(string.Format("http://direct.craftnet.nl/app_updates/updates.php?appname={0}&appver={1}", ApplicationName, ApplicationVersion));
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(string.Format("http://direct.craftnet.nl/app_updates/updates.php?appname={0}&appver={1}&v=2", ApplicationName, ApplicationVersion));
                 req.Proxy = null;
                 req.Timeout = 10000; // 10 seconds
 
@@ -37,8 +37,8 @@ namespace CraftNetTools
                     else
                     {
                         string url = sr.ReadLine();
-                        int latestVersion = int.Parse(responseText);
-                        if (latestVersion > ApplicationVersion)
+                        string latestVersion = responseText;
+                        if (latestVersion != ApplicationVersion)
                         {
                             if (MessageBox.Show(string.Format("A new version is released!\r\nVersion: {0}\r\n\r\nPress OK to go to download page!", latestVersion), ApplicationName, MessageBoxButtons.OKCancel) == DialogResult.OK)
                             {
