@@ -2,6 +2,7 @@
 
 class InventoryData {
 	private $inventories;
+	private $bags;
 	private $equips;
 	
 	public function __construct($character_id) {
@@ -19,7 +20,7 @@ class InventoryData {
 		
 		$q->free();
 		
-		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id);
+		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
 		
 		while ($row = $q->fetch_assoc()) {
 			$inv = $row['inventory'];
@@ -32,9 +33,29 @@ class InventoryData {
 				if ($slot >= $this->inventories[$inv]->getSize()) {
 					$this->inventories[$inv]->setSize($slot + ($slot % 4) + 1);
 				}
-				$this->inventories[$inv][$slot] = $inv == 0 ? new ItemEquip($row) : new ItemBase($row);
+				$item = $inv == 0 ? new ItemEquip($row) : new ItemBase($row);
+				$this->inventories[$inv][$slot] = $item;
+				
+				if ($item->bagid != -1) {
+					$this->bags[$item->bagid] = array();
+				}
 			}
 		}
+		
+		$q->free();
+		
+		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
+		
+		while ($row = $q->fetch_assoc()) {
+			$inv = $row['inventory'];
+			$bagid = $inv - 10;
+			if (!isset($this->bags[$bagid])) continue;
+			
+			$slot = $row['slot'];
+			$this->bags[$bagid][$slot] = new ItemBase($row);
+		}
+		
+		$q->free();
 	}
 	
 	public function GetInventory($inventory) {
@@ -47,7 +68,7 @@ class InventoryData {
 }
 
 class ItemBase {
-	public $inventory, $slot, $itemid, $expires, $cashid, $amount;
+	public $inventory, $slot, $itemid, $expires, $cashid, $amount, $bagid;
 	
 	public function __construct($row) {
 		$this->inventory = $row['inventory'];
@@ -56,6 +77,7 @@ class ItemBase {
 		$this->expires = $row['expires'];
 		$this->cashid = $row['cashid'];
 		$this->amount = $row['amount'];
+		$this->bagid = $row['bagid'];
 	}
 }
 
