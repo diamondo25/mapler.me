@@ -16,14 +16,13 @@ namespace CraftNetTools
     {
         public static void Check()
         {
-            string name = Application.ProductName;
-            int version = int.Parse(Application.ProductVersion.Replace(".", ""));
-
+            string ApplicationName = Application.ProductName;
+            int ApplicationVersion = int.Parse(Application.ProductVersion.Replace(".", ""));
             try
             {
                 if (File.Exists("noupdate.txt")) return;
 
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(string.Format("http://direct.craftnet.nl/app_updates/updates.php?appname={0}&appver={1}", name, version));
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(string.Format("http://direct.craftnet.nl/app_updates/updates.php?appname={0}&appver={1}", ApplicationName, ApplicationVersion));
                 req.Proxy = null;
                 req.Timeout = 10000; // 10 seconds
 
@@ -33,15 +32,15 @@ namespace CraftNetTools
                     string responseText = sr.ReadLine();
                     if (responseText.StartsWith("ERROR:"))
                     {
-                        MessageBox.Show(string.Format("Error occurred while checking for new version: {0}", responseText), name);
+                        MessageBox.Show(string.Format("Error occurred while checking for new version: {0}", responseText), ApplicationName);
                     }
                     else
                     {
                         string url = sr.ReadLine();
                         int latestVersion = int.Parse(responseText);
-                        if (latestVersion > version)
+                        if (latestVersion > ApplicationVersion)
                         {
-                            if (MessageBox.Show(string.Format("A new version is released!\r\nVersion: {0}\r\n\r\nPress OK to go to download page!", latestVersion), name, MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            if (MessageBox.Show(string.Format("A new version is released!\r\nVersion: {0}\r\n\r\nPress OK to go to download page!", latestVersion), ApplicationName, MessageBoxButtons.OKCancel) == DialogResult.OK)
                             {
                                 Process.Start(url);
                             }

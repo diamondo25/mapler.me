@@ -18,7 +18,13 @@ namespace Mapler_Client
         [STAThread]
         static void Main()
         {
-            Logger.SetLogfile(false);
+            string[] args = Environment.GetCommandLineArgs();
+
+            Logger.SetLogfile(
+                args.Count(a => { return a == "/packetlog"; }) > 0,
+                args.Count(a => { return a == "/debug"; }) > 0 ? false : true // 'Disabled' 
+            );
+
             MasterThread.Load("Client");
 
             Application.EnableVisualStyles();

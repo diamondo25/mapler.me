@@ -37,11 +37,19 @@ namespace Mapler_Client
         {
             byte type = pPacket.ReadByte();
             ushort header = pPacket.ReadUShort();
-            Console.WriteLine(pPacket.ToString());
-            if (type == (byte)MaplePacket.CommunicationType.Internal)
+            if (header >= 0xEE00)
             {
-                if (header == 0xFFFF)
+                if (header == 0xEEFF)
                 {
+                    string version = pPacket.ReadString();
+                    if (version != Logger.Version)
+                    {
+                        System.Windows.Forms.MessageBox.Show("Mapler.me client outdated. Redownload the client from the website");
+                        Environment.Exit(3);
+                        return;
+                    }
+
+
                     // Crypto
                     byte[] sendkey = pPacket.ReadBytes(32),
                         recvkey = pPacket.ReadBytes(32);
@@ -55,7 +63,7 @@ namespace Mapler_Client
                         for (ushort j = pPacket.ReadUShort(); j > 0; j--)
                         {
                             ushort tmp = pPacket.ReadUShort();
-                            Logger.WriteLine("{0} accepts 0x{1:X4}", (MaplePacket.CommunicationType)i, tmp);
+                            // Logger.WriteLine("{0} accepts 0x{1:X4}", (MaplePacket.CommunicationType)i, tmp);
                             _validHeaders[i].Add(tmp);
                         }
                     }
@@ -67,24 +75,24 @@ namespace Mapler_Client
                         AcceptedIPs.Add(ip);
                     }
 
-                    Logger.WriteLine("Initialized keys and valid headers");
+                    // Logger.WriteLine("Initialized keys and valid headers");
                 }
-                else if (header == 0xFFFE)
+                else if (header == 0xEEFE)
                 {
                     // Create screenshot and send to server
 
                     string url = pPacket.ReadString();
-                    int id = pPacket.ReadInt();
+                    string data = pPacket.ReadString();
 
                     string filename = System.IO.Path.GetTempFileName();
 
                     bool done = Screenshot.MakeScreenshotOfMaple(filename);
                     if (done)
                     {
-                        Screenshot.Upload(url, id, filename);
+                        Screenshot.Upload(url, data, filename);
                     }
                 }
-                else if (header == 0xFFFD)
+                else if (header == 0xEEFD)
                 {
                     string charname = pPacket.ReadString();
                     frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate

@@ -17,6 +17,7 @@ namespace MPLRServer
                 Items = new Dictionary<byte, ItemBase>();
             }
         }
+
         // V.129: +1 (Kanna/Hayato)
         public const byte EQUIP_INVENTORIES = 9; // DAFUCK PEOPLE
         public const byte NORMAL_INVENTORIES = 4;
@@ -102,7 +103,7 @@ namespace MPLRServer
             return pSlot;
         }
 
-        public void Decode(MaplePacket pPacket)
+        public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
             InventorySlots = new byte[INVENTORIES];
             for (int i = 0; i < INVENTORIES; i++)
@@ -145,19 +146,19 @@ namespace MPLRServer
                     ItemBase item = ItemBase.DecodeItemData(pPacket);
                     InventoryItems[i].Add(slot, item);
 
-                    if (item.Placeholder != -1)
+                    if (item.BagID != -1)
                     {
                         if (item.ItemID % 4330000 > 0)
                         {
-                            Logger.WriteLine("Found bag at inv {0} slot {1} (ItemID: {2}, BagSlot: {3})", i, slot, item.ItemID, item.Placeholder);
+                            pConnection.Logger_WriteLine("Found bag at inv {0} slot {1} (ItemID: {2}, BagSlot: {3})", i, slot, item.ItemID, item.BagID);
                         }
                         else
                         {
-                            Logger.WriteLine("Found Item != Bag at inv {0} slot {1} (ItemID: {2}, Placeholder: {3})", i, slot, item.ItemID, item.Placeholder);
+                            pConnection.Logger_WriteLine("Found Item != Bag at inv {0} slot {1} (ItemID: {2}, Placeholder: {3})", i, slot, item.ItemID, item.BagID);
                         }
 
                         BagItem bi = new BagItem(item);
-                        BagItems.Add(item.Placeholder, bi);
+                        BagItems.Add(item.BagID, bi);
                     }
                 }
             }
@@ -202,7 +203,7 @@ namespace MPLRServer
         public long CashID { get; private set; }
         public short Amount { get; set; }
 
-        public int Placeholder { get; private set; }
+        public int BagID { get; private set; }
 
         public static ItemBase DecodeItemData(MaplePacket pPacket)
         {
@@ -246,12 +247,12 @@ namespace MPLRServer
 
             Expires = pPacket.ReadLong();
 
-            Placeholder = pPacket.ReadInt(); // -1?
+            BagID = pPacket.ReadInt();
         }
 
         public virtual int GetChecksum()
         {
-            return ItemID + (int)CashID + Amount + (int)Expires + (int)(Expires << 32);
+            return ItemID + (int)CashID + Amount + (int)Expires + (int)(Expires << 32) + BagID;
         }
     }
 

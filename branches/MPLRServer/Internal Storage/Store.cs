@@ -15,7 +15,7 @@ namespace MPLRServer.Internal_Storage
             public int UserID { get; private set; }
             public byte WorldID { get; private set; }
             public string Name { get; private set; }
-            public Dictionary<short, int>[] SlotHashes { get; private set; }
+            public Dictionary<int, Dictionary<short, int>> SlotHashes { get; private set; }
 
             public void Initialize(MySql.Data.MySqlClient.MySqlDataReader pReader)
             {
@@ -27,9 +27,7 @@ namespace MPLRServer.Internal_Storage
 
                 AccountID = Store.Instance.KnownUserlist[UserID];
 
-                SlotHashes = new Dictionary<short, int>[MPLRServer.CharacterInventory.INVENTORIES];
-                for (int i = 0; i < SlotHashes.Length; i++)
-                    SlotHashes[i] = new Dictionary<short, int>();
+                SlotHashes = new Dictionary<int, Dictionary<short, int>>();
             }
         }
 
@@ -61,6 +59,9 @@ namespace MPLRServer.Internal_Storage
 
         public void SetChecksumOfSlot(int pCharacterID, byte pWorldID, byte pInventory, short pSlot, int pChecksum)
         {
+            if (!Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes.ContainsKey(pInventory))
+                Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes.Add(pInventory, new Dictionary<short, int>());
+
             if (Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].ContainsKey(pSlot))
                 Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory][pSlot] = pChecksum;
             else
@@ -125,8 +126,7 @@ namespace MPLRServer.Internal_Storage
                 var character = GetCharInfoByIntenalID(pInternalID.Value);
                 if (character != null)
                 {
-                    foreach (var inventory in character.SlotHashes)
-                        inventory.Clear();
+                    character.SlotHashes.Clear();
                 }
             }
 
@@ -147,7 +147,11 @@ namespace MPLRServer.Internal_Storage
                         }
                     }
 
-                    ch.SlotHashes[result.GetInt32("inventory")].Add(result.GetInt16("slot"), result.GetInt32("checksum"));
+                    int inventory = result.GetInt32("inventory");
+                    if (!ch.SlotHashes.ContainsKey(inventory))
+                        ch.SlotHashes.Add(inventory, new Dictionary<short, int>());
+
+                    ch.SlotHashes[inventory].Add(result.GetInt16("slot"), result.GetInt32("checksum"));
                 }
             }
         }

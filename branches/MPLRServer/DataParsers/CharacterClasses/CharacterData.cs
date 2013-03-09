@@ -24,7 +24,7 @@ namespace MPLRServer
             public const int AmountOfValues = 4;
 
             public int[] Values { get; private set; }
-            public void Decode(MaplePacket pPacket)
+            public void Decode(ClientConnection pConnection, MaplePacket pPacket)
             {
                 Values = new int[AmountOfValues];
 
@@ -36,7 +36,7 @@ namespace MPLRServer
                     tmp += string.Format("{0} |", Values[i]);
                 }
 
-                Logger.WriteLine("ULOI: {0}", tmp);
+                pConnection.Logger_WriteLine("ULOI: {0}", tmp);
             }
         }
 
@@ -45,7 +45,7 @@ namespace MPLRServer
         public Dictionary<int, long> UnknownIntegerListNumber3 { get; private set; }
         public Dictionary<long, long> UnknownIntegerListNumber4 { get; private set; }
 
-        public void Decode(MaplePacket pPacket)
+        public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
             Stats = new GW_CharacterStat();
             Stats.Decode(pPacket);
@@ -67,7 +67,7 @@ namespace MPLRServer
             for (int i = pPacket.ReadInt(); i > 0; i--)
             {
                 UnknownListOfIntegers vals = new UnknownListOfIntegers();
-                vals.Decode(pPacket);
+                vals.Decode(pConnection, pPacket);
                 UnknownIntegerList.Add(vals);
             }
 
@@ -85,7 +85,7 @@ namespace MPLRServer
             }
 
             Inventory = new CharacterInventory();
-            Inventory.Decode(pPacket);
+            Inventory.Decode(pConnection, pPacket);
 
             UnknownIntegerListNumber3 = new Dictionary<int, long>();
             for (int i = pPacket.ReadInt(); i > 0; i--)
@@ -124,10 +124,10 @@ namespace MPLRServer
 
 
             Skills = new CharacterSkills();
-            Skills.Decode(pPacket);
+            Skills.Decode(pConnection, pPacket);
 
             Quests = new CharacterQuests();
-            Quests.Decode(pPacket);
+            Quests.Decode(pConnection, pPacket);
 
             // Match
             for (int i = pPacket.ReadShort(); i > 0; i--)
@@ -207,7 +207,7 @@ namespace MPLRServer
 		        EndNode(false);
              */
 
-            Quests.DecodePQ(pPacket);
+            Quests.DecodePQ(pConnection, pPacket);
 
             // Wildhunter
             if (GameHelper.IsWildHunter(Stats.JobID))
@@ -221,7 +221,7 @@ namespace MPLRServer
                 pPacket.ReadInt();
             }
 
-            Quests.DecodePQDone(pPacket);
+            Quests.DecodePQDone(pConnection, pPacket);
 
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
@@ -264,7 +264,8 @@ namespace MPLRServer
 
         public void SaveCharacterInfo(ClientConnection pConnection)
         {
-            Queries.AddOrUpdateCharacter(Stats.ID, Stats.Name, pConnection.UserID, pConnection.WorldID, Stats.Level, Stats.JobID,
+            Queries.AddOrUpdateCharacter(pConnection, 
+                Stats.ID, Stats.Name, pConnection.UserID, pConnection.WorldID, Stats.Level, Stats.JobID,
                 Stats.Str, Stats.Dex, Stats.Int, Stats.Luk,
                 Stats.HP, Stats.MaxHP, Stats.MP, Stats.MaxMP, Stats.AP, Stats.SP,
                 Stats.EXP, Stats.Fame, Stats.MapID, Stats.MapPos,
@@ -280,24 +281,8 @@ namespace MPLRServer
             SaveCharacterInfo(pConnection);
 
             InsertQueryBuilder itemsTable = new InsertQueryBuilder("items");
-            itemsTable.OnDuplicateUpdate = true;
-            itemsTable.AddColumn("character_id", false);
-            itemsTable.AddColumn("itemid", true);
-            itemsTable.AddColumn("inventory", false);
-            itemsTable.AddColumn("slot", false);
-            itemsTable.AddColumn("checksum", true);
-            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", 
-                 "itemlevel", "itemexp",
-                "potential1", "potential2", "potential3", "potential4", "potential5", "socketstate", 
-                "socket1", "socket2", "socket3");
 
             InsertQueryBuilder petTable = new InsertQueryBuilder("pets");
-            petTable.OnDuplicateUpdate = true;
-            petTable.AddColumn("cashid", false);
-            petTable.AddColumn("name", true);
-            petTable.AddColumn("closeness", true);
-            petTable.AddColumn("fullness", true);
-            petTable.AddColumn("level", true);
 
             int internalid = 0;
 
@@ -308,8 +293,9 @@ namespace MPLRServer
                 // Update info!
                 var internalinfo = Internal_Storage.Store.Instance.KnownCharlist[Stats.ID][pConnection.WorldID];
                 internalid = internalinfo.InternalID;
-                Dictionary<byte, short> updatethese = new Dictionary<byte, short>();
-                Dictionary<byte, short> addthese = new Dictionary<byte, short>();
+
+                pConnection.CharacterInternalID = internalid;
+                pConnection.CharacterID = Stats.ID;
 
                 CharacterInventory inventory = Inventory;
 
@@ -322,13 +308,13 @@ namespace MPLRServer
                         var equip = equipdata.Value;
                         bool addrow = false;
 
-                        if (internalinfo.SlotHashes[0].ContainsKey(slot))
+                        if (internalinfo.SlotHashes.ContainsKey(0) && internalinfo.SlotHashes[0].ContainsKey(slot))
                         {
                             int hash = internalinfo.SlotHashes[0][slot];
                             int objhash = equipdata.Value.GetChecksum();
                             if (hash != objhash)
                             {
-                                Logger.WriteLine("{0} != {1}", hash, objhash);
+                                pConnection.Logger_WriteLine("{0} != {1}", hash, objhash);
                                 addrow = true;
                             }
 
@@ -340,32 +326,11 @@ namespace MPLRServer
                         }
 
                         if (addrow)
-                        {
-                            itemsTable.AddRow(
-                                internalid,
-                                equip.ItemID,
-                                0,
-                                slot,
-                                equip.GetChecksum(),
-                                equip.CashID,
-                                equip.Amount,
-                                equip.Expires,
-                                equip.Slots, equip.Scrolls,
-                                equip.Str, equip.Dex, equip.Int, equip.Luk,
-                                equip.HP, equip.MP,
-                                equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
-                                equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
-                                equip.Name, equip.Flags,
-                                equip.ViciousHammer,
-                                equip.ItemLevel, equip.ItemEXP,
-                                equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
-                                equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
-                                );
-                        }
+                            Queries.SaveItem(pConnection, 0, slot, equip, itemsTable, true);
                     }
                 }
 
-                Logger.WriteLine("Done equips");
+                pConnection.Logger_WriteLine("Done equips");
 
                 for (int i = 0; i < Inventory.InventoryItems.Length; i++)
                 {
@@ -374,13 +339,13 @@ namespace MPLRServer
                     {
                         var item = itemdata.Value;
                         bool addrow = false;
-                        if (internalinfo.SlotHashes[i + 1].ContainsKey(itemdata.Key))
+                        if (internalinfo.SlotHashes.ContainsKey(i + 1) && internalinfo.SlotHashes[i + 1].ContainsKey(itemdata.Key))
                         {
                             int hash = internalinfo.SlotHashes[i + 1][itemdata.Key];
                             int objhash = itemdata.Value.GetChecksum();
                             if (hash != objhash)
                             {
-                                Logger.WriteLine("{0} != {1}", hash, objhash);
+                                pConnection.Logger_WriteLine("{0} != {1}", hash, objhash);
                                 addrow = true;
                             }
 
@@ -394,51 +359,66 @@ namespace MPLRServer
 
                         if (addrow)
                         {
-                            string name = item is ItemRechargable ? (item as ItemRechargable).CraftName : null;
-                            int flags = item is ItemRechargable ? (item as ItemRechargable).Flags : 0;
-
-                            itemsTable.AddRow(
-                                internalid,
-                                item.ItemID,
-                                i + 1,
-                                itemdata.Key,
-                                (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
-                                item.CashID,
-                                item.Amount,
-                                item.Expires,
-                                null, null,
-                                null, null, null, null,
-                                null, null,
-                                null, null, null, null,
-                                null, null, null, null, null,
-                                name, flags,
-                                null,
-                                null, null,
-                                null, null, null, null, null,
-                                null, null, null, null
-                                );
+                            Queries.SaveItem(pConnection, (byte)(i + 1), itemdata.Key, item, itemsTable, true);
 
                             if (item is ItemPet)
                             {
-                                var pet = item as ItemPet;
-                                petTable.AddRow(pet.CashID, pet.Petname, pet.Closeness, pet.Fullness, pet.Level);
+                                Queries.SavePet(item as ItemPet, petTable);
+                            }
+                        }
+                    }
+                }
+                pConnection.Logger_WriteLine("Done items");
+
+                foreach (var bag in Inventory.BagItems)
+                {
+                    byte i = (byte)(10 + bag.Key);
+                    foreach (var itemdata in bag.Value.Items)
+                    {
+                        var item = itemdata.Value;
+                        bool addrow = false;
+                        if (internalinfo.SlotHashes.ContainsKey(i) && internalinfo.SlotHashes[i].ContainsKey(itemdata.Key))
+                        {
+                            int hash = internalinfo.SlotHashes[i][itemdata.Key];
+                            int objhash = itemdata.Value.GetChecksum();
+                            if (hash != objhash)
+                            {
+                                pConnection.Logger_WriteLine("{0} != {1}", hash, objhash);
+                                addrow = true;
+                            }
+
+
+                            internalinfo.SlotHashes[i].Remove(itemdata.Key);
+                        }
+                        else
+                        {
+                            addrow = true;
+                        }
+
+                        if (addrow)
+                        {
+                            Queries.SaveItem(pConnection, i, itemdata.Key, item, itemsTable, true);
+
+                            if (item is ItemPet)
+                            {
+                                Queries.SavePet(item as ItemPet, petTable);
                             }
                         }
                     }
                 }
 
-                Logger.WriteLine("Done items");
+                pConnection.Logger_WriteLine("Done bag items");
 
                 {
                     string removequery = "";
                     bool added = false;
-                    for (byte i = 0; i < internalinfo.SlotHashes.Length; i++)
+                    foreach (var hashlist in internalinfo.SlotHashes)
                     {
-                        foreach (var leftovers in internalinfo.SlotHashes[i])
+                        foreach (var leftovers in hashlist.Value)
                         {
-                            Logger.WriteLine("Deleting item @ inv {0} slot {1}", i, leftovers.Key);
+                            pConnection.Logger_WriteLine("Deleting item @ inv {0} slot {1}", hashlist.Key, leftovers.Key);
                             added = true;
-                            removequery += string.Format("DELETE FROM items WHERE character_id = {2} AND inventory = {0} AND slot = {1};\r\n", i, leftovers.Key, internalid);
+                            removequery += string.Format("DELETE FROM items WHERE character_id = {2} AND inventory = {0} AND slot = {1};\r\n", hashlist.Key, leftovers.Key, internalid);
                         }
                     }
                     if (added)
@@ -451,7 +431,8 @@ namespace MPLRServer
             }
             else
             {
-                Logger.WriteLine("Saving Items");
+
+                pConnection.Logger_WriteLine("Saving Items");
 
                 using (var result = MySQL_Connection.Instance.RunQuery("SELECT internal_id FROM characters WHERE id = " + Stats.ID + " AND world_id = " + pConnection.WorldID + "") as MySql.Data.MySqlClient.MySqlDataReader)
                 {
@@ -461,11 +442,13 @@ namespace MPLRServer
                     }
                     else
                     {
-                        Logger.WriteLine("OH GOD COULD NOT GET INTERNAL ID");
+                        pConnection.Logger_WriteLine("OH GOD COULD NOT GET INTERNAL ID");
                         return;
                     }
                 }
 
+                pConnection.CharacterInternalID = internalid;
+                pConnection.CharacterID = Stats.ID;
 
                 string itemlist = "";
                 itemlist += "INSERT INTO items VALUES ";
@@ -476,31 +459,11 @@ namespace MPLRServer
                     foreach (var equipdata in equips)
                     {
                         var equip = equipdata.Value;
-
-                        itemsTable.AddRow(
-                            internalid,
-                            equip.ItemID,
-                            0,
-                            equipdata.Key,
-                            equip.GetChecksum(),
-                            equip.CashID,
-                            equip.Amount,
-                            equip.Expires,
-                            equip.Slots, equip.Scrolls,
-                            equip.Str, equip.Dex, equip.Int, equip.Luk,
-                            equip.HP, equip.MP,
-                            equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
-                            equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
-                            equip.Name, equip.Flags,
-                            equip.ViciousHammer,
-                            equip.ItemLevel, equip.ItemEXP,
-                            equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
-                            equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
-                            );
+                        Queries.SaveItem(pConnection, 0, equipdata.Key, equip, itemsTable, true);
                     }
                 }
 
-                Logger.WriteLine("Done equips");
+                pConnection.Logger_WriteLine("Done equips");
 
                 for (int i = 0; i < Inventory.InventoryItems.Length; i++)
                 {
@@ -509,40 +472,33 @@ namespace MPLRServer
                     {
                         var item = itemdata.Value;
 
-                        string name = item is ItemRechargable ? (item as ItemRechargable).CraftName : null;
-                        int flags = item is ItemRechargable ? (item as ItemRechargable).Flags : 0;
-
-                        itemsTable.AddRow(
-                            internalid,
-                            item.ItemID,
-                            i + 1,
-                            itemdata.Key,
-                            (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
-                            item.CashID,
-                            item.Amount,
-                            item.Expires,
-                            null, null,
-                            null, null, null, null,
-                            null, null,
-                            null, null, null, null,
-                            null, null, null, null, null,
-                            name, flags,
-                            null,
-                            null, null,
-                            null, null, null, null, null,
-                            null, null, null, null
-                            );
+                        Queries.SaveItem(pConnection, (byte)(i + 1), itemdata.Key, item, itemsTable, true);
 
                         if (item is ItemPet)
                         {
-                            var pet = item as ItemPet;
-                            petTable.AddRow(pet.CashID, pet.Petname, pet.Closeness, pet.Fullness, pet.Level);
+                            Queries.SavePet(item as ItemPet, petTable);
                         }
                     }
                 }
 
-                Logger.WriteLine("Done items");
+                pConnection.Logger_WriteLine("Done items");
 
+                foreach (var bag in Inventory.BagItems)
+                {
+                    byte i = (byte)(10 + bag.Key);
+                    foreach (var itemdata in bag.Value.Items)
+                    {
+                        var item = itemdata.Value;
+                        Queries.SaveItem(pConnection, i, itemdata.Key, item, itemsTable, true);
+
+                        if (item is ItemPet)
+                        {
+                            Queries.SavePet(item as ItemPet, petTable);
+                        }
+                    }
+                }
+
+                pConnection.Logger_WriteLine("Done bag items");
 
                 Internal_Storage.Store.Instance.LoadBaseData(Stats.Name);
 
@@ -553,20 +509,20 @@ namespace MPLRServer
                 string q = itemsTable.ToString();
                 System.IO.File.WriteAllText("insert-update.sql", q);
                 int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                Logger.WriteLine("Result: {0}", result);
+                pConnection.Logger_WriteLine("Result: {0}", result);
             }
 
-            Logger.WriteLine("Saved item data");
+            pConnection.Logger_WriteLine("Saved item data");
 
             if (petTable.RowCount > 0)
             {
                 string q = petTable.ToString();
                 System.IO.File.WriteAllText("insert-update-pet.sql", q);
                 int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                Logger.WriteLine("Result: {0}", result);
+                pConnection.Logger_WriteLine("Result: {0}", result);
             }
 
-            Logger.WriteLine("Saved item data");
+            pConnection.Logger_WriteLine("Saved item data");
             Internal_Storage.Store.Instance.LoadInventoryHashes(internalid, true);
 
             using (InsertQueryBuilder questsTable = new InsertQueryBuilder("quests_running"))
@@ -586,7 +542,7 @@ namespace MPLRServer
                     string q = questsTable.ToString();
                     System.IO.File.WriteAllText("insert-update-quests.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result Quests Running: {0}", result);
+                    pConnection.Logger_WriteLine("Result Quests Running: {0}", result);
                 }
             }
 
@@ -606,7 +562,7 @@ namespace MPLRServer
                     string q = doneTable.ToString();
                     System.IO.File.WriteAllText("insert-update-quests-done.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result Quests Done: {0}", result);
+                    pConnection.Logger_WriteLine("Result Quests Done: {0}", result);
                 }
             }
 
@@ -627,7 +583,7 @@ namespace MPLRServer
                     string q = questsTable.ToString();
                     System.IO.File.WriteAllText("insert-update-quests.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result Party Quests Running: {0}", result);
+                    pConnection.Logger_WriteLine("Result Party Quests Running: {0}", result);
                 }
             }
 
@@ -647,7 +603,7 @@ namespace MPLRServer
                     string q = doneTable.ToString();
                     System.IO.File.WriteAllText("insert-update-quests-done.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result Party Quests Done: {0}", result);
+                    pConnection.Logger_WriteLine("Result Party Quests Done: {0}", result);
                 }
             }
 
@@ -670,7 +626,7 @@ namespace MPLRServer
                     string q = skillTable.ToString();
                     System.IO.File.WriteAllText("insert-update-skills.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result Skills: {0}", result);
+                    pConnection.Logger_WriteLine("Result Skills: {0}", result);
                 }
             }
 
@@ -691,13 +647,11 @@ namespace MPLRServer
                     string q = spTable.ToString();
                     System.IO.File.WriteAllText("insert-update-sp_data.sql", q);
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    Logger.WriteLine("Result sp_data: {0}", result);
+                    pConnection.Logger_WriteLine("Result sp_data: {0}", result);
                 }
 
             }
 
-            pConnection.CharacterInternalID = internalid;
-            pConnection.CharacterID = Internal_Storage.Store.Instance.KnownCharlist_INTERNAL[internalid].ID;
 
             itemsTable.Dispose();
             itemsTable = null;

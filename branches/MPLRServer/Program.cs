@@ -20,6 +20,9 @@ namespace MPLRServer
         static void Main(string[] args)
         {
             Logger.SetLogfile(false);
+
+            MasterThread.Load("MPLRServer");
+
             try
             {
                 MySQL_Connection.Initialize();
@@ -30,7 +33,6 @@ namespace MPLRServer
             }
 
             Internal_Storage.Store.Initialize();
-            MasterThread.Load("MPLRServer");
 
             CommandHandler.Initialize();
             Timeline.Init();
@@ -56,6 +58,16 @@ namespace MPLRServer
                 sock.Close();
             });
 
+
+            Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+            Logger.WriteLine("|                                             |");
+            Logger.WriteLine("|              Mapler.me Server               |");
+            Logger.WriteLine("|                                             |");
+            Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+            Logger.WriteLine("|           Build For: {0,3} Locale {1,1}           |", ClientPacketHandlers.LatestMajorVersion, ClientPacketHandlers.LatestLocale);
+            Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+
+
             while (true)
             {
                 string cmd = Console.ReadLine();
@@ -80,7 +92,7 @@ namespace MPLRServer
                                     var tmp = new List<ClientConnection>(Clients);
                                     foreach (var client in tmp)
                                     {
-                                        using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFE))
+                                        using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFE))
                                         {
                                             pack.SwitchOver();
                                             client.SendPacket(pack);
@@ -144,7 +156,7 @@ namespace MPLRServer
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
-                tmp.Add(0x000B, new Handler((a, pPacket) =>
+                tmp.Add(0x000B, new Handler((pConnection, pPacket) =>
                 {
                     short status = pPacket.ReadShort();
                     if (status == 0)
@@ -155,16 +167,18 @@ namespace MPLRServer
                         pPacket.ReadInt();
                         pPacket.ReadByte();
                         string chains = pPacket.ReadString(8);
-                        Logger.WriteLine("Selected charid {0} and connects to {1} ({2}) ({3})", charid, ip, chains, flag);
+                        pConnection.Logger_WriteLine("Selected charid {0} and connects to {1} ({2}) ({3})", charid, ip, chains, flag);
                     }
                 }, null));
-                tmp.Add(0x000F, new Handler((a, b) =>
+                tmp.Add(0x000F, new Handler((pConnection, pPacket) =>
                 {
-                    byte status = b.ReadByte();
+                    byte status = pPacket.ReadByte();
                     if (status == 1)
                     {
-                        string ip = string.Format("{0}.{1}.{2}.{3} port {4}", b.ReadByte(), b.ReadByte(), b.ReadByte(), b.ReadByte(), b.ReadUShort());
-                        Logger.WriteLine("Client connects to {0}", ip);
+                        string ip = string.Format("{0}.{1}.{2}.{3} port {4}", 
+                            pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), 
+                            pPacket.ReadUShort());
+                        pConnection.Logger_WriteLine("Client connects to {0}", ip);
                     }
                 }, null));
 
@@ -191,7 +205,7 @@ namespace MPLRServer
                 tmp.Add(0x0014, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
 
                 // Select Channel
-                tmp.Add(0x001B, new Handler((pClient, pPacket) =>
+                tmp.Add(0x001B, new Handler((pConnection, pPacket) =>
                 {
                     byte requestType = pPacket.ReadByte();
                     if (requestType == 1)
@@ -202,20 +216,20 @@ namespace MPLRServer
                         pPacket.Skip(4); // Unknown, 0? Prolly login mode
                         pPacket.Skip(1); // ...?
                     }
-                    pClient.WorldID = pPacket.ReadByte();
+                    pConnection.WorldID = pPacket.ReadByte();
                     byte channel = pPacket.ReadByte(); // Channel ID
                     pPacket.ReadInt(); // Internal IP 0.0?
 
-                    Logger.WriteLine("User selected World {0} Channel {1}", pClient.WorldID, channel);
+                    pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, channel);
                 }, null));
 
                 // Pong
-                tmp.Add(0x002D, new Handler((pClient, pPacket) =>
+                tmp.Add(0x002D, new Handler((pConnection, pPacket) =>
                 {
                 }, null));
 
                 // Whisper
-                tmp.Add(0x00FC, new Handler((pClient, pPacket) =>
+                tmp.Add(0x00FC, new Handler((pConnection, pPacket) =>
                 {
                     byte code = pPacket.ReadByte();
                     if (code == 0x06)
@@ -230,56 +244,17 @@ namespace MPLRServer
                             {
                                 string cmd = arguments[0];
                                 arguments.RemoveAt(0);
-                                CommandHandler.Instance.HandleCommand(pClient, cmd, arguments.ToArray());
+                                CommandHandler.Instance.HandleCommand(pConnection, cmd, arguments.ToArray());
                             }
                         }
                     }
                 }, NeedsCharData));
 
+                // Internal packets
+
+                tmp.Add(0xEE00, new Handler(InternalPacketHandler.HandleServerConnectionStatus, null));
+
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
-            }
-
-
-            {
-                // Internal Packets
-                var tmp = new Dictionary<ushort, Handler>();
-
-                // Client got connection or lost connection
-                tmp.Add(0x0000, new Handler(InternalPacketHandler.HandleServerConnectionStatus, null));
-
-                /*
-                tmp.Add(0xFFFE, new Handler((pClient, pPacket) =>
-                {
-                    if (pClient.LastReportID == -1) return;
-
-                    int size = pPacket.ReadInt();
-                    if (size > 3000000)
-                    {
-                        Logger.WriteLine("Ignored screenshot that is bigger than 3 MB");
-                        return;
-                    }
-
-                    byte[] imagebuffer = pPacket.ReadBytes(size);
-
-                    using (InsertQueryBuilder insertQuery = new InsertQueryBuilder("report_screenshots"))
-                    {
-                        insertQuery.AddColumn("report_id");
-                        insertQuery.AddColumn("image");
-
-                        insertQuery.AddRow(pClient.LastReportID, new MySQL_Connection.UnescapedValue() { Value = "0x" + imagebuffer.ToByteString("") });
-
-                        int result = (int)MySQL_Connection.Instance.RunQuery(insertQuery.ToString());
-
-                        Logger.WriteLine("Image Saving result: {0}", result);
-                    }
-
-
-                    pClient.LastReportID = -1;
-
-                }, null));
-                */
-
-                ValidHeaders[(byte)MaplePacket.CommunicationType.Internal] = tmp;
             }
 
             Logger.WriteLine("Initialized {0} client and {1} server handlers", ValidHeaders[1].Count, ValidHeaders[0].Count);

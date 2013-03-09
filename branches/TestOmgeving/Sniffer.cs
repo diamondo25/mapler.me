@@ -25,12 +25,9 @@ namespace Mapler_Client
         private KeyValuePair<ushort, ushort> _currentPortMap;
         private Session _currentSession;
 
-        private bool debugging;
-
         public Sniffer()
         {
             FoundConnection = false;
-            debugging = System.IO.File.Exists("debug.txt");
         }
 
         ~Sniffer()
@@ -81,11 +78,8 @@ namespace Mapler_Client
             foreach (var device in devices)
             {
                 device.Open(DeviceMode.Promiscuous);
-                device.Filter = "tcp portrange 8484-9000";
-                if (debugging)
-                {
-                    Logger.WriteLine("[DEBUG] Set filter for {0}", device.Description);
-                }
+                device.Filter = "tcp portrange 8383-9000";
+                Logger.WriteLine("[DEBUG] Set filter for {0}", device.Description);
                 device.OnPacketArrival += device_OnPacketArrival;
                 device.StartCapture();
                 _devices.Add(device);
@@ -122,7 +116,7 @@ namespace Mapler_Client
             {
                 return;
             }
-            
+
 
             TcpPacket tcpPacket = TcpPacket.GetEncapsulated(packet);
             if (tcpPacket == null)
@@ -139,14 +133,14 @@ namespace Mapler_Client
 
                     MasterThread.Instance.AddCallback((a) =>
                     {
-                        using (MaplePacket p = new MaplePacket(0x0000))
+                        using (MaplePacket p = new MaplePacket(0xEE00))
                         {
                             p.WriteBool(true);
                             p.WriteString(ipPacket.SourceAddress.ToString());
                             p.WriteUShort(tcpPacket.SourcePort);
                             p.SwitchOver();
                             p.Reset(0);
-                            ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.Internal, p);
+                            ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.ClientPacket, p);
                         }
                     });
 
@@ -177,12 +171,12 @@ namespace Mapler_Client
 
                     MasterThread.Instance.AddCallback((a) =>
                     {
-                        using (MaplePacket p = new MaplePacket(0x0000))
+                        using (MaplePacket p = new MaplePacket(0xEE00))
                         {
                             p.WriteBool(false);
                             p.SwitchOver();
                             p.Reset(0);
-                            ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.Internal, p);
+                            ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.ClientPacket, p);
                         }
                     });
                     return;
@@ -198,10 +192,7 @@ namespace Mapler_Client
             }
             else
             {
-                if (debugging)
-                {
-                    Logger.WriteLine("[DEBUG] {0} - {1} {2}", FoundConnection, tcpPacket.SourcePort, tcpPacket.DestinationPort);
-                }
+                Logger.WriteLine("[DEBUG] {0} - {1} {2}", FoundConnection, tcpPacket.SourcePort, tcpPacket.DestinationPort);
             }
         }
     }

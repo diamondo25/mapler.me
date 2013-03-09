@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    public class CharacterSkills
+    class CharacterSkills
     {
         public class Skill
         {
@@ -24,7 +24,7 @@ namespace MPLRServer
             Cooldowns = new Dictionary<int, int>();
         }
 
-        public void Decode(MaplePacket pPacket)
+        public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
             if (pPacket.ReadBool())
             {
@@ -47,14 +47,12 @@ namespace MPLRServer
                     // Added V.129
                     if (skill.ID == 40020002 || skill.ID == 80000004)
                     {
-                        Logger.WriteLine("[Skill] V.129 addition value: {0}", pPacket.ReadInt()); // Probably maxlevel xd
+                        pConnection.Logger_WriteLine("[Skill] V.129 addition value: {0}", pPacket.ReadInt()); // Probably maxlevel xd
                     }
-
-                    Logger.WriteLine("Found skill {0}, level {1}", skill.ID, skill.Level);
 
                     if (SkillList.ContainsKey(skill.ID)) // NEXON
                     {
-                        Logger.WriteLine("Found duplicate skill!!!");
+                        pConnection.Logger_WriteLine("Found duplicate skill {0}", skill.ID);
                     }
                     else
                     {
@@ -64,7 +62,7 @@ namespace MPLRServer
             }
             else
             {
-                Logger.WriteLine("Character has 'new' skilllist!");
+                pConnection.Logger_WriteLine("Character has 'new' skilllist!");
                 // 0.0
                 for (short i = pPacket.ReadShort(); i > 0; i--)
                 {

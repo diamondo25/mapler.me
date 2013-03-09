@@ -29,7 +29,7 @@ namespace MPLRServer
         public ClientConnection(MSBLoader pLoader)
         {
             Program.Clients.Add(this);
-            Logger.WriteLine("Fake Client Connected!");
+            Logger_WriteLine("Fake Client Connected!");
             Clear();
             pLoader.PacketHandler += OnPacket;
         }
@@ -40,14 +40,16 @@ namespace MPLRServer
             Program.Clients.Add(this);
             Clear();
             _exporter = new MSBExporter();
-            Logger.WriteLine("Client Connected!");
+            Logger_WriteLine("Client Connected!");
 
             byte[] sendkey = new byte[32], recvkey = new byte[32];
             Program.Random.NextBytes(sendkey);
             Program.Random.NextBytes(recvkey);
 
-            using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFF))
+            using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFF))
             {
+                pack.WriteString(Logger.Version);
+
                 // Add encryption keys
                 pack.WriteBytes(recvkey);
                 pack.WriteBytes(sendkey);
@@ -90,13 +92,13 @@ namespace MPLRServer
 
         public void Save(bool pReset)
         {
-            Logger.WriteLine("Trying to save...");
+            Logger_WriteLine("Trying to save...");
             if (_exporter != null)
             {
                 string filename = "Savefile_" + LastLoggedName + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
 
-                Logger.WriteLine("Saving under {0}", filename);
-                _exporter.Save(filename, MapleVersion);
+                Logger_WriteLine("Saving under {0}", filename);
+                _exporter.Save(filename, MapleVersion, base.HostEndPoint, base.ClientEndPoint);
                 if (pReset)
                 {
                     _exporter = new MSBExporter();
@@ -111,14 +113,14 @@ namespace MPLRServer
         public override void OnDisconnect()
         {
             Save(false);
-            Logger.WriteLine("Client Disconnected.");
+            Logger_WriteLine("Client Disconnected.");
             Clear();
             Program.Clients.Remove(this);
         }
 
         public void SendTimeUpdate()
         {
-            using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.Internal, 0xFFFD))
+            using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFD))
             {
                 packet.WriteString(LastLoggedName);
                 SendPacket(packet);
@@ -156,22 +158,22 @@ namespace MPLRServer
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logger.ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", header, type, ex.ToString());
+                                    Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", header, type, ex.ToString());
                                 }
                             }
                             else
                             {
-                                Logger.WriteLine("No action for {0:X4}", header);
+                                Logger_WriteLine("No action for {0:X4}", header);
                             }
                         }
                         else
                         {
-                            Logger.WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", header, type);
+                            Logger_WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", header, type);
                         }
                     }
                     else
                     {
-                        Logger.WriteLine("Packet Type not accepted!!! {0:X4} {1}", header, (byte)type);
+                        Logger_ErrorLog("Packet Type not accepted!!! {0:X4} {1}", header, (byte)type);
                     }
                 }
                 catch (Exception ex)
@@ -181,6 +183,22 @@ namespace MPLRServer
                 pPacket.Dispose();
                 pPacket = null;
             });
+        }
+
+
+        public void Logger_WriteLine(string pFormat, params object[] pParams)
+        {
+            string msg = string.Format(pFormat, pParams);
+
+            Logger.WriteLine("[{0}] {1}", LastLoggedName, msg);
+        }
+
+
+        public void Logger_ErrorLog(string pFormat, params object[] pParams)
+        {
+            string msg = string.Format(pFormat, pParams);
+
+            Logger.ErrorLog("[{0}] {1}", LastLoggedName, msg);
         }
     }
 }

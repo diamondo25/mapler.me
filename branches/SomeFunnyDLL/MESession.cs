@@ -19,11 +19,17 @@ namespace System
 
         private bool _disconnected = false;
 
+        public IPEndPoint HostEndPoint { get; private set; }
+        public IPEndPoint ClientEndPoint { get; private set; }
+
         public MESession() { }
 
         public MESession(Socket pSocket)
         {
             _socket = pSocket;
+            HostEndPoint = pSocket.LocalEndPoint as IPEndPoint;
+            ClientEndPoint = pSocket.RemoteEndPoint as IPEndPoint;
+
             StartReceive(4, false);
         }
 
@@ -119,7 +125,7 @@ namespace System
             {
                 _socket.BeginReceive(_receiveBuffer, _receivePosition, _receiveLength - _receivePosition, SocketFlags.None, EndReceive, null);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Logger.WriteLine("Internal Disconnection. StartReceive");
                 OnDisconnect();
@@ -139,7 +145,7 @@ namespace System
                     if (dataLength == 0)
                         throw new Exception();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     Logger.WriteLine("Internal Disconnection. EndReceive");
                     Disconnect();
@@ -213,7 +219,7 @@ namespace System
 
                 _socket.Send(data, 0, data.Length, SocketFlags.None);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Logger.WriteLine("Internal Packet Sending Exception @ SendPacket");
                 Disconnect();

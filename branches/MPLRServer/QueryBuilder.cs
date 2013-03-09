@@ -19,6 +19,7 @@ namespace MPLRServer
         private List<string> _rows = new List<string>();
 
         public int RowCount { get { return _rows.Count; } }
+        public bool HasColumns { get { return _columns.Count > 0; } } // For initialization check
 
         public InsertQueryBuilder(string pTableName)
         {

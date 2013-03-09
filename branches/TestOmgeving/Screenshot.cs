@@ -59,14 +59,15 @@ namespace Mapler_Client
             return true;
         }
 
-        public static void Upload(string pURL, int pID, string pFilename)
+        public static void Upload(string pURL, string pData, string pFilename)
         {
             WebClient wc = new WebClient();
+            wc.Headers.Set(HttpRequestHeader.UserAgent, "Mozilla/2.0 MaplerMeClient/1.0");
             wc.Headers.Add("Content-Type", "binary/octet-stream");
-            wc.Headers.Add("X-Report-ID", pID.ToString());
+            wc.Headers.Add("X-Data", pData);
             wc.UploadFileCompleted += (a, b) =>
             {
-                Logger.WriteLine("File Uploaded");
+                Logger.WriteLine("Screenshot Uploaded");
             };
 
             wc.UploadFileAsync(new Uri(pURL), pFilename);

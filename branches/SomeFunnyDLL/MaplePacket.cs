@@ -16,7 +16,6 @@ namespace System
 
         public enum CommunicationType : byte
         {
-            Internal,
             ServerPacket,
             ClientPacket,
             AMOUNT

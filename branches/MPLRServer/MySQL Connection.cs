@@ -13,7 +13,7 @@ namespace MPLRServer
         public struct UnescapedValue { public object Value; }
 
         public MySqlDataReader Reader { get; private set; }
-        public  bool Stop { get; set; }
+        public bool Stop { get; set; }
 
         private MySqlConnection _connection;
         private MySqlCommand _command;
@@ -96,7 +96,8 @@ namespace MPLRServer
         void connection_StateChange(object sender, System.Data.StateChangeEventArgs e)
         {
             if (Stop) return;
-            if (e.OriginalState != System.Data.ConnectionState.Connecting && e.CurrentState == System.Data.ConnectionState.Closed && !Stop)
+
+            if (e.OriginalState != System.Data.ConnectionState.Connecting && e.CurrentState == System.Data.ConnectionState.Closed)
             {
                 Logger.WriteLine("MySQL connection closed. Reconnecting!");
                 _connection.StateChange -= connection_StateChange;
@@ -117,6 +118,18 @@ namespace MPLRServer
                     Reader.Close();
                     Reader.Dispose();
                     Reader = null;
+                }
+
+                if (!_connection.Ping())
+                {
+                    Logger.WriteLine("Lost connection to DB... Trying to reconnect");
+                    // Close and reopen
+                    _connection.Close();
+                    _connection.Dispose();
+                    _connection = null;
+
+                    Connect();
+                    Logger.WriteLine("Done: {0}", _connection.Ping());
                 }
 
 
@@ -145,7 +158,6 @@ namespace MPLRServer
                 {
                     Logger.WriteLine("Lost connection to DB... Trying to reconnect and wait a second before retrying to run query.");
                     Connect();
-                    System.Threading.Thread.Sleep(1000);
                     return RunQuery(pQuery);
                 }
                 else

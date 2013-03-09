@@ -22,17 +22,8 @@ namespace MPLRServer
                 pPacket.Reset();
                 MaplePacket.CommunicationType type = (MaplePacket.CommunicationType)pPacket.ReadByte();
                 Outboud = type == MaplePacket.CommunicationType.ClientPacket;
+                Opcode = pPacket.ReadUShort();
 
-                if (type == MaplePacket.CommunicationType.Internal)
-                {
-                    ushort header = pPacket.ReadUShort();
-                    Opcode = 0xEE00;
-                    Opcode += (byte)(header & 0xFF);
-                }
-                else
-                {
-                    Opcode = pPacket.ReadUShort();
-                }
                 Data = new byte[pPacket.Length - 3];
                 Buffer.BlockCopy(pPacket.ToArray(), 3, Data, 0, Data.Length); // byte + short (header)
                 ArrivalTime = MasterThread.CurrentDate;
@@ -80,22 +71,22 @@ namespace MPLRServer
             _packets.Add(new DumpPacket(pPacket));
         }
 
-        public void Save(string pName, ushort pVersion)
+        public void Save(string pName, ushort pVersion, System.Net.IPEndPoint pHost, System.Net.IPEndPoint pClient)
         {
             using (FileStream stream = new FileStream(pName, FileMode.Create, FileAccess.Write))
+            using (BinaryWriter writer = new BinaryWriter(stream))
             {
-                BinaryWriter writer = new BinaryWriter(stream);
                 writer.Write((ushort)0x2020);
-                writer.Write("test123");
-                writer.Write((ushort)6783);
-                writer.Write("mc.craftnet.nl");
-                writer.Write((ushort)8484);
-                writer.Write((byte)0x08);
+                writer.Write(pClient.Address.ToString());
+                writer.Write((ushort)pClient.Port);
+                writer.Write(pHost.Address.ToString());
+                writer.Write((ushort)pHost.Port);
+                writer.Write((byte)0x08); // MapleStory type
                 writer.Write(pVersion);
+
                 foreach (DumpPacket packet in _packets)
-                {
                     writer.Write(packet.Dump());
-                }
+
                 stream.Flush();
             }
             _packets.Clear();

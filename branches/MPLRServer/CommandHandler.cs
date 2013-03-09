@@ -20,6 +20,9 @@ namespace MPLRServer
 
             Instance.CommandHandlers.Add("report", (pConnection, pArguments) =>
             {
+                return; // Disabled
+
+
                 if (pArguments.Length == 1)
                 {
                     string name = pArguments[0];
@@ -36,7 +39,7 @@ namespace MPLRServer
                         }
                         else
                         {
-                            Logger.WriteLine("Could not find {0} for {1}", name, pConnection.CharData.Stats.Name);
+                            pConnection.Logger_WriteLine("Could not find {0} for {1}", name, pConnection.CharData.Stats.Name);
                         }
                     }
 
@@ -50,9 +53,9 @@ namespace MPLRServer
                             int result = (int)MySQL_Connection.Instance.RunQuery(iqb.ToString());
                             if (result != 0)
                             {
-                                Logger.WriteLine("Reported {0} (by {1}). Requesting Screenshot...", name, pConnection.CharData.Stats.Name);
+                                pConnection.Logger_WriteLine("Reported {0} (by {1}). Requesting Screenshot...", name, pConnection.CharData.Stats.Name);
 
-                                using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.Internal, (ushort)0xFFFE))
+                                using (MaplePacket pack = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, (ushort)0xEEFE))
                                 {
                                     pack.WriteString("http://mapler.me/actions/upload_report.php");
                                     pack.WriteInt(MySQL_Connection.Instance.GetLastInsertId());
@@ -62,7 +65,7 @@ namespace MPLRServer
                             }
                             else
                             {
-                                Logger.WriteLine("Report FAIL {0} (by {1})", name, pConnection.CharData.Stats.Name);
+                                pConnection.Logger_WriteLine("Report FAIL {0} (by {1})", name, pConnection.CharData.Stats.Name);
                             }
                         }
 

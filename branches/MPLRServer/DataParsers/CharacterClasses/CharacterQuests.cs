@@ -15,7 +15,7 @@ namespace MPLRServer
         public Dictionary<ushort, long> PartyQuestsDone { get; private set; }
 
 
-        public void Decode(MaplePacket pPacket)
+        public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
             var v = pPacket.ReadByte(); // ?
 
@@ -61,14 +61,14 @@ namespace MPLRServer
                 }
                 else
                 {
-                    Logger.WriteLine("Unable to parse {0} as date. GG nexon. Quest ID: {1}", date, id);
+                    pConnection.Logger_WriteLine("Unable to parse {0} as date. GG nexon. Quest ID: {1}", date, id);
                     ft = 150842304000000000L; // GG Nexon.
                 }
 
                 if (!Done.ContainsKey(id))
                     Done.Add(id, ft);
                 else
-                    Logger.WriteLine("Duplicate Quest (Done): {0}", id);
+                    pConnection.Logger_WriteLine("Duplicate Quest (Done): {0}", id);
 
             }
 
@@ -81,7 +81,7 @@ namespace MPLRServer
             }
         }
 
-        public void DecodePQ(MaplePacket pPacket)
+        public void DecodePQ(ClientConnection pConnection, MaplePacket pPacket)
         {
             PartyQuestsRunning = new Dictionary<ushort, string>();
             for (int i = pPacket.ReadShort(); i > 0; i--)
@@ -91,11 +91,11 @@ namespace MPLRServer
                 if (!PartyQuestsRunning.ContainsKey(id))
                     PartyQuestsRunning.Add(id, value);
                 else
-                    Logger.WriteLine("Duplicate PQ (Running): {0}", id);
+                    pConnection.Logger_WriteLine("Duplicate PQ (Running): {0}", id);
             }
         }
 
-        public void DecodePQDone(MaplePacket pPacket)
+        public void DecodePQDone(ClientConnection pConnection, MaplePacket pPacket)
         {
             PartyQuestsDone = new Dictionary<ushort, long>();
             for (int i = pPacket.ReadShort(); i > 0; i--)
@@ -105,7 +105,7 @@ namespace MPLRServer
                 if (!PartyQuestsDone.ContainsKey(id))
                     PartyQuestsDone.Add(id, time);
                 else
-                    Logger.WriteLine("Duplicate PQ (Done): {0}", id);
+                    pConnection.Logger_WriteLine("Duplicate PQ (Done): {0}", id);
             }
         }
     }

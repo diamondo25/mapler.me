@@ -13,10 +13,10 @@ namespace MPLRServer
             pPacket.ReadShort();
             if (error != 0)
             {
-                Logger.WriteLine("Got Status: {0}", error);
+                pConnection.Logger_WriteLine("Got Status: {0}", error);
                 if (error == 0x07)
                 {
-                    Logger.WriteLine("Already logged in!");
+                    pConnection.Logger_WriteLine("Already logged in!");
                 }
                 return;
             }
@@ -47,10 +47,10 @@ namespace MPLRServer
             byte error = pPacket.ReadByte();
             if (error != 0)
             {
-                Logger.WriteLine("Got Status: {0}", error);
+                pConnection.Logger_WriteLine("Got Status: {0}", error);
                 if (error == 0x07)
                 {
-                    Logger.WriteLine("Already logged in!");
+                    pConnection.Logger_WriteLine("Already logged in!");
                 }
                 return;
             }
@@ -69,14 +69,14 @@ namespace MPLRServer
             byte qban = pPacket.ReadByte(); // Quiet Ban
             DateTime qban_time = DateTime.FromFileTime(pPacket.ReadLong()); // Quiet Ban Time
             string username2 = pPacket.ReadString();
-            Logger.WriteLine("Username 1: {0} | Username 2: {1}", username, username2);
+            pConnection.Logger_WriteLine("Username 1: {0} | Username 2: {1}", username, username2);
             DateTime create_time = DateTime.FromFileTime(pPacket.ReadLong()); // Creation Time
             pPacket.ReadInt(); // 78?
             pPacket.ReadBytes(8); // CC key
             string herpderp = pPacket.ReadString();
             if (herpderp != "")
             {
-                Logger.WriteLine("Wat is dit: {0}", herpderp);
+                pConnection.Logger_WriteLine("Wat is dit: {0}", herpderp);
             }
 
             ParseLogin(pConnection, username, admin, gender, create_time, qban_time, qban);
@@ -85,7 +85,7 @@ namespace MPLRServer
         private static void ParseLogin(ClientConnection pConnection, string pUsername, short pAdmin, byte pGender, DateTime pCreateTime, DateTime pQBan, byte pQBanReason)
         {
 
-            Logger.WriteLine("[{0}] {1} ({2}) Created at {3}, Gender {4}", pConnection.UserID, pUsername, pAdmin, pCreateTime, pGender);
+            pConnection.Logger_WriteLine("[{0}] {1} ({2}) Created at {3}, Gender {4}", pConnection.UserID, pUsername, pAdmin, pCreateTime, pGender);
 
             pConnection.AccountID = 2;
 
@@ -105,16 +105,16 @@ namespace MPLRServer
                 int tmp = Internal_Storage.Store.Instance.KnownUserlist[pConnection.UserID];
                 if (tmp == 2)
                 {
-                    Logger.WriteLine("User bound to temporary account. Trying to find correct account...");
+                    pConnection.Logger_WriteLine("User bound to temporary account. Trying to find correct account...");
                     getWebLoginID();
                     if (tmp != pConnection.AccountID)
                     {
-                        Logger.WriteLine("Found account for user!");
+                        pConnection.Logger_WriteLine("Found account for user!");
                         Internal_Storage.Store.Instance.KnownUserlist[pConnection.UserID] = pConnection.AccountID;
                     }
                     else
                     {
-                        Logger.WriteLine("No account found, using temporary...");
+                        pConnection.Logger_WriteLine("No account found, using temporary...");
                         pConnection.AccountID = tmp;
                     }
                 }
@@ -122,7 +122,7 @@ namespace MPLRServer
                 {
                     pConnection.AccountID = tmp;
                 }
-                Logger.WriteLine("Already known (Account ID: {0})", pConnection.AccountID);
+                pConnection.Logger_WriteLine("Already known (Account ID: {0})", pConnection.AccountID);
             }
             else
             {
@@ -130,7 +130,7 @@ namespace MPLRServer
 
                 getWebLoginID();
 
-                Logger.WriteLine("Creating user for accountID {0}", pConnection.AccountID);
+                pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
 
                 // Adding user!
 
@@ -138,7 +138,7 @@ namespace MPLRServer
 
                 using (var result = MySQL_Connection.Instance.RunQuery("INSERT INTO users VALUES " + insertval) as MySql.Data.MySqlClient.MySqlDataReader)
                 {
-                    Logger.WriteLine("User added to account ID {0}", pConnection.AccountID);
+                    pConnection.Logger_WriteLine("User added to account ID {0}", pConnection.AccountID);
                 }
 
                 Internal_Storage.Store.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
@@ -153,7 +153,7 @@ namespace MPLRServer
             string name = pPacket.ReadString();
             string successor = pPacket.ReadString();
             string guildname = pPacket.ReadString();
-            Logger.WriteLine("I see {0}! ID {1} Level {2}{3}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)");
+            pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)");
 
             using (InsertQueryBuilder characterViewsTable = new InsertQueryBuilder("character_views"))
             {
@@ -186,7 +186,7 @@ namespace MPLRServer
                     guild.Decode(pPacket);
                     guild.Save(pConnection.WorldID);
 
-                    Logger.WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedName, guild.Name);
+                    pConnection.Logger_WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedName, guild.Name);
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace MPLRServer
                 var level = pPacket.ReadByte();
                 Timeline.Instance.PushLevelUP(pConnection.CharacterInternalID, level);
                 pConnection.CharData.Stats.Level = level;
-                Logger.WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, level);
+                pConnection.Logger_WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, level);
             }
             if (CheckFlag(updateFlag, 0x20))
             {
@@ -247,7 +247,7 @@ namespace MPLRServer
                 var jobid = pPacket.ReadShort();
                 Timeline.Instance.PushJobUP(pConnection.CharacterInternalID, (ushort)jobid);
                 pConnection.CharData.Stats.JobID = jobid;
-                Logger.WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, jobid);
+                pConnection.Logger_WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, jobid);
             }
             if (CheckFlag(updateFlag, 0x40))
             {
@@ -465,7 +465,7 @@ namespace MPLRServer
                         string q = skillTable.ToString();
                         System.IO.File.WriteAllText("insert-update-skills-packet.sql", q);
                         int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                        Logger.WriteLine("Result Skills: {0}", result);
+                        pConnection.Logger_WriteLine("Result Skills: {0}", result);
 
                         pConnection.SendTimeUpdate();
                     }
@@ -512,12 +512,12 @@ namespace MPLRServer
                 for (var amnt = 0; amnt < items; amnt++)
                 {
                     byte type4 = pPacket.ReadByte();
+                    byte inv = pPacket.ReadByte();
+                    short slot = pPacket.ReadShort();
+                    inv -= 1;
 
                     if (type4 == 0) // New Item
                     {
-                        byte inv = pPacket.ReadByte();
-                        short slot = pPacket.ReadShort();
-                        inv -= 1;
 
                         ItemBase item = ItemBase.DecodeItemData(pPacket);
 
@@ -540,111 +540,32 @@ namespace MPLRServer
                                 inventory.InventoryItems[inv - 1][(byte)slot] = item;
                         }
 
-
-                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
-
                         using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
                         {
-                            itemsTable.OnDuplicateUpdate = true;
-                            itemsTable.AddColumn("character_id", false);
-                            itemsTable.AddColumn("itemid", true);
-                            itemsTable.AddColumn("inventory", false);
-                            itemsTable.AddColumn("slot", false);
-                            itemsTable.AddColumn("checksum", true);
-                            itemsTable.AddColumns(true, "cashid", "amount", "expires", "slots", "scrolls", "str", "dex", "int", "luk", "maxhp", "maxmp", "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers", 
-                                "itemlevel", "itemexp",
-                                "potential1", "potential2", "potential3", "potential4", "potential5", 
-                                "socketstate", "socket1", "socket2", "socket3");
-
-                            if (item is ItemEquip)
-                            {
-                                var equip = item as ItemEquip;
-
-                                itemsTable.AddRow(
-                                    pConnection.CharacterInternalID,
-                                    equip.ItemID,
-                                    0,
-                                    slot,
-                                    equip.GetChecksum(),
-                                    equip.CashID,
-                                    equip.Amount,
-                                    equip.Expires,
-                                    equip.Slots, equip.Scrolls,
-                                    equip.Str, equip.Dex, equip.Int, equip.Luk,
-                                    equip.HP, equip.MP,
-                                    equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
-                                    equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
-                                    equip.Name, equip.Flags,
-                                    equip.ViciousHammer,
-                                    equip.ItemLevel, equip.ItemEXP,
-                                    equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
-                                    equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3
-                                );
-                            }
-                            else
-                            {
-
-                                string name = item is ItemRechargable ? (item as ItemRechargable).CraftName : null;
-                                int flags = item is ItemRechargable ? (item as ItemRechargable).Flags : 0;
-
-                                itemsTable.AddRow(
-                                    pConnection.CharacterInternalID,
-                                    item.ItemID,
-                                    inv,
-                                    slot,
-                                    (item is ItemRechargable ? (item as ItemRechargable).GetChecksum() : item.GetChecksum()),
-                                    item.CashID,
-                                    item.Amount,
-                                    item.Expires,
-                                    null, null,
-                                    null, null, null, null,
-                                    null, null,
-                                    null, null, null, null,
-                                    null, null, null, null, null,
-                                    name, flags,
-                                    null,
-                                    null, null,
-                                    null, null, null, null, null,
-                                    null, null, null, null
-                                    );
-
-                            }
-
-                            {
-                                string q2 = itemsTable.ToString();
-                                System.IO.File.WriteAllText("insert-item-packet.sql", q2);
-                                int result = (int)MySQL_Connection.Instance.RunQuery(q2);
-                                Logger.WriteLine("Result Item Addition: {0}", result);
-                            }
+                            Queries.SaveItem(pConnection, inv, slot, item, itemsTable);
+                            MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
 
                             if (item is ItemPet)
                             {
                                 var pet = item as ItemPet;
                                 using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
                                 {
-                                    petTable.OnDuplicateUpdate = true;
-                                    petTable.AddColumn("cashid", false);
-                                    petTable.AddColumn("name", true);
-                                    petTable.AddColumn("closeness", true);
-                                    petTable.AddColumn("fullness", true);
-                                    petTable.AddColumn("level", true);
-
-                                    petTable.AddRow(pet.CashID, pet.Petname, pet.Closeness, pet.Fullness, pet.Level);
-
-                                    string q = petTable.ToString();
-                                    System.IO.File.WriteAllText("insert-item-pet-packet.sql", q);
-                                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                                    Logger.WriteLine("Result Pets: {0}", result);
+                                    Queries.SavePet(pet, petTable);
+                                    MySQL_Connection.Instance.RunQuery(petTable.ToString());
                                 }
                             }
                         }
+
+
                     }
                     else if (type4 == 1) // Update amount
                     {
-                        byte inv = pPacket.ReadByte();
-                        short slot = pPacket.ReadShort();
                         short amount = pPacket.ReadShort();
-                        inv -= 1; // 1 (strange counting of Nexon) + 1 (no equip inventory)
+                        if (inv == 0)
+                        {
+                            pConnection.Logger_WriteLine("WUTWUT"); // Should _never_ happen
+                            continue;
+                        }
 
                         ItemBase item = inventory.InventoryItems[inv - 1][(byte)slot];
                         item.Amount = amount;
@@ -659,22 +580,15 @@ namespace MPLRServer
                             itemTable.SetWhereColumn("slot", slot);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-
-                            string q = itemTable.ToString();
-                            System.IO.File.WriteAllText("update-item-packet.sql", q);
-                            int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                            Logger.WriteLine("Result Item Amount Update: {0}", result);
-
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                         }
 
 
                     }
                     else if (type4 == 2) // Swap
                     {
-                        byte inv = pPacket.ReadByte();
-                        short slotfrom = pPacket.ReadShort();
+                        short slotfrom = slot;
                         short slotto = pPacket.ReadShort();
-                        inv -= 1;
 
                         bool founditem = false;
 
@@ -717,7 +631,7 @@ namespace MPLRServer
                             {
                                 inventory.InventoryItems[inv - 1].Remove((byte)slotfrom);
                             }
-                            inventory.InventoryItems[inv - 1][(byte)slotto] = item;
+                            inventory.InventoryItems[inv - 1].Add((byte)slotto, item);
 
                         }
 
@@ -730,11 +644,7 @@ namespace MPLRServer
                                 itemTable.SetWhereColumn("slot", slotto);
                                 itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-
-                                string q = itemTable.ToString();
-                                System.IO.File.WriteAllText("update-item-packet.sql", q);
-                                int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                                Logger.WriteLine("Result Item Slot Switch FIX1: {0}", result);
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                             }
                         }
 
@@ -745,11 +655,7 @@ namespace MPLRServer
                             itemTable.SetWhereColumn("slot", slotfrom);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-
-                            string q = itemTable.ToString();
-                            System.IO.File.WriteAllText("update-item-packet.sql", q);
-                            int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                            Logger.WriteLine("Result Item Slot Switch: {0}", result);
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                         }
 
                         if (founditem) // Fix other slot
@@ -761,20 +667,13 @@ namespace MPLRServer
                                 itemTable.SetWhereColumn("slot", slotfrom + 3000);
                                 itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-
-                                string q = itemTable.ToString();
-                                System.IO.File.WriteAllText("update-item-packet.sql", q);
-                                int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                                Logger.WriteLine("Result Item Slot Switch FIX2: {0}", result);
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                             }
                         }
                     }
                     else if (type4 == 3)
                     {
                         // Drop item.
-                        byte inv = pPacket.ReadByte();
-                        short slot = pPacket.ReadShort();
-                        inv -= 1;
 
                         if (inv == 0)
                         {
@@ -801,12 +700,303 @@ namespace MPLRServer
                             itemTable.SetWhereColumn("slot", slot);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-
-                            string q = itemTable.ToString();
-                            System.IO.File.WriteAllText("delete-item-packet.sql", q);
-                            int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                            Logger.WriteLine("Result Item Slot Removal: {0}", result);
+                            int result = (int)MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                         }
+                    }
+
+
+
+
+
+
+
+
+                    else if (type4 == 4)
+                    {
+                        pPacket.ReadInt(); // Unknown..?
+                    }
+                    else if (type4 == 5)
+                    {
+                        // 'Swap' items from and to bags
+                        inv -= 1;
+
+                        short from = slot;
+                        byte slotfrom = (byte)(from % 100);
+                        byte bagfrom = (byte)(from / 100);
+
+                        short to = pPacket.ReadShort();
+                        byte slotto = (byte)(to % 100);
+                        byte bagto = (byte)(to / 100);
+
+
+                        slotfrom -= 1;
+                        slotto -= 1;
+                        if (bagto == 0)
+                            bagto = 255;
+                        else
+                            bagto -= 1;
+                        if (bagfrom == 0)
+                            bagfrom = 255;
+                        else
+                            bagfrom -= 1;
+
+
+                        if (
+                            (bagfrom != 255 && bagto != 255) ||
+                            (bagfrom == bagto) || // Check if the item is being moved to itself or something
+
+                            (bagfrom == 255 && !inventory.InventoryItems[inv].ContainsKey(slotfrom)) ||
+                            (bagfrom != 255 && (!inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom))) ||
+
+                            (bagto != 255 && !inventory.BagItems.ContainsKey(bagto)) // Only check if bag exists
+                            )
+                        {
+                            pConnection.Logger_WriteLine("Invalid item movement in bag !!!");
+                            continue;
+                        }
+
+                        bool founditem = false;
+
+                        byte invto = bagto == 255 ? inv : (byte)(10 + bagto);
+                        byte invfrom = bagfrom == 255 ? inv : (byte)(10 + bagfrom);
+
+                        if (bagfrom == 255)
+                        {
+                            // Move to bag
+                            ItemBase ib = inventory.InventoryItems[inv][slotfrom];
+                            if (inventory.BagItems[bagto].Items.ContainsKey(slotto))
+                            {
+                                inventory.InventoryItems[inv][slotfrom] = inventory.BagItems[bagto].Items[slotto];
+                                inventory.BagItems[bagto].Items.Remove(slotto);
+                                founditem = true;
+                            }
+
+                            inventory.BagItems[bagto].Items.Add(slotto, ib);
+
+
+
+                        }
+                        else
+                        {
+                            // Move to normal slot
+                            ItemBase ib = inventory.BagItems[bagfrom].Items[slotfrom];
+                            if (inventory.InventoryItems[inv].ContainsKey(slotto))
+                            {
+                                inventory.BagItems[bagfrom].Items[slotfrom] = inventory.InventoryItems[inv][slotto];
+                                inventory.InventoryItems[inv].Remove(slotto);
+                            }
+
+                            inventory.InventoryItems[inv].Add(slotto, ib);
+
+
+
+                            using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
+                            {
+                                Queries.SaveItem(pConnection, inv, slot, ib, itemsTable);
+                                MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
+                            }
+
+
+                        }
+
+                        /*
+                         * Item A: item being used to move/swap | inv 3, slot 21 (Etc) | slotfrom, invfrom
+                         * Item B: item that is being swapped with A | inv 11, slot 3 (Bag 2) | slotto, invto
+                         * 
+                         * Move B to a temp slot, to the new inventory: inv 11 -> inv 3, slot 3 -> slot 3021
+                         * Move A to B: inv 3 -> inv 11, slot 21 -> slot 3
+                         * Move B to A: slot 3021 -> slot 21
+                         * 
+                        */
+
+
+                        if (founditem) // New slot contained item
+                        {
+                            // Temporary moving item
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom + 3000);
+                                itemTable.SetColumn("inventory", invfrom);
+                                itemTable.SetWhereColumn("inventory", invto);
+                                itemTable.SetWhereColumn("slot", slotto);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            }
+                        }
+
+                        using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                        {
+                            itemTable.SetColumn("slot", slotto);
+                            itemTable.SetColumn("inventory", invto);
+                            itemTable.SetWhereColumn("inventory", invfrom);
+                            itemTable.SetWhereColumn("slot", slotfrom);
+                            itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                        }
+
+                        if (founditem) // Fix other slot
+                        {
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom);
+                                itemTable.SetWhereColumn("inventory", invfrom);
+                                itemTable.SetWhereColumn("slot", slotfrom + 3000);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            }
+                        }
+                    }
+                    else if (type4 == 6)
+                    {
+                        // Update bag item amount
+
+                        short from = slot;
+                        byte slotfrom = (byte)(from % 100);
+                        byte bagfrom = (byte)(from / 100);
+
+                        short amount = pPacket.ReadShort();
+
+
+                        slotfrom -= 1;
+                        if (bagfrom == 0)
+                        {
+                            pConnection.Logger_WriteLine("Invalid item bag!");
+                            continue;
+                        }
+                        else
+                            bagfrom -= 1;
+
+                        byte invfrom = (byte)(10 + bagfrom);
+
+                        if (
+                            !inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom)
+                            )
+                        {
+                            pConnection.Logger_WriteLine("Invalid item movement in bag (item did not exist)!!!");
+                            continue;
+                        }
+
+
+
+                        ItemBase item = inventory.BagItems[bagfrom].Items[slotfrom];
+                        item.Amount = amount;
+
+                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
+
+                        using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                        {
+                            itemTable.SetColumn("amount", amount);
+                            itemTable.SetColumn("checksum", item.GetChecksum());
+                            itemTable.SetWhereColumn("inventory", invfrom);
+                            itemTable.SetWhereColumn("slot", slot);
+                            itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                        }
+
+
+
+                    }
+                    else if (type4 == 8)
+                    {
+                        // Swap/move item in bags
+                        inv -= 2; // 4 = use, internally it's 1 (no equip, starts with 0 O.o)
+
+                        short from = slot;
+                        byte slotfrom = (byte)(from % 100);
+                        byte bagfrom = (byte)(from / 100);
+
+                        short to = pPacket.ReadShort();
+                        byte slotto = (byte)(to % 100);
+                        byte bagto = (byte)(to / 100);
+
+                        slotfrom -= 1;
+                        slotto -= 1;
+                        bagto -= 1;
+                        bagfrom -= 1;
+
+
+                        byte invto = (byte)(10 + bagto);
+                        byte invfrom = (byte)(10 + bagfrom);
+
+
+                        if (!inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems.ContainsKey(bagto))
+                        {
+                            pConnection.Logger_WriteLine("Invalid item movement in bag");
+                            continue;
+                        }
+
+                        if (!inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom))
+                        {
+                            pConnection.Logger_WriteLine("Invalid item movement in bag (item not found)");
+                            continue;
+                        }
+
+                        ItemBase item = inventory.BagItems[bagfrom].Items[slotfrom];
+
+                        bool founditem = false;
+
+                        if (inventory.BagItems[bagto].Items.ContainsKey(slotto))
+                        {
+                            // Swap
+
+                            inventory.BagItems[bagfrom].Items[slotfrom] = inventory.BagItems[bagto].Items[slotto];
+                            inventory.BagItems[bagto].Items.Remove(slotto); // Delete item
+                            founditem = true;
+                        }
+                        inventory.BagItems[bagto].Items.Add(slotto, item);
+
+
+
+
+                        if (founditem) // New slot contained item
+                        {
+                            // Temporary moving item
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom + 3000);
+                                itemTable.SetColumn("inventory", invfrom);
+                                itemTable.SetWhereColumn("inventory", invto);
+                                itemTable.SetWhereColumn("slot", slotto);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            }
+                        }
+
+                        using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                        {
+                            itemTable.SetColumn("slot", slotto);
+                            itemTable.SetColumn("inventory", invto);
+                            itemTable.SetWhereColumn("inventory", invfrom);
+                            itemTable.SetWhereColumn("slot", slotfrom);
+                            itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                        }
+
+                        if (founditem) // Fix other slot
+                        {
+                            using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
+                            {
+                                itemTable.SetColumn("slot", slotfrom);
+                                itemTable.SetWhereColumn("inventory", invfrom);
+                                itemTable.SetWhereColumn("slot", slotfrom + 3000);
+                                itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+
+                                MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            }
+                        }
+
+
+
+                    }
+                    else if (type4 == 10)
+                    {
+                        pConnection.Logger_WriteLine("Player probably removed some bag item... O.o?");
                     }
                 }
             }
@@ -858,15 +1048,16 @@ namespace MPLRServer
                     pPacket.Skip(tmp * 8);
                 }
 
+                pConnection.Logger_WriteLine("--------- Started parsing Character Info ----------");
 
                 CharacterData data = new CharacterData();
-                data.Decode(pPacket);
+                data.Decode(pConnection, pPacket);
 
                 data.SaveData(pConnection);
 
                 pConnection.CharData = data;
 
-                Logger.WriteLine("--------- Saved Character Info ----------");
+                pConnection.Logger_WriteLine("--------- Saved parsed Character Info ----------");
 
 
                 pConnection.LastLoggedName = pConnection.CharData.Stats.Name;
@@ -879,7 +1070,7 @@ namespace MPLRServer
 
                 int mapid = pPacket.ReadInt();
                 byte mappos = pPacket.ReadByte();
-                Logger.WriteLine("New MapID: {0} ({1})", mapid, mappos);
+                pConnection.Logger_WriteLine("New MapID: {0} ({1})", mapid, mappos);
 
                 pConnection.CharData.Stats.MapID = mapid;
                 pConnection.CharData.Stats.MapPos = mappos;
@@ -899,7 +1090,7 @@ namespace MPLRServer
             if (!isConnecting)
             {
                 DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
-                Logger.WriteLine("Servertime: {0}", servertime.ToString());
+                pConnection.Logger_WriteLine("Servertime: {0}", servertime.ToString());
                 pPacket.ReadInt(); // 100?
                 pPacket.ReadByte(); // 0
                 pPacket.ReadByte(); // 0

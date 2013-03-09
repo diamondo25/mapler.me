@@ -7,7 +7,7 @@ namespace MPLRServer
 {
     class Queries
     {
-        public static void AddOrUpdateCharacter(int pID, string pName, int pUserID, byte pWorldID, byte pLevel,
+        public static void AddOrUpdateCharacter(ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pLevel,
             short pJob, short pStr, short pDex, short pInt, short pLuk,
             int pHP, int pMaxHP, int pMP, int pMaxMP, short pAP, short pSP,
             int pEXP, int pFame, int pMap, byte pMapPos,
@@ -72,11 +72,11 @@ namespace MPLRServer
 
                     if (result >= 1)
                     {
-                        Logger.WriteLine("Updated character info: {0}", internal_id);
+                        pConnection.Logger_WriteLine("Updated character info: {0}", internal_id);
                     }
                     else
                     {
-                        Logger.WriteLine("Failed to update character info");
+                        pConnection.Logger_WriteLine("Failed to update character info");
                     }
                 }
             }
@@ -114,14 +114,130 @@ namespace MPLRServer
 
                     if (result >= 1)
                     {
-                        Logger.WriteLine("Inserted character info: {0}", MySQL_Connection.Instance.GetLastInsertId());
+                        pConnection.Logger_WriteLine("Inserted character info: {0}", MySQL_Connection.Instance.GetLastInsertId());
                     }
                     else
                     {
-                        Logger.WriteLine("Failed to insert character info");
+                        pConnection.Logger_WriteLine("Failed to insert character info");
                     }
                 }
             }
+        }
+
+
+
+
+        public static string GetAccountOptionValue(int pAccountID, string pKey)
+        {
+            string query = "SELECT option_value FROM account_options WHERE account_id = " + pAccountID + " AND option_key = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pKey) + "'";
+            using (var reader = MySQL_Connection.Instance.RunQuery(query) as MySql.Data.MySqlClient.MySqlDataReader)
+            {
+                if (reader.Read())
+                {
+                    return reader.GetString(0);
+                }
+            }
+
+            return null;
+        }
+
+        public static void SaveItem(ClientConnection pConnection, byte pInventory, short pSlot, ItemBase pItem, InsertQueryBuilder itemsTable, bool pDontSetChecksum = false)
+        {
+            if (!itemsTable.HasColumns)
+            {
+                itemsTable.OnDuplicateUpdate = true;
+                itemsTable.AddColumn("character_id", false);
+                itemsTable.AddColumn("itemid", true);
+                itemsTable.AddColumn("inventory", false);
+                itemsTable.AddColumn("slot", false);
+                itemsTable.AddColumn("checksum", true);
+                itemsTable.AddColumns(true, 
+                    "cashid", "amount", "expires", "slots", "scrolls", 
+                    "str", "dex", "int", "luk", "maxhp", "maxmp", 
+                    "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers",
+                    "itemlevel", "itemexp",
+                    "potential1", "potential2", "potential3", "potential4", "potential5",
+                    "socketstate", "socket1", "socket2", "socket3",
+                    "bagid"
+                    );
+            }
+
+            int checksum = pItem.GetChecksum();
+
+
+            if (pItem is ItemEquip)
+            {
+                var equip = pItem as ItemEquip;
+
+                itemsTable.AddRow(
+                    pConnection.CharacterInternalID,
+                    equip.ItemID,
+                    pInventory,
+                    pSlot,
+                    checksum,
+                    equip.CashID,
+                    equip.Amount,
+                    equip.Expires,
+                    equip.Slots, equip.Scrolls,
+                    equip.Str, equip.Dex, equip.Int, equip.Luk,
+                    equip.HP, equip.MP,
+                    equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
+                    equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
+                    equip.Name, equip.Flags,
+                    equip.ViciousHammer,
+                    equip.ItemLevel, equip.ItemEXP,
+                    equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
+                    equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3,
+                    pItem.BagID
+                );
+            }
+            else
+            {
+
+                string name = pItem is ItemRechargable ? (pItem as ItemRechargable).CraftName : null;
+                int flags = pItem is ItemRechargable ? (pItem as ItemRechargable).Flags : 0;
+
+                itemsTable.AddRow(
+                    pConnection.CharacterInternalID,
+                    pItem.ItemID,
+                    pInventory,
+                    pSlot,
+                    checksum,
+                    pItem.CashID,
+                    pItem.Amount,
+                    pItem.Expires,
+                    null, null,
+                    null, null, null, null,
+                    null, null,
+                    null, null, null, null,
+                    null, null, null, null, null,
+                    name, flags,
+                    null,
+                    null, null,
+                    null, null, null, null, null,
+                    null, null, null, null,
+                    pItem.BagID
+                    );
+
+            }
+
+            if (!pDontSetChecksum)
+                Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, pInventory, pSlot, checksum);
+        }
+
+        public static void SavePet(ItemPet pPet, InsertQueryBuilder pInsertBuilder)
+        {
+            if (!pInsertBuilder.HasColumns)
+            {
+                pInsertBuilder.OnDuplicateUpdate = true;
+                pInsertBuilder.AddColumn("cashid", false);
+                pInsertBuilder.AddColumn("name", true);
+                pInsertBuilder.AddColumn("closeness", true);
+                pInsertBuilder.AddColumn("fullness", true);
+                pInsertBuilder.AddColumn("level", true);
+            }
+            pInsertBuilder.AddRow(pPet.CashID, pPet.Petname, pPet.Closeness, pPet.Fullness, pPet.Level);
+
         }
     }
 }

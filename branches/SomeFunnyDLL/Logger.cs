@@ -6,47 +6,63 @@ using System.IO;
 
 namespace System
 {
-    public static class Logger
+    public partial class Logger
     {
         public static string Logfile { get; private set; }
         public static string PacketLogfile { get; private set; }
+        public const string Version = "Mapler.me Software V1.0.0.0";
 
         public static bool PacketLogging { get; private set; }
+        private static bool _disabledLogging;
 
-        public static void SetLogfile(bool pPacketLogging)
+        public static void SetLogfile(bool pPacketLogging, bool pDisabled = false)
         {
+            _disabledLogging = pDisabled;
             PacketLogging = pPacketLogging;
+
+            if (_disabledLogging) return;
+
             Logfile = "logs" + Path.DirectorySeparatorChar + "Log" + DateTime.Now.ToString("yyyy_M_d__hh_mm_ss") + ".log";
             if (PacketLogging)
                 PacketLogfile = "logs" + Path.DirectorySeparatorChar + "PacketLog" + DateTime.Now.ToString("yyyy_M_d__hh_mm_ss") + ".log";
 
             if (!Directory.Exists("logs"))
                 Directory.CreateDirectory("logs");
+
+            WriteLine("INITIALIZED {0}", Version);
         }
 
         public static void WriteLine(string pInput, params object[] pParams)
         {
+            if (_disabledLogging) return;
             string text = string.Format("[{0}] {1} {2}", DateTime.Now, string.Format(pInput, pParams), Environment.NewLine);
+            Console.Write(text);
+
             try
             {
-                File.AppendAllText(Logfile, text);
+                using (var sw = new StreamWriter(Logfile, true))
+                    sw.Write(text);
             }
             catch { }
-            Console.Write(text);
         }
 
         public static void Write(string pInput, params object[] pParams)
         {
+            if (_disabledLogging) return;
+            Console.Write(pInput, pParams);
+
             try
             {
-                File.AppendAllText(Logfile, string.Format(pInput, pParams));
+                using (var sw = new StreamWriter(Logfile, true))
+                    sw.Write(string.Format(pInput, pParams));
             }
             catch { }
-            Console.Write(pInput, pParams);
         }
 
         public static void ErrorLog(string pInput, params object[] pParams)
         {
+            if (_disabledLogging) return;
+
             Console.WriteLine("---------- EXCEPTION -----------");
             Console.WriteLine(pInput, pParams);
             try
@@ -58,9 +74,18 @@ namespace System
 
         public static void PWrite(string pInput, params object[] pParams)
         {
+            if (_disabledLogging) return;
+
             if (!PacketLogging)
                 return;
-            File.AppendAllText(PacketLogfile, string.Format(pInput, pParams));
+
+            try
+            {
+                using (var fs = new FileStream(PacketLogfile, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite))
+                using (var sw = new StreamWriter(fs))
+                    sw.Write(string.Format(pInput, pParams));
+            }
+            catch { }
         }
     }
 }
