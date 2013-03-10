@@ -136,7 +136,7 @@ else {
 					<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
 			</div>
 			
-			<?php if ($_loggedin) { ?>
+			<?php if ($_loggedin && $row['comments_disabled'] == '0') { ?>
 			<div class="status">
 				<div id="disqus_thread"></div>
 			<script type="text/javascript">
@@ -148,9 +148,8 @@ else {
 				})();
 			</script>
 			</div>
-			<?php } ?>
-        
-<?php       
+<?php
+	}    
 }
 ?>
 	</div>

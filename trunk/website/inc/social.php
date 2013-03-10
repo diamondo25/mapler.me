@@ -30,6 +30,9 @@ if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['content']) {
 	$content = htmlentities($_POST['content']);
 	$contentfix = strip_tags($content);
 	$contentfix2 = stripslashes($contentfix);
+	$dc = htmlentities($_POST['dc']);
+	$dcfix = strip_tags($dc);
+	$dcfix2 = stripslashes($dcfix);
 	
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 	$has_characters = !empty($char_config['main_character']);
@@ -44,7 +47,7 @@ if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['content']) {
 	$chr = '';
 	endif;
 	
-	$__database->query("INSERT INTO social_statuses VALUES (NULL, '".$accid."', '".$nicknm."', '".$chr."', '".$contentfix2."', 0, NOW(), 0)");
+	$__database->query("INSERT INTO social_statuses VALUES (NULL, '".$accid."', '".$nicknm."', '".$chr."', '".$contentfix2."', '".$dcfix2."', NOW(), 0)");
 ?>
 <p class="lead alert-success alert">Sending to Maple Admin.. checking.. success! Status posted.</p>
 <?php	
@@ -73,7 +76,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 					<div class="span9">
 					<textarea name="content" class="span9 status" style="height:100px;max-height:100px;max-width:888px;padding-right:50px;" placeholder="Type your status here!"></textarea>
 					</div>
-				<button type="submit" class="btn btn-large" style="padding:16px;position:relative;top:15px;">Post!</button>		
+				<button type="submit" class="btn btn-large" style="padding:16px;position:relative;top:15px;">Post!</button>
+				<br/><br/><input type="checkbox" name="dc" value="1"/> Disable commenting?
 			</form>
 			
 		
