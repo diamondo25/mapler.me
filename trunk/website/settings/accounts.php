@@ -147,8 +147,11 @@ GROUP BY
 <ul>
 <?php while ($row = $q->fetch_row()): ?>
 <div class="btn-group">
-	<button class="btn" onclick="RemoveAccount('<?php echo $row[2]; ?>')">
-		<?php echo $row[1] != '' ? ($row[1].' ('.$row[0].')') : $row[0]; ?>
+	<button class="btn">
+	<?php echo $row[1] != '' ? ($row[1].' ('.$row[0].')') : $row[0]; ?>
+	</button>
+	<button class="btn btn-danger" onclick="RemoveAccount('<?php echo $row[2]; ?>')">
+		x
 	</button>
 </div>
 <?php endwhile; ?>
