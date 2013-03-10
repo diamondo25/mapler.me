@@ -371,6 +371,16 @@ function GetCharacterName($id) {
 	return 'Unknown Character';
 }
 
+function GetMapname($id, $full = true) {
+	$map = GetMapleStoryString("map", $id, "name");
+	if ($full) {
+		$subname = GetMapleStoryString("map", $id, "street");
+		if ($subname != NULL) {
+			$map = $subname." - ".$map;
+		}
+	}
+	return $map;
+}
 
 function MakeStatAddition($name, $value, $statarray) {
 	$add = $statarray[$name];
@@ -555,6 +565,7 @@ if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdom
 	if ($__url_useraccount == null) {
 		// User Not Found Results In 404
 		header("HTTP/1.1 404 File Not Found", 404);
+		header("Location: http://".$domain."/");
 		exit;
 	}
 }

@@ -2,6 +2,7 @@
 require_once 'inc/header.php';
 require_once 'inc/job_list.php';
 require_once 'inc/exp_table.php';
+
 if (!$_loggedin) {
 ?>
 <p class="lead alert-error alert">Please login to view this page.</p>
@@ -31,12 +32,12 @@ if ($q->num_rows == 0) {
 	$q->free();
 ?>
 <center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
+	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
 	<p>Character not found! The character may have been removed or misspelled.</p>
 </center>
 <?php
-include_once('inc/footer.php');
-die;
+	include_once('inc/footer.php');
+	die;
 }
 else {
 	$character_info = $q->fetch_assoc();
@@ -65,20 +66,10 @@ else {
 			
 				<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
 				
-<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
-			</span><br/>
+				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+			</span><br />
 			
-<?php
-
-$map = GetMapleStoryString("map", $character_info['map'], "name");
-$subname = GetMapleStoryString("map", $character_info['map'], "street");
-if ($subname != NULL) {
-	$map = $subname." - ".$map;
-}
-
-?>
-			
-			<small><i>Last seen in <?php echo $map; ?>, <?php echo $character_info['world_name']; ?></i></small></h2>
+			<small><i>Last seen in <?php echo GetMapname($character_info['map']); ?>, <?php echo $character_info['world_name']; ?></i></small></h2>
 		</div>
 		
 		<hr/>
@@ -348,15 +339,13 @@ foreach ($equips as $orislot => $item) {
 		$petequips[$block][$display_slot] = $item;
 	}
 	else {
-		if ($orislot > -100) {
-			$normalequips[$orislot] = $item;
-		}
-		elseif ($orislot <= -5000) $cashequips['Coordinate'][$orislot] = $item;
-		elseif ($orislot <= -1300) $cashequips['Totem'][$orislot] = $item;
-		elseif ($orislot <= -1200) $cashequips['Android'][$orislot] = $item;
-		elseif ($orislot <= -1100) $cashequips['Mechanic'][$orislot] = $item;
-		elseif ($orislot <= -1000) $cashequips['Evan'][$orislot] = $item;
-		elseif ($orislot <= -100) $cashequips['normal'][$orislot] = $item;
+		if ($orislot > -100) 		$normalequips[$orislot] = $item;
+		elseif ($orislot <= -5000) 	$cashequips['Coordinate'][$orislot] = $item;
+		elseif ($orislot <= -1300) 	$cashequips['Totem'][$orislot] = $item;
+		elseif ($orislot <= -1200) 	$cashequips['Android'][$orislot] = $item;
+		elseif ($orislot <= -1100) 	$cashequips['Mechanic'][$orislot] = $item;
+		elseif ($orislot <= -1000) 	$cashequips['Evan'][$orislot] = $item;
+		elseif ($orislot <= -100) 	$cashequips['normal'][$orislot] = $item;
 	}
 }
 
