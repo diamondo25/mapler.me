@@ -55,6 +55,12 @@ if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'
 	if ($matches[1] == '429') {
 ?>
 <p class="lead alert-error alert">Too many incorrect logins. Please try again later.</p>
+
+<?php 
+	}
+	elseif ($matches[1] == '503') {
+?>
+<p class="lead alert-error alert">Nexon's login servers are currently under maintenance. Try at a later time!</p>
 <?php
 	}
 	elseif ($matches[1] != '200') {
