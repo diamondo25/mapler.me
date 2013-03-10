@@ -93,7 +93,7 @@ if (count($social_cache) == 0) {
 
 foreach ($social_cache as $row) {
 ?>
-		<div class="status span4">
+		<div class="status span6">
 			<div class="header"><?php echo $row['nickname'];?> said:
 				<span class="pull-right">
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
