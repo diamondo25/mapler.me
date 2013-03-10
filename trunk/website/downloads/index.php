@@ -29,15 +29,14 @@ text-align: center;
 -moz-border-radius: 6px;
 border-radius: 6px;"
 			>Download the latest client installer!</a>
+			
+			<p>Note: WinPcap is required for the client to function correctly.</p>
 		</div>
 
 		<div class="span4 offset2">
 			<h1>Hello there Beta Tester!</h1>
 			<p>Thank you for participating and helping out the site's development. Before downloading the client, make sure you've already <a href="//<?php echo $domain; ?>/panel/settings/accounts/">added your account!</a>.</p>
 			<p><img src="//<?php echo $domain; ?>/inc/img/no-character.gif" class="pull-right"/>As our client is built by a small team, we're depending on you to help us tackle those icky bugs and glitches that we may have not caught. We've set up a <a href="//<?php echo $domain; ?>/chat/">discussion group (chat)</a> for all of you to discuss the site, bugs, and more.</p>
-			<br/>
-			<h1>Client Updates:</h1>
-			<p><?php include('info.txt'); ?></p>
 		</div>
 		
 <?php

@@ -83,8 +83,12 @@ function time_elapsed_string($etime) {
 	<div class="span12">
 
 <?php
-if (count($cache) == 0) {
-echo '<p class="lead alert-info alert">404! Status not found. (The status was deleted or removed)</p>';
+if (count($cache) == 0) { ?>
+<center>
+	<img src="http://mapler.me/inc/img/icon.png"/>
+		<p>404: Status not found.</p>
+</center>
+<?php
 }
 ?>
 	
@@ -95,7 +99,15 @@ echo '<p class="lead alert-info alert">404! Status not found. (The status was de
 foreach ($cache as $row) {
 
 ?>
-			<div class="status">
+<?php
+	if ($row['override'] == '1') { ?>
+		<div class="status notification">
+<?php }
+else {
+?>
+	<div class="status">
+<?php }
+?>
 			<div class="header">
 			<?php
 			echo $row['nickname'];
@@ -124,8 +136,9 @@ foreach ($cache as $row) {
 					<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
 			</div>
 			
+			<?php if ($_loggedin) { ?>
 			<div class="status">
-			<div id="disqus_thread"></div>
+				<div id="disqus_thread"></div>
 			<script type="text/javascript">
 				var disqus_shortname = 'maplerme';
 				(function() {
@@ -135,6 +148,7 @@ foreach ($cache as $row) {
 				})();
 			</script>
 			</div>
+			<?php } ?>
         
 <?php       
 }

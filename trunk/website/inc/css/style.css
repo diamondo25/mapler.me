@@ -94,6 +94,10 @@ word-break:break-word;
 hyphens:auto
 }
 
+.notification {
+border: 1px dashed rgba(0,0,0,0.5);
+}
+
 @media (min-width: 768px) and (max-width: 979px) { 
 	.span2 {
 		width: 206px; /* Makes character display better on mobile devices / tablets */

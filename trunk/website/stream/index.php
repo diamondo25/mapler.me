@@ -45,8 +45,17 @@ $q->free();
 
 foreach ($social_cache as $row) {
 ?>
-		<div class="status">
-			<div class="header">
+
+<?php
+	if ($row['override'] == '1') { ?>
+		<div class="status notification">
+<?php }
+else {
+?>
+	<div class="status">
+<?php }
+?>
+		<div class="header">
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
 					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – 
 					<?php echo $row['nickname'];?> said:

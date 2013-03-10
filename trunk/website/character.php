@@ -30,8 +30,13 @@ WHERE
 if ($q->num_rows == 0) {
 	$q->free();
 ?>
-<p class="lead alert-error alert">Character not found! The character may have been removed or misspelled.</p>
+<center>
+	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
+	<p>Character not found! The character may have been removed or misspelled.</p>
+</center>
 <?php
+include_once('inc/footer.php');
+die;
 }
 else {
 	$character_info = $q->fetch_assoc();

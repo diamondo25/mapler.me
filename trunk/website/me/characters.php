@@ -56,7 +56,10 @@ require_once '../inc/me_header.template.php';
 <?php
 if (count($cache) == 0) {
 ?>
-		<p class="lead alert-error alert"><?php echo $__url_useraccount->GetUsername(); ?> hasn't added any characters yet!</p>
+	<center>
+		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
+		<p><?php echo $__url_useraccount->GetUsername(); ?> hasn't added any characters yet!</p>
+	</center>
 <?php
 }
 
