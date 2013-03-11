@@ -143,6 +143,8 @@ namespace MPLRServer
 
                 Internal_Storage.Store.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
             }
+
+            pConnection.SendInfoText("Identified account {0} (made at {1})", pUsername, pCreateTime);
         }
 
 
@@ -1063,6 +1065,8 @@ namespace MPLRServer
                 pConnection.LastLoggedName = pConnection.CharData.Stats.Name;
                 pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
 
+
+                pConnection.SendInfoText("Your character {0} has been added to the database!", pConnection.LastLoggedName);
             }
             else
             {

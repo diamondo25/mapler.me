@@ -23,6 +23,7 @@ namespace MPLRServer
             if (locale != LatestLocale || version != LatestMajorVersion)
             {
                 pConnection.Logger_WriteLine("MapleStory client of user is outdated/incorrect. Disconnect.");
+                pConnection.SendInfoText("Your MapleStory client is outdated!");
                 pConnection.Disconnect();
             }
 

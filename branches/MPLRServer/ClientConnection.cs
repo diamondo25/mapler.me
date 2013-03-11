@@ -69,6 +69,9 @@ namespace MPLRServer
             }
 
             SetKeys(sendkey, recvkey);
+
+
+            SendInfoText("Please start the MapleStory client");
         }
 
         private void Clear()
@@ -123,6 +126,15 @@ namespace MPLRServer
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFD))
             {
                 packet.WriteString(LastLoggedName);
+                SendPacket(packet);
+            }
+        }
+
+        public void SendInfoText(string pMessage, params object[] pParams)
+        {
+            using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFC))
+            {
+                packet.WriteString(string.Format(pMessage, pParams));
                 SendPacket(packet);
             }
         }

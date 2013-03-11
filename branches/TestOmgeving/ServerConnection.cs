@@ -100,6 +100,13 @@ namespace Mapler_Client
                         frmMain.Instance.lblLastUpdate.Text = string.Format("{0} (Character: {1})", DateTime.Now, charname);
                     });
                 }
+                else if (header == 0xEEFC)
+                {
+                    frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                    {
+                        frmMain.Instance.lblInfo.Text = pPacket.ReadString();
+                    });
+                }
             }
 
             pPacket.Dispose();

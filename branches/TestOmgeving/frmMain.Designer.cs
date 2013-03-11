@@ -34,6 +34,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.lblLastUpdate = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel1
@@ -100,12 +101,22 @@
             this.label1.Text = "Thank you for beta testing our client!\r\nLogging in or changing channels will upda" +
     "te your character.\r\nMore instructions are available on the site!";
             // 
+            // lblInfo
+            // 
+            this.lblInfo.AutoSize = true;
+            this.lblInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lblInfo.Location = new System.Drawing.Point(12, 114);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(0, 13);
+            this.lblInfo.TabIndex = 7;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(412, 108);
+            this.ClientSize = new System.Drawing.Size(412, 136);
+            this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblLastUpdate);
             this.Controls.Add(this.label3);
@@ -130,6 +141,7 @@
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.Label lblLastUpdate;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label lblInfo;
     }
 }
 
