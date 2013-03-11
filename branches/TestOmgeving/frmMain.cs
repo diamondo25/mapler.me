@@ -129,5 +129,10 @@ namespace Mapler_Client
             }
             System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
         }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

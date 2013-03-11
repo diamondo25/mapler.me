@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmStats));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblSentPackets = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,6 +47,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.Color.Transparent;
             this.groupBox1.Controls.Add(this.lblSentPackets);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.lblSentData);
@@ -95,6 +97,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.Color.Transparent;
             this.groupBox2.Controls.Add(this.lblReceivedPackets);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.lblReceivedData);
@@ -152,6 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(287, 143);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

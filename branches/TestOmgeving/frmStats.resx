@@ -120,4 +120,14 @@
   <metadata name="tmUpdateLabels.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADwAAAAqCAYAAADvczj0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAACuSURBVGhD7dixDYAwDERRWIRxmYBZoQzKBpZ1kOYV6RxH1o/vnGz3uY8V67mOsWJtK4qdZ64o
+        dp6p4L+II/xTT7vSrvRHtqWH9fA3gwnRIlpEK/PYoNJUmkpHnpRsiS2xJbbU+gTkw3yYD/Phjg4YPAwe
+        Bg+Dh8GjogMdhU3sodIVOomYBK1ODoQT9Co5OnQSexCu0EnEJGh1ciCcoFfJ0aGT2INwhU4iJkGrk+MF
+        lbtOqNVMCasAAAAASUVORK5CYII=
+</value>
+  </data>
 </root>
