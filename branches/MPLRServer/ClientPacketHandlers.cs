@@ -8,7 +8,7 @@ namespace MPLRServer
     class ClientPacketHandlers
     {
         public const byte LatestLocale = 0x08;
-        public const ushort LatestMajorVersion = 130; // Packet changes do not occur per minor version
+        public const ushort LatestMajorVersion = 131; // Packet changes do not occur per minor version
 
         public static void HandleVersion(ClientConnection pConnection, MaplePacket pPacket)
         {
