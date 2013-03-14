@@ -1,5 +1,5 @@
 <?php
-require_once '../inc/database.php';
+require_once __DIR__.'../inc/database.php';
 
 function CompressResult($query) {
 	// Assoc

@@ -1,5 +1,5 @@
 <?php
-require_once '../inc/header.php';
+require_once __DIR__.'../inc/header.php';
 
 if (!$_loggedin):
 ?>
@@ -41,5 +41,5 @@ border-radius: 6px;"
 		
 <?php
 endif;
-require_once '../inc/footer.php';
+require_once __DIR__.'../inc/footer.php';
 ?>

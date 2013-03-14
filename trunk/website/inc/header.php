@@ -1,5 +1,5 @@
 <?php
-require_once 'functions.php';
+require_once __DIR__.'functions.php';
 
-require_once 'header.template.php';
+require_once __DIR__.'header.template.php';
 ?>

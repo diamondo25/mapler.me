@@ -1,4 +1,4 @@
-<?php require_once 'inc/header.php'; ?>
+<?php require_once __DIR__.'inc/header.php'; ?>
 
 <?php
 if (!$_loggedin):
@@ -93,4 +93,4 @@ endif;
 ?>
       </div>
 
-<?php require_once 'inc/footer.php'; ?>
+<?php require_once __DIR__.'inc/footer.php'; ?>

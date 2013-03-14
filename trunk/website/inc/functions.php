@@ -5,14 +5,14 @@ session_start();
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 
-require_once 'database.php';
-require_once 'class_account.php';
-require_once 'class_inventory.php';
-require_once 'domains.php';
-require_once 'ranks.php';
-require_once 'functions.datastorage.php';
+require_once __DIR__.'database.php';
+require_once __DIR__.'class_account.php';
+require_once __DIR__.'class_inventory.php';
+require_once __DIR__.'domains.php';
+require_once __DIR__.'ranks.php';
+require_once __DIR__.'functions.datastorage.php';
 
-require_once 'bb/Parser.php';
+require_once __DIR__.'bb/Parser.php';
 $parser = new JBBCode\Parser();
 $parser->loadDefaultCodes();
 

@@ -1,3 +1,3 @@
 <?php
-require_once '../../actions/error/index.php';
+require_once __DIR__.'../../actions/error/index.php';
 ?>

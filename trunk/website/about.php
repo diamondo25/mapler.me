@@ -1,4 +1,4 @@
-<?php require_once 'inc/header.php'; ?>
+<?php require_once __DIR__.'inc/header.php'; ?>
 
 	<div class="featurette">
         <img class="featurette-image pull-right" src="//i.imm.io/NXWz.png">
@@ -21,4 +21,4 @@
 
 
       
-<?php require_once 'inc/footer.php'; ?>
+<?php require_once __DIR__.'inc/footer.php'; ?>

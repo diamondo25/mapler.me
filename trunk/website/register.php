@@ -1,5 +1,5 @@
 <?php
-include_once('inc/header.php');
+require_once __DIR__.'inc/header.php';
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -172,5 +172,5 @@ else {
 	
 }
 
-include_once('inc/footer.php');
+require_once __DIR__.'inc/footer.php';
 ?>

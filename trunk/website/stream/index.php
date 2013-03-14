@@ -1,5 +1,5 @@
 <?php
-require_once '../inc/header.php';
+require_once __DIR__.'../inc/header.php';
 if (!$_loggedin):
 ?>
 <meta http-equiv="refresh" content="0;URL='/'" />
@@ -56,17 +56,17 @@ else {
 <?php }
 ?>
 		<div class="header">
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
-					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – 
-					<?php echo $row['nickname'];?> said:
-				<span class="pull-right">
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
+			<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
+			<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – 
+			<?php echo $row['nickname'];?> said:
+			<span class="pull-right">
+			<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
 <?php
 	if ($_loggedin) {
 		if (IsOwnAccount()) {
 ?>
-					- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>)">delete?</a>
+					- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>);">delete?</a>
 <?php
 		}
 		else {
@@ -118,7 +118,7 @@ else {
 	<blockquote class="pull-right">P.S: Your main character will display at the right of the page when added!</blockquote>
 	</div>
 
-	<?php include('../inc/stream.sidebar.template.php'); ?>
+	<?php require_once __DIR__.'../inc/stream.sidebar.template.php'; ?>
 
 	</div>
 
@@ -126,6 +126,6 @@ else {
 <?php
 endif;
 
-require_once '../inc/footer.php';
+require_once __DIR__.'../inc/footer.php';
 
 ?>

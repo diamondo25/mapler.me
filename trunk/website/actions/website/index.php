@@ -46,7 +46,7 @@ Result:<br />
 
 
 
-require_once '../../inc/functions.php';
+require_once __DIR__.'../../inc/functions.php';
 
 // SHOO
 if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
@@ -54,7 +54,7 @@ if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
 	die();
 }
 
-require_once '../../inc/header.php';
+require_once __DIR__.'../../inc/header.php';
 
 ?>
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_
 		<h4>Update the sidebar:</h4>
 
 		<form method="post">
-			<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php include('sidebar.txt'); ?> </textarea>
+			<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php echo file_get_contents('sidebar.txt'); ?> </textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
 
@@ -162,5 +162,5 @@ if (isset($_GET['clear_cache'])) {
 </div>
 
 <?php
-require_once '../../inc/footer.php';
+require_once __DIR__.'../../inc/footer.php';
 ?>

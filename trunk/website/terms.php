@@ -1,4 +1,4 @@
-<?php require_once 'inc/header.php'; ?>
+<?php require_once __DIR__.'inc/header.php'; ?>
 
 <div id="main"> <div class="row"> <div class="span8 offset2"> <div id="content" class="terms-of-service"> <h1>Terms of Service</h1> <p>
                     This Mapler.me (the "Service") is a service owned and operated by Mapler.me ("Mapler.me," "we," or "us"), intended to allow our users to connect with MapleStory (owned by "Nexon America") to store, use, and access information on this site (the "Site"). By registering or using our service, you agree to be bound by these Terms of Use ("Terms"). If you do not agree to these terms, you may not proceed.
@@ -74,4 +74,4 @@
                     This Terms of Service was last updated on January 22nd, 2013.
                 </p> </div> </div> </div> </div>
       
-<?php require_once 'inc/footer.php'; ?>
+<?php require_once __DIR__.'inc/footer.php'; ?>
