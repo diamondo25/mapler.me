@@ -23,11 +23,15 @@ LEFT JOIN
 WHERE
 	cp.character_id IS NULL
 		OR
+	(
+	cp.character_id IS NOT NULL 
+		AND
 	cp.from < c.last_update
+	)
 GROUP BY
 	c.internal_id
 ORDER BY
-	cp.from DESC
+	c.last_update DESC
 ");
 
 
@@ -50,8 +54,11 @@ while ($row = $q->fetch_assoc()) {
 	$compression['skillmacros'] = CompressResult($__database->query("SELECT * FROM skillmacros WHERE character_id = ".$internal_id));
 	$compression['sp_data'] = CompressResult($__database->query("SELECT * FROM sp_data WHERE character_id = ".$internal_id));
 	
-	$__database->query("INSERT IGNORE INTO character_progress VALUES (".$internal_id.", '".$row['last_update']."', '".$__database->real_escape_string(json_encode($compression))."')");
+	$__database->query("INSERT IGNORE INTO character_progress VALUES (".$internal_id.", '".$row['last_update']."', '".$__database->real_escape_string(json_encode($compression))."')")->free();
 	unset($compression);
+	if ($__database->affected_rows > 0) {
+		echo 'Saved '.$row['name']."\r\n";
+	}
 }
 
 ?>
