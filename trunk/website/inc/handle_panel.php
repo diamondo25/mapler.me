@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'functions.php';
+require_once __DIR__.'/functions.php';
 
 if (!IsLoggedin() || !isset($_GET['page'], $_GET['type'])) {
 	header('Location: http://'.$domain.'/');
@@ -11,13 +11,13 @@ if (!file_exists($page)) {
 	die();
 }
 
-require_once __DIR__.'header.template.php';
+require_once __DIR__.'/header.template.php';
 
 if ($_GET['type'] == '') {
-	require_once __DIR__.'panel_settings_menu.php';
+	require_once __DIR__.'/panel_settings_menu.php';
 }
 
 require_once $page;
 
-require_once __DIR__.'footer.php';
+require_once __DIR__.'/footer.php';
 ?>

@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'../inc/header.php';
+require_once __DIR__.'/../inc/header.php';
 if (!$_loggedin):
 ?>
 <meta http-equiv="refresh" content="0;URL='/'" />
@@ -118,7 +118,7 @@ else {
 	<blockquote class="pull-right">P.S: Your main character will display at the right of the page when added!</blockquote>
 	</div>
 
-	<?php require_once __DIR__.'../inc/stream.sidebar.template.php'; ?>
+	<?php require_once __DIR__.'/../inc/stream.sidebar.template.php'; ?>
 
 	</div>
 
@@ -126,6 +126,6 @@ else {
 <?php
 endif;
 
-require_once __DIR__.'../inc/footer.php';
+require_once __DIR__.'/../inc/footer.php';
 
 ?>

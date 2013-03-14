@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'inc/header.php';
+require_once __DIR__.'/inc/header.php';
 if (!$_loggedin):
 ?>
 
@@ -17,5 +17,5 @@ If asked for a password, use 'betatest'. This is to keep conversations confident
 	endif;
 ?>
 <?php
-require_once __DIR__.'inc/footer.php';
+require_once __DIR__.'/inc/footer.php';
 ?>

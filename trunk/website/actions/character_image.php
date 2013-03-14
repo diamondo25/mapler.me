@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__.'../inc/database.php';
-require_once __DIR__.'../inc/domains.php';
-require_once __DIR__.'../inc/job_list.php';
-require_once __DIR__.'caching.php';
+require_once __DIR__.'/../inc/database.php';
+require_once __DIR__.'/../inc/domains.php';
+require_once __DIR__.'/../inc/job_list.php';
+require_once __DIR__.'/caching.php';
 $debug = isset($_GET['debug']);
 $font = "arial.ttf";
 $font_size = "9.25";

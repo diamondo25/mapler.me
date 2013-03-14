@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__.'../inc/database.php';
-require_once __DIR__.'caching.php';
+require_once __DIR__.'/../inc/database.php';
+require_once __DIR__.'/caching.php';
 
 $font = "arial.ttf";
 $font_size = "9.25";

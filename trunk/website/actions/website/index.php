@@ -46,7 +46,7 @@ Result:<br />
 
 
 
-require_once __DIR__.'../../inc/functions.php';
+require_once __DIR__.'/../../inc/functions.php';
 
 // SHOO
 if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
@@ -54,7 +54,7 @@ if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
 	die();
 }
 
-require_once __DIR__.'../../inc/header.php';
+require_once __DIR__.'/../../inc/header.php';
 
 ?>
 
@@ -162,5 +162,5 @@ if (isset($_GET['clear_cache'])) {
 </div>
 
 <?php
-require_once __DIR__.'../../inc/footer.php';
+require_once __DIR__.'/../../inc/footer.php';
 ?>

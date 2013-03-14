@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__.'../inc/header.php';
+require_once __DIR__.'/../inc/header.php';
 $statusid = htmlentities($_GET['id']);
 ?>
 
@@ -155,5 +155,5 @@ else {
 	</div>
 	</div>
 <?php
-require_once __DIR__.'../inc/footer.php';
+require_once __DIR__.'/../inc/footer.php';
 ?>

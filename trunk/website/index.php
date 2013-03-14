@@ -1,5 +1,5 @@
 <?php 
-require_once __DIR__.'inc/header.php';
+require_once __DIR__.'/inc/header.php';
 
 if (!$_loggedin):
 ?>	
@@ -23,6 +23,6 @@ else:
 <?php
 endif;
 
-require_once __DIR__.'inc/footer.php';
+require_once __DIR__.'/inc/footer.php';
 
 ?>

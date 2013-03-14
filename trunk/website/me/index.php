@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'../inc/header.php';
+require_once __DIR__.'/../inc/header.php';
 
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
@@ -46,7 +46,7 @@ $main_character_info = $has_characters ? $cache[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 
-require_once __DIR__.'../inc/me_header.template.php';
+require_once __DIR__.'/../inc/me_header.template.php';
 
 ?>
 
@@ -126,4 +126,4 @@ foreach ($social_cache as $row) {
 
 	</div>
 
-<?php require_once __DIR__.'../inc/footer.php'; ?>
+<?php require_once __DIR__.'/../inc/footer.php'; ?>

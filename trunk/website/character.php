@@ -1,14 +1,14 @@
 <?php
-require_once __DIR__.'inc/header.php';
-require_once __DIR__.'inc/job_list.php';
-require_once __DIR__.'inc/exp_table.php';
+require_once __DIR__.'/inc/header.php';
+require_once __DIR__.'/inc/job_list.php';
+require_once __DIR__.'/inc/exp_table.php';
 
 if (!$_loggedin) {
 ?>
 <p class="lead alert-error alert">Please login to view this page.</p>
 <?php
 
-	require_once __DIR__.'inc/footer.php';
+	require_once __DIR__.'/inc/footer.php';
 	die();
 }
 
@@ -36,7 +36,7 @@ if ($q->num_rows == 0) {
 	<p>Character not found! The character may have been removed or misspelled.</p>
 </center>
 <?php
-	require_once __DIR__.'inc/footer.php';
+	require_once __DIR__.'/inc/footer.php';
 	die;
 }
 else {
@@ -47,7 +47,7 @@ else {
 	<p class="lead alert-error alert">You are not allowed to view this page.</p>
 	<?php
 
-		require_once __DIR__.'inc/footer.php';
+		require_once __DIR__.'/inc/footer.php';
 		die();
 	}
 	
@@ -930,5 +930,5 @@ ChangePet(0);
 
 // $__database->GetRanQueries();
 
-require_once __DIR__.'inc/footer.php';
+require_once __DIR__.'/inc/footer.php';
 ?>

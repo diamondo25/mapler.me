@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'inc/header.php';
+require_once __DIR__.'/inc/header.php';
 error_reporting(E_ALL);
 $error = null;
 
@@ -8,7 +8,7 @@ if (IsLoggedin()) {
 <meta http-equiv="refresh" content="3;URL='/stream/'" />
 <p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
-	require_once __DIR__.'inc/footer.php';
+	require_once __DIR__.'/inc/footer.php';
 	die(); // Prevent error after login
 }
 
@@ -68,5 +68,5 @@ else {
 	$form->End();
 }
 
-require_once __DIR__.'inc/footer.php';
+require_once __DIR__.'/inc/footer.php';
 ?>
