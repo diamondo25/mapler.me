@@ -55,5 +55,15 @@ namespace Mapler_Client
             lblReceivedPackets.Text = Program.RECV_PACKETS.ToString("#,0");
             lblSentPackets.Text = Program.SENT_PACKETS.ToString("#,0");
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

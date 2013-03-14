@@ -71,7 +71,7 @@ namespace MPLRServer
             SetKeys(sendkey, recvkey);
 
 
-            SendInfoText("Please start the MapleStory client");
+            SendInfoText("Welcome! Please open MapleStory.");
         }
 
         private void Clear()

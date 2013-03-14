@@ -16,17 +16,17 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("- Client got connection with MapleStory server @ {0}:{1}", ip, port);
                 if (port == 8484)
                 {
-                    pConnection.SendInfoText("MapleStory connected to the login server");
+                    pConnection.SendInfoText("Mapler.me is awaiting account check! Happy mapling!");
                 }
                 else
                 {
-                    pConnection.SendInfoText("MapleStory connected to the Game or CashShop server");
+                    pConnection.SendInfoText("You are currently in-game or in the Cash Shop!");
                 }
             }
             else
             {
                 pConnection.Logger_WriteLine("- Client lost connection with MapleStory server");
-                pConnection.SendInfoText("MapleStory lost connection with the server.");
+                pConnection.SendInfoText("Mapler.me is currently not connected to MapleStory's servers!");
             }
         }
     }

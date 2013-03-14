@@ -40,7 +40,7 @@ namespace CraftNetTools
                         string latestVersion = responseText;
                         if (latestVersion != ApplicationVersion)
                         {
-                            if (MessageBox.Show(string.Format("A new version is released!\r\nVersion: {0}\r\n\r\nPress OK to go to download page!", latestVersion), ApplicationName, MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            if (MessageBox.Show(string.Format("A new version is released!\r\nVersion: {0}\r\n\r\nWould you like to visit the downloads page?", latestVersion), ApplicationName, MessageBoxButtons.OKCancel) == DialogResult.OK)
                             {
                                 Process.Start(url);
                             }

@@ -41,6 +41,7 @@
             this.lblReceivedData = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tmUpdateLabels = new System.Windows.Forms.Timer(this.components);
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +59,7 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Sent";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // lblSentPackets
             // 
@@ -151,12 +153,24 @@
             this.tmUpdateLabels.Interval = 500;
             this.tmUpdateLabels.Tick += new System.EventHandler(this.tmUpdateLabels_Tick);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Location = new System.Drawing.Point(13, 137);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(263, 78);
+            this.label2.TabIndex = 5;
+            this.label2.Text = resources.GetString("label2.Text");
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
             // frmStats
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(287, 143);
+            this.ClientSize = new System.Drawing.Size(287, 229);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -168,6 +182,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -184,5 +199,6 @@
         private System.Windows.Forms.Label lblReceivedData;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer tmUpdateLabels;
+        private System.Windows.Forms.Label label2;
     }
 }
