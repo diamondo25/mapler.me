@@ -54,7 +54,7 @@ while ($row = $q->fetch_assoc()) {
 	$compression['skillmacros'] = CompressResult($__database->query("SELECT * FROM skillmacros WHERE character_id = ".$internal_id));
 	$compression['sp_data'] = CompressResult($__database->query("SELECT * FROM sp_data WHERE character_id = ".$internal_id));
 	
-	$__database->query("INSERT IGNORE INTO character_progress VALUES (".$internal_id.", '".$row['last_update']."', '".$__database->real_escape_string(json_encode($compression))."')")->free();
+	$__database->query("INSERT IGNORE INTO character_progress VALUES (".$internal_id.", '".$row['last_update']."', '".$__database->real_escape_string(json_encode($compression))."')");
 	unset($compression);
 	if ($__database->affected_rows > 0) {
 		echo 'Saved '.$row['name']."\r\n";
