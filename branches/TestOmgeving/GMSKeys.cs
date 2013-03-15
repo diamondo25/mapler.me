@@ -62,7 +62,7 @@ namespace Mapler_Client
                 if (File.Exists("cached_keys.txt"))
                     InitByContents(File.ReadAllText("cached_keys.txt"));
                 else
-                    MessageBox.Show("Unable to load GMS Keys, because there were no cached keys stored and I failed retrieving them from the webserver! D:\r\nYou might want to check your internet connection and see if you can access http://direct.craftnet.nl/ directly.", "Problems!");
+                    MessageBox.Show("Mapler.me has failed to load cached files or update through our servers. Check your internet connection, or check the site for downtime notices!", "Problems!");
             }
 
             MapleStoryGlobalKeys.Add(118, new byte[] {

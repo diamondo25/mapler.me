@@ -20,13 +20,13 @@ namespace MPLRServer
                 }
                 else
                 {
-                    pConnection.SendInfoText("You are currently in-game or in the Cash Shop!");
+                    pConnection.SendInfoText("You successfully connected, or are in the Cash Shop!");
                 }
             }
             else
             {
                 pConnection.Logger_WriteLine("- Client lost connection with MapleStory server");
-                pConnection.SendInfoText("Mapler.me is currently not connected to MapleStory's servers!");
+                pConnection.SendInfoText("MapleStory is currently not connected to Mapler.me.");
             }
         }
     }

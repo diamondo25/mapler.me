@@ -10,7 +10,7 @@ namespace System
     {
         public static string Logfile { get; private set; }
         public static string PacketLogfile { get; private set; }
-        public const string Version = "Mapler.me Software V1.0.0.0";
+        public const string Version = "Mapler.me Software V1.0.0.3";
 
         public static bool PacketLogging { get; private set; }
         private static bool _disabledLogging;
