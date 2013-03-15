@@ -60,13 +60,56 @@ else {
 <p class="lead alert-error alert"><?php echo $error;?></p>
 <?php
 	}
-	$form = new Form('', 'form-horizontal');
+?>
+
+<?php
+$q = $__database->query("
+SELECT
+	name
+FROM
+	characters 
+WHERE
+	level > '30' 
+ORDER BY
+	rand()
+	LIMIT 7
+");
+$cache = array();
+
+while ($row = $q->fetch_assoc()) {
+	$cache[] = $row;
+}
+$q->free();
+?>
+
+<div class="row">
+	<div class="span8 offset2">
+		<?php
+		foreach ($cache as $row) {
+		?>
+		<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
+					</a>
+
+		<?php
+			}
+		?>
+	</div>
+	
+	<div class="span12">
+		<center>
+			<h1>Welcome back, hundreds of other maplers await your return!</h1>
+			<br/>
+	</div>
+<?php
+	$form = new Form('', 'form-horizontal span4 offset3');
 	$form->AddBlock('E-mail', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->MakeSubmit('Login');
-	
 	$form->End();
 }
-
+?>
+		</center>
+<?php
 require_once __DIR__.'/inc/footer.php';
 ?>

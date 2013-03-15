@@ -92,7 +92,7 @@ END;
 	}
 
 	public function MakeSubmit($text) {
-		$this->MakeButton('submit', $text, '', 'btn-primary');
+		$this->MakeButton('submit', $text, '', 'btn-success btn-large');
 	}
 
 	public function Write($text) {

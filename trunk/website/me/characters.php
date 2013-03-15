@@ -22,7 +22,7 @@ WHERE
 	usr.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
 ORDER BY
 	chr.world_id ASC,
-	chr.level DESC
+	chr.last_update DESC
 ");
 
 $cache = array();

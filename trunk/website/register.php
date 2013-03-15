@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// Check ToU
 			$notou = !isset($_POST['tou']);
 			if ($notou) {
-				$error = "You didn't accept the ToU";
+				$error = "You didn't accept our Terms of Service. This is required to sign up for Mapler.me.";
 				$errorList['ToU'] = true;
 			}
 		}
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (count($errorList) == 0) {
 			// Check passwords
 			if ($_POST['password'] != $_POST['password2']) {
-				$error = "Your passwords didn't match.";
+				$error = "Your passwords didn't match, please try again.";
 				$errorList['password'] = true;
 			}
 		}
@@ -36,13 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$username = $__database->real_escape_string($_POST['username']);
 			$len = strlen($username);
 			if ($len < 4 || $len > 20) {
-				$error = "Username must be at least 4 and at max 20 characters long.";
+				$error = "A Mapler.me username has to be between four and twenty characters long.";
 				$errorList['username'] = true;
 			}
 			else {
 				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
 				if ($result->num_rows == 1) {
-					$error = "This username has already been taken.";
+					$error = "This username has already been taken, please try another.";
 					$errorList['username'] = true;
 				}
 				$result->free();
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// Mail it
 				mail($to, $subject, $message, $headers);
 ?>
-<p class="lead alert-info alert">Welcome to Mapler.me, <?php echo $nickname; ?>! Check your email (<?php echo $email; ?>) for more information!</p>
+<p class="lead alert-info alert">Welcome to Mapler.me, <?php echo $nickname; ?>! Check your email (<?php echo $email; ?>) for more information! Note: Check your spam folder if you don't receive it after a few minutes!</p>
 <?php
 			}
 		}
@@ -149,28 +149,36 @@ else {
 <?php
 	}
 ?>
+
+<div class="row">
+<div class="span12">
 <p class="lead">Sign up for a Mapler.me account</p>
+<img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form below!</p>
 
-<div class="pull-right" style="clear:both;"><img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form to the left!</p>
+<p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better than the best Rising Sun Pendant.</p>
+</div>
 
-<p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better than the best Rising Sun Pendant.</p></div>
+<div class="span12">
 <?php
 	
 	$form = new Form('', 'form-horizontal');
-	$form->AddBlock('Username', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
+	$form->AddBlock('Display Name:<br/><sup>(your profile name, such as name.mapler.me).</sup>', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
-	$form->AddBlock('Password (again)', 'password2', (isset($errorList['password']) ? 'error' : ''), 'password');
+	$form->AddBlock('Password<br/><sup>(again for confirmation)</sup>', 'password2', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->AddEmptyBlock();
-	$form->AddBlock('Full name', 'fullname', (isset($errorList['fullname']) ? 'error' : ''), 'text', @$_POST['fullname']);
-	$form->AddBlock('Nickname', 'nickname', (isset($errorList['nickname']) ? 'error' : ''), 'text', @$_POST['nickname']);
-	$form->AddBlock('E-mail', 'email', (isset($errorList['email']) ? 'error' : ''), 'text', @$_POST['email']);
-	$form->AddBlock('Beta Key', 'key', (isset($errorList['key']) ? 'key' : ''), 'text', @$_POST['key']);
+	$form->AddBlock('Full name<br/><sup>(kept private)</sup>', 'fullname', (isset($errorList['fullname']) ? 'error' : ''), 'text', @$_POST['fullname']);
+	$form->AddBlock('Nickname<br/><sup>(what is shown publicly)</sup>', 'nickname', (isset($errorList['nickname']) ? 'error' : ''), 'text', @$_POST['nickname']);
+	$form->AddBlock('E-mail<br/><sup>(for email notifications)</sup>', 'email', (isset($errorList['email']) ? 'error' : ''), 'text', @$_POST['email']);
+	$form->AddBlock('Beta Key<br/><sup>(required to sign up!)</sup>', 'key', (isset($errorList['key']) ? 'key' : ''), 'text', @$_POST['key']);
 	$form->Agreement();
 	$form->MakeSubmit('Sign up!');
 	
 	$form->End();
 	
 }
-
+?>
+</div>
+</div>
+<?php
 require_once __DIR__.'/inc/footer.php';
 ?>
