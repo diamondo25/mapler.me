@@ -72,7 +72,7 @@ WHERE
 	level > '30' 
 ORDER BY
 	rand()
-	LIMIT 7
+	LIMIT 8
 ");
 $cache = array();
 
@@ -83,7 +83,7 @@ $q->free();
 ?>
 
 <div class="row">
-	<div class="span8 offset2">
+	<div class="span9 offset2">
 		<?php
 		foreach ($cache as $row) {
 		?>
