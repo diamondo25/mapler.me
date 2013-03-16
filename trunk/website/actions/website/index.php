@@ -164,7 +164,7 @@ if (isset($_GET['clear_cache'])) {
 <div class="span9">
 	<ul>
 <?php
-$q = $__database->query("SELECT nickname FROM users ORDER BY nickname ASC");
+$q = $__database->query("SELECT nickname FROM accounts ORDER BY nickname ASC");
 while ($row = $q->fetch_row()) {
 ?>
 		<li><a href="//<?php echo $row[0]; ?>.<?php echo $domain; ?>/"><?php echo $row[0]; ?></a></li>
