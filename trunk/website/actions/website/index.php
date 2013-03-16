@@ -164,7 +164,21 @@ if (isset($_GET['clear_cache'])) {
 <div class="span9">
 	<ul>
 <?php
-$q = $__database->query("SELECT name FROM characters ORDER BY name ASC");
+$q = $__database->query("SELECT nickname FROM users ORDER BY internal_id DESC");
+while ($row = $q->fetch_row()) {
+?>
+		<li><a href="//<?php echo $row[0]; ?>/<?php echo $domain; ?>/"><?php echo $row[0]; ?></a></li>
+<?php
+}
+
+?>
+	</ul>
+</div>
+
+<div class="span9">
+	<ul>
+<?php
+$q = $__database->query("SELECT name FROM characters ORDER BY internal_id DESC");
 while ($row = $q->fetch_row()) {
 ?>
 		<li><a href="//<?php echo $domain; ?>/player/<?php echo $row[0]; ?>"><?php echo $row[0]; ?></a></li>
