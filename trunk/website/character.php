@@ -447,8 +447,8 @@ foreach ($cashequips['normal'] as $slot => $item) {
 		<select onchange="ChangeInventory(this.value)">
 			<option value="1">Equipment</option>
 			<option value="2">Use</option>
-			<option value="3">Set-up</option>
 			<option value="4">Etc</option>
+			<option value="3">Set-up</option> <!-- Nexon! -->
 			<option value="5">Cash</option>
 		</select>
 		<br />
@@ -686,7 +686,6 @@ function ChangeInventory(id) {
 	lastid = id;
 	document.getElementById('inventory_' + lastid).style.display = 'block';
 }
-ChangeInventory(1);
 
 var lastidskill = -1;
 function ChangeSkillList(id) {
@@ -909,8 +908,13 @@ ORDER BY
 </div>
 
 <script type="text/javascript">
-ChangeSkillList(1);
-ChangePet(0);
+
+$(document).ready(function () {
+	ChangeInventory(1);
+	ChangeSkillList(1);
+	ChangePet(0);
+});
+
 </script>
 <hr />
 

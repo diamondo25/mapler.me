@@ -161,6 +161,20 @@ if (isset($_GET['clear_cache'])) {
 	</div>
 </div>
 
+<div class="span9">
+	<ul>
+<?php
+$q = $__database->query("SELECT name FROM characters ORDER BY name ASC");
+while ($row = $q->fetch_row()) {
+?>
+		<li><a href="//<?php echo $domain; ?>/player/<?php echo $row[0]; ?>"><?php echo $row[0]; ?></a></li>
+<?php
+}
+
+?>
+	</ul>
+</div>
+
 <?php
 require_once __DIR__.'/../../inc/footer.php';
 ?>
