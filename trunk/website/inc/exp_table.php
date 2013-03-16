@@ -28,9 +28,16 @@ $__exp_table = array(
 function GetExpPercentage($level, $currentEXP) {
 	global $__exp_table;
 
-	if ($level == 0 || $level == 200) return 0;
+	$neededEXP = GetNextLevelEXP($level);
+	
+	return ($currentEXP / $neededEXP * 100);
+}
 
-	return ($currentEXP / $__exp_table[$level] * 100);
+function GetNextLevelEXP($level) {
+	global $__exp_table;
+
+	if ($level == 0 || $level == 200) return 0;
+	return $__exp_table[$level];
 }
 
 

@@ -169,7 +169,7 @@ $row['luk'] = $row['luk'].' ('.$before['luk'].' + '.($row['luk'] - $before['luk'
 //$row['mhp'] = $row['mhp'].' ('.$before['mhp'].' + '.($row['mhp'] - $before['mhp']).')';
 //$row['mmp'] = $row['mmp'].' ('.$before['mmp'].' + '.($row['mmp'] - $before['mmp']).')';
 
-$nextlevelexp = GetExpPercentage($row['level']);
+$nextlevelexp = GetNextLevelEXP($row['level']);
 
 
 $image = imagecreatetruecolor(192, 345);
