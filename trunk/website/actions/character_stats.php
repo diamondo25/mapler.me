@@ -30,8 +30,9 @@ if ($len < 4 || $len > 12) {
 }
 
 if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'stats');
-$id = uniqid().rand(0, 9);
+	ShowCachedImage($charname, 'stats', '2 MINUTE');
+
+$id = uniqid().rand(0, 999);
 AddCacheImage($charname, 'stats', $id);
 
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
@@ -168,9 +169,7 @@ $row['luk'] = $row['luk'].' ('.$before['luk'].' + '.($row['luk'] - $before['luk'
 //$row['mhp'] = $row['mhp'].' ('.$before['mhp'].' + '.($row['mhp'] - $before['mhp']).')';
 //$row['mmp'] = $row['mmp'].' ('.$before['mmp'].' + '.($row['mmp'] - $before['mmp']).')';
 
-// Get EXP percentage
-$nextlevelexp = $__exp_table[$row['level']];
-$row['exp'] .= ' ('.round($row['exp'] / $nextlevelexp * 100).'%)';
+$nextlevelexp = GetExpPercentage($row['level']);
 
 
 $image = imagecreatetruecolor(192, 345);
@@ -188,7 +187,7 @@ $i = 0;
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['name']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, GetJobname($row['job']));
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['level']);
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['exp']);
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['exp'].' ('.round($row['exp'] / $nextlevelexp * 100).'%)');
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourlevel']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourexp']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['guildname']); // Guild
@@ -204,11 +203,9 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['luk']);
 
 
-imagepng($image);
-
-
 SaveCacheImage($charname, 'stats', $image, $id);
-
+imagepng($image);
 imagedestroy($image);
+
 $q->free();
 ?>

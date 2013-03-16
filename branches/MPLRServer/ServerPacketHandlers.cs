@@ -299,37 +299,42 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 0x8000))
             {
                 didsomething = true;
-                short a1 = pConnection.CharData.Stats.JobID;
 
-                if (a1 / 1000 == 3 ||
-                    a1 / 100 == 22 || a1 == 2001 ||
-                    a1 / 100 == 23 || a1 == 2002 ||
-                    a1 / 100 == 24 || a1 == 2003 ||
-                    a1 / 100 == 51 || a1 == 5000 ||
-                    a1 / 100 == 27 || a1 == 2004 ||
-                    a1 / 100 == 61 || a1 == 6000 ||
-                    a1 / 100 == 65 || a1 == 6001 ||
-                    a1 / 10 == 57 || a1 == 508)
+                short a1 = pConnection.CharData.Stats.JobID;
+                pConnection.CharData.Stats.SPData.Clear();
+
+                if (GameHelper.IsExtendedSPJob(pConnection.CharData.Stats.JobID))
                 {
-                    pConnection.CharData.Stats.SPData.Clear();
+
                     byte amnt = pPacket.ReadByte();
+                    List<byte> haslist = new List<byte>();
                     for (int j = 0; j < amnt; j++)
                     {
                         byte v1 = pPacket.ReadByte(); // Job ID
                         int v2 = pPacket.ReadInt(); // Amount
                         pConnection.CharData.Stats.SPData.Add(new KeyValuePair<byte, int>(v1, v2));
+
+                        haslist.Add(v1);
                     }
+                    for (byte j = 1; j < 20; j++)
+                    {
+                        if (!haslist.Contains(j))
+                            pConnection.CharData.Stats.SPData.Add(new KeyValuePair<byte, int>(j, 0));
+                    }
+
                 }
                 else
                 {
-                    pConnection.CharData.Stats.SP = pPacket.ReadShort();
+                    pConnection.CharData.Stats.SPData.Add(new KeyValuePair<byte, int>(0, pPacket.ReadShort()));
                 }
             }
+
             if (CheckFlag(updateFlag, 0x10000))
             {
                 didsomething = true;
                 pConnection.CharData.Stats.EXP = pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x20000))
             {
                 didsomething = true;
@@ -337,47 +342,58 @@ namespace MPLRServer
                 Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame);
                 pConnection.CharData.Stats.Fame = fame;
             }
+
             if (CheckFlag(updateFlag, 0x40000))
             {
                 didsomething = true;
                 pConnection.CharData.Stats.Mesos = pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x200000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x400000))
             {
                 pPacket.ReadByte();
             }
+
             if (CheckFlag(updateFlag, 0x800000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x1000000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x2000000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x4000000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x8000000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x10000000))
             {
                 pPacket.ReadInt();
             }
+
             if (CheckFlag(updateFlag, 0x20000000))
             {
                 pPacket.ReadBytes(21);
             }
+
             if (CheckFlag(updateFlag, 0x40000000))
             {
                 pPacket.ReadByte();
@@ -386,6 +402,7 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadByte();
             }
+
             if (CheckFlag(updateFlag, 0x80000000))
             {
                 for (byte i = 0; i < 6; i++)
@@ -395,11 +412,13 @@ namespace MPLRServer
                     pPacket.ReadInt();
                 }
             }
+
             if (CheckFlag(updateFlag, 0x100000000))
             {
                 pPacket.ReadByte();
                 pPacket.ReadByte();
             }
+
             if (CheckFlag(updateFlag, 0x200000000))
             {
                 pPacket.ReadInt();

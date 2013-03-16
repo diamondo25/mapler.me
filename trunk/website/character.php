@@ -908,13 +908,9 @@ ORDER BY
 </div>
 
 <script type="text/javascript">
-
-$(document).ready(function () {
-	ChangeInventory(1);
-	ChangeSkillList(1);
-	ChangePet(0);
-});
-
+ChangeInventory(1);
+ChangeSkillList(1);
+ChangePet(0);
 </script>
 <hr />
 

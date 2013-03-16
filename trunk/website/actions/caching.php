@@ -3,19 +3,34 @@
 function AddCacheImage($charactername, $type, $id) {
 	global $__database;
 
-	$__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charactername)."', '".$type."', '".$id."', NOW(), 0) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW(), `done` = 0");
+	$__database->query("
+INSERT INTO 
+	cache
+VALUES
+	(
+		'".$__database->real_escape_string($charactername)."', 
+		'".$type."', 
+		'".$id."', 
+		NOW(),
+		0
+	)
+ON DUPLICATE KEY UPDATE 
+	`id` = VALUES(`id`),
+	`added` = NOW(),
+	`done` = 0
+");
 }
 
 function SaveCacheImage($charactername, $type, $image, $id) {
 	global $__database;
+	
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
 	
 	$filename = '../cache/'.$id.'.png';
 
 	imagepng($image, $filename);
 
 	$__database->query("UPDATE cache SET done = 1 WHERE charactername = '".$__database->real_escape_string($charactername)."' AND type = '".$type."' AND id = '".$id."'");
-	
-	// $__database->query("INSERT INTO cache VALUES ('".$__database->real_escape_string($charactername)."', '".$type."', '".$id."', NOW(), 1) ON DUPLICATE KEY UPDATE `id` = VALUES(`id`), `added` = NOW(), `done` = 1");
 }
 
 
@@ -31,7 +46,7 @@ function ShowCachedImage($charactername, $type, $alivetime = '1 DAY') {
 		
 		for ($i = 0; $row[2] == 0 && $i < 10; $i++) {
 			$q->free();
-			sleep(2); // Wait till it's loaded.
+			sleep(1); // Wait till it's loaded.
 			$q = $__database->query($query);
 			$row = $q->fetch_row();
 		}
@@ -40,6 +55,9 @@ function ShowCachedImage($charactername, $type, $alivetime = '1 DAY') {
 			if ($row[1] == 1) {
 				if (isset($_GET['debug']))
 					echo 'found file<br />';
+
+				header('Last-Modified: '.gmdate('D, d M Y H:i:s', filemtime($filename)).' GMT');
+				
 				readfile($filename);
 				die();
 			}

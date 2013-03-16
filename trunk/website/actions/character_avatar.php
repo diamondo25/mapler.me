@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../inc/database.php';
+require_once __DIR__.'/../inc/functions.datastorage.php';
 require_once __DIR__.'/caching.php';
 
 $font = "arial.ttf";
@@ -35,8 +36,9 @@ if ($len < 4 || $len > 12) {
 }
 
 if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'avatar', '5 MINUTE');
-$id = uniqid().rand(0, 9);
+	ShowCachedImage($charname, 'avatar', '1 MINUTE');
+
+$id = uniqid().rand(0, 999);
 AddCacheImage($charname, 'avatar', $id);
 
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
@@ -736,35 +738,17 @@ if($weaponz == 'weaponOverGlove' || $weaponz == 'weaponOverHand') {
 	add_image($wep_location, $wepx + $weaponx, $wepy + $weapony);
 }
 
-imagepng($im);
-
 
 SaveCacheImage($charname, 'avatar', $im, $id);
 
-
+imagepng($im);
 imagedestroy($im);
 
 if (isset($_GET['debug'])) var_dump($GLOBALS);
 
 // Function to phrase data into an array
 function get_data($itemid) {
-	global $__database;
-	
-	$query = $__database->query("
-				SELECT 
-					* 
-				FROM 
-					`phpVana_characterwz` 
-				WHERE 
-					`itemid` = ".$itemid
-				);
-	$item_info = array();
-	while ($data = $query->fetch_assoc()) {
-		$item_info[$data['key']] = ($data['value']);
-	}
-	$item_info['ITEMID'] = $itemid;
-	$query->free();
-	return $item_info;
+	return GetItemWZInfo($itemid);
 }
 
 // Function to add element to the image

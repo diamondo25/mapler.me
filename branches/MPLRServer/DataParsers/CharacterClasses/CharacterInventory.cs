@@ -356,6 +356,37 @@ namespace MPLRServer
                 pPacket.ReadLong();
 
             pPacket.ReadInt();
+
+            /*
+            AddShort("v21");
+            AddByte("v22");
+            AddByte("v23");
+            AddInt("v24");
+            AddInt("v25");
+            AddInt("v26");
+            AddShort("v27");
+            AddShort("v28");
+            AddInt("v29");
+            AddByte("v30");
+            AddByte("v31");
+            AddByte("v32");
+            AddByte("v33");
+            AddShort("v34");
+            AddShort("v35");
+            AddShort("v36");
+            AddShort("v37");
+            AddShort("v38");
+            AddShort("v39");
+            AddShort("v40");
+            AddShort("v41");
+            AddShort("v42");
+            AddShort("v43");
+            if (iscash == 0x00) {
+                AddLong("!?");
+            }
+            AddLong("!?");
+            AddInt("v3");
+           */
         }
 
         public override int GetChecksum()

@@ -14,6 +14,8 @@ namespace MPLRServer
         public Dictionary<ushort, string> PartyQuestsRunning { get; private set; }
         public Dictionary<ushort, long> PartyQuestsDone { get; private set; }
 
+        CultureInfo provider = CultureInfo.InvariantCulture;
+
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -51,7 +53,6 @@ namespace MPLRServer
                 var id = pPacket.ReadUShort();
                 var date = pPacket.ReadUInt();
 
-                CultureInfo provider = CultureInfo.InvariantCulture;
 
                 long ft = 0;
                 DateTime temp;

@@ -85,9 +85,9 @@ if ($len < 4 || $len > 12) {
 }
 
 if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'info');
+	ShowCachedImage($charname, 'info', '2 MINUTE');
 
-$id = uniqid().rand(0, 9);
+$id = uniqid().rand(0, 999);
 AddCacheImage($charname, 'info', $id);
 
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
@@ -136,13 +136,9 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($i
 //ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 3), imagecolorallocate($image, 0, 0, 0), $font, "HAX!");
 //ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 4), imagecolorallocate($image, 0, 0, 0), $font, "HAXCLANZ");
 
+SaveCacheImage($charname, 'info', $image, $id);
 
 
 imagepng($image);
-
-
-SaveCacheImage($charname, 'info', $image, $id);
-
 imagedestroy($image);
-
 ?>

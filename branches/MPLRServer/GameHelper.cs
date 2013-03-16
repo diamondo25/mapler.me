@@ -20,6 +20,21 @@ namespace MPLRServer
                 || pJobID == 6001;
         }
 
+        public static bool IsExtendedSPJob(int pJobID)
+        {
+            return (pJobID / 1000 == 3 ||
+                pJobID / 100 == 22 || pJobID == 2001 || // Evan
+                pJobID / 100 == 23 || pJobID == 2002 || // Mercedes
+                pJobID / 100 == 24 || pJobID == 2003 || // Phantom
+                pJobID / 100 == 27 || pJobID == 2004 || // Luminous
+                pJobID / 100 == 51 || pJobID == 5000 || // Mihile
+                pJobID / 100 == 61 || pJobID == 6000 || // Kaiser
+                pJobID / 100 == 65 || pJobID == 6001 || // Angelic Buster
+                pJobID / 10  == 57 || pJobID == 508  || // Jett
+                pJobID / 1000 == 4 // JMS specials: Kanna and Hayato
+                );
+        }
+
         public static bool is_ignore_master_level_for_common(int pSkillID)
         {
             bool v1 = false;

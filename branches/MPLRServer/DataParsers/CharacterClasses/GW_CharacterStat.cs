@@ -96,27 +96,23 @@ namespace MPLRServer
 
             this.AP = pPacket.ReadShort();
 
-            short a1 = this.JobID;
-
             SPData = new List<KeyValuePair<byte, int>>();
-            if (a1 / 1000 == 3 ||
-                a1 / 100 == 22 || a1 == 2001 || // Evan
-                a1 / 100 == 23 || a1 == 2002 || // Mercedes
-                a1 / 100 == 24 || a1 == 2003 || // Phantom
-                a1 / 100 == 27 || a1 == 2004 || // Luminous
-                a1 / 100 == 51 || a1 == 5000 || // Mihile
-                a1 / 100 == 61 || a1 == 6000 || // Kaiser
-                a1 / 100 == 65 || a1 == 6001 || // Angelic Buster
-                a1 / 10 == 57  || a1 == 508  || // Jett
-                a1 / 1000 == 4 // JMS specials: Kanna and Hayato
-                )
+            if (GameHelper.IsExtendedSPJob(this.JobID))
             {
                 byte amnt = pPacket.ReadByte();
+                List<byte> haslist = new List<byte>();
                 for (int j = 0; j < amnt; j++)
                 {
                     byte v1 = pPacket.ReadByte(); // Job ID
                     int v2 = pPacket.ReadInt(); // Amount
                     SPData.Add(new KeyValuePair<byte, int>(v1, v2));
+
+                    haslist.Add(v1);
+                }
+                for (byte j = 1; j < 20; j++)
+                {
+                    if (!haslist.Contains(j))
+                        SPData.Add(new KeyValuePair<byte, int>(j, 0));
                 }
             }
             else
@@ -134,7 +130,7 @@ namespace MPLRServer
             this.JobSubID = pPacket.ReadShort();
 
 
-            if (a1 / 100 == 31 || a1 == 3001)
+            if (this.JobID / 100 == 31 || this.JobID == 3001)
             {
                 this.DemonMark = pPacket.ReadInt();
             }
