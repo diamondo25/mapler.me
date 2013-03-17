@@ -51,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 if ($_loggedin) {
 ?>
 <meta http-equiv="refresh" content="3;URL='/stream/'" />
-<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 3 seconds.<br/>
+If not, <a href="/">click here</a>.</p>
 <?php
 }
 else {
@@ -72,7 +73,7 @@ WHERE
 	level > '30' 
 ORDER BY
 	rand()
-	LIMIT 8
+	LIMIT 7
 ");
 $cache = array();
 
@@ -83,7 +84,7 @@ $q->free();
 ?>
 
 <div class="row">
-	<div class="span9 offset2">
+	<div class="span9 offset2 logincharacter">
 		<?php
 		foreach ($cache as $row) {
 		?>
@@ -100,16 +101,18 @@ $q->free();
 		<center>
 			<h1>Welcome back, hundreds of other maplers await your return!</h1>
 			<br/>
+		</center>
 	</div>
+	<div class="span12">
 <?php
-	$form = new Form('', 'form-horizontal span4 offset3');
+	$form = new Form('', 'form-horizontal span4 loginpageform');
 	$form->AddBlock('E-mail', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->MakeSubmit('Login');
 	$form->End();
 }
 ?>
-		</center>
+	</div>
 <?php
 require_once __DIR__.'/inc/footer.php';
 ?>

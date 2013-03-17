@@ -4,7 +4,7 @@
 if (!$_loggedin):
 ?>
      
-     <p class="alert alert-error">This ain't for your eyes!</p>
+     <p class="alert alert-error">Please login to view this page.</p>
 	
 <?php
 else:
@@ -25,15 +25,6 @@ else:
 
 	<div class="row">
 	<p class="lead">Mapler.me Completion List</b>
-	
-	<ul class="span12" style="opacity:0.5;">
-	<b>Before Beta:</b><br/><br/>
-	<li class="done">Make sure email notification works when signing up.</li>
-	<li class="done">Add password change in settings.</li>
-	<li class="done">Add temporary content to front page when logged in until stream is actively being worked on.</li>
-	<li class="done">Add a private chat for beta testers to chat in as well as gathering info on bugs / glitches. Make all messages logged. (Will be removed after testing).</li>
-	<li class="done">Change usernames -> email, and profile username -> nickname.</li>
-	</ul>
 	</div>
 	
 	<hr/>
@@ -91,6 +82,5 @@ else:
 <?php
 endif;
 ?>
-      </div>
 
 <?php require_once __DIR__.'/inc/footer.php'; ?>

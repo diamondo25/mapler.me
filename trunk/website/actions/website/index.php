@@ -159,34 +159,54 @@ if (isset($_GET['clear_cache'])) {
 ?>
 
 	</div>
+	
+	
+	<div class="accordion span4" id="accordion2">
+	<h4>View Mapler.me records:</h4>
+  <div class="accordion-group" style="margin-bottom:10px;">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        <button class="btn">Mapler.me Accounts</button>
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner">
+      <br/>
+        <?php
+	        $q = $__database->query("SELECT username FROM accounts ORDER BY username ASC");
+	        while ($row = $q->fetch_row()) {
+	    ?>
+		<a href="//<?php echo $row[0]; ?>.<?php echo $domain; ?>/" class="btn btn-mini"><?php echo $row[0]; ?></a> 
+		<?php
+			}
+
+			?>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        <button class="btn">Mapler.me Characters</button>
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+      <br/>
+        <?php
+	        $q = $__database->query("SELECT name FROM characters ORDER BY internal_id DESC");
+	        while ($row = $q->fetch_row()) {
+	    ?>
+		<a href="//<?php echo $domain; ?>/player/<?php echo $row[0]; ?>" class="btn btn-mini"><?php echo $row[0]; ?></a>  
+		<?php
+			}
+
+			?>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="span9">
-	<ul>
-<?php
-$q = $__database->query("SELECT username FROM accounts ORDER BY username ASC");
-while ($row = $q->fetch_row()) {
-?>
-		<li><a href="//<?php echo $row[0]; ?>.<?php echo $domain; ?>/"><?php echo $row[0]; ?></a></li>
-<?php
-}
-
-?>
-	</ul>
-</div>
-
-<div class="span9">
-	<ul>
-<?php
-$q = $__database->query("SELECT name FROM characters ORDER BY internal_id DESC");
-while ($row = $q->fetch_row()) {
-?>
-		<li><a href="//<?php echo $domain; ?>/player/<?php echo $row[0]; ?>"><?php echo $row[0]; ?></a></li>
-<?php
-}
-
-?>
-	</ul>
+	
 </div>
 
 <?php

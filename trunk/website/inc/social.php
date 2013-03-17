@@ -64,8 +64,8 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 
 <div class="row">
 	<form method="post">
-		<div class="span9">
-			<textarea name="content" class="span9 status" style="height:100px; max-height:100px; max-width:888px; padding-right:50px;" placeholder="Type your status here!"></textarea>
+		<div class="span4">
+			<textarea name="content" class="span4 status" style="height:100px; max-height:100px; padding-right:50px;" placeholder="Type your status here!"></textarea>
 		</div>
 		<button type="submit" class="btn btn-large" style="padding:16px; position:relative; top:15px;">Post!</button>
 		<br />
