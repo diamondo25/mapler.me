@@ -52,8 +52,8 @@ else {
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>
 		<hr/>
-		<p class="location"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
-		<p class="world"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
+		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
+		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<hr/>
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -63,10 +63,9 @@ else {
 				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 				
 		<hr/>
-		
-		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" /><br/><br/>
-		<img src="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>" /><br/><br/>
-		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
+		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
+		<p class="side"><i class="icon-heart faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
+		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
 	
 	<div class="span9" style="margin-left:20px;">
