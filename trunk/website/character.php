@@ -716,7 +716,9 @@ foreach ($optionlist as $option => $desc) {
 		</table>
 	</div>
 	
-	<div class="span3" style="width: 151px;">
+</div>
+
+<div class="span3" style="width: 151px;">
 		<div class="character_equips">
 			<div class="character_pets_holder">
 				<select onchange="ChangePet(this.value)">
@@ -754,8 +756,6 @@ for ($i = 0; $i < 3; $i++) {
 			</div>
 		</div>
 	</div>
-	
-</div>
 
 <p class="lead">Skills, Mounts, and more...</p>
 <style type="text/css">
