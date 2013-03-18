@@ -64,12 +64,13 @@ else {
 				
 		<hr/>
 		
-		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" />
-				
+		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" /><br/><br/>
+		<img src="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>" /><br/><br/>
+		<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" />
 	</div>
 	
-	<div class="span9" style="margin-left:10px;">
-		<p class="lead">Equipment &amp; statistics...</p>
+	<div class="span9" style="margin-left:20px;">
+		<p class="lead"><?php echo $character_info['name']; ?>'s Equipment</p>
 <?php
 
 /******************* DRAGONS BE HERE ****************************/
@@ -759,7 +760,7 @@ for ($i = 0; $i < 3; $i++) {
 	
 	<hr/>
 
-<p class="lead">Skills, Mounts, and more...</p>
+<p class="lead"><?php echo $character_info['name']; ?>'s Skills</p>
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -905,22 +906,6 @@ ChangeSkillList(1);
 ChangePet(0);
 </script>
 
-	</div>
-</div>
-	
-	<div class="row">
-<p class="lead">Realtime Avatars:</p>
-	<div class="span4">
-		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" alt="Avatar of <?php echo $character_info['name']; ?>"/><br/><br/>
-		<pre style="width: 280px;">http://<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?></pre></td>
-	</div>	
-	<div class="span4">	
-		<td><img src="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>" alt="Image of <?php echo $character_info['name']; ?>" width="271px" height="162px" /><br/><br/>
-		<pre style="width: 280px;">http://<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?></pre></td>
-	</div>	
-	<div class="span4">	
-		<td><img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" alt="Statistics of <?php echo $character_info['name']; ?>" width="192px" height="345px" /><br/><br/>
-		<pre style="width: 280px;">http://<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?></pre></td>
 	</div>
 </div>
 

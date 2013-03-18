@@ -212,8 +212,8 @@ hr {
 /* Binocular */
 .character_equips .slot27 { top: 154px; left: 10px; margin-bottom: 0px; }
 
-/* Smart Pet */
-.character_equips .slot62 { top: 154px; left: 10px; margin-bottom: 0px; }
+/* Smart Pet NEEDS FIX */
+.character_equips .slot62 { top: 0px; left: 0px; margin-bottom: 0px; display:none; }
 
 /* Magic Scales */
 .character_equips .slot28 { top: 121px; left: 43px; margin-bottom: 0px; }
@@ -344,13 +344,13 @@ hr {
 	width: 170px;
 }
 #item_info .item_req_stats > table {
-	font-size: 11px;
+	font-size: 9px;
 }
 
 #item_info .req_job {
-	font-size: 11px;
+	font-size: 9px;
 	color: white;
-
+	text-transform: uppercase;
 	padding: 2px;
 	border-radius: 3px;
 	background-color: rgba(0,0,0,1);
