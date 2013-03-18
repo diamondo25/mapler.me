@@ -51,7 +51,6 @@ require_once __DIR__.'/../inc/me_header.template.php';
 ?>
 
 	<!-- Character Display -->
-	<div id="character-wall">
 
 <?php
 if (count($cache) == 0) {
@@ -71,7 +70,6 @@ foreach ($cache as $row) {
 	if ($i % $characters_per_row == 0) {
 		if ($i > 0) {
 ?>
-		</div>
 <?php
 		}
 ?>
@@ -93,7 +91,6 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
-</div>
 </div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

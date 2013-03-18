@@ -43,7 +43,7 @@ hr {
 </style>
 
 <div class="row">
-	<div class="span3">
+	<div class="span3" style="height:100% !important;">
 		<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>"><img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/></a>
 		<br/>
 		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br/>
