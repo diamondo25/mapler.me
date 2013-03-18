@@ -50,9 +50,6 @@ require_once __DIR__.'/../inc/me_header.template.php';
 
 ?>
 
-	<!-- Character Display -->
-	<div id="character-wall">
-
 <?php
 
 
@@ -85,15 +82,13 @@ if (count($social_cache) == 0) {
 <?php
 }
 ?>
-	</div>
-	<div class="row">
-
+<div class="span9">
 <?php
 // printing table rows
 
 foreach ($social_cache as $row) {
 ?>
-		<div class="status span6">
+		<div class="status">
 			<div class="header"><?php echo $row['nickname'];?> said:
 				<span class="pull-right">
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
@@ -123,7 +118,6 @@ foreach ($social_cache as $row) {
 <?php
 }
 ?>
-
-	</div>
-
+</div>
+</div>
 <?php require_once __DIR__.'/../inc/footer.php'; ?>
