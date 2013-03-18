@@ -69,6 +69,8 @@ else {
 </button>
 
 <button type="button" class="btn btn-mini" data-toggle="collapse" data-target="#skills">
+  Skills
+</button>
  
 <div id="equips" class="collapse in">
 	<?php
