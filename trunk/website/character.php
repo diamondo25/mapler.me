@@ -41,42 +41,37 @@ if ($q->num_rows == 0) {
 }
 else {
 	$character_info = $q->fetch_assoc();
-	
-	if ($_loginaccount->GetID() != $character_info['account_id'] && $_loginaccount->GetAccountRank() < RANK_NORMAL) {
-	?>
-	<p class="lead alert-error alert">You are not allowed to view this page.</p>
-	<?php
-
-		require_once __DIR__.'/inc/footer.php';
-		die();
-	}
-	
 	$internal_id = $character_info['internal_id'];
-	
 	$stat_addition = GetCorrectStat($internal_id);
-	
 ?>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
-		<div class="row">
-			<img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" class="pull-left" />
-			<h2 class="span10"><?php echo $character_info['name']; ?> &middot; 
-			<span class="nobreak">
-				Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?>
-			
-				<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
-				
-				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
-			</span><br />
-			
-			<small><i>Last seen in <?php echo GetMapname($character_info['map']); ?>, <?php echo $character_info['world_name']; ?></i></small></h2>
-		</div>
-		
+<div class="row">
+	<div class="span3">
+		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br/>
+		<p class="name"><?php echo $character_info['name']; ?><br/>
+			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
+		</p>
+		<hr/>
+		<p class="location"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
+		<p class="world"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<hr/>
 		
-		<div class="row">
-		<p class="lead">Equipment &amp; statistics...</p>
-<?php
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		
+		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
+				
+				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+	</div>
+	
+	<div class="span9" style="margin-left:10px;">
+<button type="button" class="btn btn-mini" data-toggle="collapse" data-target="#equips">
+  Equipment
+</button>
+
+<button type="button" class="btn btn-mini" data-toggle="collapse" data-target="#skills">
+ 
+<div id="equips" class="collapse in">
+	<?php
 
 /******************* DRAGONS BE HERE ****************************/
 
@@ -764,10 +759,11 @@ foreach ($optionlist as $option => $desc) {
 	</div>
 
 </div>
-	
-<hr />
 
-<p class="lead">Skills, Mounts, and more...</p>
+</div>
+	</div>
+	
+<div id="skills" class="collapse">
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -912,7 +908,10 @@ ChangeInventory(1);
 ChangeSkillList(1);
 ChangePet(0);
 </script>
-<hr />
+
+</div>	
+
+</div>
 
 <p class="lead">Realtime Avatars:</p>
 		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" alt="Avatar of <?php echo $character_info['name']; ?>"/><br/><br/>
