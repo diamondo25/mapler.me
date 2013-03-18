@@ -61,6 +61,11 @@ else {
 		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
 				
 				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+				
+		<hr/>
+		
+		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" />
+				
 	</div>
 	
 	<div class="span9" style="margin-left:10px;">
@@ -491,10 +496,6 @@ for ($inv = 0; $inv < 5; $inv++) {
 		<span id="mesos"><?php echo number_format($character_info['mesos']); ?></span>
 
 	</div>
-	<div class="span3" style="margin-left: 20px !important;">
-		<img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" />
-	</div>
-	
 
 </div>
 
@@ -752,7 +753,7 @@ foreach ($optionlist as $option => $desc) {
 		</table>
 	</div>
 	
-<hr />
+</div>
 
 <p class="lead">Skills, Mounts, and more...</p>
 <style type="text/css">
