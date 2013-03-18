@@ -193,7 +193,7 @@ endif;
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container" style="background: rgba(255,255,255,0.5);padding: 20px;border-radius: 5px;">
 	
 <?php
 $ip = "mc.craftnet.nl";
