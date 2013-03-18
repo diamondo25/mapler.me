@@ -756,8 +756,6 @@ for ($i = 0; $i < 3; $i++) {
 <!-- so many </div> fml -->
 			</div>
 		</div>
-	</div>
-	</div>
 	
 	<hr/>
 
@@ -908,22 +906,25 @@ ChangePet(0);
 </script>
 
 	</div>
-
+	
+	<div class="row">
 <p class="lead">Realtime Avatars:</p>
+	<div class="span4">
 		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" alt="Avatar of <?php echo $character_info['name']; ?>"/><br/><br/>
 		<pre style="width: 280px;">http://<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?></pre></td>
-		
+	</div>	
+	<div class="span4">	
 		<td><img src="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>" alt="Image of <?php echo $character_info['name']; ?>" width="271px" height="162px" /><br/><br/>
 		<pre style="width: 280px;">http://<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?></pre></td>
-		
+	</div>	
+	<div class="span4">	
 		<td><img src="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>" alt="Statistics of <?php echo $character_info['name']; ?>" width="192px" height="345px" /><br/><br/>
 		<pre style="width: 280px;">http://<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?></pre></td>
+	</div>
+</div>
+
 <?php
-	
 }
-
-
 // $__database->GetRanQueries();
-
 require_once __DIR__.'/inc/footer.php';
 ?>
