@@ -906,6 +906,7 @@ ChangePet(0);
 </script>
 
 	</div>
+</div>
 	
 	<div class="row">
 <p class="lead">Realtime Avatars:</p>
