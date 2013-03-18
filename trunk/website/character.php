@@ -68,7 +68,7 @@ else {
 		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
 	
-	<div class="span9" style="margin-left:20px;">
+	<div class="span9" style="margin-left:10px;">
 		<p class="lead"><?php echo $character_info['name']; ?>'s Equipment</p>
 <?php
 
