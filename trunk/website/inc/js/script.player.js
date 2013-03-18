@@ -26,7 +26,7 @@ function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqd
 	document.getElementById('item_info_req_row_itemexp').style.display = (!isequip && (itemexp == '' || itemexp == 0)) ? 'none' : '';
 	document.getElementById('item_info_req_itemexp').innerHTML = itemexp;
 
-
+	
 
 	document.getElementById('item_info_row_str').style.display = (str == 0 || str == '') ? 'none' : '';
 	document.getElementById('item_info_str').innerHTML = str;
@@ -79,7 +79,7 @@ function SetItemInfo(event, obj, itemid, isequip, reqjob, reqlevel, reqstr, reqd
 
 	var description = descriptions[itemid];
 
-	if (description != '') {
+	if (description != undefined) {
 		document.getElementById('item_info_description').style.display = '';
 		document.getElementById('item_info_description').innerHTML = description;
 	}
@@ -247,3 +247,51 @@ function MoveWindow(event) {
 	document.getElementById('item_info').style.top = expectedTop + 'px';
 	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
 }
+
+function ShowCashEquips(show) {
+	document.getElementById('normal_equips').style.display = show ? 'none' : 'block';
+	document.getElementById('cash_equips').style.display = !show ? 'none' : 'block';
+}
+
+
+
+
+
+var lastid = -1;
+function ChangeInventory(id) {
+	id -= 1;
+	if (lastid != -1)
+		document.getElementById('inventory_' + lastid).style.display = 'none';
+	lastid = id;
+	document.getElementById('inventory_' + lastid).style.display = 'block';
+}
+
+var lastidskill = -1;
+function ChangeSkillList(id) {
+	if (lastidskill != -1) {
+		document.getElementById('bookname_' + lastidskill).style.display = 'none';
+		document.getElementById('skilllist_' + lastidskill).style.display = 'none';
+		document.getElementById('skillsp_' + lastidskill).style.display = 'none';
+	}
+	lastidskill = id;
+	document.getElementById('bookname_' + lastidskill).style.display = 'block';
+	document.getElementById('skilllist_' + lastidskill).style.display = 'block';
+	document.getElementById('skillsp_' + lastidskill).style.display = 'block';
+}
+
+var lastpet = -1;
+function ChangePet(id) {
+	if (lastpet != -1) {
+		document.getElementById('pet_' + lastpet).style.display = 'none';
+	}
+	lastpet = id;
+	document.getElementById('pet_' + lastpet).style.display = 'block';
+}
+
+
+$(document).ready(function () {
+	ChangeInventory(1);
+	ChangeSkillList(1);
+	ChangePet(0);
+	ShowCashEquips(false);
+});

@@ -161,7 +161,8 @@ function GetItemDialogInfo($item, $isequip) {
 	
 	
 	//  All options.
-	if ($isequip)  {
+	$args = 26;
+	if ($isequip) {
 		$arguments .= $reqlevel.', ';
 		$arguments .= $reqstr.', ';
 		$arguments .= $reqdex.', ';
@@ -189,7 +190,8 @@ function GetItemDialogInfo($item, $isequip) {
 		$arguments .= $item->scrolls.', ';
 	}
 	else {
-		$arguments .= '0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,';
+		for ($i = 1; $i <= $args; $i++)
+			$arguments .= '0,';
 	}
 
 	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
@@ -236,7 +238,7 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 
 ?>
 <style type="text/css">
-.character_equips_holder {
+.character_equips {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/equips_background.png');
 }
 
@@ -283,6 +285,7 @@ $petequip_slots[27] = array(0, -1);
 $petequip_slots[28] = array(0, -1);
 $petequip_slots[29] = array(0, -1);
 $petequip_slots[46] = array(0, -1); // Item Ignore 1
+$petequip_slots[62] = array(0, -1); // Smart Pet
 
 // Pet 2
 $petequip_slots[30] = array(1, 14);
@@ -294,6 +297,7 @@ $petequip_slots[35] = array(1, 26);
 $petequip_slots[36] = array(1, 27);
 $petequip_slots[37] = array(1, 21); // Flipped w/ 29
 $petequip_slots[47] = array(1, -1); // Item Ignore 2
+$petequip_slots[63] = array(1, -1); // Smart Pet [guess]
 
 // Pet 3
 $petequip_slots[38] = array(2, 14);
@@ -305,6 +309,7 @@ $petequip_slots[43] = array(2, 26);
 $petequip_slots[44] = array(2, 27);
 $petequip_slots[45] = array(2, 21); // Flipped w/ 29
 $petequip_slots[48] = array(2, -1); // Item Ignore 3
+$petequip_slots[64] = array(2, -1); // Smart Pet [guess]
 
 $petequips = array();
 $petequips[0] = array();
@@ -346,9 +351,9 @@ foreach ($equips as $orislot => $item) {
 ?>
 
 <div class="row">
-	<div class="span3" style="width: 175px;">
+	<div class="span3" style="width: 184px;">
 		<div class="character_equips">
-			<div class="character_equips_holder">
+			<div id="normal_equips">
 
 <?php
 foreach ($normalequips as $slot => $item) {
@@ -370,12 +375,7 @@ foreach ($normalequips as $slot => $item) {
 }
 ?>
 			</div>
-		</div>
-	</div>
-	
-	<div class="span3" style="width: 175px;">
-		<div class="character_equips">
-			<div class="character_equips_holder">
+			<div id="cash_equips">
 
 <?php
 foreach ($cashequips['normal'] as $slot => $item) {
@@ -396,6 +396,9 @@ foreach ($cashequips['normal'] as $slot => $item) {
 <?php
 }
 ?>
+			</div>
+			<div style="bottom: 3px; right: 20px; position: absolute;">
+				<label><input type="checkbox" onchange="ShowCashEquips(this.checked)" style="display: inline;" /> Show cash items</label>
 			</div>
 		</div>
 	</div>
@@ -419,7 +422,7 @@ $inv_extra_offx = $inv_extra_offy = 2;
 for ($inv = 0; $inv < 5; $inv++) {
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: none; padding: 5px  !important;">
+		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>; padding: 5px  !important;">
 <?php 
 	for ($i = 0; $i < count($inv1); $i++) {
 
@@ -460,11 +463,53 @@ for ($inv = 0; $inv < 5; $inv++) {
 
 	</div>
 
+
+	<div class="span3" style="width: 151px;">
+		<div class="character_pets">
+			<div class="character_pets_holder">
+				<select onchange="ChangePet(this.value)">
+					<option value="0">Pet 1</option>
+					<option value="1">Pet 2</option>
+					<option value="2">Pet 3</option>
+				</select>
+
+<?php
+for ($i = 0; $i < 3; $i++) {
+?>
+				<div class="pet_inventory" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>;" id="pet_<?php echo $i; ?>">
+<?php
+	foreach ($petequips[$i] as $slot => $item) {
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($item->itemid);
+		
+		
+		if ($info['potentials'] != 0) {
+?>
+					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+		}
+?>
+					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+?>
+				</div>
+<?php
+}
+?>
+<!-- so many </div> fml -->
+			</div>
+		</div>
+	</div>
+	
 </div>
 
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
 var potentialDescriptions = <?php echo json_encode($PotentialList); ?>;
+
 <?php
 
 if (false): // set to true to print this stuff
@@ -630,37 +675,6 @@ function MoveWindow(event) {
 endif;
 
 ?>
-
-var lastid = -1;
-function ChangeInventory(id) {
-	id -= 1;
-	if (lastid != -1)
-		document.getElementById('inventory_' + lastid).style.display = 'none';
-	lastid = id;
-	document.getElementById('inventory_' + lastid).style.display = 'block';
-}
-
-var lastidskill = -1;
-function ChangeSkillList(id) {
-	if (lastidskill != -1) {
-		document.getElementById('bookname_' + lastidskill).style.display = 'none';
-		document.getElementById('skilllist_' + lastidskill).style.display = 'none';
-		document.getElementById('skillsp_' + lastidskill).style.display = 'none';
-	}
-	lastidskill = id;
-	document.getElementById('bookname_' + lastidskill).style.display = 'block';
-	document.getElementById('skilllist_' + lastidskill).style.display = 'block';
-	document.getElementById('skillsp_' + lastidskill).style.display = 'block';
-}
-
-var lastpet = -1;
-function ChangePet(id) {
-	if (lastpet != -1) {
-		document.getElementById('pet_' + lastpet).style.display = 'none';
-	}
-	lastpet = id;
-	document.getElementById('pet_' + lastpet).style.display = 'block';
-}
 </script>
 
 <div id="item_info" style="display: none;">
@@ -717,46 +731,6 @@ foreach ($optionlist as $option => $desc) {
 	</div>
 	
 </div>
-
-<div class="span3" style="width: 151px;">
-		<div class="character_equips">
-			<div class="character_pets_holder">
-				<select onchange="ChangePet(this.value)">
-					<option value="0">Pet 1</option>
-					<option value="1">Pet 2</option>
-					<option value="2">Pet 3</option>
-				</select>
-
-<?php
-for ($i = 0; $i < 3; $i++) {
-?>
-				<div class="pet_inventory" style="display: none;" id="pet_<?php echo $i; ?>">
-<?php
-	foreach ($petequips[$i] as $slot => $item) {
-		
-		$info = GetItemDialogInfo($item, true);
-		
-		$itemwzinfo = GetItemWZInfo($item->itemid);
-		
-		
-		if ($info['potentials'] != 0) {
-?>
-					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
-<?php
-		}
-?>
-					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-	}
-?>
-				</div>
-<?php
-}
-?>
-<!-- so many </div> fml -->
-			</div>
-		</div>
-	
 	<hr/>
 
 <p class="lead"><?php echo $character_info['name']; ?>'s Skills</p>
@@ -898,12 +872,6 @@ ORDER BY
 <?php endforeach; ?>
 	</select>
 </div>
-
-<script type="text/javascript">
-ChangeInventory(1);
-ChangeSkillList(1);
-ChangePet(0);
-</script>
 
 	</div>
 </div>

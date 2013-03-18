@@ -31,6 +31,7 @@ hr {
 	border-bottom: 1px solid #CCC;
 	width: 95%;
 	margin-bottom:15px;
+	clear: both;
 }
 
 .side {
@@ -41,17 +42,31 @@ hr {
 }
 
 /************* INVENTORY AND SUCH *************/
-.character_equips_holder {
+.character_equips {
 	width: 184px;
 	height: 290px;
 	position: relative;
 }
 
-.character_equips > div > img, .character_pets_holder > div > img {
+.character_pets {
+	width: 151px;
+	height: 220px;
+	position: relative;
+}
+
+.character_pets > div {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.character_equips > div > img,
+.character_pets_holder > div > img {
 	position: absolute;
 }
 
-.character_equips > div > div, .character_pets_holder > div > div {
+.character_equips > div > div,
+.character_pets_holder > div > div {
     height: 32px;
     width: 32px;
 }
@@ -189,34 +204,33 @@ hr {
 /* pet thingies */
 
 /* HP POC */
-.character_equips .slot24 { top: 22px; left: 10px; margin-bottom: 0px; }
+.character_pets .slot24 { top: 22px; left: 10px; margin-bottom: 0px; }
 
 /* MP POC */
-.character_equips .slot25 { top: 22px; left: 76px; margin-bottom: 0px; }
+.character_pets .slot25 { top: 22px; left: 76px; margin-bottom: 0px; }
 
 /* Item pouch */
-.character_equips .slot22 { top: 55px; left: 10px; margin-bottom: 0px; }
+.character_pets .slot22 { top: 55px; left: 10px; margin-bottom: 0px; }
 
 /* Meso Magnet */
-.character_equips .slot23 { top: 88px; left: 43px; margin-bottom: 0px; }
+.character_pets .slot23 { top: 88px; left: 43px; margin-bottom: 0px; }
 
 /* Wing Boots */
-.character_equips .slot26 { top: 88px; left: 76px; margin-bottom: 0px; }
+.character_pets .slot26 { top: 88px; left: 76px; margin-bottom: 0px; }
 
 /* Equip */
-.character_equips .slot14 { top: 88px; left: 109px; margin-bottom: 0px; }
+.character_pets .slot14 { top: 88px; left: 109px; margin-bottom: 0px; }
 
 /* Binocular */
-.character_equips .slot27 { top: 154px; left: 10px; margin-bottom: 0px; }
+.character_pets .slot27 { top: 154px; left: 10px; margin-bottom: 0px; }
 
-/* Binocular */
-.character_equips .slot27 { top: 154px; left: 10px; margin-bottom: 0px; }
-
-/* Smart Pet NEEDS FIX */
-.character_equips .slot62 { top: 0px; left: 0px; margin-bottom: 0px; display:none; }
+/* Smart Pet 1, 2, 3 */
+.character_pets .slot62,
+.character_pets .slot63,
+.character_pets .slot64 { top: 154px; left: 43px; margin-bottom: 0px; }
 
 /* Magic Scales */
-.character_equips .slot28 { top: 121px; left: 43px; margin-bottom: 0px; }
+.character_pets .slot28 { top: 121px; left: 43px; margin-bottom: 0px; }
 
 
 
@@ -277,9 +291,10 @@ hr {
 }
 
 #inventories #mesos {
+	display: inline-block;
 	float: right;
 	font-size: 10px;
-	margin-right: 46px;
+	margin-right: 48px;
 }
 
 
@@ -296,7 +311,7 @@ hr {
 	background-color: rgba(255,255,255,0.95);
 	padding: 5px;
 	position: absolute;
-	width: 285px;
+	width: 290px;
 	z-index: 100;
 }
 

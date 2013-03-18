@@ -36,7 +36,7 @@ while ($row = $q->fetch_assoc()) {
 $q->free();
 ?>
 
-		<div class="span7">
+		<div class="span9">
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
@@ -104,14 +104,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 			<p class="lead">Characters <sub>(Main character and character settings)</sub></p>
 			<form class="form-horizontal" method="post">
 <?php
+$i = 0;
+$chars_per_row = 3;
 foreach ($cache as $row) {
 	if ($char_config['main_character'] == null) {
 		$char_config['main_character'] = $row['name'];
 	}
 	$shown_option_value = isset($char_config['characters'][$row['name']]) ? $char_config['characters'][$row['name']] : 0; // Default = 0
+	
+	if ($i % $chars_per_row == 0) {
+		if ($i > 0) {
 ?>
-				<div class="span3 character-brick" style="min-width:174px;margin-left: 20px;">
-				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
+			</div>
+<?php
+		}
+?>
+			<div class="row">
+<?php
+	}
+?>
+				<div class="span3 character-brick" style="min-width: 174px;">
+				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: middle;" />&nbsp;<?php echo $row['name']; ?></div>
 					<center>
 						<br />
 						<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
@@ -132,8 +145,10 @@ foreach ($cache as $row) {
 					</center>
 				</div>
 <?php
+	$i++;
 }
 ?>
+			</div>
 	
 			<div class="control-group span2" style="clear:both;">
 					<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>

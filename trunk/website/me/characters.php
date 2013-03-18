@@ -70,9 +70,11 @@ foreach ($cache as $row) {
 	if ($i % $characters_per_row == 0) {
 		if ($i > 0) {
 ?>
+		</div>
 <?php
 		}
 ?>
+		<div class="row" style="float: right;">
 <?php
 	}
 	$i++;
@@ -91,6 +93,7 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
+		</div>
 </div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

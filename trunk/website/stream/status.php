@@ -97,62 +97,56 @@ if (count($cache) == 0) { ?>
 // printing table rows
 
 foreach ($cache as $row) {
+?>
+			<div class="status<?php if ($row['override'] == 1): ?> notification<?php endif; ?>">
+				<div class="header">
+<?php if ($row['comments_disabled'] == '0'): ?>
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
+					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – 
+<?php endif; ?>
+					<a href="//<?php echo $row['nickname'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
+					<span class="pull-right">
+						<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
-?>
 <?php
-	if ($row['override'] == '1') { ?>
-		<div class="status notification">
-<?php }
-else {
+	if ($_loggedin) {
+		if (IsOwnAccount()) {
 ?>
-	<div class="status">
-<?php }
+						- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>);">delete?</a>
+<?php
+		}
+		else {
+			// Report button
 ?>
-			<div class="header">
-			<?php
-			echo $row['nickname'];
-			$playerid = $row['account_id'];
-			$bb = $row['content'];
-			?> said: <span class="pull-right">
-				<a href="//<?php echo $domain; ?>/stream/status/<?php echo $statusid; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a> 
-				
-				<?php
-				if ($_loggedin) {
-				if ($playerid == $_loginaccount->GetId()) { ?>
-					- <a href="#" onclick="RemoveStatus('<?php echo $statusid; ?>')">
-					delete?
-				</a>
-				<?php } 
-					
-				else {
-					echo '<a href="#"></a>'; //will be report button
-				}
-				}
-				?>
-				
-				
-			</span></div>
-				<br/><img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/>
-					<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
+						- <a href="#"></a>
+<?php
+		}
+	}
+?>
+					</span>
+				</div>
+				<br />
+				<img src="http://mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right" />
+				<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
 			</div>
 			
-			<?php if ($_loggedin && $row['comments_disabled'] == '0') { ?>
+<?php if ($_loggedin && $row['comments_disabled'] == '0') { ?>
 			<div class="status">
 				<div id="disqus_thread"></div>
-			<script type="text/javascript">
-				var disqus_shortname = 'maplerme';
-				(function() {
-				var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-				dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-				})();
-			</script>
+				<script type="text/javascript">
+					var disqus_shortname = 'maplerme';
+					(function() {
+					var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+					dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+					(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+					})();
+				</script>
 			</div>
 <?php
 	}    
 }
 ?>
-	</div>
+		</div>
 	</div>
 <?php
 require_once __DIR__.'/../inc/footer.php';
