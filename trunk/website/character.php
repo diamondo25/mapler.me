@@ -753,9 +753,13 @@ for ($i = 0; $i < 3; $i++) {
 <?php
 }
 ?>
+<!-- so many </div> fml -->
 			</div>
 		</div>
 	</div>
+	</div>
+	
+	<hr/>
 
 <p class="lead">Skills, Mounts, and more...</p>
 <style type="text/css">
