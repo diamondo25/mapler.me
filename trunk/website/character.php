@@ -372,44 +372,7 @@ foreach ($normalequips as $slot => $item) {
 			</div>
 		</div>
 	</div>
-	<div class="span3" style="width: 151px;">
-		<div class="character_equips">
-			<div class="character_pets_holder">
-				<select onchange="ChangePet(this.value)">
-					<option value="0">Pet 1</option>
-					<option value="1">Pet 2</option>
-					<option value="2">Pet 3</option>
-				</select>
-
-<?php
-for ($i = 0; $i < 3; $i++) {
-?>
-				<div class="pet_inventory" style="display: none;" id="pet_<?php echo $i; ?>">
-<?php
-	foreach ($petequips[$i] as $slot => $item) {
-		
-		$info = GetItemDialogInfo($item, true);
-		
-		$itemwzinfo = GetItemWZInfo($item->itemid);
-		
-		
-		if ($info['potentials'] != 0) {
-?>
-					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
-<?php
-		}
-?>
-					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-	}
-?>
-				</div>
-<?php
-}
-?>
-			</div>
-		</div>
-	</div>
+	
 	<div class="span3" style="width: 175px;">
 		<div class="character_equips">
 			<div class="character_equips_holder">
@@ -751,6 +714,45 @@ foreach ($optionlist as $option => $desc) {
 		<hr />
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
+	</div>
+	
+	<div class="span3" style="width: 151px;">
+		<div class="character_equips">
+			<div class="character_pets_holder">
+				<select onchange="ChangePet(this.value)">
+					<option value="0">Pet 1</option>
+					<option value="1">Pet 2</option>
+					<option value="2">Pet 3</option>
+				</select>
+
+<?php
+for ($i = 0; $i < 3; $i++) {
+?>
+				<div class="pet_inventory" style="display: none;" id="pet_<?php echo $i; ?>">
+<?php
+	foreach ($petequips[$i] as $slot => $item) {
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($item->itemid);
+		
+		
+		if ($info['potentials'] != 0) {
+?>
+					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+		}
+?>
+					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+?>
+				</div>
+<?php
+}
+?>
+			</div>
+		</div>
 	</div>
 	
 </div>
