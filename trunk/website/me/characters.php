@@ -65,7 +65,7 @@ if (count($cache) == 0) {
 
 // printing table rows
 
-$characters_per_row = 4;
+$characters_per_row = 3;
 $i = 0;
 foreach ($cache as $row) {
 	if ($i % $characters_per_row == 0) {
@@ -75,7 +75,6 @@ foreach ($cache as $row) {
 <?php
 		}
 ?>
-		<div class="row">
 <?php
 	}
 	$i++;
@@ -94,7 +93,7 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
-
-	</div>
+</div>
+</div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>
