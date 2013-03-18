@@ -64,16 +64,8 @@ else {
 	</div>
 	
 	<div class="span9" style="margin-left:10px;">
-<button type="button" class="btn btn-mini" data-toggle="collapse" data-target="#equips">
-  Equipment
-</button>
-
-<button type="button" class="btn btn-mini" data-toggle="collapse" data-target="#skills">
-  Skills
-</button>
- 
-<div id="equips" class="collapse in">
-	<?php
+		<p class="lead">Equipment &amp; statistics...</p>
+<?php
 
 /******************* DRAGONS BE HERE ****************************/
 
@@ -759,13 +751,10 @@ foreach ($optionlist as $option => $desc) {
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
-
-</div>
-
-</div>
-	</div>
 	
-<div id="skills" class="collapse">
+<hr />
+
+<p class="lead">Skills, Mounts, and more...</p>
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -911,9 +900,7 @@ ChangeSkillList(1);
 ChangePet(0);
 </script>
 
-</div>	
-
-</div>
+	</div>
 
 <p class="lead">Realtime Avatars:</p>
 		<td><img src="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>" alt="Avatar of <?php echo $character_info['name']; ?>"/><br/><br/>
