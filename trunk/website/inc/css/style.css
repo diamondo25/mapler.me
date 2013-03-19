@@ -254,7 +254,7 @@ footer a {
 }
 
 .navbar-inner {
-	background: url('http://i.imm.io/ZSKo.png') left bottom repeat-x !important;
+	background: url('../img/navbar_new.png') left bottom repeat-x !important;
 	box-shadow: 1px 1px 10px;
 	height: 50px !important;
 }
