@@ -35,6 +35,10 @@ SELECT
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
+LEFT JOIN
+	accounts
+	ON
+		social_statuses.account_id = accounts.id
 WHERE
 	id = '".$statusid."'
 	
@@ -104,7 +108,7 @@ foreach ($cache as $row) {
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
 					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – 
 <?php endif; ?>
-					<a href="//<?php echo $row['nickname'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
+					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
 					<span class="pull-right">
 						<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
