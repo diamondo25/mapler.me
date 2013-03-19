@@ -18,12 +18,7 @@ include('../inc/social.php');
 
 $q = $__database->query("
 SELECT
-	id,
-	account_id,
-	nickname,
-	content,
-	character,
-	comments_disabled,
+	social_statuses.*,
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
