@@ -40,7 +40,7 @@ LEFT JOIN
 	ON
 		social_statuses.account_id = accounts.id
 WHERE
-	id = '".$statusid."'
+	social_statuses.id = '".$statusid."'
 	
 ORDER BY
 secs_since ASC
