@@ -77,7 +77,8 @@ $q->free();
 if (count($social_cache) == 0) {
 ?>
 	<center>
-		<p class="lead alert-error alert"><?php echo $__url_useraccount->GetNickName(); ?> hasn't posted anything!</p>
+		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
+		<p><?php echo $__url_useraccount->GetNickName(); ?> hasn't posted anything yet!</p>
 	</center>
 <?php
 }
