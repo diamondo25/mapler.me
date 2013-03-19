@@ -23,7 +23,7 @@ SELECT
 	nickname,
 	content,
 	character,
-	comments_disabled
+	comments_disabled,
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
