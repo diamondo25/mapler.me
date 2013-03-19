@@ -76,7 +76,7 @@ else:
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/todo/">To-do*</a></li><?php endif; ?>
 								<li class="divider"></li>
-								<li><a href="//http://status.mapler.me/">Status</a></li>
+								<li><a href="//status.mapler.me/">Status</a></li>
 <?php
 endif;
 ?>
