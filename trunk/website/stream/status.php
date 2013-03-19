@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
     
 $q = $__database->query("
 SELECT
-	*,
+	social_statuses.*,
+	accounts.username,
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
