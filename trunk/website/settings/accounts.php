@@ -1,4 +1,4 @@
-		<div class="span7">
+		<div class="span9">
 		
 <script type="text/javascript">
 function RemoveAccount(id) {

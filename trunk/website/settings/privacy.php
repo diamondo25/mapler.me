@@ -1,4 +1,4 @@
-		<div class="span7">
+		<div class="span9">
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['passwordNew1'],$_POST['passwordNew2'])) {
 	$error = '';

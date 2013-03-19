@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 
 ?>
 
-		<div class="span7">
+		<div class="span9">
 			<p class="lead">General <sub>(General settings and Options)</sub></p>
 			<form class="form-horizontal" method="post">
 				<div class="control-group">
