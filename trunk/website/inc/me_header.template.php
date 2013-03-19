@@ -44,7 +44,16 @@ hr {
 
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
-		<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>"><img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/></a>
+<?php
+	if ($has_characters):
+?>
+	<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>">
+		<img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
+	</a>
+<?php
+	endif;
+?>
+		
 		<br/>
 		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br/>
 			<small class="name_extra" style="margin-top:10px;">	
