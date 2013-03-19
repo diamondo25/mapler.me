@@ -74,10 +74,9 @@ else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
-								<li><a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do</a></li><?php endif; ?>
+								<li><a href="//<?php echo $domain; ?>/todo/">To-do*</a></li><?php endif; ?>
 								<li class="divider"></li>
-								<li><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></li>
+								<li><a href="//http://status.mapler.me/">Status</a></li>
 <?php
 endif;
 ?>
@@ -148,13 +147,12 @@ if ($_loggedin):
 ?>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
-								<li><a href="//<?php echo $domain; ?>/panel/settings/general/">Settings</a></li>
 						
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/repo/">Update Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Update Website</a></li>
 <?php
 endif;
 ?>
@@ -193,7 +191,7 @@ endif;
 		</div>
 	</div>
 
-	<div class="container" style="background: rgba(255,255,255,0.5);padding: 20px;border-radius: 5px;">
+	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
 	
 <?php
 $ip = "mc.craftnet.nl";

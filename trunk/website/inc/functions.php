@@ -558,7 +558,7 @@ if (isset($_SESSION['username'])) {
 // Set to null by default
 $__url_useraccount = null;
 
-if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "cdn") {
+if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "cdn" && $subdomain != "status") {
 	// Tries to receive userdata for the subdomain. If it fails, results in a 404.
 
 	$__url_useraccount = Account::Load($subdomain);

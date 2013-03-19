@@ -107,8 +107,8 @@ foreach ($social_cache as $row) {
 		<pre>Important: If you would to hide your character, go to Settings then click on the "Characters" tab.</pre></p>
 		<hr/>
 		<h2>You're all set!</h2>
-		<p>Features will continue to be added during the beta period and will be posted on this page! As this is testing, errors or issues are bound to spring up from the depths of El Nath. You can discuss Mapler.me, as well as report bugs or issues in our <a href="//<?php echo $domain; ?>/chat/">Beta Chat</a></p>
-		<p>If you prefer email, please contact support@mapler.me with any questions.</p>
+		<p>Features will continue to be added during the beta period and will be posted on this page! As this is testing, errors or issues are bound to spring up from the depths of El Nath.</p>
+		<p>Please contact support@mapler.me with any questions.</p>
 		<br/>
 		<p>- Mapler.me Team</p>
 		<br/>
