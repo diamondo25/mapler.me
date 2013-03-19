@@ -5,7 +5,7 @@
 /* general */
 
 body {
-background: #506711 url('http://nxcache.nexon.net/maplestory/img/bg/bg_exploreres.jpg') center no-repeat;
+background: #506711 url('../img/bg_exploreres.jpg') center no-repeat;
 }
 
 html {
