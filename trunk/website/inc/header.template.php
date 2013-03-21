@@ -94,7 +94,7 @@ if ($_loggedin):
 							<ul class="dropdown-menu">
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
-								<li><a href="//<?php echo $domain; ?>/settings/general/">Settings</a></li>
+								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
