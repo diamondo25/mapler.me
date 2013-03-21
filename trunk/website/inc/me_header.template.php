@@ -1,3 +1,23 @@
+<?php
+$q = $__database->query("
+SELECT
+	accounts.*,
+	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `secs_since`
+FROM
+	accounts
+WHERE
+	accounts.id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
+ORDER BY
+	secs_since ASC
+");
+
+$lastonline = array();
+while ($row = $q->fetch_assoc()) {
+	$lastonline[] = $row;
+}
+$q->free();
+?>
+
 <style>
 
 .avatar {
@@ -62,6 +82,14 @@ hr {
 			<?php endif; ?>
 			</small>
 		</p>
+		<hr/>
+		<?php
+			foreach ($lastonline as $row) {
+		?>
+		<p class="name_extra">last seen <?php echo time_elapsed_string($row['secs_since']); ?> ago...<br/></p>
+		<?php
+			}
+		?>
 		<hr/>
 		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters" style="color:gray;"><?php echo count($cache); ?> Characters</a></p>
 	</div>

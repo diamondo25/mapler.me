@@ -3,6 +3,7 @@
 			<p>
 				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> – <?php echo $__database->QueriesRan(); ?> queries ran.
 			</p>
+			<p><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a></p>
 		</footer>
 
 <?php if (!$_loggedin && $_SERVER['REQUEST_URI'] !== '/logoff') {
