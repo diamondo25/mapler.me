@@ -11,13 +11,15 @@ if (!file_exists($page)) {
 	die();
 }
 
-require_once __DIR__.'/header.template.php';
+require_once __DIR__.'/settings.header.template.php';
 
 if ($_GET['type'] == '') {
 	require_once __DIR__.'/panel_settings_menu.php';
 }
-
-require_once $page;
-
+?>
+<div class="row">
+<?php require_once $page; ?>
+</div>
+<?php 
 require_once __DIR__.'/footer.php';
 ?>

@@ -36,7 +36,7 @@ while ($row = $q->fetch_assoc()) {
 $q->free();
 ?>
 
-		<div class="span9">
+		<div class="span12">
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 			<form class="form-horizontal" method="post">
 <?php
 $i = 0;
-$chars_per_row = 3;
+$chars_per_row = 4;
 foreach ($cache as $row) {
 	if ($char_config['main_character'] == null) {
 		$char_config['main_character'] = $row['name'];
@@ -135,7 +135,7 @@ foreach ($cache as $row) {
 						<br />
 						This character is shown: 
 						<br />
-						<select name="char_shown_option[<?php echo $row['name']; ?>]" style="height:35px !important;">
+						<select name="char_shown_option[<?php echo $row['name']; ?>]" style="height:35px !important;width: 150px !important;">
 							<option value="0"<?php echo $shown_option_value == 0 ? ' selected="selected"' : ''; ?>>Always</option>
 							<option value="1"<?php echo $shown_option_value == 1 ? ' selected="selected"' : ''; ?>>Only for friends</option>
 							<option value="2"<?php echo $shown_option_value == 2 ? ' selected="selected"' : ''; ?>>Never</option>
