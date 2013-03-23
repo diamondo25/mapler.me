@@ -107,28 +107,28 @@ if (!$is_self) {
 	if ($friend_status == 'FRIENDS') {
 ?>
 
-		<p class="name_extra">Friend!</p>
+		<p class="name_extra">You are already friends!</p>
 		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NO_FRIENDS') {
 ?>
 
-		<p class="name_extra"><a href="//<?php echo $domain; ?>/settings/friends/?invite=<?php echo $__url_useraccount->GetUsername(); ?>">Invite for friendship</a></p>
+		<p class="name_extra"><a href="//<?php echo $domain; ?>/settings/friends/?invite=<?php echo $__url_useraccount->GetUsername(); ?>">Add as a friend?</a></p>
 		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_YOU') {
 ?>
 
-		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <a href="//<?php echo $domain; ?>/settings/friends/?acceptid=<?php echo $__url_useraccount->GetUsername(); ?>">Accept now!</a></p>
+		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <a href="//<?php echo $domain; ?>/settings/friends/?acceptid=<?php echo $__url_useraccount->GetUsername(); ?>">Accept?</a></p>
 		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
-		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval...</p>
+		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval.</p>
 		<hr/>
 <?php
 	}

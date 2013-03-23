@@ -145,11 +145,11 @@ while ($row = $q->fetch_assoc()) {
 			<h3 style="margin-top: 40px;"><a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/"><?php echo $account->GetNickname(); ?></a></h3>
 			<div>
 <?php if ($did_add): ?>
-			Friends for <?php echo time_elapsed_string($row['accepted_on_secs']); ?>! <button class="btn btn-danger pull-right" onclick="RemoveFriend('<?php echo $account->GetUsername(); ?>')">Unfriend!</button>
+			You have been friends with <?php echo $account->GetNickname(); ?> for <?php echo time_elapsed_string($row['accepted_on_secs']); ?>! <button class="btn btn-danger pull-right" onclick="RemoveFriend('<?php echo $account->GetUsername(); ?>')">Unfriend!</button>
 <?php elseif ($row['added_by_yourself'] == 1): ?>
-			Still hasn't responded to your invite for about <?php echo time_elapsed_string($row['added_on_secs']); ?>... <button class="btn btn-danger pull-right" onclick="RemoveFriend('<?php echo $account->GetUsername(); ?>')">Cancel?</button>
+			You are still awaiting a response for <?php echo time_elapsed_string($row['added_on_secs']); ?>... <button class="btn btn-danger pull-right" onclick="RemoveFriend('<?php echo $account->GetUsername(); ?>')">Cancel?</button>
 <?php elseif ($row['added_by_yourself'] == 0): ?>
-			Waiting for approval for about <?php echo time_elapsed_string($row['added_on_secs']); ?>... <button class="btn btn-danger pull-right" onclick="AcceptFriend('<?php echo $account->GetUsername(); ?>')">Accept now?</button>
+			<?php echo $account->GetNickname(); ?> sent this request <?php echo time_elapsed_string($row['added_on_secs']); ?> ago... <button class="btn btn-danger pull-right" onclick="AcceptFriend('<?php echo $account->GetUsername(); ?>')">Accept now?</button>
 <?php endif; ?>
 			</div>
 		</div>
