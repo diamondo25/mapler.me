@@ -361,7 +361,7 @@ WHERE
 function GetCharacterName($id) {
 	global $__database;
 
-	$q = $__database->query("SELECT name FROM characters WHERE id = '".intval($id)."'");
+	$q = $__database->query("SELECT name FROM characters WHERE id = ".intval($id));
 	if ($q->num_rows >= 1) {
 		$tmp = $q->fetch_row();
 		$q->free();
@@ -369,6 +369,37 @@ function GetCharacterName($id) {
 	}
 	$q->free();
 	return 'Unknown Character';
+}
+
+function GetFriendStatus($id) {
+	global $__database, $_loginaccount;
+
+	$q = $__database->query("SELECT FriendStatus(".intval($id).", ".$_loginaccount->GetID().")");
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0];
+}
+
+function AccountExists($name) {
+	global $__database;
+
+	$q = $__database->query("SELECT COUNT(*) FROM accounts WHERE username = '".$__database->real_escape_string($name)."'");
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0] != 0;
+}
+
+function GetAccountID($name) {
+	global $__database;
+
+	$q = $__database->query("SELECT id FROM accounts WHERE username = '".$__database->real_escape_string($name)."'");
+	if ($q->num_rows == 0) {
+		$q->free();
+		return NULL;
+	}
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0];
 }
 
 function GetMapname($id, $full = true) {

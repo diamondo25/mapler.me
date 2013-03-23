@@ -28,7 +28,7 @@ LEFT JOIN
 	ON
 		social_statuses.account_id = accounts.id
 WHERE
-	override = 1 OR account_id = '".$__database->real_escape_string($_loginaccount->GetID())."'
+	override = 1 OR account_id = ".$_loginaccount->GetID()." OR FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS'
 ORDER BY
 	secs_since ASC
 ");

@@ -9,9 +9,12 @@ class Account {
 			$_accountrank,		$_premiumtill,		$_bio,
 			$_configuration;
 	
-	public static function Load($username) {
+	public static function Load($input) {
 		global $__database;
-		$q = $__database->query("SELECT * FROM accounts WHERE username = '".$__database->real_escape_string($username)."'");
+		if (is_numeric($input))
+			$q = $__database->query("SELECT * FROM accounts WHERE id = ".$input);
+		else
+			$q = $__database->query("SELECT * FROM accounts WHERE username = '".$__database->real_escape_string($input)."'");
 		if ($q->num_rows > 0) {
 			$account = new Account($q->fetch_assoc());
 			return $account;
@@ -127,6 +130,13 @@ WHERE
 		if ($save) {
 			$__database->query("UPDATE accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
 		}
+	}
+	
+	// Configuraton functions
+	
+	public function GetMainCharacterName() {
+		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+		return $config['main_character'];
 	}
 }
 

@@ -14,8 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 
 
 ?>
-
-		<div class="span12">
 			<p class="lead">Profile <sub>(Profile settings and Options)</sub></p>
 			<form class="form-horizontal" method="post">
 				<div class="control-group">
@@ -48,4 +46,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 					</div>
 				</div>
 			</form>
-		</div>

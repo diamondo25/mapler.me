@@ -14,5 +14,6 @@ function BuildURL($name, $url) {
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
 				<?php BuildURL('Accounts', '/settings/accounts/'); ?>
 				<?php BuildURL('Characters', '/settings/characters/'); ?>
+				<?php BuildURL('Friends', '/settings/friends/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>
 				<?php //BuildURL('Memberships', '/panel/settings/memberships/'); ?>

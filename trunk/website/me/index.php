@@ -48,10 +48,6 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
 
 require_once __DIR__.'/../inc/me_header.template.php';
 
-?>
-
-<?php
-
 
 $q = $__database->query("
 SELECT

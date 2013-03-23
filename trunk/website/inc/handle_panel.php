@@ -12,14 +12,15 @@ if (!file_exists($page)) {
 }
 
 require_once __DIR__.'/settings.header.template.php';
-
 if ($_GET['type'] == '') {
 	require_once __DIR__.'/panel_settings_menu.php';
 }
 ?>
-<div class="row">
+		<div class="row">
+			<div class="span12">
 <?php require_once $page; ?>
-</div>
+			</div>
+		</div>
 <?php 
 require_once __DIR__.'/footer.php';
 ?>

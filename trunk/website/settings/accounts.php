@@ -1,5 +1,3 @@
-		<div class="span12">
-		
 <script type="text/javascript">
 function RemoveAccount(id) {
 	if (confirm("Are you sure you want to delete this account? Doing so will remove all characters aswell!!!! THIS IS IRREVERSIBLE!!!")) {
@@ -182,4 +180,3 @@ GROUP BY
 			</div>
 		</form>
 <?php endif; ?>
-		</div>

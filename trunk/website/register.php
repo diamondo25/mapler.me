@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__.'/inc/header.php';
 
+$username_regex = "/([\w\d]+)/";
+
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname", "key"), $errorList)) {
@@ -37,6 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$len = strlen($username);
 			if ($len < 4 || $len > 20) {
 				$error = "A Mapler.me username has to be between four and twenty characters long.";
+				$errorList['username'] = true;
+			}
+			elseif (preg_match($username_regex, $username) == 0) {
+				$error = "A Mapler.me username may only hold alphanumeric characters.";
 				$errorList['username'] = true;
 			}
 			else {
@@ -162,7 +168,7 @@ else {
 <?php
 	
 	$form = new Form('', 'form-horizontal');
-	$form->AddBlock('Display Name:<br/><sup>(your profile name, such as name.mapler.me).</sup>', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
+	$form->AddBlock('Display Name:<br/><sup>(your profile name, such as <strong>name</strong>.mapler.me).</sup>', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->AddBlock('Password<br/><sup>(again for confirmation)</sup>', 'password2', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->AddEmptyBlock();

@@ -34,12 +34,8 @@ while ($row = $q->fetch_assoc()) {
 	$characternames[] = $row['name'];
 }
 $q->free();
-?>
 
-		<div class="span12">
-<?php
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
+<?phpif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
 	$char_options = $_POST['char_shown_option'];
 	$main_char = $_POST['main_character'];
 	$error = '';
@@ -154,4 +150,3 @@ foreach ($cache as $row) {
 					<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>
 			</div>
 			</form>
-		</div>
