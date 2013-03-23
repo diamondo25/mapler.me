@@ -35,7 +35,7 @@ while ($row = $q->fetch_assoc()) {
 }
 $q->free();
 
-<?php if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
 	$char_options = $_POST['char_shown_option'];
 	$main_char = $_POST['main_character'];
 	$error = '';
