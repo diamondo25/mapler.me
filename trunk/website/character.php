@@ -41,9 +41,16 @@ if ($q->num_rows == 0) {
 }
 else {
 	$character_info = $q->fetch_assoc();
+	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
 	$stat_addition = GetCorrectStat($internal_id);
 ?>
+<div class="row">
+	<div class="span12">
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/"><?php echo $account->GetUsername(); ?></a> -&gt; <?php echo $character_info['name']; ?>
+		<hr />
+	</div>
+</div>
 
 <div class="row">
 	<div class="span3">
