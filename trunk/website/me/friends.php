@@ -53,7 +53,6 @@ while ($row = $q->fetch_assoc()) {
 
 $characters_per_row = 3;
 $i = 0;
-foreach ($cache as $row) {
 	if ($i % $characters_per_row == 0) {
 		if ($i > 0) {
 ?>
