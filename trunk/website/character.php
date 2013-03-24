@@ -47,8 +47,7 @@ else {
 ?>
 <div class="row">
 	<div class="span12">
-		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/"><?php echo $account->GetUsername(); ?></a> -&gt; <?php echo $character_info['name']; ?>
-		<hr />
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
 	</div>
 </div>
 

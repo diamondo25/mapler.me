@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 				// Send mail?
 ?>
-<p class="alert-info alert">Successfully accepted <?php echo $name; ?>'s invite!<p>
+<p class="alert-info alert">Successfully accepted <?php echo $name; ?>'s request!<p>
 <?php
 			}
 		}
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 				// Send mail?
 ?>
-<p class="alert-info alert">Successfully invited <?php echo $name; ?> for a friendship!<p>
+<p class="alert-info alert">Successfully sent <?php echo $name; ?> a friend request!<p>
 <?php
 			}
 		}
