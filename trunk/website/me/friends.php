@@ -51,23 +51,32 @@ while ($row = $q->fetch_assoc()) {
 		
 	$did_add = $row['accepted_on'] != NULL;
 
-?>
-
-	<!-- Character Display -->
-
-<?php
-if (count($row) == 0) {
-?>
+	if (count($row) = null) {
+	?>
 	<center>
 		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
 		<p><?php echo $__url_useraccount->GetNickName(); ?> hasn't added friends yet!</p>
 	</center>
 <?php
 }
-?>
 
-<?php if ($did_add): ?>
+$characters_per_row = 3;
+$i = 0;
+foreach ($cache as $row) {
+	if ($i % $characters_per_row == 0) {
+		if ($i > 0) {
+?>
+		</div>
+<?php
+		}
+?>
 		<div class="row" style="float: right;">
+<?php
+	}
+	$i++;
+
+if ($did_add):
+?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
 			<div class="caption"><?php echo $account->GetNickname(); ?></div>
 				<center>
