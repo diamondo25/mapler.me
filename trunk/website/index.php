@@ -14,7 +14,7 @@ if ($_loggedin) {
 ?>
 <meta http-equiv="refresh" content="0;URL='/stream/'" />
 <?php
-die;
+	die;
 }
 ?>
 

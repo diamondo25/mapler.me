@@ -1,26 +1,31 @@
+<?php
+if (isset($__url_useraccount)) {
+	$title = $__url_useraccount->GetNickname()." &middot; Mapler.me";
+}
+else {
+	$title = "Mapler.me &middot; MapleStory Social Network";
+}
+
+if ($isloggedin) {
+	$notifications = GetNotification();
+	if ($notifications > 0)
+		$title = '('.$notifications.') '.$title;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php
-		if (!isset($__url_useraccount)):
-	?>
-	<title>
-	(<?php echo GetNotification($tmp); ?>) Mapler.me &middot; MapleStory Social Network</title>
-	<?php
-		else:
-	?>
-	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
-	<?php
-		endif;
-	?>  
+	<title><?php echo $title; ?></title> 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me, Mapler Me, Mapler.me, Nexon, Nexon America,
 	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS, <?php
-		if (isset($__url_useraccount)):
+	if (isset($__url_useraccount)):
 		echo $__url_useraccount->GetNickname().', '.$__url_useraccount->GetNickname()."'s Mapler.me";
-		endif;
+	endif;
 	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	

@@ -138,6 +138,15 @@ WHERE
 		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 		return $config['main_character'];
 	}
+	
+	public function GetCharacterDisplayValue($charname) {
+		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+		
+		if ($config['characters'] == NULL) return 0;
+		if (isset($config['characters'][$charname])) return $config['characters'][$charname];
+		
+		return 0;
+	}
 }
 
 ?>

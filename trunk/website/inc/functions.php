@@ -374,6 +374,32 @@ function GetCharacterName($id) {
 	return 'Unknown Character';
 }
 
+function GetCharacterAccountId($id) {
+	global $__database;
+
+	$q = $__database->query("SELECT GetCharacterAccountId(".intval($id).")");
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0];
+}
+
+function GetCharacterStatus($id, $account = NULL) {
+	global $__database;
+	
+	if ($account == NULL) {
+		$q = $__database->query("SELECT * FROM accounts WHERE id = GetCharacterAccountId(".intval($id).")");
+		$account = new Account($q->fetch_assoc());
+	}
+	
+	$name = GetCharacterName($id);
+	
+	$value = $account->GetCharacterDisplayValue($name);
+	
+	unset($account);
+	
+	return $value;
+}
+
 function GetFriendStatus($id) {
 	global $__database, $_loginaccount;
 
@@ -406,7 +432,7 @@ function GetAccountID($name) {
 }
 
 // only notifications will be friend requests for now.
-function GetNotification($id) {
+function GetNotification() {
 	global $__database, $_loginaccount;
 
 	$q = $__database->query("SELECT COUNT(*) FROM friend_list WHERE friend_id = ".$_loginaccount->GetId()." AND accepted_on IS NULL");
