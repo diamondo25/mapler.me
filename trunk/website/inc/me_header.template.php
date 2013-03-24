@@ -17,14 +17,17 @@ while ($row = $q->fetch_assoc()) {
 }
 $q->free();
 
-if ($__url_useraccount->GetID() == $_loginaccount->GetID()) {
-	$is_self = true;
-}
-else {
-	$is_self = false;
-	$q = $__database->query("SELECT FriendStatus(".$__url_useraccount->GetID().", ".$_loginaccount->GetID().")");
-	$row = $q->fetch_row();
-	$friend_status = $row[0];
+if ($_loggedin) {
+
+	if ($__url_useraccount->GetID() == $_loginaccount->GetID()) {
+		$is_self = true;
+	}
+	else {
+		$is_self = false;
+		$q = $__database->query("SELECT FriendStatus(".$__url_useraccount->GetID().", ".$_loginaccount->GetID().")");
+		$row = $q->fetch_row();
+		$friend_status = $row[0];
+	}
 }
 ?>
 
@@ -103,7 +106,7 @@ unset($lastonline);
 ?>
 		<hr/>
 <?php
-if (!$is_self) {
+if ($_loggedin && !$is_self) {
 	if ($friend_status == 'FRIENDS') {
 ?>
 
