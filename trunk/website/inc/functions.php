@@ -402,6 +402,16 @@ function GetAccountID($name) {
 	return $tmp[0];
 }
 
+// only notifications will be friend requests for now.
+function GetNotification($id) {
+	global $__database, $_loginaccount;
+
+	$q = $__database->query("SELECT COUNT(*) FROM friend_list WHERE friend_id = ".$_loginaccount->GetId()." AND accepted_on IS NULL");
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0];
+}
+
 function GetMapname($id, $full = true) {
 	$map = GetMapleStoryString("map", $id, "name");
 	if ($full) {
