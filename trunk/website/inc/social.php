@@ -62,16 +62,26 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 <p class="lead alert-error alert">Please wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?> before posting another message. :)</p>
 <?php else: ?>
 
-<div class="row">
-	<form method="post">
-		<div class="span4">
-			<textarea name="content" class="span4 status" style="height:100px; max-height:100px; padding-right:50px;" placeholder="Type your status here!"></textarea>
-		</div>
-		<button type="submit" class="btn btn-large" style="padding:16px; position:relative; top:15px;">Post!</button>
-		<br />
-		<br />
-		<input type="checkbox" name="dc" value="1"/> Disable commenting?
+<div id="PostStatus" class="modal-share hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+style="-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;">
+  <div class="modal-header">
+    <h3 id="myModalLabel">Post a status?</h3>
+  </div>
+  <div class="modal-body">
+  	<form method="post">
+    	<textarea name="content" style="height:100px; max-height:100px; width:550px; max-width: 550px; border: none;" placeholder="Type your status here!"></textarea>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-large">Post!</button>
+    <button type="button" class="btn btn-large" data-toggle="button" name="dc" value="1">Disable commenting?</button>
 	</form>
+
+  </div>
 </div>
 
 <?php endif; ?>

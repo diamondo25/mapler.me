@@ -101,6 +101,12 @@ if ($_loggedin):
 							<span class="notification-badge"><?php echo GetNotification($tmp); ?></span>
 						</a>
 					</li>
+					
+					<li>
+						<a href="#PostStatus" data-toggle="modal">+Post</a>
+					</li>
+					
+					
 <?php
 endif;
 ?>
@@ -229,6 +235,8 @@ endif;
 	</div>
 
 	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
+	
+	<?php require_once __DIR__.'/../inc/social.php'; ?>
 	
 <?php
 $ip = "mc.craftnet.nl";

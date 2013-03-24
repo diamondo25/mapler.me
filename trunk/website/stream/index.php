@@ -9,13 +9,7 @@ else:
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 	$has_characters = !empty($char_config['main_character']);
-
-?>
-
-<p><b>Stream</b> | What do you want to say, <?php echo $_loginaccount->GetFullName(); ?>?</p>
-<?php
-include('../inc/social.php');
-
+	
 $q = $__database->query("
 SELECT
 	social_statuses.*,
