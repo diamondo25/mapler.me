@@ -51,15 +51,6 @@ while ($row = $q->fetch_assoc()) {
 		
 	$did_add = $row['accepted_on'] != NULL;
 
-	if (count($row) = null) {
-	?>
-	<center>
-		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
-		<p><?php echo $__url_useraccount->GetNickName(); ?> hasn't added friends yet!</p>
-	</center>
-<?php
-}
-
 $characters_per_row = 3;
 $i = 0;
 foreach ($cache as $row) {
