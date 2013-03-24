@@ -118,7 +118,7 @@ if ($_loggedin):
 									<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
 										<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
 									<div class="info">
-										<p><?php echo $_loginaccount->GetFullName(); ?></p>
+										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
 										<!-- function needed that displays rank as text instead off number -->
 										<span class="ct-label">Member</span>
 									</div>

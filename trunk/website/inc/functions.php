@@ -5,6 +5,9 @@ session_start();
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 
+//for now.
+error_reporting(0);
+
 require_once __DIR__.'/database.php';
 require_once __DIR__.'/class_account.php';
 require_once __DIR__.'/class_inventory.php';

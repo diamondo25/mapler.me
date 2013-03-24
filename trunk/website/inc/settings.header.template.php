@@ -50,14 +50,45 @@
 				
 					<!-- Login / Main Menu -->	
 					<ul class="nav hidden-phone pull-right">
+<?php
+if ($_loggedin):
+?>					
+					<li>
+						<a id="notify" href="/settings/friends/">
+							<span class="sprite notify"></span>
+							<span class="notification-badge"><?php echo GetNotification($tmp); ?></span>
+						</a>
+					</li>
+<?php
+endif;
+?>
+
 						<li class="dropdown">
 <?php
 if ($_loggedin):
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><?php echo $_loginaccount->GetFullName(); ?> <b class="caret"></b></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Me <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
+							
+							<?php
+							$main_char = $_loginaccount->GetMainCharacterName();
+							if ($main_char == null)
+								$main_char = 'inc/img/no-character.gif';
+							else
+								$main_char = 'avatar/'.$main_char;
+							?>
+								<li id="user-dropdown">
+									<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
+										<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
+									<div class="info">
+										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
+										<!-- function needed that displays rank as text instead off number -->
+										<span class="ct-label">Member</span>
+									</div>
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php

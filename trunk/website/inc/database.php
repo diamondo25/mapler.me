@@ -44,7 +44,7 @@ foreach ($this->queries as $query) {
 // Connect to the database
 $__database = new ExtendedMysqli("stats.craftnet.nl", "maplestats", "maplederp", "maplestats");
 if ($__database->connect_errno != 0) {
-	die("<strong>Failed to connect to the MySQL server: ".$__database->connect_error." (errno: ".$__database->connect_errno.")</strong>");
+	die("<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>");
 }
 
 ?>
