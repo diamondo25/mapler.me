@@ -50,21 +50,9 @@ while ($row = $q->fetch_assoc()) {
 		$main_char = 'avatar/'.$main_char;
 		
 	$did_add = $row['accepted_on'] != NULL;
-
-$characters_per_row = 3;
-$i = 0;
-	if ($i % $characters_per_row == 0) {
-		if ($i > 0) {
-?>
-		</div>
-<?php
-		}
 ?>
 		<div class="row" style="float: right;">
 <?php
-	}
-	$i++;
-
 if ($did_add):
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
@@ -77,9 +65,7 @@ if ($did_add):
 					<br />
 				</center>
 			</div>
-<?php endif; ?>
-
-<?php
+<?php endif;
 }
 ?>
 		</div>
