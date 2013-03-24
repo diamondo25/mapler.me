@@ -39,7 +39,9 @@ FROM
 ORDER BY
 	a.accepted_on DESC
 ");
-
+?>
+<div class="row" style="float: right;">
+<?php
 while ($row = $q->fetch_assoc()) {
 	$account = Account::Load($row['account_id']);
 	
@@ -51,7 +53,6 @@ while ($row = $q->fetch_assoc()) {
 		
 	$did_add = $row['accepted_on'] != NULL;
 ?>
-		<div class="row" style="float: right;">
 <?php
 if ($did_add):
 ?>
@@ -68,7 +69,6 @@ if ($did_add):
 <?php endif;
 }
 ?>
-		</div>
 </div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>
