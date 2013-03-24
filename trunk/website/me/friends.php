@@ -43,7 +43,7 @@ ORDER BY
 while ($row = $q->fetch_assoc()) {
 	$account = Account::Load($row['account_id']);
 	
-	$main_char = $__url_useraccount->GetMainCharacterName();
+	$main_char = $account->GetMainCharacterName();
 	if ($main_char == null)
 		$main_char = 'inc/img/no-character.gif';
 	else
@@ -67,9 +67,6 @@ if (count($row) == 0) {
 ?>
 
 <?php if ($did_add): ?>
-			You have been friends with <?php echo $account->GetNickname(); ?> for <?php echo time_elapsed_string($row['accepted_on_secs']); ?>! <button class="btn btn-danger pull-right" onclick="RemoveFriend('<?php echo $account->GetUsername(); ?>')">Unfriend!</button>
-<?php endif; ?>
-
 		<div class="row" style="float: right;">
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
 			<div class="caption"><?php echo $account->GetNickname(); ?></div>
@@ -81,6 +78,7 @@ if (count($row) == 0) {
 					<br />
 				</center>
 			</div>
+<?php endif; ?>
 
 <?php
 }
