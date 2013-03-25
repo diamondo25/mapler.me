@@ -98,7 +98,7 @@ if ($_loggedin):
 					<li>
 						<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
 							<span class="sprite notify"></span>
-							<span class="notification-badge"><?php echo GetNotification($tmp); ?></span>
+							<span class="notification-badge"><?php echo GetNotification(); ?></span>
 						</a>
 					</li>
 					
