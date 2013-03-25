@@ -74,6 +74,8 @@ if (isset($__url_useraccount)):
 ?>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
+								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Friends</a></li>
+								
 <?php
 // Display normal pages if not a subdomain
 else:
@@ -137,6 +139,7 @@ if ($_loggedin):
 								</li>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php
@@ -185,25 +188,47 @@ endif;
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
 
 							<ul class="dropdown-menu">
-<?php
+							<?php
 if ($_loggedin):
 ?>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
+							<?php
+							$main_char = $_loginaccount->GetMainCharacterName();
+							if ($main_char == null)
+								$main_char = 'inc/img/no-character.gif';
+							else
+								$main_char = 'avatar/'.$main_char;
+							?>
+								<li id="user-dropdown">
+									<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
+										<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
+									<div class="info">
+										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
+										<!-- function needed that displays rank as text instead off number -->
+										<span class="ct-label">Member</span>
+									</div>
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
+								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php
-if ($_loginaccount->GetAccountRank() == RANK_ADMIN):
+if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Update Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Manage Website</a></li>
 <?php
 endif;
 ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
+							</ul>
 <?php
 else:
 ?>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Login <b class="caret"></b></a>
+							<ul class="dropdown-menu">
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
 										<div class="controls">
@@ -222,6 +247,7 @@ else:
 										</div>
 									</div>
 								</form>
+
 <?php
 endif;
 ?>

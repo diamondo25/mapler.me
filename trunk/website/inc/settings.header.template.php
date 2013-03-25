@@ -89,6 +89,7 @@ if ($_loggedin):
 								</li>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php
@@ -140,8 +141,9 @@ endif;
 <?php
 if ($_loggedin):
 ?>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">My Profile</a></li>
-								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">My Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
+								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
 						
 <?php
 if ($_loginaccount->GetAccountRank() == RANK_ADMIN):

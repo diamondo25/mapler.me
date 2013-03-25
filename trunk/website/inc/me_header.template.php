@@ -89,13 +89,13 @@ endif;
 		
 		<br />
 		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br/>
-		<span class="ct-label">Member</span>
 			<small class="name_extra" style="margin-top:10px;">	
 			<?php if ($__url_useraccount->GetBio() != null): ?>
 				<?php echo $__url_useraccount->GetBio(); ?>
 			<?php endif; ?>
 			</small>
 		</p>
+		<span class="ct-label">Member</span>
 		<hr/>
 <?php
 foreach ($lastonline as $row) {

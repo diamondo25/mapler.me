@@ -48,8 +48,8 @@
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
 	<script src="//<?php echo $domain; ?>/inc/js/script.player.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
 <?php endif; ?>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
-	<script src="//isotope.metafizzy.co/jquery.isotope.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
 
@@ -88,41 +88,15 @@
         </script>
 
 	<script type="text/javascript">
-    $(document).ready(function() {
-        var container = $('#character-wall');
-
-        if (Modernizr.touch) {
-            container.masonry({
-                itemSelector : '.character-brick',
-                gutterWidth: 20,
-
-                    isFitWidth: true,
-
-                isAnimated: false
-            }).imagesLoaded(function() {
-                container.masonry('reload');
-            });
-        }
-		else {
-            container.masonry({
-                itemSelector : '.character',
-                gutterWidth: 14,
-
-                    isFitWidth: true,
-
-                isAnimated: true
-            }).imagesLoaded(function() {
-                container.masonry('reload');
-            });
-        }
-
-		container.isotope({
-		  // options
-		  itemSelector : '.item',
-		  layoutMode : 'fitRows'
-		});
-
-    });
+		$(window).load(function(){
+			$('.stream_display').isotope({
+  // options
+  			itemSelector : '.status',
+  			layoutMode : 'masonry',
+  			itemPositionDataEnabled: true,
+  			columnWidth: 240
+  			});
+  		})
 </script>
 
 </body>
