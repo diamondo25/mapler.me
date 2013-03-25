@@ -5,6 +5,13 @@ session_start();
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 
+require_once __DIR__.'/database.php';
+require_once __DIR__.'/class_account.php';
+require_once __DIR__.'/class_inventory.php';
+require_once __DIR__.'/domains.php';
+require_once __DIR__.'/ranks.php';
+require_once __DIR__.'/functions.datastorage.php';
+
 //for now.
 if($_loggedin || $_loginaccount->GetAccountRank() = RANK_ADMIN) 
 { 
@@ -15,12 +22,6 @@ else
   ini_set('display_errors','Off');
 }
 
-require_once __DIR__.'/database.php';
-require_once __DIR__.'/class_account.php';
-require_once __DIR__.'/class_inventory.php';
-require_once __DIR__.'/domains.php';
-require_once __DIR__.'/ranks.php';
-require_once __DIR__.'/functions.datastorage.php';
 
 require_once __DIR__.'/bb/Parser.php';
 $parser = new JBBCode\Parser();
