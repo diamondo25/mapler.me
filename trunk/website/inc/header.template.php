@@ -62,7 +62,7 @@ if (!isset($__url_useraccount)):
                             
 <?php
 // Is settings
-else if (strpos($_SERVER['REQUEST_URI'], '/settings/'.$settingpage.'') !== FALSE):
+else if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE):
 require_once('panel_settings_menu.php');
 // Is a subdomain
 else:
