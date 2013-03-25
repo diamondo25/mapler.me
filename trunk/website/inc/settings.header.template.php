@@ -1,31 +1,25 @@
-<?php
-if (isset($__url_useraccount)) {
-	$title = $__url_useraccount->GetNickname()." &middot; Mapler.me";
-}
-else {
-	$title = "Mapler.me &middot; MapleStory Social Network";
-}
-
-if ($_loggedin) {
-	$notifications = GetNotification();
-	if ($notifications > 0)
-		$title = '('.$notifications.') '.$title;
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?php echo $title; ?></title> 
+	<?php
+		if (!isset($__url_useraccount)):
+	?>
+	<title>Mapler.me &middot; MapleStory Social Network</title>
+	<?php
+		else:
+	?>
+	<title><?php echo $__url_useraccount->GetNickname(); ?> &middot; Mapler.me</title>
+	<?php
+		endif;
+	?>  
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="keywords" content="maplestory, maple, story, mmorpg, maple story, maplerme, mapler, me, Mapler Me, Mapler.me, Nexon, Nexon America,
 	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS, <?php
-	if (isset($__url_useraccount)):
+		if (isset($__url_useraccount)):
 		echo $__url_useraccount->GetNickname().', '.$__url_useraccount->GetNickname()."'s Mapler.me";
-	endif;
+		endif;
 	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	
@@ -51,43 +45,7 @@ if ($_loggedin) {
 					<?php endif; ?>"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:0px;width:60px;"/></a>
 				<div class="nav-collapse">
 					<ul class="nav hidden-phone">
-						 <li class="dropdown">
-<?php
-// Not a subdomain
-if (!isset($__url_useraccount)):
-?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
-                            
-<?php
-// Is a subdomain
-else:
-?>
-
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>                         
-<?php
-endif;
-?>                      
-							<ul class="dropdown-menu">
-<?php
-// Display subdomain pages related to the user
-if (isset($__url_useraccount)):
-?>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
-<?php
-// Display normal pages if not a subdomain
-else:
-?>
-								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
-								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do*</a></li><?php endif; ?>
-								<li class="divider"></li>
-								<li><a href="//status.mapler.me/">Status</a></li>
-<?php
-endif;
-?>
-					 		</ul>
-						</li>
+<?php require_once('panel_settings_menu.php'); ?>
 					</ul>
 				
 					<!-- Login / Main Menu -->	
@@ -101,12 +59,6 @@ if ($_loggedin):
 							<span class="notification-badge"><?php echo GetNotification(); ?></span>
 						</a>
 					</li>
-					
-					<li>
-						<a href="#PostStatus" data-toggle="modal">+Post</a>
-					</li>
-					
-					
 <?php
 endif;
 ?>
@@ -235,8 +187,6 @@ endif;
 	</div>
 
 	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
-	
-	<?php require_once __DIR__.'/../inc/social.php'; ?>
 	
 <?php
 $ip = "mc.craftnet.nl";
