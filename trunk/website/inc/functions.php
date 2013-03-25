@@ -12,17 +12,6 @@ require_once __DIR__.'/domains.php';
 require_once __DIR__.'/ranks.php';
 require_once __DIR__.'/functions.datastorage.php';
 
-//for now.
-if($_loggedin || $_loginaccount->GetAccountRank() = RANK_ADMIN) 
-{ 
-  ini_set('display_errors','On'); 
-} 
-else 
-{ 
-  ini_set('display_errors','Off');
-}
-
-
 require_once __DIR__.'/bb/Parser.php';
 $parser = new JBBCode\Parser();
 $parser->loadDefaultCodes();
