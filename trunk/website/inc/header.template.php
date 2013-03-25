@@ -12,6 +12,8 @@ if ($_loggedin) {
 		$title = '('.$notifications.') '.$title;
 }
 
+//for checking if settings pages.
+$settingpage = $_GET['type'];
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +61,9 @@ if (!isset($__url_useraccount)):
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
                             
 <?php
+// Is settings
+else if (strpos($_SERVER['REQUEST_URI'], '/settings/'.$settingpage.''):
+require_once('panel_settings_menu.php');
 // Is a subdomain
 else:
 ?>
@@ -75,6 +80,9 @@ if (isset($__url_useraccount)):
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
 <?php
+// settings
+else if (strpos($_SERVER['REQUEST_URI'], '/settings/'):
+require_once('panel_settings_menu.php');
 // Display normal pages if not a subdomain
 else:
 ?>
