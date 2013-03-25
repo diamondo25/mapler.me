@@ -11,6 +11,51 @@ ORDER BY
 	last_login ASC
 ");
 
+$char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+
+
+$x = $__database->query("
+SELECT
+	chr.id,
+	chr.name,
+	w.world_name
+FROM
+	characters chr
+LEFT JOIN
+	users usr
+	ON
+		usr.ID = chr.userid
+LEFT JOIN
+	world_data w
+	ON
+		w.world_id = chr.world_id
+WHERE
+	usr.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
+ORDER BY
+	chr.world_id ASC,
+	chr.level DESC
+");
+
+$cache = array();
+
+$selected_main_character = $char_config['main_character'];
+$character_display_options = $char_config['characters'];
+
+while ($row = $x->fetch_assoc()) {
+	if (isset($character_display_options[$row['name']])) {
+		if ($character_display_options[$row['name']] == 2) { // Always hide... :)
+			continue;
+		}
+	}
+	$cache[] = $row;
+}
+$x->free();
+
+$has_characters = count($cache) != 0;
+$main_character_info = $has_characters ? $cache[0] : null;
+$main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
+$main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
+
 $lastonline = array();
 while ($row = $q->fetch_assoc()) {
 	$lastonline[] = $row;

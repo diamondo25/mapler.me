@@ -74,7 +74,7 @@ if (isset($__url_useraccount)):
 ?>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Friends</a></li>
+								<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends">Friends</a></li>
 								
 <?php
 // Display normal pages if not a subdomain

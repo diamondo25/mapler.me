@@ -1,33 +1,6 @@
 <?php 
 require_once __DIR__.'/../inc/header.php';
 $statusid = htmlentities($_GET['id']);
-?>
-
-<script type="text/javascript">
-function RemoveStatus(id) {
-	if (confirm("Are you sure you want to delete this status?")) {
-		document.location.href = '?removeid=' + id;
-	}
-}
-</script>
-<?php
-
-// Preventing spamming of form.
-
-// If antispam passes, push status
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
-	// Removing status
-	
-	$id = $__database->real_escape_string($_GET['removeid']);
-	
-	$__database->query("DELETE FROM social_statuses WHERE id = '".$id."' AND account_id = ".$_loginaccount->GetId());
-?>
-<p class="lead alert-info alert">The status was successfully deleted.</p>
-<?php
-}
-
-?>
-    <?php
     
 $q = $__database->query("
 SELECT
