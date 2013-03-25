@@ -103,7 +103,7 @@ if (count($cache) == 0) { ?>
 
 foreach ($cache as $row) {
 ?>
-			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?>" style="width:288px; margin:10px;">
+			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?>">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">
 					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
 				</div>

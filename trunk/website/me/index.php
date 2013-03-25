@@ -87,7 +87,7 @@ foreach ($social_cache as $row) {
 ?>
 			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?>">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">
-					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
+					<?php echo $row['nickname'];?> said:
 				</div>
 				<br />
 				<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
