@@ -6,7 +6,7 @@ else {
 	$title = "Mapler.me &middot; MapleStory Social Network";
 }
 
-if ($isloggedin) {
+if ($_loggedin) {
 	$notifications = GetNotification();
 	if ($notifications > 0)
 		$title = '('.$notifications.') '.$title;

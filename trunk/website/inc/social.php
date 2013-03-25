@@ -1,3 +1,7 @@
+<?php
+if ($_loggedin) {
+?>
+
 <script type="text/javascript">
 function RemoveStatus(id) {
 	if (confirm("Are you sure you want to delete this status?")) {
@@ -84,4 +88,5 @@ user-select: none;">
   </div>
 </div>
 
-<?php endif; ?>
+<?php endif;
+} ?>
