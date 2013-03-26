@@ -91,10 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_
 ?>
 		</pre>
 
-		<h4>Update the sidebar:</h4>
+		<h4>Change the stream notice:</h4>
 
 		<form method="post">
-			<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php echo file_get_contents('sidebar.txt'); ?> </textarea>
+			<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php echo file_get_contents('notice.txt'); ?> </textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
 
@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 	$updatetxt = $_POST['updatetxt']; //not protected from sql injection to prevent html / php added from derping.
 
-	$filename = 'sidebar.txt';
+	$filename = 'notice.txt';
 	$somecontent = $updatetxt;
 
 	if (is_writable($filename)) {

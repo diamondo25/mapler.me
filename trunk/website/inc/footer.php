@@ -42,15 +42,6 @@
 }
 ?>
 
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/scripts.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
-<?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
-	<script src="//<?php echo $domain; ?>/inc/js/script.player.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
-<?php endif; ?>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
-
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -86,18 +77,6 @@
         	(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
         	}());
         </script>
-
-	<script type="text/javascript">
-		$(window).load(function(){
-			$('.stream_display').isotope({
-  // options
-  			itemSelector : '.status',
-  			layoutMode : 'masonry',
-  			itemPositionDataEnabled: true,
-  			columnWidth: 240
-  			});
-  		})
-</script>
 
 </body>
 </html>

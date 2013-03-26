@@ -36,6 +36,35 @@ if ($_loggedin) {
 <?php endif; ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
+	<script src="//<?php echo $domain; ?>/inc/js/scripts.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
+<?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
+	<script src="//<?php echo $domain; ?>/inc/js/script.player.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
+<?php endif; ?>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
+	
+		<script type="text/javascript">
+		$(function() {
+			$('.stream_display').css("display","none");
+			$('.load').css("display","block");
+			});
+		
+		$(window).load(function(){
+			$('.load').css("display","none");
+			$('.stream_display').css("display","block");
+			})
+		
+		$(window).load(function(){
+			$('.stream_display').isotope({
+  // options
+  			itemSelector : '.status',
+  			layoutMode : 'masonry',
+  			columnWidth: 240
+  			});
+  		})
+  		</script>
 </head>
 
 <body>

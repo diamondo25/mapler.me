@@ -95,7 +95,7 @@ html { overflow-x: hidden; }
 	hyphens:auto
 }
 
-.status {
+.status, .status-loading {
 	overflow:hidden;
 	color:#666;
 	padding:10px;
@@ -141,6 +141,10 @@ html { overflow-x: hidden; }
 
 .notification {
 	border: 1px dashed rgba(0,0,0,0.5);
+}
+
+.postplox {
+	border: 1px solid rgba(0,0,0,0.7);
 }
 
 /* Fixes for different layouts */

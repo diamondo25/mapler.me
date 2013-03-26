@@ -36,6 +36,13 @@ while ($row = $q->fetch_assoc()) {
 $q->free();
 
 ?>
+
+<div class="load status-loading" style="width:200px;margin:0 auto;">
+<center>
+<img src="//mapler.me/<?php echo $main_char; ?>"/><br/>
+-loading-</center>
+</div>
+
 <div class="stream_display">
 <?php
 
@@ -43,9 +50,9 @@ $q->free();
 
 foreach ($social_cache as $row) {
 ?>
-			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?>" style="width:288px; margin:10px;">
+			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?><?php if ($row['account_id'] == $_loginaccount->GetID()): ?> postplox<?php endif; ?>" style="width:288px; margin:10px;">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">
-					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php echo $row['nickname'];?></a> said:
+					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php if ($row['account_id'] == $_loginaccount->GetID()): ?>You<?php else: echo $row['nickname']; endif; ?></a> said:
 				</div>
 				<br />
 				<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
