@@ -26,7 +26,7 @@ namespace MPLRServer
             else
             {
                 pConnection.Logger_WriteLine("- Client lost connection with MapleStory server");
-                pConnection.SendInfoText("MapleStory is currently not connected to Mapler.me.");
+                pConnection.SendInfoText("Maplestory is closed, or not connected properly.");
             }
         }
     }
