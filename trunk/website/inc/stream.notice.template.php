@@ -5,6 +5,6 @@ if ($notice !== '') {
 <div class="status">
 <?php echo $notice; ?>
 </div>
-<?
+<?php
 }
 ?>
