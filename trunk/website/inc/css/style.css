@@ -159,6 +159,9 @@ html { overflow-x: hidden; }
 		position: relative;
 		right: 50px;
 	}
+	.dropdown:hover .dropdown-menu {
+	display: block;
+	}
 }
 
 @media (min-width: 768px) and (max-width: 979px) { 

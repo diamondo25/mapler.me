@@ -74,6 +74,7 @@ else {
 		<hr/>
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
+		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo GetCharacterChannel(); ?></p>
 		<hr/>
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -85,7 +86,7 @@ else {
 		<hr/>
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
 		<p class="side"><i class="icon-heart faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
-		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Statistics</a></p>
+		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
 	
 	<div class="span9" style="margin-left:10px;">
