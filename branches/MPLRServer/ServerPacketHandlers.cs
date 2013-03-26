@@ -1031,11 +1031,14 @@ namespace MPLRServer
             pPacket.Skip(tmp * (4 + 4));
 
             int channelid = pPacket.ReadInt();
+            pConnection.ChannelID = (byte)channelid;
+
             pPacket.Skip(1 + 4);
             pPacket.Skip(1); // Portals taken
             pPacket.Skip(4);
 
             bool isConnecting = pPacket.ReadBool();
+
             tmp = pPacket.ReadShort(); // Contains Message
             if (tmp > 0)
             {
@@ -1074,6 +1077,8 @@ namespace MPLRServer
                 CharacterData data = new CharacterData();
                 data.Decode(pConnection, pPacket);
 
+                pConnection.Logger_WriteLine("--------- Done parsing Character Info ----------");
+
                 data.SaveData(pConnection);
 
                 pConnection.CharData = data;
@@ -1101,24 +1106,21 @@ namespace MPLRServer
                 int hp = pPacket.ReadInt();
                 pConnection.CharData.Stats.HP = hp;
 
-                bool dosomething = pPacket.ReadBool();
-                if (dosomething)
+                if (pPacket.ReadBool())
                 {
                     pPacket.ReadInt();
                     pPacket.ReadInt();
                 }
+
                 MySQL_Connection.Instance.RunQuery(string.Format("UPDATE characters SET chp = {0}, map = {1}, pos = {2} WHERE internal_id = {3}", hp, mapid, mappos, pConnection.CharacterInternalID));
             }
 
-            if (!isConnecting)
-            {
-                DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
-                pConnection.Logger_WriteLine("Servertime: {0}", servertime.ToString());
-                pPacket.ReadInt(); // 100?
-                pPacket.ReadByte(); // 0
-                pPacket.ReadByte(); // 0
-                pPacket.ReadByte(); // 1
-            }
+            DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
+            pConnection.Logger_WriteLine("Servertime: {0}", servertime.ToString());
+            pPacket.ReadInt(); // 100?
+            pPacket.ReadByte(); // 0
+            pPacket.ReadByte(); // 0
+            pPacket.ReadByte(); // 1
 
             pConnection.SendTimeUpdate();
         }

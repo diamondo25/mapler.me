@@ -14,6 +14,7 @@ namespace MPLRServer
         public int CharacterID { get; set; }
         public int CharacterInternalID { get; set; }
         public byte WorldID { get; set; }
+        public byte ChannelID { get; set; }
 
         public int LastReportID { get; set; }
 

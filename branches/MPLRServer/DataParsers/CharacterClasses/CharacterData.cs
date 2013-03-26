@@ -209,7 +209,6 @@ namespace MPLRServer
 
             Quests.DecodePQ(pConnection, pPacket);
 
-            // Wildhunter
             if (GameHelper.IsWildHunter(Stats.JobID))
             {
                 pPacket.ReadByte(); // Level
@@ -260,12 +259,89 @@ namespace MPLRServer
 
             Stats.HonourLevel = pPacket.ReadInt();
             Stats.HonourExp = pPacket.ReadInt();
+
+            {
+                byte unk = pPacket.ReadByte();
+                if (unk == 1)
+                {
+                    while (true)
+                    {
+                        ushort tmp = pPacket.ReadUShort();
+                        if (tmp <= 0) break;
+
+                        while (true)
+                        {
+                            ushort tmp2 = pPacket.ReadUShort();
+                            if (tmp2 <= 0) break;
+
+                            pPacket.ReadInt();
+                            pPacket.ReadInt();
+                        }
+                    }
+                }
+                else
+                {
+                    while (true)
+                    {
+                        ushort tmp = pPacket.ReadUShort();
+                        if (tmp <= 0) break;
+
+                        pPacket.ReadUShort();
+                        pPacket.ReadInt();
+                        pPacket.ReadInt();
+                    }
+                }
+            }
+
+            if (pPacket.ReadBool())
+            {
+                // Wat.
+                ItemBase unkitem = ItemBase.DecodeItemData(pPacket);
+            }
+
+
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadByte();
+            }
+
+
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadLong();
+            }
+
+            pPacket.Skip(84); // I don't even
+
+            pPacket.ReadByte();
+
+            {
+                for (short i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadShort();
+                    pPacket.ReadShort();
+                }
+            }
+
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+
+                pPacket.Skip(32);
+            }
+
+            pPacket.ReadInt(); // I DONT EVEN D:
         }
 
         public void SaveCharacterInfo(ClientConnection pConnection)
         {
             Queries.AddOrUpdateCharacter(pConnection, 
-                Stats.ID, Stats.Name, pConnection.UserID, pConnection.WorldID, Stats.Level, Stats.JobID,
+                Stats.ID, Stats.Name, pConnection.UserID, pConnection.WorldID, pConnection.ChannelID, Stats.Level, Stats.JobID,
                 Stats.Str, Stats.Dex, Stats.Int, Stats.Luk,
                 Stats.HP, Stats.MaxHP, Stats.MP, Stats.MaxMP, Stats.AP, Stats.SP,
                 Stats.EXP, Stats.Fame, Stats.MapID, Stats.MapPos,
@@ -504,26 +580,18 @@ namespace MPLRServer
 
             }
 
-            if (itemsTable.RowCount > 0)
-            {
-                string q = itemsTable.ToString();
-                System.IO.File.WriteAllText("insert-update.sql", q);
-                int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                pConnection.Logger_WriteLine("Result: {0}", result);
-            }
+            itemsTable.RunQuery();
 
             pConnection.Logger_WriteLine("Saved item data");
 
-            if (petTable.RowCount > 0)
-            {
-                string q = petTable.ToString();
-                System.IO.File.WriteAllText("insert-update-pet.sql", q);
-                int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                pConnection.Logger_WriteLine("Result: {0}", result);
-            }
+            petTable.RunQuery();
 
-            pConnection.Logger_WriteLine("Saved item data");
+            pConnection.Logger_WriteLine("Saved pet data");
+
+
             Internal_Storage.Store.Instance.LoadInventoryHashes(internalid, true);
+
+
 
             using (InsertQueryBuilder questsTable = new InsertQueryBuilder("quests_running"))
             {
@@ -537,13 +605,7 @@ namespace MPLRServer
                     questsTable.AddRow(internalid, quest.Key, quest.Value);
                 }
 
-                if (questsTable.RowCount > 0)
-                {
-                    string q = questsTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-quests.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result Quests Running: {0}", result);
-                }
+                questsTable.RunQuery("insert-update-quests.sql");
             }
 
             using (InsertQueryBuilder doneTable = new InsertQueryBuilder("quests_done")) 
@@ -557,13 +619,7 @@ namespace MPLRServer
                     doneTable.AddRow(internalid, quest.Key, quest.Value);
                 }
 
-                if (doneTable.RowCount > 0)
-                {
-                    string q = doneTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-quests-done.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result Quests Done: {0}", result);
-                }
+                doneTable.RunQuery("insert-update-quests-done.sql");
             }
 
             using (InsertQueryBuilder questsTable = new InsertQueryBuilder("quests_running_party"))
@@ -578,13 +634,7 @@ namespace MPLRServer
                     questsTable.AddRow(internalid, quest.Key, quest.Value);
                 }
 
-                if (questsTable.RowCount > 0)
-                {
-                    string q = questsTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-quests.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result Party Quests Running: {0}", result);
-                }
+                questsTable.RunQuery();
             }
 
             using (InsertQueryBuilder doneTable = new InsertQueryBuilder("quests_done_party"))
@@ -598,13 +648,7 @@ namespace MPLRServer
                     doneTable.AddRow(internalid, quest.Key, quest.Value);
                 }
 
-                if (doneTable.RowCount > 0)
-                {
-                    string q = doneTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-quests-done.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result Party Quests Done: {0}", result);
-                }
+                doneTable.RunQuery();
             }
 
             using (InsertQueryBuilder skillTable = new InsertQueryBuilder("skills"))
@@ -621,13 +665,7 @@ namespace MPLRServer
                     skillTable.AddRow(internalid, skill.Key, skill.Value.Level, skill.Value.MasterLevel != -1 ? (object)skill.Value.MasterLevel : null, skill.Value.Expiration);
                 }
 
-                if (skillTable.RowCount > 0)
-                {
-                    string q = skillTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-skills.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result Skills: {0}", result);
-                }
+                skillTable.RunQuery();
             }
 
             using (InsertQueryBuilder spTable = new InsertQueryBuilder("sp_data"))
@@ -642,14 +680,7 @@ namespace MPLRServer
                     spTable.AddRow(internalid, kvp.Key, kvp.Value);
                 }
 
-                if (spTable.RowCount > 0)
-                {
-                    string q = spTable.ToString();
-                    System.IO.File.WriteAllText("insert-update-sp_data.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                    pConnection.Logger_WriteLine("Result sp_data: {0}", result);
-                }
-
+                spTable.RunQuery();
             }
 
 

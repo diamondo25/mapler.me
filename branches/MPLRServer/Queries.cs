@@ -7,7 +7,8 @@ namespace MPLRServer
 {
     class Queries
     {
-        public static void AddOrUpdateCharacter(ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pLevel,
+        public static void AddOrUpdateCharacter(
+            ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pChannelID, byte pLevel,
             short pJob, short pStr, short pDex, short pInt, short pLuk,
             int pHP, int pMaxHP, int pMP, int pMaxMP, short pAP, short pSP,
             int pEXP, int pFame, int pMap, byte pMapPos,
@@ -27,6 +28,7 @@ namespace MPLRServer
                     query.SetColumn("name", pName);
                     query.SetColumn("userid", pUserID);
                     query.SetColumn("world_id", pWorldID);
+                    query.SetColumn("channel_id", pChannelID);
                     query.SetColumn("level", pLevel);
                     query.SetColumn("job", pJob);
                     query.SetColumn("str", pStr);
@@ -61,7 +63,7 @@ namespace MPLRServer
                     query.SetColumn("cash_slots", pSlots[4]);
 
                     query.SetColumn("blessingoffairy", pBoF);
-                    query.SetColumn("blessingofempress", pBoF);
+                    query.SetColumn("blessingofempress", pBoE);
                     query.SetColumn("ultimateexplorer", pUE);
 
                     query.SetWhereColumn("internal_id", internal_id);
@@ -88,6 +90,7 @@ namespace MPLRServer
                     query.AddColumn("internal_id");
                     query.AddColumn("id");
                     query.AddColumn("name");
+                    query.AddColumn("channel_id", true);
                     query.AddColumns(true, new string[] { "userid", "world_id", "level", "job", "str", "dex", "int", "luk", "chp", "mhp", "cmp", "mmp", "ap", "sp", "exp", "fame", "map", "pos", "gender", "skin", "eyes", "hair" });
                     query.AddColumns(true, new string[] { "honourlevel", "honourexp", "mesos", "demonmark" });
                     query.AddColumns(true, new string[] { "eqp_slots", "use_slots", "setup_slots", "etc_slots", "cash_slots" });
@@ -95,7 +98,7 @@ namespace MPLRServer
                     query.AddColumn("last_update", true);
 
 
-                    query.AddRow(null, pID, pName, pUserID, pWorldID, pLevel,
+                    query.AddRow(null, pID, pName, pUserID, pWorldID, pChannelID, pLevel,
                         pJob, pStr, pDex, pInt, pLuk,
                         pHP, pMaxHP, pMP, pMaxMP, pAP, pSP,
                         pEXP, pFame, pMap, pMapPos, pGender, pSkin,

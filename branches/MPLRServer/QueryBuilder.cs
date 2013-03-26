@@ -101,6 +101,17 @@ namespace MPLRServer
 
             return query;
         }
+
+        public void RunQuery(string pSaveFile = null)
+        {
+            if (RowCount > 0)
+            {
+                string q = ToString();
+                if (pSaveFile != null)
+                    System.IO.File.WriteAllText(pSaveFile, q);
+                MySQL_Connection.Instance.RunQuery(q);
+            }
+        }
     }
 
     class UpdateQueryBuilder : IDisposable
@@ -169,6 +180,14 @@ namespace MPLRServer
 
             return query;
         }
+
+        public void RunQuery(string pSaveFile = null)
+        {
+            string q = ToString();
+            if (pSaveFile != null)
+                System.IO.File.WriteAllText(pSaveFile, q);
+            MySQL_Connection.Instance.RunQuery(q);
+        }
     }
 
     class DeleteQueryBuilder : IDisposable
@@ -217,6 +236,14 @@ namespace MPLRServer
             query = query.Substring(0, query.Length - 4);
 
             return query;
+        }
+
+        public void RunQuery(string pSaveFile = null)
+        {
+            string q = ToString();
+            if (pSaveFile != null)
+                System.IO.File.WriteAllText(pSaveFile, q);
+            MySQL_Connection.Instance.RunQuery(q);
         }
     }
 }

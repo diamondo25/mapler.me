@@ -217,10 +217,10 @@ namespace MPLRServer
                         pPacket.Skip(1); // ...?
                     }
                     pConnection.WorldID = pPacket.ReadByte();
-                    byte channel = pPacket.ReadByte(); // Channel ID
+                    pConnection.ChannelID = pPacket.ReadByte(); // Channel ID
                     pPacket.ReadInt(); // Internal IP 0.0?
 
-                    pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, channel);
+                    pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, pConnection.ChannelID);
                 }, null));
 
                 // Pong
