@@ -51,13 +51,19 @@ $q->free();
 // printing table rows
 
 foreach ($social_cache as $row) {
+$content = $row['content'];
+//@replies
+$content1 = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $content);
+//#hashtags (no search for the moment)
+$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
 ?>
+
 			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?><?php if ($row['account_id'] == $_loginaccount->GetID()): ?> postplox<?php endif; ?>" style="width:288px; margin:10px;">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">
 					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php if ($row['account_id'] == $_loginaccount->GetID()): ?>You<?php else: echo $row['nickname']; endif; ?></a> said:
 				</div>
 				<br />
-				<?php $parser->parse($row['content']); echo $parser->getAsHtml(); ?>
+				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
 					<?php if ($row['comments_disabled'] == '0'): ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
