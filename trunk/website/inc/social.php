@@ -11,24 +11,16 @@ function RemoveStatus(id) {
 </script>
 <?php
 
-// Preventing spamming of form.
-$antispam = true;
-if ($_loginaccount->GetConfigurationOption('last_status_sent', 0) != 0) {
-	$tmp = strtotime($_loginaccount->GetConfigurationOption('last_status_sent'));
-	$tmp += 1 * 60; // 1 minute
-
-	if (time() < $tmp) { // 1 minute
-		$antispam = false;
-		$minutes_timeout = ceil(($tmp - time()) / 60);
-	}
-
-}
+// Preventing spamming of form. [disabled]
+//$antispam = true;
+//if ($_loginaccount->GetConfigurationOption('last_status_sent', 0) != 0) {
+//
+//}
 
 // If antispam passes, push status
-if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
 	// Oh jolly
-	$antispam = false;
-	$minutes_timeout = 1;
+	// $antispam = false;
 	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
 	$content = nl2br(htmlentities(strip_tags($_POST['content'])));
@@ -40,20 +32,16 @@ if ($antispam && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content']
 	// set internally
 	$accid = $_loginaccount->GetId();
 	$nicknm = $_loginaccount->GetNickname();
-
 	$chr = $has_characters ? $char_config['main_character'] : '';
-
 
 	$__database->query("INSERT INTO social_statuses VALUES (NULL, ".$accid.", '".$__database->real_escape_string($nicknm)."', '".$__database->real_escape_string($chr)."', '".$__database->real_escape_string($content)."', ".$dc.", NOW(), 0)");
 ?>
-<p class="lead alert-success alert">Sending to Maple Admin.. checking.. success! Status posted.</p>
+<p class="lead alert-success alert">The status was successfully posted!</p>
 <?php
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 	// Removing status
-
 	$id = intval($_GET['removeid']);
-
 	$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
 ?>
 <p class="lead alert-info alert">The status was successfully deleted.</p>
@@ -61,10 +49,6 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 }
 
 ?>
-
-<?php if (!$antispam): ?>
-<p class="lead alert-error alert">Please wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?> before posting another message. :)</p>
-<?php else: ?>
 
 <div id="PostStatus" class="modal-share hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
 style="-webkit-touch-callout: none;
@@ -82,11 +66,10 @@ user-select: none;">
   </div>
   <div class="modal-footer">
     <button type="submit" class="btn btn-large">Post!</button>
-    <button type="button" class="btn btn-large" data-toggle="button" name="dc" value="1">Disable commenting?</button>
 	</form>
 
   </div>
 </div>
 
-<?php endif;
+<?php
 } ?>
