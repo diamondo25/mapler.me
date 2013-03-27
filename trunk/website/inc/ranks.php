@@ -1,6 +1,7 @@
 <?php
 
 // Members
+define("RANK_PERMABANNED", -200);
 define("RANK_BANNED", -100);
 define("RANK_AWAITING_ACTIVATION", 0);
 define("RANK_NORMAL", 100);
