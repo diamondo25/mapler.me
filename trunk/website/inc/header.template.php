@@ -79,8 +79,13 @@ if ($_loggedin) {
 						//<?php echo $domain; ?>
 					<?php endif; ?>"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:0px;width:60px;"/></a>
 				<div class="nav-collapse">
-					<ul class="nav hidden-phone">
+					<ul class="nav hidden-phone">			
 						 <li class="dropdown">
+<?php
+	if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE):
+		require_once('panel_settings_menu.php');
+	else:
+?>
 <?php
 // Not a subdomain
 if (!isset($__url_useraccount)):
@@ -111,10 +116,11 @@ else:
 ?>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
-								<li><a href="//<?php echo $domain; ?>/todo/">To-do*</a></li><?php endif; ?>
+								<li><a href="//<?php echo $domain; ?>/todo/">Completion List</a></li><?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//status.mapler.me/">Status</a></li>
 <?php
+endif;
 endif;
 ?>
 					 		</ul>

@@ -37,7 +37,6 @@ $q->free();
 	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 	border: 1px solid #ddd;
 	margin-bottom: 20px;
-	width: 100%;
 }
 
 hr {
@@ -52,17 +51,17 @@ hr {
 </style>
 
 <center><h2>Our Team</h2></center>
-<div class="row">
+<div class="stream_display">
 <?php
 foreach ($cache as $row) {
 ?>
 
-	<div class="span2">
-		<img src="//mapler.me/avatar/<?php echo $row['character']; ?>" class="avatar" /><br/>
+	<div class="status clickable-brick" style="width:293px; margin:10px;" onclick="document.location = '//<?php echo $row['name']; ?>.<?php echo $domain; ?>'">
+		<img src="//mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/><br/>
 		<p class="title"><?php echo $row['name']; ?><br/>
 		<small class="more"><?php echo $row['job']; ?></small></p>
 		<hr/>
-		<p class="more"><?php echo $row['description']; ?></p>
+		<small class="more"><?php echo $row['description']; ?></small></p>
 	</div>
 
 <?php
