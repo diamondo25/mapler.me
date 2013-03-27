@@ -297,7 +297,7 @@ endif;
 
 	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
 	
-	<?php if($_loginaccount->GetAccountRank() < RANK_AWAITING_ACTIVATION) { ?>
+	<?php if($_loggedin && $_loginaccount->GetAccountRank() < RANK_AWAITING_ACTIVATION) { ?>
 		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me.</p>
 	<?php
 		require_once __DIR__.'/../inc/footer.php';
