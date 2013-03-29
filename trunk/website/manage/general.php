@@ -1,100 +1,11 @@
 <?php
-$username = "maplerme-website";
-$password = "#FMO@JF)JNRWGO$@Ngf9hwref923@R#@";
-
-$svn_arguments = '--non-interactive --username '.escapeshellarg($username).' --password '.escapeshellarg($password).' /var/www/maplestats_svn/ 2>&1';
-
-function RunCMD($cmd) {
-	$descriptorspec = array(
-	   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
-	   1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-	   2 => array("file", "/tmp/error-output.txt", "a") // stderr is a file to write to
-	);
-
-	$cwd = '/mal';
-
-	$process = proc_open($cmd, $descriptorspec, $pipes, $cwd);
-
-	if (is_resource($process)) {
-		$data = stream_get_contents($pipes[1]);
-		fclose($pipes[1]);
-
-		$return_value = proc_close($process);
-	}
-	else {
-		$data = "ERROR";
-	}
-
-	return $data;
-}
-
-if (isset($_GET['EMERGENCY_UPDATE']) && $_GET['EMERGENCY_UPDATE'] == 'NOSHITBRO') {
+require_once __DIR__.'/../inc/header.php';
 ?>
-Result:<br />
-<pre>
-<?php echo RunCMD('svn up '.$svn_arguments); ?>
-</pre>
-<?php
-	die();
-}
-
-
-
-
-
-
-
-
-
-require_once __DIR__.'/../../inc/functions.php';
-
-// SHOO
-if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
-	header('Location: /');
-	die();
-}
-
-require_once __DIR__.'/../../inc/header.php';
-
-?>
-
-<p class="lead">Mapler.me Administrative Panel :: <?php echo $_loginaccount->GetFullName(); ?> (id: <?php echo $_loginaccount->GetID(); ?>)</p>
-
-<div class="row">
-	<div class="span8">
-		<h4>Update the website by pushing a revision:</h4>
-		<pre style="font-size:12px;">
-<?php
-$rows = RunCMD('svn log -r COMMITTED '.$svn_arguments);
-
-echo $rows;
-?>
-		</pre>
-
-		<form action="" method="post">
-			<div class="input-append">
-				<input class="span7" id="appendedInputButton" name="ihewfihewfewf" type="password" placeholder="Type the development password here.">
-				<input type="submit" class="btn" style="position: relative;
-				right: 1px;
-				height: 36px;
-				border-radius: 0px;
-				width: 107px;" value="Update!"/>
-			</div>
-		</form>
-
-		Result:<br />
-		<pre>
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_POST['ihewfihewfewf'] == 'HURR1312') {
-	echo RunCMD('svn up '.$svn_arguments);
-}
-?>
-		</pre>
 
 		<h4>Change the stream notice:</h4>
 
 		<form method="post">
-			<textarea name="updatetxt" class="span7" id="updatetxt" style="height:350px;max-height:600px;" > <?php echo file_get_contents('notice.txt'); ?> </textarea>
+			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;" > <?php echo file_get_contents('notice.txt'); ?> </textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
 
@@ -130,9 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 
 }
 ?>
-
-	</div>
-	<div class="span4">
 		<h4>Various functions and information:</h4>
 		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button> <button type="button" class="btn" onclick="location.href = 'info.php'">View Apache/Php Info?</button>
 		<br />
@@ -157,11 +65,8 @@ if (isset($_GET['clear_cache'])) {
 	apc_delete('data_itemoptions_cache');
 }
 ?>
-
-	</div>
 	
-	
-	<div class="accordion span4" id="accordion2">
+	<div class="accordion" id="accordion2">
 	<h4>View Mapler.me records:</h4>
   <div class="accordion-group" style="margin-bottom:10px;">
     <div class="accordion-heading">
@@ -210,5 +115,5 @@ if (isset($_GET['clear_cache'])) {
 </div>
 
 <?php
-require_once __DIR__.'/../../inc/footer.php';
+require_once __DIR__.'/../inc/footer.php';
 ?>

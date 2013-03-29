@@ -4,8 +4,10 @@
 	RewriteEngine On
 	
 	
-	RewriteRule ^/settings/([^.]*)/ /inc/handle_panel.php?page=$1&type=settings [L,QSA]
-	RewriteRule ^settings/([^.]*)/ /inc/handle_panel.php?page=$1&type= [L,QSA]
+	RewriteRule ^/settings/([^.]*)/ /inc/handle.settings.php?page=$1&type=settings [L,QSA]
+	RewriteRule ^settings/([^.]*)/ /inc/handle.settings.php?page=$1&type= [L,QSA]
+	RewriteRule ^/manage/([^.]*)/ /inc/handle.manage.php?page=$1&type=settings [L,QSA]
+	RewriteRule ^manage/([^.]*)/ /inc/handle.manage.php?page=$1&type= [L,QSA]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME}\.php -f 

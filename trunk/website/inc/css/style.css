@@ -285,6 +285,14 @@ footer a {
 	height: 19px !important;
 }
 
+.active {
+	color:#fff;background:#f4d867 !important;background:rgba(245,241,235,0.25) !important; border-radius: 5px; padding-right: 0px !important;
+}
+
+.active:hover {
+	color:#fff;background:#f4d867 !important;background:rgba(245,241,235,0.25) !important; border-radius: 5px; padding-right: 0px !important;
+}
+
 .brand {
 	padding: 5px 8px 5px !important;
 	display: inline-block !important;

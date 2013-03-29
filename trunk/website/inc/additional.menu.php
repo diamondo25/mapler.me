@@ -10,6 +10,9 @@ function BuildURL($name, $url) {
 }
 ?>
 
+<?php
+	if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
+?>
 				<?php BuildURL('Profile', '/settings/profile/'); ?>
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
 				<?php BuildURL('Accounts', '/settings/accounts/'); ?>
@@ -17,3 +20,24 @@ function BuildURL($name, $url) {
 				<?php BuildURL('Friends', '/settings/friends/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>
 				<?php //BuildURL('Memberships', '/panel/settings/memberships/'); ?>
+				
+<style>
+.hide-menu {
+	display: none;
+}
+</style>				
+<?php
+}
+else if (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
+?>
+				<?php BuildURL('General', '/manage/general/'); ?>
+				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
+
+<style>
+.hide-menu {
+	display: none;
+}
+</style>
+<?php
+}
+?>

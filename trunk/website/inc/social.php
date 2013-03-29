@@ -19,9 +19,6 @@ function RemoveStatus(id) {
 
 // If antispam passes, push status
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
-	// Oh jolly
-	// $antispam = false;
-	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
 	$content = nl2br(htmlentities(strip_tags($_POST['content'])));
 	$dc = isset($_POST['dc']) ? 1 : 0;
@@ -33,11 +30,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
 	$accid = $_loginaccount->GetId();
 	$nicknm = $_loginaccount->GetNickname();
 	$chr = $has_characters ? $char_config['main_character'] : '';
+	
+	if ($content == '') {
+	?>
+		<p class="lead alert-danger alert">Error: That status was left blank, retry?</p>
+	<?php
+	}
+	
+	else {
+	
+	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
 	$__database->query("INSERT INTO social_statuses VALUES (NULL, ".$accid.", '".$__database->real_escape_string($nicknm)."', '".$__database->real_escape_string($chr)."', '".$__database->real_escape_string($content)."', ".$dc.", NOW(), 0)");
 ?>
 <p class="lead alert-success alert">The status was successfully posted!</p>
 <?php
+	}
 }
 elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
 	// Removing status

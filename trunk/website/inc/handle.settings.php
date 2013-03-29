@@ -13,7 +13,7 @@ if (!file_exists($page)) {
 
 require_once __DIR__.'/header.template.php';
 if ($_GET['type'] == '') {
-	require_once __DIR__.'/panel_settings_menu.php';
+	require_once __DIR__.'/additional.menu.php';
 }
 ?>
 		<div class="row">

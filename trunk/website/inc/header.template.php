@@ -82,15 +82,13 @@ if ($_loggedin) {
 					<ul class="nav hidden-phone">			
 						 <li class="dropdown">
 <?php
-	if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE):
-		require_once('panel_settings_menu.php');
-	else:
+		require_once('additional.menu.php');
 ?>
 <?php
 // Not a subdomain
 if (!isset($__url_useraccount)):
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
+							<a data-toggle="dropdown" class="dropdown-toggle hide-menu" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
                             
 <?php
 // Is a subdomain
@@ -120,7 +118,6 @@ else:
 								<li class="divider"></li>
 								<li><a href="//status.mapler.me/">Status</a></li>
 <?php
-endif;
 endif;
 ?>
 					 		</ul>
@@ -181,7 +178,7 @@ if ($_loggedin):
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Manage Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/">Manage</a></li>
 <?php
 endif;
 ?>
@@ -252,7 +249,7 @@ if ($_loggedin):
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/actions/website/">Manage Website</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/">Manage</a></li>
 <?php
 endif;
 ?>
