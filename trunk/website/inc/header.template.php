@@ -178,7 +178,7 @@ if ($_loggedin):
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/">Manage</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/general/">Manage</a></li>
 <?php
 endif;
 ?>
@@ -249,7 +249,7 @@ if ($_loggedin):
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 								<li class="divider"></li>
-								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/">Manage</a></li>
+								<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/general/">Manage</a></li>
 <?php
 endif;
 ?>
