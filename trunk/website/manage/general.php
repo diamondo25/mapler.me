@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 }
 ?>
 		<h4>Various functions and information:</h4>
-		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button> <button type="button" class="btn" onclick="location.href = 'info.php'">View Apache/Php Info?</button>
+		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button> <button type="button" class="btn" onclick="location.href = '/manage/info/'">View Apache/Php Info?</button>
 		<br />
 		<br />
 <?php
@@ -60,9 +60,7 @@ if (isset($_GET['clear_cache'])) {
 <?php
 
 	// Clear data caches
-	apc_delete('data_cache');
-	apc_delete('data_iteminfo_cache');
-	apc_delete('data_itemoptions_cache');
+	apc_clear_cache();
 }
 ?>
 	

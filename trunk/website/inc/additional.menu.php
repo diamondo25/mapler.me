@@ -28,10 +28,11 @@ function BuildURL($name, $url) {
 </style>				
 <?php
 }
-else if (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
+elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 ?>
 				<?php BuildURL('General', '/manage/general/'); ?>
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
+				<?php BuildURL('PHP Info', '/manage/info/'); ?>
 
 <style>
 .hide-menu {
