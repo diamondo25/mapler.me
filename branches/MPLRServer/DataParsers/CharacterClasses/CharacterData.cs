@@ -102,9 +102,9 @@ namespace MPLRServer
 
             while (true)
             {
-
                 byte val = pPacket.ReadByte();
                 if (val == 0) break;
+
                 {
                     pPacket.ReadInt();
                     pPacket.ReadByte();

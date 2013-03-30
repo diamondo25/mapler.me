@@ -39,6 +39,19 @@ foreach ($this->queries as $query) {
 	public function QueriesRan() {
 		return count($this->queries);
 	}
+	
+	public static function GetAllRows($query, $how = 'assoc') {
+		$rows = array();
+		while (true) {
+			$row = null;
+			if ($how == 'assoc') $row = $query->fetch_assoc();
+			elseif ($how == 'row') $row = $query->fetch_row();
+			elseif ($how == 'array') $row = $query->fetch_array();
+			if ($row == null) break;
+			$rows[] = $row;
+		}
+		return $rows;
+	}
 }
 
 // Connect to the database

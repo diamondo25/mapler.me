@@ -1,28 +1,53 @@
 <?php
+require_once __DIR__.'/../database.php';
 
 class InventoryData {
 	private $inventories;
 	private $bags;
 	private $equips;
 	
-	public function __construct($character_id) {
+	// $emulateData SEE character.php; push the full array
+	public function __construct($character_id, $emulateData = null) {
 		global $__database;
 		
 		$this->equips = array();
 		
-		$q = $__database->query("SELECT eqp_slots, use_slots, setup_slots, etc_slots, cash_slots FROM characters WHERE internal_id = ".$character_id);
-		$row = $q->fetch_row();
+		if ($emulateData != null) {
+			$row = array(
+				$emulateData['own_data']['eqp_slots'],
+				$emulateData['own_data']['use_slots'], 
+				$emulateData['own_data']['setup_slots'], 
+				$emulateData['own_data']['etc_slots'],
+				$emulateData['own_data']['cash_slots']
+			);
+		}
+		else {
+			$q = $__database->query("SELECT eqp_slots, use_slots, setup_slots, etc_slots, cash_slots FROM characters WHERE internal_id = ".$character_id);
+			$row = $q->fetch_row();
+			$q->free();
+		}
 		
 		$this->inventories = new SplFixedArray(count($row));
 		for ($i = 0; $i < count($row); $i++) {
 			$this->inventories[$i] = new SplFixedArray($row[$i]);
 		}
 		
-		$q->free();
+		if ($emulatedData != null) {
+			$rows = array_filter($emulatedData['items'], 'FilterOnlyInventories');
+			for ($i = 0; $i < count($rows); $i++) {
+				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
+			}
+		}
+		else {
+			$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
+			$rows = array();
+			while ($row = $q->fetch_assoc()) {
+				$rows[] = $row;
+			}
+			$q->free();
+		}
 		
-		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
-		
-		while ($row = $q->fetch_assoc()) {
+		foreach ($rows as $row) {
 			$inv = $row['inventory'];
 			$slot = $row['slot'];
 			if ($inv == 0 && $slot < 0) {
@@ -42,9 +67,22 @@ class InventoryData {
 			}
 		}
 		
-		$q->free();
 		
-		$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
+		if ($emulatedData != null) {
+			$rows = array_filter($emulatedData['items'], 'FilterOnlyBags');
+			for ($i = 0; $i < count($rows); $i++) {
+				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
+			}
+		}
+		else {
+			$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
+		
+			$rows = array();
+			while ($row = $q->fetch_assoc()) {
+				$rows[] = $row;
+			}
+			$q->free();
+		}
 		
 		while ($row = $q->fetch_assoc()) {
 			$inv = $row['inventory'];
@@ -52,10 +90,16 @@ class InventoryData {
 			if (!isset($this->bags[$bagid])) continue;
 			
 			$slot = $row['slot'];
-			$this->bags[$bagid][$slot] = new ItemBase($row);
+			$this->bags[$bagid][$slot] = new ItemBase($row); // Bags only contain regular items (mostly etc)
 		}
-		
-		$q->free();
+	}
+	
+	private function FilterOnlyInventories($value) {
+		return $value['inventory'] < 10;
+	}
+	
+	private function FilterOnlyBags($value) {
+		return $value['inventory'] >= 10;
 	}
 	
 	public function GetInventory($inventory) {

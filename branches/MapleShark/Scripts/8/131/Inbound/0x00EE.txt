@@ -142,13 +142,13 @@ using (ScriptAPI) {
 		}
 		
 		amount = AddInt("Amount");
-		for (i = 1; i <= amount; i++) {
+		for (i = 0; i < amount; i++) {
 			AddInt("1 --");
 			AddLong("-- 2");
 		}
 		
 		amount = AddInt("Amount");
-		for (i = 1; i <= amount; i++) {
+		for (i = 0; i < amount; i++) {
 			AddLong("1 --");
 			AddLong("-- 2");
 		}

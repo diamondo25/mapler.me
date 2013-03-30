@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/database.php';
+require_once __DIR__.'/../database.php';
 
 
 class Account {
@@ -45,7 +45,7 @@ SET
 	full_name = '".$__database->real_escape_string($this->_fullname)."',
 	email = '".$__database->real_escape_string($this->_email)."',
 	nickname = '".$__database->real_escape_string($this->_nickname)."',
-	account_rank = '".$__database->real_escape_string($this->_accountrank)."',
+	account_rank = '".intval($this->_accountrank)."',
 	premium_till = '".$__database->real_escape_string($this->_premiumtill)."',
 	bio = '".$__database->real_escape_string($this->_bio)."',
 	configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."'
