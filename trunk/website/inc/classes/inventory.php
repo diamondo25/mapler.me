@@ -84,7 +84,7 @@ class InventoryData {
 			$q->free();
 		}
 		
-		while ($row = $q->fetch_assoc()) {
+		foreach ($rows as $row) {
 			$inv = $row['inventory'];
 			$bagid = $inv - 10;
 			if (!isset($this->bags[$bagid])) continue;
