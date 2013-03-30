@@ -5,7 +5,7 @@ require_once __DIR__.'/../inc/header.php';
 		<h4>Change the stream notice:</h4>
 
 		<form method="post">
-			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;" > <?php echo file_get_contents('notice.txt'); ?> </textarea>
+			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;" > <?php echo (file_exists('notice.txt') ? file_get_contents('notice.txt') : ''); ?> </textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
 
@@ -17,28 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 	$somecontent = $updatetxt;
 
 	if (is_writable($filename)) {
-
-		if (!$handle = fopen($filename, 'w')) {
-			 echo '<p class="alert info-danger">Could not open the sidebar. Protected?</p>';
-			 exit;
-		}
-
-		// Write $somecontent to our opened file.
-		if (fwrite($handle, $somecontent) === FALSE) {
-			echo '<p class="alert info-danger">Could not write to sidebar.</p>';
-			exit;
-		}
-
+		file_put_contents('notice.txt', $updatetxt);
+		
 		echo '<p class="alert info-sucess">Successfully updated sidebar!</p>';
-
-		fclose($handle);
-
 	}
 	else {
 		echo '<p class="alert info-danger">Error: The sidebar is not writable.</p>';
 	}
-
-
 }
 ?>
 		<h4>Various functions and information:</h4>
