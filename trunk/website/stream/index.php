@@ -1,16 +1,17 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-if (!$_loggedin):
+if (!$_loggedin) {
 ?>
 <meta http-equiv="refresh" content="0;URL='/'" />
 <?php
-else:
+}
+else {
 
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 	$has_characters = !empty($char_config['main_character']);
 	
-$q = $__database->query("
+	$q = $__database->query("
 SELECT
 	social_statuses.*,
 	accounts.username,
@@ -24,38 +25,36 @@ LEFT JOIN
 WHERE
 	override = 1 OR account_id = ".$_loginaccount->GetID()." OR FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS'
 ORDER BY
-	secs_since ASC
-");
+	secs_since ASC");
 
 
-$social_cache = array();
-while ($row = $q->fetch_assoc()) {
-	$social_cache[] = $row;
-}
+	$social_cache = array();
+	while ($row = $q->fetch_assoc()) {
+		$social_cache[] = $row;
+	}
 
-$q->free();
+	$q->free();
 
+	require_once '../inc/stream.notice.template.php';
 ?>
 
-<?php require_once '../inc/stream.notice.template.php'; ?>
-
 <div class="load status-loading" style="width:200px;margin:0 auto;">
-<center>
-<img src="//mapler.me/<?php echo $main_char; ?>"/><br/>
--loading-</center>
-</div>
+	<center>
+		<img src="//mapler.me/<?php echo $main_char; ?>"/><br />
+		-loading-</center>
+		</div>
 
 <div class="stream_display">
 <?php
 
-// printing table rows
+	// printing table rows
 
-foreach ($social_cache as $row) {
-$content = $row['content'];
-//@replies
-$content1 = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $content);
-//#hashtags (no search for the moment)
-$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
+	foreach ($social_cache as $row) {
+		$content = $row['content'];
+		//@replies
+		$content1 = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $content);
+		//#hashtags (no search for the moment)
+		$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
 ?>
 
 			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?><?php if ($row['account_id'] == $_loginaccount->GetID()): ?> postplox<?php endif; ?>" style="width:293px; margin:10px;">
@@ -70,29 +69,29 @@ $content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a
 					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> – <?php endif; ?><a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
 <?php
-	if ($_loggedin) {
-		if (IsOwnAccount()) {
+		if ($_loggedin) {
+			if (IsOwnAccount()) {
 ?>
 						- <a href="#" onclick="RemoveStatus(<?php echo $row['id']; ?>);">delete?</a>
 <?php
-		}
-		else {
-			// Report button
+			}
+			else {
+				// Report button
 ?>
 						- <a href="#"></a>
 <?php
+			}
 		}
-	}
 ?>
 				</div>
 			</div>
 			
 <?php
-}
+	}
 ?>
 </div>
 <?php
-endif;
+}
 
 require_once __DIR__.'/../inc/footer.php';
 ?>

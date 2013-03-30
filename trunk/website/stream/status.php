@@ -1,6 +1,6 @@
 <?php 
 require_once __DIR__.'/../inc/header.php';
-$statusid = htmlentities($_GET['id']);
+$statusid = intval($_GET['id']);
     
 $q = $__database->query("
 SELECT
@@ -19,16 +19,9 @@ WHERE
 ORDER BY
 secs_since ASC
 ");
-	
-$fixugh = '0';
-	
+
 $cache = array();
 while ($row = $q->fetch_assoc()) {
-	if (isset($fixugh)) {
-		if ($fixugh == 2) { // Always hide... :)
-			continue;
-		}
-	}
 	$cache[] = $row;
 }
 
@@ -61,25 +54,23 @@ function time_elapsed_string($etime) {
 	<div class="span12">
 
 <?php
-if (count($cache) == 0) { ?>
-<center>
-	<img src="http://mapler.me/inc/img/icon.png"/>
+if (count($cache) == 0) {
+?>
+	<center>
+		<img src="http://mapler.me/inc/img/icon.png"/>
 		<p>404: Status not found.</p>
-</center>
+	</center>
 <?php
 }
-?>
-	
-	<?php
 
 // printing table rows
 
 foreach ($cache as $row) {
-$content = $row['content'];
-//@replies
-$content1 = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $content);
-//#hashtags (no search for the moment)
-$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
+	$content = $row['content'];
+	//@replies
+	$content1 = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $content);
+	//#hashtags (no search for the moment)
+	$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
 ?>
 			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?>">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">

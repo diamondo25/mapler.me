@@ -59,9 +59,9 @@ if ($_loggedin) {
 		$(window).load(function(){
 			$('.stream_display').isotope({
   // options
-  			itemSelector : '.status',
-  			layoutMode : 'masonry',
-  			columnWidth: 240
+				itemSelector : '.status',
+				layoutMode : 'masonry',
+				columnWidth: 240
   			});
   		})
   		</script>
@@ -211,7 +211,7 @@ else:
 							</ul>
 <?php
 endif;
-	?>
+?>
 						</li>
 					</ul>
 		
@@ -220,16 +220,14 @@ endif;
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
 
 							<ul class="dropdown-menu">
-							<?php
+<?php
 if ($_loggedin):
-?>
-							<?php
 							$main_char = $_loginaccount->GetMainCharacterName();
 							if ($main_char == null)
 								$main_char = 'inc/img/no-character.gif';
 							else
 								$main_char = 'avatar/'.$main_char;
-							?>
+?>
 								<li id="user-dropdown">
 									<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
 										<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
