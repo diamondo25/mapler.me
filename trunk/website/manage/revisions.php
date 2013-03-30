@@ -37,16 +37,19 @@ if (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_ADMIN) {
 }
 
 require_once __DIR__.'/../inc/header.php';
-
 ?>
 		<h4>Update the website by pushing a revision:</h4>
-		<pre style="font-size:12px;">
-<?php
-$rows = RunCMD('svn log -r COMMITTED '.$svn_arguments);
 
-echo $rows;
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_POST['ihewfihewfewf'] == 'HURR1312') {
 ?>
-		</pre>
+		Result:<br />
+		<pre><?php echo RunCMD('svn up '.$svn_arguments); ?></pre>
+<?php
+}
+?>
+
+		<pre style="font-size:12px;"><?php echo RunCMD('svn log -r COMMITTED '.$svn_arguments); ?></pre>
 
 		<form action="" method="post">
 			<div class="input-append">
@@ -58,15 +61,6 @@ echo $rows;
 				width: 107px;" value="Update!"/>
 			</div>
 		</form>
-
-		Result:<br />
-		<pre>
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ihewfihewfewf']) && $_POST['ihewfihewfewf'] == 'HURR1312') {
-	echo RunCMD('svn up '.$svn_arguments);
-}
-?>
-		</pre>
 
 <?php
 require_once __DIR__.'/../inc/footer.php';
