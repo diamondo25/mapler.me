@@ -32,8 +32,8 @@ class InventoryData {
 			$this->inventories[$i] = new SplFixedArray($row[$i]);
 		}
 		
-		if ($emulatedData != null) {
-			$rows = array_filter($emulatedData['items'], 'FilterOnlyInventories');
+		if ($emulateData != null) {
+			$rows = array_filter($emulateData['items'], 'FilterOnlyInventories');
 			for ($i = 0; $i < count($rows); $i++) {
 				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
 			}
@@ -68,8 +68,8 @@ class InventoryData {
 		}
 		
 		
-		if ($emulatedData != null) {
-			$rows = array_filter($emulatedData['items'], 'FilterOnlyBags');
+		if ($emulateData != null) {
+			$rows = array_filter($emulateData['items'], 'FilterOnlyBags');
 			for ($i = 0; $i < count($rows); $i++) {
 				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
 			}
