@@ -1,31 +1,30 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-?>
 
-		<h4>Change the stream notice:</h4>
-
-		<form method="post">
-			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;" > <?php echo (file_exists('notice.txt') ? file_get_contents('notice.txt') : ''); ?> </textarea>
-			<button type="submit" class="btn">Update!</button>
-		</form>
-
-<?php
+$notice_filename = 'notice.txt';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 	$updatetxt = $_POST['updatetxt']; //not protected from sql injection to prevent html / php added from derping.
 
-	$filename = 'notice.txt';
-	$somecontent = $updatetxt;
+	
+	if (!file_exists('notice.txt')) {
+		file_put_contents('notice.txt', '');
+	}
 
-	if (is_writable($filename)) {
-		file_put_contents('notice.txt', $updatetxt);
+	if (!is_writable($notice_filename)) {
+		chmod($notice_filename, 0755);
+	}
+	file_put_contents('notice.txt', $updatetxt);
 		
-		echo '<p class="alert info-sucess">Successfully updated sidebar!</p>';
-	}
-	else {
-		echo '<p class="alert info-danger">Error: The sidebar is not writable.</p>';
-	}
+	echo '<p class="alert info-sucess">Successfully updated sidebar!</p>';
 }
 ?>
+		<h4>Change the stream notice:</h4>
+
+		<form method="post">
+			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;" > <?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?> </textarea>
+			<button type="submit" class="btn">Update!</button>
+		</form>
+
 		<h4>Various functions and information:</h4>
 		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button> <button type="button" class="btn" onclick="location.href = '/manage/info/'">View Apache/Php Info?</button>
 		<br />
