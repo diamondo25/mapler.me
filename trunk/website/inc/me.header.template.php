@@ -56,6 +56,8 @@ $main_character_info = $has_characters ? $cache[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 
+$rank = $__url_useraccount->GetAccountRank();
+
 $lastonline = array();
 while ($row = $q->fetch_assoc()) {
 	$lastonline[] = $row;
@@ -152,7 +154,7 @@ endif;
 			<?php endif; ?>
 			</small>
 		</p>
-		<p class="rank">Member</p>
+		<p class="rank"><?php echo GetRankTitle($rank); ?></p>
 		<hr/>
 <?php
 foreach ($lastonline as $row) {

@@ -10,6 +10,8 @@ if ($_loggedin) {
 	$notifications = GetNotification();
 	if ($notifications > 0)
 		$title = '('.$notifications.') '.$title;
+		
+	$rank = $_loginaccount->GetAccountRank();	
 }
 
 ?>
@@ -165,7 +167,7 @@ if ($_loggedin):
 									<div class="info">
 										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
 										<!-- function needed that displays rank as text instead off number -->
-										<span class="ct-label">Member</span>
+										<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
 									</div>
 									</a>
 								</li>
@@ -234,7 +236,7 @@ if ($_loggedin):
 									<div class="info">
 										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
 										<!-- function needed that displays rank as text instead off number -->
-										<span class="ct-label">Member</span>
+										<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
 									</div>
 									</a>
 								</li>
