@@ -32,7 +32,7 @@ elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 ?>
 				<?php BuildURL('General', '/manage/general/'); ?>
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
-				<?php BuildURL('PHP Info', '/manage/info/'); ?>
+				<?php BuildURL('PHP Info', '/manage/php/'); ?>
 
 <style>
 .hide-menu {
