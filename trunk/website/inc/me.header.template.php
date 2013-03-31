@@ -118,6 +118,18 @@ hr {
 	font-size: 15px;
 }
 
+.rank {
+	white-space: nowrap;
+	background: #f7921e;
+	color: #fff;
+	padding: 2px 4px;
+	font-size: 11px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-bottom: 10px;
+}
+
 </style>
 
 <div class="row">
@@ -140,7 +152,7 @@ endif;
 			<?php endif; ?>
 			</small>
 		</p>
-		<span class="ct-label">Member</span>
+		<p class="rank">Member</p>
 		<hr/>
 <?php
 foreach ($lastonline as $row) {

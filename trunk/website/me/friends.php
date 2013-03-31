@@ -39,10 +39,21 @@ FROM
 ORDER BY
 	a.accepted_on DESC
 ");
-?>
-<div class="row" style="float: right;">
-<?php
+
+$characters_per_row = 3;
+$i = 0;
 while ($row = $q->fetch_assoc()) {
+	if ($i % $characters_per_row == 0) {
+		if ($i > 0) {
+?>
+		</div>
+<?php
+		}
+?>
+		<div class="row" style="float: right;">
+<?php
+	}
+	$i++;
 	$account = Account::Load($row['account_id']);
 	
 	$main_char = $account->GetMainCharacterName();
