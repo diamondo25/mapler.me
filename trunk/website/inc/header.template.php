@@ -131,18 +131,20 @@ endif;
 <?php
 if ($_loggedin):
 function GetSearch() {
-	$searchback = nl2br(htmlentities(strip_tags($_POST['search'])));
-	if ($searchback !== '') {
-		return $searchback;
-	}
-	else {
-		return 'Search?';
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
+		$searchback = nl2br(htmlentities(strip_tags($_POST['search'])));
+		if ($searchback !== '') {
+			return $searchback;
+			}
+		else {
+			return 'Search?';
+		}
 	}
 }
 ?>					
 					<li>
 						<form method="POST" action="/search/">
-						<input type="text" name="search" class="search-query searchbar" placeholder="<?php echo GetSearch(); ?>">	 
+						<input type="text" name="search" class="search-query searchbar" placeholder="Search?">	 
 						</form>
 					</li>
 					
