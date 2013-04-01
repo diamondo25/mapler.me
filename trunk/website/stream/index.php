@@ -35,7 +35,7 @@ ORDER BY
 
 	$q->free();
 
-	require_once '../inc/stream.notice.template.php';
+	require_once __DIR__.'/../inc/stream.notice.template.php';
 ?>
 
 <div class="load status-loading" style="width:200px;margin:0 auto;">
