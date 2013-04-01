@@ -139,7 +139,7 @@ if ($_loggedin):
 					</li>
 					
 					<li>
-						<a href="#PostStatus" data-toggle="modal">+Post</a>
+						<a href="#PostStatus" data-toggle="collapse" data-target="#post">+Post</a>
 					</li>
 					
 					

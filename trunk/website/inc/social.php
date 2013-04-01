@@ -5,7 +5,7 @@ if ($_loggedin) {
 <script type="text/javascript">
 function RemoveStatus(id) {
 	if (confirm("Are you sure you want to delete this status?")) {
-		document.location.href = '?removeid=' + id;
+		document.location.href = '?remove=' + id;
 	}
 }
 </script>
@@ -47,10 +47,16 @@ function RemoveStatus(id) {
 <?php
 		}
 	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removeid'])) {
+	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['remove'])) {
 		// Removing status
 		$id = intval($_GET['removeid']);
-		$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
+		
+		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
+			$__database->query("DELETE FROM social_statuses WHERE id = ".$id."");
+		}
+		else {
+			$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
+		}
 ?>
 <p class="lead alert-info alert">The status was successfully deleted.</p>
 <?php
@@ -58,17 +64,11 @@ function RemoveStatus(id) {
 
 ?>
 
-<div id="PostStatus" class="modal-share hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<form method="post">
-	<div class="modal-header">
+<div id="post" class="collapse">
+	<form method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
 		<h3 id="myModalLabel">Post a status?</h3>
-	</div>
-	<div class="modal-body">
-		<textarea name="content" style="height:100px; max-height:100px; width:550px; max-width: 550px; border: none; -moz-user-select: text;" placeholder="Type your status here!"></textarea>
-	</div>
-	<div class="modal-footer">
+		<textarea name="content" style="height:100px; max-height:100px;" class="post-resize" placeholder="Type your status here!"></textarea>
 		<button type="submit" class="btn btn-large">Post!</button>
-	</div>
 	</form>
 </div>
 
