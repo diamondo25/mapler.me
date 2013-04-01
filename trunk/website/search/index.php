@@ -22,6 +22,10 @@ SELECT
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
+LEFT JOIN
+	accounts
+	ON
+		social_statuses.account_id = accounts.id
 WHERE
 	content LIKE '%$searchfix%'
 ORDER BY
