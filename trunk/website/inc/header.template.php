@@ -130,7 +130,23 @@ endif;
 					<ul class="nav hidden-phone pull-right">
 <?php
 if ($_loggedin):
+function GetSearch() {
+	$searchback = nl2br(htmlentities(strip_tags($_POST['search'])));
+	if ($searchback !== '') {
+		return $searchback;
+	}
+	else {
+		return 'Search?';
+	}
+}
 ?>					
+					<li>
+						<form method="POST" action="/search/">
+						<input type="text" name="search" class="search-query searchbar" placeholder="<?php echo GetSearch(); ?>">	 
+						</form>
+					</li>
+					
+
 					<li>
 						<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
 							<span class="sprite notify"></span>

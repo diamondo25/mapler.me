@@ -40,6 +40,25 @@ html { overflow-x: hidden; }
 	font-size: 13px;
 }
 
+.searchbar {
+	display: block;
+	width: 163px;
+	height: 14px;
+	padding: 6px 27px 6px 12px;
+	color: #666;
+	background-color: #FFF;
+	border: 0;
+	-webkit-border-radius: 13px;
+	-moz-border-radius: 13px;
+	border-radius: 13px;
+	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: inset 0 1px 2px rgba(0,0,0,.2);
+	-webkit-transition: all .2s ease-in-out;
+	-moz-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+}
+
 /* Profiles + Specific Pages */
 
 .profilec {
