@@ -144,13 +144,13 @@ function GetSearch() {
 ?>					
 					<li>
 						<form method="POST" action="/search/">
-						<input type="text" name="search" class="search-query searchbar" placeholder="Search?">	 
+						<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?">	 
 						</form>
 					</li>
 					
 
 					<li>
-						<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
+						<a class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" id="notify" href="//<?php echo $domain; ?>/settings/friends/">
 							<span class="sprite notify"></span>
 							<span class="notification-badge"><?php echo GetNotification(); ?></span>
 						</a>
