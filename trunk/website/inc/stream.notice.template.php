@@ -1,5 +1,5 @@
 <?php
-$notice = file_get_contents('../manage/notice.txt');
+$notice = file_get_contents('notice.txt');
 if ($notice !== '') {
 ?>
 	<div class="status">
