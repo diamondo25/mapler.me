@@ -49,7 +49,7 @@ function RemoveStatus(id) {
 	}
 	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['remove'])) {
 		// Removing status
-		$id = intval($_GET['removeid']);
+		$id = intval($_GET['remove']);
 		
 		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id."");
