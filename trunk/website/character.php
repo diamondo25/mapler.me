@@ -16,7 +16,8 @@ $q = $__database->query("
 SELECT 
 	*,
 	w.world_name,
-	`GetCharacterAccountID`(id) AS account_id
+	`GetCharacterAccountID`(id) AS account_id,
+	TIMESTAMPDIFF(SECOND, last_update, NOW()) AS `secs_since`
 FROM
 	`characters` chr
 LEFT JOIN 
@@ -86,6 +87,7 @@ else {
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo GetCharacterChannel(); ?></p>
+		<p class="side"><i class="icon-eye-open faded"></i> last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
 		<hr/>
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
