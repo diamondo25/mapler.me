@@ -72,7 +72,7 @@ ORDER BY
 				<br />
 				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
-					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['username']; ?>" onclick="Mention()" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
+					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['id']; ?>" onclick="Mention()" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
 					
 					<script type="text/javascript">
 						function Mention(id) {
