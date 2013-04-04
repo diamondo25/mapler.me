@@ -11,12 +11,14 @@ function RemoveStatus(id) {
 </script>
 
 <script type="text/javascript">
-$('.mention').click(function() {
+function Mention(id) {
+	$('.mention').click(function() {
     var value = $(".mention").attr('mentioned');
     var input = $('#post-status');
     input.val(input.val() + '@' + value + ' ');
     return false;
 });
+}
 </script>
 <?php
 
