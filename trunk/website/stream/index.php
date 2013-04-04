@@ -72,7 +72,19 @@ ORDER BY
 				<br />
 				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
-					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention" onclick="Mention(<?php echo $row['username']; ?>)" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a><?php endif; ?>
+					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['username']; ?>" onclick="Mention()" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
+					
+					<script type="text/javascript">
+						function Mention(id) {
+							$('.mention-<?php echo $row['username']; ?>').click(function() {
+								var value = $(".mention").attr('mentioned');
+								var input = $('#post-status');
+								input.val(input.val() + '@' + value + ' ');
+								return false;
+								});
+							}
+					</script>
+					<?php endif; ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
 <?php

@@ -9,17 +9,6 @@ function RemoveStatus(id) {
 	}
 }
 </script>
-
-<script type="text/javascript">
-function Mention(id) {
-	$('.mention').click(function() {
-    var value = $(".mention").attr('mentioned');
-    var input = $('#post-status');
-    input.val(input.val() + '@' + value + ' ');
-    return false;
-});
-}
-</script>
 <?php
 
 // Preventing spamming of form. [disabled]
