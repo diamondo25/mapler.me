@@ -76,7 +76,7 @@ ORDER BY
 					
 					<script type="text/javascript">
 						function Mention(id) {
-							$('.mention-<?php echo $row['username']; ?>').click(function() {
+							$('.mention-<?php echo $row['id']; ?>').click(function() {
 								var value = $(".mention").attr('mentioned');
 								var input = $('#post-status');
 								input.val(input.val() + '@' + value + ' ');
