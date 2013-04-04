@@ -11,8 +11,9 @@ function RemoveStatus(id) {
 </script>
 
 <script type="text/javascript">
-function Mention(username) {
-	$('#post-status').val($('#post-status').val() + '@' + username);
+function Mention(id) {
+	var input = $( "#post-status" );
+	input.val( input.val() + "@" + id);
 	}
 }
 </script>
