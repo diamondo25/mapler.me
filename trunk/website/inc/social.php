@@ -9,6 +9,13 @@ function RemoveStatus(id) {
 	}
 }
 </script>
+
+<script type="text/javascript">
+function Mention(username) {
+	$('#post-status').val($('#post-status').val() + '@' + username);
+	}
+}
+</script>
 <?php
 
 // Preventing spamming of form. [disabled]
@@ -67,7 +74,7 @@ function RemoveStatus(id) {
 <div id="post" class="collapse">
 	<form method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
 		<h3 id="myModalLabel">Post a status?</h3>
-		<textarea name="content" style="height:100px; max-height:100px;" class="post-resize" placeholder="Type your status here!"></textarea>
+		<textarea name="content" style="height:100px; max-height:100px;" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
 		<button type="submit" class="btn btn-large">Post!</button>
 	</form>
 </div>
