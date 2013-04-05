@@ -3,6 +3,7 @@
 /* Start session and load library. */
 session_start();
 require_once('twitteroauth/twitteroauth.php');
+require_once('twitteroauth/OAuth.php');
 require_once('config.php');
 
 /* Build TwitterOAuth object with client credentials. */
