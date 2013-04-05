@@ -1,5 +1,6 @@
 <?php
 if ($_loggedin) {
+include_once('twitter.class.php');
 ?>
 
 <script type="text/javascript">
@@ -9,6 +10,22 @@ function RemoveStatus(id) {
 	}
 }
 </script>
+
+<script type="text/javascript">
+function ConnectTwitter() {
+		document.location.href = '?twitter';
+}
+</script>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['twitter'])) {
+$connection = new TwitterOAuth('AeH4Ka2jIhiBWASIQUEQ', 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw');
+$request_token = $connection->getRequestToken(BASE_LINK_URL . 'callback.php');
+$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
+$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
+}
+?>
+
 <?php
 
 // Preventing spamming of form. [disabled]
