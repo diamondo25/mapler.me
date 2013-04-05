@@ -29,7 +29,7 @@ $q->free();
 
 function time_elapsed_string($etime) {
    if ($etime < 1) {
-       return '0 seconds';
+       return 'now';
    }
    
    $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
@@ -79,10 +79,18 @@ foreach ($cache as $row) {
 				<br />
 				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
-					<?php if ($row['comments_disabled'] == '0'): ?>
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>#disqus_thread"></a>
-					<img src="//<?php echo $domain; ?>/inc/img/icons/comment.png"/> - <?php endif; ?><a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
-
+				<div class="status-extra">
+					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['id']; ?>" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
+					<script type="text/javascript">
+							$('.mention-<?php echo $row['id']; ?>').click(function() {
+								var value = $(".mention-<?php echo $row['id']; ?>").attr('mentioned');
+								var input = $('#post-status');
+								input.val(input.val() + '@' + value + ' ');
+								return false;
+							});
+					</script>
+					<?php endif; ?>
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 <?php
 	if ($_loggedin) {
 		if (IsOwnAccount()) {
