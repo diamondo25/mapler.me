@@ -11,8 +11,6 @@ function RemoveStatus(id) {
 }
 </script>
 
-$("p").addClass("myClass yourClass");
-
 <?php
 
 // Preventing spamming of form. [disabled]
