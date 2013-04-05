@@ -80,6 +80,7 @@ ORDER BY
 								var input = $('#post-status');
 								input.val(input.val() + '@' + value + ' ');
 								return false;
+								$(".poster").addClass("on");
 							});
 					</script>
 					<?php endif; ?>

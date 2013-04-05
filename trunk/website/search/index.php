@@ -47,7 +47,7 @@ if ($q->num_rows == 0) {
 	<p>No statuses were found containing <?php echo GetSearch(); ?>!</p>
 </center>
 <?php
-	require_once __DIR__.'/inc/footer.php';
+	require_once __DIR__.'/../inc/footer.php';
 	die;
 }
 ?>

@@ -11,20 +11,7 @@ function RemoveStatus(id) {
 }
 </script>
 
-<script type="text/javascript">
-function ConnectTwitter() {
-		document.location.href = '?twitter';
-}
-</script>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['twitter'])) {
-$connection = new TwitterOAuth('AeH4Ka2jIhiBWASIQUEQ', 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw');
-$request_token = $connection->getRequestToken(BASE_LINK_URL . 'callback.php');
-$_SESSION['oauth_token'] = $token = $request_token['oauth_token'];
-$_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-}
-?>
+$("p").addClass("myClass yourClass");
 
 <?php
 
@@ -81,7 +68,7 @@ $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
 
 ?>
 
-<div id="post" class="collapse">
+<div id="post" class="collapse poster">
 	<form method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
 		<h3 id="myModalLabel">Post a status?</h3>
 		<textarea name="content" style="height:100px; max-height:100px;" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
