@@ -79,7 +79,6 @@ foreach ($cache as $row) {
 				<br />
 				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
-				<div class="status-extra">
 					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['id']; ?>" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
 					<script type="text/javascript">
 							$('.mention-<?php echo $row['id']; ?>').click(function() {

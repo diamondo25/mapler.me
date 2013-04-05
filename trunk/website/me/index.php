@@ -9,6 +9,10 @@ SELECT
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
+LEFT JOIN
+	accounts
+	ON
+		social_statuses.account_id = accounts.id
 WHERE
 	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
 ORDER BY
