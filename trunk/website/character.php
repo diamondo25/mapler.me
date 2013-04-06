@@ -70,6 +70,10 @@ else {
 	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
 	$stat_addition = GetCorrectStat($internal_id);
+	
+	$channelid = $character_info['channel'];
+	if ($channelid == -1) $channelid = 'Unknown';
+	else $channelid++; // 1 = 0
 ?>
 <div class="row">
 	<div class="span12">
@@ -86,7 +90,7 @@ else {
 		<hr/>
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
-		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo GetCharacterChannel(); ?></p>
+		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
 		<p class="side"><i class="icon-eye-open faded"></i> last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
 		<hr/>
 		

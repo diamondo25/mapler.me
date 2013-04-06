@@ -437,19 +437,6 @@ function GetNotification() {
 	return $tmp[0];
 }
 
-function GetCharacterChannel() {
-	global $__database;
-
-	$q = $__database->query("SELECT channel_id FROM characters WHERE name = '".$__database->real_escape_string($_GET['name'])."'");
-	$tmp = $q->fetch_row();
-	if ($tmp[0] == '-1') {
-		echo "Unknown";
-	}
-	else {
-		return $tmp[0];
-	}
-}
-
 function GetMapname($id, $full = true) {
 	$map = GetMapleStoryString("map", $id, "name");
 	if ($full) {
