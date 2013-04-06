@@ -48,6 +48,7 @@ if ($_loggedin) {
 	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
 	
 		<script type="text/javascript">
+		$('.in').affix();
 		$(function() {
 			$('.stream_display').css("display","none");
 			$('.load').css("display","block");
@@ -67,6 +68,36 @@ if ($_loggedin) {
   			});
   		})
   		</script>
+  		
+  		<style>
+  		.in.affix {
+	  		position: fixed;
+	  		z-index:999;
+	  		width: 350px;
+	  		background: rgba(255,255,255,0.9);
+	  		border-radius: 5px;
+	  		padding: 10px;
+	  		color: #FFF;
+	  		top:70px;
+	  		-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+            -moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+  		}
+  		
+  		.in.affix h3 {
+	  		display: none;
+  		}
+  		
+  		.in.affix .post-resize {
+	  		width:330px !important;
+  		}
+  		
+  		.in.affix form {
+	  		padding: 0px !important;
+	  		margin: 0px !important;
+	  		border-bottom: none !important;
+  		}
+  		</style>
 </head>
 
 <body>
