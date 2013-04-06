@@ -71,7 +71,7 @@ else {
 	$internal_id = $character_info['internal_id'];
 	$stat_addition = GetCorrectStat($internal_id);
 	
-	$channelid = $character_info['channel'];
+	$channelid = $character_info['channel_id'];
 	if ($channelid == -1) $channelid = 'Unknown';
 	else $channelid++; // 1 = 0
 ?>
