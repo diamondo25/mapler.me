@@ -85,6 +85,8 @@ foreach ($cache as $row) {
 								var value = $(".mention-<?php echo $row['id']; ?>").attr('mentioned');
 								var input = $('#post-status');
 								input.val(input.val() + '@' + value + ' ');
+								$(".poster").addClass("in");
+								$('.poster').css("height","auto");
 								return false;
 							});
 					</script>

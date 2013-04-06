@@ -61,6 +61,8 @@ $content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a
 								var value = $(".mention-<?php echo $row['id']; ?>").attr('mentioned');
 								var input = $('#post-status');
 								input.val(input.val() + '@' + value + ' ');
+								$(".poster").addClass("in");
+								$('.poster').css("height","auto");
 								return false;
 							});
 					</script>
