@@ -1052,25 +1052,6 @@ namespace MPLRServer
             if (isConnecting)
             {
                 pPacket.Skip(12); // RNGs
-                pPacket.Skip(8); // Flag
-                pPacket.Skip(1);
-
-                tmp = pPacket.ReadByte();
-                pPacket.Skip(tmp * 4);
-
-                tmp = pPacket.ReadInt();
-                pPacket.Skip(tmp * (4 + 8));
-
-
-                pPacket.Skip(1);
-
-                if (pPacket.ReadBool())
-                {
-                    tmp = pPacket.ReadInt();
-                    pPacket.Skip(tmp * 8);
-                    tmp = pPacket.ReadInt();
-                    pPacket.Skip(tmp * 8);
-                }
 
                 pConnection.Logger_WriteLine("--------- Started parsing Character Info ----------");
 

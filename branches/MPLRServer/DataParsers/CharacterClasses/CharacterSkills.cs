@@ -59,6 +59,12 @@ namespace MPLRServer
                         SkillList.Add(skill.ID, skill);
                     }
                 }
+
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadInt();
+                    pPacket.ReadShort();
+                }
             }
             else
             {

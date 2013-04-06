@@ -39,5 +39,15 @@ namespace System
             }
             return result;
         }
+
+        public static bool HasFlag(this int pValue, int pFlag)
+        {
+            return (pValue & pFlag) == pFlag;
+        }
+
+        public static bool HasFlag(this uint pValue, uint pFlag)
+        {
+            return (pValue & pFlag) == pFlag;
+        }
     }
 }

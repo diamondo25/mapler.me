@@ -153,6 +153,7 @@ namespace MPLRServer
 
                 // V.125 -> 126| Diff 0x00E8 -> 0x00ED, 0x011B -> 0x0121
                 // V.127 -> 128| Diff 0x00ED -> 0x00EE, 0x0121 -> 0x0122
+                // V.128 -> 132| Diff 0x00EE -> 0x00F4...
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
@@ -191,9 +192,9 @@ namespace MPLRServer
                 tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
                 tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
                 tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
-                tmp.Add(0x00ED, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
-                tmp.Add(0x00EE, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
-                tmp.Add(0x0122, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
+                tmp.Add(0x00F3, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
+                tmp.Add(0x00F4, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
+                tmp.Add(0x0129, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ServerPacket] = tmp;
             }

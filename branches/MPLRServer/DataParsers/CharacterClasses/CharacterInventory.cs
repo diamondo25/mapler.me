@@ -163,12 +163,14 @@ namespace MPLRServer
                 }
             }
 
-            // Bagzzz
 
-            while (true)
+            pPacket.ReadInt(); // New v.132
+
+            // Bagzzz
+            var bags = pPacket.ReadInt();
+            for (int i = 0; i < bags; i++)
             {
                 int bagid = pPacket.ReadInt();
-                if (bagid == -1) break;
 
                 int itemid = pPacket.ReadInt();
 
@@ -279,10 +281,13 @@ namespace MPLRServer
         public string Name { get; private set; }
         public short Flags { get; private set; }
 
+        public byte IncreasesSkills { get; private set; }
+
         public byte ItemLevel { get; private set; }
         public int ItemEXP { get; private set; }
 
         public int ViciousHammer { get; private set; }
+        public short PVPDamage { get; private set; }
 
         public short Potential1 { get; private set; }
         public short Potential2 { get; private set; }
@@ -300,46 +305,61 @@ namespace MPLRServer
         {
             base.Decode(pPacket);
 
+            {
+                {
+                    uint flag = pPacket.ReadUInt();
 
-            this.Slots = pPacket.ReadByte();
-            this.Scrolls = pPacket.ReadByte();
-            this.Str = pPacket.ReadShort();
-            this.Dex = pPacket.ReadShort();
-            this.Int = pPacket.ReadShort();
-            this.Luk = pPacket.ReadShort();
-            this.HP = pPacket.ReadShort();
-            this.MP = pPacket.ReadShort();
-            this.Watk = pPacket.ReadShort();
-            this.Matk = pPacket.ReadShort();
-            this.Wdef = pPacket.ReadShort();
-            this.Mdef = pPacket.ReadShort();
-            this.Acc = pPacket.ReadShort();
-            this.Avo = pPacket.ReadShort();
-            this.Hands = pPacket.ReadShort();
-            this.Speed = pPacket.ReadShort();
-            this.Jump = pPacket.ReadShort();
+                    this.Slots = FlaggedValue(flag, 0x01, pPacket, this.Slots);
+                    this.Scrolls = FlaggedValue(flag, 0x02, pPacket, this.Scrolls);
+                    this.Str = FlaggedValue(flag, 0x04, pPacket, this.Str);
+                    this.Dex = FlaggedValue(flag, 0x08, pPacket, this.Dex);
+                    this.Int = FlaggedValue(flag, 0x10, pPacket, this.Int);
+                    this.Luk = FlaggedValue(flag, 0x20, pPacket, this.Luk);
+                    this.HP = FlaggedValue(flag, 0x40, pPacket, this.HP);
+                    this.MP = FlaggedValue(flag, 0x80, pPacket, this.MP);
+                    this.Watk = FlaggedValue(flag, 0x100, pPacket, this.Watk);
+                    this.Matk = FlaggedValue(flag, 0x200, pPacket, this.Matk);
+                    this.Wdef = FlaggedValue(flag, 0x400, pPacket, this.Wdef);
+                    this.Mdef = FlaggedValue(flag, 0x800, pPacket, this.Mdef);
+                    this.Acc = FlaggedValue(flag, 0x1000, pPacket, this.Acc);
+                    this.Avo = FlaggedValue(flag, 0x2000, pPacket, this.Avo);
+                    this.Hands = FlaggedValue(flag, 0x4000, pPacket, this.Hands);
+                    this.Speed = FlaggedValue(flag, 0x8000, pPacket, this.Speed);
+                    this.Jump = FlaggedValue(flag, 0x10000, pPacket, this.Jump);
+                    this.Flags = FlaggedValue(flag, 0x20000, pPacket, this.Flags);
+
+                    this.IncreasesSkills = FlaggedValue(flag, 0x40000, pPacket, this.IncreasesSkills);
+
+                    this.ItemLevel = FlaggedValue(flag, 0x80000, pPacket, this.ItemLevel);
+                    this.ItemEXP = FlaggedValue(flag, 0x100000, pPacket, this.ItemEXP);
+
+
+                    FlaggedValue(flag, 0x200000, pPacket, (int)0);
+                    this.ViciousHammer = FlaggedValue(flag, 0x400000, pPacket, this.ViciousHammer);
+
+                    this.PVPDamage = FlaggedValue(flag, 0x800000, pPacket, this.PVPDamage);
+
+                    FlaggedValue(flag, 0x1000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x2000000, pPacket, (short)0);
+                    FlaggedValue(flag, 0x4000000, pPacket, (int)0);
+                    FlaggedValue(flag, 0x8000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x10000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x20000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x40000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x80000000, pPacket, (byte)0);
+                }
+
+                {
+                    uint flag = pPacket.ReadUInt();
+                    FlaggedValue(flag, 0x01, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x02, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x04, pPacket, (byte)0);
+                }
+            }
 
             this.Name = pPacket.ReadString();
-            this.Flags = pPacket.ReadShort();
-
-            pPacket.ReadByte(); // Increases Skill
-
-            this.ItemLevel = pPacket.ReadByte();
-            this.ItemEXP = pPacket.ReadInt();
-
-            pPacket.ReadInt(); // 
-            this.ViciousHammer = pPacket.ReadInt();
-
-            pPacket.ReadShort(); // PVP damage
-
-            pPacket.ReadByte();
-            pPacket.ReadByte();
-
 
             this.SocketState = pPacket.ReadShort();
-            this.Socket1 = pPacket.ReadShort();
-            this.Socket2 = pPacket.ReadShort();
-            this.Socket3 = pPacket.ReadShort();
 
             this.Potential1 = pPacket.ReadShort();
             this.Potential2 = pPacket.ReadShort();
@@ -347,46 +367,20 @@ namespace MPLRServer
             this.Potential4 = pPacket.ReadShort();
             this.Potential5 = pPacket.ReadShort();
 
-            pPacket.ReadShort(); // New?
+            this.Socket1 = pPacket.ReadShort();
+            this.Socket2 = pPacket.ReadShort();
+            this.Socket3 = pPacket.ReadShort();
 
-            pPacket.ReadLong();
+            pPacket.ReadShort(); //
+            pPacket.ReadShort(); //
+            pPacket.ReadShort(); //
+
             pPacket.ReadLong(); // V.126
 
             if (CashID == 0)
                 pPacket.ReadLong();
 
             pPacket.ReadInt();
-
-            /*
-            AddShort("v21");
-            AddByte("v22");
-            AddByte("v23");
-            AddInt("v24");
-            AddInt("v25");
-            AddInt("v26");
-            AddShort("v27");
-            AddShort("v28");
-            AddInt("v29");
-            AddByte("v30");
-            AddByte("v31");
-            AddByte("v32");
-            AddByte("v33");
-            AddShort("v34");
-            AddShort("v35");
-            AddShort("v36");
-            AddShort("v37");
-            AddShort("v38");
-            AddShort("v39");
-            AddShort("v40");
-            AddShort("v41");
-            AddShort("v42");
-            AddShort("v43");
-            if (iscash == 0x00) {
-                AddLong("!?");
-            }
-            AddLong("!?");
-            AddInt("v3");
-           */
         }
 
         public override int GetChecksum()
@@ -398,6 +392,36 @@ namespace MPLRServer
                 ItemLevel + ItemEXP +
                 Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + 
                 SocketState + Socket1 + Socket2 + Socket3;
+        }
+
+        private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, byte pDefault = 0)
+        {
+            if (pValue.HasFlag(pFlag))
+                Logger.WriteLine("FOUND {0:X8}", pFlag);
+            if (pValue.HasFlag(pFlag))
+                return pPacket.ReadByte();
+            else
+                return pDefault;
+        }
+
+        private static short FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, short pTypeValue, short pDefault = 0)
+        {
+            if (pValue.HasFlag(pFlag))
+                Logger.WriteLine("FOUND {0:X8}", pFlag);
+            if (pValue.HasFlag(pFlag))
+                return pPacket.ReadShort();
+            else
+                return pDefault;
+        }
+
+        private static int FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, int pTypeValue, int pDefault = 0)
+        {
+            if (pValue.HasFlag(pFlag))
+                Logger.WriteLine("FOUND {0:X8}", pFlag);
+            if (pValue.HasFlag(pFlag))
+                return pPacket.ReadInt();
+            else
+                return pDefault;
         }
     }
 

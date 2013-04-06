@@ -85,7 +85,7 @@ namespace MPLRServer
 
         }
 
-        public static void Load(string pServerName, ulong pTicksBeforeSleep = 200)
+        public static void Load(string pServerName, ulong pTicksBeforeSleep = 100)
         {
             Instance = new MasterThread(pServerName, pTicksBeforeSleep);
             Instance.Init();

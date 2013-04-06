@@ -47,6 +47,33 @@ namespace MPLRServer
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
+            pPacket.Skip(8); // Flag
+
+            pPacket.Skip(1);
+
+            { // V.132
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+
+            int tmp = pPacket.ReadByte();
+            pPacket.Skip(tmp * 4);
+
+            tmp = pPacket.ReadInt();
+            pPacket.Skip(tmp * (4 + 8));
+
+
+            pPacket.Skip(1);
+
+            if (pPacket.ReadBool())
+            {
+                tmp = pPacket.ReadInt();
+                pPacket.Skip(tmp * 8);
+                tmp = pPacket.ReadInt();
+                pPacket.Skip(tmp * 8);
+            }
+
             Stats = new GW_CharacterStat();
             Stats.Decode(pPacket);
 
@@ -266,7 +293,7 @@ namespace MPLRServer
                 {
                     while (true)
                     {
-                        ushort tmp = pPacket.ReadUShort();
+                        tmp = pPacket.ReadUShort();
                         if (tmp <= 0) break;
 
                         while (true)
@@ -283,7 +310,7 @@ namespace MPLRServer
                 {
                     while (true)
                     {
-                        ushort tmp = pPacket.ReadUShort();
+                        tmp = pPacket.ReadUShort();
                         if (tmp <= 0) break;
 
                         pPacket.ReadUShort();
@@ -313,6 +340,8 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadLong();
             }
+
+            pPacket.ReadInt(); // New v.132
 
             pPacket.Skip(84); // I don't even
 
