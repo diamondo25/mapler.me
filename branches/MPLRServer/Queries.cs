@@ -144,7 +144,7 @@ namespace MPLRServer
             return null;
         }
 
-        public static void SaveItem(ClientConnection pConnection, byte pInventory, short pSlot, ItemBase pItem, InsertQueryBuilder itemsTable, bool pDontSetChecksum = false)
+        public static void SaveItem(ClientConnection pConnection, ushort pInventory, short pSlot, ItemBase pItem, InsertQueryBuilder itemsTable, bool pDontSetChecksum = false)
         {
             if (!itemsTable.HasColumns)
             {

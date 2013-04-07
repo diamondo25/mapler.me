@@ -420,6 +420,7 @@ function DecodeItem() {
 			AddByte("-.-");
 			AddInt("New!?!?!?!");
 			AddInt("New!?!?!!?");
+			AddShort("Moar new wtf man");
 		}
 	}
 }

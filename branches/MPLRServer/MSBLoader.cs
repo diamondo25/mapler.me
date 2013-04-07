@@ -10,9 +10,10 @@ namespace MPLRServer
     class MSBLoader
     {
         public delegate void DHandlePacket(MaplePacket pPacket);
-
         public DHandlePacket PacketHandler;
 
+        public delegate void DOnDisconnect();
+        public DOnDisconnect DisconnectHandler;
 
         public void Parse(string pFile)
         {
@@ -44,7 +45,7 @@ namespace MPLRServer
                     buffer[0] = (byte)(outbound ? MaplePacket.CommunicationType.ClientPacket : MaplePacket.CommunicationType.ServerPacket);
                     Buffer.BlockCopy(BitConverter.GetBytes(opcode), 0, buffer, 1, 2);
                     Buffer.BlockCopy(reader.ReadBytes(size), 0, buffer, 3, size);
-
+                    if (opcode >= 0xEE00) continue; // Ignore!
 
                     Logger.WriteLine("Emulating {0:X4} ({1})", opcode, size);
                     MaplePacket packet = new MaplePacket(buffer);
@@ -60,6 +61,8 @@ namespace MPLRServer
                     }
                 }
             }
+
+            DisconnectHandler();
         }
 
         

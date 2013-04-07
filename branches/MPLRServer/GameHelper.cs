@@ -208,5 +208,9 @@ namespace MPLRServer
             return pJobID / 100 == 33;
         }
 
+        public static ushort GetBagID(int pID, int pInventory)
+        {
+            return (ushort)((pInventory * 30) + pID);
+        }
     }
 }

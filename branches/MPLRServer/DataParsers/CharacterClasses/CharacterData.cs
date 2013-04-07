@@ -323,7 +323,7 @@ namespace MPLRServer
             if (pPacket.ReadBool())
             {
                 // Wat.
-                ItemBase unkitem = ItemBase.DecodeItemData(pPacket);
+                ItemBase.DecodeItemData(pPacket);
             }
 
 
@@ -341,7 +341,21 @@ namespace MPLRServer
                 pPacket.ReadLong();
             }
 
-            pPacket.ReadInt(); // New v.132
+            {
+                for (short i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadShort(); // Seems block ID
+                    pPacket.ReadInt(); // 3600000+ ?
+                    pPacket.ReadInt(); // Level?
+                }
+                for (short i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadShort();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                }
+
+            }
 
             pPacket.Skip(84); // I don't even
 
@@ -477,7 +491,7 @@ namespace MPLRServer
 
                 foreach (var bag in Inventory.BagItems)
                 {
-                    byte i = (byte)(10 + bag.Key);
+                    ushort i = (ushort)bag.Key;
                     foreach (var itemdata in bag.Value.Items)
                     {
                         var item = itemdata.Value;
@@ -590,7 +604,7 @@ namespace MPLRServer
 
                 foreach (var bag in Inventory.BagItems)
                 {
-                    byte i = (byte)(10 + bag.Key);
+                    ushort i = (ushort)(bag.Key);
                     foreach (var itemdata in bag.Value.Items)
                     {
                         var item = itemdata.Value;

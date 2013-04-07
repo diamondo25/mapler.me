@@ -721,7 +721,7 @@ namespace MPLRServer
                             itemTable.SetWhereColumn("slot", slot);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
-                            int result = (int)MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                         }
                     }
 
@@ -762,14 +762,18 @@ namespace MPLRServer
                             bagfrom -= 1;
 
 
+                        ushort invto = bagto == 255 ? inv : GameHelper.GetBagID(bagto, inv);
+                        ushort invfrom = bagfrom == 255 ? inv : GameHelper.GetBagID(bagfrom, inv);
+
+
                         if (
                             (bagfrom != 255 && bagto != 255) ||
                             (bagfrom == bagto) || // Check if the item is being moved to itself or something
 
                             (bagfrom == 255 && !inventory.InventoryItems[inv].ContainsKey(slotfrom)) ||
-                            (bagfrom != 255 && (!inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom))) ||
+                            (bagfrom != 255 && (!inventory.BagItems.ContainsKey(invfrom) || !inventory.BagItems[invfrom].Items.ContainsKey(slotfrom))) ||
 
-                            (bagto != 255 && !inventory.BagItems.ContainsKey(bagto)) // Only check if bag exists
+                            (bagto != 255 && !inventory.BagItems.ContainsKey(invto)) // Only check if bag exists
                             )
                         {
                             pConnection.Logger_WriteLine("Invalid item movement in bag !!!");
@@ -777,22 +781,18 @@ namespace MPLRServer
                         }
 
                         bool founditem = false;
-
-                        byte invto = bagto == 255 ? inv : (byte)(10 + bagto);
-                        byte invfrom = bagfrom == 255 ? inv : (byte)(10 + bagfrom);
-
                         if (bagfrom == 255)
                         {
                             // Move to bag
                             ItemBase ib = inventory.InventoryItems[inv][slotfrom];
-                            if (inventory.BagItems[bagto].Items.ContainsKey(slotto))
+                            if (inventory.BagItems[invto].Items.ContainsKey(slotto))
                             {
-                                inventory.InventoryItems[inv][slotfrom] = inventory.BagItems[bagto].Items[slotto];
-                                inventory.BagItems[bagto].Items.Remove(slotto);
+                                inventory.InventoryItems[inv][slotfrom] = inventory.BagItems[invto].Items[slotto];
+                                inventory.BagItems[invto].Items.Remove(slotto);
                                 founditem = true;
                             }
 
-                            inventory.BagItems[bagto].Items.Add(slotto, ib);
+                            inventory.BagItems[invto].Items.Add(slotto, ib);
 
 
 
@@ -800,10 +800,10 @@ namespace MPLRServer
                         else
                         {
                             // Move to normal slot
-                            ItemBase ib = inventory.BagItems[bagfrom].Items[slotfrom];
+                            ItemBase ib = inventory.BagItems[invfrom].Items[slotfrom];
                             if (inventory.InventoryItems[inv].ContainsKey(slotto))
                             {
-                                inventory.BagItems[bagfrom].Items[slotfrom] = inventory.InventoryItems[inv][slotto];
+                                inventory.BagItems[invfrom].Items[slotfrom] = inventory.InventoryItems[inv][slotto];
                                 inventory.InventoryItems[inv].Remove(slotto);
                             }
 
@@ -873,6 +873,7 @@ namespace MPLRServer
                     else if (type4 == 6)
                     {
                         // Update bag item amount
+                        inv -= 1;
 
                         short from = slot;
                         byte slotfrom = (byte)(from % 100);
@@ -890,10 +891,10 @@ namespace MPLRServer
                         else
                             bagfrom -= 1;
 
-                        byte invfrom = (byte)(10 + bagfrom);
+                        ushort invfrom = GameHelper.GetBagID(bagfrom, inv);
 
                         if (
-                            !inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom)
+                            !inventory.BagItems.ContainsKey(invfrom) || !inventory.BagItems[invfrom].Items.ContainsKey(slotfrom)
                             )
                         {
                             pConnection.Logger_WriteLine("Invalid item movement in bag (item did not exist)!!!");
@@ -902,7 +903,7 @@ namespace MPLRServer
 
 
 
-                        ItemBase item = inventory.BagItems[bagfrom].Items[slotfrom];
+                        ItemBase item = inventory.BagItems[invfrom].Items[slotfrom];
                         item.Amount = amount;
 
                         Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
@@ -917,14 +918,34 @@ namespace MPLRServer
 
                             MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                         }
+                    }
+                    else if (type4 == 7)
+                    {
+                        // Delete/drop bag item D:
+                        inv -= 1;
+
+                        short from = slot;
+                        byte slotfrom = (byte)(from % 100);
+                        byte bagfrom = (byte)(from / 100);
+
+                        slotfrom -= 1;
+                        bagfrom -= 1;
+                        ushort invfrom = GameHelper.GetBagID(bagfrom, inv);
 
 
+                        using (DeleteQueryBuilder itemTable = new DeleteQueryBuilder("items"))
+                        {
+                            itemTable.SetWhereColumn("inventory", invfrom);
+                            itemTable.SetWhereColumn("slot", slotfrom);
+                            itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
 
+                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                        }
                     }
                     else if (type4 == 8)
                     {
                         // Swap/move item in bags
-                        inv -= 2; // 4 = use, internally it's 1 (no equip, starts with 0 O.o)
+                        inv -= 1;
 
                         short from = slot;
                         byte slotfrom = (byte)(from % 100);
@@ -940,35 +961,35 @@ namespace MPLRServer
                         bagfrom -= 1;
 
 
-                        byte invto = (byte)(10 + bagto);
-                        byte invfrom = (byte)(10 + bagfrom);
+                        ushort invto = GameHelper.GetBagID(bagto, inv);
+                        ushort invfrom = GameHelper.GetBagID(bagfrom, inv);
 
 
-                        if (!inventory.BagItems.ContainsKey(bagfrom) || !inventory.BagItems.ContainsKey(bagto))
+                        if (!inventory.BagItems.ContainsKey(invfrom) || !inventory.BagItems.ContainsKey(invto))
                         {
                             pConnection.Logger_WriteLine("Invalid item movement in bag");
                             continue;
                         }
 
-                        if (!inventory.BagItems[bagfrom].Items.ContainsKey(slotfrom))
+                        if (!inventory.BagItems[invfrom].Items.ContainsKey(slotfrom))
                         {
                             pConnection.Logger_WriteLine("Invalid item movement in bag (item not found)");
                             continue;
                         }
 
-                        ItemBase item = inventory.BagItems[bagfrom].Items[slotfrom];
+                        ItemBase item = inventory.BagItems[invfrom].Items[slotfrom];
 
                         bool founditem = false;
 
-                        if (inventory.BagItems[bagto].Items.ContainsKey(slotto))
+                        if (inventory.BagItems[invto].Items.ContainsKey(slotto))
                         {
                             // Swap
 
-                            inventory.BagItems[bagfrom].Items[slotfrom] = inventory.BagItems[bagto].Items[slotto];
-                            inventory.BagItems[bagto].Items.Remove(slotto); // Delete item
+                            inventory.BagItems[invfrom].Items[slotfrom] = inventory.BagItems[invto].Items[slotto];
+                            inventory.BagItems[invto].Items.Remove(slotto); // Delete item
                             founditem = true;
                         }
-                        inventory.BagItems[bagto].Items.Add(slotto, item);
+                        inventory.BagItems[invto].Items.Add(slotto, item);
 
 
 
@@ -1011,9 +1032,42 @@ namespace MPLRServer
                                 MySQL_Connection.Instance.RunQuery(itemTable.ToString());
                             }
                         }
+                    }
+                    else if (type4 == 9)
+                    {
+                        // Add item directly to bag
+                        inv -= 1;
+
+                        ItemBase item = ItemBase.DecodeItemData(pPacket);
+
+                        short from = slot;
+                        byte slotfrom = (byte)(from % 100);
+                        byte bagfrom = (byte)(from / 100);
+
+                        slotfrom -= 1;
+                        bagfrom -= 1;
+                        ushort invfrom = GameHelper.GetBagID(bagfrom, inv);
+
+                        if (!inventory.BagItems.ContainsKey(invfrom)) continue;
+
+                        inventory.BagItems[invfrom].Items[slotfrom] = item;
 
 
+                        using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
+                        {
+                            Queries.SaveItem(pConnection, invfrom, slotfrom, item, itemsTable);
+                            MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
 
+                            if (item is ItemPet)
+                            {
+                                var pet = item as ItemPet;
+                                using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
+                                {
+                                    Queries.SavePet(pet, petTable);
+                                    MySQL_Connection.Instance.RunQuery(petTable.ToString());
+                                }
+                            }
+                        }
                     }
                     else if (type4 == 10)
                     {

@@ -148,14 +148,8 @@ namespace MPLRServer
 
                     if (item.BagID != -1)
                     {
-                        if (item.ItemID % 4330000 > 0)
-                        {
-                            pConnection.Logger_WriteLine("Found bag at inv {0} slot {1} (ItemID: {2}, BagSlot: {3})", i, slot, item.ItemID, item.BagID);
-                        }
-                        else
-                        {
-                            pConnection.Logger_WriteLine("Found Item != Bag at inv {0} slot {1} (ItemID: {2}, Placeholder: {3})", i, slot, item.ItemID, item.BagID);
-                        }
+                        // Update BagID... O.o
+                        item.BagID = GameHelper.GetBagID(item.BagID, i);
 
                         BagItem bi = new BagItem(item);
                         BagItems.Add(item.BagID, bi);
@@ -163,26 +157,26 @@ namespace MPLRServer
                 }
             }
 
-
-            pPacket.ReadInt(); // New v.132
-
             // Bagzzz
-            var bags = pPacket.ReadInt();
-            for (int i = 0; i < bags; i++)
+            for (int inv = 3; inv <= 4; inv++)
             {
-                int bagid = pPacket.ReadInt();
-
-                int itemid = pPacket.ReadInt();
-
-                BagItem bi = BagItems[bagid];
-
-                while (true)
+                var bags = pPacket.ReadInt();
+                for (int i = 0; i < bags; i++)
                 {
-                    int slotid = pPacket.ReadInt();
-                    if (slotid == -1) break;
+                    int bagid = pPacket.ReadInt();
 
-                    ItemBase item = ItemBase.DecodeItemData(pPacket);
-                    bi.Items.Add((byte)slotid, item);
+                    int bagitemid = pPacket.ReadInt();
+
+                    BagItem bi = BagItems[GameHelper.GetBagID(bagid, inv - 2)]; // No addition to inv...!
+
+                    while (true)
+                    {
+                        int slotid = pPacket.ReadInt();
+                        if (slotid == -1) break;
+
+                        ItemBase item = ItemBase.DecodeItemData(pPacket);
+                        bi.Items.Add((byte)slotid, item);
+                    }
                 }
             }
         }
@@ -205,7 +199,7 @@ namespace MPLRServer
         public long CashID { get; private set; }
         public short Amount { get; set; }
 
-        public int BagID { get; private set; }
+        public int BagID { get; set; }
 
         public static ItemBase DecodeItemData(MaplePacket pPacket)
         {
@@ -467,7 +461,8 @@ namespace MPLRServer
             Fullness = pPacket.ReadByte();
 
 
-            pPacket.Skip(8 + 2 + 2 + 4 + 2 + 1 + 4 + 4);
+            pPacket.Skip(8 + 2 + 2 + 4 + 2 + 1 + 4 + 4 + 2);
+            // V.132: + 2
         }
     }
 }

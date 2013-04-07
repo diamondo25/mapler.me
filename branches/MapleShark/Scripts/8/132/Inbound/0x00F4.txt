@@ -131,23 +131,22 @@ using (ScriptAPI) {
 		}
 		EndNode(false);
 		
-		AddInt("test");
-		
-		i = AddInt("Bag ID");
-        for (; i > 0; i--) {
-			StartNode("Bag " + i);
-			AddInt("Slot ID");
-			AddInt("Bag Item ID");
-			for (j = 0; j < 10; j++) {
-	    	    slot = AddInt("Slot ID");
-	    	    if (slot == -1) break;
-	    		StartNode("? " + slot);
-	    		DecodeItem();
-	    		EndNode(false);
+		for (k = 3; k <= 4; k++) {
+			i = AddInt("bags");
+	        for (; i > 0; i--) {
+				StartNode("Bag " + i);
+				AddInt("Bag ID");
+				AddInt("Bag Item ID");
+			    while(true) {
+		    	    slot = AddInt("Slot ID");
+					if (slot == -1) break;
+		    		StartNode("? " + slot);
+		    		DecodeItem();
+		    		EndNode(false);
+				}
+				EndNode(false);
 			}
-			EndNode(false);
 		}
-		
 		amount = AddInt("Amount");
 		for (i = 0; i < amount; i++) {
 			AddInt("1 --");
@@ -478,27 +477,44 @@ using (ScriptAPI) {
 		}
 	    EndNode(false);
 		
-		StartNode("..."); // & 0x04
+		StartNode("Decode some item"); // & 0x04
 		if (AddByte("unk") == 1) {
 			DecodeItem();
 			AddInt("---");
 		}
 		EndNode(false);
 		
-		StartNode("fmemew"); // & 0x08
+		StartNode("3 ints and a byte"); // & 0x08
 		AddInt("....");
 		AddInt("....");
 		AddInt("....");
 		AddByte("....");
 		EndNode(false);
 		
-		StartNode("32r32"); // & 0x20
+		StartNode("Two ints and a long"); // & 0x20
 		AddInt("....");
 		AddInt("....");
 		AddLong("....");
 		EndNode(false);
 		
-		AddInt("New v.132"); // & 0x20000
+		StartNode("New v.132"); // & 0x20000
+		amnt = AddShort("amount 1");
+		for (; amnt > 0; amnt--) {
+			StartNode("block");
+			AddShort("main");
+			AddInt("1");
+			AddInt("2");
+			EndNode(false);
+		}
+		amnt = AddShort("amount 2");
+		for (; amnt > 0; amnt--) {
+			StartNode("block");
+			AddShort("main");
+			AddInt("1");
+			AddInt("2");
+			EndNode(false);
+		}
+		EndNode(false);
 		
 		AddField("WAT DE FUCK", 84); // & 0x10000
 		AddByte("unk");

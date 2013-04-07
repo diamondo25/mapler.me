@@ -26,13 +26,16 @@ namespace MPLRServer
         public ushort MapleVersion { get; set; }
 
         private MSBExporter _exporter;
+        private bool _isFake = false;
 
         public ClientConnection(MSBLoader pLoader)
         {
             Program.Clients.Add(this);
             Logger_WriteLine("Fake Client Connected!");
+            _isFake = true;
             Clear();
             pLoader.PacketHandler += OnPacket;
+            pLoader.DisconnectHandler += OnDisconnect;
         }
 
         public ClientConnection(Socket pSocket)
@@ -87,6 +90,7 @@ namespace MPLRServer
 
         public override void SendPacket(MaplePacket pPacket)
         {
+            if (_isFake) return;
             using (MaplePacket tmp = new MaplePacket(pPacket.ToArray()))
             {
                 _exporter.AddPacket(tmp);
@@ -96,6 +100,8 @@ namespace MPLRServer
 
         public void Save(bool pReset)
         {
+            if (_isFake) return;
+
             Logger_WriteLine("Trying to save...");
             if (_exporter != null)
             {
@@ -124,6 +130,7 @@ namespace MPLRServer
 
         public void SendTimeUpdate()
         {
+            if (_isFake) return;
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFD))
             {
                 packet.WriteString(LastLoggedName);
@@ -133,6 +140,7 @@ namespace MPLRServer
 
         public void SendInfoText(string pMessage, params object[] pParams)
         {
+            if (_isFake) return;
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFC))
             {
                 packet.WriteString(string.Format(pMessage, pParams));
@@ -192,6 +200,7 @@ namespace MPLRServer
                 catch (Exception ex)
                 {
                     Logger.ErrorLog("Failed handling packet: {0}", ex.ToString());
+                    SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
                 }
                 pPacket.Dispose();
                 pPacket = null;
