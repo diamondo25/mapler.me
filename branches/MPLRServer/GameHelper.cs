@@ -210,7 +210,7 @@ namespace MPLRServer
 
         public static ushort GetBagID(int pID, int pInventory)
         {
-            return (ushort)((pInventory * 30) + pID);
+            return (ushort)(10 + ((pInventory * 30) + pID));
         }
     }
 }

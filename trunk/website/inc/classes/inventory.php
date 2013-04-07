@@ -85,8 +85,7 @@ class InventoryData {
 		}
 		
 		foreach ($rows as $row) {
-			$inv = $row['inventory'];
-			$bagid = $inv - 10;
+			$bagid = $row['inventory'];
 			if (!isset($this->bags[$bagid])) continue;
 			
 			$slot = $row['slot'];
