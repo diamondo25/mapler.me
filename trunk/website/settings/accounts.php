@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function RemoveAccount(id) {
-	if (confirm("Are you sure you want to delete this account? Doing so will remove all characters aswell!!!! THIS IS IRREVERSIBLE!!!")) {
+	if (confirm("Are you sure you want to remove this account? Doing so will remove all characters from your Mapler.me as well! THIS IS IRREVERSIBLE!!!")) {
 		document.location.href = '?removeid=' + id;
 	}
 }
@@ -10,9 +10,9 @@ function RemoveAccount(id) {
 $maycheck = true;
 if ($_loginaccount->GetConfigurationOption('last_account_addition', 0) != 0) {
 	$tmp = strtotime($_loginaccount->GetConfigurationOption('last_account_addition'));
-	$tmp += 4 * 60; // 3 minutes
+	$tmp += 5 * 60; // 5 minutes
 	
-	if (time() < $tmp) { // 3 minutes
+	if (time() < $tmp) { // 5 minutes
 		$maycheck = false;
 		$minutes_timeout = ceil(($tmp - time()) / 60);
 	}
@@ -23,7 +23,7 @@ if ($_loginaccount->GetConfigurationOption('last_account_addition', 0) != 0) {
 if ($maycheck && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username'], $_POST['password'])) {
 	// Oh jolly
 	$maycheck = false;
-	$minutes_timeout = 4;
+	$minutes_timeout = 5;
 	$_loginaccount->SetConfigurationOption('last_account_addition', date("Y-m-d H:i:s"));
 
 	$post_values = array(
@@ -158,7 +158,7 @@ GROUP BY
 <h3>Connect an account:</h3>
 <?php if (!$maycheck): ?>
 <p class="lead alert-error alert">Error: You have to wait <?php echo $minutes_timeout; ?> minute<?php echo $minutes_timeout > 1 ? 's' : ''; ?> before trying again...</p>
-<p>Reason: When you connect a Nexon account, you are logged in through Nexon's login API which can use up their resources. Additionally, to allow Nexon to track players connecting their accounts to Mapler.me, it also states that the login came from here. To prevent abuse or damage, we permit one attempt every three minutes.
+<p>Reason: When you connect a Nexon account, you are logged in through Nexon's login API which can use up their resources. Additionally, to allow Nexon to track players connecting their accounts to Mapler.me, it also states that the login came from here. To prevent abuse or damage, we permit one attempt every five minutes.
 <?php else: ?>
 		<form class="form-horizontal" action="" method="post">
 			<div class="control-group">

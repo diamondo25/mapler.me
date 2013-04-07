@@ -33,7 +33,7 @@ if ($q->num_rows == 0) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
-	<p>Character not found! The character may have been removed or misspelled.</p>
+	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
 	require_once __DIR__.'/inc/footer.php';
@@ -56,16 +56,29 @@ if ($character_info['userid'] == '18833935') {
 $status = GetCharacterStatus($character_info['id']);
 $friend_status = GetFriendStatus(GetCharacterAccountId($character_info['id']), $_loginaccount->GetID());
 
-if ($status == 2 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE') {
+if ($status == 1 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE') {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
-	<p>Only friends are allowed to view this character's stats!</p>
+	<p>Only friends are allowed to view this character!</p>
 </center>
 <?php
 	require_once __DIR__.'/inc/footer.php';
 	die;
 }
+
+elseif ($status == 2) {
+// displays the same error as not found to not tell if exists or not.
+?>
+<center>
+	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<p>Character not found! The character may have been removed or hidden.</p>
+</center>
+<?php
+    require_once __DIR__.'/inc/footer.php';
+	die;
+}
+
 else {
 	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
