@@ -1,6 +1,10 @@
 <?php
 require_once __DIR__.'/../database.php';
 
+define("ITEM_RECHARGE", 1);
+define("ITEM_EQUIP", 2);
+define("ITEM_PET", 3);
+
 class InventoryData {
 	private $inventories;
 	private $bags;
@@ -35,11 +39,11 @@ class InventoryData {
 		if ($emulateData != null) {
 			$rows = array_filter($emulateData['items'], 'FilterOnlyInventories');
 			for ($i = 0; $i < count($rows); $i++) {
-				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
+				$rows[$i]['expires'] = ceil(($rows[$i]['expires'] / 10000000) - 11644473600);
 			}
 		}
 		else {
-			$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
+			$q = $__database->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
 			$rows = array();
 			while ($row = $q->fetch_assoc()) {
 				$rows[] = $row;
@@ -58,7 +62,7 @@ class InventoryData {
 				if ($slot >= $this->inventories[$inv]->getSize()) {
 					$this->inventories[$inv]->setSize($slot + ($slot % 4) + 1);
 				}
-				$item = $inv == 0 ? new ItemEquip($row) : new ItemBase($row);
+				$item = ItemBase::MakeItem($row, $emulateData);
 				$this->inventories[$inv][$slot] = $item;
 				
 				if ($item->bagid != -1) {
@@ -71,11 +75,11 @@ class InventoryData {
 		if ($emulateData != null) {
 			$rows = array_filter($emulateData['items'], 'FilterOnlyBags');
 			for ($i = 0; $i < count($rows); $i++) {
-				$rows[$i]['expires'] = ceil(($rows[$i]['expires']/10000000) - 11644473600);
+				$rows[$i]['expires'] = ceil(($rows[$i]['expires'] / 10000000) - 11644473600);
 			}
 		}
 		else {
-			$q = $__database->query("SELECT *, ceil((expires/10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
+			$q = $__database->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
 		
 			$rows = array();
 			while ($row = $q->fetch_assoc()) {
@@ -112,6 +116,7 @@ class InventoryData {
 
 class ItemBase {
 	public $inventory, $slot, $itemid, $expires, $cashid, $amount, $bagid;
+	public $type;
 	
 	public function __construct($row) {
 		$this->inventory = $row['inventory'];
@@ -122,6 +127,20 @@ class ItemBase {
 		$this->amount = $row['amount'];
 		$this->bagid = $row['bagid'];
 	}
+	
+	public static function MakeItem($row, $emulateData) {
+		if ($row['inventory'] == 0)
+			$item = new ItemEquip($row);
+		elseif (GetItemType($row['itemid']) == 500)
+			$item = new ItemPet($row, $emulateData);
+		else
+			$item = new ItemBase($row);
+		return $item;
+	}
+	
+	public function IsExpired() {
+		return $this->expires <= time();
+	}
 }
 
 class ItemRechargable extends ItemBase {
@@ -129,6 +148,7 @@ class ItemRechargable extends ItemBase {
 	
 	public function __construct($row) {
 		parent::__construct($row);
+		$this->type = ITEM_RECHARGE;
 		
 		$this->crafter = $row['name'];
 		$this->flags = $row['flags'];
@@ -170,6 +190,7 @@ class ItemEquip extends ItemBase {
 
 	public function __construct($row) {
 		parent::__construct($row);
+		$this->type = ITEM_EQUIP;
 		
 		$this->slots = $row['slots'];
 		$this->scrolls = $row['scrolls'];
@@ -222,6 +243,37 @@ class ItemEquip extends ItemBase {
 
 	public function IsKarmad() {
 		return ($this->flags & 0x10) == 0x10 ? 1 : 0;
+	}
+}
+
+class ItemPet extends ItemBase {
+	public $name, $closeness, $fullness, $level;
+	
+	public function __construct($row, $emulateData = null) {
+		global $__database;
+		$this->type = ITEM_PET;
+		
+		parent::__construct($row);
+		
+		$temp = null;
+		if ($emulateData != null) {
+			foreach ($emulateData['pets'] as $petrow) {
+				if ($petrow['cashid'] == $this->cashid) {
+					$temp = $petrow;
+					break;
+				}
+			}
+		}
+		else {
+			$q = $__database->query("SELECT * FROM pets WHERE cashid = ".$this->cashid." LIMIT 1");
+			$temp = $q->fetch_assoc();
+			$q->free();
+		}
+		
+		$this->name = $temp['name'];
+		$this->closeness = $temp['closeness'];
+		$this->fullness = $temp['fullness'];
+		$this->level = $temp['level'];
 	}
 }
 ?>
