@@ -54,7 +54,7 @@ function RemoveStatus(id) {
 		$id = intval($_GET['remove']);
 		
 		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
-			$__database->query("DELETE FROM social_statuses WHERE id = ".$id."");
+			$__database->query("DELETE FROM social_statuses WHERE id = ".$id);
 		}
 		else {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());

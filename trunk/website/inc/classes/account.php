@@ -44,7 +44,10 @@ WHERE
 		$this->_premiumtill = $row['premium_till'];
 		$this->_bio = $row['bio'];
 		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration'], true);
-		$this->_lastlogin_secs = $row['last_login_secs_since'];
+		if (!isset($row['last_login_secs_since']))
+			$this->_lastlogin_secs = 1; // Manual load...
+		else
+			$this->_lastlogin_secs = $row['last_login_secs_since'];
 	}
 	
 	public function Save() {

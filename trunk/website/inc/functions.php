@@ -382,16 +382,18 @@ function GetCharacterAccountId($id) {
 function GetCharacterStatus($id, $account = NULL) {
 	global $__database;
 	
-	if ($account == NULL) {
-		$q = $__database->query("SELECT * FROM accounts WHERE id = GetCharacterAccountId(".intval($id).")");
-		$account = new Account($q->fetch_assoc());
+	$accountLoaded = $account != NULL;
+	if (!$accountLoaded) {
+		$account = Account::Load(intval(GetCharacterAccountId($id)));
 	}
 	
 	$name = GetCharacterName($id);
 	
 	$value = $account->GetCharacterDisplayValue($name);
 	
-	unset($account);
+	if (!$accountLoaded) { // Clear data
+		unset($account);
+	}
 	
 	return $value;
 }

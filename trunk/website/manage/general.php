@@ -14,8 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 		chmod($notice_filename, 0755);
 	}
 	file_put_contents('notice.txt', $updatetxt);
-		
-	echo '<p class="alert info-sucess">Successfully updated sidebar!</p>';
+?>
+	<p class="alert info-sucess">Successfully updated sidebar!</p>
+<?php
 }
 ?>
 		<h4>Change the stream notice:</h4>
@@ -59,15 +60,15 @@ if (isset($_GET['clear_cache'])) {
     <div id="collapseOne" class="accordion-body collapse">
       <div class="accordion-inner">
       <br/>
-        <?php
-	        $q = $__database->query("SELECT username FROM accounts ORDER BY username ASC");
-	        while ($row = $q->fetch_row()) {
-	    ?>
+<?php
+$q = $__database->query("SELECT username FROM accounts ORDER BY username ASC");
+while ($row = $q->fetch_row()) {
+?>
 		<a href="//<?php echo $row[0]; ?>.<?php echo $domain; ?>/" class="btn btn-mini"><?php echo $row[0]; ?></a> 
-		<?php
-			}
-
-			?>
+<?php
+}
+$q->free();
+?>
       </div>
     </div>
   </div>
@@ -80,15 +81,15 @@ if (isset($_GET['clear_cache'])) {
     <div id="collapseTwo" class="accordion-body collapse">
       <div class="accordion-inner">
       <br/>
-        <?php
-	        $q = $__database->query("SELECT name FROM characters ORDER BY internal_id DESC");
-	        while ($row = $q->fetch_row()) {
-	    ?>
+<?php
+$q = $__database->query("SELECT name FROM characters ORDER BY internal_id DESC");
+while ($row = $q->fetch_row()) {
+?>
 		<a href="//<?php echo $domain; ?>/player/<?php echo $row[0]; ?>" class="btn btn-mini"><?php echo $row[0]; ?></a>  
-		<?php
-			}
-
-			?>
+<?php
+}
+$q->free();
+?>
       </div>
     </div>
   </div>
