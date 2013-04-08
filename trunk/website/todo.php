@@ -18,7 +18,7 @@ else:
 	<div class="row">
 		<div class="span12">
 			<p class="lead">Mapler.me Completion List</b><br/>
-			<small>Please note this is a very generalized todo list and many additions or information is left out.</small>
+			<small>Please note this is a very generalized todo list and many additions or information is left out. Please ask us about features or suggestions.</small>
 			</p>
 		</div>
 	</div>
@@ -29,14 +29,18 @@ else:
 	<b>General</b><br/><br/>
 	<li>Add "progress" to character page once finished..</li>
 	<li>Search for players.</li>
+	<li>Search for characters.</li>
+	<li>Complete item/mob/npc database? (updated in real-time)</li>
 	</ul>
 	</div>
 	<div class="row">
 	<ul class="status">
 	<b>Features</b><br/><br/>
-	<li>Be able to post text / screenshots while in-game that is shown on Mapler.me (would send the screenshot + text as an API request, then the image would be saved on our servers or another CDN).</li>
+	<li>Be able to post text / screenshots while in-game that is shown on Mapler.me (would send the screenshot + text as an API request, then the image would be saved on our CDN.</li>
 	<li>Email notifications for new additions, content, mentions, etc.</li>
 	<li>Notifications for replies / mentions. (Stream)</li>
+	<li>Ability to search through your entire inventory(s) for items.</li>
+	<li>Ability to hide items, equipment, or inventories.</li>
 	</ul>
 	
 	<ul class="status">

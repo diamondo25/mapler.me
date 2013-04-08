@@ -137,7 +137,7 @@ function GetPasswordHash($password, $salt) {
 
 function time_elapsed_string($etime) {
    if ($etime < 1) {
-	   return 'now';
+	   return 'moments';
    }
 
    $a = array( 12 * 30 * 24 * 60 * 60  =>  'year',

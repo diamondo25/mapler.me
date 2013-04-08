@@ -11,7 +11,9 @@ if ($_loggedin) {
 	if ($notifications > 0)
 		$title = '('.$notifications.') '.$title;
 		
-	$rank = $_loginaccount->GetAccountRank();	
+	$rank = $_loginaccount->GetAccountRank();
+	
+	$_loginaccount->SetConfigurationOption('last_seen', date("Y-m-d H:i:s"));
 }
 
 ?>

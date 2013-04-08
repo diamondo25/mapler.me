@@ -1,18 +1,8 @@
 <?php
-$q = $__database->query("
-SELECT
-	accounts.*,
-	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `secs_since`
-FROM
-	accounts
-WHERE
-	accounts.id = ".$__url_useraccount->GetID()."
-ORDER BY
-	last_login ASC
-");
 
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
+$lastseen = $__url_useraccount->GetConfigurationOption('last_seen');
 
 $x = $__database->query("
 SELECT
@@ -57,12 +47,6 @@ $main_character_name = $has_characters ? ($selected_main_character != null ? $se
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 
 $rank = $__url_useraccount->GetAccountRank();
-
-$lastonline = array();
-while ($row = $q->fetch_assoc()) {
-	$lastonline[] = $row;
-}
-$q->free();
 
 if ($_loggedin) {
 
@@ -154,14 +138,7 @@ endif;
 		</p>
 		<p class="rank"><?php echo GetRankTitle($rank); ?></p>
 		<hr/>
-<?php
-foreach ($lastonline as $row) {
-?>
-		<p class="name_extra">last seen <?php echo time_elapsed_string($row['secs_since']); ?> ago...<br/></p>
-<?php
-}
-unset($lastonline);
-?>
+		<p class="name_extra">last seen <?php echo time_elapsed_string($lastseen); ?> ago...<br/></p>
 		<hr/>
 <?php
 if ($_loggedin && !$is_self) {
