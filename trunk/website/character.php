@@ -54,7 +54,7 @@ if ($character_info['userid'] == '18833935') {
 
 // Get status
 $status = GetCharacterStatus($character_info['id']);
-$friend_status = GetFriendStatus(GetCharacterAccountId($character_info['id']), $_loginaccount->GetID());
+$friend_status = GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id']));
 
 if ($status == 1 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE') {
 ?>

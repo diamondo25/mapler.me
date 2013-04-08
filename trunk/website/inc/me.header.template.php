@@ -71,9 +71,7 @@ if ($_loggedin) {
 	}
 	else {
 		$is_self = false;
-		$q = $__database->query("SELECT FriendStatus(".$__url_useraccount->GetID().", ".$_loginaccount->GetID().")");
-		$row = $q->fetch_row();
-		$friend_status = $row[0];
+		$friend_status = GetFriendStatus($_loginaccount->GetID(), $__url_useraccount->GetID());
 	}
 }
 ?>

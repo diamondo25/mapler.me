@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$name = $_GET['invite'];
 		$id = GetAccountID($name);
 		
-		if ($id != NULL && GetFriendStatus($id) == 'NO_FRIENDS') {
+		if ($id != NULL && GetFriendStatus($_loginaccount->GetID(), $id) == 'NO_FRIENDS') {
 			$__database->query("
 			INSERT INTO
 				friend_list

@@ -396,10 +396,10 @@ function GetCharacterStatus($id, $account = NULL) {
 	return $value;
 }
 
-function GetFriendStatus($id) {
+function GetFriendStatus($you, $it) {
 	global $__database, $_loginaccount;
 
-	$q = $__database->query("SELECT FriendStatus(".intval($id).", ".$_loginaccount->GetID().")");
+	$q = $__database->query("SELECT FriendStatus(".intval($you).", ".intval($it).")");
 	$tmp = $q->fetch_row();
 	$q->free();
 	return $tmp[0];

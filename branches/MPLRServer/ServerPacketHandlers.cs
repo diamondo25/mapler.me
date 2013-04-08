@@ -89,15 +89,16 @@ namespace MPLRServer
 
             pConnection.AccountID = 2;
 
-            Action getWebLoginID = delegate
+            Func<int> GetWebLoginID = delegate
             {
                 using (var result = MySQL_Connection.Instance.RunQuery("SELECT account_id FROM users_weblogin WHERE name = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pUsername) + "'") as MySql.Data.MySqlClient.MySqlDataReader)
                 {
                     if (result.Read())
                     {
-                        pConnection.AccountID = result.GetInt32(0);
+                        return result.GetInt32(0);
                     }
                 }
+                return -1;
             };
 
             if (Internal_Storage.Store.Instance.KnownUserlist.ContainsKey(pConnection.UserID))
@@ -106,16 +107,17 @@ namespace MPLRServer
                 if (tmp == 2)
                 {
                     pConnection.Logger_WriteLine("User bound to temporary account. Trying to find correct account...");
-                    getWebLoginID();
-                    if (tmp != pConnection.AccountID)
+                    var newid = GetWebLoginID();
+                    if (newid != -1)
                     {
+                        pConnection.AccountID = newid;
+
                         pConnection.Logger_WriteLine("Found account for user!");
                         Internal_Storage.Store.Instance.KnownUserlist[pConnection.UserID] = pConnection.AccountID;
                     }
                     else
                     {
                         pConnection.Logger_WriteLine("No account found, using temporary...");
-                        pConnection.AccountID = tmp;
                     }
                 }
                 else
@@ -128,7 +130,16 @@ namespace MPLRServer
             {
                 // Check if exists in users_weblogin
 
-                getWebLoginID();
+                int id = GetWebLoginID();
+                if (id == -1)
+                {
+                    pConnection.Logger_WriteLine("ACCOUNT NOT REGISTERED!!! Using temp (2)");
+                    pConnection.AccountID = 2;
+                }
+                else
+                {
+                    pConnection.AccountID = id;
+                }
 
                 pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
 
