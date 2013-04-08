@@ -103,7 +103,7 @@ WHERE
 	}
 	
 	public function GetLastLoginSeconds() {
-		return $this->_last_login_secs;
+		return $this->_lastlogin_secs;
 	}
 	
 	public function GetLastIP() {
