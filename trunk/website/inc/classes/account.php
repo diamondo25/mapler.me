@@ -7,14 +7,24 @@ class Account {
 	private $_username,			$_fullname,			$_email,
 			$_nickname,			$_lastlogin,		$_lastip,
 			$_accountrank,		$_premiumtill,		$_bio,
-			$_configuration;
-	
+			$_configuration,	$_lastlogin_secs;
+			
 	public static function Load($input) {
 		global $__database;
+		$temp = "
+SELECT 
+	accounts.*,
+	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `last_login_secs_since`
+FROM 
+	accounts 
+WHERE
+";
 		if (is_numeric($input))
-			$q = $__database->query("SELECT * FROM accounts WHERE id = ".$input);
+			$temp .= "id = ".$input;
 		else
-			$q = $__database->query("SELECT * FROM accounts WHERE username = '".$__database->real_escape_string($input)."'");
+			$temp .= "username = '".$__database->real_escape_string($input)."'";
+
+		$q = $__database->query($temp);
 		if ($q->num_rows > 0) {
 			$account = new Account($q->fetch_assoc());
 			return $account;
@@ -34,6 +44,7 @@ class Account {
 		$this->_premiumtill = $row['premium_till'];
 		$this->_bio = $row['bio'];
 		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration'], true);
+		$this->_lastlogin_secs = $row['last_login_secs_since'];
 	}
 	
 	public function Save() {
@@ -89,6 +100,10 @@ WHERE
 	
 	public function GetLastLogin() {
 		return $this->_lastlogin;
+	}
+	
+	public function GetLastLoginSeconds() {
+		return $this->_last_login_secs;
 	}
 	
 	public function GetLastIP() {
