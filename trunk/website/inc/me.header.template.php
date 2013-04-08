@@ -1,8 +1,18 @@
 <?php
+$q = $__database->query("
+SELECT
+	accounts.*,
+	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `secs_since`
+FROM
+	accounts
+WHERE
+	accounts.id = ".$__url_useraccount->GetID()."
+ORDER BY
+	last_login ASC
+");
 
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
-$lastseen = $__url_useraccount->GetConfigurationOption('last_seen');
 
 $x = $__database->query("
 SELECT
@@ -48,6 +58,12 @@ $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_characte
 
 $rank = $__url_useraccount->GetAccountRank();
 
+$lastonline = array();
+while ($row = $q->fetch_assoc()) {
+	$lastonline[] = $row;
+}
+$q->free();
+
 if ($_loggedin) {
 
 	if ($__url_useraccount->GetID() == $_loginaccount->GetID()) {
@@ -55,7 +71,9 @@ if ($_loggedin) {
 	}
 	else {
 		$is_self = false;
-		$friend_status = GetFriendStatus($_loginaccount->GetID(), $__url_useraccount->GetID());
+		$q = $__database->query("SELECT FriendStatus(".$__url_useraccount->GetID().", ".$_loginaccount->GetID().")");
+		$row = $q->fetch_row();
+		$friend_status = $row[0];
 	}
 }
 ?>
@@ -138,7 +156,14 @@ endif;
 		</p>
 		<p class="rank"><?php echo GetRankTitle($rank); ?></p>
 		<hr/>
-		<p class="name_extra">last seen <?php echo time_elapsed_string($lastseen); ?> ago...<br/></p>
+<?php
+foreach ($lastonline as $row) {
+?>
+		<p class="name_extra">last seen <?php echo time_elapsed_string($row['secs_since']); ?> ago...<br/></p>
+<?php
+}
+unset($lastonline);
+?>
 		<hr/>
 <?php
 if ($_loggedin && !$is_self) {

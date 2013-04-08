@@ -13,7 +13,7 @@ if ($_loggedin) {
 		
 	$rank = $_loginaccount->GetAccountRank();
 	
-	$_loginaccount->SetConfigurationOption('last_seen', date("Y-m-d H:i:s"));
+	$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = '".$_loginaccount->GetID()."'");	
 }
 
 ?>
