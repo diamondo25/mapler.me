@@ -104,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
 			$statement = $__database->prepare("INSERT INTO accounts 
-				(id, username, password, salt, full_name, email, nickname, last_login, last_ip) VALUES
-				(NULL,?,?,?,?,?,?,NOW(),?)");
+				(id, username, password, salt, full_name, email, nickname, last_login, last_ip, registered_on) VALUES
+				(NULL,?,?,?,?,?,?,NOW(),?,NOW())");
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 
 				$__database->real_escape_string($salt), $fullname, 
 				$email, $nickname,
