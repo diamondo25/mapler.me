@@ -3,15 +3,6 @@ require_once __DIR__.'/inc/header.php';
 require_once __DIR__.'/inc/job_list.php';
 require_once __DIR__.'/inc/exp_table.php';
 
-if (!$_loggedin) {
-?>
-<p class="lead alert-error alert">Please login to view this page.</p>
-<?php
-
-	require_once __DIR__.'/inc/footer.php';
-	die();
-}
-
 $q = $__database->query("
 SELECT 
 	*,
@@ -118,6 +109,19 @@ else {
 		<p class="side"><i class="icon-heart faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
 		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
+	
+<?php	
+if (!$_loggedin) {
+?>
+<div class="span9" style="margin-left:10px;">
+	<p class="lead alert-error alert">To see more information and equipment for <?php echo $character_info['name']; ?>, please login!</p>
+</div>
+</div>
+<?php
+	require_once __DIR__.'/inc/footer.php';
+	die();
+}
+?>
 	
 	<div class="span9" style="margin-left:10px;">
 		<p class="lead"><?php echo $character_info['name']; ?>'s Equipment</p>

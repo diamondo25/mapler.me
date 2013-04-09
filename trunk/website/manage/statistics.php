@@ -12,11 +12,7 @@ require_once __DIR__.'/../inc/header.php';
 			
 			<hr/>
 			
-			<h1><span class="faded">Mapler.me characters have been famed</span> <?php $q = $__database->query("SELECT COUNT(*) FROM timeline WHERE type = 'gotfame'"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> <span class="faded">times together.</span></h1>
-			
 			<h1><span class="faded">Mapler.me characters have leveled</span> <?php $q = $__database->query("SELECT COUNT(*) FROM timeline WHERE type = 'levelup'"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> <span class="faded">times collaboratively.</span></h1>
-			
-			<h1><span class="faded">Mapler.me characters have used</span> <?php $q = $__database->query("SELECT COUNT(*) FROM timeline WHERE type = 'jobup'"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> <span class="faded">SP collaboratively.</span></h1>
 			
 			<hr/>
 			

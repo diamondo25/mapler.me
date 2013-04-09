@@ -5,7 +5,7 @@ $username_regex = "/([\w\d]+)/";
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname", "key"), $errorList)) {
+	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname"), $errorList)) {
 		$error = "The input you've entered has some errors. Please correct these errors and try again.";
 	}
 	else {

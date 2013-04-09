@@ -52,7 +52,7 @@ ORDER BY
 		-loading-</center>
 		</div>
 
-<div class="stream_display">
+<div class="stream_display row">
 <?php
 
 	// printing table rows
@@ -65,7 +65,7 @@ ORDER BY
 		$content2 = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $content1);
 ?>
 
-			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?><?php if ($row['account_id'] == $_loginaccount->GetID()): ?> postplox<?php endif; ?>" style="width:293px; margin:10px;">
+			<div class="status <?php if ($row['override'] == 1): ?> notification<?php endif; ?><?php if ($row['account_id'] == $_loginaccount->GetID()): ?> postplox<?php endif; ?> span12">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $row['character']; ?>') no-repeat right -30px #FFF;">
 					<a href="//<?php echo $row['username'];?>.<?php echo $domain; ?>/"><?php if ($row['account_id'] == $_loginaccount->GetID()): ?>You<?php else: echo $row['nickname']; endif; ?></a> said:
 				</div>

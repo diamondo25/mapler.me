@@ -60,15 +60,6 @@ if ($_loggedin) {
 			$('.load').css("display","none");
 			$('.stream_display').css("display","block");
 			})
-		
-		$(window).load(function(){
-			$('.stream_display').isotope({
-  // options
-				itemSelector : '.status',
-				layoutMode : 'masonry',
-				columnWidth: 240
-  			});
-  		})
   		</script>
   		
   		<style>
