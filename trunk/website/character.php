@@ -32,17 +32,6 @@ if ($q->num_rows == 0) {
 }
 
 $character_info = $q->fetch_assoc();
-if ($character_info['userid'] == '18833935') {
-?>
-<center>
-	<p class="lead alert alert-danger">
-		<?php echo $character_info['name']; ?> took it's last breathe <?php echo date('F d, Y <b>h:sA</b> ', strtotime ($character_info['last_update'])); ?> - #freetimber
-	</p>
-</center>
-<br/>
-<?php
-}
-
 
 // Check character status
 $friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id'])) : 'NO_FRIENDS';
