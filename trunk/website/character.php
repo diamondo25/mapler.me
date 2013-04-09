@@ -44,6 +44,7 @@ if ($character_info['userid'] == '18833935') {
 }
 
 // Get status
+if ($_loggedin) {
 $status = GetCharacterStatus($character_info['id']);
 $friend_status = GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id']));
 
@@ -57,6 +58,22 @@ if ($status == 1 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_AL
 	require_once __DIR__.'/inc/footer.php';
 	die;
 }
+}
+
+if (!$_loggedin) {
+	$status = GetCharacterStatus($character_info['id']);
+	if ($status == 1) { //does not check if you are friends since they're not logged in.
+?>
+<center>
+	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<p>Only friends are allowed to view this character!</p>
+</center>
+<?php
+	require_once __DIR__.'/inc/footer.php';
+	die;
+}
+}
+
 
 elseif ($status == 2) {
 // displays the same error as not found to not tell if exists or not.
