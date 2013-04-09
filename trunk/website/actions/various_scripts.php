@@ -22,17 +22,17 @@ else:
 ?>
 
 Contest display / check if something is null.
-	<?php
-	$q = $__database->query("
-	SELECT 
-		assigned_to
-	FROM
-		`beta_invite_keys`
-	WHERE 
-		invite_key = 'BETADQ3A'
-	");
+<?php
+$q = $__database->query("
+SELECT 
+	assigned_to
+FROM
+	`beta_invite_keys`
+WHERE 
+	invite_key = 'BETADQ3A'
+");
 
-	$check = $q->fetch_assoc();
+$check = $q->fetch_assoc();
 
 if (!isset($check['assigned_to'])) {
 ?>

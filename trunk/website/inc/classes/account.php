@@ -3,6 +3,8 @@ require_once __DIR__.'/../database.php';
 
 
 class Account {
+	private static $___cached_account_list;
+
 	private $_id;
 	private $_username,			$_fullname,			$_email,
 			$_nickname,			$_lastlogin,		$_lastip,
@@ -11,6 +13,12 @@ class Account {
 			
 	public static function Load($input) {
 		global $__database;
+		
+		if (is_numeric($input) && isset(self::$___cached_account_list[$input])) {
+			// Check if loaded
+			return self::$___cached_account_list[$input];
+		}
+		
 		$temp = "
 SELECT 
 	accounts.*,
@@ -26,7 +34,15 @@ WHERE
 
 		$q = $__database->query($temp);
 		if ($q->num_rows > 0) {
-			$account = new Account($q->fetch_assoc());
+			$row = $q->fetch_assoc();
+			if (isset(self::$___cached_account_list[$row['id']])) {
+				// Check if loaded
+				return self::$___cached_account_list[$row['id']];
+			}
+			
+			$account = new Account($row);
+			
+			self::$___cached_account_list[$row['id']] = $account;
 			return $account;
 		}
 		return null;

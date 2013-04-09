@@ -8,6 +8,7 @@ set_time_limit(60);
 require_once __DIR__.'/database.php';
 require_once __DIR__.'/classes/account.php';
 require_once __DIR__.'/classes/inventory.php';
+require_once __DIR__.'/classes/statusses.php';
 require_once __DIR__.'/domains.php';
 require_once __DIR__.'/ranks.php';
 require_once __DIR__.'/functions.datastorage.php';
