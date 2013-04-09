@@ -97,7 +97,7 @@ SELECT
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
 		<hr/>
 		<p class="side"><i class="icon-tasks"></i> <?php echo $statistics['quests_done']; ?> quests completed</p>
-		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests running</p>
+		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests in progress</p>
 		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
 		<hr/>
 		
@@ -117,7 +117,7 @@ SELECT
 if (!$_loggedin) {
 ?>
 	<div class="span9" style="margin-left:10px;">
-		<p class="lead alert-error alert">To see more information and equipment for <?php echo $character_info['name']; ?>, please login!</p>
+		<p class="status" style="margin-top:0px;"><i class="icon-ban-circle faded"></i> To view more information and equipment for <?php echo $character_info['name']; ?>, please <a href="//<?php echo $domain; ?>/login/">login</a> or <a href="//<?php echo $domain; ?>/signup/">register!</a></p>
 	</div>
 </div>
 <?php
