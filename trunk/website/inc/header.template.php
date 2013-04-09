@@ -154,21 +154,10 @@ endif;
 					<ul class="nav hidden-phone pull-right">
 <?php
 if ($_loggedin):
-function GetSearch() {
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
-		$searchback = nl2br(htmlentities(strip_tags($_POST['search'])));
-		if ($searchback !== '') {
-			return $searchback;
-			}
-		else {
-			return 'Search?';
-		}
-	}
-}
 ?>					
 					<li>
-						<form method="POST" action="/search/">
-						<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?">	 
+						<form method="post" action="/search/">
+							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?" />	 
 						</form>
 					</li>
 					
