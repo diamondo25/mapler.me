@@ -49,8 +49,9 @@ ORDER BY
 <div class="load status-loading" style="width:200px;margin:0 auto;">
 	<center>
 		<img src="//mapler.me/<?php echo $main_char; ?>"/><br />
-		-loading-</center>
-		</div>
+		-loading-
+	</center>
+</div>
 
 <div class="stream_display row">
 <?php
@@ -72,7 +73,8 @@ ORDER BY
 				<br />
 				<?php $parser->parse($content2); echo $parser->getAsHtml(); ?>
 				<div class="status-extra">
-					<?php if ($row['account_id'] !== 2): ?><a href="#" class="mention-<?php echo $row['id']; ?>" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
+<?php if ($row['account_id'] !== 2): ?>
+					<a href="#" class="mention-<?php echo $row['id']; ?>" mentioned="<?php echo $row['username']; ?>"><i class="icon-share-alt"></i></a>
 					
 					<script type="text/javascript">
 							$('.mention-<?php echo $row['id']; ?>').click(function() {
@@ -84,7 +86,7 @@ ORDER BY
 								return false;
 							});
 					</script>
-					<?php endif; ?>
+<?php endif; ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $row['id']; ?>"><?php echo time_elapsed_string($row['secs_since']); ?> ago</a>
 
 <?php

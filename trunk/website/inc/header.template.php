@@ -336,15 +336,16 @@ endif;
 
 	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
 	
-	<?php if($_loggedin && $_loginaccount->GetAccountRank() < RANK_AWAITING_ACTIVATION) { ?>
-		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me.</p>
-	<?php
-		require_once __DIR__.'/../inc/footer.php';
-		die;
-	}
-	require_once __DIR__.'/../inc/social.php'; ?>
-	
 <?php
+if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
+?>
+		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me.</p>
+<?php
+	require_once __DIR__.'/../inc/footer.php';
+	die;
+}
+require_once __DIR__.'/../inc/social.php';
+
 $ip = "mc.craftnet.nl";
 $port = 23711;
 $onlinetext = "Mapler.me's servers are currently online!";

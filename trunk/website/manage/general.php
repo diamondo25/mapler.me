@@ -28,9 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 		
 		<div class="pull-right status">
 		<h2>Statistics:</h2>
-			<?php $q = $__database->query("SELECT COUNT(*) FROM accounts"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> accounts<br/>
-			<?php $q = $__database->query("SELECT COUNT(*) FROM characters"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> characters<br/>
-			<?php $q = $__database->query("SELECT COUNT(*) FROM social_statuses"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> statuses sent<br/>
+<?php 
+$q = $__database->query("
+SELECT 
+	(SELECT COUNT(*) FROM accounts),
+	(SELECT COUNT(*) FROM characters),
+	(SELECT COUNT(*) FROM social_statuses)
+"); 
+$tmp = $q->fetch_row();
+$q->free();
+?>
+			<?php echo $tmp[0]; ?> accounts<br/>
+			<?php echo $tmp[1]; ?> characters<br/>
+			<?php echo $tmp[2]; ?> statuses sent<br/>
 		</div>
 
 		<h4>Various functions and information:</h4>

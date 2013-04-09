@@ -21,31 +21,71 @@ function RemoveStatus(id) {
 
 // If antispam passes, push status
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
-
-		$content = nl2br(htmlentities(strip_tags($_POST['content'])));
-		$dc = isset($_POST['dc']) ? 1 : 0;
-
-		$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
-		$has_characters = !empty($char_config['main_character']);
-
-		// set internally
-		$accid = $_loginaccount->GetId();
-		$nicknm = $_loginaccount->GetNickname();
-		$chr = $has_characters ? $char_config['main_character'] : '';
-		
+		$content = nl2br(htmlentities(strip_tags(trim($_POST['content']))));
+		$error = '';
 		if ($content == '') {
-?>
-		<p class="lead alert-danger alert">Error: That status was left blank, retry?</p>
-<?php
+			$error = 'That status was left blank, retry?';
+		}
+		else {
+			// Check for duplicate
+			$q = $__database->query("
+SELECT 
+	1
+FROM 
+	social_statuses 
+WHERE 
+	account_id = ".$_loginaccount->GetId()." 
+	AND 
+	content = '".$__database->real_escape_string($content)."'
+	AND
+	DATE_ADD(`timestamp`, INTERVAL 24 HOUR) >= NOW()
+				");
+			if ($q->num_rows != 0) {
+				$error = 'You already said that!';
+			}
+			$q->free();
 		}
 		
-		else {
-		
-		$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
+		if ($error == '') {
+			$dc = isset($_POST['dc']) ? 1 : 0;
 
-		$__database->query("INSERT INTO social_statuses VALUES (NULL, ".$accid.", '".$__database->real_escape_string($nicknm)."', '".$__database->real_escape_string($chr)."', '".$__database->real_escape_string($content)."', ".$dc.", NOW(), 0)");
+			$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+			$has_characters = !empty($char_config['main_character']);
+
+			// set internally
+			$nicknm = $_loginaccount->GetNickname();
+			$chr = $has_characters ? $char_config['main_character'] : '';
+		
+			$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
+
+			$__database->query("
+INSERT INTO 
+	social_statuses 
+VALUES 
+(
+	NULL, 
+	".$_loginaccount->GetId().", 
+	'".$__database->real_escape_string($nicknm)."', 
+	'".$__database->real_escape_string($chr)."', 
+	'".$__database->real_escape_string($content)."', 
+	".$dc.", 
+	NOW(), 
+	0
+)
+			");
+			if ($__database->affected_rows == 1) {
 ?>
 <p class="lead alert-success alert">The status was successfully posted!</p>
+<?php
+			}
+			else {
+				$error = 'The Maple Admin was not able to deliver your status update because of angry ribbon pigs! Retry?';
+			}
+		}
+		
+		if ($error != '') {
+?>
+<p class="lead alert-danger alert">Error: <?php echo $error; ?></p>
 <?php
 		}
 	}
@@ -59,9 +99,17 @@ function RemoveStatus(id) {
 		else {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
 		}
+		
+		if ($__database->affected_rows == 1) {
 ?>
 <p class="lead alert-info alert">The status was successfully deleted.</p>
 <?php
+		}
+		else {
+?>
+<p class="lead alert-info alert">Unable to delete the status.</p>
+<?php
+		}
 	}
 
 ?>
