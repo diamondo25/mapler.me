@@ -43,12 +43,12 @@ if ($character_info['userid'] == '18833935') {
 <?php
 }
 
-// Get status
-if ($_loggedin) {
+
+// Check character status
+$friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id'])) : 'NO_FRIENDS';
 $status = GetCharacterStatus($character_info['id']);
-$friend_status = GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id']));
 
-if ($status == 1 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE') {
+if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE'))) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -58,25 +58,8 @@ if ($status == 1 && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_AL
 	require_once __DIR__.'/inc/footer.php';
 	die;
 }
-}
-
-if (!$_loggedin) {
-	$status = GetCharacterStatus($character_info['id']);
-	if ($status == 1) { //does not check if you are friends since they're not logged in.
-?>
-<center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
-	<p>Only friends are allowed to view this character!</p>
-</center>
-<?php
-	require_once __DIR__.'/inc/footer.php';
-	die;
-}
-}
-
-
 elseif ($status == 2) {
-// displays the same error as not found to not tell if exists or not.
+	// displays the same error as not found to not tell if exists or not.
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -86,7 +69,6 @@ elseif ($status == 2) {
     require_once __DIR__.'/inc/footer.php';
 	die;
 }
-
 else {
 	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
@@ -98,7 +80,7 @@ else {
 ?>
 <div class="row">
 	<div class="span12">
-		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
 	</div>
 </div>
 
@@ -130,9 +112,9 @@ else {
 <?php	
 if (!$_loggedin) {
 ?>
-<div class="span9" style="margin-left:10px;">
-	<p class="lead alert-error alert">To see more information and equipment for <?php echo $character_info['name']; ?>, please login!</p>
-</div>
+	<div class="span9" style="margin-left:10px;">
+		<p class="lead alert-error alert">To see more information and equipment for <?php echo $character_info['name']; ?>, please login!</p>
+	</div>
 </div>
 <?php
 	require_once __DIR__.'/inc/footer.php';
