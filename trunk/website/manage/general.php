@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 	}
 	file_put_contents('notice.txt', $updatetxt);
 ?>
-	<p class="alert info-sucess">Successfully updated sidebar!</p>
+	<p class="alert alert-success">Successfully updated notice!</p>
 <?php
 }
 ?>
@@ -25,9 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;"><?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?></textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
+		
+		<div class="pull-right status">
+		<h2>Statistics:</h2>
+			<?php $q = $__database->query("SELECT COUNT(*) FROM accounts"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> accounts<br/>
+			<?php $q = $__database->query("SELECT COUNT(*) FROM characters"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> characters<br/>
+			<?php $q = $__database->query("SELECT COUNT(*) FROM social_statuses"); $tmp = $q->fetch_row(); $q->free(); echo $tmp[0]; ?> statuses sent<br/>
+		</div>
 
 		<h4>Various functions and information:</h4>
-		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button> <button type="button" class="btn" onclick="location.href = '/manage/info/'">View Apache/Php Info?</button>
+		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button>
+		<button type="button" class="btn" onclick="location.href = '/manage/info/'">View Apache/Php Info?</button>
 		<br />
 		<br />
 <?php
@@ -41,11 +49,32 @@ if (isset($_GET['clear_cache'])) {
 		}
 	}
 ?>
-<p class="alert info-danger">Notice: <?php echo $i; ?> cached files were deleted! </p>
+<p class="alert alert-danger">Notice: <?php echo $i; ?> cached files were deleted! </p>
 <?php
 
 	// Clear data caches
 	apc_clear_cache();
+}
+?>
+
+	<h4>Signup Control</h4>
+	<button type="button" class="btn" onclick="location.href = '?signupon'">Allow Registering</button>
+	<button type="button" class="btn" onclick="location.href = '?signupoff'">Disable Registering</button>
+	<br/><br/>
+	<?php
+if (isset($_GET['signupon'])) {
+?>
+<p class="alert alert-success">Notice: Sign-up is now open! </p>
+<?php
+$__database->query("UPDATE signup_lock SET status = 0");
+}
+?>
+	<?php
+if (isset($_GET['signupoff'])) {
+?>
+<p class="alert alert-danger">Notice: Sign-up is now closed! </p>
+<?php
+$__database->query("UPDATE signup_lock SET status = 1");
 }
 ?>
 	

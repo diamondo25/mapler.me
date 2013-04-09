@@ -74,19 +74,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			}
 		}
 		
-		if (count($errorList) == 0) {
-			// Check beta key
-			$key = $__database->real_escape_string($_POST['key']);
-			$result = $__database->query("SELECT 1 FROM beta_invite_keys WHERE invite_key = '".$key."' AND assigned_to IS NULL");
-			if ($result->num_rows == 1) {
-				$__database->query("UPDATE beta_invite_keys SET assigned_to = '".$username."' WHERE invite_key = '".$key."'");
-			}
-			else {
-				$error = "Incorrect beta code, or it was already used!"; // Default response!
-				$errorList['key'] = true;
-			}
-			$result->free();
-		}
+		//if (count($errorList) == 0) {
+		//	// Check beta key
+		//	$key = $__database->real_escape_string($_POST['key']);
+		//	$result = $__database->query("SELECT 1 FROM beta_invite_keys WHERE invite_key = '".$key."' AND assigned_to IS NULL");
+		//	if ($result->num_rows == 1) {
+		//		$__database->query("UPDATE beta_invite_keys SET assigned_to = '".$username."' WHERE invite_key = '".$key."'");
+		//	}
+		//	else {
+		//		$error = "Incorrect beta code, or it was already used!"; // Default response!
+		//		$errorList['key'] = true;
+		//	}
+		//	$result->free();
+		// }
 		
 		
 		if (count($errorList) == 0) {
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				// Mail it
 				mail($to, $subject, $message, $headers);
 ?>
-<p class="lead alert-info alert">Welcome to Mapler.me, <?php echo $nickname; ?>! Check your email (<?php echo $email; ?>) for more information! Note: Check your spam folder if you don't receive it after a few minutes!</p>
+<p class="lead alert-info alert">Welcome to Mapler.me, <?php echo $nickname; ?>! Check your email (<?php echo $email; ?>) for more information! Note: <b>Check your spam folder if you don't receive it after a few minutes!</b></p>
 <?php
 			}
 		}
@@ -156,10 +156,44 @@ else {
 	}
 ?>
 
+<?php
+$x = $__database->query("
+SELECT
+	status
+FROM
+	signup_lock
+");
+
+$cache = array();
+while ($row = $x->fetch_assoc()) {
+	$cache[] = $row;
+}
+$x->free();
+?>
+
+<?php
+foreach ($cache as $row) {
+if($row['status'] == '1') {
+?>
+	<p>
+		<center class="status lead">
+			<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px"/><br/>
+			We're sorry! The amount of new members today has reached it's max.<br/>
+			Come back tomorrow!<br/>
+			<sub>Tip: The limit resets at 8PM (PST / MapleStory Time)</sub>
+		</center>
+	</p>
+<?php
+require_once __DIR__.'/inc/footer.php';
+die;
+}
+}
+?>
+
 <div class="row">
 <div class="span12">
-<p class="lead">Sign up for a Mapler.me account</p>
-<img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Sign up is currently only available to those invited as a Beta Tester. If you were given a code, use it in the form below!</p>
+<p class="lead">Sign up for a Mapler.me account..</p>
+<img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Hello, welcome to Mapler.me! Sign up is currently limited each day. After the limit has been reached, creating new accounts will be locked until the next day.</p>
 
 <p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better than the best Rising Sun Pendant.</p>
 </div>
@@ -175,7 +209,6 @@ else {
 	$form->AddBlock('Full name<br/><sup>(kept private)</sup>', 'fullname', (isset($errorList['fullname']) ? 'error' : ''), 'text', @$_POST['fullname']);
 	$form->AddBlock('Nickname<br/><sup>(what is shown publicly)</sup>', 'nickname', (isset($errorList['nickname']) ? 'error' : ''), 'text', @$_POST['nickname']);
 	$form->AddBlock('E-mail<br/><sup>(for email notifications)</sup>', 'email', (isset($errorList['email']) ? 'error' : ''), 'text', @$_POST['email']);
-	$form->AddBlock('Beta Key<br/><sup>(required to sign up!)</sup>', 'key', (isset($errorList['key']) ? 'key' : ''), 'text', @$_POST['key']);
 	$form->Agreement();
 	$form->MakeSubmit('Sign up!');
 	
