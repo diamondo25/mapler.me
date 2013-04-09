@@ -77,6 +77,17 @@ else {
 	$channelid = $character_info['channel_id'];
 	if ($channelid == -1) $channelid = 'Unknown';
 	else $channelid++; // 1 = 0
+	
+	
+	// Some quick count queries
+	$qcount = $__database->query("
+SELECT
+	(SELECT COUNT(DISTINCT a.questid) FROM (SELECT questid FROM quests_done WHERE character_id = ".$internal_id." UNION ALL SELECT questid FROM quests_done_party WHERE character_id = ".$internal_id.") a) as `quests_done`,
+	(SELECT COUNT(DISTINCT a.questid) FROM (SELECT questid FROM quests_running WHERE character_id = ".$internal_id." UNION ALL SELECT questid FROM quests_running_party WHERE character_id = ".$internal_id.") a) as `quests_left`,
+	(SELECT COUNT(*) FROM skills WHERE character_id = ".$internal_id.") as `skills`
+");
+	$statistics = $qcount->fetch_assoc();
+	$qcount->free();
 ?>
 <div class="row">
 	<div class="span12">
@@ -94,7 +105,11 @@ else {
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
-		<p class="side"><i class="icon-eye-open faded"></i> last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
+		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
+		<hr/>
+		<p class="side"><i class="icon-tasks"></i> <?php echo $statistics['quests_done']; ?> quests completed</p>
+		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests running</p>
+		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
 		<hr/>
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
