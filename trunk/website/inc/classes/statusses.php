@@ -59,7 +59,7 @@ class Status {
 					<a href="#" class="mention-<?php echo $this->id; ?>" mentioned="<?php echo $username; ?>"><i class="icon-share-alt"></i></a>
 					<script type="text/javascript">
 						$('.mention-<?php echo $this->id; ?>').click(function() {
-							var value = $(".mention-<?php echo $row['id']; ?>").attr('mentioned');
+							var value = $(".mention-<?php echo $this->id; ?>").attr('mentioned');
 							var input = $('#post-status');
 							input.val(input.val() + '@' + value + ' ');
 							$(".poster").addClass("in");
