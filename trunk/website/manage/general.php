@@ -41,6 +41,7 @@ $q->free();
 			<?php echo $tmp[0]; ?> accounts<br/>
 			<?php echo $tmp[1]; ?> characters<br/>
 			<?php echo $tmp[2]; ?> statuses sent<br/>
+			<a href="<?php echo $domain; ?>/manage/statistics/">View more statistics</a>
 		</div>
 
 		<h4>Various functions and information:</h4>

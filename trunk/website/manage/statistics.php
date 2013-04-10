@@ -5,6 +5,7 @@ SELECT
 	(SELECT COUNT(*) FROM accounts),
 	(SELECT COUNT(*) FROM characters),
 	(SELECT COUNT(*) FROM items),
+	(SELECT COUNT(*) FROM strings),
 	(SELECT COUNT(*) FROM timeline WHERE type = 'levelup'),
 	(SELECT COUNT(*) FROM social_statuses),
 	(SELECT COUNT(*) FROM friend_list WHERE accepted_on IS NOT NULL)
