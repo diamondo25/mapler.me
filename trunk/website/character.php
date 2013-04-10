@@ -47,7 +47,7 @@ if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' &
 	require_once __DIR__.'/inc/footer.php';
 	die;
 }
-elseif ($status == 2) {
+elseif ($status == 2 && ($_loggedin && !IsOwnAccount())) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <center>
@@ -80,7 +80,7 @@ SELECT
 ?>
 <div class="row">
 	<div class="span12">
-		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>	
 	</div>
 </div>
 
@@ -123,6 +123,15 @@ if (!$_loggedin) {
 <?php
 	require_once __DIR__.'/inc/footer.php';
 	die();
+}
+
+else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
+	// displays the same error as not found to not tell if exists or not.
+?>
+<div class="span9" style="margin-left:10px;">
+		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i> This character is currently only viewable by yourself (hidden).</p>
+	</div>
+<?php
 }
 ?>
 	
