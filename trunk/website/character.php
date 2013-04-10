@@ -228,7 +228,7 @@ function GetItemDialogInfo($item, $isequip) {
 	
 	
 	//  All options.
-	$args = 26;
+	$args = 25;
 	if ($isequip) {
 		$arguments .= $reqlevel.', ';
 		$arguments .= $reqstr.', ';
@@ -258,7 +258,7 @@ function GetItemDialogInfo($item, $isequip) {
 	}
 	else {
 		for ($i = 1; $i <= $args; $i++)
-			$arguments .= '0,';
+			$arguments .= '0, ';
 	}
 
 	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";

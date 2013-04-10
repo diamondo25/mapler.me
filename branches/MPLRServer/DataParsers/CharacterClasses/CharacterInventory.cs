@@ -328,26 +328,26 @@ namespace MPLRServer
                     this.ItemEXP = FlaggedValue(flag, 0x100000, pPacket, this.ItemEXP);
 
 
-                    FlaggedValue(flag, 0x200000, pPacket, (int)0);
+                    FlaggedValue(flag, 0x200000, pPacket, (int)0, true);
                     this.ViciousHammer = FlaggedValue(flag, 0x400000, pPacket, this.ViciousHammer);
 
                     this.PVPDamage = FlaggedValue(flag, 0x800000, pPacket, this.PVPDamage);
 
-                    FlaggedValue(flag, 0x1000000, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x2000000, pPacket, (short)0);
-                    FlaggedValue(flag, 0x4000000, pPacket, (int)0);
-                    FlaggedValue(flag, 0x8000000, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x10000000, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x20000000, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x40000000, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x80000000, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x1000000, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x2000000, pPacket, (short)0, true);
+                    FlaggedValue(flag, 0x4000000, pPacket, (int)0, true);
+                    FlaggedValue(flag, 0x8000000, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x10000000, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x20000000, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x40000000, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x80000000, pPacket, (byte)0, true);
                 }
 
                 {
                     uint flag = pPacket.ReadUInt();
-                    FlaggedValue(flag, 0x01, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x02, pPacket, (byte)0);
-                    FlaggedValue(flag, 0x04, pPacket, (byte)0);
+                    FlaggedValue(flag, 0x01, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x02, pPacket, (byte)0, true);
+                    FlaggedValue(flag, 0x04, pPacket, (byte)0, true);
                 }
             }
 
@@ -388,34 +388,48 @@ namespace MPLRServer
                 SocketState + Socket1 + Socket2 + Socket3;
         }
 
-        private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, byte pDefault = 0)
+        private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
-                Logger.WriteLine("FOUND {0:X8}", pFlag);
-            if (pValue.HasFlag(pFlag))
-                return pPacket.ReadByte();
+            {
+                var val = pPacket.ReadShort();
+                if (pLogIfFound)
+                {
+                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
+                }
+                return val;
+            }
             else
-                return pDefault;
+                return 0;
         }
 
-        private static short FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, short pTypeValue, short pDefault = 0)
+        private static short FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, short pTypeValue, bool pLogIfFound = false)
         {
-            if (pValue.HasFlag(pFlag))
-                Logger.WriteLine("FOUND {0:X8}", pFlag);
-            if (pValue.HasFlag(pFlag))
-                return pPacket.ReadShort();
+            if (pValue.HasFlag(pFlag)) {
+                var val = pPacket.ReadShort();
+                if (pLogIfFound)
+                {
+                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
+                }
+                return val;
+            }
             else
-                return pDefault;
+                return 0;
         }
 
-        private static int FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, int pTypeValue, int pDefault = 0)
+        private static int FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, int pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
-                Logger.WriteLine("FOUND {0:X8}", pFlag);
-            if (pValue.HasFlag(pFlag))
-                return pPacket.ReadInt();
+            {
+                var val = pPacket.ReadShort();
+                if (pLogIfFound)
+                {
+                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
+                }
+                return val;
+            }
             else
-                return pDefault;
+                return 0;
         }
     }
 
