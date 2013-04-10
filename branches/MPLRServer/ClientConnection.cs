@@ -157,17 +157,21 @@ namespace MPLRServer
                     if (_exporter != null)
                         _exporter.AddPacket(pPacket);
 
-
                     MaplePacket.CommunicationType type = (MaplePacket.CommunicationType)pPacket.ReadByte();
-                    ushort header = pPacket.ReadUShort();
+                    ushort opcode = pPacket.ReadUShort();
+
+                    if (_isFake)
+                    {
+                        Logger.WriteLine("Emulating {0:X4} (Len: {1})", opcode, pPacket.Length);
+                    }
 
                     if ((byte)type < Program.ValidHeaders.Length)
                     {
                         // Check if packet is accepted
                         var list = Program.ValidHeaders[(byte)type];
-                        if (list.ContainsKey(header))
+                        if (list.ContainsKey(opcode))
                         {
-                            var action = list[header];
+                            var action = list[opcode];
                             if (action != null)
                             {
                                 try
@@ -179,22 +183,22 @@ namespace MPLRServer
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", header, type, ex.ToString());
+                                    Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", opcode, type, ex.ToString());
                                 }
                             }
                             else
                             {
-                                Logger_WriteLine("No action for {0:X4}", header);
+                                Logger_WriteLine("No action for {0:X4}", opcode);
                             }
                         }
                         else
                         {
-                            Logger_WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", header, type);
+                            Logger_WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", opcode, type);
                         }
                     }
                     else
                     {
-                        Logger_ErrorLog("Packet Type not accepted!!! {0:X4} {1}", header, (byte)type);
+                        Logger_ErrorLog("Packet Type not accepted!!! {0:X4} {1}", opcode, (byte)type);
                     }
                 }
                 catch (Exception ex)

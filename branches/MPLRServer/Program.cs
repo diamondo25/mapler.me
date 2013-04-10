@@ -111,6 +111,8 @@ namespace MPLRServer
                                 break;
                             }
                         case "close":
+                        case "stop":
+                        case "exit":
                             {
 
                                 MasterThread.Instance.AddCallback(a =>

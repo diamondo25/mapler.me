@@ -7,7 +7,7 @@ namespace MPLRServer
 {
     class Queries
     {
-        public static void AddOrUpdateCharacter(
+        public static int AddOrUpdateCharacter(
             ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pChannelID, byte pLevel,
             short pJob, short pStr, short pDex, short pInt, short pLuk,
             int pHP, int pMaxHP, int pMP, int pMaxMP, short pAP, short pSP,
@@ -90,8 +90,7 @@ namespace MPLRServer
                     query.AddColumn("internal_id");
                     query.AddColumn("id");
                     query.AddColumn("name");
-                    query.AddColumn("channel_id", true);
-                    query.AddColumns(true, new string[] { "userid", "world_id", "level", "job", "str", "dex", "int", "luk", "chp", "mhp", "cmp", "mmp", "ap", "sp", "exp", "fame", "map", "pos", "gender", "skin", "eyes", "hair" });
+                    query.AddColumns(true, new string[] { "userid", "world_id", "channel_id", "level", "job", "str", "dex", "int", "luk", "chp", "mhp", "cmp", "mmp", "ap", "sp", "exp", "fame", "map", "pos", "gender", "skin", "eyes", "hair" });
                     query.AddColumns(true, new string[] { "honourlevel", "honourexp", "mesos", "demonmark" });
                     query.AddColumns(true, new string[] { "eqp_slots", "use_slots", "setup_slots", "etc_slots", "cash_slots" });
                     query.AddColumns(true, new string[] { "blessingoffairy", "blessingofempress", "ultimateexplorer" });
@@ -125,6 +124,16 @@ namespace MPLRServer
                     }
                 }
             }
+
+            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT internal_id FROM characters WHERE id = " + pID) as MySql.Data.MySqlClient.MySqlDataReader)
+            {
+                if (reader.Read())
+                {
+                    return reader.GetInt32(0);
+                }
+            }
+            Logger.WriteLine("!!!!!! Character not found O.O");
+            return -1;
         }
 
 

@@ -350,7 +350,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 int fame = pPacket.ReadInt();
-                Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame);
+                Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame, fame);
                 pConnection.CharData.Stats.Fame = fame;
             }
 
@@ -1104,7 +1104,7 @@ namespace MPLRServer
 
             bool isConnecting = pPacket.ReadBool();
 
-            tmp = pPacket.ReadShort(); // Contains Message
+            tmp = pPacket.ReadShort(); // Contains Message (Not used anymore lol.)
             if (tmp > 0)
             {
                 pPacket.ReadString(); // Title
@@ -1136,7 +1136,7 @@ namespace MPLRServer
                 pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
 
 
-                pConnection.SendInfoText("Your character {0} has been added to the database!", pConnection.LastLoggedName);
+                pConnection.SendInfoText("Your character {0} has been saved!", pConnection.LastLoggedName);
             }
             else
             {

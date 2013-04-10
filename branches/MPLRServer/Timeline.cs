@@ -16,9 +16,17 @@ namespace MPLRServer
             GotFame,
         }
 
+        private static Dictionary<Types, string> _type_name_map = new Dictionary<Types, string>();
+
         public static Timeline Instance { get; private set; }
         public static void Init()
         {
+            _type_name_map.Add(Types.LevelUP, "levelup");
+            _type_name_map.Add(Types.JobUP, "jobup");
+            _type_name_map.Add(Types.SkillUP, "skillup");
+            _type_name_map.Add(Types.GotEXP, "gotexp");
+            _type_name_map.Add(Types.GotFame, "gotfame");
+
             Instance = new Timeline();
             Logger.WriteLine("Initialized Timeline");
         }
@@ -38,19 +46,15 @@ namespace MPLRServer
             Push(Types.JobUP, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
         }
 
-        public void PushGotFame(int pCharInternalID, bool pAdd)
+        public void PushGotFame(int pCharInternalID, bool pAdd, int pNewFame)
         {
-            Push(Types.GotFame, pCharInternalID, pAdd ? "1" : "0");
+            Push(Types.GotFame, pCharInternalID, (pAdd ? "1" : "0") + ";" + pNewFame);
         }
 
 
         public void Push(Types pType, int pObjectID, string pData)
         {
-            string type = pType.ToString();
-            type = type.Substring(type.LastIndexOf('.') + 1).ToLower();
-
-            string query = string.Format("INSERT INTO timeline VALUES (NULL, '{0}', NOW(), {1}, '{2}')", type, pObjectID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData));
-            MySQL_Connection.Instance.RunQuery(query);
+            MySQL_Connection.Instance.RunQuery(string.Format("INSERT INTO timeline VALUES (NULL, '{0}', NOW(), {1}, '{2}')", _type_name_map[pType], pObjectID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData)));
         }
 
     }

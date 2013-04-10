@@ -106,6 +106,7 @@ namespace MPLRServer
             else if (e.CurrentState == System.Data.ConnectionState.Open)
             {
                 Logger.WriteLine("MySQL connection opened!");
+                Logger.WriteLine("MySQL Server: {0}", _connection.ServerVersion);
             }
         }
 

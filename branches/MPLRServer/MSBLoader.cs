@@ -47,7 +47,6 @@ namespace MPLRServer
                     Buffer.BlockCopy(reader.ReadBytes(size), 0, buffer, 3, size);
                     if (opcode >= 0xEE00) continue; // Ignore!
 
-                    Logger.WriteLine("Emulating {0:X4} ({1})", opcode, size);
                     MaplePacket packet = new MaplePacket(buffer);
                     try
                     {

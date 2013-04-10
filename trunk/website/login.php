@@ -49,16 +49,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 if ($_loggedin) {
+	$push_to_page = (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'logoff') === FALSE) ? $_SERVER['HTTP_REFERER'] : '/stream/';
+
 ?>
-<meta http-equiv="refresh" content="3;URL='/stream/'" />
-<p class="lead alert info-danger">You successfully logged in! You'll be redirected to the main page in 3 seconds.<br/>
-If not, <a href="/">click here</a>.</p>
+<meta http-equiv="refresh" content="3;URL='<?php echo $push_to_page; ?>'" />
+
+<p class="lead alert info-danger">You successfully logged in! You'll be redirected in 3 seconds.<br />
+If not, <a href="<?php echo $push_to_page; ?>">click here</a>.
+</p>
 <?php
 }
 else {
 	if ($error != null) {
 ?>
-<p class="lead alert-error alert"><?php echo $error;?></p>
+<p class="lead alert-error alert"><?php echo $error; ?></p>
 <?php
 	}
 ?>
@@ -70,10 +74,10 @@ SELECT
 FROM
 	characters 
 WHERE
-	level > '30' 
+	level > 30
 ORDER BY
 	rand()
-	LIMIT 7
+	LIMIT 5
 ");
 $cache = array();
 
@@ -85,22 +89,21 @@ $q->free();
 
 <div class="row">
 	<div class="span9 offset2 logincharacter">
-		<?php
-		foreach ($cache as $row) {
-		?>
+<?php
+foreach ($cache as $row) {
+?>
 		<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
-					</a>
-
-		<?php
-			}
-		?>
+			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>"/>
+		</a>
+<?php
+}
+?>
 	</div>
 	
 	<div class="span12">
 		<center>
 			<h1>Welcome back, hundreds of other maplers await your return!</h1>
-			<br/>
+			<br />
 		</center>
 	</div>
 	<div class="span12">

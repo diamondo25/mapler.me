@@ -105,7 +105,7 @@ SELECT
 		
 		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
 				
-				<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 				
 		<hr/>
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
@@ -222,9 +222,9 @@ function GetItemDialogInfo($item, $isequip) {
 	$reqluk = ValueOrDefault($stats['reqluk'], 0);
 	$reqpop = ValueOrDefault($stats['reqpop'], "'-'");
 	
-	$arguments = "SetItemInfo(event, this, ";
-	$arguments .= $item->itemid.",".($isequip ? 1 : 0).", ";
-	$arguments .= ValueOrDefault($stats['reqjob'], 0).", ";
+	$arguments = 'SetItemInfo(event, this, ';
+	$arguments .= $item->itemid.','.($isequip ? 1 : 0).', ';
+	$arguments .= ValueOrDefault($stats['reqjob'], 0).', ';
 	
 	
 	//  All options.
