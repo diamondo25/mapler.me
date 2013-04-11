@@ -143,7 +143,7 @@ if ($_loggedin && !$is_self) {
 	if ($friend_status == 'FRIENDS') {
 ?>
 
-		<p class="name_extra">You are already friends!</p>
+		<p class="name_extra">You are already friends! <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Remove?</button></p>
 		<hr/>
 <?php
 	}
@@ -164,7 +164,7 @@ if ($_loggedin && !$is_self) {
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
-		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-success" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Canel?</button></p>
+		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Canel?</button></p>
 		<hr/>
 <?php
 	}
