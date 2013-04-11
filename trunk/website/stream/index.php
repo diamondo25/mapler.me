@@ -38,7 +38,10 @@ ORDER BY
 		if (!$has_characters || $_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 ?>
 <p class="lead alert alert-info">Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide! F2</a></p>
+<p>This will disappear once you've successfully added a character or sent a status!</p>
 <?php
+require_once __DIR__.'/../inc/footer.php';
+die;
 		}
 ?>
 
