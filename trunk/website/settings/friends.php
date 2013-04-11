@@ -19,7 +19,6 @@ $cache = array();
 while ($row = $q->fetch_assoc()) {
 	$cache[] = $row;
 }
-$q->free();
 
 if (count($cache) == 0) {
 ?>
@@ -47,4 +46,5 @@ while ($row = $q->fetch_assoc()) {
 			<h3 style="margin-top: 10px;"><a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/"><?php echo $account->GetNickname(); ?></a> <small>sent this request <?php echo time_elapsed_string($row['added_on_secs']); ?> ago...</small> <br/><button class="btn btn-mini btn-success" style="margin-top:10px;" onclick="AcceptFriend('<?php echo $account->GetUsername(); ?>')">Accept?</button> <button class="btn btn-mini btn-danger" style="margin-top:10px;" onclick="DenyFriend('<?php echo $account->GetUsername(); ?>')">Deny?</button></h3>
 <?php
 }
+$q->free();
 ?>
