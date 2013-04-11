@@ -11,24 +11,8 @@ WHERE
 	accepted_on IS NULL
 
 ORDER BY
-	accepted_on DESC
+	added_on DESC
 ");
-
-$cache = array();
-
-while ($row = $q->fetch_assoc()) {
-	$cache[] = $row;
-}
-
-if (count($cache) == 0) {
-?>
-	<center>
-		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
-		<p>You don't have any friend requests!</p>
-	</center>
-	</div>
-<?php
-}
 
 while ($row = $q->fetch_assoc()) {
 	$account = Account::Load($row['account_id']);

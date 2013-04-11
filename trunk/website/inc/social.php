@@ -2,8 +2,6 @@
 if ($_loggedin) {
 ?>
 
-<?php // Friend System ?>
-
 <script type="text/javascript">
 function RemoveFriend(id) {
 	if (confirm("Are you sure you want to unfriend this person?")) {
@@ -128,8 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	}
 }
 ?>
-
-<?php // Status System ?>
 
 <script type="text/javascript">
 function RemoveStatus(id) {
