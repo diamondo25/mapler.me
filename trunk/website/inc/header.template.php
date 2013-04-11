@@ -251,11 +251,11 @@ endif;
 					<ul class="nav mobile pull-right">
 					
 					<li>
-						<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment"></i></a>
+						<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment icon-white"></i></a>
 					</li>
 					
 						<li class="menu dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><span class="sprite more menu"></span></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><i class="icon-chevron-down icon-white"</span></a>
 
 							<ul class="dropdown-menu">
 <?php
