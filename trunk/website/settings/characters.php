@@ -58,14 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 		}
 		
 		if (!$found) {
-			$error = 'An error occurred. Try again. Error code 1';
+			$error = 'An error occurred. Try again.';
 		}
 		elseif (!isset($char_options[$main_char])) {
 			// lolwat.
-			$error = 'An error occurred. Try again. Error code 2';
-		}
-		elseif ($char_options[$main_char] != 0) { // Hiding your main character? NO WAY DUUUDE
-			$error = 'Heh, you cannot hide your main character!';
+			$error = 'An error occurred. Try again.';
 		}
 		else {
 			$char_config['main_character'] = $main_char;
@@ -84,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 	
 	if ($error == '') {
 ?>
-<p class="lead alert-success alert">Successfully saved!</p>
+<p class="lead alert-success alert">You successfully updated your characters.</p>
 <?php
 	}
 	else {
