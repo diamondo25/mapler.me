@@ -135,6 +135,7 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 		?>
 		This character is currently hidden by <?php echo $account->GetNickName(); ?>. 
 		<?php
+		}
 			else {
 		?>
 		This character is currently only viewable to yourself (hidden).
