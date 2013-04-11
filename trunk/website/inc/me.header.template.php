@@ -150,25 +150,32 @@ if ($_loggedin && !$is_self) {
 	elseif ($friend_status == 'NO_FRIENDS') {
 ?>
 
-		<p class="name_extra"><a href="//<?php echo $domain; ?>/settings/friends/?invite=<?php echo $__url_useraccount->GetUsername(); ?>">Add as a friend?</a></p>
+		<p class="name_extra"><button class="btn btn-mini btn-success" onclick="InviteFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Add as a friend?</button></p>
 		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_YOU') {
 ?>
 
-		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <a href="//<?php echo $domain; ?>/settings/friends/?acceptid=<?php echo $__url_useraccount->GetUsername(); ?>">Accept?</a></p>
+		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <button class="btn btn-mini btn-success" onclick="AcceptFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Accept?</button></p>
 		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
-		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval.</p>
+		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-success" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Canel?</button></p>
 		<hr/>
 <?php
 	}
 }
+if (count($cache) == 0) {
+	echo '';
+}
+else {
 ?>
 		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters" style="color:gray;"><?php echo count($cache); ?> Characters</a></p>
+<?php
+}
+?>
 	</div>

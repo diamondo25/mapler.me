@@ -129,7 +129,19 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <div class="span9" style="margin-left:10px;">
-		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i> This character is currently only viewable by yourself (hidden).</p>
+		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+		<?php
+			if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR) {
+		?>
+		This character is currently hidden by <?php echo $account->GetNickName(); ?>. 
+		<?php
+			else {
+		?>
+		This character is currently only viewable to yourself (hidden).
+		<?php
+		}
+		?>
+		</p>
 	</div>
 <?php
 }

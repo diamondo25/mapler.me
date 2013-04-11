@@ -56,6 +56,7 @@ if ($q->num_rows == 0) {
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
 	<p>No statuses were found containing <?php echo $searching; ?>!</p>
 </center>
+</div>
 <?php
 	require_once __DIR__.'/../inc/footer.php';
 	die;

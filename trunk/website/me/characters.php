@@ -59,6 +59,7 @@ if (count($cache) == 0) {
 		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
 		<p><?php echo $__url_useraccount->GetNickName(); ?> hasn't added any characters yet!</p>
 	</center>
+	</div>
 <?php
 }
 

@@ -111,21 +111,6 @@ hr {
 
 </style>
 
-<script>
-var $container = $('#search-results');
-// initialize isotope
-$container.isotope({
-  // options...
-});
-
-// filter items when filter link is clicked
-$('#filters a').click(function(){
-  var selector = $(this).attr('data-filter');
-  $container.isotope({ filter: selector });
-  return false;
-});
-</script>
-
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
 		<ul id="filters" class="nav nav-list search-menu">

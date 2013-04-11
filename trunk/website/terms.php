@@ -5,10 +5,10 @@
                 </p> <p>
                     The terms of service are subject to change by Mapler.me at any time in its discretion. Your use of this site after such changes are implemented constitutes your acknowledgment and acceptance of the changes. Please consult the terms of service regularly.
                 </p> <p>
-                    In addition to reviewing this Agreement, please read our <a href="/privacy/" target="_blank">Privacy Policy</a>. Your use of the Website constitutes agreement to its terms and conditions as well.
-                </p> <h3>Definition</h3> <ol> <li>'Player' refers to (1) any players accessed through our service and it's information, (2) another individual's character(s) and (3) player information stored in our databases.</li> <li>'User' refers to the individual who registers and uses our service, has collected information using our client, or those who interact with the Mapler.me service.</li> <li>'Link' refers to any Uniform Resource Locator (URL) that represents a page, picture, avatar, or content accessed on Mapler.me.</li> </ol> <h3>Monitoring</h3> <p>
+                    In addition to reviewing this Agreement, please read our Privacy Policy. Your use of the Website constitutes agreement to its terms and conditions as well.
+                </p> <h3>[1] Definition</h3> <ol> <li>'Player' refers to (1) any players accessed through our service and it's information, (2) another individual's character(s) and (3) player information stored in our databases.</li> <li>'User' refers to the individual who registers and uses our service, has collected information using our client, or those who interact with the Mapler.me service.</li> <li>'Link' refers to any Uniform Resource Locator (URL) that represents a page, picture, avatar, or content accessed on Mapler.me.</li> </ol> <h3>[2] Monitoring</h3> <p>
                     Mapler.me has the right to monitor all activities to the website. Upon accepting the terms of use, all users of this website agrees to such monitoring. Mapler.me uses secure methods of collecting allowed information from MapleStory, ignoring all confidential information such as 1) Nexon America account information, 2) Communication between players within buddy, guild, alliance, party, expedition, and all other forms, and 3)  Nevertheless, we do not make any warranties or guarantees that: (1) the Website, or any portion thereof, will be monitored for accuracy or unacceptable use, (2) apparent statements of fact will be authenticated, or (3) we will take any specific action (or any action at all) in the event of a dispute regarding compliance or non-compliance with this Agreement.
-                </p> <h3>User Conducts</h3> <p>
+                </p> <h3>[3] User Conducts</h3> <p>
                     As a condition of use, you promise not to use the Services for any purpose that is unlawful or prohibited by these Terms of Use, or any other purpose not reasonably intended by Mapler.me. We respect other people's rights and we expect you to do the same.
                 </p> <p>
                     By way of example, and not as a limitation, you agree not to use the Services:
@@ -31,7 +31,7 @@
                 
                 <p>
                     Mapler.me may remove any activity and Mapler.me accounts at any time for any reason (including, but not limited to, upon receipt of claims or allegations from third parties or authorities relating to such activity), or for no reason at all. You are solely responsible for your interactions with other users of the Site. Mapler.me reserves the right, but has no obligation, to monitor disputes between you and other users.
-                </p> <h3>Player Information / Nexon Involvement</h3> <p>
+                </p> <h3>[4] Player Information / Nexon Involvement</h3> <p>
                     By adding players to Mapler.me, you grant Mapler.me permission to use the information and content for public viewing, as well as the right to use collected information for statistics. You also agree that all information When using our client, information about your character is collected and stored confidentially.
                 </p>
                 
@@ -47,31 +47,35 @@
                     <li>having a status of "NEXON" set to their account, as well as "Nexon" displayed besides their name;</li>
                     <li>instant access to any new features, additions, or changes to the site or service before any public release;</li>
                     </ul>
-                </p> <p>
-                <h3>Restrictions</h3>
-                <p>Mapler.me disallows any involement with actions or behavior that is against Nexon America's Terms of Service which includes hacking, botting, exploiting, or the use of unallowed 3rd Party Programs. If a user is caught to be involved with the above statement, Mapler.me reserves the right, in its sole discretion, to replace, delete or remove any content or players from the Site and to restrict, suspend or terminate your access to all or part of the Site, at any time for any reason without prior notice or liability.   
                 </p>
                 
-                <p>Mapler.me offers the ability to report players in-game if they are caught breaking the Terms of Service. When reported, a screenshot as well as information regarding the report are sent to our servers to be reviewed. Once reviewed, if a reported character is registered their account will be disabled permanantly. The ability to add any other players from the same Nexon Account will also be disabled.</p>
+                <p>
+                	When connecting a Nexon America account with your Mapler.me account, a request is sent to Nexon America, which includes information that allows Nexon to track and monitor all connections through our service. This information is not viewable by Mapler.me or it's team, and purpose is to ensure user security and reassurance.
+                <h3>[5] Restrictions</h3>
+                <p>Mapler.me disallows any involement with actions or behavior that is against Nexon America's Terms of Service which includes hacking, botting, exploiting, or the use of unallowed 3rd Party Programs. If a user is caught to be involved with the above statement, Mapler.me reserves the right, in its sole discretion, to replace, delete or remove any content or players from the Site and to restrict, suspend or terminate your access to all or part of the Site, at any time for any reason without prior notice or liability.
+                </p>
             
-                <h3>Privacy</h3> <p>
-                    All information provided by the user is strictly confidential. Mapler.me reserves the right to distribute aggregated demographic information provided by the user, but Mapler.me will never release any personal information about the user without permission. However, Mapler.me reserves the right to release <u>player information</u> if requested by Nexon America as discussed above.</p>
+                <h3>[6] Privacy</h3><p>
+                    All information provided by the user is strictly confidential. Mapler.me reserves the right to distribute aggregated demographic information provided by the user, but Mapler.me will never release any personal information about the user without permission. However, Mapler.me reserves the right to release <u>player information</u> if requested by Nexon America as discussed above in Section [4].</p>
 
-                <h3>Warranty Disclaimers</h3> <p>
+                <h3>[7] Warranty Disclaimers</h3> <p>
                     You acknowledge that Mapler.me has no control over, and no duty to take any action regarding: which users gain access to the Site or use the Services; what effects the content may have on you; how you may interpret or use the content; or what actions you may take as a result of having been exposed to the content. You release Mapler.me from all liability for you having acquired or not acquired content through the Site or the Services. The Site or Services may contain, or direct you to sites containing, information that some people may find offensive or inappropriate. Mapler.me makes no representations concerning any content contained in or accessed through the Site or Services, and Mapler.me will not be responsible or liable for the accuracy, copyright compliance, legality or decency of material contained in or accessed through the Site or the Services. THE SERVICE, CONTENT, AND SITE ARE PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. SOME STATES DO NOT ALLOW LIMITATIONS ON HOW LONG AN IMPLIED WARRANTY LASTS, SO THE ABOVE LIMITATIONS MAY NOT APPLY TO YOU.
-                </p> <h3>Limitation of Liability</h3>
+                </p> <h3>[8] Limitation of Liability</h3>
                 <p>
                     Mapler.me makes no guarantee of availability of service and reserves the right to change, withdraw, suspend, or discontinue any functionality or feature of Mapler.me's services. In no event shall Mapler.me be liable for any damages whatsoever. This includes direct, indirect, incidental, special, consequential, or punitive damages arising out of the use of or inability to use Mapler.me's services or any content thereon.
                 </p>
+                <p>
+                	Mapler.me requires occasional maintenances to improve, resolve, or update our service. These maintenances can take time, and can result in time without client functionality. We are now responsible for not being able to record in-game progress, changes, or new character classes not initally working perfectly.
+                </p>
                 
-                	<h3>Maintenance</h3> <p>
-                    Mapler.me may perform maintenance services at anytime. User acknowledges that such maintenance may require downtime, and contents on Mapler.me may not load during this time.
-                </p> <h3>Legal Policy</h3> <p>
+                	<h3>[9] Maintenance</h3> <p>
+                    Mapler.me may perform maintenance services at any time. You acknowledge that such maintenance may require downtime, and contents or features on Mapler.me may not load during this time as well as client functionality being disabled.
+                </p> <h3>[10] Legal Policy</h3> <p>
                     Mapler.me Terms of Service are subject to change without notice.
                 </p> <p>
                     Mapler.me directs full legal responsibility of files to their respective users.
                 </p><h3>Last Revision</h3> <p>
-                    This Terms of Service was last updated on January 22nd, 2013.
+                    This Terms of Service was last updated on April 10, 2013.
                 </p> </div> </div> </div> </div>
       
 <?php require_once __DIR__.'/inc/footer.php'; ?>
