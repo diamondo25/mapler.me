@@ -178,21 +178,6 @@ html { overflow-x: hidden; }
 }
 
 /* Fixes for different layouts */
-@media (max-width: 767px) {
-	#plzjoin {
-		display: none;
-	}
-	.logincharacter {
-		display: none !important;
-	}
-	.loginpageform {
-		position: relative;
-		right: 50px;
-	}
-	.dropdown:hover .dropdown-menu {
-	display: block;
-	}
-}
 
 @media (min-width: 980px) {
 	.post-resize {
@@ -204,21 +189,60 @@ html { overflow-x: hidden; }
 	.post-resize {
 		width: 740px !important;
 	}
+	.hidden-desktop {
+    	display: inherit !important;
+    }
+    .visible-desktop {
+    	display: none !important ;
+    }
+    .visible-tablet {
+    	display: inherit !important;
+    }
+    .hidden-tablet {
+    	display: none !important;
+    }
 }
 
 @media (max-width: 767px) {
+	.hidden-desktop {
+    	display: inherit !important;
+    }
+  	.visible-desktop {
+    	display: none !important;
+    }
+  	.visible-phone {
+    	display: inherit !important;
+    }
+  	.hidden-phone {
+    	display: none !important;
+    }
 	.post-resize {
 		width: 95% !important;
 	}
-}
-
-
-@media (min-width: 768px) and (max-width: 979px) { 
+	.in.affix {
+		width: 250px !important;
+	}
+	.in.affix .post-resize {
+		width:230px !important;
+	}
 	.span2 {
 		width: 206px; /* Makes character display better on mobile devices / tablets */
 	}
 	.logincharacter {
 		display: none !important;
+	}
+	#plzjoin {
+		display: none;
+	}
+	.logincharacter {
+		display: none !important;
+	}
+	.loginpageform {
+		position: relative;
+		right: 50px;
+	}
+	.dropdown:hover .dropdown-menu {
+		display: block;
 	}
 }
 
@@ -377,35 +401,6 @@ footer a {
 }
 .visible-desktop {
   display: inherit !important;
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-  .hidden-desktop {
-    display: inherit !important;
-  }
-  .visible-desktop {
-    display: none !important ;
-  }
-  .visible-tablet {
-    display: inherit !important;
-  }
-  .hidden-tablet {
-    display: none !important;
-  }
-}
-@media (max-width: 767px) {
-  .hidden-desktop {
-    display: inherit !important;
-  }
-  .visible-desktop {
-    display: none !important;
-  }
-  .visible-phone {
-    display: inherit !important;
-  }
-  .hidden-phone {
-    display: none !important;
-  }
 }
 
 /* compressed buttons to save space (they will never be changed) */
