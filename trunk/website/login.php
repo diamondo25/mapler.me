@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 if ($_loggedin) {
-	$push_to_page = (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'logoff') === FALSE) ? $_SERVER['HTTP_REFERER'] : '/stream/';
+	$push_to_page = (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'logoff') === FALSE && strpos($_SERVER['HTTP_REFERER'], 'login') === FALSE) ? $_SERVER['HTTP_REFERER'] : '/stream/';
 
 ?>
 <meta http-equiv="refresh" content="3;URL='<?php echo $push_to_page; ?>'" />

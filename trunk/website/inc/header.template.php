@@ -156,7 +156,7 @@ endif;
 if ($_loggedin):
 ?>					
 					<li>
-						<form method="post" action="/search/">
+						<form method="post" action="http://<?php echo $domain; ?>/search/">
 							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?" />	 
 						</form>
 					</li>
