@@ -17,13 +17,34 @@ else:
 
 	<div class="row">
 		<div class="span12">
-			<p class="lead">Mapler.me Completion List</b><br/>
-			<small>Please note this is a very generalized todo list and many additions or information is left out. Please ask us about features or suggestions.</small>
+			<p class="lead">Known Issues:</p><br/>
+		</div>
+	<ul class="status">
+	<h2>General:</h2>
+	<li>- When your first character is added, it is not automatically considered a 'main character' requiring manual selection.</li>
+	<li>- There is not an option to request a password reset without being logged in.</li>
+	<li>- Status updates will sometimes not display correctly on mobile devices and appear stretched.</li>
+	</ul>
+	<ul class="status">
+	<h2>Statuses:</h2>
+	<li>- When replying to another mapler, the status is shown on all of your friend's streams (lack of privacy and spammy).</li>
+	<li>- There is not a cutoff for the amount of statuses shown on your Stream, this will be resolved soon.</li>
+	<li>- Status updates will sometimes not display correctly on mobile devices and appear stretched.</li>
+	</ul>
+	<ul class="status">
+	<h2>Equipment:</h2>
+	<li>- Items that are anvil'd display their original item look.</li>
+	<li>- Some Unique and Legendary potentials do not display correctly.</li>
+	<li>- Some pet equips are incorrectly positioned or not considered a pet equip.</li>
+	</ul>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="span12">
+			<p class="lead">Completion List:</b><br/>
 			</p>
 		</div>
 	</div>
-	
-	<hr/>
 	<div class="row">
 	<ul class="status">
 	<b>General</b><br/><br/>
@@ -51,8 +72,6 @@ else:
 	<li>Married?</li>
 	</ul>
 	</div>
-	
-	<hr/>
 	
 	<div class="row">
 	<ul class="status">
