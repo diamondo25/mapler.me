@@ -379,21 +379,22 @@ function DecodeItem() {
             AddShort("Potential1");
             AddShort("Potential2");
             AddShort("Potential3");
-            AddShort("Potential4");
-            AddShort("Potential5");
+            AddShort("Bonus Potential4");
+            AddShort("Bonus Potential5");
+			AddShort("Bonus Potential6");
 			
-			AddShort("Socket1");
-			AddShort("Socket2");
-			AddShort("Socket3");
+			AddShort("Anvilled item ID + (itemid - (itemid % 10000))");
 			
-			AddShort("?x2");
+			AddShort("Socket Color thing?");
 			
-			AddShort("?");
+			AddShort("Nebulite item ID + 3060000");
 			
-            AddShort("UNK new");
+			AddShort("THINK");
+			
+            AddShort("THINK");
 			
 			if (iscash == 0x00)
-    			AddLong("?x8");
+    			AddLong("?x8"); // Unique ID?
 			AddLong("v126");
 			
 			AddInt("?x4");

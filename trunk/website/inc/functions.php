@@ -151,7 +151,7 @@ function time_elapsed_string($etime) {
 
    foreach ($a as $secs => $str) {
 	   $d = $etime / $secs;
-	   if ($d >= 1) {
+	   if ($d > 1) {
 		   $r = round($d);
 		   return $r . ' ' . $str . ($r > 1 ? 's' : '');
 	   }
