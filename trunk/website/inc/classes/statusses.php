@@ -18,7 +18,7 @@ class Statusses {
 }
 
 class Status {
-	public $id, $account, $nickname, $character, $content, $comments_disabled, $timestamp, $override;
+	public $id, $account, $nickname, $character, $content, $comments_disabled, $timestamp, $override, $mention_list, $reply_to;
 	
 	public function __construct($row) {
 		$this->id = $row['id'];
@@ -31,15 +31,49 @@ class Status {
 		$this->timestamp = $row['timestamp'];
 		$this->override = $row['override'];
 		$this->seconds_since = $row['secs_since'];
+		$this->reply_to = $row['reply_to'];
 		
 		$this->ParseContent();
 	}
 	
+	public static function GetReplyInfo($id) {
+		global $__database;
+		
+		$q = $__database->query("
+SELECT
+	id,
+	nickname,
+	timestamp,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+FROM
+	social_statuses
+WHERE
+	id = ".$id);
+		if ($q->num_rows == 0) {
+			$q->free();
+			return NULL;
+		}
+		$row = $q->fetch_assoc();
+		$q->free();
+		return $row;
+	}
+	
 	public function ParseContent() {
+		global $domain;
+		
+		preg_match_all('/@([a-z0-9_]+)/i', $this->content, $matches);
+		// $matches[1] Contains a list of found mentions
+		// Remove dupes
+		$matches[1] = array_unique($matches[1]);
+		
+		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
+		
+		$this->content = preg_replace('/http\:\/\/([^\<\s\t]+)/i', '<a href="http://$1">http://$1</a>', $this->content);
+		
 		//@replies
-		$this->content = preg_replace('/(^|[^a-z0-9_])@([a-z0-9_]+)/i', '$1<a href="http://$2.mapler.me/">@$2</a>', $this->content);
+		$this->content = preg_replace('/@([a-z0-9_]+)/i', '<a href="http://$1.'.$domain.'/">@$1</a>', $this->content);
 		//#hashtags (no search for the moment)
-		$this->content = preg_replace('/(^|[^a-z0-9_])#([a-z0-9_]+)/i', '$1<a href="#">#$2</a>', $this->content);
+		$this->content = preg_replace('/#([a-z0-9_]+)/i', '<a href="#">#$1</a>', $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
@@ -47,31 +81,30 @@ class Status {
 		$parser->parse($this->content);
 		
 		$username = $this->account->GetUsername();
+		$own_post = $_loggedin && $this->account_id == $_loginaccount->GetID();
+		
+		$reply_info = $this->reply_to == NULL ? NULL : $this->GetReplyInfo($this->reply_to);
+		
 ?>
-			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo ($_loggedin && $this->account_id == $_loginaccount->GetID()) ? ' postplox' : ''; ?><?php echo $style_addition; ?>">
+			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $own_post ? ' postplox' : ''; ?><?php echo $style_addition; ?>">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat right -30px #FFF;">
 					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/"><?php echo $this->nickname;?></a> said:
 				</div>
 				<br />
+				<div class="status-contents">
 				<?php echo $parser->getAsHtml(); ?>
+				</div>
 				<div class="status-extra">
+<?php if ($reply_info != NULL): ?>
+					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
+<?php endif; ?>
 <?php if ($this->account_id !== 2): ?>
-					<a href="#" class="mention-<?php echo $this->id; ?>" mentioned="<?php echo $username; ?>"><i class="icon-share-alt"></i></a>
-					<script type="text/javascript">
-						$('.mention-<?php echo $this->id; ?>').click(function() {
-							var value = $(".mention-<?php echo $this->id; ?>").attr('mentioned');
-							var input = $('#post-status');
-							input.val(input.val() + '@' + value + ' ');
-							$(".poster").addClass("in");
-							$('.poster').css("height","auto");
-							return false;
-						});
-					</script>
+					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i></a>
 <?php endif; ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php
 	if ($_loggedin) {
-		if (IsOwnAccount()) {
+		if ($own_post) {
 ?>
 						- <a href="#" onclick="RemoveStatus(<?php echo $this->id; ?>);">delete?</a>
 <?php

@@ -127,7 +127,7 @@ endif;
 ?>
 		
 		<br />
-		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br/>
+		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br />
 			<small class="name_extra" style="margin-top:10px;">	
 			<?php if ($__url_useraccount->GetBio() != null): ?>
 				<?php echo $__url_useraccount->GetBio(); ?>
@@ -164,15 +164,13 @@ if ($_loggedin && !$is_self) {
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
-		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Canel?</button></p>
+		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Cancel?</button></p>
 		<hr/>
 <?php
 	}
 }
-if (count($cache) == 0) {
-	echo '';
-}
-else {
+
+if (count($cache) > 0) {
 ?>
 		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters" style="color:gray;"><?php echo count($cache); ?> Characters</a></p>
 <?php

@@ -48,6 +48,7 @@ if ($_loggedin) {
 <?php endif; ?>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
+	<script src="//<?php echo $domain; ?>/inc/js/maplerme.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
 	
 		<script type="text/javascript">
 		$('.in').affix();

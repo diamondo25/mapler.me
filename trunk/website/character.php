@@ -502,7 +502,7 @@ $inv_extra_offx = $inv_extra_offy = 2;
 for ($inv = 0; $inv < 5; $inv++) {
 	$inv1 = $inventory->GetInventory($inv);
 ?>
-		<div class="character-brick inventory" id="inventory_<?php echo $inv; ?>" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>; padding: 5px  !important;">
+		<div class="character-brick inventory scrollable" id="inventory_<?php echo $inv; ?>" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>; padding: 5px  !important;">
 <?php 
 	for ($i = 0; $i < count($inv1); $i++) {
 
@@ -909,7 +909,7 @@ ORDER BY
 		<div class="book_title"><?php echo $book; ?></div>
 	</div>
 	<span id="skillsp_<?php echo $i; ?>" class="skill_sp" style="display: none;"><?php echo $sp; ?></span>
-	<div id="skilllist_<?php echo $i; ?>" class="skill_job" style="display: none;">
+	<div id="skilllist_<?php echo $i; ?>" class="skill_job scrollable" style="display: none;">
 <?php
 		}
 		
