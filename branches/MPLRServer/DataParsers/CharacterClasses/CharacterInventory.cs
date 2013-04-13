@@ -392,7 +392,7 @@ namespace MPLRServer
         {
             if (pValue.HasFlag(pFlag))
             {
-                var val = pPacket.ReadShort();
+                var val = pPacket.ReadByte();
                 if (pLogIfFound)
                 {
                     Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
@@ -421,7 +421,7 @@ namespace MPLRServer
         {
             if (pValue.HasFlag(pFlag))
             {
-                var val = pPacket.ReadShort();
+                var val = pPacket.ReadInt();
                 if (pLogIfFound)
                 {
                     Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
