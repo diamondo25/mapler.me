@@ -17,7 +17,7 @@ else:
 			
 			<h1>Mapler.me Client Installer</h1>
 			<p>Simplistic, easy to use, and always there for you, the Mapler.me client is used to update your characters, items, and more.</p>
-			<a href="//<?php echo $domain; ?>/downloads/client/setup.exe" class="btn btn-success btn-large"
+			<a href="http://cdn.mapler.me/installers/setupv1004.exe" class="btn btn-success btn-large"
 			style="display: block;
 width: auto;
 padding: 19px 24px;

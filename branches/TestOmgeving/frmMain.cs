@@ -39,15 +39,14 @@ namespace Mapler_Client
                     _mapleEXE = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable");
                 }
 
-                CraftNetTools.AppUpdates.Check();
-
                 ServerConnection.Initialize();
                 GMSKeys.Initialize();
                 Sniffer.Init();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.ToString()), "ERROR");
+                MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.Message), "ERROR");
+                Program.Closing = true;
                 Environment.Exit(1);
             }
         }
@@ -133,6 +132,20 @@ namespace Mapler_Client
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = true;
+                this.WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+            }
         }
     }
 }

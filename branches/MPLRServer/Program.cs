@@ -210,11 +210,11 @@ namespace MPLRServer
                 tmp.Add(0x0129, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
 
                 // Testing more data throughput
-                tmp.Add(530, null);
-                tmp.Add(435, null);
-                tmp.Add(569, null);
-                tmp.Add(566, null);
-                tmp.Add(567, null);
+                //tmp.Add(530, null);
+                //tmp.Add(435, null);
+                //tmp.Add(569, null);
+                //tmp.Add(566, null);
+                //tmp.Add(567, null);
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ServerPacket] = tmp;
             }

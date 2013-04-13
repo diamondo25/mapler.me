@@ -105,10 +105,10 @@ namespace Mapler_Client
 
         void device_OnPacketArrival(object sender, CaptureEventArgs e)
         {
-            // Check if ack!
             var packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
 
-            IpPacket ipPacket = IpPacket.GetEncapsulated(packet);
+            // Check if IP packet
+            IpPacket ipPacket = packet.Extract(typeof(IpPacket)) as IpPacket;
             if (ipPacket == null)
                 return;
 
@@ -118,7 +118,7 @@ namespace Mapler_Client
             }
 
 
-            TcpPacket tcpPacket = TcpPacket.GetEncapsulated(packet);
+            TcpPacket tcpPacket = packet.Extract(typeof(TcpPacket)) as TcpPacket;
             if (tcpPacket == null)
                 return;
 
