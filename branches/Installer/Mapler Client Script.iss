@@ -5,8 +5,7 @@
 #define MyAppVersion "1.0.0.4"
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
-#define MyAppExeName "Mapler Client.exe"
-#define MyAppExeName "Mapler Client.exe"
+#define MyAppExeName "MaplerUpdater.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -45,6 +44,7 @@ Source: ".\..\TestOmgeving\bin\x86\Release\PacketDotNet.xml"; DestDir: "{app}"; 
 Source: ".\..\TestOmgeving\bin\x86\Release\SharpPcap.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\..\TestOmgeving\bin\x86\Release\Mapler Client.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\..\TestOmgeving\bin\x86\Release\Mapler Client.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\..\MaplerUpdater\bin\x86\Release\MaplerUpdater.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\..\WinPcap Installer\*.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
@@ -57,5 +57,5 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 [Run]          
 Filename: "{app}\WinPcap_4_1_3.exe"; Flags: shellexec waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait skipifnotsilent
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
 
