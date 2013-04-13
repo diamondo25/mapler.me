@@ -244,8 +244,14 @@ function MoveWindow(event) {
 	if (document.body.clientHeight < expectedBottom) {
 		expectedTop -= (expectedBottom - document.body.clientHeight) + 10;
 	}
+	
+	var expectedLeft = event.pageX + 10;
+	var expectedRight = expectedLeft + parseInt(document.getElementById('item_info').clientWidth);
+	if (document.body.clientWidth < expectedRight) {
+		expectedLeft -= (expectedRight - document.body.clientWidth) + 10;
+	}
 	document.getElementById('item_info').style.top = expectedTop + 'px';
-	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
+	document.getElementById('item_info').style.left = expectedLeft + 'px';
 }
 
 function ShowCashEquips(show) {

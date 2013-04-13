@@ -40,6 +40,9 @@ ORDER BY
 	a.accepted_on DESC
 ");
 
+?>
+	<div class="span9">
+<?php
 $characters_per_row = 3;
 $i = 0;
 while ($row = $q->fetch_assoc()) {
@@ -50,7 +53,7 @@ while ($row = $q->fetch_assoc()) {
 <?php
 		}
 ?>
-		<div class="row" style="float: right;">
+		<div class="row">
 <?php
 	}
 	$i++;
@@ -68,7 +71,7 @@ while ($row = $q->fetch_assoc()) {
 if ($did_add):
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
-			<div class="caption"><?php echo $account->GetNickname(); ?></div>
+				<div class="caption"><?php echo $account->GetNickname(); ?></div>
 				<center>
 					<br />
 					<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" style="text-decoration: none !important; font-weight: 300; color: inherit;">
@@ -80,6 +83,7 @@ if ($did_add):
 <?php endif;
 }
 ?>
-</div>
+		</div>
+	</div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

@@ -65,6 +65,9 @@ if (count($cache) == 0) {
 
 // printing table rows
 
+?>
+	<div class="span9">
+<?php
 $characters_per_row = 3;
 $i = 0;
 foreach ($cache as $row) {
@@ -75,13 +78,13 @@ foreach ($cache as $row) {
 <?php
 		}
 ?>
-		<div class="row" style="float: right;">
+		<div class="row">
 <?php
 	}
 	$i++;
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
-			<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
+				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 				<center>
 					<br />
 					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
@@ -95,6 +98,6 @@ foreach ($cache as $row) {
 }
 ?>
 		</div>
-</div>
+	</div>
 
 <?php require_once __DIR__.'/../inc/footer.php'; ?>
