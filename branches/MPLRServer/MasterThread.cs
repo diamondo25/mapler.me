@@ -62,30 +62,39 @@ namespace MPLRServer
             }
         }
 
-        public static MasterThread Instance { get; private set; }
+        private volatile static MasterThread _instance;
+        public static MasterThread Instance { get { return _instance; } private set { _instance = value; } }
 
-        public static DateTime CurrentDate { get; private set; }
+        private static long _curdate;
+        public static DateTime CurrentDate { get { return new DateTime(_curdate); } }
 
         public ulong TicksPerSecond { get; private set; }
-        public ulong TicksBeforeSleep { get; set; }
+        public int TicksBeforeSleep { get; private set; }
         public ulong CurrentTickCount { get; private set; }
-        public bool Stop { get; set; }
+        private volatile bool _stop;
+        public bool Stop { get { return _stop; } set { _stop = value; } }
         public string ServerName { get; private set; }
+        public int LastAmountOfCallbacks { get; private set; }
 
         private ConcurrentQueue<Action<DateTime>> _callbacks = new ConcurrentQueue<Action<DateTime>>();
         private List<RepeatingAction> _repeatingActions = new List<RepeatingAction>();
 
         private Thread _mainThread;
+        private Timer _dateUpdator;
 
-        public MasterThread(string pServerName, ulong pTicksBeforeSleep)
+        public MasterThread(string pServerName, int pTicksBeforeSleep)
         {
             ServerName = pServerName;
             TicksBeforeSleep = pTicksBeforeSleep;
             Stop = false;
 
+            _dateUpdator = new Timer((a) =>
+            {
+                Interlocked.Exchange(ref _curdate, DateTime.Now.Ticks);
+            }, null, 0, 1000);
         }
 
-        public static void Load(string pServerName, ulong pTicksBeforeSleep = 100)
+        public static void Load(string pServerName, int pTicksBeforeSleep = -100)
         {
             Instance = new MasterThread(pServerName, pTicksBeforeSleep);
             Instance.Init();
@@ -138,24 +147,27 @@ namespace MPLRServer
         private void Run()
         {
             Action<DateTime> action;
-            CurrentDate = DateTime.Now;
             try
             {
                 for (CurrentTickCount = 0; !Stop; CurrentTickCount++)
                 {
-                    while (_callbacks.TryDequeue(out action))
+                    LastAmountOfCallbacks = _callbacks.Count;
+                    if (LastAmountOfCallbacks > 0)
                     {
-                        try
+                        while (_callbacks.TryDequeue(out action))
                         {
-                            action(CurrentDate);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.WriteLine("Caught an exception inside the MainThread thread while running an action. Please, handle the exceptions yourself!\r\n{0}", ex.ToString());
+                            try
+                            {
+                                action(CurrentDate);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.WriteLine("Caught an exception inside the MainThread thread while running an action. Please, handle the exceptions yourself!\r\n{0}", ex.ToString());
+                            }
                         }
                     }
-
-
+                    // Unused thing atm
+                    /*
                     foreach (var ra in _repeatingActions)
                     {
                         try
@@ -167,17 +179,40 @@ namespace MPLRServer
                             Logger.WriteLine("Caught an exception inside the MainThread thread while running an action. Please, handle the exceptions yourself!\r\n{0}", ex.ToString());
                         }
                     }
-
-                    if (CurrentTickCount % TicksBeforeSleep == 0)
+                    */
+                    if ((int)(CurrentTickCount % int.MaxValue) % (TicksBeforeSleep <= 0 ? 1 : TicksBeforeSleep) == 0)
                     {
-                        CurrentDate = DateTime.Now;
-                        Thread.Sleep(1);
+                        // Re-calculate amount of ticks required before a simple sleep, to cool down the CPU or forcing more throughput.
+                        int lasttbf = TicksBeforeSleep;
+                        int sleeptime = 1;
+                        if (LastAmountOfCallbacks == 0) // Server is doing nothing, so make the sleep more ocurring
+                        {
+                            TicksBeforeSleep -= 10;
+                            NormalizeTicksBeforeSleep();
+                        }
+                        else  // increase if needed
+                        {
+                            TicksBeforeSleep += 10 + (int)Math.Pow(LastAmountOfCallbacks / 5, 1.5);
+                            NormalizeTicksBeforeSleep();
+                        }
+
+                        if (TicksBeforeSleep < 0)
+                        {
+                            sleeptime = Math.Abs(TicksBeforeSleep);
+                        }
+
+                        Thread.Sleep(sleeptime);
                     }
                 }
 
             }
             catch { }
             _mainThread = null;
+        }
+
+        private void NormalizeTicksBeforeSleep()
+        {
+            TicksBeforeSleep = Math.Max(-200, Math.Min(10000, TicksBeforeSleep));
         }
     }
 }

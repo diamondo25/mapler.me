@@ -19,11 +19,22 @@ namespace MPLRServer
             pConnection.Logger_WriteLine("Client data: {0} {1}.{2}", locale, version, subversion);
             pConnection.MapleVersion = version;
             pConnection.CharData = null; // Back to the LoginServer!!!
-
-            if (locale != LatestLocale || version != LatestMajorVersion)
+            if (locale != LatestLocale)
+            {
+                pConnection.Logger_WriteLine("Incompatible MapleStory locale detected!!!!");
+                pConnection.SendInfoText("Unsupported MapleStory client detected. Mapler.me only supports MapleStory Global version {0} at the moment.", LatestMajorVersion); // This should _never_ happen XD (different encryption and such)
+                pConnection.Disconnect();
+            }
+            else if (version > LatestMajorVersion)
             {
                 pConnection.Logger_WriteLine("MapleStory client of user is outdated/incorrect. Disconnect.");
-                pConnection.SendInfoText("MapleStory seems outdated, update?");
+                pConnection.SendInfoText("Your MapleStory client seems outdated. Update your client in order to use the Mapler.me service.\r\nVersion identified: {0}\r\nSupported version: {1}", version, LatestMajorVersion);
+                pConnection.Disconnect();
+            }
+            else if (version < LatestMajorVersion)
+            {
+                pConnection.Logger_WriteLine("MapleStory client of user is more up-to-date than Mapler.me service!!!");
+                pConnection.SendInfoText("As your client is more up-to-date than the Mapler.me service, you are unable to use the Mapler.me service at this time.\r\nCheck the Mapler.me website and/or Twitter (@maplerme) for updates!\r\n\r\nCurrently supported version: {0}\r\nYour version: {1}", LatestMajorVersion, version);
                 pConnection.Disconnect();
             }
 

@@ -17,8 +17,19 @@ namespace MPLRServer
 
         public static List<ClientConnection> Clients { get; private set; }
 
+        // lolname
+        static void UnexpectedExHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            System.IO.File.AppendAllText("RUNTIME_ERROR.txt", e.ToString());
+        }
+
+
         static void Main(string[] args)
         {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnexpectedExHandler);
+
             Logger.SetLogfile(false);
 
             MasterThread.Load("MPLRServer");
@@ -155,7 +166,7 @@ namespace MPLRServer
 
                 // V.125 -> 126| Diff 0x00E8 -> 0x00ED, 0x011B -> 0x0121
                 // V.127 -> 128| Diff 0x00ED -> 0x00EE, 0x0121 -> 0x0122
-                // V.128 -> 132| Diff 0x00EE -> 0x00F4...
+                // V.131 -> 132| Diff 0x00EE -> 0x00F4...
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
@@ -169,8 +180,8 @@ namespace MPLRServer
                         byte flag = pPacket.ReadByte();
                         pPacket.ReadInt();
                         pPacket.ReadByte();
-                        string chains = pPacket.ReadString(8);
-                        pConnection.Logger_WriteLine("Selected charid {0} and connects to {1} ({2}) ({3})", charid, ip, chains, flag);
+                        //string chains = pPacket.ReadString(8);
+                        pConnection.Logger_WriteLine("Selected charid {0} and connects to {1} ({2})", charid, ip, flag);
                     }
                 }, null));
                 tmp.Add(0x000F, new Handler((pConnection, pPacket) =>
@@ -198,6 +209,13 @@ namespace MPLRServer
                 tmp.Add(0x00F4, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
                 tmp.Add(0x0129, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
 
+                // Testing more data throughput
+                tmp.Add(530, null);
+                tmp.Add(435, null);
+                tmp.Add(569, null);
+                tmp.Add(566, null);
+                tmp.Add(567, null);
+
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ServerPacket] = tmp;
             }
 
@@ -221,7 +239,7 @@ namespace MPLRServer
                     }
                     pConnection.WorldID = pPacket.ReadByte();
                     pConnection.ChannelID = pPacket.ReadByte(); // Channel ID
-                    pPacket.ReadInt(); // Internal IP 0.0?
+                    pPacket.ReadInt(); // Client LAN IP -.-: 192.168.0.212
 
                     pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, pConnection.ChannelID);
                 }, null));
