@@ -393,13 +393,13 @@ namespace MPLRServer
             return base.GetChecksum() + 
                 Slots + Scrolls + Str + Dex + Int + Luk + HP + MP + 
                 Watk + Wdef + Matk + Mdef + Acc + Avo + Hands + Jump + 
-                Speed + Flags + ViciousHammer + 
-                ItemLevel + ItemEXP +
-                StatusFlags + BattleModeDamage +
+                Speed + Flags + ViciousHammer +
+                ItemLevel + ItemEXP + BattleModeDamage +
+                StatusFlags +
                 Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + Potential6 +
                 DisplayID + SocketState + Nebulite1 + 
                 Nebulite2 + Nebulite3 +
-                (int)UniqueID + (int)(UniqueID >> 32);
+                (int)UniqueID + (int)(UniqueID >> 32) + 1;
         }
 
         private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, bool pLogIfFound = false)

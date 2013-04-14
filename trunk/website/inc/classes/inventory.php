@@ -119,13 +119,13 @@ class ItemBase {
 	public $type;
 	
 	public function __construct($row) {
-		$this->inventory = $row['inventory'];
-		$this->slot = $row['slot'];
-		$this->itemid = $row['itemid'];
+		$this->inventory = (int)$row['inventory'];
+		$this->slot = (int)$row['slot'];
+		$this->itemid = (int)$row['itemid'];
 		$this->expires = $row['expires'];
-		$this->cashid = $row['cashid'];
-		$this->amount = $row['amount'];
-		$this->bagid = $row['bagid'];
+		$this->cashid = (int)$row['cashid'];
+		$this->amount = (int)$row['amount'];
+		$this->bagid = (int)$row['bagid'];
 	}
 	
 	public static function MakeItem($row, $emulateData) {
@@ -151,7 +151,7 @@ class ItemRechargable extends ItemBase {
 		$this->type = ITEM_RECHARGE;
 		
 		$this->crafter = $row['name'];
-		$this->flags = $row['flags'];
+		$this->flags = (int)$row['flags'];
 	}
 }
 
@@ -178,71 +178,81 @@ class ItemEquip extends ItemBase {
 	public $hammers;
 	public $itemlevel;
 	public $itemexp;
+	public $statusflag;
 	public $potential1;
 	public $potential2;
 	public $potential3;
 	public $potential4;
 	public $potential5;
+	public $potential6;
 	public $socketstate;
-	public $socket1;
-	public $socket2;
-	public $socket3;
+	public $nebulite1;
+	public $nebulite2;
+	public $nebulite3;
+	public $display_id;
 
 	public function __construct($row) {
 		parent::__construct($row);
 		$this->type = ITEM_EQUIP;
 		
-		$this->slots = $row['slots'];
-		$this->scrolls = $row['scrolls'];
-		$this->str = $row['str'];
-		$this->dex = $row['dex'];
-		$this->int = $row['int'];
-		$this->luk = $row['luk'];
-		$this->maxhp = $row['maxhp'];
-		$this->maxmp = $row['maxmp'];
-		$this->weaponatt = $row['weaponatt'];
-		$this->weapondef = $row['weapondef'];
-		$this->magicatt = $row['magicatt'];
-		$this->magicdef = $row['magicdef'];
-		$this->acc = $row['acc'];
-		$this->avo = $row['avo'];
-		$this->hands = $row['hands'];
-		$this->jump = $row['jump'];
-		$this->speed = $row['speed'];
+		$this->slots = (int)$row['slots'];
+		$this->scrolls = (int)$row['scrolls'];
+		$this->str = (int)$row['str'];
+		$this->dex = (int)$row['dex'];
+		$this->int = (int)$row['int'];
+		$this->luk = (int)$row['luk'];
+		$this->maxhp = (int)$row['maxhp'];
+		$this->maxmp = (int)$row['maxmp'];
+		$this->weaponatt = (int)$row['weaponatt'];
+		$this->weapondef = (int)$row['weapondef'];
+		$this->magicatt = (int)$row['magicatt'];
+		$this->magicdef = (int)$row['magicdef'];
+		$this->acc = (int)$row['acc'];
+		$this->avo = (int)$row['avo'];
+		$this->hands = (int)$row['hands'];
+		$this->jump = (int)$row['jump'];
+		$this->speed = (int)$row['speed'];
 		$this->name = $row['name'];
-		$this->flags = $row['flags'];
-		$this->hammers = $row['hammers'];
-		$this->itemlevel = $row['itemlevel'];
-		$this->itemexp = $row['itemexp'];
-		$this->potential1 = $row['potential1'];
-		$this->potential2 = $row['potential2'];
-		$this->potential3 = $row['potential3'];
-		$this->potential4 = $row['potential4'];
-		$this->potential5 = $row['potential5'];
-		$this->socketstate = $row['socketstate'];
-		$this->socket1 = $row['socket1'];
-		$this->socket2 = $row['socket2'];
-		$this->socket3 = $row['socket3'];
+		$this->flags = (int)$row['flags'];
+		$this->hammers = (int)$row['hammers'];
+		$this->itemlevel = (int)$row['itemlevel'];
+		$this->itemexp = (int)$row['itemexp'];
+		$this->statusflag = (int)$row['statusflag'];
+		$this->potential1 = (int)$row['potential1'];
+		$this->potential2 = (int)$row['potential2'];
+		$this->potential3 = (int)$row['potential3'];
+		$this->potential4 = (int)$row['potential4'];
+		$this->potential5 = (int)$row['potential5'];
+		$this->potential6 = (int)$row['potential6'];
+		$this->socketstate = (int)$row['socketstate'];
+		$this->nebulite1 = (int)$row['nebulite1'];
+		$this->nebulite2 = (int)$row['nebulite2'];
+		$this->nebulite3 = (int)$row['nebulite3'];
+		$this->display_id = (int)$row['display_id'];
 	}
 
 	public function HasLock() {
-		return ($this->flags & 0x01) == 0x01 ? 1 : 0;
+		return ($this->flags & 0x01) != 0 ? 1 : 0;
 	}
 
 	public function HasSpikes() {
-		return ($this->flags & 0x02) == 0x02 ? 1 : 0;
+		return ($this->flags & 0x02) != 0 ? 1 : 0;
 	}
 
 	public function HasColdProtection() {
-		return ($this->flags & 0x04) == 0x04 ? 1 : 0;
+		return ($this->flags & 0x04) != 0 ? 1 : 0;
 	}
 
 	public function TradeBlocked() {
-		return ($this->flags & 0x08) == 0x08 ? 1 : 0;
+		return ($this->flags & 0x08) != 0 ? 1 : 0;
 	}
 
 	public function IsKarmad() {
-		return ($this->flags & 0x10) == 0x10 ? 1 : 0;
+		return ($this->flags & 0x10) != 0 ? 1 : 0;
+	}
+
+	public function HasClosedPotential() {
+		return ($this->statusflag & 0x0001) != 0 ? 1 : 0;
 	}
 }
 
@@ -271,9 +281,9 @@ class ItemPet extends ItemBase {
 		}
 		
 		$this->name = $temp['name'];
-		$this->closeness = $temp['closeness'];
-		$this->fullness = $temp['fullness'];
-		$this->level = $temp['level'];
+		$this->closeness = (int)$temp['closeness'];
+		$this->fullness = (int)$temp['fullness'];
+		$this->level = (int)$temp['level'];
 	}
 }
 ?>

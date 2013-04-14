@@ -190,6 +190,39 @@ $reqlist['itemexp'] = 'ITEM EXP : ';
 $IDlist = array();
 $PotentialList = array();
 
+function GetItemQuality($item, $stats) {
+	$longcalc =
+		$item->str +
+		$item->dex +
+		$item->int +
+		$item->luk +
+		$item->maxhp +
+		$item->maxmp +
+		$item->weapondef +
+		$item->weaponatt +
+		$item->magicdef +
+		$item->magicatt -
+		// Now, minus
+		ValueOrDefault($stats['incstr'], 0) -
+		ValueOrDefault($stats['incdex'], 0) -
+		ValueOrDefault($stats['incint'], 0) -
+		ValueOrDefault($stats['incluk'], 0) -
+		ValueOrDefault($stats['incmhp'], 0) -
+		ValueOrDefault($stats['incmmp'], 0) -
+		ValueOrDefault($stats['incpad'], 0) -
+		ValueOrDefault($stats['incpdd'], 0) -
+		ValueOrDefault($stats['incmad'], 0) -
+		ValueOrDefault($stats['incmdd'], 0);
+	
+	if ($longcalc < 0) return -1;
+	elseif ($longcalc >= 0 && $longcalc < 6) return 0;
+	elseif ($longcalc >= 6 && $longcalc < 23) return 1;
+	elseif ($longcalc >= 23 && $longcalc < 40) return 2;
+	elseif ($longcalc >= 40 && $longcalc < 55) return 3;
+	elseif ($longcalc >= 55 && $longcalc < 70) return 4;
+	elseif ($longcalc >= 70) return 5;
+}
+
 
 function GetItemDialogInfo($item, $isequip) {
 	global $PotentialList, $IDlist, $reqlist, $optionlist;
@@ -233,74 +266,56 @@ function GetItemDialogInfo($item, $isequip) {
 	$reqdex = ValueOrDefault($stats['reqdex'], 0);
 	$reqint = ValueOrDefault($stats['reqint'], 0);
 	$reqluk = ValueOrDefault($stats['reqluk'], 0);
-	$reqpop = ValueOrDefault($stats['reqpop'], "'-'");
+	$reqpop = ValueOrDefault($stats['reqpop'], 0);
+	
+	$quality = GetItemQuality($item, $stats);
 	
 	$arguments = 'SetItemInfo(event, this, ';
 	$arguments .= $item->itemid.','.($isequip ? 1 : 0).', ';
 	$arguments .= ValueOrDefault($stats['reqjob'], 0).', ';
 	
-	
-	//  All options.
-	$args = 25;
-	if ($isequip) {
-		$arguments .= $reqlevel.', ';
-		$arguments .= $reqstr.', ';
-		$arguments .= $reqdex.', ';
-		$arguments .= $reqint.', ';
-		$arguments .= $reqluk.', ';
-		$arguments .= $reqpop.', ';
-		$arguments .= ($item->itemlevel == NULL ? "'-'" : $item->itemlevel).', ';
-		$arguments .= ($item->itemexp == NULL ? "'-'" : "'".round(GetExpPercentage($item->itemlevel + 1, $item->itemexp))."%'").', ';
-		$arguments .= $item->str.', ';
-		$arguments .= $item->dex.', ';
-		$arguments .= $item->int.', ';
-		$arguments .= $item->luk.', ';
-		$arguments .= $item->maxhp.', ';
-		$arguments .= $item->maxmp.', ';
-		$arguments .= $item->weaponatt.', ';
-		$arguments .= $item->weapondef.', ';
-		$arguments .= $item->magicatt.', ';
-		$arguments .= $item->magicdef.', ';
-		$arguments .= $item->acc.', ';
-		$arguments .= $item->avo.', ';
-		$arguments .= $item->hands.', ';
-		$arguments .= $item->jump.', ';
-		$arguments .= $item->speed.', ';
-		$arguments .= $item->slots.', ';
-		$arguments .= $item->scrolls.', ';
-	}
-	else {
-		for ($i = 1; $i <= $args; $i++)
-			$arguments .= '0, ';
-	}
+	$info_array = array();
+	$info_array['iteminfo'] = $item;
+	$info_array['requirements'] = array(
+		'level' => $reqlevel,
+		'pop' => $reqpop,
+		'job' => ValueOrDefault($stats['reqjob'], 0),
+		'str' => $reqstr,
+		'dex' => $reqdex,
+		'int' => $reqint,
+		'luk' => $reqluk
+	);
+	$info_array['other_info'] = array(
+		'tradeblock' => $tradeblock,
+		'expires' => GetSystemTimeFromFileTime($item->expires),
+		'quality' => $quality
+	);
+	$info_array['other_info']['locked'] = ($isequip ? $item->HasLock() : 0);
+	$info_array['other_info']['spiked'] = ($isequip ? $item->HasSpikes() : 0);
+	$info_array['other_info']['coldprotection'] = ($isequip ? $item->HasColdProtection() : 0);
+	$info_array['other_info']['questitem'] = ValueOrDefault($stats['quest'], 0);
+	$info_array['other_info']['karmad'] = ($isequip ? $item->IsKarmad() : 0);
+	$info_array['other_info']['oneofakind'] = ValueOrDefault($stats['only'], 0);
 
-	$arguments .= "'".GetSystemTimeFromFileTime($item->expires)."', ";
-	$arguments .= ($isequip ? $item->HasLock() : 0).", ";
-	$arguments .= ($isequip ? $item->HasSpikes() : 0).", ";
-	$arguments .= ($isequip ? $item->HasColdProtection() : 0).", ";
-	$arguments .= $tradeblock.", ";
-	$arguments .= ValueOrDefault($stats['quest'], 0).", ";
-	$arguments .= ($isequip ? $item->IsKarmad() : 0).", ";
-	$arguments .= ($isequip ? $item->socket3 : 0).", "; // Seems to be sort of potential flag (1 = locked, 12 = unlocked)
-	$arguments .= ($isequip ? $item->potential1 : 0).", ";
-	$arguments .= ($isequip ? $item->potential2 : 0).", ";
-	$arguments .= ($isequip ? $item->potential3 : 0).", ";
-	$arguments .= ($isequip ? $item->potential4 : 0).", ";
-	$arguments .= ($isequip ? $item->potential5 : 0).", ";
-	$arguments .= ValueOrDefault($stats['only'], 0).");";
 	
 	$potential = 0;
-	if ($isequip && $item->socket3 == 1)
-		$potential = 1; // Default color
-	else {
-		if ($isequip && $item->potential1 != 0) $potential++;
-		if ($isequip && $item->potential2 != 0) $potential++;
-		if ($isequip && $item->potential3 != 0) $potential++;
-		if ($isequip && $item->potential4 != 0) $potential++;
-		if ($isequip && $item->potential5 != 0) $potential++;
+	if ($isequip) {
+		if ($item->HasClosedPotential()) {
+			$potential = 1; // Default color
+		}
+		else {
+			if ($item->potential1 != 0) $potential++;
+			if ($item->potential2 != 0) $potential++;
+			if ($item->potential3 != 0) $potential++;
+			if ($item->potential4 != 0) $potential++;
+			if ($item->potential5 != 0) $potential++;
+			//if ($item->potential6 != 0) $potential++;
+		}
 	}
 	
-	return array('mouseover' => $arguments, 'potentials' => $potential);
+	$arguments_temp = 'SetItemInfo(event, this, '.json_encode($info_array).')';
+	
+	return array('mouseover' => $arguments_temp, 'potentials' => $potential);
 }
 
 
@@ -450,7 +465,7 @@ foreach ($normalequips as $slot => $item) {
 <?php
 	}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
 ?>
@@ -472,7 +487,7 @@ foreach ($cashequips['normal'] as $slot => $item) {
 <?php
 	}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
 ?>
@@ -522,7 +537,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 
 ?>
 			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"  onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmousemove(event)"></div>
-			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php 
 			if (!$isequip) {
 				// Woop
@@ -789,7 +804,7 @@ foreach ($reqlist as $option => $desc) {
 		<span class="req_job" id="item_info_reqjob_4">Thief</span>
 		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
 	</div>
-	<div class="item_stats">
+	<div class="item_stats" id="item_stats_block">
 		<hr />
 		<table border="0" tablepadding="3" tablespacing="3">
 
@@ -812,6 +827,16 @@ foreach ($optionlist as $option => $desc) {
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
+	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
+		<hr />
+		<span id="nebulite_info"></span>
+	</div>
+	<div class="item_potential_stats" id="item_info_bonus_potentials">
+		<hr />
+		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
+		</table>
+	</div>
+	<span id="nebulite_info"></span>
 	
 </div>
 	<hr/>
