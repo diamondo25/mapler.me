@@ -314,8 +314,13 @@ function GetItemDialogInfo($item, $isequip) {
 	}
 	
 	$arguments_temp = 'SetItemInfo(event, this, '.json_encode($info_array).')';
+	$iconid = $item->itemid;
+	if ($isequip && $item->display_id != 0) {
+		$iconid -= $iconid % 1000;
+		$iconid += $item->display_id;
+	}
 	
-	return array('mouseover' => $arguments_temp, 'potentials' => $potential);
+	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid);
 }
 
 
@@ -456,7 +461,7 @@ foreach ($normalequips as $slot => $item) {
 	
 	$info = GetItemDialogInfo($item, true);
 	
-	$itemwzinfo = GetItemWZInfo($item->itemid);
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
 	
 	
 	if ($info['potentials'] != 0) {
@@ -465,7 +470,7 @@ foreach ($normalequips as $slot => $item) {
 <?php
 	}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
 ?>
@@ -478,7 +483,7 @@ foreach ($cashequips['normal'] as $slot => $item) {
 	
 	$info = GetItemDialogInfo($item, true);
 	
-	$itemwzinfo = GetItemWZInfo($item->itemid);
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
 	
 	
 	if ($info['potentials'] != 0) {
@@ -487,7 +492,7 @@ foreach ($cashequips['normal'] as $slot => $item) {
 <?php
 	}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
 ?>
