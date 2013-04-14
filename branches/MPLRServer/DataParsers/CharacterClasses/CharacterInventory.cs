@@ -248,7 +248,7 @@ namespace MPLRServer
 
         public virtual int GetChecksum()
         {
-            return ItemID + (int)CashID + Amount + (int)Expires + (int)(Expires << 32) + BagID;
+            return ItemID + (int)CashID + Amount + (int)Expires + (int)(Expires >> 32) + BagID;
         }
     }
 
@@ -281,19 +281,26 @@ namespace MPLRServer
         public int ItemEXP { get; private set; }
 
         public int ViciousHammer { get; private set; }
-        public short PVPDamage { get; private set; }
+        public short BattleModeDamage { get; private set; }
+
+        public short StatusFlags { get; private set; } // [XX, unk] [YY, amount of stars] | ?? 02 = 2 stars, ?? 0C = 12 stars!
 
         public short Potential1 { get; private set; }
         public short Potential2 { get; private set; }
         public short Potential3 { get; private set; }
+        // Bonus potentials
         public short Potential4 { get; private set; }
         public short Potential5 { get; private set; }
+        public short Potential6 { get; private set; }
 
 
-        public short SocketState { get; private set; }
-        public short Socket1 { get; private set; }
-        public short Socket2 { get; private set; }
-        public short Socket3 { get; private set; }
+        public short DisplayID { get; private set; } // ID of anvilled item, 0 if not set. calculate with: (ItemID - (ItemID % 10000)) + DisplayID
+        public short SocketState { get; private set; } // 00 00 = No nebs, 03 00 = Neb 1 open, 13 00 = Neb 1 used (others closed)
+        public short Nebulite1 { get; private set; }
+        public short Nebulite2 { get; private set; } // Could be 2 other nebs...!?
+        public short Nebulite3 { get; private set; }
+
+        public long UniqueID { get; private set; }
 
         public override void Decode(MaplePacket pPacket)
         {
@@ -331,7 +338,7 @@ namespace MPLRServer
                     FlaggedValue(flag, 0x200000, pPacket, (int)0, true);
                     this.ViciousHammer = FlaggedValue(flag, 0x400000, pPacket, this.ViciousHammer);
 
-                    this.PVPDamage = FlaggedValue(flag, 0x800000, pPacket, this.PVPDamage);
+                    this.BattleModeDamage = FlaggedValue(flag, 0x800000, pPacket, this.BattleModeDamage);
 
                     FlaggedValue(flag, 0x1000000, pPacket, (byte)0, true);
                     FlaggedValue(flag, 0x2000000, pPacket, (short)0, true);
@@ -353,28 +360,32 @@ namespace MPLRServer
 
             this.Name = pPacket.ReadString();
 
-            this.SocketState = pPacket.ReadShort();
+            this.StatusFlags = pPacket.ReadShort();
 
             this.Potential1 = pPacket.ReadShort();
             this.Potential2 = pPacket.ReadShort();
             this.Potential3 = pPacket.ReadShort();
+
             this.Potential4 = pPacket.ReadShort();
             this.Potential5 = pPacket.ReadShort();
+            this.Potential6 = pPacket.ReadShort();
 
-            this.Socket1 = pPacket.ReadShort();
-            this.Socket2 = pPacket.ReadShort();
-            this.Socket3 = pPacket.ReadShort();
+            this.DisplayID = pPacket.ReadShort();
 
-            pPacket.ReadShort(); //
-            pPacket.ReadShort(); //
-            pPacket.ReadShort(); //
-
-            pPacket.ReadLong(); // V.126
+            this.SocketState = pPacket.ReadShort();
+            this.Nebulite1 = pPacket.ReadShort();
+            this.Nebulite2 = pPacket.ReadShort();
+            this.Nebulite3 = pPacket.ReadShort();
 
             if (CashID == 0)
-                pPacket.ReadLong();
+                this.UniqueID = pPacket.ReadLong();
+            else
+                this.UniqueID = 0;
+            
+            pPacket.ReadLong(); // Some weird expiration time
 
-            pPacket.ReadInt();
+
+            pPacket.ReadInt(); // always -1?
         }
 
         public override int GetChecksum()
@@ -384,8 +395,11 @@ namespace MPLRServer
                 Watk + Wdef + Matk + Mdef + Acc + Avo + Hands + Jump + 
                 Speed + Flags + ViciousHammer + 
                 ItemLevel + ItemEXP +
-                Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + 
-                SocketState + Socket1 + Socket2 + Socket3;
+                StatusFlags + BattleModeDamage +
+                Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + Potential6 +
+                DisplayID + SocketState + Nebulite1 + 
+                Nebulite2 + Nebulite3 +
+                (int)UniqueID + (int)(UniqueID >> 32);
         }
 
         private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, bool pLogIfFound = false)
@@ -454,7 +468,7 @@ namespace MPLRServer
 
         public override int GetChecksum()
         {
-            return base.GetChecksum() + Flags;
+            return base.GetChecksum() + Flags + (int)UniqueID + (int)(UniqueID >> 32);
         }
     }
 

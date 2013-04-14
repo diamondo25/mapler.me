@@ -349,20 +349,20 @@ function DecodeItem() {
 				ReadIfFlaggedByte(flag, 0x80000, "Item Level");
 				ReadIfFlaggedInt(flag, 0x100000, "Item EXP");
 				
-				ReadIfFlaggedInt(flag, 0x200000, "unk");
+				ReadIfFlaggedInt(flag, 0x200000, "unk1112");
 				
 				ReadIfFlaggedInt(flag, 0x400000, "Hammertiem");
 				
 				ReadIfFlaggedShort(flag, 0x800000, "PVP Damage");
-				ReadIfFlaggedByte(flag, 0x1000000, "Scrolls");
-				ReadIfFlaggedShort(flag, 0x2000000, "Scrolls");
-				ReadIfFlaggedInt(flag, 0x4000000, "Scrolls");
+				ReadIfFlaggedByte(flag, 0x1000000, "unk118");
+				ReadIfFlaggedShort(flag, 0x2000000, "unk119");
+				ReadIfFlaggedInt(flag, 0x4000000, "unk1176");
 				
-				ReadIfFlaggedByte(flag, 0x8000000, "Scrolls");
-				ReadIfFlaggedByte(flag, 0x10000000, "Scrolls");
-				ReadIfFlaggedByte(flag, 0x20000000, "Scrolls");
-				ReadIfFlaggedByte(flag, 0x40000000, "Scrolls");
-				ReadIfFlaggedByte(flag, 0x80000000, "Scrolls");
+				ReadIfFlaggedByte(flag, 0x8000000, "unk115");
+				ReadIfFlaggedByte(flag, 0x10000000, "unk114");
+				ReadIfFlaggedByte(flag, 0x20000000, "unk113");
+				ReadIfFlaggedByte(flag, 0x40000000, "unk11");
+				ReadIfFlaggedByte(flag, 0x80000000, "unk112");
 			EndNode(true);
 			
 			StartNode("Flags part 2");
@@ -374,7 +374,9 @@ function DecodeItem() {
 			
 			AddString("Name tag");
 			
-			AddShort("Status Flag");
+			status = AddShort("Status Flag");
+			stars = (status / 0x100) & 0xFF;
+			AddComment("Amount of stars: " + stars);
 			
             AddShort("Potential1");
             AddShort("Potential2");
@@ -385,13 +387,12 @@ function DecodeItem() {
 			
 			AddShort("Anvilled item ID + (itemid - (itemid % 10000))");
 			
-			AddShort("Socket Color thing?");
+			AddShort("Socket state?");
 			
 			AddShort("Nebulite item ID + 3060000");
 			
-			AddShort("THINK");
-			
-            AddShort("THINK");
+			AddShort("Neb 2?");
+            AddShort("Neb 3?");
 			
 			if (iscash == 0x00)
     			AddLong("?x8"); // Unique ID?

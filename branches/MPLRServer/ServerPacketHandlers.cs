@@ -506,6 +506,51 @@ namespace MPLRServer
             }
         }
 
+        public static void HandleFamiliarList(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            using (InsertQueryBuilder familiars = new InsertQueryBuilder("familiars"))
+            {
+                familiars.AddColumn("character_id");
+                familiars.AddColumn("mobid");
+                familiars.AddColumns(true,
+                    "name", "fitality_cur", "fitality_max",
+                    "starttime", "endtime", "unktime"
+                );
+
+                for (int i = pPacket.ReadInt(); i > 0; i--)
+                {
+                    pPacket.ReadInt(); // Weird id?
+                    int mobid = pPacket.ReadInt();
+                    string name = pPacket.ReadString(13);
+                    byte currentfit = pPacket.ReadByte();
+                    byte maxfit = pPacket.ReadByte();
+                    pPacket.ReadInt();
+                    pPacket.ReadByte();
+                    DateTime starttime = DateTime.FromFileTime(pPacket.ReadLong());
+                    DateTime endtime = DateTime.FromFileTime(pPacket.ReadLong());
+                    DateTime unktime = DateTime.FromFileTime(pPacket.ReadLong());
+
+                    pPacket.ReadByte();
+                    pPacket.ReadByte();
+
+
+                    familiars.AddRow(
+                        pConnection.CharacterInternalID,
+                        mobid,
+                        name,
+                        currentfit,
+                        maxfit,
+                        starttime,
+                        endtime,
+                        unktime
+                        );
+
+                }
+
+                familiars.RunQuery();
+            }
+        }
+
         public static void HandleInventorySlotsUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             CharacterInventory inventory = pConnection.CharData.Inventory;
@@ -526,8 +571,7 @@ namespace MPLRServer
                 case 5: slotname = "cash"; break;
             }
 
-            string query = string.Format("UPDATE characters SET {0}_slots = {1} WHERE internal_id = {2}", slotname, newslots, pConnection.CharacterInternalID);
-            MySQL_Connection.Instance.RunQuery(query);
+            MySQL_Connection.Instance.RunQuery(string.Format("UPDATE characters SET {0}_slots = {1} WHERE internal_id = {2}", slotname, newslots, pConnection.CharacterInternalID));
 
             pConnection.SendTimeUpdate();
         }

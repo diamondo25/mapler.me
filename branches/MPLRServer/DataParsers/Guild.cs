@@ -151,6 +151,10 @@ namespace MPLRServer
                     MySQL_Connection.Instance.RunQuery(guildTable.ToString());
             }
 
+            // Delete members first
+
+            MySQL_Connection.Instance.RunQuery("DELETE FROM guild_members WHERE guild_id = " + ID);
+
             using (InsertQueryBuilder guildMembersTable = new InsertQueryBuilder("guild_members"))
             {
                 guildMembersTable.OnDuplicateUpdate = true;

@@ -166,10 +166,15 @@ namespace MPLRServer
                 itemsTable.AddColumns(true, 
                     "cashid", "amount", "expires", "slots", "scrolls", 
                     "str", "dex", "int", "luk", "maxhp", "maxmp", 
-                    "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags", "hammers",
+                    "weaponatt", "weapondef", "magicatt", "magicdef", "acc", "avo", "hands", "jump", "speed", "name", "flags",
                     "itemlevel", "itemexp",
-                    "potential1", "potential2", "potential3", "potential4", "potential5",
-                    "socketstate", "socket1", "socket2", "socket3",
+                    "hammers",
+                    "battlemodedmg",
+                    "potential1", "potential2", "potential3", "potential4", "potential5", "potential6",
+                    "display_id",
+                    "socketstate", 
+                    "nebulite1", "nebulite2", "nebulite3",
+                    "uniqueid",
                     "bagid"
                     );
             }
@@ -196,10 +201,14 @@ namespace MPLRServer
                     equip.Watk, equip.Wdef, equip.Matk, equip.Mdef,
                     equip.Acc, equip.Avo, equip.Hands, equip.Jump, equip.Speed,
                     equip.Name, equip.Flags,
-                    equip.ViciousHammer,
                     equip.ItemLevel, equip.ItemEXP,
-                    equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5,
-                    equip.SocketState, equip.Socket1, equip.Socket2, equip.Socket3,
+                    equip.ViciousHammer,
+                    equip.BattleModeDamage,
+                    equip.Potential1, equip.Potential2, equip.Potential3, equip.Potential4, equip.Potential5, equip.Potential6,
+                    equip.DisplayID,
+                    equip.SocketState, 
+                    equip.Nebulite1, equip.Nebulite2, equip.Nebulite3,
+                    equip.UniqueID,
                     pItem.BagID
                 );
             }
@@ -222,12 +231,15 @@ namespace MPLRServer
                     null, null, null, null,
                     null, null,
                     null, null, null, null,
-                    null, null, null, null, null,
-                    name, flags,
-                    null,
+                    null, null, null, null, null, name, flags,
                     null, null,
-                    null, null, null, null, null,
-                    null, null, null, null,
+                    null,
+                    null,
+                    null, null, null, null, null, null,
+                    null,
+                    null, 
+                    null, null, null,
+                    pItem is ItemRechargable ? (pItem as ItemRechargable).UniqueID : 0,
                     pItem.BagID
                     );
 

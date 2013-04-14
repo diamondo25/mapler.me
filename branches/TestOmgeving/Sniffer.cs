@@ -84,14 +84,26 @@ namespace Mapler_Client
                 device.StartCapture();
                 _devices.Add(device);
 
+                System.Net.NetworkInformation.PhysicalAddress mac = null;
+                try
+                {
+                    mac = device.MacAddress;
+                }
+                catch
+                {
+                    Logger.WriteLine("Unable to get mac address!!!");
+                }
+
+
+
                 if (device.LinkType != LinkLayers.Ethernet)
                 {
-                    Logger.WriteLine("Skipped sniffing {0} ({1})", device.Description, device.MacAddress);
+                    Logger.WriteLine("Skipped sniffing {0} ({1})", device.Description, mac);
                     StopCapture(device);
                 }
                 else
                 {
-                    Logger.WriteLine("Started sniffing {0} ({1})", device.Description, device.MacAddress);
+                    Logger.WriteLine("Started sniffing {0} ({1})", device.Description, mac);
                 }
             }
         }
