@@ -31,7 +31,7 @@ if ($_loggedin) {
 							
 							<p>Real-time character updates, progress timelines, and more await you! <b>Join today</b>.</p>
 				
-				<p><a href="/signup/" class="btn btn-success btn-action btn-large">Currently Public Beta!</a></p>
+				<p><a href="/login/" class="btn btn-success btn-action btn-large">Login</a></p>
 				</div>
 			</div>
 		</div>

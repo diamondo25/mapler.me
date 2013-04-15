@@ -115,6 +115,7 @@ foreach ($cache as $row) {
 	$form->End();
 }
 ?>
+	<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
 	</div>
 <?php
 require_once __DIR__.'/inc/footer.php';
