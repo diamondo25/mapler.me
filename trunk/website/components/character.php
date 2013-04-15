@@ -268,7 +268,7 @@ function GetItemDialogInfo($item, $isequip) {
 	$reqluk = ValueOrDefault($stats['reqluk'], 0);
 	$reqpop = ValueOrDefault($stats['reqpop'], 0);
 	
-	$quality = IsEquip ? GetItemQuality($item, $stats) : 0;
+	$quality = ($isequip ? GetItemQuality($item, $stats) : 0);
 	
 	$arguments = 'SetItemInfo(event, this, ';
 	$arguments .= $item->itemid.','.($isequip ? 1 : 0).', ';
