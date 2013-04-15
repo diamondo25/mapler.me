@@ -336,10 +336,10 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 ?>
 		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me.</p>
 <?php
-	require_once __DIR__.'/../inc/footer.php';
+	require_once __DIR__.'/../../inc/footer.php';
 	die;
 }
-require_once __DIR__.'/../inc/social.php';
+require_once '../social.php';
 
 $ip = "mc.craftnet.nl";
 $port = 23711;
