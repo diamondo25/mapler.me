@@ -11,7 +11,7 @@ if (!file_exists($page)) {
 	die();
 }
 
-require_once __DIR__.'/header.template.php';
+require_once __DIR__.'/templates/header.template.php';
 if ($_GET['type'] == '') {
 	require_once __DIR__.'/additional.menu.php';
 }
