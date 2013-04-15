@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/inc/header.php';
-require_once __DIR__.'/inc/job_list.php';
-require_once __DIR__.'/inc/exp_table.php';
+require_once __DIR__.'/../inc/header.php';
+require_once __DIR__.'/../inc/job_list.php';
+require_once __DIR__.'/../inc/exp_table.php';
 
 $q = $__database->query("
 SELECT 
@@ -27,7 +27,7 @@ if ($q->num_rows == 0) {
 	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
-	require_once __DIR__.'/inc/footer.php';
+	require_once __DIR__.'/../inc/footer.php';
 	die;
 }
 
@@ -44,7 +44,7 @@ if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' &
 	<p>Only friends are allowed to view this character!</p>
 </center>
 <?php
-	require_once __DIR__.'/inc/footer.php';
+	require_once __DIR__.'/../inc/footer.php';
 	die;
 }
 elseif ($status == 2 && ($_loggedin && !IsOwnAccount())) {
@@ -55,7 +55,7 @@ elseif ($status == 2 && ($_loggedin && !IsOwnAccount())) {
 	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
-    require_once __DIR__.'/inc/footer.php';
+    require_once __DIR__.'/../inc/footer.php';
 	die;
 }
 else {
@@ -121,7 +121,7 @@ if (!$_loggedin) {
 	</div>
 </div>
 <?php
-	require_once __DIR__.'/inc/footer.php';
+	require_once __DIR__.'/../inc/footer.php';
 	die();
 }
 
@@ -992,5 +992,5 @@ ORDER BY
 <?php
 }
 // $__database->GetRanQueries();
-require_once __DIR__.'/inc/footer.php';
+require_once __DIR__.'/../inc/footer.php';
 ?>
