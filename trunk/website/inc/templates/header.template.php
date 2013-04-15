@@ -109,7 +109,7 @@ if ($_loggedin) {
 					<ul class="nav hidden-phone">			
 						 <li class="dropdown">
 <?php
-		require_once('additional.menu.php');
+		require_once('../additional.menu.php');
 ?>
 <?php
 // Not a subdomain
