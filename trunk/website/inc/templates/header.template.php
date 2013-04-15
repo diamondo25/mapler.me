@@ -339,7 +339,7 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 	require_once __DIR__.'/../../inc/footer.php';
 	die;
 }
-require_once '../social.php';
+require_once '../inc/social.php';
 
 $ip = "mc.craftnet.nl";
 $port = 23711;
