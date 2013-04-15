@@ -1,5 +1,24 @@
-<style type="text/css">
+<script type="text/javascript">
+function GetStatus() {
+    $('input[name=type]').val('status');
+    $("input").attr("placeholder", "Search for statuses?");
+}
+function GetPlayer() {
+	$('input[name=type]').val('player');
+	$("input").attr("placeholder", "Search for maplers?");
+}
+</script>
 
+<?php
+//default is status so results always show
+$searchtype = 'status';
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type'])) {
+	$typepls = nl2br(htmlentities(strip_tags(trim($_POST['type']))));
+	$searchtype = $typepls;
+}
+?>
+
+<style type="text/css">
 .avatar {
 	padding: 5px;
 	background: #fff;
@@ -108,18 +127,17 @@ hr {
   background-image: url(../img/glyphicons-halflings-white.png);
   opacity: 1;
 }
-
 </style>
 
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
 		<ul id="filters" class="nav nav-list search-menu">
-          <li><a href="#" data-filter=".statuss"><i class="icon-chevron-right"></i> Statuses</a></li>
-          <li style="display:none;"><a href="#" data-filter=".mapler"><i class="icon-chevron-right"></i> Maplers</a></li>
+          <li><a href="#" onclick="GetStatus()"><i class="icon-chevron-right"></i> Statuses</a></li>
+          <li><a href="#" onclick="GetPlayer()"><i class="icon-chevron-right"></i> Maplers</a></li>
           <li style="display:none;"><a href="#" data-filter=".character"><i class="icon-chevron-right"></i> Characters</a></li>
         </ul>
-		<br/>
-		<hr/>
-		<p>This search feature is currently a <strong>work in progress.</strong> Errors or issues is expceted.</p>
-
+        <form method="post" action="http://<?php echo $domain; ?>/search/">
+							<input type="text" name="search" placeholder="Search?" />
+							<input type="hidden" name="type" id="stype" value="<?php echo $searchtype; ?>"/>
+						</form>
 	</div>

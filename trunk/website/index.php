@@ -40,9 +40,6 @@ if ($_loggedin) {
 		<p>&copy; 2013 Mapler.me</p>
 		<ul>
 			<li class="hide-mobile"><a href="https://twitter.com/maplerme">@maplerme</a></li>
-			<li>-</li> 
-			<li><a href="//<?php echo $domain; ?>/login/" style="color:gray;">(return to main site)</a></li>
-			
 		</ul>
 	</footer>
 
