@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-require_once __DIR__.'/../inc/me.header.template.php';
+require_once __DIR__.'/../inc/templates/me.header.template.php';
 
 
 $q = $__database->query("

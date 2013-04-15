@@ -46,7 +46,7 @@ $main_character_name = $has_characters ? ($selected_main_character != null ? $se
 $main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 
 
-require_once __DIR__.'/../inc/me.header.template.php';
+require_once __DIR__.'/../inc/templates/me.header.template.php';
 
 ?>
 

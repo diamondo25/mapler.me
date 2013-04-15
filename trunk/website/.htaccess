@@ -32,7 +32,7 @@
 	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L,QSA]
 	
 	# character / player rewrites
-	RewriteRule ^player/([^/]*)$ /character.php?name=$1
+	RewriteRule ^player/([^/]*)$ /components/character.php?name=$1
 	
 </IfModule>
 

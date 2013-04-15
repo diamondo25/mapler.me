@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-require_once __DIR__.'/../inc/search.header.template.php';
+require_once __DIR__.'/../inc/templates/search.header.template.php';
 
 $searching = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {

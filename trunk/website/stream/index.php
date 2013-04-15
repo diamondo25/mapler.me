@@ -31,7 +31,7 @@ ORDER BY
 	$statusses->FeedData($q);
 	$q->free();
 
-	require_once __DIR__.'/../inc/stream.notice.template.php';
+	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
 ?>
 
 <?php

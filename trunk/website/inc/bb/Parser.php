@@ -275,8 +275,6 @@ class Parser {
         $this->addBBCode("b", "<strong>{param}</strong>");
         $this->addBBCode("i", "<em>{param}</em>");
         $this->addBBCode("u", "<u>{param}</u>");
-        $this->addBBCode("url", "<a href=\"{param}\">{param}</a>");
-        $this->addBBCode("url", "<a href=\"{option}\">{param}</a>", true);
         $this->addBBCode("img", "<img src=\"{param}\" alt=\"a user uploaded image\" />");
         $this->addBBCode("img", "<img src=\"{param}\" alt=\"{option}\" />", true);
         $this->addBBCode("color", "<span style=\"color: {option}\">{param}</span>", true);
