@@ -99,46 +99,28 @@ if ($_loggedin) {
 	<div class="navbar navbar-fixed-top">
 		<div class="navbar-inner">
 			<div class="container">
-				<a class="brand" href="
-					<?php if ($_loggedin): ?>
-						//<?php echo $domain; ?>/stream/
-					<?php else: ?>
-						//<?php echo $domain; ?>
-					<?php endif; ?>"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:0px;right:0px;width:60px;"/></a>
 				<div class="nav-collapse">
-					<ul class="nav hidden-phone">			
+					<ul class="nav">			
 						 <li class="dropdown">
-<?php
-		require_once __DIR__.'/additional.menu.php';
-?>
-<?php
-// Not a subdomain
-if (!isset($__url_useraccount)):
-?>
-							<a data-toggle="dropdown" class="dropdown-toggle hide-menu" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> Pages <b class="caret"></b></a>
-                            
-<?php
-// Is a subdomain
-else:
-?>
+				<a class="brand" data-toggle="dropdown" class="dropdown-toggle hide-menu" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:10px;right:0px;width:60px;"/></a>
 
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"> <?php echo $__url_useraccount->GetNickname(); ?>  <b class="caret"></b></a>                         
-<?php
-endif;
-?>                      
-							<ul class="dropdown-menu">
+	<ul class="dropdown-menu" style="margin-top:20px;">
 <?php
 // Display subdomain pages related to the user
 if (isset($__url_useraccount)):
 ?>
-								<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
+								<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_useraccount->GetNickName(); ?></a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends">Friends</a></li>
+								<li class="divider"></li>
+								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 								
 <?php
 // Display normal pages if not a subdomain
 else:
 ?>
+								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
+								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/todo/">To-do / Issues</a></li><?php endif; ?>
@@ -148,8 +130,12 @@ else:
 endif;
 ?>
 					 		</ul>
+<?php
+		require_once __DIR__.'/additional.menu.php';
+?>                 
 						</li>
 					</ul>
+				</div>
 				
 					<!-- Login / Main Menu -->	
 					<ul class="nav hidden-phone pull-right">
@@ -158,7 +144,7 @@ if ($_loggedin):
 ?>					
 					<li>
 						<form method="post" action="http://<?php echo $domain; ?>/search/">
-							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search for statuses?" />
+							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?" />
 							<input type="hidden" name="type" value="status"/>
 						</form>
 					</li>

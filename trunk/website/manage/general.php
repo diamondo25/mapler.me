@@ -1,5 +1,30 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
+?>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ViewAccount'])) {
+		$name = $_POST['ViewAccount'];
+		$id = GetAccountID($name);
+		$account = Account::Load($id);
+		$q = $__database->query("SELECT * FROM accounts WHERE id = ".$id." ");
+		$display = $q->fetch_assoc();
+?>
+<hr/>
+	<a href="//<?php echo $domain; ?>/manage/general/" class="btn btn-mini pull-right">Return to General?</a>
+	<h1><?php echo $account->GetNickname(); ?>
+		<small>
+			(<a href="//<?php echo $account->GetUsername();; ?>.mapler.me/"><?php echo $account->GetUsername(); ?>.mapler.me</a>) - 
+			<?php echo GetRankTitle($account->GetAccountRank()); ?>
+		</small>
+	</h1>
+	<sup><?php echo $account->GetNickname(); ?> has been registered since <?php echo $account->GetRegisterDate(); ?></sup><br/><br/>
+	<p>More information will be added soon.</p>
+<?php
+		$q->free();
+		require_once __DIR__.'/../inc/footer.php';
+		die;
+}
 
 $notice_filename = 'notice.txt';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
@@ -100,15 +125,17 @@ $__database->query("UPDATE signup_lock SET status = 1");
     <div id="collapseOne" class="accordion-body collapse">
       <div class="accordion-inner">
       <br/>
+      <form method="post">
 <?php
-$q = $__database->query("SELECT username FROM accounts ORDER BY username ASC");
+$q = $__database->query("SELECT username FROM accounts ORDER BY id DESC");
 while ($row = $q->fetch_row()) {
 ?>
-		<a href="//<?php echo $row[0]; ?>.<?php echo $domain; ?>/" class="btn btn-mini"><?php echo $row[0]; ?></a> 
+	<input type="submit" href="#" value="<?php echo $row[0]; ?>" name="ViewAccount" class="btn btn-mini" />
 <?php
 }
 $q->free();
 ?>
+	</form>
       </div>
     </div>
   </div>

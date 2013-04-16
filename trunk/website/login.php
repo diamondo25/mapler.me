@@ -77,7 +77,7 @@ WHERE
 	level > 30
 ORDER BY
 	rand()
-	LIMIT 5
+	LIMIT 7
 ");
 $cache = array();
 
@@ -113,10 +113,14 @@ foreach ($cache as $row) {
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->MakeSubmit('Login');
 	$form->End();
+?>
+	<div class="span12">
+	<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
+	</div>
+<?php
 }
 ?>
 	</div>
-	<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
 <?php
 require_once __DIR__.'/inc/footer.php';
 ?>

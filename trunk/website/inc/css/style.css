@@ -70,6 +70,15 @@ html { overflow-x: hidden; }
 	}
 }
 
+.brand:hover {
+	background: transparent !important;
+}
+
+.navbar .nav>li.open>a, .navbar .nav>li.active>a:hover {
+	opacity: 1;
+	z-index: 9000;
+}
+
 /* Profiles + Specific Pages */
 
 .profilec {

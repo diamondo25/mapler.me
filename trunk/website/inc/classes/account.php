@@ -9,7 +9,7 @@ class Account {
 	private $_username,			$_fullname,			$_email,
 			$_nickname,			$_lastlogin,		$_lastip,
 			$_accountrank,		$_premiumtill,		$_bio,
-			$_configuration,	$_lastlogin_secs;
+			$registered,		$_configuration,	$_lastlogin_secs;
 			
 	public static function Load($input) {
 		global $__database;
@@ -59,6 +59,7 @@ WHERE
 		$this->_accountrank = $row['account_rank'];
 		$this->_premiumtill = $row['premium_till'];
 		$this->_bio = $row['bio'];
+		$this->_registered = $row['registered_on'];
 		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration'], true);
 		if (!isset($row['last_login_secs_since']))
 			$this->_lastlogin_secs = 1; // Manual load...
@@ -83,7 +84,6 @@ SET
 WHERE
 	id = ".$this->_id);
 	}
-	
 	
 	public function GetID() {
 		return $this->_id;
@@ -151,6 +151,10 @@ WHERE
 	
 	public function SetBio($value) {
 		$this->_bio = $value;
+	}
+	
+	public function GetRegisterDate() {
+		return $this->_registered;
 	}
 	
 	public function GetConfigurationOption($name, $default = null) {
