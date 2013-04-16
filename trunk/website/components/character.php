@@ -125,6 +125,36 @@ if (!$_loggedin) {
 	die();
 }
 
+elseif ($status == 1 && ($_loggedin && $friend_status = 'FRIENDS' && $friend_status != 'FOREVER_ALONE')) {
+?>
+		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+			<?php echo $account->GetNickName(); ?> has allowed you to view this character.
+		</p>
+<?php
+}
+
+elseif ($status == 1 && ($_loggedin && IsOwnAccount())) {
+	// displays the same error as not found to not tell if exists or not.
+?>
+<div class="span9" style="margin-left:10px;">
+		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+		<?php
+			if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR) {
+		?>
+		This character can only be seen by friends, set by <?php echo $account->GetNickName(); ?>. 
+		<?php
+		}
+			else {
+		?>
+		This character is currently only viewable to friends and yourself.
+		<?php
+		}
+		?>
+		</p>
+	</div>
+<?php
+}
+
 else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
