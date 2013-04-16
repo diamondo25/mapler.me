@@ -9,19 +9,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ViewAccount'])) {
 		$account = Account::Load($id);
 		$q = $__database->query("SELECT * FROM accounts WHERE id = ".$id." ");
 		$display = $q->fetch_assoc();
+		$q->free();
 ?>
 <hr/>
 	<a href="//<?php echo $domain; ?>/manage/general/" class="btn btn-mini pull-right">Return to General?</a>
-	<h1><?php echo $account->GetNickname(); ?>
+	<h1><?php echo $account->GetNickname(); ?><span style="font-size:15px !important;">[<?php echo $account->GetLastIP(); ?>]</span>
 		<small>
 			(<a href="//<?php echo $account->GetUsername();; ?>.mapler.me/"><?php echo $account->GetUsername(); ?>.mapler.me</a>) - 
 			<?php echo GetRankTitle($account->GetAccountRank()); ?>
 		</small>
 	</h1>
-	<sup><?php echo $account->GetNickname(); ?> has been registered since <?php echo $account->GetRegisterDate(); ?></sup><br/><br/>
+	<p class="alert"><?php echo $account->GetNickname(); ?> was last online <?php echo time_elapsed_string($account->GetLastLoginSeconds()); ?> ago!</p><br/><br/>
 	<p>More information will be added soon.</p>
 <?php
-		$q->free();
 		require_once __DIR__.'/../inc/footer.php';
 		die;
 }
