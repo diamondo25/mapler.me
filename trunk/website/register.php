@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/inc/header.php';
 
-$username_regex = "/([\w\d]+)/";
+$username_regex = "/^[a-zA-Z0-9-_]+$/";
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
