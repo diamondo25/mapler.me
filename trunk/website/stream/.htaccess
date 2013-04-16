@@ -8,6 +8,7 @@
 	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
 	
 	RewriteRule ^status/([^\./]*) status.php?id=$1 [L,QSA]
+	RewriteRule ^replies/ replies.php
 	
 </IfModule>
 

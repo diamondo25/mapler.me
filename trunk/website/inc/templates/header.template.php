@@ -120,6 +120,9 @@ if (isset($__url_useraccount)):
 else:
 ?>
 								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
+								<?php if ($_loggedin): ?>
+								<li><a href="//<?php echo $domain; ?>/stream/replies/">Replies</a></li>
+								<?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/intro/">About</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
