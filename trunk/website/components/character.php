@@ -37,7 +37,7 @@ $character_info = $q->fetch_assoc();
 $friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id'])) : 'NO_FRIENDS';
 $status = GetCharacterStatus($character_info['id']);
 
-if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE'))) {
+if ($status == 1 && (!$_loggedin || $_loginaccount->GetAccountRank() < RANK_MODERATOR || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE'))) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
