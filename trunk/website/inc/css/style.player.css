@@ -67,8 +67,8 @@ hr {
 
 .character_equips > div > div,
 .character_pets_holder > div > div {
-    height: 32px;
-    width: 32px;
+    height: 31px;
+    width: 31px;
 }
 
 .character_pets_holder {
@@ -232,6 +232,14 @@ hr {
 /* Magic Scales */
 .character_pets .slot28 { top: 121px; left: 43px; margin-bottom: 0px; }
 
+/* Item Ignore 1, 2, 3 */
+.character_pets .slot46,
+.character_pets .slot47,
+.character_pets .slot48 { top: 121px; left: 10px; margin-bottom: 0px; }
+
+
+.character_pets .slot57 { top: 55px; left: 109px; margin-bottom: 0px; }
+
 
 
 .inventory {
@@ -360,6 +368,14 @@ hr {
 }
 #item_info .item_req_stats > table {
 	font-size: 9px;
+}
+
+#item_info #bonus_potentials {
+	color: darkblue;
+}
+
+#item_info #potentials {
+	color: darkred;
 }
 
 #item_info .req_job {

@@ -201,7 +201,8 @@ function IGTextToWeb($data, $extraOptions = array()) {
 	for ($i = 0; $i < $datalen; $i++) {
 		$end = ($i + 1 == $datalen);
 		$c = $data[$i];
-		if ($c == '#') {
+		$preobj = $i > 0 ? $data[$i - 1] : '-';
+		if ($c == '#' && $preobj != '&') {
 			if ($end) continue;
 			$nc = $data[$i + 1];
 			$i++;

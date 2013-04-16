@@ -1,3 +1,5 @@
+var lastSetWindow = null;
+
 function SetItemInfo(event, obj, values) {
 	var reqs = values.requirements;
 	var item = values.iteminfo;
@@ -26,8 +28,17 @@ function SetItemInfo(event, obj, values) {
 		}
 	};
 	
-	var SetObjText = function(name, value) {
-		GetObj('item_info_row_' + name).style.display = (value == 0 || value == '' || value == undefined) ? 'none' : '';
+	var hasStatsSet = false;
+	
+	var SetObjText = function(name, value, ignoreZero) {
+		if (ignoreZero == undefined) ignoreZero = false;
+		var isSet = !(value == '' || value == undefined);
+		if (ignoreZero && value == 0)
+			isSet = true;
+
+		if (isSet)
+			hasStatsSet = true;
+		GetObj('item_info_row_' + name).style.display = isSet ? '' : 'none';
 		GetObj('item_info_' + name).innerHTML = value;
 	};
 	
@@ -46,10 +57,9 @@ function SetItemInfo(event, obj, values) {
 		
 	}
 	
-	GetObj('item_info_title').style.color = isequip ? GetQualityColor(otherinfo.quality) : '#CCC';
+	GetObj('item_info_title').style.color = GetQualityColor(otherinfo.quality);
 	
 	GetObj('item_info_icon').src = obj.src;
-	GetObj('item_stats_block').style.display = isequip ? 'block' : 'none';
 	
 	SetObjTextIsEquip('reqlevel', reqs.level);
 	SetObjTextIsEquip('reqstr', reqs.str);
@@ -79,7 +89,9 @@ function SetItemInfo(event, obj, values) {
 	SetObjText('speed', item.speed);
 	SetObjText('slots', item.slots);
 	SetObjText('hands', item.hands);
+	SetObjText('hammers', item.hammers, isequip);
 	
+	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	
 	var description = descriptions[itemid];
 
@@ -92,7 +104,7 @@ function SetItemInfo(event, obj, values) {
 	}
 
 	var extrainfo = '';
-	extrainfo += '<span>Quality: ' + otherinfo.quality + '</span>';
+	// extrainfo += '<span>Quality: ' + otherinfo.quality + '</span>';
 
 	if (otherinfo.oneofakind)
 		extrainfo += '<span>One of a Kind</span>';
@@ -142,8 +154,9 @@ function SetItemInfo(event, obj, values) {
 	
 	
 	
-	GetObj('potentials').innerHTML = ""; // Clear potentials
-	GetObj('bonus_potentials').innerHTML = ""; // Clear potentials
+	GetObj('potentials').innerHTML = ''; // Clear potentials
+	GetObj('bonus_potentials').innerHTML = ''; // Clear potentials
+	GetObj('nebulite_info').innerHTML = ''; // Clear nebulite info
 
 	var potentiallevel = Math.round(reqs.level / 10);
 	if (potentiallevel == 0) potentiallevel = 1;
@@ -162,6 +175,11 @@ function SetItemInfo(event, obj, values) {
 			var row = GetObj('bonus_potentials').insertRow(-1);
 			row.innerHTML = '<tr> <td width="150px">Hidden Bonus Potential.</td> </tr>';
 			hasbonuspotential = true;
+		}
+		
+		if (item.nebulite1 == 0) {
+			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
+			hasnebulite = true;
 		}
 
 		for (var i = 1; i <= 6; i++) {
@@ -194,10 +212,14 @@ function SetItemInfo(event, obj, values) {
 	var potentialName = obj.getAttribute('potential');
 	GetObj('item_info').setAttribute('class', potentialName != null ? 'potential' + potentialName : '');
 
+	GetObj('extra_item_info').innerHTML += '';
 
 	
 	GetObj('item_info').style.display = 'block';
 	GetObj('req_job_list').style.display = isequip ? 'block' : 'none';
+	
+	lastSetWindow = GetObj('item_info');
+	
 	MoveWindow(event);
 }
 
@@ -215,18 +237,21 @@ function HideItemInfo() {
 
 function MoveWindow(event) {
 	var expectedTop = event.pageY + 10;
-	var expectedBottom = expectedTop + parseInt(document.getElementById('item_info').clientHeight);
-	if (document.body.clientHeight < expectedBottom) {
-		expectedTop -= (expectedBottom - document.body.clientHeight) + 10;
+	var expectedBottom = expectedTop + parseInt(lastSetWindow.clientHeight) + 10;
+	var screenBottom = $(window).height() + window.scrollY;
+	if (screenBottom < expectedBottom) {
+		expectedTop -= (expectedBottom - screenBottom);
 	}
 	
 	var expectedLeft = event.pageX + 10;
-	var expectedRight = expectedLeft + parseInt(document.getElementById('item_info').clientWidth);
-	if (document.body.clientWidth < expectedRight) {
-		expectedLeft -= (expectedRight - document.body.clientWidth) + 10;
+	var expectedRight = expectedLeft + parseInt(lastSetWindow.clientWidth) + 10;
+	var screenRight = $(window).width() + window.scrollX;
+	if (screenRight < expectedRight) {
+		expectedLeft -= (expectedRight - screenRight);
 	}
-	document.getElementById('item_info').style.top = expectedTop + 'px';
-	document.getElementById('item_info').style.left = expectedLeft + 'px';
+	
+	lastSetWindow.style.top = expectedTop + 'px';
+	lastSetWindow.style.left = expectedLeft + 'px';
 }
 
 function ShowCashEquips(show) {

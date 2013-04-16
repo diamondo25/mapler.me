@@ -37,7 +37,7 @@ $character_info = $q->fetch_assoc();
 $friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id'])) : 'NO_FRIENDS';
 $status = GetCharacterStatus($character_info['id']);
 
-if ($status == 1 && (!$_loggedin || ($_loggedin && $_loginaccount->GetAccountRank() < RANK_MODERATOR) || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE'))) {
+if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE' && $_loginaccount->GetAccountRank() < RANK_MODERATOR))) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -86,20 +86,24 @@ SELECT
 
 <div class="row">
 	<div class="span3">
-		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br/>
+		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>
-		<hr/>
+<?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
+		<hr />
+		Internal ID: <?php echo $internal_id; ?><br />
+<?php endif; ?>
+		<hr />
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
-		<hr/>
+		<hr />
 		<p class="side"><i class="icon-tasks"></i> <?php echo $statistics['quests_done']; ?> quests completed</p>
 		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests in progress</p>
 		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
-		<hr/>
+		<hr />
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		
@@ -107,10 +111,10 @@ SELECT
 				
 		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 				
-		<hr/>
+		<hr />
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
-		<p class="side"><i class="icon-heart faded"></i>  <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
-		<p class="side"><i class="icon-th-list faded"></i>  <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
+		<p class="side"><i class="icon-heart faded"></i> <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
+		<p class="side"><i class="icon-th-list faded"></i> <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
 	
 <?php	
@@ -138,18 +142,11 @@ elseif ($status == 1 && ($_loggedin && IsOwnAccount())) {
 ?>
 <div class="span9" style="margin-left:10px;">
 		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
-		<?php
-			if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR) {
-		?>
+<?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		This character can only be seen by friends, set by <?php echo $account->GetNickName(); ?>. 
-		<?php
-		}
-			else {
-		?>
+<?php else: ?>
 		This character is currently only viewable to friends and yourself.
-		<?php
-		}
-		?>
+<?php endif; ?>
 		</p>
 	</div>
 <?php
@@ -160,18 +157,11 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 ?>
 <div class="span9" style="margin-left:10px;">
 		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
-		<?php
-			if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR) {
-		?>
+<?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		This character is currently hidden by <?php echo $account->GetNickName(); ?>. 
-		<?php
-		}
-			else {
-		?>
+<?php else: ?>
 		This character is currently only viewable to yourself (hidden).
-		<?php
-		}
-		?>
+<?php endif; ?>
 		</p>
 	</div>
 <?php
@@ -204,7 +194,7 @@ $optionlist['hands'] = 'Hands : ';
 $optionlist['jump'] = 'Jump : ';
 $optionlist['speed'] = 'Speed : ';
 $optionlist['slots'] = 'Upgrades available : ';
-$optionlist['scrolls'] = 'Number of upgrades done : ';
+$optionlist['hammers'] = 'Nr of hammers applied : ';
 
 
 $reqlist = array();
@@ -222,27 +212,41 @@ $PotentialList = array();
 
 function GetItemQuality($item, $stats) {
 	$longcalc =
-		$item->str +
-		$item->dex +
-		$item->int +
-		$item->luk +
-		$item->maxhp +
-		$item->maxmp +
-		$item->weapondef +
-		$item->weaponatt +
-		$item->magicdef +
-		$item->magicatt -
-		// Now, minus
-		ValueOrDefault($stats['incstr'], 0) -
-		ValueOrDefault($stats['incdex'], 0) -
-		ValueOrDefault($stats['incint'], 0) -
-		ValueOrDefault($stats['incluk'], 0) -
-		ValueOrDefault($stats['incmhp'], 0) -
-		ValueOrDefault($stats['incmmp'], 0) -
-		ValueOrDefault($stats['incpad'], 0) -
-		ValueOrDefault($stats['incpdd'], 0) -
-		ValueOrDefault($stats['incmad'], 0) -
-		ValueOrDefault($stats['incmdd'], 0);
+		(
+			$item->str +
+			$item->dex +
+			$item->int +
+			$item->luk +
+			$item->maxhp +
+			$item->maxmp +
+			$item->acc +
+			$item->avo +
+			$item->speed +
+			$item->hands +
+			$item->jump +
+			$item->weapondef +
+			$item->weaponatt +
+			$item->magicdef +
+			$item->magicatt
+		) 
+		 - // Now, minus
+		(
+			ValueOrDefault($stats['incstr'], 0) +
+			ValueOrDefault($stats['incdex'], 0) +
+			ValueOrDefault($stats['incint'], 0) +
+			ValueOrDefault($stats['incluk'], 0) +
+			ValueOrDefault($stats['incmhp'], 0) +
+			ValueOrDefault($stats['incmmp'], 0) +
+			ValueOrDefault($stats['incacc'], 0) +
+			ValueOrDefault($stats['inceva'], 0) + // yep...
+			ValueOrDefault($stats['incspeed'], 0) +
+			ValueOrDefault($stats['inccraft'], 0) +
+			ValueOrDefault($stats['incjump'], 0) +
+			ValueOrDefault($stats['incpad'], 0) +
+			ValueOrDefault($stats['incpdd'], 0) +
+			ValueOrDefault($stats['incmad'], 0) +
+			ValueOrDefault($stats['incmdd'], 0) 
+		);
 	
 	if ($longcalc < 0) return -1;
 	elseif ($longcalc >= 0 && $longcalc < 6) return 0;
@@ -271,6 +275,8 @@ function GetItemDialogInfo($item, $isequip) {
 		$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
 	if ($isequip && $item->potential5 != 0 && !array_key_exists($item->potential5, $PotentialList))
 		$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
+	if ($isequip && $item->potential6 != 0 && !array_key_exists($item->potential6, $PotentialList))
+		$PotentialList[$item->potential6] = GetPotentialInfo($item->potential6);
 	
 	$stats = GetItemDefaultStats($item->itemid);
 	
@@ -326,6 +332,12 @@ function GetItemDialogInfo($item, $isequip) {
 	$info_array['other_info']['questitem'] = ValueOrDefault($stats['quest'], 0);
 	$info_array['other_info']['karmad'] = ($isequip ? $item->IsKarmad() : 0);
 	$info_array['other_info']['oneofakind'] = ValueOrDefault($stats['only'], 0);
+	$info_array['other_info']['charmexp'] = ValueOrDefault($stats['charmexp'], 0);
+	$info_array['other_info']['willexp'] = ValueOrDefault($stats['willexp'], 0);
+	$info_array['other_info']['charismaexp'] = ValueOrDefault($stats['charismaexp'], 0);
+	$info_array['other_info']['senseexp'] = ValueOrDefault($stats['senseexp'], 0);
+	$info_array['other_info']['craftexp'] = ValueOrDefault($stats['craftexp'], 0);
+	$info_array['other_info']['insightexp'] = ValueOrDefault($stats['insightexp'], 0);
 
 	
 	$potential = 0;
@@ -346,7 +358,7 @@ function GetItemDialogInfo($item, $isequip) {
 	$arguments_temp = 'SetItemInfo(event, this, '.json_encode($info_array).')';
 	$iconid = $item->itemid;
 	if ($isequip && $item->display_id != 0) {
-		$iconid -= $iconid % 1000;
+		$iconid -= $iconid % 10000;
 		$iconid += $item->display_id;
 	}
 	
@@ -416,6 +428,7 @@ $petequip_slots[28] = array(0, -1);
 $petequip_slots[29] = array(0, -1);
 $petequip_slots[46] = array(0, -1); // Item Ignore 1
 $petequip_slots[62] = array(0, -1); // Smart Pet
+$petequip_slots[57] = array(0, -1); // Auto buff
 
 // Pet 2
 $petequip_slots[30] = array(1, 14);
@@ -624,7 +637,7 @@ for ($i = 0; $i < 3; $i++) {
 <?php
 		}
 ?>
-					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover="<?php echo $info['mouseover']; ?>" onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info_icon_origin_Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info_icon_origin_X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 	}
 ?>
@@ -642,172 +655,6 @@ for ($i = 0; $i < 3; $i++) {
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
 var potentialDescriptions = <?php echo json_encode($PotentialList); ?>;
-
-<?php
-
-if (false): // set to true to print this stuff
-
-?>
-function SetItemInfo(event, obj, itemid, isequip, reqjob, <?php
-foreach ($reqlist as $option => $desc) {
-	echo $option.", ";
-}
-foreach ($optionlist as $option => $desc) {
-	echo $option.", ";
-}
-?>
-expires, f_lock, f_spikes, f_coldprotection, f_tradeblock, questitem, f_karmad, potentialflag, potential1, potential2, potential3, potential4, potential5, one) {
-	document.getElementById('item_info_title').innerHTML = obj.getAttribute('item-name');
-	document.getElementById('item_info_icon').src = obj.src;
-	
-<?php
-foreach ($reqlist as $option => $desc) {
-?>
-	document.getElementById('item_info_req_row_<?php echo strtolower($option); ?>').style.display = (!isequip && (<?php echo $option; ?> == '' || <?php echo $option; ?> == 0)) ? 'none' : '';
-	document.getElementById('item_info_req_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
-	
-<?php
-}
-?>
-
-
-<?php
-foreach ($optionlist as $option => $desc) {
-	if ($option == 'scrolls') continue;
-?>
-	document.getElementById('item_info_row_<?php echo strtolower($option); ?>').style.display = (<?php echo $option; ?> == 0 || <?php echo $option; ?> == '') ? 'none' : '';
-	document.getElementById('item_info_<?php echo strtolower($option); ?>').innerHTML = <?php echo $option; ?>;
-	
-<?php
-}
-?>
-	
-	var description = descriptions[itemid];
-	
-	if (description != '') {
-		document.getElementById('item_info_description').style.display = '';
-		document.getElementById('item_info_description').innerHTML = description;
-	}
-	else {
-		document.getElementById('item_info_description').style.display = 'none';
-	}
-	
-	var extrainfo = '';
-	
-	if (one)
-		extrainfo += '<span>One of a Kind</span>';
-	
-	if (questitem)
-		extrainfo += '<span>Quest item</span>';
-	
-	if (f_lock)
-		extrainfo += '<span>Sealed untill ' + expires + '</span>';
-	else if (expires != '')
-		extrainfo += '<span>Expires on ' + expires + '</span>';
-	if (f_spikes)
-		extrainfo += '<span>Prevents slipping</span>';
-	if (f_coldprotection)
-		extrainfo += '<span>Cold prevention</span>';
-	if (f_tradeblock) {
-		var tradeInfo = 'Untradable';
-		switch (f_tradeblock) {
-			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
-			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
-			case 0x21: tradeInfo = 'Use the Platinum Scissors of Karma to enable an item to be traded one time'; break;
-			case 0x30: tradeInfo = 'Trade disabled when equipped'; break;
-			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
-		}
-		extrainfo += '<span>' + tradeInfo + '</span>';
-	}
-	if (f_karmad)
-		extrainfo += '<span>1 time trading (karma\'d)</span>';
-
-	//extrainfo += '<span>ITEMID ' + itemid + '</span>';
-	
-	
-	document.getElementById('item_info_extra').innerHTML = extrainfo;
-	document.getElementById('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
-	
-	// Classes
-	
-	if (reqjob == 0) reqjob = 255; // All classes
-	SetJob(0, reqjob, 0x80); // Beginner
-	SetJob(1, reqjob, 0x01); // Warrior
-	SetJob(2, reqjob, 0x02); // Magician
-	SetJob(3, reqjob, 0x04); // Bowman
-	SetJob(4, reqjob, 0x08); // Thief
-	SetJob(5, reqjob, 0x10); // Pirate
-	
-	document.getElementById('potentials').innerHTML = ""; // Clear potentials
-	
-	var potentiallevel = Math.round(reqlevel / 10);
-	if (potentiallevel == 0) potentiallevel = 1;
-	
-	if (potentialflag == 1) { // 12 = unlocked...?
-		var row = document.getElementById('potentials').insertRow(-1);
-		row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
-	}
-	
-<?php
-for ($i = 1; $i <= 5; $i++) {
-?>
-	if (potential<?php echo $i;?> != 0) {
-		var potentialinfo = potentialDescriptions[potential<?php echo $i;?>];
-		if (potentialinfo.name != null) {
-			var leveldata = potentialinfo.levels[potentiallevel];
-			
-			var result = potentialinfo.name;
-			for (var leveloption in leveldata) {
-				result = result.replace('#' + leveloption, leveldata[leveloption]);
-			}
-			
-			var row = document.getElementById('potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td>' + result + '</td> </tr>';
-		}
-	}
-<?php
-}
-?>
-	
-	document.getElementById('item_info_potentials').style.display = document.getElementById('potentials').innerHTML == '' ? 'none' : 'block';
-	
-	var potentialName = obj.getAttribute('potential');
-	document.getElementById('item_info').setAttribute('class', potentialName != null ? 'potential' + potentialName : '');
-	
-	
-	document.getElementById('item_info').style.display = 'block';
-	document.getElementById('req_job_list').style.display = isequip ? 'block' : 'none';
-	MoveWindow(event);
-}
-
-function SetJob(id, flag, neededflag) {
-	var correct = (flag & neededflag) == neededflag;
-	if (neededflag == 0x80 && flag != 255) 
-		correct = false;
-	document.getElementById('item_info_reqjob_' + id).setAttribute("class", "req_job" + (correct ? ' needed_job' : ''));
-	
-}
-
-function HideItemInfo() {
-	document.getElementById('item_info').style.display = 'none';
-}
-
-function MoveWindow(event) {
-	var expectedTop = event.pageY + 10;
-	var expectedBottom = expectedTop + parseInt(document.getElementById('item_info').clientHeight);
-	if (document.body.clientHeight < expectedBottom) {
-		expectedTop -= (expectedBottom - document.body.clientHeight) + 10;
-	}
-	document.getElementById('item_info').style.top = expectedTop + 'px';
-	document.getElementById('item_info').style.left = event.pageX + 10 + 'px';
-}
-
-
-<?php
-
-endif;
-
-?>
 </script>
 
 <div id="item_info" style="display: none;">
@@ -871,7 +718,7 @@ foreach ($optionlist as $option => $desc) {
 		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
 		</table>
 	</div>
-	<span id="nebulite_info"></span>
+	<div id="extra_item_info"></div>
 	
 </div>
 	<hr/>
