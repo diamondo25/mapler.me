@@ -25,6 +25,8 @@
 	RewriteRule ^todo/ todo.php
 	RewriteRule ^contest/ contest.php
 	RewriteRule ^characters characters.php
+	RewriteRule ^team/ team.php
+	RewriteRule ^support/ /actions/support_email.php
 	
 	# image / ranking rewrites
 	

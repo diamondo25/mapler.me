@@ -44,7 +44,7 @@ hr {
 	border: 0;
 	border-top: 1px solid #eee;
 	border-bottom: 1px solid #CCC;
-	width: 95%;
+	width: 100%;
 	margin-bottom:15px;
 }
 
@@ -56,7 +56,7 @@ hr {
 foreach ($cache as $row) {
 ?>
 
-	<div class="status clickable-brick" style="width:293px; margin:10px;" onclick="document.location = '//<?php echo $row['name']; ?>.<?php echo $domain; ?>'">
+	<div class="status clickable-brick" style="margin:10px;" onclick="document.location = '//<?php echo $row['name']; ?>.<?php echo $domain; ?>'">
 		<img src="//mapler.me/avatar/<?php echo $row['character']; ?>" class="pull-right"/><br/>
 		<p class="title"><?php echo $row['name']; ?><br/>
 		<small class="more"><?php echo $row['job']; ?></small></p>
