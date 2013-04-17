@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email_content'])) {
 		<p>Your Email: <b><?php echo $_loginaccount->GetEmail(); ?></b> (you will get a response here)</p>
 		<p>Mapler.me Rank: <b><?php echo GetRankTitle($rank); ?></b></p>
 		<hr />
-		<p>At Mapler.me, we are always here to assist <b>you</b>. In most cases, you'll receive assistance in <i>less then a day</i>. However, keep in mind repeated abuse of the support system or spamming tickets can result in <i>account restrictions.<i></p>
+		<p>At Mapler.me, we are always here to assist <b>you</b>. In most cases, you'll receive assistance in <i>less than a day</i>. However, keep in mind repeated abuse of the support system or spamming tickets can result in <i>account restrictions.<i></p>
 	</div>
 </div>
 	<form method="POST">
