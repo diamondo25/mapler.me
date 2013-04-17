@@ -10,8 +10,8 @@ using (ScriptAPI) {
 		AddInt("Derp");
 		AddByte("Dunno");
 		AddLong("Start time");
+		AddLong("Update time");
 		AddLong("End time");
-		AddLong("More time");
 		
 		AddByte("Fitality");
 		AddByte("Max Fitality");

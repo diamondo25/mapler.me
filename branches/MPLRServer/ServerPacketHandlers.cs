@@ -527,8 +527,8 @@ namespace MPLRServer
                     pPacket.ReadInt();
                     pPacket.ReadByte();
                     DateTime starttime = DateTime.FromFileTime(pPacket.ReadLong());
-                    DateTime endtime = DateTime.FromFileTime(pPacket.ReadLong());
                     DateTime unktime = DateTime.FromFileTime(pPacket.ReadLong());
+                    DateTime endtime = DateTime.FromFileTime(pPacket.ReadLong());
 
                     pPacket.ReadByte();
                     pPacket.ReadByte();

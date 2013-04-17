@@ -40,10 +40,27 @@ namespace MPLRServer
             }
         }
 
+        public class EvolutionCard
+        {
+            // wut
+            public short ID { get; set; }
+            public int ItemID { get; set; }
+            public byte Level { get; set; }
+            public byte Block { get; set; }
+
+            public void Decode(ClientConnection pConnection, MaplePacket pPacket)
+            {
+                ID = pPacket.ReadShort();
+                ItemID = pPacket.ReadInt();
+                Level = (byte)pPacket.ReadInt();
+            }
+        }
+
         public List<UnknownListOfIntegers> UnknownIntegerList { get; private set; }
         public List<int> UnknownIntegerListNumber2 { get; private set; }
         public Dictionary<int, long> UnknownIntegerListNumber3 { get; private set; }
         public Dictionary<long, long> UnknownIntegerListNumber4 { get; private set; }
+        public List<EvolutionCard> EvolutionCards { get; private set; }
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -252,14 +269,14 @@ namespace MPLRServer
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
                 short cnt = pPacket.ReadShort();
-                int unk = pPacket.ReadInt();
+                int unk = pPacket.ReadInt(); // 9010040 | Conor (NPC)
                 if (cnt > 0 && unk > 0)
                 {
                     for (short j = 0; j < cnt; j++)
                     {
-                        pPacket.ReadInt();
+                        pPacket.ReadInt(); // 9010040 | Conor (NPC)
                         pPacket.ReadShort();
-                        pPacket.ReadInt();
+                        pPacket.ReadInt(); // 4330019 | Pink Coin Purse
                         pPacket.ReadShort();
                     }
                 }
@@ -342,17 +359,22 @@ namespace MPLRServer
             }
 
             {
+                EvolutionCards = new List<EvolutionCard>();
+
                 for (short i = pPacket.ReadShort(); i > 0; i--)
                 {
-                    pPacket.ReadShort(); // Seems block ID
-                    pPacket.ReadInt(); // 3600000+ ?
-                    pPacket.ReadInt(); // Level?
+                    var card = new EvolutionCard();
+                    card.Decode(pConnection, pPacket);
+                    card.Block = 1;
+                    EvolutionCards.Add(card);
                 }
+
                 for (short i = pPacket.ReadShort(); i > 0; i--)
                 {
-                    pPacket.ReadShort();
-                    pPacket.ReadInt();
-                    pPacket.ReadInt();
+                    var card = new EvolutionCard();
+                    card.Decode(pConnection, pPacket);
+                    card.Block = 2;
+                    EvolutionCards.Add(card);
                 }
 
             }
@@ -712,6 +734,47 @@ namespace MPLRServer
                     spTable.RunQuery();
                 }
 
+                using (InsertQueryBuilder teleportRocks = new InsertQueryBuilder("teleport_rock_locations"))
+                {
+                    teleportRocks.AddColumn("character_id");
+                    teleportRocks.AddColumn("index");
+                    teleportRocks.AddColumn("map", true);
+
+                    for (int i = 0; i < Inventory.TeleportRocks.Length; i++)
+                    {
+                        teleportRocks.AddRow(
+                            pConnection.CharacterInternalID,
+                            i,
+                            Inventory.TeleportRocks[i]
+                            );
+
+                    }
+
+                    teleportRocks.RunQuery();
+                }
+
+                using (InsertQueryBuilder table = new InsertQueryBuilder("evolution_levels"))
+                {
+                    table.AddColumn("character_id");
+                    table.AddColumn("block");
+                    table.AddColumn("index");
+                    table.AddColumn("card", true);
+                    table.AddColumn("level", true);
+
+                    foreach (var card in EvolutionCards)
+                    {
+                        table.AddRow(
+                            pConnection.CharacterInternalID,
+                            card.Block,
+                            card.ID,
+                            card.ItemID,
+                            card.Level
+                            );
+
+                    }
+
+                    table.RunQuery();
+                }
             }
         }
     }

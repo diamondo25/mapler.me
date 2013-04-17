@@ -32,9 +32,10 @@ if ($q->num_rows == 0) {
 }
 
 $character_info = $q->fetch_assoc();
+$character_account_id = GetCharacterAccountId($character_info['id']);
 
 // Check character status
-$friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), GetCharacterAccountId($character_info['id'])) : 'NO_FRIENDS';
+$friend_status = $_loggedin ? ($character_account_id == $_loginaccount->GetID() ? 'FOREVER_ALONE' : GetFriendStatus($_loginaccount->GetID(), $character_account_id)) : 'NO_FRIENDS';
 $status = GetCharacterStatus($character_info['id']);
 
 if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE' && $_loginaccount->GetAccountRank() < RANK_MODERATOR))) {
@@ -47,7 +48,7 @@ if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' &
 	require_once __DIR__.'/../inc/footer.php';
 	die;
 }
-elseif ($status == 2 && ($_loggedin && !IsOwnAccount())) {
+elseif ($status == 2 && ($_loggedin && $friend_status != 'FOREVER_ALONE' && $_loginaccount->GetAccountRank() < RANK_MODERATOR)) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <center>

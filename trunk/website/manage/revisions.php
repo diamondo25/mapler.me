@@ -11,7 +11,7 @@ function RunCMD($cmd) {
 	   2 => array("file", "/tmp/error-output.txt", "a") // stderr is a file to write to
 	);
 
-	$cwd = '/mal';
+	$cwd = '/var/www/maplestats_svn';
 
 	$process = proc_open($cmd, $descriptorspec, $pipes, $cwd);
 

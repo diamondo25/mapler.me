@@ -1,15 +1,9 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-?>
 
-<?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ViewAccount'])) {
 		$name = $_POST['ViewAccount'];
-		$id = GetAccountID($name);
-		$account = Account::Load($id);
-		$q = $__database->query("SELECT * FROM accounts WHERE id = ".$id." ");
-		$display = $q->fetch_assoc();
-		$q->free();
+		$account = Account::Load($name);
 ?>
 <hr/>
 	<a href="//<?php echo $domain; ?>/manage/general/" class="btn btn-mini pull-right">Return to General?</a>
@@ -130,7 +124,7 @@ $__database->query("UPDATE signup_lock SET status = 1");
 $q = $__database->query("SELECT username FROM accounts ORDER BY id DESC");
 while ($row = $q->fetch_row()) {
 ?>
-	<input type="submit" href="#" value="<?php echo $row[0]; ?>" name="ViewAccount" class="btn btn-mini" />
+	<input type="submit" value="<?php echo $row[0]; ?>" name="ViewAccount" class="btn btn-mini" />
 <?php
 }
 $q->free();
