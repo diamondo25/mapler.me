@@ -16,11 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email_content'])) {
 	$to = 'support@mapler.me';
 	
 	// subject
-	$subject = '[Mapler.me Support] '.$theirname.'-'.$theirrank;
+	$subject = '[Mapler.me Support] '.$theirname.' ('.$theirrank.')';
 
 	// message
 	
-	$contentpls = $_POST['email_content'];
+	$contentpls = nl2br(htmlentities(strip_tags(trim($_POST['email_content']))));
 	
 	$message = $contentpls;
 
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email_content'])) {
 </div>
 	<form method="POST">
 		<textarea class="span12" style="height:200px;" name="email_content" placeholder="Describe your issue. Provide any details such as error messages, screenshots, or URL(s)."></textarea>
-		<input type="submit" class="span11 btn btn-large" value="Request support! (note: you can send one a day)">
+		<input type="submit" class="span12 btn btn-large" value="Request support! (note: you can send one a day)">
 	</form>
 
 <?php
