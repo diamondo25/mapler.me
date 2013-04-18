@@ -404,24 +404,25 @@ hr {
 	display: none;
 }
 
+/* rare */
 .potential1 {
-	border: 1px solid #FF0066 !important;
-}
-
-.potential2 {
 	border: 1px solid #5CA1FF !important;
 }
-
-.potential3 {
+/* epic */
+.potential2 {
 	border: 1px solid #C261FF !important;
 }
-
-.potential4 {
+/* unique */
+.potential3 {
 	border: 1px solid #7FFF00 !important;
 }
-
-.potential5 {
+/* legendary */
+.potential4 {
 	border: 1px solid #37FF00 !important;
+}
+/* not sure on others? */
+.potential5 {
+	border: 1px solid #FF007F !important;
 }
 
 .potential6 {
