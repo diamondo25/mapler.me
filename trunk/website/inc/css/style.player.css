@@ -404,28 +404,27 @@ hr {
 	display: none;
 }
 
-/* rare */
+.potential0 {
+	border: 1px solid #FF0066 !important;
+}
+
 .potential1 {
 	border: 1px solid #5CA1FF !important;
 }
-/* epic */
+
 .potential2 {
 	border: 1px solid #C261FF !important;
 }
-/* unique */
+
 .potential3 {
 	border: 1px solid #7FFF00 !important;
 }
-/* legendary */
+
 .potential4 {
 	border: 1px solid #37FF00 !important;
 }
-/* not sure on others? */
-.potential5 {
-	border: 1px solid #FF007F !important;
-}
 
-.potential6 {
+.potential5 {
 	border: 1px solid #FF007F !important;
 }
 
