@@ -16,7 +16,7 @@ namespace MPLRServer
             ushort version = pPacket.ReadUShort();
             ushort subversion = pPacket.ReadUShort();
 
-            pConnection.Logger_WriteLine("Client data: {0} {1}.{2}", locale, version, subversion);
+            pConnection.Logger_WriteLine("Detected MapleStory version of client: {1}.{2} (locale: {0})", locale, version, subversion);
             pConnection.MapleVersion = version;
             pConnection.CharData = null; // Back to the LoginServer!!!
             if (locale != LatestLocale)

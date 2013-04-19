@@ -84,17 +84,34 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'info', '2 MINUTE');
-
-$id = uniqid().rand(0, 999);
-AddCacheImage($charname, 'info', $id);
-
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	die("character not found");
 }
 $row = $q->fetch_assoc();
+
+$internal_id = $row['internal_id'];
+
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($internal_id, 'info', $row['last_update'], false, '2 MINUTE');
+
+$id = uniqid().rand(0, 999);
+AddCacheImage($internal_id, 'info', $row['last_update'], $id);
+
+
+
+$row['guildname'] = '-';
+$q2 = $__database->query("SELECT guild FROM character_views WHERE name = '".$__database->real_escape_string($charname)."'");
+if ($q2->num_rows == 1) {
+	// Try to fetch guildname
+	$row2 = $q2->fetch_assoc();
+	if ($row2['guild'] != null) {
+		$row['guildname'] = $row2['guild'];
+	}
+}
+$q2->free();
+
+
 	
 
 $image = imagecreatetruecolor(271, 162);
@@ -107,19 +124,19 @@ imagealphablending($image, true);
 
 // LOAD CHARACTER
 
-$charpos_x = 10;
-$charpos_y = 20;
+$charpos_x = -4;
+$charpos_y = 15;
 
-//$character_image = LoadPNG("http://".$domain."/avatar/".$charname);
-$character_image = LoadPNG("http://mapler.me/avatar/".$charname);
+$character_image = LoadPNG("http://".$domain."/avatar/".$charname);
+//$character_image = LoadPNG("http://mapler.me/avatar/".$charname);
 
-imagecopyresampled($image, $character_image, $charpos_x, $charpos_y, 0, 0, 96, 96, 96, 96);
+imagecopyresampled($image, $character_image, $charpos_x, $charpos_y, 0, 0, 128, 128, 128, 128);
 
 // SET NAMETAG
 $name = $row['name'];
 
-$x = ($charpos_x + (96 / 2));
-$y = ($charpos_y + 10 + 96);
+$x = ($charpos_x + (128 / 2));
+$y = ($charpos_y + 15 + 96);
 
 $startWidth = $x - calculateWidth($name) / 2;
 $endWidth = $x + calculateWidth($name) / 2;
@@ -133,10 +150,10 @@ $step = 18;
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 0),  imagecolorallocate($image, 0, 0, 0), $font, $row['level']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 1),  imagecolorallocate($image, 0, 0, 0), $font, GetJobname($row['job']));
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 2), imagecolorallocate($image, 0, 0, 0), $font, $row['fame']);
-//ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 3), imagecolorallocate($image, 0, 0, 0), $font, "HAX!");
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 3), imagecolorallocate($image, 0, 0, 0), $font, $row['guildname']);
 //ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * 4), imagecolorallocate($image, 0, 0, 0), $font, "HAXCLANZ");
 
-SaveCacheImage($charname, 'info', $image, $id);
+SaveCacheImage($internal_id, 'info', $image, $id);
 
 
 imagepng($image);

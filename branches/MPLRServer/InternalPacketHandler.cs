@@ -22,11 +22,24 @@ namespace MPLRServer
                 {
                     pConnection.SendInfoText("You successfully connected, or are in the Cash Shop!");
                 }
+
+                pConnection.ConnectedTimeToServer = MasterThread.CurrentDate;
             }
             else
             {
                 pConnection.Logger_WriteLine("- Client lost connection with MapleStory server");
                 pConnection.SendInfoText("Maplestory is closed, or not connected properly.");
+
+                if (pConnection.ConnectedTimeToServer != DateTime.MinValue)
+                {
+                    var timespan = MasterThread.CurrentDate - pConnection.ConnectedTimeToServer;
+                    pConnection.Logger_WriteLine("Player was connected for {0}", timespan);
+
+                    if (timespan.TotalSeconds < 5)
+                    {
+                        pConnection.Logger_WriteLine("CLIENT PROBABLY FAILED TO CONNECT!!!");
+                    }
+                }
             }
         }
     }

@@ -256,24 +256,24 @@ namespace MPLRServer
     {
         public byte Slots { get; private set; }
         public byte Scrolls { get; private set; }
-        public short Str { get; private set; }
-        public short Dex { get; private set; }
-        public short Int { get; private set; }
-        public short Luk { get; private set; }
-        public short HP { get; private set; }
-        public short MP { get; private set; }
-        public short Watk { get; private set; }
-        public short Matk { get; private set; }
-        public short Wdef { get; private set; }
-        public short Mdef { get; private set; }
-        public short Acc { get; private set; }
-        public short Avo { get; private set; }
-        public short Hands { get; private set; }
-        public short Jump { get; private set; }
-        public short Speed { get; private set; }
+        public ushort Str { get; private set; }
+        public ushort Dex { get; private set; }
+        public ushort Int { get; private set; }
+        public ushort Luk { get; private set; }
+        public ushort HP { get; private set; }
+        public ushort MP { get; private set; }
+        public ushort Watk { get; private set; }
+        public ushort Matk { get; private set; }
+        public ushort Wdef { get; private set; }
+        public ushort Mdef { get; private set; }
+        public ushort Acc { get; private set; }
+        public ushort Avo { get; private set; }
+        public ushort Hands { get; private set; }
+        public ushort Jump { get; private set; }
+        public ushort Speed { get; private set; }
 
         public string Name { get; private set; }
-        public short Flags { get; private set; }
+        public ushort Flags { get; private set; }
 
         public byte IncreasesSkills { get; private set; }
 
@@ -281,21 +281,21 @@ namespace MPLRServer
         public int ItemEXP { get; private set; }
 
         public int ViciousHammer { get; private set; }
-        public short BattleModeDamage { get; private set; }
+        public ushort BattleModeDamage { get; private set; }
 
-        public short StatusFlags { get; private set; } // [XX, unk] [YY, amount of stars] | ?? 02 = 2 stars, ?? 0C = 12 stars!
+        public ushort StatusFlags { get; private set; } // [XX, unk] [YY, amount of stars] | ?? 02 = 2 stars, ?? 0C = 12 stars!
 
-        public short Potential1 { get; private set; }
-        public short Potential2 { get; private set; }
-        public short Potential3 { get; private set; }
+        public ushort Potential1 { get; private set; }
+        public ushort Potential2 { get; private set; }
+        public ushort Potential3 { get; private set; }
         // Bonus potentials
-        public short Potential4 { get; private set; }
-        public short Potential5 { get; private set; }
-        public short Potential6 { get; private set; }
+        public ushort Potential4 { get; private set; }
+        public ushort Potential5 { get; private set; }
+        public ushort Potential6 { get; private set; }
 
 
-        public short DisplayID { get; private set; } // ID of anvilled item, 0 if not set. calculate with: (ItemID - (ItemID % 10000)) + DisplayID
-        public short SocketState { get; private set; } // 00 00 = No nebs, 03 00 = Neb 1 open, 13 00 = Neb 1 used (others closed)
+        public ushort DisplayID { get; private set; } // ID of anvilled item, 0 if not set. calculate with: (ItemID - (ItemID % 10000)) + DisplayID
+        public ushort SocketState { get; private set; } // 00 00 = No nebs, 03 00 = Neb 1 open, 13 00 = Neb 1 used (others closed)
         public short Nebulite1 { get; private set; }
         public short Nebulite2 { get; private set; } // Could be 2 other nebs...!?
         public short Nebulite3 { get; private set; }
@@ -360,19 +360,19 @@ namespace MPLRServer
 
             this.Name = pPacket.ReadString();
 
-            this.StatusFlags = pPacket.ReadShort();
+            this.StatusFlags = pPacket.ReadUShort();
 
-            this.Potential1 = pPacket.ReadShort();
-            this.Potential2 = pPacket.ReadShort();
-            this.Potential3 = pPacket.ReadShort();
+            this.Potential1 = pPacket.ReadUShort();
+            this.Potential2 = pPacket.ReadUShort();
+            this.Potential3 = pPacket.ReadUShort();
 
-            this.Potential4 = pPacket.ReadShort();
-            this.Potential5 = pPacket.ReadShort();
-            this.Potential6 = pPacket.ReadShort();
+            this.Potential4 = pPacket.ReadUShort();
+            this.Potential5 = pPacket.ReadUShort();
+            this.Potential6 = pPacket.ReadUShort();
 
-            this.DisplayID = pPacket.ReadShort();
+            this.DisplayID = pPacket.ReadUShort();
 
-            this.SocketState = pPacket.ReadShort();
+            this.SocketState = pPacket.ReadUShort();
             this.Nebulite1 = pPacket.ReadShort();
             this.Nebulite2 = pPacket.ReadShort();
             this.Nebulite3 = pPacket.ReadShort();
@@ -421,6 +421,21 @@ namespace MPLRServer
         {
             if (pValue.HasFlag(pFlag)) {
                 var val = pPacket.ReadShort();
+                if (pLogIfFound)
+                {
+                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
+                }
+                return val;
+            }
+            else
+                return 0;
+        }
+
+        private static ushort FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, ushort pTypeValue, bool pLogIfFound = false)
+        {
+            if (pValue.HasFlag(pFlag))
+            {
+                var val = pPacket.ReadUShort();
                 if (pLogIfFound)
                 {
                     Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);

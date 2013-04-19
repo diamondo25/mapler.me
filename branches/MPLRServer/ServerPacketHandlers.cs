@@ -156,6 +156,12 @@ namespace MPLRServer
             }
 
             pConnection.SendInfoText("Identified account {0} (made at {1})", pUsername, pCreateTime);
+
+            if (pConnection.LogFilename == "Unknown")
+                pConnection.LogFilename = "";
+            else
+                pConnection.LogFilename += "_";
+            pConnection.LogFilename += pConnection.AccountID.ToString();
         }
 
 
@@ -199,7 +205,7 @@ namespace MPLRServer
                     guild.Decode(pPacket);
                     guild.Save(pConnection.WorldID);
 
-                    pConnection.Logger_WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedName, guild.Name);
+                    pConnection.Logger_WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedCharacterName, guild.Name);
                 }
             }
         }
@@ -1176,11 +1182,12 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("--------- Saved parsed Character Info ----------");
 
 
-                pConnection.LastLoggedName = pConnection.CharData.Stats.Name;
+                pConnection.LastLoggedCharacterName = pConnection.CharData.Stats.Name;
                 pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
 
+                pConnection.LogFilename += "-" + pConnection.CharacterInternalID;
 
-                pConnection.SendInfoText("Your character {0} has been saved!", pConnection.LastLoggedName);
+                pConnection.SendInfoText("Your character {0} has been saved!", pConnection.CharData.Stats.Name);
             }
             else
             {

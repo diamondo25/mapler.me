@@ -194,6 +194,7 @@ $optionlist['avo'] = 'Avoidability : ';
 $optionlist['hands'] = 'Hands : ';
 $optionlist['jump'] = 'Jump : ';
 $optionlist['speed'] = 'Speed : ';
+$optionlist['enchantments'] = 'Nr of times enchanted : ';
 $optionlist['slots'] = 'Upgrades available : ';
 $optionlist['hammers'] = 'Nr of hammers applied : ';
 
@@ -210,6 +211,7 @@ $reqlist['itemexp'] = 'ITEM EXP : ';
 
 $IDlist = array();
 $PotentialList = array();
+$NebuliteList = array();
 
 function GetItemQuality($item, $stats) {
 	$longcalc =
@@ -260,7 +262,7 @@ function GetItemQuality($item, $stats) {
 
 
 function GetItemDialogInfo($item, $isequip) {
-	global $PotentialList, $IDlist, $reqlist, $optionlist;
+	global $PotentialList, $IDlist, $reqlist, $optionlist, $NebuliteList;
 	
 	if (!array_key_exists($item->itemid, $IDlist)) {
 		$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
@@ -279,6 +281,13 @@ function GetItemDialogInfo($item, $isequip) {
 	if ($isequip && $item->potential6 != 0 && !array_key_exists($item->potential6, $PotentialList))
 		$PotentialList[$item->potential6] = GetPotentialInfo($item->potential6);
 	
+	if ($isequip && $item->nebulite1 != -1 && !array_key_exists($item->nebulite1, $NebuliteList))
+		$NebuliteList[$item->nebulite1] = GetNebuliteInfo($item->nebulite1);
+	if ($isequip && $item->nebulite2 != -1 && !array_key_exists($item->nebulite2, $NebuliteList))
+		$NebuliteList[$item->nebulite2] = GetNebuliteInfo($item->nebulite2);
+	if ($isequip && $item->nebulite3 != -1 && !array_key_exists($item->nebulite3, $NebuliteList))
+		$NebuliteList[$item->nebulite3] = GetNebuliteInfo($item->nebulite3);
+
 	$stats = GetItemDefaultStats($item->itemid);
 	
 	$tradeblock = 0;
@@ -314,13 +323,13 @@ function GetItemDialogInfo($item, $isequip) {
 	$info_array = array();
 	$info_array['iteminfo'] = $item;
 	$info_array['requirements'] = array(
-		'level' => $reqlevel,
-		'pop' => $reqpop,
-		'job' => ValueOrDefault($stats['reqjob'], 0),
-		'str' => $reqstr,
-		'dex' => $reqdex,
-		'int' => $reqint,
-		'luk' => $reqluk
+		'level' => (int)$reqlevel,
+		'pop' => (int)$reqpop,
+		'job' => (int)ValueOrDefault($stats['reqjob'], 0),
+		'str' => (int)$reqstr,
+		'dex' => (int)$reqdex,
+		'int' => (int)$reqint,
+		'luk' => (int)$reqluk
 	);
 	$info_array['other_info'] = array(
 		'tradeblock' => $tradeblock,
@@ -330,15 +339,15 @@ function GetItemDialogInfo($item, $isequip) {
 	$info_array['other_info']['locked'] = ($isequip ? $item->HasLock() : 0);
 	$info_array['other_info']['spiked'] = ($isequip ? $item->HasSpikes() : 0);
 	$info_array['other_info']['coldprotection'] = ($isequip ? $item->HasColdProtection() : 0);
-	$info_array['other_info']['questitem'] = ValueOrDefault($stats['quest'], 0);
+	$info_array['other_info']['questitem'] = (int)ValueOrDefault($stats['quest'], 0);
 	$info_array['other_info']['karmad'] = ($isequip ? $item->IsKarmad() : 0);
-	$info_array['other_info']['oneofakind'] = ValueOrDefault($stats['only'], 0);
-	$info_array['other_info']['charmexp'] = ValueOrDefault($stats['charmexp'], 0);
-	$info_array['other_info']['willexp'] = ValueOrDefault($stats['willexp'], 0);
-	$info_array['other_info']['charismaexp'] = ValueOrDefault($stats['charismaexp'], 0);
-	$info_array['other_info']['senseexp'] = ValueOrDefault($stats['senseexp'], 0);
-	$info_array['other_info']['craftexp'] = ValueOrDefault($stats['craftexp'], 0);
-	$info_array['other_info']['insightexp'] = ValueOrDefault($stats['insightexp'], 0);
+	$info_array['other_info']['oneofakind'] = (int)ValueOrDefault($stats['only'], 0);
+	$info_array['other_info']['charmexp'] = (int)ValueOrDefault($stats['charmexp'], 0);
+	$info_array['other_info']['willexp'] = (int)ValueOrDefault($stats['willexp'], 0);
+	$info_array['other_info']['charismaexp'] = (int)ValueOrDefault($stats['charismaexp'], 0);
+	$info_array['other_info']['senseexp'] = (int)ValueOrDefault($stats['senseexp'], 0);
+	$info_array['other_info']['craftexp'] = (int)ValueOrDefault($stats['craftexp'], 0);
+	$info_array['other_info']['insightexp'] = (int)ValueOrDefault($stats['insightexp'], 0);
 
 	
 	$potential = 0;
@@ -348,10 +357,10 @@ function GetItemDialogInfo($item, $isequip) {
 		}
 		else {
 			if ($item->potential1 != 0) $potential++;
-			if ($item->potential2 != 0) $potential++;
-			if ($item->potential3 != 0) $potential++;
-			if ($item->potential4 != 0) $potential++;
-			if ($item->potential5 != 0) $potential++;
+			//if ($item->potential2 != 0) $potential++;
+			//if ($item->potential3 != 0) $potential++;
+			//if ($item->potential4 != 0) $potential++;
+			//if ($item->potential5 != 0) $potential++;
 			//if ($item->potential6 != 0) $potential++;
 		}
 	}
@@ -656,6 +665,7 @@ for ($i = 0; $i < 3; $i++) {
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
 var potentialDescriptions = <?php echo json_encode($PotentialList); ?>;
+var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 </script>
 
 <div id="item_info" style="display: none;">

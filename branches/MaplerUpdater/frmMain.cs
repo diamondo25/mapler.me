@@ -11,9 +11,12 @@ namespace MaplerUpdater
 {
     public partial class frmMain : Form
     {
+        public static frmMain Instance { get; private set; }
+
         public frmMain()
         {
             InitializeComponent();
+            Instance = this;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -31,10 +34,15 @@ namespace MaplerUpdater
                 string ret = CraftNetTools.AppUpdates.Check(label1);
                 if (ret == "Boot")
                 {
-                    System.Diagnostics.Process.Start("Mapler Client.exe");
+                    System.Diagnostics.Process.Start("Mapler Client.exe", "/updated");
                     Environment.Exit(0);
                 }
             }).Start();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

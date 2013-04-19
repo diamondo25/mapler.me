@@ -91,6 +91,9 @@ function SetItemInfo(event, obj, values) {
 	SetObjText('hands', item.hands);
 	SetObjText('hammers', item.hammers, isequip);
 	
+	var stars = parseInt(item.statusflag / 0x100);
+	SetObjText('enchantments', stars, isequip);
+	
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	
 	var description = descriptions[itemid];
@@ -159,10 +162,23 @@ function SetItemInfo(event, obj, values) {
 	GetObj('nebulite_info').innerHTML = ''; // Clear nebulite info
 
 	var potentiallevel = Math.round(reqs.level / 10);
+	potentiallevel += stars;
 	
 	var haspotential = false;
 	var hasbonuspotential = false;
 	var hasnebulite = false;
+	
+	var GetNebuliteType = function (itemid) {
+		var val = parseInt(itemid / 1000);
+		switch (val) {
+			case 0: return 'D';
+			case 1: return 'C';
+			case 2: return 'B';
+			case 3: return 'A';
+			case 4: return 'S';
+			default: return '? ' + val;
+		}
+	};
 	
 	if (isequip) {
 		if ((item.statusflag & 0x0001) != 0 && item.potential1 == 0 && item.potential2 == 0 && item.potential3 == 0) {
@@ -180,6 +196,13 @@ function SetItemInfo(event, obj, values) {
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
+		else if (item.nebulite1 > 0) {
+			var nebuliteinfo = nebuliteInfo[item.nebulite1];
+		
+			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
+			GetObj('nebulite_info').innerHTML = '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			hasnebulite = true;
+		}
 
 		for (var i = 1; i <= 6; i++) {
 			var isbonus = i >= 4;
@@ -193,13 +216,10 @@ function SetItemInfo(event, obj, values) {
 
 			var leveldata = potentialinfo.levels[potentiallevel];
 
-			var result = potentialinfo.name;
-			for (var leveloption in leveldata) {
-				result = result.replace('#' + leveloption, leveldata[leveloption]);
-			}
+			var text = ReplaceIGNText(potentialinfo.name, leveldata);
 
 			var row = GetObj(isbonus ? 'bonus_potentials' : 'potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td>' + result + '</td> </tr>';
+			row.innerHTML = '<tr> <td>' + text + '</td> </tr>';
 		}
 	}
 
@@ -220,6 +240,13 @@ function SetItemInfo(event, obj, values) {
 	lastSetWindow = GetObj('item_info');
 	
 	MoveWindow(event);
+}
+
+function ReplaceIGNText(input, strings) {
+	for (var str in strings) {
+		input = input.replace('#' + str, strings[str]);
+	}
+	return input;
 }
 
 function SetJob(id, flag, neededflag) {

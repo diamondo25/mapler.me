@@ -26,5 +26,24 @@ $(document).ready(function() {
 			$("input[name='reply-to']").attr('value', -1);
 		}
 	});
+	
+	$('body').on('click', '.status[status-id]', function() {
+		var statusid = $(this).attr('status-id');
+		var uniqueid = $(this).attr('unique-id');
+		$.ajax({
+			type: 'GET',
+			url: '/ajax/status.php?type=responses&statusid=' + statusid,
+			success: function (data) {
+				if (data.error != undefined) {
+					alert(data.error);
+				}
+				else {
+					$('.reply-list[status-id=' + statusid + '][unique-id=' + uniqueid + ']').html(data.result);
+				}
+			}
+		
+		});
+	
+	});
 });
 

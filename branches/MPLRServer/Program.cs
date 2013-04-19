@@ -121,6 +121,13 @@ namespace MPLRServer
 
                                 break;
                             }
+                        case "players":
+                            {
+                                string names = "";
+                                Clients.ForEach(a => names += a.LastLoggedCharacterName + ", ");
+                                Console.WriteLine("Players online: {0}", names);
+                                break;
+                            }
                         case "close":
                         case "stop":
                         case "exit":

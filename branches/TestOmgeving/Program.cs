@@ -20,6 +20,11 @@ namespace Mapler_Client
         {
             string[] args = Environment.GetCommandLineArgs();
 
+            if (args.Count(a => { return a == "/updated"; }) == 0)
+            {
+                return;
+            }
+
             Logger.SetLogfile(
                 args.Count(a => { return a == "/packetlog"; }) > 0,
                 args.Count(a => { return a == "/debug"; }) > 0 ? false : true // 'Disabled' 

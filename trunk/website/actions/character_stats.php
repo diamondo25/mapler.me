@@ -29,12 +29,6 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'stats', '2 MINUTE');
-
-$id = uniqid().rand(0, 999);
-AddCacheImage($charname, 'stats', $id);
-
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	$im = imagecreatetruecolor (192, 345);
@@ -51,8 +45,16 @@ if ($q->num_rows == 0) {
 	die();
 }
 
-
 $row = $q->fetch_assoc();
+$internal_id = $row['internal_id'];
+
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($internal_id, 'stats', $row['last_update'], false, '2 MINUTE');
+
+$id = uniqid().rand(0, 999);
+AddCacheImage($internal_id, 'stats', $row['last_update'], $id);
+
+
 
 $row['guildname'] = '-';
 $q2 = $__database->query("SELECT guild FROM character_views WHERE name = '".$__database->real_escape_string($charname)."'");
@@ -91,14 +93,16 @@ if (isset($stat_addition['mhp'])) $row['mhp'] += $stat_addition['mhp'];
 if (isset($stat_addition['mmp'])) $row['mmp'] += $stat_addition['mmp'];
 
 
-foreach ($potential_stat_addition as $itemid => $stats) {
-	if (isset($stats['incSTR'])) $row['str'] += $stats['incSTR'];
-	if (isset($stats['incDEX'])) $row['dex'] += $stats['incDEX'];
-	if (isset($stats['incINT'])) $row['int'] += $stats['incINT'];
-	if (isset($stats['incLUK'])) $row['luk'] += $stats['incLUK'];
-	
-	if (isset($stats['incMHP'])) $row['mhp'] += $stats['incMHP'];
-	if (isset($stats['incMMP'])) $row['mhp'] += $stats['incMMP'];
+foreach ($potential_stat_addition as $itemid => $stats_tmp) {
+	foreach ($stats_tmp as $stats) {
+		if (isset($stats['incSTR'])) $row['str'] += $stats['incSTR'];
+		if (isset($stats['incDEX'])) $row['dex'] += $stats['incDEX'];
+		if (isset($stats['incINT'])) $row['int'] += $stats['incINT'];
+		if (isset($stats['incLUK'])) $row['luk'] += $stats['incLUK'];
+		
+		if (isset($stats['incMHP'])) $row['mhp'] += $stats['incMHP'];
+		if (isset($stats['incMMP'])) $row['mhp'] += $stats['incMMP'];
+	}
 }
 
 
@@ -125,14 +129,16 @@ foreach ($skill_stat_addition as $skillid => $tempinfo) {
 }
 
 // Rates
-foreach ($potential_stat_addition as $itemid => $stats) {
-	if (isset($stats['incSTRr'])) $row['str'] *= ((100 + $stats['incSTRr']) / 100);
-	if (isset($stats['incDEXr'])) $row['dex'] *= ((100 + $stats['incDEXr']) / 100);
-	if (isset($stats['incINTr'])) $row['int'] *= ((100 + $stats['incINTr']) / 100);
-	if (isset($stats['incLUKr'])) $row['luk'] *= ((100 + $stats['incLUKr']) / 100);
-	
-	if (isset($stats['incMHPr'])) $row['mhp'] *= ((100 + $stats['incMHPr']) / 100);
-	if (isset($stats['incMMPr'])) $row['mhp'] *= ((100 + $stats['incMMPr']) / 100);
+foreach ($potential_stat_addition as $itemid => $stats_tmp) {
+	foreach ($stats_tmp as $stats) {
+		if (isset($stats['incSTRr'])) $row['str'] *= (100 + (int)$stats['incSTRr']) / 100;
+		if (isset($stats['incDEXr'])) $row['dex'] *= (100 + (int)$stats['incDEXr']) / 100;
+		if (isset($stats['incINTr'])) $row['int'] *= (100 + (int)$stats['incINTr']) / 100;
+		if (isset($stats['incLUKr'])) $row['luk'] *= (100 + (int)$stats['incLUKr']) / 100;
+
+		if (isset($stats['incMHPr'])) $row['mhp'] *= (100 + (int)$stats['incMHPr']) / 100;
+		if (isset($stats['incMMPr'])) $row['mhp'] *= (100 + (int)$stats['incMMPr']) / 100;
+	}
 }
 
 // Moar rates
@@ -190,7 +196,7 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['exp'].' ('.round($row['exp'] / $nextlevelexp * 100).'%)');
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourlevel']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourexp']);
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['guildname']); // Guild
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['guildname']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['chp']." / ".$row['mhp']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['cmp']." / ".$row['mmp']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['fame']);
@@ -203,7 +209,7 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['luk']);
 
 
-SaveCacheImage($charname, 'stats', $image, $id);
+SaveCacheImage($internal_id, 'stats', $image, $id);
 imagepng($image);
 imagedestroy($image);
 

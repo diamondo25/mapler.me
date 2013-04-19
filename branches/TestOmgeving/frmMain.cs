@@ -45,7 +45,7 @@ namespace Mapler_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.Message), "ERROR");
+                MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.ToString()), "ERROR");
                 Program.Closing = true;
                 Environment.Exit(1);
             }

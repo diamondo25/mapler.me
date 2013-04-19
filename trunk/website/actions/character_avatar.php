@@ -17,37 +17,34 @@ else {
 }
 
 
+$image_width = 128;
+$image_height = 128;
+
 $charname = isset($_GET['name']) ? $_GET['name'] : 'RoboticOil';
 
 $len = strlen($charname);
 if ($len < 4 || $len > 12) {
-	$im = imagecreatetruecolor (96, 96);
+	$im = imagecreatetruecolor ($image_width, $image_height);
 	$bgc = imagecolorallocate ($im, 255, 255, 255);
 	$tc = imagecolorallocate ($im, 0, 0, 0);
 
-	imagefilledrectangle ($im, 0, 0, 96, 96, $bgc);
+	imagefilledrectangle ($im, 0, 0, $image_width, $image_height, $bgc);
 
 	/* Output an error message */
 	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
-	imagestring ($im, 1, 5, 20, "Incorrect Charname", $tc);
+	imagestring ($im, 1, 5, 20, 'Incorrect Charname', $tc);
 	imagepng($im);
 	imagedestroy($im);
 	die();
 }
 
-if (!isset($_GET['NO_CACHING']))
-	ShowCachedImage($charname, 'avatar', '1 MINUTE');
-
-$id = uniqid().rand(0, 999);
-AddCacheImage($charname, 'avatar', $id);
-
 $q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
-	$im = imagecreatetruecolor (96, 96);
+	$im = imagecreatetruecolor ($image_width, $image_height);
 	$bgc = imagecolorallocate ($im, 255, 255, 255);
 	$tc = imagecolorallocate ($im, 0, 0, 0);
 
-	imagefilledrectangle ($im, 0, 0, 96, 96, $bgc);
+	imagefilledrectangle ($im, 0, 0, $image_width, $image_height, $bgc);
 
 	/* Output an error message */
 	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
@@ -57,30 +54,48 @@ if ($q->num_rows == 0) {
 	die();
 }
 
+// Get character attributes
+$character_data = $q->fetch_array();
+$internal_id = $character_data['internal_id'];
+$character_id = $character_data['id'];
+
+$image_mode = isset($_GET['show_name']) ? 'avatar_ingame' : 'avatar';
+
+
+if (!isset($_GET['NO_CACHING']))
+	ShowCachedImage($internal_id, $image_mode, $character_data['last_update'], false, '1 MINUTE');
+
+$id = uniqid().rand(0, 999);
+if (!isset($_GET['NO_CACHING']))
+	AddCacheImage($internal_id, $image_mode, $character_data['last_update'], $id);
+
+
+
 // Create blank template
-$im = imagecreatetruecolor(96, 96);
+$im = imagecreatetruecolor($image_width, $image_height);
 imagesavealpha($im, true);
 $trans = imagecolorallocatealpha($im, 0, 0, 0, 127);
 imagefill($im, 0, 0, $trans);
 
-// Get character attributes
-$character_data = $q->fetch_array();
-$character_id = $character_data['internal_id'];
 // Set everything null for the hash
 $skin = $face = $hair = $hat = $mask = $eyes = $ears = $top = $pants = $overall = $shoe = $glove = $cape = $shield = $wep = $nxwep = NULL;
 
 // Coordinates for center
-$mainx = 44;
-$mainy = 34;
+$mainx = 60;
+$mainy = 38;
 
 // Some other variables
-$characterwz = "/var/www/maplestory_images/Character";
-if (!is_dir($characterwz)) {
-	$characterwz = 'P:/Result/Character';
-	if (!is_dir($characterwz)) {
+
+$main_dir = '/var/www/maplestory_images/';
+if (!is_dir($main_dir)) {
+	$main_dir = 'P:/Result/';
+	if (!is_dir($main_dir)) {
 		// your call
 	}
 }
+
+$characterwz = $main_dir.'Character';
+$guild_info_location = $main_dir.'GuildEmblem';
 
 $skin = $character_data['skin'] + 2000;
 $face = $character_data['eyes'];
@@ -107,7 +122,7 @@ SELECT
 FROM 
 	`items` 
 WHERE 
-	`character_id` = " . $character_id . " 
+	`character_id` = " . $internal_id . " 
 AND 
 	`slot` < 0 
 AND 
@@ -118,7 +133,7 @@ DESC"
 );
 
 
-while($row2 = $character_equipment->fetch_assoc()) {
+while ($row2 = $character_equipment->fetch_assoc()) {
 	switch ($row2['slot']) {
 		case -1:	// Hat
 		case -101:	// NX Hat
@@ -184,6 +199,10 @@ while($row2 = $character_equipment->fetch_assoc()) {
 
 $character_equipment->free();
 
+
+// Render name
+if (isset($_GET['show_name']))
+	RenderName($character_data['name'], $image_width/2, $mainy + 71);
 
 // This section determines which stand to use based on the weapon you have
 // Credit goes to zOmgnO1 for improved code
@@ -739,12 +758,16 @@ if($weaponz == 'weaponOverGlove' || $weaponz == 'weaponOverHand') {
 }
 
 
-SaveCacheImage($charname, 'avatar', $im, $id);
+
+if (!isset($_GET['NO_CACHING']))
+	SaveCacheImage($internal_id, $image_mode, $im, $id);
 
 imagepng($im);
 imagedestroy($im);
 
-if (isset($_GET['debug'])) var_dump($GLOBALS);
+
+
+
 
 // Function to phrase data into an array
 function get_data($itemid) {
@@ -762,3 +785,69 @@ function add_image($location, $x, $y) {
 		echo "-- Could not find ".$location." -- <br />";
 	}
 }
+
+
+function RenderName($name, $x, $y) {
+	global $character_id;
+	global $im;
+	global $font;
+	global $font_size;
+	global $__database;
+	global $guild_info_location;
+
+	$startWidth = $x - calculateWidth($name)/2;
+	$endWidth = $x + calculateWidth($name)/2;
+	imagefillroundedrect($im, $startWidth, $y - 17, $endWidth - 1, $y - 2, 1, imagecolorallocate($im, 85, 85, 85));
+	ImageTTFText($im, $font_size, 0, $startWidth + 3, $y - 5, imagecolorallocate($im, 255, 255, 255), $font, $name);
+	$q = $__database->query("SELECT g.name, g.emblem_bg, g.emblem_bg_color, g.emblem_fg, g.emblem_fg_color FROM guild_members c INNER JOIN guilds g ON g.id = c.guild_id WHERE c.character_id = ".$character_id);
+	
+	if ($q->num_rows == 1) {
+		$res = $q->fetch_array();
+		$name = $res[0];
+		$hasemblem = ($res[1] != 0 || $res[2] != 0 || $res[3] != 0 || $res[4] != 0) ? true : false;
+		$startWidth = $x - calculateWidth($name) / 2;
+		$endWidth = $x + calculateWidth($name) / 2;
+		
+		imagefillroundedrect($im, $startWidth, $y, $endWidth - 1, $y + 15, 1, imagecolorallocate($im, 85, 85, 85));
+		ImageTTFText($im, $font_size, 0, $startWidth + 2, $y + 12, imagecolorallocate($im, 255, 255, 255), $font, $name);
+		ImageTTFText($im, $font_size, 0, $startWidth + 3, $y + 12, imagecolorallocate($im, 255, 255, 255), $font, $name);
+		
+		if ($hasemblem) {
+			if ($res[1] != 0 || $res[2] != 0) {
+				add_image($guild_info_location.'/BackGround/0000'.$res[1].'/'.$res[2].'.png', $startWidth - 18, $y + 1);
+			}
+			if ($res[3] != 0 || $res[4] != 0) {
+				$name = "";
+				$sort = floor($res[3] / 1000);
+				if ($sort == 2) $name = "Animal";
+				elseif ($sort == 3) $name = "Plant";
+				elseif ($sort == 4) $name = "Pattern";
+				elseif ($sort == 5) $name = "Letter";
+				elseif ($sort == 9) $name = "Etc";
+				add_image($guild_info_location.'/Mark/'.$name.'/0000'.$res[3].'/'.$res[4].'.png', $startWidth - 17, $y + 2);
+			}
+		}
+		
+	}
+}
+
+function calculateWidth($name) {
+	global $font;
+	global $font_size;
+	$width = 7;
+	$bbox = imagettfbbox($font_size, 0, $font, $name);
+	$width += abs($bbox[4] - $bbox[0]);
+	return $width;
+}
+
+function imagefillroundedrect($im, $x, $y, $cx, $cy, $rad, $col) {
+	imagefilledrectangle($im,$x,$y+$rad,$cx,$cy-$rad,$col);
+	imagefilledrectangle($im,$x+$rad,$y,$cx-$rad,$cy,$col);
+	$dia = $rad*2;
+	imagefilledellipse($im, $x+$rad, $y+$rad, $rad*2, $dia, $col);
+	imagefilledellipse($im, $x+$rad, $cy-$rad, $rad*2, $dia, $col);
+	imagefilledellipse($im, $cx-$rad, $cy-$rad, $rad*2, $dia, $col);
+	imagefilledellipse($im, $cx-$rad, $y+$rad, $rad*2, $dia, $col);
+}
+
+?>

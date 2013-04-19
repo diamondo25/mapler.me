@@ -1,12 +1,14 @@
 <?php
 require_once __DIR__.'/../database.php';
 require_once __DIR__.'/account.php';
+require_once __DIR__.'/../functions.php'; // For a lot of functions
 
 
 class Statusses {
 	public $data;
 	
 	public function FeedData($query) {
+		$this->data = array();
 		while ($row = $query->fetch_assoc()) {
 			$this->data[] = new Status($row);
 		}
@@ -85,8 +87,10 @@ WHERE
 		
 		$reply_info = $this->reply_to == NULL ? NULL : $this->GetReplyInfo($this->reply_to);
 		
+		$object_id = GetUniqueID();
+		
 ?>
-			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $own_post ? ' postplox' : ''; ?><?php echo $style_addition; ?>">
+			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $own_post ? ' postplox' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat right -30px #FFF;">
 					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/"><?php echo $this->nickname;?></a> said:
 				</div>
@@ -119,6 +123,7 @@ WHERE
 ?>
 				</div>
 			</div>
+			<div class="reply-list span12" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
 <?php    
 	}
 }

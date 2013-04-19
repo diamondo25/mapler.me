@@ -14,6 +14,8 @@ namespace CraftNetTools
 {
     class AppUpdates
     {
+        private static string _tempfile;
+
         public static string Check(Label pLabel)
         {
             // Get Mapler.me assembly
@@ -42,22 +44,17 @@ namespace CraftNetTools
                     if (latestVersion != ApplicationVersion)
                     {
                         // Download version
-                        string tempfile = Path.GetTempPath() + "maplerdownload.exe";
+                        _tempfile = Path.GetTempPath() + "maplerdownload.exe";
 
                         pLabel.Invoke((MethodInvoker)delegate
                         {
                             pLabel.Text = "Downloading update...";
                         });
 
-                        wc.DownloadFile(url, tempfile);
-
-                        pLabel.Invoke((MethodInvoker)delegate
-                        {
-                            pLabel.Text = "Starting update...";
-                        });
-
-                        Process.Start(tempfile, "/silent");
-                        Environment.Exit(100);
+                        wc.DownloadProgressChanged += wc_DownloadProgressChanged;
+                        wc.DownloadFileCompleted += wc_DownloadFileCompleted;
+                        wc.DownloadFileAsync(new Uri(url), _tempfile);
+                        return "Downloading...";
                     }
                     else
                     {
@@ -70,6 +67,25 @@ namespace CraftNetTools
             }
 
             return "Boot";
+        }
+
+        static void wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            MaplerUpdater.frmMain.Instance.label1.Invoke((MethodInvoker)delegate
+            {
+                MaplerUpdater.frmMain.Instance.label1.Text = "Starting update...";
+            });
+
+            Process.Start(_tempfile, "/silent");
+            Environment.Exit(100);
+        }
+
+        static void wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            MaplerUpdater.frmMain.Instance.label1.Invoke((MethodInvoker)delegate
+            {
+                MaplerUpdater.frmMain.Instance.label1.Text = "Download at " + e.ProgressPercentage + "%";
+            });
         }
     }
 }

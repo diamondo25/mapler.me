@@ -28,6 +28,8 @@
 	RewriteRule ^team/ team.php
 	RewriteRule ^support/ /actions/support_email.php
 	
+	RewriteRule ^ajax/(.*) /actions/ajax/$1 [L,QSA]
+	
 	# image / ranking rewrites
 	
 	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]

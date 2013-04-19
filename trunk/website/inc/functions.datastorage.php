@@ -73,7 +73,6 @@ function GetItemDefaultStats($id) {
 	return NULL;
 }
 
-
 function GetPotentialInfo($id) {
 	global $__database, $apcinstalled;
 	
@@ -97,6 +96,32 @@ function GetPotentialInfo($id) {
 
 	return $data;
 }
+
+function GetNebuliteInfo($itemid) {
+	global $__database, $apcinstalled;
+	
+	$key_name = "data_nebulite_cache".$itemid;
+	
+	if ($apcinstalled && apc_exists($key_name)) {
+		return apc_fetch($key_name);
+	}
+	
+	$itemid += 3060000;
+
+	$data = array();
+
+	$q = $__database->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".$itemid);
+	$row = $q->fetch_row();
+	$data['description'] = $row[0];
+	$data['info'] = Explode2(';', '=', $row[1]);
+	
+	if ($apcinstalled) {
+		apc_add($key_name, $data);
+	}
+
+	return $data;
+}
+
 
 // Only for X Y and some special stuff!!!
 function GetItemWZInfo($itemid) {
@@ -146,6 +171,10 @@ SELECT
 	i.potential3,
 	i.potential4,
 	i.potential5,
+	i.potential6,
+	i.nebulite1,
+	i.nebulite2,
+	i.nebulite3,
 	ii.reqlevel
 FROM
 	`items` i
@@ -163,11 +192,17 @@ WHERE
 		$level = round($row['reqlevel'] / 10);
 		if ($level == 0) $level = 1;
 		$temp[$row['itemid']] = array();
-		for ($i = 1; $i <= 5; $i++) {
+		for ($i = 1; $i <= 6; $i++) {
 			if ($row['potential'.$i] == 0) continue;
 			$potentialinfo = GetPotentialInfo($row['potential'.$i]);
 
-			$temp[$row['itemid']] = array_merge($temp[$row['itemid']], $potentialinfo['levels'][$level]);
+			$temp[$row['itemid']][] = $potentialinfo['levels'][$level];
+		}
+		for ($i = 1; $i <= 3; $i++) {
+			if ($row['nebulite'.$i] == -1) continue;
+			$nebinfo = GetNebuliteInfo($row['nebulite'.$i]);
+
+			$temp[$row['itemid']][] = $nebinfo['info'];
 		}
 	}
 	$q->free();

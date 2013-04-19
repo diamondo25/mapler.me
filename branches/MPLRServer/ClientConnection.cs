@@ -18,7 +18,8 @@ namespace MPLRServer
 
         public int LastReportID { get; set; }
 
-        public string LastLoggedName = "Unknown";
+        public string LogFilename = "Unknown";
+        public string LastLoggedCharacterName = "Unknown";
         public string LastLoggedDate = null;
 
         public CharacterData CharData { get; set; }
@@ -27,6 +28,8 @@ namespace MPLRServer
 
         private MSBExporter _exporter;
         private bool _isFake = false;
+
+        public DateTime ConnectedTimeToServer = DateTime.MinValue;
 
         public ClientConnection(MSBLoader pLoader)
         {
@@ -105,7 +108,7 @@ namespace MPLRServer
             Logger_WriteLine("Trying to save...");
             if (_exporter != null)
             {
-                string filename = "Savefile_" + LastLoggedName + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
+                string filename = "Savefile_" + LogFilename + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
 
                 Logger_WriteLine("Saving under {0}", filename);
                 _exporter.Save(filename, MapleVersion, base.HostEndPoint, base.ClientEndPoint);
@@ -122,10 +125,13 @@ namespace MPLRServer
 
         public override void OnDisconnect()
         {
-            Save(false);
-            Logger_WriteLine("Client Disconnected.");
-            Clear();
-            Program.Clients.Remove(this);
+            MasterThread.Instance.AddCallback((a) =>
+            {
+                Save(false);
+                Logger_WriteLine("Client Disconnected.");
+                Clear();
+                Program.Clients.Remove(this);
+            });
         }
 
         public void SendTimeUpdate()
@@ -133,7 +139,7 @@ namespace MPLRServer
             if (_isFake) return;
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFD))
             {
-                packet.WriteString(LastLoggedName);
+                packet.WriteString(LastLoggedCharacterName);
                 SendPacket(packet);
             }
         }
@@ -216,7 +222,7 @@ namespace MPLRServer
         {
             string msg = string.Format(pFormat, pParams);
 
-            Logger.WriteLine("[{0}] {1}", LastLoggedName, msg);
+            Logger.WriteLine("[{0}] {1}", LastLoggedCharacterName, msg);
         }
 
 
@@ -224,7 +230,7 @@ namespace MPLRServer
         {
             string msg = string.Format(pFormat, pParams);
 
-            Logger.ErrorLog("[{0}] {1}", LastLoggedName, msg);
+            Logger.ErrorLog("[{0}] {1}", LastLoggedCharacterName, msg);
         }
     }
 }
