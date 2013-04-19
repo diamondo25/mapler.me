@@ -41,7 +41,7 @@ $statusses = new Statusses();
 $statusses->FeedData($r);
 $r->free();
 
-if ($r->num_rows !== 0) {
+if ($statusses->Count() !== 0) {
 	foreach ($statusses->data as $status) {
 		$status->PrintAsHTML(' span6');
 	}
