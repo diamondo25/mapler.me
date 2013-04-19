@@ -19,7 +19,7 @@ if ($q->num_rows == 0) {
 ?>
 		<center>
 			<img src="http://mapler.me/inc/img/icon.png"/>
-			<p>404: Status not found.</p>
+			<p class="lead status">404: Status not found.</p>
 		</center>
 <?php
 }
@@ -38,9 +38,6 @@ WHERE
 	reply_to = ".$statusid);
 
 if ($r->num_rows !== 0) {
-?>
-	<p class="status lead span12">Replies:</p>
-<?php
 	$status = new Status($r->fetch_assoc());
 	$status->PrintAsHTML(' span6');
 }

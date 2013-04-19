@@ -39,6 +39,68 @@ while ($row = $x->fetch_assoc()) {
 }
 $x->free();
 
+$y = $__database->query("
+SELECT
+	a.*
+FROM
+(
+	(
+		SELECT
+			friend.account_id AS `account_id`,
+			friend.added_on,
+			friend.accepted_on,
+			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
+			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
+			0 AS `added_by_yourself`
+		FROM
+			friend_list friend
+		WHERE
+			friend.friend_id = ".$__url_useraccount->GetId()."
+	)
+	UNION
+	(
+		SELECT
+			friend.friend_id AS `account_id`,
+			friend.added_on,
+			friend.accepted_on,
+			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
+			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
+			1 AS `added_by_yourself`
+		FROM
+			friend_list friend
+		WHERE
+			friend.account_id = ".$__url_useraccount->GetId()."
+	)
+) a
+
+ORDER BY
+	a.accepted_on DESC
+");
+
+$cachey = array();
+while ($rowy = $y->fetch_assoc()) {
+	$cachey[] = $rowy;
+}
+
+$y->free();
+
+$z = $__database->query("
+SELECT
+	*,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+FROM
+	social_statuses
+WHERE
+	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
+ORDER BY
+	secs_since ASC
+");
+
+$cachez = array();
+while ($rowz = $z->fetch_assoc()) {
+	$cachez[] = $rowz;
+}
+
 $has_characters = count($cache) != 0;
 $main_character_info = $has_characters ? $cache[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
@@ -172,7 +234,9 @@ if ($_loggedin && !$is_self) {
 
 if (count($cache) > 0) {
 ?>
+		<p class="side"><i class="icon-comment faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/friends" style="color:gray;"><?php echo count($cachez); ?> Statuses</a></p>
 		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters" style="color:gray;"><?php echo count($cache); ?> Characters</a></p>
+		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/friends" style="color:gray;"><?php echo count($cachey); ?> Friends</a></p>
 <?php
 }
 ?>
