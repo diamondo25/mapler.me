@@ -6,7 +6,6 @@ $statusid = intval($_GET['id']);
 		<div class="span12">
 
 <?php
-    
 $q = $__database->query("
 SELECT
 	*,
@@ -29,6 +28,22 @@ else {
 	$status = new Status($q->fetch_assoc());
 	$status->PrintAsHTML();
 }
+?>
+<p class="status lead">Replies:</p>
+		</div>
+		<div class="span6">
+<?php
+$r = $__database->query("
+SELECT
+	*,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+FROM
+	social_statuses
+WHERE
+	reply_to = ".$statusid);
+
+	$status = new Status($r->fetch_assoc());
+	$status->PrintAsHTML();
 ?>
 		</div>
 	</div>

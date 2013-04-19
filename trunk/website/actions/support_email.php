@@ -3,7 +3,10 @@
 <?php
 if (!$_loggedin):
 ?>
-<p class="lead alert-error alert">Opps! To send a support ticket you must be logged in!</p>
+<center>
+	<p class="lead status">Opps! To send a support ticket you must be logged in!</p>
+	<p>For all legal or confidential inquiries please email support[at]mapler.me!</p>
+</center>
 <?php
 else:
 

@@ -57,6 +57,21 @@
             
                 <h3>[6] Privacy</h3><p>
                     All information provided by the user is strictly confidential. Mapler.me reserves the right to distribute aggregated demographic information provided by the user, but Mapler.me will never release any personal information about the user without permission. However, Mapler.me reserves the right to release <u>player information</u> if requested by Nexon America as discussed above in Section [4].</p>
+                    <p>By connecting your Nexon America account and <i>successfully</i> adding a character, the following information is collected and stored safely:</p>
+                    <ul>
+                    <li>General and statistical information about your character including it's world, statistics, graphical configuration (hair, eyes, and markings), and gender.</li>
+                    <li>All of the character's items and currently worn equipment, which is displayed on the character's page for the owner to view publicly.</li>
+                    <li>A complete list of all quests completed and in-progress.</li>
+                    <li>All skills the character has learned including mounts and link skills.</li>
+                    <li>Guild information including it's name, emblem, ranks, and capacity. This information is used to create publicly viewable guild pages.</li>
+                    </ul>
+                    <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regan to entering a new map. Some information collected is currently stored internally for future additions. The client also tracks the following events:</p>
+                    <ul>
+                    <li>Leveling up</li>
+                    <li>Job Advancements</li>
+                    <li>Being famed (does not record who).</li>
+                    </ul>
+                    
 
                 <h3>[7] Warranty Disclaimers</h3> <p>
                     You acknowledge that Mapler.me has no control over, and no duty to take any action regarding: which users gain access to the Site or use the Services; what effects the content may have on you; how you may interpret or use the content; or what actions you may take as a result of having been exposed to the content. You release Mapler.me from all liability for you having acquired or not acquired content through the Site or the Services. The Site or Services may contain, or direct you to sites containing, information that some people may find offensive or inappropriate. Mapler.me makes no representations concerning any content contained in or accessed through the Site or Services, and Mapler.me will not be responsible or liable for the accuracy, copyright compliance, legality or decency of material contained in or accessed through the Site or the Services. THE SERVICE, CONTENT, AND SITE ARE PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. SOME STATES DO NOT ALLOW LIMITATIONS ON HOW LONG AN IMPLIED WARRANTY LASTS, SO THE ABOVE LIMITATIONS MAY NOT APPLY TO YOU.
@@ -75,7 +90,7 @@
                 </p> <p>
                     Mapler.me directs full legal responsibility of files to their respective users.
                 </p><h3>Last Revision</h3> <p>
-                    This Terms of Service was last updated on April 10, 2013.
+                    This Terms of Service was last updated on April 18, 2013.
                 </p> </div> </div> </div> </div>
       
 <?php require_once __DIR__.'/inc/footer.php'; ?>
