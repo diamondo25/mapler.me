@@ -24,17 +24,20 @@ else:
 	<li>- When your first character is added, it is not automatically considered a 'main character' requiring manual selection.</li>
 	<li>- There is not an option to request a password reset without being logged in.</li>
 	<li>- Status updates will sometimes not display correctly on mobile devices and appear stretched.</li>
+	<li>- The login button on mobile devices is hard to click for front page (splash page).</li>
 	</ul>
 	<ul class="status">
 	<h2>Statuses:</h2>
 	<li>- When replying to another mapler, the status is shown on all of your friend's streams (lack of privacy and spammy).</li>
 	<li>- There is not a cutoff for the amount of statuses shown on your Stream, this will be resolved soon.</li>
 	<li>- Status updates will sometimes not display correctly on mobile devices and appear stretched.</li>
+	<li>- You are unable to include any hearts (<3) in statuses. Doing so will remove all content after it.</li>
 	</ul>
 	<ul class="status">
 	<h2>Equipment:</h2>
 	<li>- Items that are anvil'd display their original item look.</li>
 	<li>- Some Unique and Legendary potentials do not display correctly.</li>
+	<li>- Potential tiers are not accurate.</li>
 	<li>- Some pet equips are incorrectly positioned or not considered a pet equip.</li>
 	</ul>
 	</div>

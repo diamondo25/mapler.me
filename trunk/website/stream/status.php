@@ -36,10 +36,15 @@ FROM
 	social_statuses
 WHERE
 	reply_to = ".$statusid);
+	
+$statusses = new Statusses();
+$statusses->FeedData($r);
+$r->free();
 
 if ($r->num_rows !== 0) {
-	$status = new Status($r->fetch_assoc());
-	$status->PrintAsHTML(' span6');
+	foreach ($statusses->data as $status) {
+		$status->PrintAsHTML(' span6');
+	}
 }
 ?>
 	</div>
