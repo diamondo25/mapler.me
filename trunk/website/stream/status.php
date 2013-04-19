@@ -3,7 +3,6 @@ require_once __DIR__.'/../inc/header.php';
 $statusid = intval($_GET['id']);
 ?>
 	<div class="row">
-		<div class="span12">
 
 <?php
 $q = $__database->query("
@@ -26,13 +25,9 @@ if ($q->num_rows == 0) {
 }
 else {
 	$status = new Status($q->fetch_assoc());
-	$status->PrintAsHTML();
+	$status->PrintAsHTML(' span12');
 }
-?>
-<p class="status lead">Replies:</p>
-		</div>
-		<div class="span6">
-<?php
+
 $r = $__database->query("
 SELECT
 	*,
@@ -42,10 +37,14 @@ FROM
 WHERE
 	reply_to = ".$statusid);
 
-	$status = new Status($r->fetch_assoc());
-	$status->PrintAsHTML();
+if ($r->num_rows !== 0) {
 ?>
-		</div>
+	<p class="status lead">Replies:</p>
+<?php
+	$status = new Status($r->fetch_assoc());
+	$status->PrintAsHTML(' span6');
+}
+?>
 	</div>
 <?php
 require_once __DIR__.'/../inc/footer.php';
