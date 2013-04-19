@@ -39,7 +39,7 @@ WHERE
 
 if ($r->num_rows !== 0) {
 ?>
-	<p class="status lead">Replies:</p>
+	<p class="status lead span12">Replies:</p>
 <?php
 	$status = new Status($r->fetch_assoc());
 	$status->PrintAsHTML(' span6');
