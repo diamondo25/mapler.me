@@ -10,6 +10,8 @@ $font_size = "9.25";
 
 if (!isset($_GET['debug']))
 	header('Content-Type: image/png');
+else
+	error_reporting(E_ALL);
 
 $charname = isset($_GET['name']) ? $_GET['name'] : 'ixdiamondoz';
 
@@ -165,7 +167,7 @@ $row['int'] = round($row['int']);
 $row['luk'] = round($row['luk']);
 
 $row['mhp'] = round($row['mhp']);
-$row['mhp'] = round($row['mhp']);
+$row['mmp'] = round($row['mmp']);
 
 $row['str'] = $row['str'].' ('.$before['str'].' + '.($row['str'] - $before['str']).')';
 $row['dex'] = $row['dex'].' ('.$before['dex'].' + '.($row['dex'] - $before['dex']).')';
@@ -176,6 +178,7 @@ $row['luk'] = $row['luk'].' ('.$before['luk'].' + '.($row['luk'] - $before['luk'
 //$row['mmp'] = $row['mmp'].' ('.$before['mmp'].' + '.($row['mmp'] - $before['mmp']).')';
 
 $nextlevelexp = GetNextLevelEXP($row['level']);
+$nextlevelperc = $nextlevelexp == 0 ? 0 : round($row['exp'] / $nextlevelexp * 100);
 
 
 $image = imagecreatetruecolor(192, 345);
@@ -193,7 +196,7 @@ $i = 0;
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['name']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, GetJobname($row['job']));
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['level']);
-ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['exp'].' ('.round($row['exp'] / $nextlevelexp * 100).'%)');
+ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['exp'].' ('.$nextlevelperc.'%)');
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourlevel']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['honourexp']);
 ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate($image, 0, 0, 0), $font, $row['guildname']);
@@ -210,7 +213,10 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 
 
 SaveCacheImage($internal_id, 'stats', $image, $id);
-imagepng($image);
+if (isset($_GET['debug']))
+	var_dump($GLOBALS);
+else
+	imagepng($image);
 imagedestroy($image);
 
 $q->free();
