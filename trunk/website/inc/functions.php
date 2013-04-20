@@ -4,6 +4,7 @@ session_start();
 //Default set to Pacific Time (MapleStory Time)
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
+error_reporting(0);
 
 require_once __DIR__.'/database.php';
 require_once __DIR__.'/classes/account.php';

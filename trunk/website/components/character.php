@@ -87,13 +87,13 @@ SELECT
 
 <div class="row">
 	<div class="span3">
-		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
+		<img src="//mapler.me/ignavatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		<hr />
-		Internal ID: <?php echo $internal_id; ?><br />
+		<p class="side"> Internal ID: <?php echo $internal_id; ?></p>
 <?php endif; ?>
 		<hr />
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
