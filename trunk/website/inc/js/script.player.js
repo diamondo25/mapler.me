@@ -162,6 +162,7 @@ function SetItemInfo(event, obj, values) {
 	GetObj('nebulite_info').innerHTML = ''; // Clear nebulite info
 
 	var potentiallevel = Math.round(reqs.level / 10);
+	if (potentiallevel == 0) potentiallevel = 1;
 	potentiallevel += stars;
 	
 	var haspotential = false;
