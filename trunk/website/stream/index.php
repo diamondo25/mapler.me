@@ -45,13 +45,6 @@ die;
 		}
 ?>
 
-<div class="load status-loading" style="width:200px;margin:0 auto;">
-	<center>
-		<img src="//mapler.me/<?php echo $main_char; ?>"/><br />
-		-loading-
-	</center>
-</div>
-
 <div class="stream_display row">
 <?php
 	foreach ($statusses->data as $status) {

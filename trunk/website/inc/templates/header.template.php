@@ -52,15 +52,6 @@ if ($_loggedin) {
 	
 		<script type="text/javascript">
 		$('.in').affix();
-		$(function() {
-			$('.stream_display').css("display","none");
-			$('.load').css("display","block");
-			});
-		
-		$(window).load(function(){
-			$('.load').css("display","none");
-			$('.stream_display').css("display","block");
-			})
   		</script>
   		
   		<style>
@@ -102,7 +93,7 @@ if ($_loggedin) {
 				<div class="nav-collapse">
 					<ul class="nav">			
 						 <li class="dropdown">
-				<a class="brand" data-toggle="dropdown" class="dropdown-toggle hide-menu" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:10px;right:0px;width:60px;"/></a>
+				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:10px;right:0px;width:60px;"/></a>
 
 	<ul class="dropdown-menu" style="margin-top:20px;">
 <?php

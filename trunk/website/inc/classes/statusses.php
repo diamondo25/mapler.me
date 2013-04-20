@@ -123,7 +123,7 @@ WHERE
 ?>
 				</div>
 			</div>
-			<div class="reply-list span12" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
+			<div class="reply-list span6" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
 <?php    
 	}
 }
