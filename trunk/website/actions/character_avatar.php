@@ -199,10 +199,20 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 
 $character_equipment->free();
 
+if (isset($_GET['bg'])) {
+	$bgid = intval($_GET['bg']);
+	$bgname = '';
+	switch ($bgid) {
+		case 0: $bgname = 'fm'; break;
+		case 1: $bgname = 'kerning'; break;
+		case 2: $bgname = 'kerning_hideout'; break;
+		case 3: $bgname = 'monsterpark'; break;
+		case 4: $bgname = 'ardentmill'; break;
+		default: $bgname = 'fm'; break;
+	}
+	add_image(__DIR__.'/../inc/img/avatar_backgrounds/'.$bgname.'.png', 0, 0);
+}
 
-// Render name
-if (isset($_GET['show_name']))
-	RenderName($character_data['name'], $image_width/2, $mainy + 71);
 
 // This section determines which stand to use based on the weapon you have
 // Credit goes to zOmgnO1 for improved code
@@ -759,6 +769,11 @@ if($weaponz == 'weaponOverGlove' || $weaponz == 'weaponOverHand') {
 
 
 
+// Render name
+if (isset($_GET['show_name']))
+	RenderName($character_data['name'], $image_width/2, $mainy + 71);
+
+
 if (!isset($_GET['NO_CACHING']))
 	SaveCacheImage($internal_id, $image_mode, $im, $id);
 
@@ -795,10 +810,13 @@ function RenderName($name, $x, $y) {
 	global $__database;
 	global $guild_info_location;
 
+	$background = imagecolorallocatealpha($im, 0, 0, 0, 33);
+	$fontcolor = imagecolorallocate($im, 255, 255, 255);
+	
 	$startWidth = $x - calculateWidth($name)/2;
 	$endWidth = $x + calculateWidth($name)/2;
-	imagefillroundedrect($im, $startWidth, $y - 17, $endWidth - 1, $y - 2, 1, imagecolorallocate($im, 85, 85, 85));
-	ImageTTFText($im, $font_size, 0, $startWidth + 3, $y - 5, imagecolorallocate($im, 255, 255, 255), $font, $name);
+	DrawNameBox($im, $startWidth, $y - 17, $endWidth - 1, $y - 2, $background);
+	ImageTTFText($im, $font_size, 0, $startWidth + 3, $y - 5, $fontcolor, $font, $name);
 	$q = $__database->query("SELECT g.name, g.emblem_bg, g.emblem_bg_color, g.emblem_fg, g.emblem_fg_color FROM guild_members c INNER JOIN guilds g ON g.id = c.guild_id WHERE c.character_id = ".$character_id);
 	
 	if ($q->num_rows == 1) {
@@ -808,9 +826,9 @@ function RenderName($name, $x, $y) {
 		$startWidth = $x - calculateWidth($name) / 2;
 		$endWidth = $x + calculateWidth($name) / 2;
 		
-		imagefillroundedrect($im, $startWidth, $y, $endWidth - 1, $y + 15, 1, imagecolorallocate($im, 85, 85, 85));
-		ImageTTFText($im, $font_size, 0, $startWidth + 2, $y + 12, imagecolorallocate($im, 255, 255, 255), $font, $name);
-		ImageTTFText($im, $font_size, 0, $startWidth + 3, $y + 12, imagecolorallocate($im, 255, 255, 255), $font, $name);
+		DrawNameBox($im, $startWidth, $y, $endWidth - 1, $y + 15, $background);
+		ImageTTFText($im, $font_size, 0, $startWidth + 2, $y + 12, $fontcolor, $font, $name);
+		ImageTTFText($im, $font_size, 0, $startWidth + 3, $y + 12, $fontcolor, $font, $name); // Boldness
 		
 		if ($hasemblem) {
 			if ($res[1] != 0 || $res[2] != 0) {
@@ -839,15 +857,12 @@ function calculateWidth($name) {
 	$width += abs($bbox[4] - $bbox[0]);
 	return $width;
 }
-
-function imagefillroundedrect($im, $x, $y, $cx, $cy, $rad, $col) {
-	imagefilledrectangle($im,$x,$y+$rad,$cx,$cy-$rad,$col);
-	imagefilledrectangle($im,$x+$rad,$y,$cx-$rad,$cy,$col);
-	$dia = $rad*2;
-	imagefilledellipse($im, $x+$rad, $y+$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $x+$rad, $cy-$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $cx-$rad, $cy-$rad, $rad*2, $dia, $col);
-	imagefilledellipse($im, $cx-$rad, $y+$rad, $rad*2, $dia, $col);
+function DrawNameBox($im, $x, $y, $cx, $cy, $col) {
+	// Draw main text box
+	imagefilledrectangle($im, $x + 1, $y, $cx - 1, $cy, $col);
+	// Draw remaining right and left thingies
+	imageline($im, $x, $y + 1, $x, $cy - 1, $col);
+	imageline($im, $cx, $y + 1, $cx, $cy - 1, $col);
 }
 
 ?>
