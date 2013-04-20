@@ -1,7 +1,6 @@
 <?php
-session_start();
-
-//Default set to Pacific Time (MapleStory Time)
+// Default set to Pacific Time (MapleStory Time)
+// Note that our database still uses the GMT + 1 time (Holland)
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 error_reporting(0);
@@ -392,7 +391,7 @@ function GetCharacterStatus($id, $account = NULL) {
 }
 
 function GetFriendStatus($you, $it) {
-	global $__database, $_loginaccount;
+	global $__database;
 
 	$q = $__database->query("SELECT FriendStatus(".intval($you).", ".intval($it).")");
 	$tmp = $q->fetch_row();
@@ -451,15 +450,6 @@ function MakeStatAddition($name, $value, $statarray) {
 	else {
 		return $value;
 	}
-}
-
-function IsLoggedin() {
-	return isset($_SESSION['username']);
-}
-
-function IsOwnAccount() {
-	global $subdomain, $_loginaccount;
-	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
 
 function GetItemType($id) {
@@ -608,13 +598,7 @@ function ValueOrDefault($what, $default) {
 	return isset($what) ? $what : $default;
 }
 
-// Initialize Login Data
-$_loggedin = false;
-if (isset($_SESSION['username'])) {
-	$username = $_SESSION['username'];
-	$_loggedin = (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE);
-	$_loginaccount = Account::Load($username);
-}
+require_once __DIR__.'/functions.loginaccount.php';
 
 // Set to null by default
 $__url_useraccount = null;

@@ -1,5 +1,4 @@
 <?php
-
 header('Content-type: application/json');
 
 function JSONDie($msg) {

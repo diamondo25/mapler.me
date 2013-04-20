@@ -45,13 +45,16 @@ die;
 		}
 ?>
 
-<div class="stream_display row">
+<div class="stream_display row" id="statuslist">
 <?php
-	foreach ($statusses->data as $status) {
-		$status->PrintAsHTML(' span12');
-	}
+	//foreach ($statusses->data as $status) {
+	//	$status->PrintAsHTML(' span12');
+	//}
 ?>
 </div>
+<p>
+	<center><button onclick="TryRequestMore(false, false);" class="btn btn-large" type="button">Load more</button></center>
+</p>
 <?php
 }
 

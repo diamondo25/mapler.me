@@ -27,6 +27,7 @@ $(document).ready(function() {
 		}
 	});
 	
+	// Bind click-on-status stuff
 	$('body').on('click', '.status[status-id]', function() {
 		var statusid = $(this).attr('status-id');
 		var uniqueid = $(this).attr('unique-id');
@@ -41,9 +42,39 @@ $(document).ready(function() {
 					$('.reply-list[status-id=' + statusid + '][unique-id=' + uniqueid + ']').html(data.result);
 				}
 			}
-		
 		});
-	
 	});
+	
+	TryRequestMore(true, true);
 });
 
+
+var latestStatusUp = -1;
+var latestStatusDown = -1;
+function TryRequestMore(up, init) {
+	$.ajax({
+		type: 'GET',
+		url: '/ajax/status.php?type=list&lastpost=' + (up ? latestStatusUp : latestStatusDown) + '&mode=' + (up ? 'up' : 'back'),
+		success: function (data) {
+			if (data.error != undefined) {
+				alert(data.error);
+			}
+			else if (data.amount > 0) {
+				var oridata = $('#statuslist').html();
+				if (up)
+					$('#statuslist').html(data.result + oridata);
+				else
+					$('#statuslist').html(oridata + data.result);
+
+				if (init || !up)
+					latestStatusDown = data.firstid;
+				if (init || up)
+					latestStatusUp = data.lastid;
+					
+				if (init) {
+					setInterval("TryRequestMore(true, false)", 10000);
+				}
+			}
+		}
+	});
+}

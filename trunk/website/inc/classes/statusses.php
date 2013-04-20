@@ -23,17 +23,17 @@ class Status {
 	public $id, $account, $nickname, $character, $content, $comments_disabled, $timestamp, $override, $mention_list, $reply_to;
 	
 	public function __construct($row) {
-		$this->id = $row['id'];
-		$this->account_id = $row['account_id'];
+		$this->id = (int)$row['id'];
+		$this->account_id = (int)$row['account_id'];
 		$this->account = Account::Load($this->account_id);
 		$this->nickname = $row['nickname'];
 		$this->character = $row['character'];
 		$this->content = $row['content'];
-		$this->comments_disabled = $row['comments_disabled'];
+		$this->comments_disabled = (int)$row['comments_disabled'];
 		$this->timestamp = $row['timestamp'];
-		$this->override = $row['override'];
-		$this->seconds_since = $row['secs_since'];
-		$this->reply_to = $row['reply_to'];
+		$this->override = (int)$row['override'];
+		$this->seconds_since = (int)$row['secs_since'];
+		$this->reply_to = (int)$row['reply_to'];
 		
 		$this->ParseContent();
 	}
