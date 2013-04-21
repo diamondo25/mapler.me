@@ -276,7 +276,6 @@ endif;
 <?php
 else:
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Login <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
