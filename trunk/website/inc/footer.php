@@ -27,7 +27,7 @@
 
                <div class="span4" style="border-left:1px solid #CFC7BE">
                		<div style="float:left;width: 200px">
-               		<iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fmaplerme&amp;width=250&amp;height=62&amp;show_faces=false&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=256278267725729" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:62px;" allowtransparency="true"></iframe>
+						<iframe src="//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fmaplerme&amp;width=250&amp;height=62&amp;show_faces=false&amp;colorscheme=light&amp;stream=false&amp;border_color&amp;header=false&amp;appId=256278267725729" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:62px;" allowtransparency="true"></iframe>
                		</div>
                		
                		<div id="twitter">

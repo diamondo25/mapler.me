@@ -63,7 +63,7 @@ while ($row = $q->fetch_assoc()) {
 	if ($main_char == null)
 		$main_char = 'inc/img/no-character.gif';
 	else
-		$main_char = 'avatar/'.$main_char;
+		$main_char = 'ignavatar/'.$main_char;
 		
 	$did_add = $row['accepted_on'] != NULL;
 ?>

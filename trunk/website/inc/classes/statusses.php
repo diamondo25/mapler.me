@@ -60,6 +60,21 @@ WHERE
 		return $row;
 	}
 	
+	public function GetReplyToCount() {
+		global $__database;
+		
+		$q = $__database->query("
+SELECT
+	COUNT(*)
+FROM
+	social_statuses
+WHERE
+	reply_to = ".$this->id);
+		$row = $q->fetch_row();
+		$q->free();
+		return $row[0];
+	}
+	
 	public function ParseContent() {
 		global $domain;
 		
@@ -103,7 +118,7 @@ WHERE
 					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
 <?php endif; ?>
 <?php if ($this->account_id !== 2): ?>
-					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i></a>
+					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<?php echo $this->GetReplyToCount(); ?>)</a>
 <?php endif; ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php
@@ -113,7 +128,7 @@ WHERE
 						- <a href="#" onclick="RemoveStatus(<?php echo $this->id; ?>);">delete?</a>
 <?php
 		}
-		else {
+		elseif (false) {
 			// Report button
 ?>
 						- <a href="#"></a>

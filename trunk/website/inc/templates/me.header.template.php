@@ -104,7 +104,7 @@ while ($rowz = $z->fetch_assoc()) {
 $has_characters = count($cache) != 0;
 $main_character_info = $has_characters ? $cache[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
-$main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
+$main_character_image = $has_characters ? '//'.$domain.'/ignavatar/'.$main_character_name : '';
 
 $rank = $__url_useraccount->GetAccountRank();
 
