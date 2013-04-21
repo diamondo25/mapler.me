@@ -1,20 +1,22 @@
 <?php
 require_once __DIR__.'/functions.php';
 
-if (!IsLoggedin() || !isset($_GET['page'], $_GET['type'])) {
+if (!IsLoggedin() || !isset($_GET['page'])) {
 	header('Location: http://'.$domain.'/');
+	die();
 }
 
-$page = '../settings/'.($_GET['type'] == '' ? '' : stripslashes($_GET['type']).'/').stripslashes($_GET['page']).'.php';
+$page = stripslashes($_GET['page']);
+$page = str_replace('/', '', $page);
+
+$page = '../settings/'.$page.'.php';
 if (!file_exists($page)) {
 	header('Location: http://'.$domain.'/');
 	die();
 }
 
 require_once __DIR__.'/templates/header.template.php';
-if ($_GET['type'] == '') {
-	require_once __DIR__.'/templates/additional.menu.php';
-}
+require_once __DIR__.'/templates/additional.menu.php';
 ?>
 		<div class="row">
 			<div class="span12">

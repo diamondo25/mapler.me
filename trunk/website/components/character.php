@@ -214,6 +214,14 @@ $PotentialList = array();
 $NebuliteList = array();
 
 function GetItemQuality($item, $stats) {
+	if ($stats['cash'] == 1) return 0; // Cash items do not have stats
+	if ($item->itemid / 100000 == 19) return 0; // Taming mobs etc neither
+
+	// Spiegelmanns badges have static qualities:
+	if ($item->itemid >= 1182000 && $item->itemid <= 1182005)
+		return $item->itemid - 1182000;
+
+
 	$longcalc =
 		(
 			$item->str +

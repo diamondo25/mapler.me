@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+	Options +FollowSymLinks
+	Options +Indexes
+	RewriteEngine On
+	RewriteBase /
+	
+	RewriteRule ^(.*)$ /inc/handle.manage.php?page=$1 [L,QSA]
+</IfModule>

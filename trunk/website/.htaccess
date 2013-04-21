@@ -2,13 +2,7 @@
 	Options +FollowSymLinks
 	Options +Indexes
 	RewriteEngine On
-	
-	
-	RewriteRule ^/settings/([^.]*)/ /inc/handle.settings.php?page=$1&type=settings [L,QSA]
-	RewriteRule ^settings/([^.]*)/ /inc/handle.settings.php?page=$1&type= [L,QSA]
-	RewriteRule ^/manage/([^.]*)/ /inc/handle.manage.php?page=$1&type=settings [L,QSA]
-	RewriteRule ^manage/([^.]*)/ /inc/handle.manage.php?page=$1&type= [L,QSA]
-	
+
 	RewriteRule ^search/([^.]*)/([^/]*)$ /search/index.php?type=$1&type=$2 [L,QSA]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d

@@ -43,7 +43,7 @@ namespace MPLRServer
 
         public void PushSkillUP(int pCharInternalID, int pSkill, int pLevel)
         {
-            Push(Types.JobUP, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
+            Push(Types.SkillUP, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
         }
 
         public void PushGotFame(int pCharInternalID, bool pAdd, int pNewFame)

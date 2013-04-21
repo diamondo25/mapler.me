@@ -11,7 +11,7 @@ function BuildURL($name, $url) {
 ?>
 
 <?php
-	if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
+if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
 ?>
 				<?php BuildURL('Profile', '/settings/profile/'); ?>
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>

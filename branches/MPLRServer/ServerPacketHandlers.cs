@@ -143,16 +143,17 @@ namespace MPLRServer
 
                 pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
 
-                // Adding user!
-
-                string insertval = MySQL_Connection.QueryQuery(pConnection.AccountID, pConnection.UserID, pUsername, pAdmin, new MySQL_Connection.NowType(), pQBan, pQBanReason, pCreateTime);
-
-                using (var result = MySQL_Connection.Instance.RunQuery("INSERT INTO users VALUES " + insertval) as MySql.Data.MySqlClient.MySqlDataReader)
-                {
-                    pConnection.Logger_WriteLine("User added to account ID {0}", pConnection.AccountID);
-                }
-
                 Internal_Storage.Store.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
+            }
+
+
+            using (InsertQueryBuilder insertq = new InsertQueryBuilder("users"))
+            {
+                insertq.AddColumn("account_id");
+                insertq.AddColumns(true, "ID", "username", "admin", "last_check", "quiet_ban_expire", "quiet_ban_reason", "creation_date");
+
+                insertq.AddRow(pConnection.AccountID, pConnection.UserID, pUsername, pAdmin, new MySQL_Connection.NowType(), pQBan, pQBanReason, pCreateTime);
+                insertq.RunQuery();
             }
 
             pConnection.SendInfoText("Identified account {0} (made at {1})", pUsername, pCreateTime);
@@ -172,24 +173,9 @@ namespace MPLRServer
             string name = pPacket.ReadString();
             string successor = pPacket.ReadString();
             string guildname = pPacket.ReadString();
-            pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)");
+            pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}, guild {4}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)", guildname);
 
-            using (InsertQueryBuilder characterViewsTable = new InsertQueryBuilder("character_views"))
-            {
-                characterViewsTable.OnDuplicateUpdate = true;
-                characterViewsTable.AddColumn("character_id", false);
-                characterViewsTable.AddColumn("world_id", true);
-                characterViewsTable.AddColumn("name", true);
-                characterViewsTable.AddColumn("level", true);
-                characterViewsTable.AddColumn("guild", true);
-                characterViewsTable.AddColumn("mapid", true);
-                characterViewsTable.AddColumn("last_seen_when", true);
-                characterViewsTable.AddColumn("last_seen_by", true);
-
-                characterViewsTable.AddRow(id, pConnection.WorldID, name, level, guildname == "" ? null : guildname, pConnection.CharData.Stats.MapID, new MySQL_Connection.NowType(), pConnection.CharacterInternalID);
-
-                MySQL_Connection.Instance.RunQuery(characterViewsTable.ToString());
-            }
+            Queries.SeePlayer(id, name, pConnection.WorldID, level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
         }
 
 
@@ -237,20 +223,22 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 4)) // Eyes
             {
                 didsomething = true;
-               pConnection.CharData.Stats.Hair =  pPacket.ReadInt();
+                pConnection.CharData.Stats.Hair =  pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 8))
             {
                 didsomething = true;
-               pConnection.CharData.Stats.Pets[0] = pPacket.ReadLong();
+                pConnection.CharData.Stats.Pets[0] = pPacket.ReadLong();
             }
             if (CheckFlag(updateFlag, 0x80000))
             {
-                pPacket.ReadLong();
+                var value = pPacket.ReadLong();
+                pConnection.Logger_WriteLine("0x80000 | {0}", value);
             }
             if (CheckFlag(updateFlag, 0x100000))
             {
-                pPacket.ReadLong();
+                var value = pPacket.ReadLong();
+                pConnection.Logger_WriteLine("0x100000 | {0}", value);
             }
             if (CheckFlag(updateFlag, 0x10))
             {
@@ -368,42 +356,50 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x200000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x200000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x400000))
             {
-                pPacket.ReadByte();
+                var value = pPacket.ReadByte();
+                pConnection.Logger_WriteLine("0x400000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x800000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x800000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x1000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x1000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x2000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x2000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x4000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x4000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x8000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x8000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x10000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x10000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x20000000))
@@ -432,13 +428,15 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x100000000))
             {
-                pPacket.ReadByte();
-                pPacket.ReadByte();
+                var value1 = pPacket.ReadByte();
+                var value2 = pPacket.ReadByte();
+                pConnection.Logger_WriteLine("0x100000000 | {0} | {1}", value1, value2);
             }
 
             if (CheckFlag(updateFlag, 0x200000000))
             {
-                pPacket.ReadInt();
+                var value = pPacket.ReadInt();
+                pConnection.Logger_WriteLine("0x200000000 | {0}", value);
             }
 
             if (didsomething)
@@ -554,6 +552,38 @@ namespace MPLRServer
                 }
 
                 familiars.RunQuery();
+            }
+        }
+
+        public static void HandleBuddyList(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            byte mode = pPacket.ReadByte();
+            if (mode != 0x07) return;
+
+            MySQL_Connection.Instance.RunQuery(string.Format("DELETE FROM buddies WHERE character_id = {0}", pConnection.CharacterInternalID));
+            using (InsertQueryBuilder buddies = new InsertQueryBuilder("buddies"))
+            {
+                buddies.AddColumn("character_id");
+                buddies.AddColumn("friend_id");
+                buddies.AddColumns(true, "friend_name", "group_name");
+
+                byte amount = pPacket.ReadByte();
+                for (byte i = 0; i < amount; i++)
+                {
+                    int bid = pPacket.ReadInt();
+                    string bname = pPacket.ReadString(13);
+                    pPacket.Skip(1 + 4);
+                    string gname = pPacket.ReadString(13);
+                    pPacket.Skip(4);
+
+                    buddies.AddRow(
+                        pConnection.CharacterInternalID,
+                        bid,
+                        bname,
+                        gname
+                        );
+                }
+                buddies.RunQuery();
             }
         }
 

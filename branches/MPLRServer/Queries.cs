@@ -270,5 +270,25 @@ namespace MPLRServer
             pInsertBuilder.AddRow(pPet.CashID, pPet.Petname, pPet.Closeness, pPet.Fullness, pPet.Level);
 
         }
+
+        public static void SeePlayer(int pCharacterID, string pName, byte pWorld, byte pLevel, string pGuild, int pMapID, int pSeenBy)
+        {
+            using (InsertQueryBuilder characterViewsTable = new InsertQueryBuilder("character_views"))
+            {
+                characterViewsTable.OnDuplicateUpdate = true;
+                characterViewsTable.AddColumn("character_id", false);
+                characterViewsTable.AddColumn("world_id", true);
+                characterViewsTable.AddColumn("name", true);
+                characterViewsTable.AddColumn("level", true);
+                characterViewsTable.AddColumn("guild", true);
+                characterViewsTable.AddColumn("mapid", true);
+                characterViewsTable.AddColumn("last_seen_when", true);
+                characterViewsTable.AddColumn("last_seen_by", true);
+
+                characterViewsTable.AddRow(pCharacterID, pWorld, pName, pLevel, pGuild == "" ? null : pGuild, pMapID, new MySQL_Connection.NowType(), pSeenBy);
+
+                characterViewsTable.RunQuery();
+            }
+        }
     }
 }

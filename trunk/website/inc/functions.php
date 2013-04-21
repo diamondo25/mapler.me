@@ -432,11 +432,11 @@ function GetNotification() {
 }
 
 function GetMapname($id, $full = true) {
-	$map = GetMapleStoryString("map", $id, "name");
+	$map = GetMapleStoryString('map', $id, 'name');
 	if ($full) {
-		$subname = GetMapleStoryString("map", $id, "street");
+		$subname = GetMapleStoryString('map', $id, 'street');
 		if ($subname != NULL) {
-			$map = $subname." - ".$map;
+			$map = $subname.' - '.$map;
 		}
 	}
 	return $map;
@@ -464,17 +464,17 @@ function GetWZItemTypeName($id) {
 	$tmp = GetItemType($id);
 
 	switch ($tmp) {
-		case 100: return "Cap";
-		case 104: return "Coat";
-		case 105: return "Longcoat";
-		case 106: return "Pants";
-		case 107: return "Shoes";
-		case 108: return "Glove";
-		case 109: return "Shield";
-		case 110: return "Cape";
-		case 111: return "Ring";
-		case 117: return "MonsterBook";
-		case 120: return "Totem";
+		case 100: return 'Cap';
+		case 104: return 'Coat';
+		case 105: return 'Longcoat';
+		case 106: return 'Pants';
+		case 107: return 'Shoes';
+		case 108: return 'Glove';
+		case 109: return 'Shield';
+		case 110: return 'Cape';
+		case 111: return 'Ring';
+		case 117: return 'MonsterBook';
+		case 120: return 'Totem';
 
 
 		case 101:
@@ -487,7 +487,7 @@ function GetWZItemTypeName($id) {
 		case 116:
 		case 118:
 		case 119:
-			return "Accessory";
+			return 'Accessory';
 
 
 		case 121:
@@ -520,18 +520,18 @@ function GetWZItemTypeName($id) {
 		case 155: // Fans of the wall, oh wait
 		case 160:
 		case 170:
-			return "Weapon";
+			return 'Weapon';
 
 		case 161:
 		case 162:
 		case 163:
 		case 164:
 		case 165:
-			return "Mechanic";
+			return 'Mechanic';
 
 		case 180:
 		case 181:
-			return "PetEquip";
+			return 'PetEquip';
 
 		case 190:
 		case 191:
@@ -539,20 +539,20 @@ function GetWZItemTypeName($id) {
 		case 193:
 		case 198:
 		case 199:
-			return "TamingMob";
+			return 'TamingMob';
 
 		case 194:
 		case 195:
 		case 196:
 		case 197:
-			return "Dragon";
+			return 'Dragon';
 
 
 		case 166:
 		case 167:
-			return "Android";
+			return 'Android';
 
-		case 996: return "Familiar";
+		case 996: return 'Familiar';
 	}
 }
 
@@ -603,14 +603,14 @@ require_once __DIR__.'/functions.loginaccount.php';
 // Set to null by default
 $__url_useraccount = null;
 
-if ($subdomain != "" && $subdomain != "www" && $subdomain != "direct" && $subdomain != "dev" && $subdomain != "cdn" && $subdomain != "status") {
+if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdomain != 'dev' && $subdomain != 'cdn' && $subdomain != 'status') {
 	// Tries to receive userdata for the subdomain. If it fails, results in a 404.
 
 	$__url_useraccount = Account::Load($subdomain);
 	if ($__url_useraccount == null) {
 		// User Not Found Results In 404
-		header("HTTP/1.1 404 File Not Found", 404);
-		header("Location: http://".$domain."/");
+		header('HTTP/1.1 404 File Not Found', 404);
+		header('Location: http://'.$domain.'/');
 		exit;
 	}
 }
