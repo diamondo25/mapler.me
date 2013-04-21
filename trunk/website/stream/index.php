@@ -10,26 +10,6 @@ else {
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 	$has_characters = !empty($char_config['main_character']);
-	
-	$q = $__database->query("
-SELECT
-	social_statuses.*,
-	accounts.username,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-LEFT JOIN
-	accounts
-	ON
-		social_statuses.account_id = accounts.id
-WHERE
-	override = 1 OR account_id = ".$_loginaccount->GetID()." OR FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS'
-ORDER BY
-	secs_since ASC");
-
-	$statusses = new Statusses();
-	$statusses->FeedData($q);
-	$q->free();
 
 	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
 ?>
@@ -45,16 +25,13 @@ die;
 		}
 ?>
 
-<div class="stream_display row" id="statuslist">
-<?php
-	//foreach ($statusses->data as $status) {
-	//	$status->PrintAsHTML(' span12');
-	//}
-?>
-</div>
+<div class="stream_display row" id="statuslist"></div>
 <p>
 	<center><button onclick="TryRequestMore(false, false);" class="btn btn-large" type="button">Load more</button></center>
 </p>
+<script>
+$(document).ready(function() { TryRequestMore(true, true); });
+</script>
 <?php
 }
 

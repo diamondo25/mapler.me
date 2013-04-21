@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('.mention[status-id]').click(function() {
+	$('body').on('click', '.mention[status-id]', function() {
 		var poster = $(this).attr('poster');
 		var mentionlist = $(this).attr('mentions').split(';');
 		var input = $('#post-status');
@@ -45,7 +45,6 @@ $(document).ready(function() {
 		});
 	});
 	
-	TryRequestMore(true, true);
 });
 
 

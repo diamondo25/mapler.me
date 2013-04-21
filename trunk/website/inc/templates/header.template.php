@@ -10,18 +10,17 @@ if ($_loggedin) {
 	$notifications = GetNotification();
 	if ($notifications > 0)
 		$title = '('.$notifications.') '.$title;
-		
+
 	$rank = $_loginaccount->GetAccountRank();
-	
-	$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = '".$_loginaccount->GetID()."'");	
+
+	$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = '".$_loginaccount->GetID()."'");
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?php echo $title; ?></title> 
+	<title><?php echo $title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -32,7 +31,7 @@ if ($_loggedin) {
 	endif;
 	?>" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
-	
+
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
@@ -40,7 +39,7 @@ if ($_loggedin) {
 <?php endif; ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
-	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
 	<script src="//<?php echo $domain; ?>/inc/js/scripts.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
@@ -49,40 +48,40 @@ if ($_loggedin) {
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
 	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
 	<script src="//<?php echo $domain; ?>/inc/js/maplerme.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
-	
-		<script type="text/javascript">
-		$('.in').affix();
-  		</script>
-  		
-  		<style>
-  		.in.affix {
-	  		position: fixed;
-	  		z-index:999;
-	  		width: 350px;
-	  		background: rgba(255,255,255,0.9);
-	  		border-radius: 5px;
-	  		padding: 10px;
-	  		color: #FFF;
-	  		top:70px;
-	  		-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
-            -moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
-            box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
-  		}
-  		
-  		.in.affix h3 {
-	  		display: none;
-  		}
-  		
-  		.in.affix .post-resize {
-	  		width:330px !important;
-  		}
-  		
-  		.in.affix form {
-	  		padding: 0px !important;
-	  		margin: 0px !important;
-	  		border-bottom: none !important;
-  		}
-  		</style>
+
+	<script type="text/javascript">
+	$('.in').affix();
+	</script>
+
+	<style>
+	.in.affix {
+		position: fixed;
+		z-index:999;
+		width: 350px;
+		background: rgba(255,255,255,0.9);
+		border-radius: 5px;
+		padding: 10px;
+		color: #FFF;
+		top:70px;
+		-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+		-moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+		box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	}
+
+	.in.affix h3 {
+		display: none;
+	}
+
+	.in.affix .post-resize {
+		width:330px !important;
+	}
+
+	.in.affix form {
+		padding: 0px !important;
+		margin: 0px !important;
+		border-bottom: none !important;
+	}
+	</style>
 </head>
 
 <body>
@@ -91,7 +90,7 @@ if ($_loggedin) {
 		<div class="navbar-inner">
 			<div class="container">
 				<div class="nav-collapse">
-					<ul class="nav">			
+					<ul class="nav">
 						 <li class="dropdown">
 				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:10px;right:0px;width:60px;"/></a>
 
@@ -105,7 +104,7 @@ if (isset($__url_useraccount)):
 								<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends">Friends</a></li>
 								<li class="divider"></li>
 								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
-								
+
 <?php
 // Display normal pages if not a subdomain
 else:
@@ -126,23 +125,23 @@ endif;
 					 		</ul>
 <?php
 		require_once __DIR__.'/additional.menu.php';
-?>                 
+?>
 						</li>
 					</ul>
 				</div>
-				
-					<!-- Login / Main Menu -->	
+
+					<!-- Login / Main Menu -->
 					<ul class="nav hidden-phone pull-right">
 <?php
 if ($_loggedin):
-?>					
+?>
 					<li>
 						<form method="post" action="http://<?php echo $domain; ?>/search/">
 							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?" />
 							<input type="hidden" name="type" value="status"/>
 						</form>
 					</li>
-					
+
 
 					<li>
 						<a class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" id="notify" href="//<?php echo $domain; ?>/settings/friends/">
@@ -150,12 +149,12 @@ if ($_loggedin):
 							<span class="notification-badge"><?php echo GetNotification(); ?></span>
 						</a>
 					</li>
-					
+
 					<li>
 						<a href="#PostStatus" data-toggle="collapse" data-target="#post">+Post</a>
 					</li>
-					
-					
+
+
 <?php
 endif;
 ?>
@@ -166,7 +165,7 @@ if ($_loggedin):
 ?>
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Me <b class="caret"></b></a>
 							<ul class="dropdown-menu">
-							
+
 							<?php
 							$main_char = $_loginaccount->GetMainCharacterName();
 							if ($main_char == null)
@@ -188,7 +187,7 @@ if ($_loggedin):
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
-						
+
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
@@ -229,13 +228,13 @@ endif;
 ?>
 						</li>
 					</ul>
-		
+
 					<ul class="nav mobile pull-right">
-					
+
 					<li>
 						<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment icon-white"></i></a>
 					</li>
-					
+
 						<li class="menu dropdown">
 							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><i class="icon-chevron-down icon-white"></i></a>
 
@@ -262,7 +261,7 @@ if ($_loggedin):
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
 								<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
-						
+
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
@@ -301,7 +300,7 @@ else:
 <?php
 endif;
 ?>
-					 			
+
 					 		</ul>
 						</li>
 					</ul>
@@ -311,7 +310,7 @@ endif;
 	</div>
 
 	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
-	
+
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
 ?>
@@ -327,7 +326,7 @@ $port = 23711;
 $onlinetext = "Mapler.me's servers are currently online!";
 $offlinetext = "Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.";
 
-if(!@fsockopen($ip, $port, $errno, $errstr, 2)) {
+if(!@fsockopen($ip, $port, $errno, $errstr, 5)) {
 ?>
 	<p class="lead alert alert-danger"><?php echo $offlinetext; ?></p>
 <?php
