@@ -7,6 +7,17 @@
 	henesys, leafre, southperry, maplestory rankings, maplestory, realtime updates, Maplestory items, MapleStory skills, guild, alliance, GMS, KMS, EMS" />
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	
+<style>
+@media (max-width: 480px) {
+	.outer {
+		display:none;
+	}
+	.mobilepls {
+		display: block;
+	}
+}
+</style>
 </head>
 
 <?php
@@ -36,6 +47,12 @@ if ($_loggedin) {
 			</div>
 		</div>
 	</div>
+	
+	<div class="mobilepls" style="display:none;">
+		<img src="//<?php echo $domain ?>/inc/img/icon.png" width="200px"/>
+		<p><a href="/login/" class="btn btn-success btn-action btn-large">Login</a></p>
+	</div>
+	
 	<footer>
 		<p>&copy; 2013 Mapler.me</p>
 		<ul>
