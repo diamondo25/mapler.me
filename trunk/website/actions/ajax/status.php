@@ -44,7 +44,7 @@ SELECT
 FROM
 	social_statuses
 WHERE
-	account_id = '137'
+	blog = '1'
 ORDER BY
 	id DESC
 ");

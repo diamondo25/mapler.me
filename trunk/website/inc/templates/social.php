@@ -172,7 +172,7 @@ WHERE
 		}
 		
 		if ($error == '') {
-			$dc = isset($_POST['dc']) ? 1 : 0;
+			$blog = isset($_POST['blog']) ? 1 : 0;
 
 			$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 			$has_characters = !empty($char_config['main_character']);
@@ -183,44 +183,22 @@ WHERE
 		
 			$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
-			if (isset($_POST['blog'])) {
 			$__database->query("
 			INSERT INTO 
 				social_statuses 
 			VALUES 
 				(
 					NULL, 
-					137, 
+					".$_loginaccount->GetId().",
 					'".$__database->real_escape_string($nicknm)."', 
 					'".$__database->real_escape_string($chr)."', 
 					'".$__database->real_escape_string($content)."', 
-					".$dc.", 
+					".$blog.", 
 					NOW(), 
 					0,
 					".($reply_to == -1 ? 'NULL' : $reply_to)."
 				)
 			");	
-
-			}
-			
-			else {
-			$__database->query("
-			INSERT INTO 
-				social_statuses 
-			VALUES 
-				(
-					NULL, 
-					".$_loginaccount->GetId().", 
-					'".$__database->real_escape_string($nicknm)."', 
-					'".$__database->real_escape_string($chr)."', 
-					'".$__database->real_escape_string($content)."', 
-					".$dc.", 
-					NOW(), 
-					0,
-					".($reply_to == -1 ? 'NULL' : $reply_to)."
-				)
-			");	
-			}
 			
 			if ($__database->affected_rows == 1) {
 ?>
