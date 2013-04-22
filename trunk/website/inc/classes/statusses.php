@@ -20,7 +20,7 @@ class Statusses {
 }
 
 class Status {
-	public $id, $account, $nickname, $character, $content, $comments_disabled, $timestamp, $override, $mention_list, $reply_to;
+	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to;
 	
 	public function __construct($row) {
 		$this->id = (int)$row['id'];
@@ -29,7 +29,7 @@ class Status {
 		$this->nickname = $row['nickname'];
 		$this->character = $row['character'];
 		$this->content = $row['content'];
-		$this->comments_disabled = (int)$row['comments_disabled'];
+		$this->blog = (int)$row['blog'];
 		$this->timestamp = $row['timestamp'];
 		$this->override = (int)$row['override'];
 		$this->seconds_since = (int)$row['secs_since'];
