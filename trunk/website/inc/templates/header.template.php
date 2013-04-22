@@ -36,6 +36,8 @@ if ($_loggedin) {
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
+<?php elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE):?>
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
 <?php endif; ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />

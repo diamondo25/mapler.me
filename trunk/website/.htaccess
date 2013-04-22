@@ -33,6 +33,7 @@
 	
 	# character / player rewrites
 	RewriteRule ^player/([^/]*)$ /components/character.php?name=$1
+	RewriteRule ^guild/([^/]*)/([^/]*)$ /components/guild.php?world=$1&name=$2
 	
 </IfModule>
 

@@ -10,7 +10,7 @@ SELECT
 FROM
 	social_statuses
 WHERE
-	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."'
+	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND blog = 0
 ORDER BY
 	secs_since ASC
 ");
