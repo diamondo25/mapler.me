@@ -183,22 +183,45 @@ WHERE
 		
 			$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
+			if (isset($_POST['blog'])) {
 			$__database->query("
-INSERT INTO 
-	social_statuses 
-VALUES 
-(
-	NULL, 
-	".$_loginaccount->GetId().", 
-	'".$__database->real_escape_string($nicknm)."', 
-	'".$__database->real_escape_string($chr)."', 
-	'".$__database->real_escape_string($content)."', 
-	".$dc.", 
-	NOW(), 
-	0,
-	".($reply_to == -1 ? 'NULL' : $reply_to)."
-)
-			");
+			INSERT INTO 
+				social_statuses 
+			VALUES 
+				(
+					NULL, 
+					137, 
+					'".$__database->real_escape_string($nicknm)."', 
+					'".$__database->real_escape_string($chr)."', 
+					'".$__database->real_escape_string($content)."', 
+					".$dc.", 
+					NOW(), 
+					0,
+					".($reply_to == -1 ? 'NULL' : $reply_to)."
+				)
+			");	
+
+			}
+			
+			else {
+			$__database->query("
+			INSERT INTO 
+				social_statuses 
+			VALUES 
+				(
+					NULL, 
+					".$_loginaccount->GetId().", 
+					'".$__database->real_escape_string($nicknm)."', 
+					'".$__database->real_escape_string($chr)."', 
+					'".$__database->real_escape_string($content)."', 
+					".$dc.", 
+					NOW(), 
+					0,
+					".($reply_to == -1 ? 'NULL' : $reply_to)."
+				)
+			");	
+			}
+			
 			if ($__database->affected_rows == 1) {
 ?>
 <p class="lead alert-success alert">The status was successfully posted!</p>
@@ -246,6 +269,9 @@ VALUES
 		<textarea name="content" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
 		<input type="hidden" name="reply-to" value="-1" />
 		<button type="submit" class="btn btn-large">Post!</button>
+		<?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR):?>
+		Is this a blog post? <input type="checkbox" name="blog" value="Yes" />
+		<?php endif; ?>
 	</form>
 </div>
 

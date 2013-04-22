@@ -77,7 +77,7 @@ WHERE
 	level > 30
 ORDER BY
 	rand()
-	LIMIT 7
+	LIMIT 5
 ");
 $cache = array();
 

@@ -77,3 +77,27 @@ function TryRequestMore(up, init) {
 		}
 	});
 }
+
+function GetBlogPosts(up, init) {
+	$.ajax({
+		type: 'GET',
+		url: '/ajax/status.php?type=blog',
+		success: function (data) {
+			if (data.error != undefined) {
+				alert(data.error);
+			}
+			else if (data.amount > 0) {
+				var oridata = $('#statuslist').html();
+				if (up)
+					$('#statuslist').html(data.result + oridata);
+				else
+					$('#statuslist').html(oridata + data.result);
+
+				if (init || !up)
+					latestStatusDown = data.firstid;
+				if (init || up)
+					latestStatusUp = data.lastid;
+			}
+		}
+	});
+}
