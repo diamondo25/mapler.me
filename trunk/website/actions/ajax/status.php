@@ -88,7 +88,8 @@ WHERE
 	(
 		override = 1 OR 
 		account_id = ".$_loginaccount->GetID()." OR 
-		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS'
+		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND
+		blog = '0'
 	)
 ORDER BY
 	id DESC
