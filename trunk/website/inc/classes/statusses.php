@@ -85,7 +85,7 @@ WHERE
 		
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
-		$this->content = preg_replace('/http\:\/\/([^\<\s\t]+)/i', '<a href="http://$1">http://$1</a>', $this->content);
+		$this->content = preg_replace('/http\:\/\/([^\<\s\t]+)/i', '<a href="http://$1" target="_blank">http://$1</a>', $this->content);
 		
 		//@replies
 		$this->content = preg_replace('/@([a-z0-9_]+)/i', '<a href="http://$1.'.$domain.'/">@$1</a>', $this->content);
