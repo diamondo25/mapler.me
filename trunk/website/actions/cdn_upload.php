@@ -10,6 +10,14 @@ if (!$_loggedin):
 else:
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
+
+$allowed =  array('gif','png','jpg','jpeg');
+$filename = $_FILES['file']['name'];
+$ext = pathinfo($filename, PATHINFO_EXTENSION);
+if(!in_array($ext,$allowed) ) {
+    echo "<p class='alert alert-danger'>Error: Only picture files can be uploaded to Mapler.me!</p>";
+}
+else {
 	$target_url = 'http://cdn.mapler.me/add.php';
 	$file = $_FILES['file']['tmp_name'];
 	$owner = $_loginaccount->GetID();
@@ -22,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	$result=curl_exec ($ch);
 	curl_close ($ch);
+}
 }
 ?>
 
