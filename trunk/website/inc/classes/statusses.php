@@ -91,6 +91,8 @@ WHERE
 		$this->content = preg_replace('/@([a-z0-9_]+)/i', '<a href="http://$1.'.$domain.'/">@$1</a>', $this->content);
 		//#hashtags (no search for the moment)
 		$this->content = preg_replace('/#([a-z0-9_]+)/i', '<a href="#">#$1</a>', $this->content);
+		//^images (workaround for the moment)
+		$this->content = preg_replace('/!([a-z0-9_]+)/i', '<a href="http://cdn.mapler.me/media/$1"><img src="http://cdn.mapler.me/media/$1" class="pull-right status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'"/></a>', $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
@@ -113,7 +115,7 @@ WHERE
 				<div class="status-contents">
 				<?php echo $parser->getAsHtml(); ?>
 				</div>
-				<div class="status-extra">
+				<div class="status-extra" style="clear:both;">
 <?php if ($reply_info != NULL): ?>
 					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
 <?php endif; ?>
