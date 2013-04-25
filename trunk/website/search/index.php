@@ -72,7 +72,7 @@ SELECT
 FROM
 	accounts
 WHERE
-	nickname LIKE '%".$__database->real_escape_string($searching)."%'
+	username LIKE '%".$__database->real_escape_string($searching)."%'
 ORDER BY
 	last_login DESC
 LIMIT
