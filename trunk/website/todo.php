@@ -52,7 +52,6 @@ else:
 	<div class="row">
 	<ul class="status">
 	<b>Features</b><br/><br/>
-	<li>Be able to post text / screenshots while in-game that is shown on Mapler.me (would send the screenshot + text as an API request, then the image would be saved on our CDN.</li>
 	<li>Email notifications for new additions, content, mentions, etc.</li>
 	<li>Notifications for replies / mentions. (Stream)</li>
 	<li>Ability to search through your entire inventory(s) for items.</li>
@@ -61,22 +60,8 @@ else:
 	
 	<ul class="status">
 	<b>Information still needed to be displayed:</b><br/><br/>
-	<li>Medals</li>
 	<li>Traits</li>
-	<li>Guild / Alliance</li>
 	<li>Married?</li>
-	</ul>
-	</div>
-	
-	<div class="row">
-	<ul class="status">
-	<b>Guild / Alliance System (Pages)</b><br/><br/>
-	<li>Add a check for if a player is a guild master or junior.</li>
-	<li class="done">Create page for guilds.<br/>
-		Guilds will be located like this: /guild/scania/MPLRME
-	</li>
-	<li>Create page for alliances.<br/>
-		Guilds will be located like this: /alliance/scania/MPLRME</li>
 	</ul>
 	</div>
 
