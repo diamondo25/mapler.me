@@ -109,7 +109,6 @@ LIMIT 15
 		$firstid = $status->id;
 		$status->PrintAsHTML(' span12');
 	}
-	
 	$data = ob_get_clean();
 	
 	JSONAnswer(array('result' => $data, 'lastid' => $lastid, 'firstid' => $firstid, 'amount' => count($statuses->data)));
