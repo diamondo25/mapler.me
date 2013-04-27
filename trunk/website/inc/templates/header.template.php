@@ -369,7 +369,7 @@ endif;
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
 ?>
-		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me.</p>
+		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me. <a href="//<?php echo $domain; ?>/support/">Request support?</a></p>
 <?php
 	require_once __DIR__.'/../../inc/footer.php';
 	die;
