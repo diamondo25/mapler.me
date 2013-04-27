@@ -16,3 +16,12 @@ ErrorDocument 401 /errors/_error_document_.php
 ErrorDocument 403 /errors/_error_document_.php
 ErrorDocument 404 /errors/_error_document_.php
 ErrorDocument 500 /errors/_error_document_.php
+
+AddType application/vnd.ms-fontobject .eot
+AddType font/ttf .ttf
+AddType font/otf .otf
+<FilesMatch "\.(ttf|otf|eot)$">
+<IfModule mod_headers.c>
+Header set Access-Control-Allow-Origin "*"
+</IfModule>
+</FilesMatch>
