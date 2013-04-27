@@ -218,7 +218,7 @@ WHERE
 	}
 	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removestatus'])) {
 		// Removing status
-		$id = intval($_GET['remove']);
+		$id = intval($_GET['removestatus']);
 		
 		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id);
