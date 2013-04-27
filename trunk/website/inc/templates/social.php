@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 <script type="text/javascript">
 function RemoveStatus(id) {
 	if (confirm("Are you sure you want to delete this status?")) {
-		document.location.href = '?remove=' + id;
+		document.location.href = '?removestatus=' + id;
 	}
 }
 </script>
@@ -216,7 +216,7 @@ WHERE
 <?php
 		}
 	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['remove'])) {
+	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removestatus'])) {
 		// Removing status
 		$id = intval($_GET['remove']);
 		

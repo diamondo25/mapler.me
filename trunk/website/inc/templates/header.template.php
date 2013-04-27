@@ -54,9 +54,7 @@ if ($_loggedin) {
 
 	<script type="text/javascript">
 	$('.in').affix();
-	$('.navbar').affix( {
-		$('.container').css("padding-top", "280px");
-	});
+	$('.navbar').affix();
 	</script>
 
 	<style>
