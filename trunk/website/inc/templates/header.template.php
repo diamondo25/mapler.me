@@ -161,7 +161,7 @@ if ($_loggedin) {
 				<div class="nav-collapse">
 					<ul class="nav">
 						 <li class="dropdown">
-				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;width:70px;"/></a>
+				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#" style="border: none;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;width:70px;"/></a>
 
 	<ul class="dropdown-menu" style="margin-left:5px;">
 <?php

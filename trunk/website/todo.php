@@ -25,7 +25,6 @@ else:
 	<li>- There is not an option to request a password reset without being logged in.</li>
 	<li>- The login button on mobile devices is hard to click for front page (splash page).</li>
 	<li>- When you click on a blog post to view replies, the layout breaks. <a href="http://puu.sh/2Il72.png">Example</a></li>
-	<li>- The border on the left side of the logo is lighter then the rest of the menus.</li>
 	<li>- A mapler's rank is not aligned correctly on Safari on the main menu. <a href="http://puu.sh/2Il5m.png">Example</a></li>
 	<li>- Profession and special skills do not display correctly (broken icon)</li>
 	</ul>
