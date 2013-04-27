@@ -134,7 +134,6 @@ hr {
 		<ul id="filters" class="nav nav-list search-menu">
           <!-- <li><a href="#" onclick="GetStatus()"><i class="icon-chevron-right"></i> Statuses</a></li> -->
           <li><a href="#" onclick="GetPlayer()"><i class="icon-chevron-right"></i> Maplers</a></li>
-          <li style="display:none;"><a href="#" data-filter=".character"><i class="icon-chevron-right"></i> Characters</a></li>
         </ul>
         <form method="post" action="http://<?php echo $domain; ?>/search/">
 							<input type="text" name="search" placeholder="Search?" />
