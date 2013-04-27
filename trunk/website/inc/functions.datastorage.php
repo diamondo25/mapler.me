@@ -191,19 +191,22 @@ WHERE
 	while ($row = $q->fetch_assoc()) {
 		$level = round($row['reqlevel'] / 10);
 		if ($level == 0) $level = 1;
-		$temp[$row['itemid']] = array();
+		$obj = array();
 		for ($i = 1; $i <= 6; $i++) {
 			if ($row['potential'.$i] == 0) continue;
 			$potentialinfo = GetPotentialInfo($row['potential'.$i]);
 
-			$temp[$row['itemid']][] = $potentialinfo['levels'][$level];
+			$obj[] = $potentialinfo['levels'][$level];
 		}
 		for ($i = 1; $i <= 3; $i++) {
 			if ($row['nebulite'.$i] == -1) continue;
 			$nebinfo = GetNebuliteInfo($row['nebulite'.$i]);
 
-			$temp[$row['itemid']][] = $nebinfo['info'];
+			$obj[] = $nebinfo['info'];
 		}
+		
+		if (count($obj) > 0)
+			$temp[$row['itemid']] = $obj;
 	}
 	$q->free();
 	return $temp;

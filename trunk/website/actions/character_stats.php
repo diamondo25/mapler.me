@@ -85,7 +85,6 @@ $before = array(
 	'mmp' => $row['mmp']
 );
 
-
 if (isset($stat_addition['str'])) $row['str'] += $stat_addition['str'];
 if (isset($stat_addition['dex'])) $row['dex'] += $stat_addition['dex'];
 if (isset($stat_addition['int'])) $row['int'] += $stat_addition['int'];
@@ -131,20 +130,29 @@ foreach ($skill_stat_addition as $skillid => $tempinfo) {
 }
 
 // Rates
+$rates = array();
+$rates['str'] = 0;
+$rates['dex'] = 0;
+$rates['int'] = 0;
+$rates['luk'] = 0;
+$rates['mhp'] = 0;
+$rates['mmp'] = 0;
 foreach ($potential_stat_addition as $itemid => $stats_tmp) {
 	foreach ($stats_tmp as $stats) {
-		if (isset($stats['incSTRr'])) $row['str'] *= (100 + (int)$stats['incSTRr']) / 100;
-		if (isset($stats['incDEXr'])) $row['dex'] *= (100 + (int)$stats['incDEXr']) / 100;
-		if (isset($stats['incINTr'])) $row['int'] *= (100 + (int)$stats['incINTr']) / 100;
-		if (isset($stats['incLUKr'])) $row['luk'] *= (100 + (int)$stats['incLUKr']) / 100;
+		if (isset($stats['incSTRr'])) $rates['str'] += (int)$stats['incSTRr'];
+		if (isset($stats['incDEXr'])) $rates['dex'] += (int)$stats['incDEXr'];
+		if (isset($stats['incINTr'])) $rates['int'] += (int)$stats['incINTr'];
+		if (isset($stats['incLUKr'])) $rates['luk'] += (int)$stats['incLUKr'];
 
-		if (isset($stats['incMHPr'])) $row['mhp'] *= (100 + (int)$stats['incMHPr']) / 100;
-		if (isset($stats['incMMPr'])) $row['mhp'] *= (100 + (int)$stats['incMMPr']) / 100;
+		if (isset($stats['incMHPr'])) $rates['mhp'] += (int)$stats['incMHPr'];
+		if (isset($stats['incMMPr'])) $rates['mmp'] += (int)$stats['incMMPr'];
 	}
 }
+foreach ($rates as $ratename => $value)
+	if ($value > 0)
+		$row[$ratename] *= (100 + (int)$value) / 100;
 
 // Moar rates
-
 foreach ($skill_stat_addition as $skillid => $tempinfo) {
 	$level = $tempinfo['level'];
 	$data = $tempinfo['data'];
@@ -213,8 +221,14 @@ ImageTTFText($image, 9, 0, $base_x, $base_y + ($step * $i++), imagecolorallocate
 
 
 SaveCacheImage($internal_id, 'stats', $image, $id);
-if (isset($_GET['debug']))
-	var_dump($GLOBALS);
+if (isset($_GET['debug'])) {
+	echo 'Skills:'."\r\n";
+	print_r($skill_stat_addition);
+	echo 'Potential items:'."\r\n";
+	print_r($potential_stat_addition);
+	echo 'Stats:'."\r\n";
+	print_r($stat_addition);
+}
 else
 	imagepng($image);
 imagedestroy($image);

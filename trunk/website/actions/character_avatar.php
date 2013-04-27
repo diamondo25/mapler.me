@@ -118,7 +118,7 @@ $q->free();
 // Get character equipment
 $character_equipment = $__database->query("
 SELECT 
-	* 
+	itemid, slot, display_id 
 FROM 
 	`items` 
 WHERE 
@@ -132,67 +132,75 @@ ORDER BY
 DESC"
 );
 
+function GetID($row) {
+	$itemid = $row['itemid'];
+	if ($row['display_id'] > 0) {
+		$itemid -= $itemid % 10000;
+		$itemid += $row['display_id'];
+	}
+	return $itemid;
+}
 
 while ($row2 = $character_equipment->fetch_assoc()) {
 	switch ($row2['slot']) {
 		case -1:	// Hat
 		case -101:	// NX Hat
 			if ($row2['itemid'] != 1002186) // Invisible Hat
-				$hat = $row2['itemid'];
+				$hat = GetID($row2);
 			else
 				unset($hat);
 			break;
 		case -2:	// Face Accessory
 		case -102:	// NX Face Accessory
-			$mask = $row2['itemid'];
+			$mask = $GetID($row2);
 			break;
 		case -3:	// Eye Accessory
 		case -103:	// NX Eye Accessory
-			$eyes = $row2['itemid'];
+			$eyes = GetID($row2);
 			break;
 		case -4:	// Earrings
 		case -104:	// NX Earrings
-			$ears = $row2['itemid'];
+			$ears = GetID($row2);
 			break;
 		case -5:	// Top | Overall
 		case -105:	// NX Top | Overall
 			if (substr($row2['itemid'], 0, 3) == "105") {
-				$overall = $row2['itemid'];
+				$overall = GetID($row2);
 				$top = NULL;
 			}
 			else {
-				$top = $row2['itemid'];
+				$top = GetID($row2);
 				$overall = NULL;
 			}
 			break;
 		case -6:	// Bottom
 		case -106:	// NX Bottom
 			if (!isset($overall))
-				$pants = $row2['itemid'];
+				$pants = GetID($row2);
 			break;
 		case -7:	// Shoes
 		case -107:	// NX Shoes
-			$shoe = $row2['itemid'];
+			$shoe = GetID($row2);
 			break;
 		case -8:	// Gloves
 		case -108:	// NX Gloves
-			$glove = $row2['itemid'];
+			$glove = GetID($row2);
 			break;
 		case -9:	// Cape
 		case -109:	// NX Cape
-			$cape = $row2['itemid'];
+			$cape = GetID($row2);
 			break;
 		case -10:	// Shield
 		case -110:	// NX Shield
 			if (floor($row2['itemid'] / 100) != 13527) { // Bullet for Mech
-				$shield = $row2['itemid'];
+				$shield = GetID($row2);
 			}
 			break;
 		case -11:	// Weapon
-			$wep = $row2['itemid'];
+			$wep = GetID($row2);
 			break;
 		case -111:	// NX Weapon
-			$nxwep = $row2['itemid'];
+			$nxwep = GetID($row2);
 			break;
 	}
 }
