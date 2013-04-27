@@ -2,7 +2,7 @@
 require_once __DIR__.'/functions.php';
 
 if (!IsLoggedin() || $_loginaccount->GetAccountRank() < RANK_ADMIN || !isset($_GET['page'])) {
-	//header('Location: http://'.$domain.'/');
+	header('Location: http://'.$domain.'/');
 	die();
 }
 
@@ -11,8 +11,8 @@ $page = str_replace('/', '', $page);
 
 $page = '../manage/'.$page.'.php';
 if (!file_exists($page)) {
-	//header('Location: http://'.$domain.'/');
-	die($page);
+	header('Location: http://'.$domain.'/');
+	die();
 }
 
 require_once __DIR__.'/templates/header.template.php';
