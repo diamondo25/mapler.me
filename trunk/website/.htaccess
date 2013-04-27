@@ -29,6 +29,7 @@
 	
 	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]
 	RewriteRule ^avatar/([^\./]*) /actions/character_avatar.php?name=$1 [L,QSA]
+	RewriteRule ^avatar2/([^\./]*) /actions/character_avatar_layered.php?name=$1 [L,QSA]
 	RewriteRule ^ignavatar/([^\./]*) /actions/character_avatar.php?name=$1&show_name [L,QSA]
 	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L,QSA]
 	

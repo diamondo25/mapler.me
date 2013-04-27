@@ -393,7 +393,7 @@ if (isset($cape)) {
 if (isset($shield)) {
 	$shieldarray = get_data($shield);
 	$shieldx = -$shieldarray['stand1_0_shield_origin_X']-$shieldarray['stand1_0_shield_map_navel_X'];
-	$shieldy = -$shieldarray['stand1_0_shield_origin_Y']-$shieldarray['stand1_0_shield_map_navel_Y'];	
+	$shieldy = -$shieldarray['stand1_0_shield_origin_Y']-$shieldarray['stand1_0_shield_map_navel_Y'];
 }
 
 // Shoes

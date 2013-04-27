@@ -566,17 +566,30 @@ function GetItemIconID($id) {
 	return $main_id + $nebtype;
 }
 
-function GetItemIcon($id, $addition = '') {
-	$domain = '//static_images.mapler.me/';
+function GetItemDataLocation($location, $id) {
 	$inv = GetItemInventory($id);
-	if ($inv == 1) {
+	$type = GetItemType($id);
+	if ($type < 5) {
+		switch ($type) {
+			case 0:
+			case 1:
+				$url = $location.'Character/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/';
+				break;
+			case 2:
+				$url = $location.'Character/Face/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/';
+				break;
+			case 3:
+				$url = $location.'Character/Hair/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/';
+				break;
+		}
+	}
+	elseif ($inv == 1) {
 		$name = GetWZItemTypeName($id);
-		$url = $domain.'Character/'.$name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/info.icon'.$addition.'.png';
+		$url = $location.'Character/'.$name.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'.img/';
 	}
 	else {
-		$type = GetItemType($id);
 		if ($type == 500) {
-			$url = $domain.'Inventory/Pet/'.$id.'.img/info.icon'.$addition.'.png';
+			$url = $location.'Inventory/Pet/'.$id.'.img/';
 		}
 		else {
 			$typeid = str_pad($type, 4, '0', STR_PAD_LEFT).'.img';
@@ -587,11 +600,15 @@ function GetItemIcon($id, $addition = '') {
 				case 4: $typename = 'Etc'; break;
 				case 5: $typename = 'Cash'; break;
 			}
-			$url = $domain.'Inventory/'.$typename.'/'.$typeid.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'/info.icon'.$addition.'.png';
+			$url = $location.'Inventory/'.$typename.'/'.$typeid.'/'.str_pad($id, 8, '0', STR_PAD_LEFT).'/';
 		}
 	}
-
 	return $url;
+}
+
+function GetItemIcon($id, $addition = '') {
+	$domain = '//static_images.mapler.me/';
+	return GetItemDataLocation($domain, $id).'info.icon'.$addition.'.png';
 }
 
 function ValueOrDefault($what, $default) {
