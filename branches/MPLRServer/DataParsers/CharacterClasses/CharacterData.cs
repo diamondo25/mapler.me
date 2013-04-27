@@ -659,6 +659,8 @@ namespace MPLRServer
                     questsTable.RunQuery("insert-update-quests.sql");
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM quests_done WHERE character_id = " + internalid);
+
                 using (InsertQueryBuilder doneTable = new InsertQueryBuilder("quests_done"))
                 {
                     doneTable.AddColumn("character_id", false);
@@ -688,6 +690,7 @@ namespace MPLRServer
                     questsTable.RunQuery();
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM quests_done_party WHERE character_id = " + internalid);
                 using (InsertQueryBuilder doneTable = new InsertQueryBuilder("quests_done_party"))
                 {
                     doneTable.AddColumn("character_id", false);

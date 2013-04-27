@@ -120,7 +120,6 @@
     <Compile Include="frmStats.Designer.cs">
       <DependentUpon>frmStats.cs</DependentUpon>
     </Compile>
-    <Compile Include="GMSKeys.cs" />
     <Compile Include="MasterThread.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

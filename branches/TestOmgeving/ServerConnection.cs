@@ -17,6 +17,7 @@ namespace Mapler_Client
 
         private List<ushort>[] _validHeaders;
         public List<string> AcceptedIPs { get; private set; }
+        public byte[] MapleStoryCryptoKey { get; private set; }
         
         public ServerConnection(string pDomain)
             : base(pDomain, 23710)
@@ -95,6 +96,8 @@ namespace Mapler_Client
                         string ip = pPacket.ReadString();
                         AcceptedIPs.Add(ip);
                     }
+
+                    MapleStoryCryptoKey = pPacket.ReadBytes(32);
 
                     // Logger.WriteLine("Initialized keys and valid headers");
                 }

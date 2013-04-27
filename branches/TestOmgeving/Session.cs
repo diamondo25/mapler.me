@@ -227,7 +227,7 @@ namespace Mapler_Client
                     // Second one
                     pVersion = (ushort)(0xFFFF - pVersion);
                 }
-                mAES.Key = GMSKeys.GetKeyForVersion(pVersion);
+                mAES.Key = ServerConnection.Instance.MapleStoryCryptoKey;
                 mAES.Mode = CipherMode.ECB;
                 mAES.Padding = PaddingMode.PKCS7;
                 _transformer = mAES.CreateEncryptor();

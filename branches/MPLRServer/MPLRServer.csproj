@@ -75,6 +75,7 @@
     <Compile Include="DataParsers\CharacterClasses\GW_CharacterStat.cs" />
     <Compile Include="DataParsers\Guild.cs" />
     <Compile Include="GameHelper.cs" />
+    <Compile Include="GMSKeys.cs" />
     <Compile Include="Internal Storage\Store.cs" />
     <Compile Include="InternalPacketHandler.cs" />
     <Compile Include="MasterThread.cs" />

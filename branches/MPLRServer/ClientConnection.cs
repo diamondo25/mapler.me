@@ -72,6 +72,8 @@ namespace MPLRServer
                 foreach (string ip in Program.AcceptedIPs)
                     pack.WriteString(ip);
 
+                pack.WriteBytes(GMSKeys.GetKeyForVersion());
+
                 SendPacket(pack);
             }
 

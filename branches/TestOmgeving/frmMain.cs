@@ -40,7 +40,6 @@ namespace Mapler_Client
                 }
 
                 ServerConnection.Initialize();
-                GMSKeys.Initialize();
                 Sniffer.Init();
             }
             catch (Exception ex)

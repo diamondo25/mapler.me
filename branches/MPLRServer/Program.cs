@@ -44,6 +44,7 @@ namespace MPLRServer
             }
 
             Internal_Storage.Store.Initialize();
+            GMSKeys.Initialize();
 
             CommandHandler.Initialize();
             Timeline.Init();
@@ -52,7 +53,7 @@ namespace MPLRServer
 
             InitializeValidHeaders();
             AcceptedIPs = new List<string>();
-            AcceptedIPs.Add("8.31.98."); // Nexon's subnet
+            AcceptedIPs.Add("8.31.9"); // Nexon's subnet
 
             Clients = new List<ClientConnection>();
 
@@ -87,6 +88,10 @@ namespace MPLRServer
                 {
                     switch (arguments[0])
                     {
+                        case "getkeys": {
+                            GMSKeys.Initialize();
+                            break;
+                            }
                         case "reload_store":
                             {
                                 MasterThread.Instance.AddCallback(a =>
