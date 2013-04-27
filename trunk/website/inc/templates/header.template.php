@@ -34,6 +34,7 @@ if ($_loggedin) {
 
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
+	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/font-awesome.min.css" type="text/css" />
 <?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
 	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
 <?php elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE):?>
@@ -53,6 +54,9 @@ if ($_loggedin) {
 
 	<script type="text/javascript">
 	$('.in').affix();
+	$('.navbar').affix( {
+		$('.container').css("padding-top", "280px");
+	});
 	</script>
 
 	<style>
@@ -64,10 +68,49 @@ if ($_loggedin) {
 		border-radius: 5px;
 		padding: 10px;
 		color: #FFF;
-		top:70px;
+		top:95px;
 		-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
 		-moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
 		box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	}
+	
+		.menu-divider {
+		border-left:solid 1px rgba(0,0,0,0.2);
+		width:1px;
+		height:85px;
+		position:relative;
+		bottom:12px;
+	}
+	
+	.moar-inner-navbar {
+		background-color: #3487cb !important;
+		border-bottom: 1px solid #133783 !important;
+		min-width: 981px !important;
+		position: relative !important;
+		height:40px !important;
+		padding-left: 20px !important;;
+		padding-right: 20px !important;
+		box-shadow: none !important;
+	}
+	
+	.moar-navbar {
+	margin-bottom: 0px;
+	}
+	
+	.moar-navbar a{
+		color: #FFF;
+		margin: 5px;
+	}
+	
+	.main-navbar {
+	z-index:1050;
+	}
+	
+	.main-navbar.affix {
+		position: fixed;
+		top:0;
+		left:0;
+		right:0;
 	}
 
 	.in.affix h3 {
@@ -87,16 +130,40 @@ if ($_loggedin) {
 </head>
 
 <body>
+	
+		<div class="navbar moar-navbar">
+		<div class="navbar-inner moar-inner-navbar">
+			<div class="container">
+				<div class="nav-collapse">
+					<ul class="nav">
+						 <li> 
+						<form method="post" style="margin:0px;" action="http://<?php echo $domain; ?>/search/">
+							<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
+							<input type="hidden" name="type" value="player"/>
+						</form>
+						 </li>
+					</ul>
+				</div>
 
-	<div class="navbar navbar-fixed-top">
+					<ul class="nav hidden-phone pull-right">
+					<a href="http://twitter.com/maplerme"><i class="icon-twitter"></i></a>
+					<a href="http://facebook.com/maplerme"><i class="icon-facebook"></i></a>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="navbar main-navbar" data-spy="affix" data-offset-top="43">
 		<div class="navbar-inner">
 			<div class="container">
 				<div class="nav-collapse">
 					<ul class="nav">
 						 <li class="dropdown">
-				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;position:relative;bottom:10px;right:0px;width:60px;"/></a>
+				<a class="brand" data-toggle="dropdown" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;width:70px;"/></a>
 
-	<ul class="dropdown-menu" style="margin-top:20px;">
+	<ul class="dropdown-menu" style="margin-left:5px;">
 <?php
 // Display subdomain pages related to the user
 if (isset($__url_useraccount)):
@@ -112,9 +179,6 @@ if (isset($__url_useraccount)):
 else:
 ?>
 								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
-								<?php if ($_loggedin): ?>
-								<li><a href="//<?php echo $domain; ?>/stream/mentions/">Mentions</a></li>
-								<?php endif; ?>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $domain; ?>/blog/">Mapler.News (Blog)</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
@@ -125,66 +189,53 @@ else:
 endif;
 ?>
 					 		</ul>
+				<?php if ($_loggedin):?>
+				<?php if (strpos($_SERVER['REQUEST_URI'], '/stream/') !== FALSE): ?>
+					<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
+					<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
+				<?php endif; ?>
+				<?php endif; ?>
 <?php
 		require_once __DIR__.'/additional.menu.php';
 ?>
 						</li>
 					</ul>
 				</div>
-
 					<!-- Login / Main Menu -->
-					<ul class="nav hidden-phone pull-right">
+					<ul class="nav hidden-phone pull-right" style="height: 73px;">
 <?php
-if ($_loggedin):
+	if ($_loggedin):
+	$main_char = $_loginaccount->GetMainCharacterName();
+	if ($main_char == null)
+		$main_char = 'inc/img/no-character.gif';
+	else
+		$main_char = 'avatar/'.$main_char;
 ?>
-					<li>
-						<form method="post" action="http://<?php echo $domain; ?>/search/">
-							<input type="text" name="search" class="search-query searchbar <?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" placeholder="Search?" />
-							<input type="hidden" name="type" value="player"/>
-						</form>
+					<li class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>">
+						<a href="#PostStatus" data-toggle="collapse" data-target="#post"  style="z-index: 999;"><i class="icon-plus"></i>Post</a>
 					</li>
-
-
-					<li>
-						<a class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>" id="notify" href="//<?php echo $domain; ?>/settings/friends/">
-							<span class="sprite notify"></span>
-							<span class="notification-badge"><?php echo GetNotification(); ?></span>
-						</a>
-					</li>
-
-					<li>
-						<a href="#PostStatus" data-toggle="collapse" data-target="#post">+Post</a>
-					</li>
-
 
 <?php
 endif;
-?>
-
+?>				
 						<li class="dropdown">
 <?php
 if ($_loggedin):
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Me <b class="caret"></b></a>
-							<ul class="dropdown-menu">
-
-							<?php
-							$main_char = $_loginaccount->GetMainCharacterName();
-							if ($main_char == null)
-								$main_char = 'inc/img/no-character.gif';
-							else
-								$main_char = 'avatar/'.$main_char;
-							?>
-								<li id="user-dropdown">
-									<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
-										<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
-									<div class="info">
-										<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
+							<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
+					<div id="user-dropdown" class="info" style="width:165px;height:80px;">
+<img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
+		<div style="position:relative;right:50px;top:15px;">
+										<p style="text-transform:lowercase;margin-bottom:-25px !important;"><?php echo $_loginaccount->GetUsername(); ?></p>
 										<!-- function needed that displays rank as text instead off number -->
 										<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
-									</div>
-									</a>
-								</li>
+		</div>
+																	</div>
+							<i class="icon-chevron-down" style="position:relative;left:-2px;bottom:75px;"></i>		 
+
+							</a>
+							<ul class="dropdown-menu" style="margin-right: 9px;">
+								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">Profile</a></li>
 								<li class="divider"></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 								<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
@@ -204,7 +255,7 @@ endif;
 <?php
 else:
 ?>
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Login <b class="caret"></b></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Login <i class="icon-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
 									<div class="control-group">
@@ -234,11 +285,11 @@ endif;
 					<ul class="nav mobile pull-right">
 
 					<li>
-						<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment icon-white"></i></a>
+						<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment"></i></a>
 					</li>
 
 						<li class="menu dropdown">
-							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><i class="icon-chevron-down icon-white"></i></a>
+							<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><i class="icon-chevron-down"></i></a>
 
 							<ul class="dropdown-menu">
 <?php
@@ -309,8 +360,11 @@ endif;
 			</div>
 		</div>
 	</div>
+	
+	<div class="left"></div>
+	<div class="right"></div>
 
-	<div class="container" style="background: rgba(255,255,255,0.6);padding: 20px;border-radius: 5px;">
+	<div class="container" style="background:rgba(255,255,255,0.7);padding:20px;border-radius:5px;margin-top:60px;">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
