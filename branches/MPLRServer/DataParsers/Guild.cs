@@ -7,7 +7,8 @@ namespace MPLRServer
 {
     public class Guild
     {
-        public class GuildSkill {
+        public class GuildSkill
+        {
             public int SkillID { get; set; }
             public short Level { get; set; }
             public long BoughtAt { get; set; }
@@ -147,8 +148,7 @@ namespace MPLRServer
                     AllianceID
                     );
 
-                if (guildTable.RowCount > 0)
-                    MySQL_Connection.Instance.RunQuery(guildTable.ToString());
+                guildTable.RunQuery();
             }
 
             // Delete members first

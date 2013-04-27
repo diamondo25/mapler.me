@@ -439,3 +439,60 @@ function ReadIfFlaggedShort(value, flag, text) {
 function ReadIfFlaggedInt(value, flag, text) {
 	if ((value & flag) == flag) AddInt(text + " - " + flag);
 }
+
+function ReadGuild() {
+	using (ScriptAPI) {
+		StartNode("Guild Info");
+		AddInt("Guild ID");
+		AddString("Guild Name");
+		
+		AddString("Rank 1");
+		AddString("Rank 2");
+		AddString("Rank 3");
+		AddString("Rank 4");
+		AddString("Rank 5");
+		
+		players = AddByte("players");
+		for (i = 1; i <= players; i++)
+		    AddInt("Char ID " + i);
+		for (i = 1; i <= players; i++) {
+		    StartNode("Player info " + i);
+			AddPaddedString("name", 13);
+			AddInt("Job Id");
+			AddInt("level");
+			AddInt("guild rank");
+			AddInt("online");
+			AddInt("alliance rank");
+			AddInt("contribution");
+			EndNode(false);
+		}
+	    
+		AddInt("Capacity");
+		AddShort("BG");
+		AddByte("BGC");
+		AddShort("FG");
+		AddByte("FGC");
+		
+		AddString("Notice");
+		
+		AddInt("Points");
+		AddInt("Today Points");
+		AddInt("Alliance ID");
+		
+		AddByte("Unk");
+		AddShort("Herp");
+		
+		skills = AddShort("Skills");
+		for (i = 1; i <= skills; i++) {
+		    StartNode("Skill info " + i);
+			AddInt("Skill ID");
+			AddInt("level");
+			AddLong("Bought at");
+			AddString("By");
+			AddString("unk");
+			EndNode(false);
+		}
+		
+		EndNode(false);
+	}
+}

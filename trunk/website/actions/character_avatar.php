@@ -152,7 +152,7 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 			break;
 		case -2:	// Face Accessory
 		case -102:	// NX Face Accessory
-			$mask = $GetID($row2);
+			$mask = GetID($row2);
 			break;
 		case -3:	// Eye Accessory
 		case -103:	// NX Eye Accessory

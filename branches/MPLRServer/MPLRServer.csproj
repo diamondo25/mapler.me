@@ -66,6 +66,7 @@
     <Compile Include="ClientConnection.cs" />
     <Compile Include="ClientPacketHandlers.cs" />
     <Compile Include="CommandHandler.cs" />
+    <Compile Include="DataParsers\Alliance.cs" />
     <Compile Include="DataParsers\CharacterClasses\AvatarLook.cs" />
     <Compile Include="DataParsers\CharacterClasses\CharacterData.cs" />
     <Compile Include="DataParsers\CharacterClasses\CharacterInventory.cs" />

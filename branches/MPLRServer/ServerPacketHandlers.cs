@@ -178,9 +178,11 @@ namespace MPLRServer
             Queries.SeePlayer(id, name, pConnection.WorldID, level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
         }
 
-
         public static void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
         {
+            // Disabled
+            return;
+
             byte type = pPacket.ReadByte();
             if (type == 0x20)
             {
@@ -193,6 +195,26 @@ namespace MPLRServer
 
                     pConnection.Logger_WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedCharacterName, guild.Name);
                 }
+            }
+        }
+
+        public static void HandleAlliance(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            byte type = pPacket.ReadByte();
+            if (type == 0x0C)
+            {
+                bool hasAlliance = pPacket.ReadBool();
+                if (hasAlliance)
+                {
+                    Alliance alliance = new Alliance();
+                    alliance.Decode(pPacket);
+                    alliance.Save(pConnection.WorldID);
+                    pConnection.Logger_WriteLine("{0} must be in Alliance {1}", pConnection.LastLoggedCharacterName, alliance.Name);
+                }
+            }
+            else if (type == 0x0D)
+            {
+                Alliance.DecodeGuilds(pPacket, pConnection.WorldID);
             }
         }
 
