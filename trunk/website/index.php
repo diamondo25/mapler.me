@@ -36,7 +36,7 @@ if ($_loggedin) {
 			<div class="middle">
 				<div class="inner">
 					<a href="#">
-						<img src="http://i.imm.io/ZaH7.png">
+						<img class="logo" src="http://i.imm.io/ZaH7.png">
 					</a>
 						<div class="info">
 							<p>Mapler.me is a MapleStory <b>social network</b> and service providing innovative features to enhance your gaming experience!</p>
@@ -51,14 +51,6 @@ if ($_loggedin) {
 	
 	<div class="mobilepls" style="display:none;">
 		<img src="//<?php echo $domain ?>/inc/img/icon.png" width="200px"/>
-		<p><a href="/login/" class="btn btn-success btn-action btn-large">Login</a></p>
+		<p><a href="/login/" class="btn btn-info btn-action btn-large">Login</a></p>
 	</div>
-	
-	<footer>
-		<p>&copy; 2013 Mapler.me</p>
-		<ul>
-			<li class="hide-mobile"><a href="https://twitter.com/maplerme">@maplerme</a></li>
-		</ul>
-	</footer>
-
 </body>
