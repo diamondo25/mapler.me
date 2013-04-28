@@ -13,10 +13,7 @@ require_once __DIR__.'/../inc/header.php';
 <div class="span4">
 	<div class="status">
 		<center>
-			<h2>Player Spotlight</h2>
-			<img src="//mapler.me/ignavatar/Marissaurus"/><br/>
-			(<a href="//maryse.mapler.me">Maryse</a>)<hr />
-			Maryse, one of our Mapler+ members, joined Mapler.me early on during it's private beta. Since the very beginning she helped give suggestions for additions, helped discover and tackle some early bugs with our client, as well as being an active member.
+			<h2>Our Friends</h2>
 		</center>
 	</div>
 	

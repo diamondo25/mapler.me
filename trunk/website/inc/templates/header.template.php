@@ -178,7 +178,7 @@ else:
 ?>
 								<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 								<li class="divider"></li>
-								<li><a href="//<?php echo $domain; ?>/blog/">Mapler.News (Blog)</a></li>
+								<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
 								<?php if ($_loggedin): ?><li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 								<li><a href="//<?php echo $domain; ?>/todo/">To-do / Issues</a></li><?php endif; ?>
 								<li class="divider"></li>
@@ -224,7 +224,7 @@ if ($_loggedin):
 					<div id="user-dropdown" class="info" style="width:200px;height:80px;">
 <img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
 		<div style="position:relative;right:50px;top:15px;">
-										<p style="text-transform:lowercase;margin-bottom:-25px !important;"><?php echo $_loginaccount->GetUsername(); ?></p>
+										<p style="text-transform:lowercase;margin-bottom:-25px !important;"><?php echo substr($_loginaccount->GetUsername(), 0,7)."..."; ?></p>
 										<!-- function needed that displays rank as text instead off number -->
 										<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
 		</div>
