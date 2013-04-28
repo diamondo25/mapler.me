@@ -28,7 +28,8 @@ if ($_loggedin) {
 	die;
 }
 ?>
-
+<div class="left"></div>
+<div class="right"></div>
 <body class="teaser-page">
 	<div class="bg"></div>
 		<div class="outer">
