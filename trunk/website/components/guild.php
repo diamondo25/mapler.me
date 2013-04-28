@@ -88,7 +88,7 @@ $guild = $q->fetch_assoc();
 
 	
 	<div class="span12">
-	<?php
+<?php
 // This has to be fixed.
 $characters_per_row = 4;
 $i = 0;

@@ -132,7 +132,8 @@ namespace MPLRServer
                 guildTable.AddColumn("points", true);
                 guildTable.AddColumn("alliance_id", true);
 
-                guildTable.AddRow(ID, pWorldID, Name,
+                guildTable.AddRow(
+                    ID, pWorldID, Name,
                     Notice,
                     Ranks[0],
                     Ranks[1],
@@ -159,6 +160,7 @@ namespace MPLRServer
             {
                 guildMembersTable.OnDuplicateUpdate = true;
                 guildMembersTable.AddColumn("guild_id", true);
+                guildMembersTable.AddColumn("world_id", true);
                 guildMembersTable.AddColumn("character_id", false); // Switching guild huh?
                 guildMembersTable.AddColumn("rank", true);
                 guildMembersTable.AddColumn("contribution", true);
@@ -166,7 +168,8 @@ namespace MPLRServer
                 foreach (var member in Members)
                 {
                     guildMembersTable.AddRow(
-                        ID,
+                        ID, 
+                        pWorldID,
                         member.CharacterID,
                         member.Rank,
                         member.Contribution
@@ -181,6 +184,7 @@ namespace MPLRServer
             {
                 guildSkillsTable.OnDuplicateUpdate = true;
                 guildSkillsTable.AddColumn("guild_id", false);
+                guildSkillsTable.AddColumn("world_id", true);
                 guildSkillsTable.AddColumn("skill_id", false);
                 guildSkillsTable.AddColumn("level", true);
                 guildSkillsTable.AddColumn("bought_by", true);
@@ -191,6 +195,7 @@ namespace MPLRServer
                 {
                     guildSkillsTable.AddRow(
                         ID,
+                        pWorldID,
                         skill.SkillID,
                         skill.Level,
                         skill.BoughtBy,

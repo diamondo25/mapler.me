@@ -150,7 +150,7 @@ function GetID($row) {
 $zlayers = array();
 $item_locations = array();
 
-$using_face = GetCharacterOption($internal_id, 'avatar_face', 'smile');
+$using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
 
 function ParseItem($id) {
 	global $item_locations, $zlayers, $zmap, $main_dir, $using_face;
@@ -160,8 +160,10 @@ function ParseItem($id) {
 	$zvalue = '';
 	$foundinfo = false;
 	foreach ($iteminfo['grouped'] as $key => $value) {
-		if (!isset($value[0])) continue;
-		foreach ($value[0] as $category => $block) {
+		$isface = $itemtype == 2 || $itemtype == 3;
+		$tmp = isset($value[0]) ? $value[0] : ($isface && $key == 'default' ? $value : null);
+		if ($tmp == null) continue;
+		foreach ($tmp as $category => $block) {
 			if (!isset($block['z'])) continue;
 			$zval = $zmap[$block['z']];
 			if (isset($_GET['debug']))
@@ -182,6 +184,8 @@ function ParseItem($id) {
 				'vslot' => isset($iteminfo['grouped']['info']['vslot']) ? $iteminfo['grouped']['info']['vslot'] : array(),
 				'islot' => isset($iteminfo['grouped']['info']['islot']) ? $iteminfo['grouped']['info']['islot'] : 'characterStart'
 			);
+			
+			$objectdata['image'] = $objectdata['stance'].($isface && $key == 'default' ? '.' : '.0.').$objectdata['category'].'.png';
 			$foundinfo = true;
 			//if ($zmap[$objectdata['islot']] > $zmap['characterEnd']) continue;
 			$zlayers[$zval][] = $objectdata;
@@ -296,7 +300,7 @@ foreach ($zlayers as $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
 		if ($zval == 'hairOverHead' && isset($zlayers[$zmap['cap']])) continue;
-		$img = $item_locations[$object['itemid']].$object['stance'].'.0.'.$object['category'].'.png';
+		$img = $item_locations[$object['itemid']].$object['image'];
 		$x = $mainx;
 		$y = $mainy;
 		if (isset($object['info']['map']['navel'])) {
