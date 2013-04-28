@@ -1,14 +1,24 @@
 <?php
 $char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
+$faces = array();
+$faces[] = array('default', 'Standard');
+$faces[] = array('angry', 'Mad');
+$faces[] = array('blaze', 'Blaze');
+$faces[] = array('bowing', 'Bowing');
+$faces[] = array('cheers', 'Cheering');
+$faces[] = array('cry', 'Crying');
+$faces[] = array('hot', 'Hot');
+
 
 $characternames = array();
 
 $q = $__database->query("
 SELECT 
-	chr.id, 
-	chr.name, 
-	w.world_name 
+	chr.internal_id,
+	chr.id,
+	chr.name,
+	w.world_name
 FROM 
 	characters chr 
 LEFT JOIN 
@@ -28,15 +38,18 @@ ORDER BY
 
 // printing table rows
 $cache = array();
+$name_internal_id_list = array();
 
 while ($row = $q->fetch_assoc()) {
 	$cache[] = $row;
 	$characternames[] = $row['name'];
+	$name_internal_id_list[$row['name']] = $row['internal_id'];
 }
 $q->free();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
 	$char_options = $_POST['char_shown_option'];
+	$char_face_options = $_POST['char_face_option'];
 	$main_char = $_POST['main_character'];
 	$error = '';
 	
@@ -56,6 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 				break;
 			}
 		}
+
+		foreach ($char_face_options as $charname => $value) {
+			if (!in_array($charname, $characternames) || !isset($faces[$value])) {
+				$found = false;
+				break;
+			}
+		}
 		
 		if (!$found) {
 			$error = 'An error occurred. Try again.';
@@ -68,11 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 			$char_config['main_character'] = $main_char;
 			
 			foreach ($char_options as $charname => $value) {
-				if (!in_array($charname, $characternames)) {
-					$found = false;
-					break;
-				}
 				$char_config['characters'][$charname] = $value;
+			}
+			foreach ($char_face_options as $charname => $value) {
+				SetCharacterOption($name_internal_id_list[$charname], 'avatar_face', $faces[$value][0]);
 			}
 			
 			$_loginaccount->SetConfigurationOption('character_config', $char_config);
@@ -104,7 +123,7 @@ foreach ($cache as $row) {
 		$char_config['main_character'] = $row['name'];
 	}
 	$shown_option_value = isset($char_config['characters'][$row['name']]) ? $char_config['characters'][$row['name']] : 0; // Default = 0
-	
+	$shown_face_value = GetCharacterOption($row['internal_id'], 'avatar_face', 'default');
 	if ($i % $chars_per_row == 0) {
 		if ($i > 0) {
 ?>
@@ -132,6 +151,14 @@ foreach ($cache as $row) {
 							<option value="0"<?php echo $shown_option_value == 0 ? ' selected="selected"' : ''; ?>>Always</option>
 							<option value="1"<?php echo $shown_option_value == 1 ? ' selected="selected"' : ''; ?>>Only for friends</option>
 							<option value="2"<?php echo $shown_option_value == 2 ? ' selected="selected"' : ''; ?>>Never</option>
+						</select>
+						<br />
+						Using face: 
+						<br />
+						<select name="char_face_option[<?php echo $row['name']; ?>]" style="height:35px !important;width: 150px !important;">
+<?php foreach ($faces as $faceid => $data): ?>
+							<option value="<?php echo $faceid; ?>"<?php echo $shown_face_value == $data[0] ? ' selected="selected"' : ''; ?>><?php echo $data[1]; ?></option>
+<?php endforeach; ?>
 						</select>
 						<br />
 						<input type="radio" name="main_character" value="<?php echo $row['name']; ?>"<?php echo $char_config['main_character'] == $row['name'] ? ' checked="checked"' : ''; ?> /> Main character

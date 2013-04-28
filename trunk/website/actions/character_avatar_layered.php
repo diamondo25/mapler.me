@@ -296,10 +296,11 @@ if (isset($_GET['debug'])) {
 	print_r($item_locations);
 }
 
+$foundcap = false;
 foreach ($zlayers as $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
-		if ($zval == 'hairOverHead' && isset($zlayers[$zmap['cap']])) continue;
+		if (($zval == 'hairOverHead' || $zval == 'backHair') && $foundcap) continue;
 		$img = $item_locations[$object['itemid']].$object['image'];
 		$x = $mainx;
 		$y = $mainy;
@@ -335,6 +336,8 @@ foreach ($zlayers as $objects) {
 			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' ---- Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
 		add_image($img, $x, $y);
+		
+		if ($zval == 'cap') $foundcap = true;
 	}
 }
 
