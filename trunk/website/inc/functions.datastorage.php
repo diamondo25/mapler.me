@@ -227,3 +227,41 @@ WHERE
 	$q->free();
 	return $temp;
 }
+
+
+function GetCharacterOption($id, $key, $default = null) {
+	global $__database;
+	$q = $__database->query("
+SELECT
+	option_value
+FROM
+	character_options
+WHERE
+	character_id = ".$id."
+AND
+	option_key = '".$__database->real_escape_string($key)."'");
+	
+	if ($q->num_rows == 0) {
+		$q->free();
+		return $default;
+	}
+	$row = $q->fetch_row();
+	$q->free();
+	return $row[0];
+}
+
+
+function SetCharacterOption($id, $key, $value) {
+	global $__database;
+	$q = $__database->query("
+INSERT INTO
+	character_options
+VALUES
+(
+	".$id.",
+	'".$__database->real_escape_string($key)."',
+	'".$__database->real_escape_string($value)."'
+)
+ON DUPLICATE KEY UPDATE
+	option_value = VALUES(`option_value`)");
+}

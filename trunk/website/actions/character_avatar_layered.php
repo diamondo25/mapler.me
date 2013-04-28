@@ -150,9 +150,12 @@ function GetID($row) {
 $zlayers = array();
 $item_locations = array();
 
+$using_face = GetCharacterOption($internal_id, 'avatar_face', 'smile');
+
 function ParseItem($id) {
-	global $item_locations, $zlayers, $zmap, $main_dir;
+	global $item_locations, $zlayers, $zmap, $main_dir, $using_face;
 	$iteminfo = get_data($id);
+	$itemtype = GetItemType($id);
 
 	$zvalue = '';
 	$foundinfo = false;
@@ -161,16 +164,15 @@ function ParseItem($id) {
 		foreach ($value[0] as $category => $block) {
 			if (!isset($block['z'])) continue;
 			$zval = $zmap[$block['z']];
-			$itemtype = GetItemType($id);
 			if (isset($_GET['debug']))
 				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
-			if ($itemtype == 2 && $key != 'angry') continue;
+
+			if ($itemtype == 2 && $key != $using_face) continue;
 			if ($itemtype == 1 && $category == 'ear') continue; // Android!
-			if ($itemtype != 2 && $key != 'stand1' && $key != 'angry') continue;
+			if ($itemtype != 2 && $key != 'stand1' && $key != $using_face) continue;
 			if ($itemtype == 121 && $category != 'weapon') continue;
 			if ($itemtype == 190) continue;
-			// echo 'Category '.$category.' has Z!'."\r\n";
-			
+
 			$objectdata = array(
 				'info' => $block,
 				'type' => $itemtype,
@@ -215,19 +217,20 @@ $character_equipment->free();
 
 krsort($zlayers);
 
-
-if (isset($_GET['bg'])) {
-	$bgid = intval($_GET['bg']);
-	$bgname = '';
-	switch ($bgid) {
-		case 0: $bgname = 'fm'; break;
-		case 1: $bgname = 'kerning'; break;
-		case 2: $bgname = 'kerning_hideout'; break;
-		case 3: $bgname = 'monsterpark'; break;
-		case 4: $bgname = 'ardentmill'; break;
-		default: $bgname = 'fm'; break;
+if (isset($_GET['use_bg'])) {
+	$bg = GetCharacterOption($internal_id, 'avatar_bg');
+	if ($bg !== null) {
+		$bgname = '';
+		switch ($bg) {
+			case 0: $bgname = 'fm'; break;
+			case 1: $bgname = 'kerning'; break;
+			case 2: $bgname = 'kerning_hideout'; break;
+			case 3: $bgname = 'monsterpark'; break;
+			case 4: $bgname = 'ardentmill'; break;
+			default: $bgname = 'fm'; break;
+		}
+		add_image(__DIR__.'/../inc/img/avatar_backgrounds/'.$bgname.'.png', 0, 0);
 	}
-	add_image(__DIR__.'/../inc/img/avatar_backgrounds/'.$bgname.'.png', 0, 0);
 }
 
 
@@ -289,12 +292,10 @@ if (isset($_GET['debug'])) {
 	print_r($item_locations);
 }
 
-$hascap = false;
-
 foreach ($zlayers as $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
-		if ($hascap && $zval == 'hairOverHead') continue;
+		if ($zval == 'hairOverHead' && isset($zlayers[$zmap['cap']])) continue;
 		$img = $item_locations[$object['itemid']].$object['stance'].'.0.'.$object['category'].'.png';
 		$x = $mainx;
 		$y = $mainy;
@@ -330,9 +331,6 @@ foreach ($zlayers as $objects) {
 			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' ---- Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
 		add_image($img, $x, $y);
-		if (!$hascap && $zval == 'cap') {
-			$hascap = true;
-		}
 	}
 }
 

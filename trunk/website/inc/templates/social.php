@@ -172,7 +172,7 @@ WHERE
 		}
 		
 		if ($error == '') {
-			$blog = isset($_POST['blog']) ? 1 : 0;
+			$blog = $_loginaccount->GetAccountRank() >= RANK_MODERATOR && isset($_POST['blog']) ? 1 : 0;
 
 			$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 			$has_characters = !empty($char_config['main_character']);

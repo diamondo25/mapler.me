@@ -244,8 +244,9 @@ namespace MPLRServer
                 tmp.Add(0x001B, new Handler((pConnection, pPacket) =>
                 {
                     byte requestType = pPacket.ReadByte();
-                    if (requestType == 1)
+                    if (requestType != 2)
                     {
+                        pConnection.Logger_WriteLine("Used weblogin, probably!");
                         // Logging in via web.... D:
                         pPacket.ReadString(); // Login key
                         pPacket.Skip(16); // CC key
