@@ -159,7 +159,7 @@ function ParseItem($id) {
 
 	$zvalue = '';
 	$foundinfo = false;
-	foreach ($iteminfo['grouped'] as $key => $value) {
+	foreach ($iteminfo as $key => $value) {
 		$isface = $itemtype == 2 || $itemtype == 3;
 		$tmp = isset($value[0]) ? $value[0] : ($isface && $key == 'default' ? $value : null);
 		if ($tmp == null) continue;
@@ -181,8 +181,8 @@ function ParseItem($id) {
 				'itemid' => $iteminfo['ITEMID'], 
 				'stance' => $key, 
 				'category' => $category,
-				'vslot' => isset($iteminfo['grouped']['info']['vslot']) ? $iteminfo['grouped']['info']['vslot'] : array(),
-				'islot' => isset($iteminfo['grouped']['info']['islot']) ? $iteminfo['grouped']['info']['islot'] : 'characterStart'
+				'vslot' => isset($iteminfo['info']['vslot']) ? $iteminfo['info']['vslot'] : array(),
+				'islot' => isset($iteminfo['info']['islot']) ? $iteminfo['info']['islot'] : 'characterStart'
 			);
 			
 			$objectdata['image'] = $objectdata['stance'].($isface && $key == 'default' ? '.' : '.0.').$objectdata['category'].'.png';

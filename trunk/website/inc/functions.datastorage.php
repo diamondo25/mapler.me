@@ -125,9 +125,9 @@ function GetNebuliteInfo($itemid) {
 
 // Only for X Y and some special stuff!!!
 function GetItemWZInfo($itemid) {
-	global $__database;//, $apcinstalled;
-	$apcinstalled = false;
-	$key_name = "data_characterwz_cache2".$itemid;
+	global $__database, $apcinstalled;
+	
+	$key_name = 'data_characterwz_cache2'.$itemid;
 	
 	if ($apcinstalled && apc_exists($key_name)) {
 		return apc_fetch($key_name);
@@ -144,16 +144,16 @@ WHERE
 );
 
 	$item_info = array();
-	$item_info['grouped'] = array();
+	//$item_info['grouped'] = array();
 	while ($data = $q->fetch_row()) {
 		if ($data[0] == 'info_vslot') {
 			preg_match_all('/../i', $data[1], $matches);
 			$data[1] = $matches[0];
 		}
-		$item_info[$data[0]] = $data[1];
+		//$item_info[$data[0]] = $data[1];
 		$split = explode('_', $data[0]);
 		$val = true;
-		$tmp2 = &$item_info['grouped'];
+		$tmp2 = &$item_info;
 		foreach ($split as $name) {
 			//$tmp = $val ? $data[1] : $block;
 			if (!isset($tmp2[$name]))
