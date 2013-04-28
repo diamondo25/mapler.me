@@ -88,6 +88,8 @@ $mainy = 38;
 $necky = $mainy + 31;
 $handx = $mainx + 12;
 $handy = $mainy + 38;
+$hand2x = $handx - 12;
+$hand2y = $handy;
 
 // Some other variables
 
@@ -105,14 +107,9 @@ $guild_info_location = $main_dir.'GuildEmblem';
 $skin = $character_data['skin'] + 2000;
 $face = $character_data['eyes'];
 $hair = $character_data['hair'];
-$hairshade = $character_data['skin'];
 $gender = $character_data['gender'];
 
 $ds_mark = $character_data['demonmark'];
-
-if ($ds_mark != 0) {
-	$mask = $ds_mark;
-}
 
 // Determine which items are visible
 // Credit goes to zOmgnO1 for improved code
@@ -152,6 +149,33 @@ $item_locations = array();
 
 $using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
 
+$stand = 1;
+
+function CheckStand($type, $data) {
+	global $stand;
+	switch ($type) {
+		case 140:	// 2-Handed Sword
+		case 141:	// 2-Handed Axe
+		case 142:	// 2-Handed BW
+		case 143:	// Spear
+		case 146:	// Crossbow
+			$stand = 2;
+			
+			if (isset($_GET['debug']))
+				echo 'STANCE ITEM: '.$type."\r\n";
+			break;
+		case 144:	// Pole Arm
+			if (isset($data['stand1'])) // Snowboards are stand = 1
+				$stand = 1;
+			else
+				$stand = 2;
+			if (isset($_GET['debug']))
+				echo 'STANCE ITEM: '.$type."\r\n";
+			break;
+	}
+}
+
+
 function ParseItem($id) {
 	global $item_locations, $zlayers, $zmap, $main_dir, $using_face;
 	$iteminfo = get_data($id);
@@ -159,21 +183,26 @@ function ParseItem($id) {
 
 	$zvalue = '';
 	$foundinfo = false;
+	if (isset($_GET['debug']))
+		echo 'Item: '.$id."\r\n";
 	foreach ($iteminfo as $key => $value) {
+		if ($key == 'ITEMID') continue;
 		$isface = $itemtype == 2 || $itemtype == 3;
 		$tmp = isset($value[0]) ? $value[0] : ($isface && $key == 'default' ? $value : null);
 		if ($tmp == null) continue;
 		foreach ($tmp as $category => $block) {
-			if (!isset($block['z'])) continue;
+			if (!isset($block['z'], $zmap[$block['z']])) continue;
 			$zval = $zmap[$block['z']];
 			if (isset($_GET['debug']))
 				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
 
 			if ($itemtype == 2 && $key != $using_face) continue;
 			if ($itemtype == 1 && $category == 'ear') continue; // Android!
-			if ($itemtype != 2 && $key != 'stand1' && $key != $using_face) continue;
+			if ($itemtype != 2 && $key != 'stand1' && $key != 'stand2' && $key != $using_face) continue;
 			if ($itemtype == 121 && $category != 'weapon') continue;
 			if ($itemtype == 190) continue;
+			
+			CheckStand($itemtype, $iteminfo);
 
 			$objectdata = array(
 				'info' => $block,
@@ -217,7 +246,9 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 }
 $character_equipment->free();
 
-
+if ($ds_mark > 0) {
+	ParseItem($ds_mark);
+}
 
 krsort($zlayers);
 
@@ -237,70 +268,17 @@ if (isset($_GET['use_bg'])) {
 	}
 }
 
-
-// This section determines which stand to use based on the weapon you have
-// Credit goes to zOmgnO1 for improved code
-if ($wep) {
-	$wepType = (int) substr($wep, 0, 3);
-	switch ($wepType) {
-		case 130:	// 1-Handed Sword
-		case 131:	// 1-Handed Axe
-		case 132:	// 1-Handed BW
-		case 133:	// Dagger
-		case 137:	// Wand
-		case 138:	// Staff
-		case 139:	// ?? Unknown
-		case 145:	// Bow
-		case 147:	// Claw
-		case 148:	// Knucle
-		case 149:	// Gun
-			$stand = 1;
-			break;
-		case 140:	// 2-Handed Sword
-		case 141:	// 2-Handed Axe
-		case 142:	// 2-Handed BW
-		case 143:	// Spear
-		case 146:	// Crossbow
-			$stand = 2;
-			break;
-		case 144:	// Pole Arm
-			$location = "Weapon/0" . $wep . ".img/stand1.0.weapon.png";
-			if (file_exists($location)) // Snowboards are stand = 1
-				$stand = 1;
-			else
-				$stand = 2;
-			break;
-		default:
-			$stand = 1;
-			break;
-	}
-}
-else {
-	$stand = 1;
-}
-
-$nxwep = $wep;
-$vslot = "";
-
-
-//$faces = array("hot"); // array("angry", "bewildered", "blaze", "bowing", "cheers", "chu", "cry", "dam", "despair", "glitter", "hit", "hot", "love");
-$faces = array('default');
-
-// Create face
-$chosenface = $faces[rand(0, count($faces) - 1)];
-$chosenface_info = $chosenface == 'default' ? $chosenface : $chosenface.'_0';
-$chosenface_img = $chosenface == 'default' ? $chosenface : $chosenface.'.0';
-
 if (isset($_GET['debug'])) {
 	print_r($zlayers);
 	print_r($item_locations);
 }
 
-$foundcap = false;
-foreach ($zlayers as $objects) {
+$foundcap = isset($zlayers[$zmap['cap']]) || isset($zlayers[$zmap['capOverHair']]);
+foreach ($zlayers as $zname => $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
 		if (($zval == 'hairOverHead' || $zval == 'backHair') && $foundcap) continue;
+		if ($object['stance'] == 'stand'.($stand == 1 ? 2 : 1)) continue;
 		$img = $item_locations[$object['itemid']].$object['image'];
 		$x = $mainx;
 		$y = $mainy;
@@ -323,8 +301,8 @@ foreach ($zlayers as $objects) {
 			$y -= $object['info']['map']['neck']['Y'];
 		}
 		elseif (isset($object['info']['map']['hand'])) {
-			$x = $handx;
-			$y = $handy;
+			$x = $stand == 1 ? $handx : $hand2x;
+			$y = $stand == 1 ? $handy : $hand2y;
 			$x -= $object['info']['map']['hand']['X'];
 			$y -= $object['info']['map']['hand']['Y'];
 		}
@@ -333,11 +311,11 @@ foreach ($zlayers as $objects) {
 		if (isset($object['info']['origin']['X'])) $x -= $object['info']['origin']['X'];
 		if (isset($object['info']['origin']['Y'])) $y -= $object['info']['origin']['Y'];
 		if (isset($_GET['debug'])) {
-			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' ---- Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
+			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' --- Zname '.$zname.'  - Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
 		add_image($img, $x, $y);
 		
-		if ($zval == 'cap') $foundcap = true;
+		//if ($zval == 'cap') $foundcap = true;
 	}
 }
 

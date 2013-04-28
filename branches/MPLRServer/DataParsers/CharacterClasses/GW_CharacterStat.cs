@@ -73,6 +73,8 @@ namespace MPLRServer
             this.ID = pPacket.ReadInt();
             this.Name = pPacket.ReadString(13);
 
+            Logger.WriteLine("FOUND CHARACTER {0} (ID: {1})", this.Name, this.ID);
+
             this.Gender = pPacket.ReadByte();
             this.Skin = pPacket.ReadByte();
             this.Face = pPacket.ReadInt();

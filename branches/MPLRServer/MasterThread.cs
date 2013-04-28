@@ -164,6 +164,7 @@ namespace MPLRServer
                             {
                                 Logger.WriteLine("Caught an exception inside the MainThread thread while running an action. Please, handle the exceptions yourself!\r\n{0}", ex.ToString());
                             }
+                            if (Stop) break;
                         }
                     }
                     // Unused thing atm
@@ -208,6 +209,8 @@ namespace MPLRServer
             }
             catch { }
             _mainThread = null;
+
+            Environment.Exit(0);
         }
 
         private void NormalizeTicksBeforeSleep()

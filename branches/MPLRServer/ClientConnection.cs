@@ -103,7 +103,7 @@ namespace MPLRServer
             base.SendPacket(pPacket);
         }
 
-        public void Save(bool pReset)
+        public void Save(bool pReset, bool pClean = true)
         {
             if (_isFake) return;
 
@@ -118,7 +118,7 @@ namespace MPLRServer
                 {
                     _exporter = new MSBExporter();
                 }
-                else
+                else if (pClean)
                 {
                     _exporter = null;
                 }
@@ -192,6 +192,9 @@ namespace MPLRServer
                                 catch (Exception ex)
                                 {
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", opcode, type, ex.ToString());
+                                    LogFilename += "ERROR";
+                                    Save(false, false);
+                                    SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
                                 }
                             }
                             else

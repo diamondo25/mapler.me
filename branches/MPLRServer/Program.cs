@@ -142,11 +142,13 @@ namespace MPLRServer
                                 {
                                     var tmp = new List<ClientConnection>(Clients);
                                     foreach (var client in tmp)
+                                    {
+                                        client.Save(true, true);
                                         client.Disconnect();
+                                    }
 
                                     MySQL_Connection.Instance.Stop = true;
                                     MasterThread.Instance.Stop = true;
-                                    Environment.Exit(0);
                                 });
                                 break;
                             }
