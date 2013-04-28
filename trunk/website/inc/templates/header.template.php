@@ -188,7 +188,7 @@ endif;
 ?>
 					 		</ul>
 				<?php if ($_loggedin):?>
-				<?php if (strpos($_SERVER['REQUEST_URI'], '/stream/') !== FALSE): ?>
+				<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') === FALSE && strpos($_SERVER['REQUEST_URI'], '/manage/') === FALSE): ?>
 					<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
 					<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
 				<?php endif; ?>
