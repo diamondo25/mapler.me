@@ -4,7 +4,6 @@ require_once __DIR__.'/../inc/classes/guild.php';
 
 $guild = new Guild();
 
-
 if (!$guild->LoadByName($_GET['name'], $_GET['world'])) {
 ?>
 <center>
@@ -22,7 +21,7 @@ if (!$guild->LoadByName($_GET['name'], $_GET['world'])) {
 <div class="row">
 	<div class="span12">
 	<center>
-		<h1 class="name"><span class="faded"><?php echo $guild->world_name; ?> / </span><?php echo $guild->name; ?><br/>
+		<h1 class="name"><span class="faded"><?php echo $guild->world_name; ?> / </span><?php echo $guild->name; ?> <span class="faded capacity">(<?php echo count($guild->members); ?>/<?php echo $guild->capacity; ?>)</span><br/>
 			<small>"<?php echo $guild->notice; ?>"</small>
 		</h1>
 		<hr />
@@ -35,7 +34,6 @@ if (!$guild->LoadByName($_GET['name'], $_GET['world'])) {
 		</p>
 	</center>
 	</div>
-
 	
 	<div class="span12">
 <?php

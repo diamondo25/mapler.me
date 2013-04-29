@@ -85,6 +85,10 @@ ORDER BY
 		}
 	}
 }
-
-
 ?>
+
+<style>
+.capacity {
+	font-size: 15px;
+}
+</style>
