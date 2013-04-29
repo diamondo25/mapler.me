@@ -51,7 +51,7 @@ z-index: -999;
 	}
 	
 	.moar-inner-navbar {
-		background-color: #3487cb !important;
+		background: #3487cb !important;
 		border-bottom: 1px solid #133783 !important;
 		min-width: 981px !important;
 		position: relative !important;
@@ -449,7 +449,7 @@ footer a {
 .navbar-inner {
 	background: rgba(255,255,255,1) !important;
 	box-shadow: 1px 4px 10px rgba(0,0,0,0.2);
-	height: 85px !important;
+	height: 85px;
 	padding-left:20px;
 	padding-right:20px;
 }
