@@ -99,9 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
 			
 			$ip_address = $_SERVER['REMOTE_ADDR'];
-			$fullname = $__database->real_escape_string($_POST["fullname"], ENT_COMPAT, 'UTF-8');
-			$email = $__database->real_escape_string($_POST['email'], ENT_COMPAT, 'UTF-8');
-			$nickname = $__database->real_escape_string($_POST['nickname'], ENT_COMPAT, 'UTF-8');
+			$fullname = $__database->real_escape_string($_POST["fullname"]);
+			$email = $__database->real_escape_string($_POST['email']);
+			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
 			$statement = $__database->prepare("INSERT INTO accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip, registered_on) VALUES
@@ -180,7 +180,7 @@ if($row['status'] == '1') {
 				<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px"/><br/>
 				We're sorry! The amount of new members today has reached it's max.<br/>
 				Come back tomorrow!<br/>
-			<sub>Tip: The limit resets around <b>8AM</b> (PST / MapleStory Time)</sub>
+			<sub>Tip: The limit resets at <b>8AM</b> (PST / MapleStory Time)</sub>
 		</center>
 	</p>
 <?php
