@@ -4,28 +4,30 @@
 
 /* general */
 
-body { background: #f0fef0 url('../img/goatesbg.png') center -75px no-repeat fixed; }
+body {
+	background: #f0fef0 url('../img/goatesbg.png') center -75px no-repeat fixed;
+}
 
 .left {
-background: url('../img/left.png');
-width:447px;
-height: 1530px;
-position: fixed;
-top: 0px;
-bottom: 0px;
-left: 0px;
-z-index: -998;
+	background: url('../img/left.png');
+	width:447px;
+	height: 1530px;
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	z-index: -998;
 }
 
 .right {
-background: url('../img/right.png');
-width:447px;
-height: 1530px;
-position: fixed;
-top: 0px;
-bottom: 0px;
-right: 0px;
-z-index: -999;
+	background: url('../img/right.png');
+	width:447px;
+	height: 1530px;
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+	z-index: -999;
 }
 
 	.in.affix {
@@ -42,7 +44,7 @@ z-index: -999;
 		box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
 	}
 	
-		.menu-divider {
+	.menu-divider {
 		border-left:solid 1px rgba(0,0,0,0.2);
 		width:1px;
 		height:85px;
@@ -51,7 +53,7 @@ z-index: -999;
 	}
 	
 	.main-navbar {
-	z-index:1050;
+		z-index:1050;
 	}
 	
 	.main-navbar.affix {
@@ -108,6 +110,13 @@ html { overflow-x: hidden; }
 	font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
 	line-height: 1.28;
 	font-size: 13px;
+}
+
+.top-nav {
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
 }
 
 .searchbar {

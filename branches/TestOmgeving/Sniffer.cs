@@ -169,10 +169,11 @@ namespace Mapler_Client
                     cache = (int)(tcpPacket.SequenceNumber + 1);
                 }
             }
-            else if (FoundConnection && (
-                (_currentPortMap.Key == tcpPacket.SourcePort && _currentPortMap.Value == tcpPacket.DestinationPort)
-                ||
-                (_currentPortMap.Value == tcpPacket.SourcePort && _currentPortMap.Key == tcpPacket.DestinationPort)
+            else if (FoundConnection && 
+                (
+                    (_currentPortMap.Key == tcpPacket.SourcePort && _currentPortMap.Value == tcpPacket.DestinationPort)
+                    ||
+                    (_currentPortMap.Value == tcpPacket.SourcePort && _currentPortMap.Key == tcpPacket.DestinationPort)
                 )
                 )
             {
@@ -204,7 +205,7 @@ namespace Mapler_Client
             }
             else
             {
-                Logger.WriteLine("[DEBUG] {0} - {1} {2}", FoundConnection, tcpPacket.SourcePort, tcpPacket.DestinationPort);
+                // Logger.WriteLine("[DEBUG] {0} - {1} {2}", FoundConnection, tcpPacket.SourcePort, tcpPacket.DestinationPort);
             }
         }
     }

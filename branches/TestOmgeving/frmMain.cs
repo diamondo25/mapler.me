@@ -53,6 +53,7 @@ namespace Mapler_Client
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             Program.Closing = true;
+            notifyIcon1.Visible = false;
             if (Sniffer.Instance != null)
             {
                 Sniffer.Instance.Stop();
@@ -125,7 +126,15 @@ namespace Mapler_Client
                     }
                 }
             }
-            System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
+            var process = System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
+            for (int i = 0; i < 20; i++)
+            {
+                System.Threading.Thread.Sleep(1000);
+                if (process.MainWindowHandle != IntPtr.Zero && process.CloseMainWindow())
+                {
+                    break;
+                }
+            }
         }
 
         private void label3_Click(object sender, EventArgs e)

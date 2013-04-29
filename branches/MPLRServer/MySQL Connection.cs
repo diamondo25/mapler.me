@@ -14,6 +14,8 @@ namespace MPLRServer
 
         public MySqlDataReader Reader { get; private set; }
         public bool Stop { get; set; }
+        public int QueryCounter { get; private set; }
+        public int QueryCounterSinceLastReset { get; private set; }
 
         private MySqlConnection _connection;
         private MySqlCommand _command;
@@ -28,7 +30,6 @@ namespace MPLRServer
 
             Instance = new MySQL_Connection("maplestats", "maplederp", "maplestats", ip);
         }
-
 
         ~MySQL_Connection()
         {
@@ -63,17 +64,19 @@ namespace MPLRServer
             _queryList.Clear();
         }
 
+        public MySQL_Connection(string pUsername, string pPassword, string pDatabase, string pHost, ushort pPort = 3306)
+        {
+            QueryCounter = 0;
+
+            Stop = false;
+            _connectionString = "Server=" + pHost + "; Port=" + pPort + "; Database=" + pDatabase + "; Uid=" + pUsername + "; Pwd=" + pPassword;
+            Connect();
+        }
+
         private void AddQuery(string pQuery)
         {
             if (_queryList.Count > 5) _queryList.Pop();
             _queryList.Push(new KeyValuePair<string, string>(pQuery, new StackTrace().ToString()));
-        }
-
-        public MySQL_Connection(string pUsername, string pPassword, string pDatabase, string pHost, ushort pPort = 3306)
-        {
-            Stop = false;
-            _connectionString = "Server=" + pHost + "; Port=" + pPort + "; Database=" + pDatabase + "; Uid=" + pUsername + "; Pwd=" + pPassword;
-            Connect();
         }
 
         public void Connect()
@@ -83,6 +86,7 @@ namespace MPLRServer
                 _connection = new MySqlConnection(_connectionString);
                 _connection.StateChange += new System.Data.StateChangeEventHandler(connection_StateChange);
                 _connection.Open();
+                QueryCounterSinceLastReset = 0;
             }
             catch (Exception ex)
             {
@@ -136,6 +140,8 @@ namespace MPLRServer
 
                 _command = new MySqlCommand(pQuery, _connection);
                 AddQuery(pQuery);
+                QueryCounter++;
+                QueryCounterSinceLastReset++;
                 if (pQuery.StartsWith("SELECT"))
                 {
                     Reader = _command.ExecuteReader();

@@ -90,7 +90,6 @@ namespace MPLRServer
                 stream.Flush();
             }
             _packets.Clear();
-            _packets = null;
         }
     }
 }
