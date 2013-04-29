@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/inc/header.php';
 
-$username_regex = "/^[a-zA-Z0-9-_]+$/";
+$username_regex = "/^[a-z0-9-_]+$/";
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -37,12 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// Check username
 			$username = $__database->real_escape_string($_POST['username']);
 			$len = strlen($username);
+			$disallowed = array("nexon", "nexonamerica", "wizet", "hacker", "waltzing", "maple", "maplestory", 
+			"staff", "admin", "administrator", "moderator", "team", "hack", "hacking", "mesos", "meso", "fuck", 
+			"shit", "asshole", "nigger", "faggot", "cunt", "pussy", "dick", "vagina", "penis", "mail", "cdn", 
+			"user", "users", "contact", "support", "legal", "sales", "bitch", "whore", "slut");
 			if ($len < 4 || $len > 20) {
 				$error = "A Mapler.me username has to be between four and twenty characters long.";
 				$errorList['username'] = true;
 			}
 			elseif (preg_match($username_regex, $username) == 0) {
 				$error = "A Mapler.me username may only hold alphanumeric characters.";
+				$errorList['username'] = true;
+			}
+			elseif (in_array($username, $disallowed)) {
+				$error = "That username is disallowed, please choose another.";
 				$errorList['username'] = true;
 			}
 			else {
