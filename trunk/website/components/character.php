@@ -95,7 +95,11 @@ SELECT
 ?>
 <div class="row">
 	<div class="span12">
-		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>	
+	<?php if ($character_info['account_id'] !== '2') { ?>
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
+	<?php } else { ?>
+		<p class="alert alert-warning">Important: This character was incorrectly added to Mapler.me. (Logged in to an account before connecting to Mapler.me). To gain ownership of this character, please try re-adding the account, or send a request through Support with a screenshot of your character in-game saying your username.</p>
+	<?php } ?>
 	</div>
 </div>
 
