@@ -22,15 +22,15 @@ if (!$guild->LoadByName($_GET['name'], $_GET['world'])) {
 <div class="row">
 	<div class="span12">
 	<center>
-		<h1 class="name"><?php echo $guild->name; ?><br/>
-			<small><?php echo $guild->notice; ?></small>
+		<h1 class="name"><span class="faded"><?php echo $guild->world_name; ?> / </span><?php echo $guild->name; ?><br/>
+			<small>"<?php echo $guild->notice; ?>"</small>
 		</h1>
 		<hr />
-		<p class="name">
-			<small class="name_extra" style="margin-top:10px;">Guild Leader: <?php echo $guild->ranks[0]; ?> -</small>
-			<small class="name_extra" style="margin-top:10px;">Junior: <?php echo $guild->ranks[1]; ?> -</small>
-			<small class="name_extra" style="margin-top:10px;">Rank: <?php echo $guild->ranks[2]; ?> -</small>
-			<small class="name_extra" style="margin-top:10px;">Rank: <?php echo $guild->ranks[3]; ?> -</small>
+		<p class="name"><small class="name_extra" style="margin-top:10px;"><b>Ranks:</b></small>
+			<small class="name_extra" style="margin-top:10px;">Guild Leader: <?php echo $guild->ranks[0]; ?> /</small>
+			<small class="name_extra" style="margin-top:10px;">Junior: <?php echo $guild->ranks[1]; ?> /</small>
+			<small class="name_extra" style="margin-top:10px;">Rank: <?php echo $guild->ranks[2]; ?> /</small>
+			<small class="name_extra" style="margin-top:10px;">Rank: <?php echo $guild->ranks[3]; ?> /</small>
 			<small class="name_extra" style="margin-top:10px;">Rank: <?php echo $guild->ranks[4]; ?></small>
 		</p>
 	</center>

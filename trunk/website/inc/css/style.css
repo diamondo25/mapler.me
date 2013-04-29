@@ -28,6 +28,74 @@ right: 0px;
 z-index: -999;
 }
 
+	.in.affix {
+		position: fixed;
+		z-index:999;
+		width: 350px;
+		background: rgba(255,255,255,0.9);
+		border-radius: 5px;
+		padding: 10px;
+		color: #FFF;
+		top:95px;
+		-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+		-moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+		box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	}
+	
+		.menu-divider {
+		border-left:solid 1px rgba(0,0,0,0.2);
+		width:1px;
+		height:85px;
+		position:relative;
+		bottom:12px;
+	}
+	
+	.moar-inner-navbar {
+		background-color: #3487cb !important;
+		border-bottom: 1px solid #133783 !important;
+		min-width: 981px !important;
+		position: relative !important;
+		height:40px !important;
+		padding-left: 20px !important;;
+		padding-right: 20px !important;
+		box-shadow: none !important;
+	}
+	
+	.moar-navbar {
+	margin-bottom: 0px;
+	}
+	
+	.moar-navbar a{
+		color: #FFF;
+		margin: 5px;
+	}
+	
+	.main-navbar {
+	z-index:1050;
+	}
+	
+	.main-navbar.affix {
+		position: fixed;
+		top:0;
+		left:0;
+		right:0;
+	}
+
+	.in.affix h3 {
+		display: none;
+	}
+
+	.in.affix .post-resize {
+		width:330px !important;
+	}
+
+	.in.affix form {
+		padding: 0px !important;
+		margin: 0px !important;
+		border-bottom: none !important;
+	}
+
+
 html { overflow-x: hidden; }
 
 .nobreak { white-space: nowrap; }
