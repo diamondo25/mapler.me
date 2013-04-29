@@ -74,7 +74,7 @@ if ($did_add):
 				<div class="caption"><?php echo $account->GetNickname(); ?></div>
 				<center>
 					<br />
-					<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+					<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/">
 						<img src="//<?php echo $domain; ?>/<?php echo $main_char; ?>"/>
 					</a>
 					<br />

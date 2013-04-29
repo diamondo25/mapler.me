@@ -87,7 +87,7 @@ foreach ($cache as $row) {
 				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 				<center>
 					<br />
-					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>">
 						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
 					</a>
 					<br />

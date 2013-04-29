@@ -55,10 +55,11 @@ foreach ($guild->members as $character) {
 	}
 	$i++;
 	
-	$img = !isset($character['name']) ? '/inc/img/no-character.gif' : '/ignavatar/'.$character['name'];
+	$img = !isset($character['name']) ? '/inc/img/no-character.gif' : '/avatar/'.$character['name'];
 	
 ?>
-			<div class="character-brick profilec span3">
+			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $character['name']; ?>'">
+				<div class="caption"><img src="//mapler.me/inc/img/worlds/<?php echo $guild->world_name; ?>.png"> <?php echo $character['name']; ?></div>
 				<center>
 					<br />
 					<img src="//<?php echo $domain.$img; ?>" />
