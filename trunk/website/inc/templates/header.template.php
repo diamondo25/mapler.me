@@ -58,6 +58,25 @@ if ($_loggedin) {
 	</script>
 
 	<style>
+	.moar-inner-navbar {
+		background: #3487cb !important;
+		border-bottom: 1px solid #133783 !important;
+		min-width: 981px !important;
+		position: relative !important;
+		height:40px !important;
+		padding-left: 20px !important;;
+		padding-right: 20px !important;
+		box-shadow: none !important;
+	}
+	
+	.moar-navbar {
+	margin-bottom: 0px ;
+	}
+	
+	.moar-navbar a{
+		color: #FFF;
+		margin: 5px;
+	}
 	</style>
 </head>
 
