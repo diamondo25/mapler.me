@@ -74,6 +74,8 @@ WHERE
 	guild_members.guild_id = ".$this->id."
 AND
 	guild_members.world_id = ".$this->world_id."
+AND
+	characters.name IS NOT NULL
 ORDER BY
 	rank ASC");
 
