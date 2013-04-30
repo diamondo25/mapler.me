@@ -61,7 +61,6 @@ if ($_loggedin) {
 	.moar-inner-navbar {
 		background: #3487cb !important;
 		border-bottom: 1px solid #133783 !important;
-		min-width: 981px !important;
 		position: relative !important;
 		height:40px !important;
 		padding-left: 20px !important;;
@@ -85,10 +84,18 @@ if ($_loggedin) {
 		<div class="navbar moar-navbar">
 			<div class="navbar-inner moar-inner-navbar">
 				<div class="container">
+				
+					<ul class="nav pull-left">
+														
+								<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
+							<span><?php echo GetNotification(); ?> <i class="icon-bell-alt icon-white"></i> </span>
+						</a>
+					</ul>
+				
 					<div class="nav-collapse">
 						<ul class="nav">
-							 <li> 
-								<form method="post" style="margin: 0px;" action="http://<?php echo $domain; ?>/search/">
+							 <li>
+								<form method="post" style="margin: 0px;" class="span10" action="http://<?php echo $domain; ?>/search/">
 									<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
 									<input type="hidden" name="type" value="player" />
 								</form>
@@ -96,7 +103,7 @@ if ($_loggedin) {
 						</ul>
 					</div>
 
-					<ul class="nav hidden-phone pull-right">
+					<ul class="nav pull-right">
 						<a href="http://twitter.com/maplerme"><i class="icon-twitter"></i></a>
 						<a href="http://facebook.com/maplerme"><i class="icon-facebook"></i></a>
 					</ul>
