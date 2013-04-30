@@ -85,7 +85,7 @@ if ($_loggedin) {
 			<div class="navbar-inner moar-inner-navbar">
 				<div class="container">
 				<?php if ($_loggedin) { ?>
-					<ul class="nav pull-left">
+					<ul class="nav pull-left universal">
 														
 								<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
 							<span><?php echo GetNotification(); ?> <i class="icon-bell-alt icon-white"></i> </span>
@@ -103,7 +103,7 @@ if ($_loggedin) {
 						</ul>
 					</div>
 
-					<ul class="nav pull-right">
+					<ul class="nav pull-right universal">
 						<a href="http://twitter.com/maplerme"><i class="icon-twitter"></i></a>
 						<a href="http://facebook.com/maplerme"><i class="icon-facebook"></i></a>
 					</ul>
@@ -322,7 +322,7 @@ endif;
 	<div class="left"></div>
 	<div class="right"></div>
 
-	<div class="container" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 160px">
+	<div class="container main" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 160px">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
