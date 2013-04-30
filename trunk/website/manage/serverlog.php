@@ -2,7 +2,6 @@
 require_once __DIR__.'/../inc/header.php';
 
 function RunCMD($cmd) {
-	echo 'COMMAND: '.$cmd."\r\n\r\n";
 	$descriptorspec = array(
 		0 => array('pipe', 'r'),  // stdin is a pipe that the child will read from
 		1 => array('pipe', 'w'),  // stdout is a pipe that the child will write to
@@ -54,7 +53,7 @@ foreach (glob('/mplrserver/logs/*') as $filename) {
 }
 ?>
 <pre>
-<?php echo RunCMD('grep '.escapeshellarg($searchfor).' '.escapeshellarg($name).' | tail -n '.$lines); ?>
+<?php echo RunCMD('grep -i -n '.escapeshellarg($searchfor).' '.escapeshellarg($name).' | tail -n '.$lines); ?>
 </pre>
 <?php
 require_once __DIR__.'/../inc/footer.php';
