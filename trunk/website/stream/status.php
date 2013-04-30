@@ -17,10 +17,11 @@ WHERE
 
 if ($q->num_rows == 0) {
 ?>
+	<div class="span12">
 		<center>
-			<img src="http://mapler.me/inc/img/icon.png"/>
 			<p class="lead status">404: Status not found.</p>
 		</center>
+	</div>
 <?php
 }
 else {
