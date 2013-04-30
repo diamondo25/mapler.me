@@ -183,7 +183,7 @@ if ($_loggedin):
 									<div id="user-dropdown" class="info" style="width:200px;height:80px;">
 										<img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
 										<div style="position:relative;right:50px;top:15px;">
-											<p style="text-transform:lowercase;margin-bottom:-25px !important;"><?php echo substr($_loginaccount->GetUsername(), 0,7)."..."; ?></p>
+											<p style="text-transform:lowercase;margin-bottom:-25px !important;overflow:hidden;text-overflow:ellipsis;"><?php echo $_loginaccount->GetUsername(); ?></p>
 											<!-- function needed that displays rank as text instead off number -->
 											<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
 										</div>
