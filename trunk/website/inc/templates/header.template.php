@@ -84,14 +84,14 @@ if ($_loggedin) {
 		<div class="navbar moar-navbar">
 			<div class="navbar-inner moar-inner-navbar">
 				<div class="container">
-				
+				<?php if ($_loggedin) { ?>
 					<ul class="nav pull-left">
 														
 								<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
 							<span><?php echo GetNotification(); ?> <i class="icon-bell-alt icon-white"></i> </span>
 						</a>
 					</ul>
-				
+				<?php } ?>
 					<div class="nav-collapse">
 						<ul class="nav">
 							 <li>
