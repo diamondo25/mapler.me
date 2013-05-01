@@ -33,7 +33,7 @@ $(document).ready(function() {
 		var uniqueid = $(this).attr('unique-id');
 		$.ajax({
 			type: 'GET',
-			url: '/api/responses/' + statusid + '/',
+			url: '/api/status/' + statusid + '/',
 			success: function (data) {
 				if (data.error != undefined) {
 					alert(data.error);
