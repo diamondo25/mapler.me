@@ -31,8 +31,8 @@ LIMIT 10");
 		$status->PrintAsHTML();
 	
 	$data = ob_get_clean();
-	
-	JSONAnswer(array('result' => $data));
+	if (!$data) JSONAnswer(array('response' => '404'));
+	JSONAnswer(array('response' => '200', 'result' => $data));
 }
 
 elseif ($request_type == 'blog') {
@@ -60,14 +60,13 @@ ORDER BY
 	}
 	
 	$data = ob_get_clean();
-	
+	if (!$data) JSONAnswer(array('response' => '404'));
 	JSONAnswer(array('result' => $data, 'amount' => count($statuses->data)));
 }
 
 elseif ($request_type == 'list') {
-	// Retrieves at max 10 statusses
+	// Either requires the SESSION to be loggedin OR gives a correct api key (will be worked on).
 	if (!$_loggedin) JSONDie('Not loggedin');
-	
 	RetrieveInput('lastpost', 'mode');
 	
 	$P['lastpost'] = intval($P['lastpost']);
@@ -110,7 +109,7 @@ LIMIT 15
 		$status->PrintAsHTML(' span12');
 	}
 	$data = ob_get_clean();
-	
+	if (!$data) JSONAnswer(array('response' => '404'));
 	JSONAnswer(array('result' => $data, 'lastid' => $lastid, 'firstid' => $firstid, 'amount' => count($statuses->data)));
 }
 

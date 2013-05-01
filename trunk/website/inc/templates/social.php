@@ -145,7 +145,15 @@ function RemoveStatus(id) {
 
 // If antispam passes, push status
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
-		$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
+		$blogcheck = $_POST['blog'];
+		
+		if ($blogcheck == '0') {
+			$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
+		}
+		else {
+			$content = $_POST['content'];
+		}
+		
 		$reply_to = intval($_POST['reply-to']);
 		$error = '';
 		if ($content == '') {

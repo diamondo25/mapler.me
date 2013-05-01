@@ -33,7 +33,7 @@ $(document).ready(function() {
 		var uniqueid = $(this).attr('unique-id');
 		$.ajax({
 			type: 'GET',
-			url: '/ajax/status.php?type=responses&statusid=' + statusid,
+			url: '/api/responses/' + statusid + '/',
 			success: function (data) {
 				if (data.error != undefined) {
 					alert(data.error);
@@ -53,7 +53,7 @@ var latestStatusDown = -1;
 function TryRequestMore(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '/ajax/status.php?type=list&lastpost=' + (up ? latestStatusUp : latestStatusDown) + '&mode=' + (up ? 'up' : 'back'),
+		url: '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
 		success: function (data) {
 			if (data.error != undefined) {
 				alert(data.error);
@@ -81,7 +81,7 @@ function TryRequestMore(up, init) {
 function GetBlogPosts(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '/ajax/status.php?type=blog',
+		url: '/api/blog/',
 		success: function (data) {
 			if (data.error != undefined) {
 				alert(data.error);

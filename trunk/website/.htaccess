@@ -20,10 +20,13 @@
 	RewriteRule ^contest/ contest.php
 	RewriteRule ^characters characters.php
 	RewriteRule ^team/ team.php
+	RewriteRule ^developers/ dev.php
 	RewriteRule ^support/ /actions/support_email.php
 	RewriteRule ^cdn/ /actions/cdn_upload.php
 	
-	RewriteRule ^ajax/(.*) /actions/ajax/$1 [L,QSA]
+	RewriteRule ^api/list/([^/]*)/([^/]*)/ /actions/ajax/status.php?type=list&lastpost=$2&mode=$3
+	RewriteRule ^api/blog/ /actions/ajax/status.php?type=blog
+	RewriteRule ^api/status/([^/]*)/ /actions/ajax/status.php?type=responses&statusid=$1
 	
 	# image / ranking rewrites
 	

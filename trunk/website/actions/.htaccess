@@ -7,5 +7,4 @@
    RewriteRule ^(.*)$ $1.php
    RewriteRule ^img/([^/]*)$ /actions/character_image.php?name=$1 [L]
 </IfModule>
-
 Options -Indexes
