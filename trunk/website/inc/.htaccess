@@ -2,3 +2,7 @@
 	order allow,deny
 	deny from all
 </FilesMatch>
+
+RewriteEngine on
+RewriteRule ^js/(.*)\.([0-9]+)\.js$ js/$1.js
+RewriteRule ^css/(.*)\.([0-9]+)\.css$ css/$1.css

@@ -189,13 +189,12 @@ namespace MPLRServer
                         if (LastAmountOfCallbacks == 0) // Server is doing nothing, so make the sleep more ocurring
                         {
                             TicksBeforeSleep -= 10;
-                            NormalizeTicksBeforeSleep();
                         }
                         else  // increase if needed
                         {
                             TicksBeforeSleep += 10 + (int)Math.Pow(LastAmountOfCallbacks / 5, 1.5);
-                            NormalizeTicksBeforeSleep();
                         }
+                        NormalizeTicksBeforeSleep();
 
                         if (TicksBeforeSleep < 0)
                         {

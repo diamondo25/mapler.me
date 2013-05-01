@@ -71,6 +71,11 @@ namespace MPLRServer
             _packets.Add(new DumpPacket(pPacket));
         }
 
+        public int GetSize()
+        {
+            return _packets.Count;
+        }
+
         public void Save(string pName, ushort pVersion, System.Net.IPEndPoint pHost, System.Net.IPEndPoint pClient)
         {
             using (FileStream stream = new FileStream(pName, FileMode.Create, FileAccess.Write))

@@ -18,8 +18,8 @@ FROM
 	social_statuses
 WHERE
 	reply_to = ".intval($P['statusid'])."
-
-LIMIT 10");
+LIMIT 10
+");
 	
 	$statuses = new Statusses();
 	$statuses->FeedData($q);
@@ -31,8 +31,8 @@ LIMIT 10");
 		$status->PrintAsHTML();
 	
 	$data = ob_get_clean();
-	if (!$data) JSONAnswer(array('response' => '404'));
-	JSONAnswer(array('response' => '200', 'result' => $data));
+	if ($data === false) JSONDie('No data returned', 204);
+	JSONAnswer(array('result' => $data));
 }
 
 elseif ($request_type == 'blog') {
@@ -44,7 +44,7 @@ SELECT
 FROM
 	social_statuses
 WHERE
-	blog = '1'
+	blog = 1
 ORDER BY
 	id DESC
 ");
@@ -60,13 +60,14 @@ ORDER BY
 	}
 	
 	$data = ob_get_clean();
-	if (!$data) JSONAnswer(array('response' => '404'));
+	if ($data === false) JSONDie('No data returned', 204);
 	JSONAnswer(array('result' => $data, 'amount' => count($statuses->data)));
 }
 
 elseif ($request_type == 'list') {
 	// Either requires the SESSION to be loggedin OR gives a correct api key (will be worked on).
-	if (!$_loggedin) JSONDie('Not loggedin');
+	if (!$_loggedin) JSONDie('Not loggedin', 401);
+
 	RetrieveInput('lastpost', 'mode');
 	
 	$P['lastpost'] = intval($P['lastpost']);
@@ -109,8 +110,8 @@ LIMIT 15
 		$status->PrintAsHTML(' span12');
 	}
 	$data = ob_get_clean();
-	if (!$data) JSONAnswer(array('response' => '404'));
+	if ($data === false) JSONDie('No data returned', 204);
+
 	JSONAnswer(array('result' => $data, 'lastid' => $lastid, 'firstid' => $firstid, 'amount' => count($statuses->data)));
 }
-
 ?>

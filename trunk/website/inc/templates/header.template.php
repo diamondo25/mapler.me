@@ -16,6 +16,34 @@ if ($_loggedin) {
 	$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 }
 
+function _AddHeaderLink($what, $filename) {
+	global $domain;
+	switch ($what) {
+		case 'css':
+			$dirname = 'css';
+			$extension = 'css';
+			$type = 'css';
+		break;
+		case 'js':
+			$dirname = 'js';
+			$extension = 'js';
+			$type = 'javascript';
+		break;
+	}
+	
+	$modificationTime = filemtime(__DIR__.'/../'.$dirname.'/'.$filename.'.'.$extension);
+	if ($what == 'css') {
+?>
+<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/<?php echo $dirname; ?>/<?php echo $filename.'.'.$modificationTime.'.'.$extension; ?>" type="text/<?php echo $type; ?>" />
+<?php
+	}
+	elseif ($what == 'js') {
+?>
+<script type="text/javascript" src="//<?php echo $domain; ?>/inc/<?php echo $dirname; ?>/<?php echo $filename.'.'.$modificationTime.'.'.$extension; ?>"></script>
+<?php
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,24 +63,27 @@ if ($_loggedin) {
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.css" type="text/css" />
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/font-awesome.min.css" type="text/css" />
-<?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
-<?php elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE):?>
-	<link rel="stylesheet" href="//<?php echo $domain; ?>/inc/css/style.player.css" type="text/css" />
-<?php endif; ?>
+<?php
+_AddHeaderLink('css', 'style');
+_AddHeaderLink('css', 'font-awesome.min');
+if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
+	strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
+	_AddHeaderLink('css', 'style.player');
+}
+?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/scripts.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
-<?php if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE): ?>
-	<script src="//<?php echo $domain; ?>/inc/js/script.player.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
-<?php endif; ?>
+<?php
+_AddHeaderLink('js', 'scripts');
+if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
+	_AddHeaderLink('js', 'script.player');
+}
+_AddHeaderLink('js', 'jquery.isotope.min');
+_AddHeaderLink('js', 'maplerme');
+?>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/jquery.isotope.min.js" type="text/javascript"></script>
-	<script src="//<?php echo $domain; ?>/inc/js/maplerme.js?refresh=<?php echo time(); ?>" type="text/javascript"></script>
 
 	<script type="text/javascript">
 	$('.in').affix();

@@ -70,9 +70,9 @@ function TryRequestMore(up, init) {
 				if (init || up)
 					latestStatusUp = data.lastid;
 					
-				// if (init) {
-				//	setInterval("TryRequestMore(true, false)", 10000);
-				// }
+				if (init) {
+					setInterval("TryRequestMore(true, false)", 10000);
+				}
 			}
 		}
 	});

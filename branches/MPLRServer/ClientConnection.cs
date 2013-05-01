@@ -112,7 +112,7 @@ namespace MPLRServer
             {
                 string filename = "Savefile_" + LogFilename + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
 
-                Logger_WriteLine("Saving under {0}", filename);
+                Logger_WriteLine("Saving under {0} (Packets saved: {1})", filename, _exporter.GetSize());
                 _exporter.Save(filename, ClientPacketHandlers.LatestMajorVersion, base.HostEndPoint, base.ClientEndPoint);
                 if (pReset)
                 {
