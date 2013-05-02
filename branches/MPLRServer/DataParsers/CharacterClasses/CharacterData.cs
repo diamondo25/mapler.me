@@ -301,6 +301,24 @@ namespace MPLRServer
                 pPacket.ReadByte(); // Rank
             }
 
+            {
+                // V.134
+                for (int i = pPacket.ReadInt(); i > 0; i--)
+                {
+                    pPacket.ReadString();
+
+                    pPacket.ReadInt();
+                    pPacket.ReadString();
+
+                    for (int j = pPacket.ReadInt(); j > 0; j--)
+                    {
+                        pPacket.ReadByte();
+                    }
+                }
+
+                pPacket.ReadByte();
+            }
+
             Stats.HonourLevel = pPacket.ReadInt();
             Stats.HonourExp = pPacket.ReadInt();
 
@@ -377,6 +395,32 @@ namespace MPLRServer
                     EvolutionCards.Add(card);
                 }
 
+            }
+
+            {
+                // V.134
+                for (byte i = pPacket.ReadByte(); i > 0; i--)
+                {
+                    pPacket.ReadInt();
+                    pPacket.ReadLong();
+                }
+            }
+
+            {
+                // V.134
+                pPacket.ReadString(); // Creating
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadByte();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+
+                pPacket.ReadInt();
+                pPacket.ReadInt();
             }
 
             pPacket.Skip(84); // I don't even

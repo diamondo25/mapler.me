@@ -162,6 +162,21 @@ using (ScriptAPI) {
 	    while (true) {
 			v = AddByte("Looping...");
 			if (v <= 0) break;
+			StartNode("Looping block");
+			AddInt("Oh shi");
+			AddByte("...");
+			AddByte("...");
+			AddInt("4...");
+			AddInt("4...");
+			AddInt("4...");
+			AddInt("4...");
+			AddByte("...");
+			AddInt("4...");
+			AddLong("8...");
+			AddLong("8...");
+			AddLong("8...");
+			AddLong("8...");
+			EndNode(false);
 		}
 		
 		old = AddByte("Skills (USE OLD)");
@@ -175,8 +190,6 @@ using (ScriptAPI) {
 				AddLong("Expiration");
 				if (is_skill_need_master_level(skillid))
 				    AddInt("Masterlevel");
-				if (skillid == 40020002 || skillid == 80000004)
-				    AddInt("Unk stuff !?!?!");
 				EndNode(false);
 			}
 			EndNode(false);

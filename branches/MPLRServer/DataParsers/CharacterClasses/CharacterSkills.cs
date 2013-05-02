@@ -36,28 +36,14 @@ namespace MPLRServer
                     skill.Expiration = pPacket.ReadLong();
 
                     if (GameHelper.is_skill_need_master_level(skill.ID))
-                    {
                         skill.MasterLevel = pPacket.ReadInt();
-                    }
                     else
-                    {
                         skill.MasterLevel = -1;
-                    }
-
-                    // Added V.129
-                    if (skill.ID == 40020002 || skill.ID == 80000004)
-                    {
-                        pConnection.Logger_WriteLine("[Skill] V.129 addition value: {0}", pPacket.ReadInt()); // Probably maxlevel xd
-                    }
 
                     if (SkillList.ContainsKey(skill.ID)) // NEXON
-                    {
                         pConnection.Logger_WriteLine("Found duplicate skill {0}", skill.ID);
-                    }
                     else
-                    {
                         SkillList.Add(skill.ID, skill);
-                    }
                 }
 
                 for (int i = pPacket.ReadShort(); i > 0; i--)

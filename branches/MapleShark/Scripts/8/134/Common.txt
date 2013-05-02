@@ -249,7 +249,10 @@ function is_skill_need_master_level(pSkillID)
     if ((pSkillID / 1000000 != 92 || pSkillID % 10000 >= 1) &&
         (tmp / 1000000 == 92) && tmp % 10000 == 0) return false;
 
-    tmp = pSkillID / 10000;
+	tmp = pSkillID;
+	tmp -= (tmp % 10000);
+    tmp = tmp / 10000;
+	ScriptAPI.AddComment("Skill TMP: " + tmp);
     if (tmp == 8000
               || (tmp % 1000) == 0
               || tmp == 2001

@@ -110,18 +110,32 @@ namespace MPLRServer
             Logger_WriteLine("Trying to save...");
             if (_exporter != null)
             {
-                string filename = "Savefile_" + LogFilename + "-" + (LastLoggedDate == null ? MasterThread.CurrentDate.ToString("ddMMyyyy-HHmss") : LastLoggedDate) + ".msb";
+                // Try to get logfile ID from DB
+                string filename = "Savefile_";
+                int packets = _exporter.GetSize();
+                try
+                {
+                    using (InsertQueryBuilder iqb = new InsertQueryBuilder("session_logfiles"))
+                    {
+                        iqb.AddColumns(false, "id", "information", "at");
+                        iqb.AddRow(null, packets + " > " + LogFilename, new MySQL_Connection.NowType());
+                        iqb.RunQuery();
 
-                Logger_WriteLine("Saving under {0} (Packets saved: {1})", filename, _exporter.GetSize());
+                        filename += MySQL_Connection.Instance.GetLastInsertId();
+                    }
+                }
+                catch
+                {
+                    filename += "NOMYSQL_" + MasterThread.CurrentDate.ToFileTime();
+                }
+                filename += ".msb";
+
+                Logger_WriteLine("Saving packets to '{0}' ({1} packets logged)", filename, _exporter.GetSize());
                 _exporter.Save(filename, ClientPacketHandlers.LatestMajorVersion, base.HostEndPoint, base.ClientEndPoint);
                 if (pReset)
-                {
                     _exporter = new MSBExporter();
-                }
                 else if (pClean)
-                {
                     _exporter = null;
-                }
             }
         }
 
@@ -185,16 +199,14 @@ namespace MPLRServer
                                 try
                                 {
                                     if (action.CanHandle == null || action.CanHandle(this))
-                                    {
                                         action.Handle(this, pPacket);
-                                    }
                                 }
                                 catch (Exception ex)
                                 {
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", opcode, type, ex.ToString());
                                     LogFilename += "ERROR";
-                                    Save(false, false);
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
+                                    Save(false, false);
                                 }
                             }
                             else
