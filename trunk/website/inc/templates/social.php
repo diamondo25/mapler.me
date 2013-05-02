@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	if (isset($_GET['accept'])) {
 		$name = $_GET['accept'];
 		$id = GetAccountID($name);
-		
+
 		if ($id != NULL) {
 			$__database->query("
 			UPDATE
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	elseif (isset($_GET['invite'])) {
 		$name = $_GET['invite'];
 		$id = GetAccountID($name);
-		
+
 		if ($id != NULL && GetFriendStatus($_loginaccount->GetID(), $id) == 'NO_FRIENDS') {
 			$__database->query("
 			INSERT INTO
@@ -147,7 +147,7 @@ function RemoveStatus(id) {
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
 
 			$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
-		
+
 		$reply_to = intval($_POST['reply-to']);
 		$error = '';
 		if ($content == '') {
@@ -156,13 +156,13 @@ function RemoveStatus(id) {
 		else {
 			// Check for duplicate
 			$q = $__database->query("
-SELECT 
+SELECT
 	1
-FROM 
-	social_statuses 
-WHERE 
-	account_id = ".$_loginaccount->GetId()." 
-	AND 
+FROM
+	social_statuses
+WHERE
+	account_id = ".$_loginaccount->GetId()."
+	AND
 	content = '".$__database->real_escape_string($content)."'
 	AND
 	DATE_ADD(`timestamp`, INTERVAL 24 HOUR) >= NOW()
@@ -172,7 +172,21 @@ WHERE
 			}
 			$q->free();
 		}
-		
+		if ($error == '' && $reply_to != -1) {
+			// Check if status exists...
+			$q = $__database->query("
+SELECT
+	1
+FROM
+	social_statuses
+WHERE
+	id = ".$reply_to);
+			if ($q->num_rows == 0) {
+				// No status found!
+				$error = 'Sadly, the status you are trying to reply to has been deleted!';
+			}
+		}
+
 		if ($error == '') {
 			$blog = $_loginaccount->GetAccountRank() >= RANK_MODERATOR && isset($_POST['blog']) ? 1 : 0;
 
@@ -182,26 +196,26 @@ WHERE
 			// set internally
 			$nicknm = $_loginaccount->GetNickname();
 			$chr = $has_characters ? $char_config['main_character'] : '';
-		
+
 			$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
 			$__database->query("
-			INSERT INTO 
-				social_statuses 
-			VALUES 
+			INSERT INTO
+				social_statuses
+			VALUES
 				(
-					NULL, 
+					NULL,
 					".$_loginaccount->GetId().",
-					'".$__database->real_escape_string($nicknm)."', 
-					'".$__database->real_escape_string($chr)."', 
-					'".$__database->real_escape_string($content)."', 
-					".$blog.", 
-					NOW(), 
+					'".$__database->real_escape_string($nicknm)."',
+					'".$__database->real_escape_string($chr)."',
+					'".$__database->real_escape_string($content)."',
+					".$blog.",
+					NOW(),
 					0,
 					".($reply_to == -1 ? 'NULL' : $reply_to)."
 				)
-			");	
-			
+			");
+
 			if ($__database->affected_rows == 1) {
 ?>
 <p class="lead alert-success alert">The status was successfully posted!</p>
@@ -211,7 +225,7 @@ WHERE
 				$error = 'The Maple Admin was not able to deliver your status update because of angry ribbon pigs! Retry?';
 			}
 		}
-		
+
 		if ($error != '') {
 ?>
 <p class="lead alert-danger alert">Error: <?php echo $error; ?></p>
@@ -221,14 +235,14 @@ WHERE
 	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removestatus'])) {
 		// Removing status
 		$id = intval($_GET['removestatus']);
-		
+
 		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id);
 		}
 		else {
 			$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
 		}
-		
+
 		if ($__database->affected_rows == 1) {
 ?>
 <p class="lead alert-info alert">The status was successfully deleted.</p>
