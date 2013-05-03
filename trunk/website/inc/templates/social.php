@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 				// Send mail?
 ?>
-<p class="alert-info alert">Successfully accepted <?php echo $name; ?>'s request!<p>
+<p class="alert-info alert fademeout">Successfully accepted <?php echo $name; ?>'s request!<p>
 <?php
 			}
 		}
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 			// Send mail?
 ?>
-<p class="alert-info alert">Successfully unfriended <?php echo $name; ?><p>
+<p class="alert-info alert fademeout">Successfully unfriended <?php echo $name; ?><p>
 <?php
 			}
 		}
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 			// Send mail?
 ?>
-<p class="alert-info alert">Successfully denied <?php echo $name; ?>'s friend request!<p>
+<p class="alert-info alert fademeout">Successfully denied <?php echo $name; ?>'s friend request!<p>
 <?php
 			}
 		}
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			if ($__database->affected_rows == 1) {
 				// Send mail?
 ?>
-<p class="alert-info alert">Successfully sent <?php echo $name; ?> a friend request!<p>
+<p class="alert-info alert fademeout">Successfully sent <?php echo $name; ?> a friend request!<p>
 <?php
 			}
 		}
@@ -218,7 +218,7 @@ WHERE
 
 			if ($__database->affected_rows == 1) {
 ?>
-<p class="lead alert-success alert">The status was successfully posted!</p>
+<p class="lead alert-success alert fademeout">The status was successfully posted!</p>
 <?php
 			}
 			else {
@@ -228,7 +228,7 @@ WHERE
 
 		if ($error != '') {
 ?>
-<p class="lead alert-danger alert">Error: <?php echo $error; ?></p>
+<p class="lead alert-danger alert fademeout">Error: <?php echo $error; ?></p>
 <?php
 		}
 	}
@@ -245,12 +245,12 @@ WHERE
 
 		if ($__database->affected_rows == 1) {
 ?>
-<p class="lead alert-info alert">The status was successfully deleted.</p>
+<p class="lead alert-info alert fademeout">The status was successfully deleted.</p>
 <?php
 		}
 		else {
 ?>
-<p class="lead alert-info alert">Unable to delete the status.</p>
+<p class="lead alert-info alert fademeout">Unable to delete the status.</p>
 <?php
 		}
 	}
@@ -269,7 +269,6 @@ WHERE
 <?php endif; ?>
 	</form>
 </div>
-
 <?php
 }
 ?>

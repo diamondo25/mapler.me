@@ -45,8 +45,10 @@ $(document).ready(function() {
 		});
 	});
 	
+	$('.fademeout').delay(7000).fadeOut(1000, function() {
+		$(this).delete();
+	});
 });
-
 
 var latestStatusUp = -1;
 var latestStatusDown = -1;
