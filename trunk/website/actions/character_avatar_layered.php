@@ -176,8 +176,9 @@ function CheckStand($type, $data) {
 }
 
 
+$foundHidingCap = false;
 function ParseItem($id) {
-	global $item_locations, $zlayers, $zmap, $main_dir, $using_face;
+	global $item_locations, $zlayers, $zmap, $main_dir, $using_face, $foundHidingCap;
 	$iteminfo = get_data($id);
 	$itemtype = GetItemType($id);
 
@@ -218,6 +219,10 @@ function ParseItem($id) {
 			$foundinfo = true;
 			//if ($zmap[$objectdata['islot']] > $zmap['characterEnd']) continue;
 			$zlayers[$zval][] = $objectdata;
+			
+			if ($objectdata['islot'] == 'Cp' && in_array('H1', $objectdata['vslot'])) {
+				$foundHidingCap = true;
+			}
 		}
 	}
 	if ($foundinfo)
@@ -273,7 +278,6 @@ if (isset($_GET['debug'])) {
 	print_r($item_locations);
 }
 
-$foundHidingCap = false;
 foreach ($zlayers as $zname => $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
@@ -318,9 +322,6 @@ foreach ($zlayers as $zname => $objects) {
 		}
 		add_image($img, $x, $y);
 		
-		if ($zval == 'cap' && in_array('H1', $object['vslot'])) {
-			$foundHidingCap = true;
-		}
 	}
 }
 

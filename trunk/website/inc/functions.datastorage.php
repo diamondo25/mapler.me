@@ -125,9 +125,8 @@ function GetNebuliteInfo($itemid) {
 
 // Only for X Y and some special stuff!!!
 function GetItemWZInfo($itemid) {
-	global $__database;//, $apcinstalled;
-	$apcinstalled = false;
-	$key_name = 'data_characterwz_cache2'.$itemid;
+	global $__database, $apcinstalled;
+	$key_name = 'data_characterwz_cache'.$itemid;
 	
 	if ($apcinstalled && apc_exists($key_name)) {
 		return apc_fetch($key_name);
