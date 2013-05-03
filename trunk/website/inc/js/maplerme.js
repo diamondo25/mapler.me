@@ -48,10 +48,17 @@ $(document).ready(function() {
 	$('.fademeout').delay(7000).fadeOut(1000, function() {
 		$(this).delete();
 	});
+	$(window).scroll(function() {
+		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+			if (didinit)
+				TryRequestMore(false, false);
+		}
+	});
 });
 
 var latestStatusUp = -1;
 var latestStatusDown = -1;
+var didinit = false;
 function TryRequestMore(up, init) {
 	$.ajax({
 		type: 'GET',
@@ -71,6 +78,8 @@ function TryRequestMore(up, init) {
 					latestStatusDown = data.firstid;
 				if (init || up)
 					latestStatusUp = data.lastid;
+				if (init)
+					didinit = true;
 					
 				if (init) {
 					setInterval("TryRequestMore(true, false)", 10000);
