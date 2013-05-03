@@ -1227,19 +1227,39 @@ namespace MPLRServer
 
                 pConnection.Logger_WriteLine("--------- Done parsing Character Info ----------");
 
-                data.SaveData(pConnection);
+                // Quick duplicate check
+                bool conflicted = false;
+                using (var reader = MySQL_Connection.Instance.RunQuery("SELECT id FROM characters WHERE id <> " + data.Stats.ID + " AND name = " + MySQL_Connection.Escape(data.Stats.Name)) as MySql.Data.MySqlClient.MySqlDataReader)
+                {
+                    if (reader.Read())
+                    {
+                        // CONFLICTS
+                        conflicted = true;
+                    }
+                }
+                if (!conflicted)
+                {
+                    data.SaveData(pConnection);
 
-                pConnection.CharData = data;
+                    pConnection.CharData = data;
 
-                pConnection.Logger_WriteLine("--------- Saved parsed Character Info ----------");
+                    pConnection.Logger_WriteLine("--------- Saved parsed Character Info ----------");
 
 
-                pConnection.LastLoggedCharacterName = pConnection.CharData.Stats.Name;
-                pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
+                    pConnection.LastLoggedCharacterName = pConnection.CharData.Stats.Name;
+                    pConnection.LastLoggedDate = pConnection.CharData.Stats.DateThing.ToString();
 
-                pConnection.LogFilename += "-" + pConnection.CharacterInternalID;
+                    pConnection.LogFilename += "-" + pConnection.CharacterInternalID;
 
-                pConnection.SendInfoText("Your character {0} has been saved!", pConnection.CharData.Stats.Name);
+                    pConnection.SendInfoText("Your character {0} has been saved!", pConnection.CharData.Stats.Name);
+                }
+                else
+                {
+                    pConnection.LogFilename += "-(CONFLICT)" + data.Stats.Name;
+
+                    pConnection.Logger_WriteLine("!!!!!! FOUND CHARACTER NAME CONFLICT");
+                    pConnection.SendInfoText("A different character has already this name! Delete this character via the website first!");
+                }
             }
             else
             {

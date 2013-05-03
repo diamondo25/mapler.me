@@ -17,6 +17,8 @@ namespace MPLRServer
         public string TableName { get; private set; }
         public bool OnDuplicateUpdate { get; set; }
         private List<string> _rows = new List<string>();
+        private Dictionary<string, List<object>> _rowsColumned = new Dictionary<string, List<object>>();
+        private int _rowsColumnedCount = 0;
 
         public int RowCount { get { return _rows.Count; } }
         public bool HasColumns { get { return _columns.Count > 0; } } // For initialization check
@@ -49,6 +51,11 @@ namespace MPLRServer
                 _rows.Clear();
                 _rows = null;
             }
+            if (_rowsColumned != null)
+            {
+                _rowsColumned.Clear();
+                _rowsColumned = null;
+            }
         }
 
         public void AddColumn(string pName, bool pInUpdate = false)
@@ -56,12 +63,23 @@ namespace MPLRServer
             _columns.Add(new Column() { Name = pName, InUpdate = pInUpdate });
         }
 
+        public void AddColumnWithValue(string pName, object pValue, bool pInUpdate = true)
+        {
+            var dunno = _columns.Count(a => { return a.Name == pName; });
+            if (dunno == 0)
+            {
+                _columns.Add(new Column() { Name = pName, InUpdate = pInUpdate });
+                _rowsColumned.Add(pName, new List<object>());
+            }
+            _rowsColumned[pName].Add(pValue);
+            if (_rowsColumnedCount < _rowsColumned[pName].Count)
+                _rowsColumnedCount = _rowsColumned[pName].Count;
+        }
+
         public void AddColumns(bool pInUpdate, params string[] pColumnNames)
         {
             foreach (var name in pColumnNames)
-            {
                 _columns.Add(new Column() { Name = name, InUpdate = pInUpdate });
-            }
         }
 
         public void AddRow(params object[] pColumns)
@@ -70,7 +88,7 @@ namespace MPLRServer
             _rows.Add(MySQL_Connection.QueryQuery(pColumns));
         }
 
-        public bool HasRows() { return _rows.Count > 0; }
+        public bool HasRows() { return _rows.Count > 0 || _rowsColumned.Count > 0; }
 
         public override string ToString()
         {
@@ -84,13 +102,32 @@ namespace MPLRServer
             query += string.Join(", ", columnlist);
             query += ")\r\nVALUES\r\n\t";
 
-            query += string.Join(",\r\n\t", _rows);
+            List<string> tmp = new List<string>(_rows);
+            if (_rowsColumnedCount > 0)
+            {
+                for (int j = 0; j < _columns.Count; j++)
+                {
+                    if (_rowsColumned[_columns[j].Name].Count != _rowsColumnedCount)
+                    {
+                        throw new Exception("Column " + _columns[j].Name + " did not have enough values!!!");
+                    }
+                }
+                for (int i = 0; i < _rowsColumnedCount; i++)
+                {
+                    object[] inputobjects = new object[_columns.Count];
+                    for (int j = 0; j < _columns.Count; j++)
+                    {
+                        inputobjects[j] = _rowsColumned[_columns[j].Name][i];
+                    }
+                    tmp.Add(MySQL_Connection.QueryQuery(inputobjects));
+                }
+            }
+
+            query += string.Join(",\r\n\t", tmp);
 
             List<string> updatecolumns = new List<string>();
             foreach (Column col in _columns.Where(c => { return c.InUpdate; }))
-            {
                 updatecolumns.Add(string.Format("`{0}` = VALUES(`{0}`)", col.Name));
-            }
 
             if (updatecolumns.Count > 0)
             {

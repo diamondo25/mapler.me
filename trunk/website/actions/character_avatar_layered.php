@@ -273,11 +273,14 @@ if (isset($_GET['debug'])) {
 	print_r($item_locations);
 }
 
-$foundcap = isset($zlayers[$zmap['cap']]) || isset($zlayers[$zmap['capOverHair']]);
+$foundHidingCap = false;
 foreach ($zlayers as $zname => $objects) {
 	foreach ($objects as $object) {
 		$zval = $object['info']['z'];
-		if (($zval == 'hairOverHead' || $zval == 'backHair') && $foundcap) continue;
+
+		if ($object['category'] == 'hairOverHead' && $foundHidingCap) {
+			continue;
+		}
 		if ($object['stance'] == 'stand'.($stand == 1 ? 2 : 1)) continue;
 		$img = $item_locations[$object['itemid']].$object['image'];
 		$x = $mainx;
@@ -315,7 +318,9 @@ foreach ($zlayers as $zname => $objects) {
 		}
 		add_image($img, $x, $y);
 		
-		//if ($zval == 'cap') $foundcap = true;
+		if ($zval == 'cap' && in_array('H1', $object['vslot'])) {
+			$foundHidingCap = true;
+		}
 	}
 }
 

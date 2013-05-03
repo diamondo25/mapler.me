@@ -86,27 +86,50 @@ namespace MPLRServer
             {
                 using (InsertQueryBuilder query = new InsertQueryBuilder("characters"))
                 {
-                    query.OnDuplicateUpdate = true;
-                    query.AddColumn("internal_id");
-                    query.AddColumn("id");
-                    query.AddColumn("name");
-                    query.AddColumns(true, new string[] { "userid", "world_id", "channel_id", "level", "job", "str", "dex", "int", "luk", "chp", "mhp", "cmp", "mmp", "ap", "sp", "exp", "fame", "map", "pos", "gender", "skin", "eyes", "hair" });
-                    query.AddColumns(true, new string[] { "honourlevel", "honourexp", "mesos", "demonmark" });
-                    query.AddColumns(true, new string[] { "eqp_slots", "use_slots", "setup_slots", "etc_slots", "cash_slots" });
-                    query.AddColumns(true, new string[] { "blessingoffairy", "blessingofempress", "ultimateexplorer" });
-                    query.AddColumn("last_update", true);
+                    query.OnDuplicateUpdate = false;
+                    query.AddColumnWithValue("internal_id", null);
 
+                    query.AddColumnWithValue("id", pID);
+                    query.AddColumnWithValue("name", pName);
+                    query.AddColumnWithValue("userid", pUserID);
+                    query.AddColumnWithValue("world_id", pWorldID);
+                    query.AddColumnWithValue("channel_id", pChannelID);
+                    query.AddColumnWithValue("level", pLevel);
+                    query.AddColumnWithValue("job", pJob);
+                    query.AddColumnWithValue("str", pStr);
+                    query.AddColumnWithValue("dex", pDex);
+                    query.AddColumnWithValue("int", pInt);
+                    query.AddColumnWithValue("luk", pLuk);
+                    query.AddColumnWithValue("chp", pHP);
+                    query.AddColumnWithValue("mhp", pMaxHP);
+                    query.AddColumnWithValue("cmp", pMP);
+                    query.AddColumnWithValue("mmp", pMaxMP);
+                    query.AddColumnWithValue("ap", pAP);
+                    query.AddColumnWithValue("sp", pSP);
+                    query.AddColumnWithValue("exp", pEXP);
+                    query.AddColumnWithValue("fame", pFame);
+                    query.AddColumnWithValue("map", pMap);
+                    query.AddColumnWithValue("pos", pMapPos);
+                    query.AddColumnWithValue("gender", pGender);
+                    query.AddColumnWithValue("skin", pSkin);
+                    query.AddColumnWithValue("eyes", pEyes);
+                    query.AddColumnWithValue("hair", pHair);
+                    query.AddColumnWithValue("last_update", new MySQL_Connection.NowType());
 
-                    query.AddRow(null, pID, pName, pUserID, pWorldID, pChannelID, pLevel,
-                        pJob, pStr, pDex, pInt, pLuk,
-                        pHP, pMaxHP, pMP, pMaxMP, pAP, pSP,
-                        pEXP, pFame, pMap, pMapPos, pGender, pSkin,
-                        pHonourLevel, pHonourEXP, pMesos, pDemonMark,
-                        pEyes, pHair,
-                        pSlots[0], pSlots[1], pSlots[2], pSlots[3], pSlots[4], 
-                        pBoF, pBoE, pUE,
-                        
-                        new MySQL_Connection.NowType());
+                    query.AddColumnWithValue("honourlevel", pHonourLevel);
+                    query.AddColumnWithValue("honourexp", pHonourEXP);
+                    query.AddColumnWithValue("mesos", pMesos);
+                    query.AddColumnWithValue("demonmark", pDemonMark);
+
+                    query.AddColumnWithValue("eqp_slots", pSlots[0]);
+                    query.AddColumnWithValue("use_slots", pSlots[1]);
+                    query.AddColumnWithValue("setup_slots", pSlots[2]);
+                    query.AddColumnWithValue("etc_slots", pSlots[3]);
+                    query.AddColumnWithValue("cash_slots", pSlots[4]);
+
+                    query.AddColumnWithValue("blessingoffairy", pBoF);
+                    query.AddColumnWithValue("blessingofempress", pBoE);
+                    query.AddColumnWithValue("ultimateexplorer", pUE);
 
                     string q = query.ToString();
 
@@ -116,7 +139,8 @@ namespace MPLRServer
 
                     if (result >= 1)
                     {
-                        pConnection.Logger_WriteLine("Inserted character info: {0}", MySQL_Connection.Instance.GetLastInsertId());
+                        int id = MySQL_Connection.Instance.GetLastInsertId();
+                        pConnection.Logger_WriteLine("Inserted character info: {0}", id);
                     }
                     else
                     {
