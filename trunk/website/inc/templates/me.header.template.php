@@ -253,6 +253,7 @@ if (count($cache) > 0) {
 	
 	$__url_useraccount->SetAccountRank($rank);
 	$__url_useraccount->Save();
+	}
 	?>
 	<div id="manage" class="collapse">
 		<div class="status span9">
