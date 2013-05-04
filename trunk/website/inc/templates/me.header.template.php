@@ -254,12 +254,8 @@ if (count($cache) > 0) {
 	$__url_useraccount->SetAccountRank($rank);
 	$__url_useraccount->Save();
 	?>
-	<?php
-	}
-	?>
 	<div id="manage" class="collapse">
 		<div class="status span9">
-		<p class="alert alert-info">Configurations have been saved.</p>
 	<h1><?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]</span>
 		<small>
 			- 
