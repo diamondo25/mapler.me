@@ -131,6 +131,13 @@ namespace Mapler_Client
                         frmMain.Instance.lblInfo.Text = pPacket.ReadString();
                     });
                 }
+                else if (header == 0xEE01)
+                {
+                    using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE01))
+                    {
+                        SendPacket(mp);
+                    }
+                }
             }
 
             pPacket.Dispose();

@@ -1,5 +1,30 @@
 <?php
 require_once __DIR__.'/inc/header.php';
+	
+$x = $__database->query("
+SELECT
+	status
+FROM
+	signup_lock
+");
+
+$row = $x->fetch_assoc();
+if($row['status'] == '1') {
+?>
+	<p>
+		<center class="status lead">
+				<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px"/><br/>
+				We're sorry! The amount of new members today has reached it's max.<br/>
+				Come back tomorrow!<br/>
+			<sub>Tip: The limit resets at <b>8AM</b> (PST / MapleStory Time)</sub>
+		</center>
+	</p>
+<?php
+	require_once __DIR__.'/inc/footer.php';
+	die;
+}
+
+
 
 $username_regex = "/^[a-z0-9-_]+$/";
 
@@ -49,17 +74,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$error = "A Mapler.me username may only hold alphanumeric characters.";
 				$errorList['username'] = true;
 			}
-			elseif (in_array($username, $disallowed)) {
-				$error = "That username is disallowed, please choose another.";
-				$errorList['username'] = true;
-			}
 			else {
-				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
-				if ($result->num_rows == 1) {
-					$error = "This username has already been taken, please try another.";
+				$nope = false;
+				foreach ($disallowed as $name) {
+					if (strpos($username, $name) !== FALSE) {
+						$nope = true;
+						break;
+					}
+				}
+				if ($nope) {
+					$error = "That username is disallowed, please choose another.";
 					$errorList['username'] = true;
 				}
-				$result->free();
+				else {
+					$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
+					if ($result->num_rows == 1) {
+						$error = "This username has already been taken, please try another.";
+						$errorList['username'] = true;
+					}
+					$result->free();
+				}
 			}
 		}
 		
@@ -162,40 +196,7 @@ else {
 <p class="lead alert-error alert"><?php echo $error;?></p>
 <?php
 	}
-?>
 
-<?php
-$x = $__database->query("
-SELECT
-	status
-FROM
-	signup_lock
-");
-
-$cache = array();
-while ($row = $x->fetch_assoc()) {
-	$cache[] = $row;
-}
-$x->free();
-?>
-
-<?php
-foreach ($cache as $row) {
-if($row['status'] == '1') {
-?>
-	<p>
-		<center class="status lead">
-				<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px"/><br/>
-				We're sorry! The amount of new members today has reached it's max.<br/>
-				Come back tomorrow!<br/>
-			<sub>Tip: The limit resets at <b>8AM</b> (PST / MapleStory Time)</sub>
-		</center>
-	</p>
-<?php
-require_once __DIR__.'/inc/footer.php';
-die;
-}
-}
 ?>
 
 <div class="row">

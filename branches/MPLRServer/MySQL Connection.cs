@@ -75,8 +75,13 @@ namespace MPLRServer
 
         private void AddQuery(string pQuery)
         {
-            if (_queryList.Count > 5) _queryList.Pop();
+            if (_queryList.Count > 10) _queryList.Pop();
             _queryList.Push(new KeyValuePair<string, string>(pQuery, new StackTrace().ToString()));
+        }
+
+        public List<KeyValuePair<string, string>> GetRanQueries()
+        {
+            return _queryList.ToList();
         }
 
         public void Connect()
@@ -171,7 +176,7 @@ namespace MPLRServer
                 {
                     Logger.WriteLine(ex.ToString());
                     Logger.WriteLine(pQuery);
-                    throw new Exception(string.Format("[{0}][DB LIB] Got exception @ MySQL_Connection::RunQuery({1}) : {2}", DateTime.Now.ToString(), pQuery, ex.ToString()));
+                    throw new Exception(string.Format("Got exception @ MySQL_Connection::RunQuery({0}) : {1}", pQuery, ex.ToString()));
                 }
             }
             return 0;

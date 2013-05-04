@@ -766,7 +766,6 @@ namespace MPLRServer
                                 inventory.InventoryItems[inv - 1].Remove((byte)slotfrom);
                             }
                             inventory.InventoryItems[inv - 1].Add((byte)slotto, item);
-
                         }
 
                         if (founditem) // New slot contained item
@@ -807,7 +806,7 @@ namespace MPLRServer
                     }
                     else if (type4 == 3)
                     {
-                        // Drop item.
+                        // Drop/delete item.
 
                         if (inv == 0)
                         {
@@ -816,16 +815,16 @@ namespace MPLRServer
                             slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
 
                             if (inventory.EquipmentItems[internalInventory].ContainsKey(slot))
-                            {
                                 inventory.EquipmentItems[internalInventory].Remove(slot);
-                            }
+                            else
+                                pConnection.Logger_WriteLine("!!! Could not find item @ {0} {1}", inv, slot);
                         }
                         else
                         {
                             if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
-                            {
                                 inventory.InventoryItems[inv - 1].Remove((byte)slot);
-                            }
+                            else
+                                pConnection.Logger_WriteLine("!!! Could not find item @ {0} {1}", inv, slot);
                         }
 
                         using (DeleteQueryBuilder itemTable = new DeleteQueryBuilder("items"))
@@ -833,8 +832,7 @@ namespace MPLRServer
                             itemTable.SetWhereColumn("inventory", inv);
                             itemTable.SetWhereColumn("slot", slot);
                             itemTable.SetWhereColumn("character_id", pConnection.CharacterInternalID);
-
-                            MySQL_Connection.Instance.RunQuery(itemTable.ToString());
+                            itemTable.RunQuery();
                         }
                     }
 

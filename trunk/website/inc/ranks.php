@@ -16,18 +16,18 @@ define("RANK_NEXON", 950);
 define("RANK_ADMIN", 1000);
 
 $_account_ranks = array(
-	-200	=> 'Permanently Banned',
-	-100 	=> 'Banned',
+	RANK_PERMABANNED	=> 'Permanently Banned',
+	RANK_BANNED 		=> 'Banned',
 	
-	0 		=> 'Mapler', // displays as member even though awaiting activation.
-	100 	=> 'Mapler',
+	RANK_AWAITING_ACTIVATION 	=> 'Mapler', // displays as member even though awaiting activation.
+	RANK_NORMAL 				=> 'Mapler',
 	
-	200 	=> 'Mapler+',
-	300 	=> 'Mapler+', // mapler plus includes developer status and access?
+	RANK_PLUS 		=> 'Mapler+',
+	RANK_DEVELOPER 	=> 'Mapler+', // mapler plus includes developer status and access?
 	
-	900 	=> 'Staff',
-	950 	=> 'Nexon',
-	1000 	=> 'Staff'
+	RANK_MODERATOR 	=> 'Staff',
+	RANK_NEXON 		=> 'Nexon',
+	RANK_ADMIN 		=> 'Staff'
 );
 
 function GetRankTitle($rank) {

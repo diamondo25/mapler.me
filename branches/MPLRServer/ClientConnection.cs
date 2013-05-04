@@ -27,15 +27,18 @@ namespace MPLRServer
         public ushort MapleVersion { get; set; }
 
         private MSBExporter _exporter;
-        private bool _isFake = false;
+        public bool IsFake { get; private set; }
+
+        public bool Pong { get; set; }
 
         public DateTime ConnectedTimeToServer = DateTime.MinValue;
 
         public ClientConnection(MSBLoader pLoader)
         {
+            Pong = true;
             Program.Clients.Add(this);
             Logger_WriteLine("Fake Client Connected!");
-            _isFake = true;
+            IsFake = true;
             Clear();
             pLoader.PacketHandler += OnPacket;
             pLoader.DisconnectHandler += OnDisconnect;
@@ -44,6 +47,8 @@ namespace MPLRServer
         public ClientConnection(Socket pSocket)
             : base(pSocket)
         {
+            Pong = true;
+            IsFake = false;
             Program.Clients.Add(this);
             Clear();
             _exporter = new MSBExporter();
@@ -95,7 +100,7 @@ namespace MPLRServer
 
         public override void SendPacket(MaplePacket pPacket)
         {
-            if (_isFake) return;
+            if (IsFake) return;
             using (MaplePacket tmp = new MaplePacket(pPacket.ToArray()))
             {
                 _exporter.AddPacket(tmp);
@@ -105,7 +110,7 @@ namespace MPLRServer
 
         public void Save(bool pReset, bool pClean = true)
         {
-            if (_isFake) return;
+            if (IsFake) return;
 
             Logger_WriteLine("Trying to save...");
             if (_exporter != null)
@@ -141,18 +146,28 @@ namespace MPLRServer
 
         public override void OnDisconnect()
         {
-            MasterThread.Instance.AddCallback((a) =>
+            if (MasterThread.Instance.IsInMainThread())
             {
                 Save(false);
                 Logger_WriteLine("Client Disconnected.");
                 Clear();
                 Program.Clients.Remove(this);
-            });
+            }
+            else
+            {
+                MasterThread.Instance.AddCallback((a) =>
+                {
+                    Save(false);
+                    Logger_WriteLine("Client Disconnected.");
+                    Clear();
+                    Program.Clients.Remove(this);
+                });
+            }
         }
 
         public void SendTimeUpdate()
         {
-            if (_isFake) return;
+            if (IsFake) return;
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFD))
             {
                 packet.WriteString(LastLoggedCharacterName);
@@ -162,7 +177,7 @@ namespace MPLRServer
 
         public void SendInfoText(string pMessage, params object[] pParams)
         {
-            if (_isFake) return;
+            if (IsFake) return;
             using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFC))
             {
                 packet.WriteString(string.Format(pMessage, pParams));
@@ -182,7 +197,7 @@ namespace MPLRServer
                     MaplePacket.CommunicationType type = (MaplePacket.CommunicationType)pPacket.ReadByte();
                     ushort opcode = pPacket.ReadUShort();
 
-                    if (_isFake)
+                    if (IsFake)
                     {
                         Logger.WriteLine("Emulating {0:X4} (Len: {1})", opcode, pPacket.Length);
                     }
@@ -206,6 +221,25 @@ namespace MPLRServer
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", opcode, type, ex.ToString());
                                     LogFilename += "ERROR";
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
+
+                                    // Save exception to packet
+                                    using (MaplePacket mp = new MaplePacket(0x9999))
+                                    {
+                                        mp.WriteString(ex.ToString());
+                                        if (ex is MySql.Data.MySqlClient.MySqlException)
+                                        {
+                                            Logger_ErrorLog("MySQL exception!");
+                                            var queries = MySQL_Connection.Instance.GetRanQueries();
+                                            mp.WriteInt(queries.Count);
+                                            foreach (var kvp in queries)
+                                            {
+                                                mp.WriteString(kvp.Key);
+                                                mp.WriteString(kvp.Value);
+                                            }
+                                        }
+                                        _exporter.AddPacket(mp);
+                                    }
+
                                     Save(false, false);
                                 }
                             }

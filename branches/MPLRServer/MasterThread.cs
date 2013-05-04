@@ -109,6 +109,11 @@ namespace MPLRServer
             _mainThread.Start();
         }
 
+        public bool IsInMainThread()
+        {
+            return Thread.CurrentThread.Equals(_mainThread.ManagedThreadId);
+        }
+
         public void AddRepeatingAction(RepeatingAction pAction)
         {
             AddCallback((a) =>

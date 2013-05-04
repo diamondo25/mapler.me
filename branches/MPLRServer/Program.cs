@@ -29,6 +29,7 @@ namespace MPLRServer
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnexpectedExHandler);
+            Console.CancelKeyPress += Console_CancelKeyPress;
 
             Logger.SetLogfile(false);
 
@@ -56,6 +57,7 @@ namespace MPLRServer
             AcceptedIPs.Add("8.31.9"); // Nexon's subnet
 
             Clients = new List<ClientConnection>();
+            StartPinger();
 
             // For clients
             Acceptor accept = new Acceptor(23710, sock =>
@@ -83,6 +85,7 @@ namespace MPLRServer
             while (true)
             {
                 string cmd = Console.ReadLine();
+                if (cmd == null) break; // CTRL + C
                 string[] arguments = cmd.Split(' ');
                 if (arguments.Length >= 1)
                 {
@@ -158,6 +161,43 @@ namespace MPLRServer
                     }
                 }
             }
+        }
+
+        static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            var tmp = new List<ClientConnection>(Clients);
+            foreach (var client in tmp)
+            {
+                client.Disconnect();
+            }
+        }
+
+        static System.Threading.Timer _timert;
+        static void StartPinger()
+        {
+            _timert = new System.Threading.Timer((obj) =>
+            {
+                MasterThread.Instance.AddCallback(a =>
+                {
+                    var tmp = new List<ClientConnection>(Clients);
+                    foreach (var client in tmp)
+                    {
+                        if (!client.Pong)
+                        {
+                            client.Disconnect();
+                        }
+                        else
+                        {
+                            client.Pong = false;
+                            using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEE01))
+                            {
+                                client.SendPacket(mp);
+                            }
+                        }
+                    }
+                });
+
+            }, null, 0, 10000);
         }
 
         static void InitializeValidHeaders()
@@ -292,6 +332,10 @@ namespace MPLRServer
                 // Internal packets
 
                 tmp.Add(0xEE00, new Handler(InternalPacketHandler.HandleServerConnectionStatus, null));
+                tmp.Add(0xEE01, new Handler((a, b) =>
+                {
+                    a.Pong = true;
+                }, null));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
             }

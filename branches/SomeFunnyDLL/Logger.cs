@@ -63,8 +63,8 @@ namespace System
         {
             if (_disabledLogging) return;
 
-            Console.WriteLine("---------- EXCEPTION -----------");
-            Console.WriteLine(pInput, pParams);
+            WriteLine("---------- EXCEPTION -----------");
+            WriteLine(pInput, pParams);
             try
             {
                 File.AppendAllText("EXCEPTIONS.txt", string.Format("{0}[{2}]{1}{0}", Environment.NewLine, "-----------------", DateTime.Now) + string.Format(pInput, pParams) + Environment.NewLine);
