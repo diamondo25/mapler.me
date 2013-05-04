@@ -23,20 +23,11 @@ else:
 	<h2>General:</h2>
 	<li>- When your first character is added, it is not automatically considered a 'main character' requiring manual selection.</li>
 	<li>- There is not an option to request a password reset without being logged in.</li>
-	<li>- The login button on mobile devices is hard to click for front page (splash page).</li>
-	<li>- When you click on a blog post to view replies, the layout breaks. <a href="http://puu.sh/2Il72.png">Example</a></li>
-	<li>- A mapler's rank is not aligned correctly on Safari on the main menu. <a href="http://puu.sh/2Il5m.png">Example</a></li>
 	<li>- Profession and special skills do not display correctly (broken icon)</li>
 	</ul>
 	<ul class="status">
 	<h2>Statuses:</h2>
 	<li>- When replying to another mapler, the status is shown on all of your friend's streams (lack of privacy and spammy).</li>
-	<li>- You are unable to include any hearts (<3) in statuses. Doing so will remove all content after it.</li>
-	<li>- Unicode is not parsed correctly.</li>
-	</ul>
-	<ul class="status">
-	<h2>Equipment:</h2>
-	<li>- Items that are anvil'd display their original item look.</li>
 	</ul>
 	</div>
 	<br/>
