@@ -257,7 +257,7 @@ if (count($cache) > 0) {
 	<?php
 	}
 	?>
-	<div id="manage" class="collapse in">
+	<div id="manage" class="collapse">
 		<div class="status span9">
 		<p class="alert alert-info">Configurations have been saved.</p>
 	<h1><?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]</span>
@@ -310,5 +310,6 @@ foreach ($cache as $row) {
 <?php
 }
 ?>
+	</div>
 	</div>
 	<?php endif; ?>
