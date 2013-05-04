@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../database.php';
+require_once __DIR__.'/../ranks.php';
 
 
 class Account {
@@ -155,6 +156,10 @@ WHERE
 	
 	public function GetRegisterDate() {
 		return $this->_registered;
+	}
+	
+	public function IsRankOrHigher($rank) {
+		return $this->_accountrank >= $rank;
 	}
 	
 	public function GetConfigurationOption($name, $default = null) {

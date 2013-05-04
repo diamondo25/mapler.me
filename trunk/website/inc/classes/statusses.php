@@ -85,14 +85,14 @@ WHERE
 		
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
-		$this->content = preg_replace('/http\:\/\/([^\<\s\t]+)/i', '<a href="http://$1" target="_blank">http://$1</a>', $this->content);
+		$this->content = preg_replace('/(http|https|ftp|mailto)\:\/\/([^\<\s\t]+)/i', '<a href="$1://$2" target="_blank">$1://$2</a>', $this->content);
 		
 		//@replies
-		$this->content = preg_replace('/@([a-z0-9_]+)/i', '<a href="http://$1.'.$domain.'/">@$1</a>', $this->content);
+		$this->content = preg_replace('/(^| )@([a-z0-9_]+)/i', '$1<a href="http://$2.'.$domain.'/">@$2</a>', $this->content);
 		//#hashtags (no search for the moment)
-		//$this->content = preg_replace('/#([a-z0-9_]+)/i', '<a href="#">#$1</a>', $this->content);
+		// $this->content = preg_replace('/(^| )#([a-z0-9_]+)/i', '$1<a href="//'.$domain.'/search/tag/$2">#$2</a>', $this->content);
 		//^images (workaround for the moment)
-		$this->content = preg_replace('/!([a-z0-9_]+)/i', '<a href="http://cdn.mapler.me/media/$1"><img src="http://cdn.mapler.me/media/$1" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'"/></a>', $this->content);
+		$this->content = preg_replace('/(^| )!([a-z0-9_]+)/i', '$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
@@ -100,7 +100,7 @@ WHERE
 		$parser->parse($this->content);
 		
 		$username = $this->account->GetUsername();
-		$own_post = $_loggedin && $this->account_id == $_loginaccount->GetID();
+		$own_post = $_loggedin && ($this->account_id == $_loginaccount->GetID() || $_loginaccount->IsRankOrHigher(RANK_MODERATOR));
 		
 		$reply_info = $this->reply_to == NULL ? NULL : $this->GetReplyInfo($this->reply_to);
 		

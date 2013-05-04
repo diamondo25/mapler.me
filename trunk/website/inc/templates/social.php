@@ -188,7 +188,7 @@ WHERE
 		}
 
 		if ($error == '') {
-			$blog = $_loginaccount->GetAccountRank() >= RANK_MODERATOR && isset($_POST['blog']) ? 1 : 0;
+			$blog = $_loginaccount->IsRankOrHigher(RANK_MODERATOR) && isset($_POST['blog']) ? 1 : 0;
 
 			$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 			$has_characters = !empty($char_config['main_character']);
@@ -236,12 +236,12 @@ WHERE
 		// Removing status
 		$id = intval($_GET['removestatus']);
 
-		if ($_loginaccount->GetAccountRank() > RANK_DEVELOPER) {
-			$__database->query("DELETE FROM social_statuses WHERE id = ".$id);
-		}
-		else {
-			$__database->query("DELETE FROM social_statuses WHERE id = ".$id." AND account_id = ".$_loginaccount->GetId());
-		}
+		$__database->query("DELETE FROM social_statuses WHERE id = ".$id.
+			(
+				$_loginaccount->IsRankOrHigher(RANK_MODERATOR) 
+				? ' AND account_id = '.$_loginaccount->GetId()
+				: ''
+			));
 
 		if ($__database->affected_rows == 1) {
 ?>

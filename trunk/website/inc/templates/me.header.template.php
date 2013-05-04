@@ -247,41 +247,30 @@ if (count($cache) > 0) {
 }
 ?>
 	</div>
-	<?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): 
+<?php
+if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)): 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['setrankpls'])) {
-	$rank = $_POST['setrankpls'];
-	
-	$__url_useraccount->SetAccountRank($rank);
-	$__url_useraccount->Save();
+		$__url_useraccount->SetAccountRank(intval($_POST['setrankpls']));
+		$__url_useraccount->Save();
 	}
-	?>
+?>
 	<div id="manage" class="collapse">
 		<div class="status span9">
 	<h1><?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]</span>
 		<small>
-			- 
-			<?php echo GetRankTitle($__url_useraccount->GetAccountRank()); ?>
+			- <?php echo GetRankTitle($__url_useraccount->GetAccountRank()); ?>
 		</small>
 	</h1>
 	<p class="alert"><?php echo $__url_useraccount->GetNickname(); ?> was last online <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago!</p>
 	
 	<?php
-	$ranks = array();
-	$ranks[] = array('-200', 'Permanent Ban');
-	$ranks[] = array('-100', 'Ban');
-	$ranks[] = array('100', 'Mapler');
-	$ranks[] = array('200', 'Mapler+');
-	$ranks[] = array('300', 'Developer');
-	$ranks[] = array('900', 'Moderator');
-	$ranks[] = array('950', 'Nexon');
-	
 	$currentrank = $__url_useraccount->GetAccountRank();
 	?>
 	
 	<form class="form-horizontal" method="post">
 	Rank: <select name="setrankpls" style="height:35px !important;width: 150px !important;">
-<?php foreach ($ranks as $rankid => $data): ?>
-							<option value="<?php echo $data[0]; ?>"<?php echo $currentrank == $data[0] ? ' selected="selected"' : ''; ?>><?php echo $data[1]; ?></option>
+<?php foreach ($_account_ranks as $rankid => $rankname): ?>
+							<option value="<?php echo $rankid; ?>"<?php echo $currentrank == $rankid ? ' selected="selected"' : ''; ?>><?php echo $rankname; ?></option>
 <?php endforeach; ?>
 	</select>
 	<br />
@@ -291,7 +280,7 @@ if (count($cache) > 0) {
 
 <hr />
 	<?php
-foreach ($cache as $row) {
+	foreach ($cache as $row) {
 ?>
 			<div class="span2" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 				<center>
@@ -305,8 +294,10 @@ foreach ($cache as $row) {
 			</div>
 
 <?php
-}
+	}
 ?>
 	</div>
 	</div>
-	<?php endif; ?>
+<?php
+endif;
+?>

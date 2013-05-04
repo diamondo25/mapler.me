@@ -15,7 +15,7 @@ define("RANK_MODERATOR", 900);
 define("RANK_NEXON", 950);
 define("RANK_ADMIN", 1000);
 
-$ranks = array(
+$_account_ranks = array(
 	-200	=> 'Permanently Banned',
 	-100 	=> 'Banned',
 	
@@ -31,8 +31,8 @@ $ranks = array(
 );
 
 function GetRankTitle($rank) {
-	global $ranks;
-	if (!isset($ranks[$rank])) return 'Mapler'; //Mapler instead of "Unknown".
-	return $ranks[$rank];
+	global $_account_ranks;
+	if (!isset($_account_ranks[$rank])) return 'Mapler'; //Mapler instead of "Unknown".
+	return $_account_ranks[$rank];
 }
 ?>
