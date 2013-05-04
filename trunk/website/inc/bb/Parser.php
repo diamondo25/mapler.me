@@ -272,12 +272,6 @@ class Parser {
      * Adds a set of default, standard bbcode definitions commonly used across the web. 
      */
     public function loadDefaultCodes() {
-        $this->addBBCode("b", "<strong>{param}</strong>");
-        $this->addBBCode("i", "<em>{param}</em>");
-        $this->addBBCode("u", "<u>{param}</u>");
-        $this->addBBCode("img", "<img src=\"{param}\" alt=\"a user uploaded image\" />");
-        $this->addBBCode("img", "<img src=\"{param}\" alt=\"{option}\" />", true);
-        $this->addBBCode("color", "<span style=\"color: {option}\">{param}</span>", true);
     }
     
     /**

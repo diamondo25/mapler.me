@@ -90,9 +90,9 @@ WHERE
 		//@replies
 		$this->content = preg_replace('/@([a-z0-9_]+)/i', '<a href="http://$1.'.$domain.'/">@$1</a>', $this->content);
 		//#hashtags (no search for the moment)
-		$this->content = preg_replace('/#([a-z0-9_]+)/i', '<a href="#">#$1</a>', $this->content);
+		//$this->content = preg_replace('/#([a-z0-9_]+)/i', '<a href="#">#$1</a>', $this->content);
 		//^images (workaround for the moment)
-		$this->content = preg_replace('/!([a-z0-9_]+)/i', '<a href="http://cdn.mapler.me/media/$1"><img src="http://cdn.mapler.me/media/$1" class="pull-right status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'"/></a>', $this->content);
+		$this->content = preg_replace('/!([a-z0-9_]+)/i', '<a href="http://cdn.mapler.me/media/$1"><img src="http://cdn.mapler.me/media/$1" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'"/></a>', $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
