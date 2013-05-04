@@ -1,25 +1,6 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ViewAccount'])) {
-		$name = $_POST['ViewAccount'];
-		$account = Account::Load($name);
-?>
-<hr/>
-	<a href="//<?php echo $domain; ?>/manage/general/" class="btn btn-mini pull-right">Return to General?</a>
-	<h1><?php echo $account->GetNickname(); ?><span style="font-size:15px !important;">[<?php echo $account->GetLastIP(); ?>]</span>
-		<small>
-			(<a href="//<?php echo $account->GetUsername();; ?>.mapler.me/"><?php echo $account->GetUsername(); ?>.mapler.me</a>) - 
-			<?php echo GetRankTitle($account->GetAccountRank()); ?>
-		</small>
-	</h1>
-	<p class="alert"><?php echo $account->GetNickname(); ?> was last online <?php echo time_elapsed_string($account->GetLastLoginSeconds()); ?> ago!</p><br/><br/>
-	<p>More information will be added soon.</p>
-<?php
-		require_once __DIR__.'/../inc/footer.php';
-		die;
-}
-
 $notice_filename = 'notice.txt';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 	$updatetxt = $_POST['updatetxt']; //not protected from sql injection to prevent html / php added from derping.
@@ -124,7 +105,7 @@ $__database->query("UPDATE signup_lock SET status = 1");
 $q = $__database->query("SELECT username FROM accounts ORDER BY id DESC");
 while ($row = $q->fetch_row()) {
 ?>
-	<input type="submit" value="<?php echo $row[0]; ?>" name="ViewAccount" class="btn btn-mini" />
+	<a href="//<?php echo $row[0]; ?>.mapler.me/" class="btn btn-mini"><?php echo $row[0]; ?></a>
 <?php
 }
 $q->free();

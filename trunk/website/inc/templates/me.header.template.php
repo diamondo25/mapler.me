@@ -200,6 +200,12 @@ endif;
 		<hr/>
 		<p class="name_extra">last seen <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago...<br/></p>
 		<hr/>
+<?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
+		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage">
+  Manage <?php echo $__url_useraccount->GetNickname(); ?>
+</button>
+<br /><br />
+<?php endif; ?>
 <?php
 if ($_loggedin && !$is_self) {
 	if ($friend_status == 'FRIENDS') {
@@ -241,3 +247,68 @@ if (count($cache) > 0) {
 }
 ?>
 	</div>
+	<?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): 
+	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['setrankpls'])) {
+	$rank = $_POST['setrankpls'];
+	
+	$__url_useraccount->SetAccountRank($rank);
+	$__url_useraccount->Save();
+	?>
+	<?php
+	}
+	?>
+	<div id="manage" class="collapse in">
+		<div class="status span9">
+		<p class="alert alert-info">Configurations have been saved.</p>
+	<h1><?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]</span>
+		<small>
+			- 
+			<?php echo GetRankTitle($__url_useraccount->GetAccountRank()); ?>
+		</small>
+	</h1>
+	<p class="alert"><?php echo $__url_useraccount->GetNickname(); ?> was last online <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago!</p>
+	
+	<?php
+	$ranks = array();
+	$ranks[] = array('-200', 'Permanent Ban');
+	$ranks[] = array('-100', 'Ban');
+	$ranks[] = array('100', 'Mapler');
+	$ranks[] = array('200', 'Mapler+');
+	$ranks[] = array('300', 'Developer');
+	$ranks[] = array('900', 'Moderator');
+	$ranks[] = array('950', 'Nexon');
+	
+	$currentrank = $__url_useraccount->GetAccountRank();
+	?>
+	
+	<form class="form-horizontal" method="post">
+	Rank: <select name="setrankpls" style="height:35px !important;width: 150px !important;">
+<?php foreach ($ranks as $rankid => $data): ?>
+							<option value="<?php echo $data[0]; ?>"<?php echo $currentrank == $data[0] ? ' selected="selected"' : ''; ?>><?php echo $data[1]; ?></option>
+<?php endforeach; ?>
+	</select>
+	<br />
+	<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>
+
+	</form>
+
+<hr />
+	<?php
+foreach ($cache as $row) {
+?>
+			<div class="span2" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
+				<center>
+					<?php echo $row['name']; ?>			
+					<br />
+					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>">
+						<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/>
+					</a>
+					<br />
+				</center>
+			</div>
+
+<?php
+}
+?>
+	</div>
+	<?php endif; ?>
