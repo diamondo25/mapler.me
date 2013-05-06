@@ -115,6 +115,43 @@ WHERE
 
 <script type="text/javascript">
 	$("#status-more-<?php echo $this->id;?>").popover();
+	$('#status-more-<?php echo $this->id;?>').popover(
+    {
+      placement: 'right',
+      offset: 15,
+      trigger: 'hover',
+      delay: { show: 350, hide: 100 },
+      html: true,
+    }
+  );
+    var timer,
+        popover_parent;
+    function hidePopover(elem) {
+        $(elem).popover('hide');
+    }
+    $('#status-more-<?php echo $this->id;?>').hover(
+        function() {
+          var self = this;
+          clearTimeout(timer);
+          $('.popover').hide(); //Hide any open popovers on other elements.
+          popover_parent = self
+          $(self).popover('show');            
+        }, 
+        function() {
+          var self = this;
+          timer = setTimeout(function(){hidePopover(self)},300);                 
+    });
+    $('.popover').live({
+      mouseover: function() {
+        clearTimeout(timer);
+      },
+      mouseleave: function() {
+        var self = this;
+        timer = setTimeout(function(){hidePopover(popover_parent)},300); 
+      }
+    });
+});
+	
 </script>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header" style="background: url('http://mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"><a href="#" id="status-more-<?php echo $this->id;?>" rel="popover" data-content="<i class='icon-share'></i> <a href='//<?php echo $username; ?>.mapler.me/'>Profile</a>" data-original-title="
