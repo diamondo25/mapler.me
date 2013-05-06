@@ -8,7 +8,7 @@ body {
 	background: #f0fef0 url('../img/goatesbg.png') center -75px no-repeat fixed;
 }
 
-.left {
+.left-bg {
 	background: url('../img/left.png');
 	width:447px;
 	height: 1530px;
@@ -19,7 +19,7 @@ body {
 	z-index: -998;
 }
 
-.right {
+.right-bg {
 	background: url('../img/right.png');
 	width:447px;
 	height: 1530px;
@@ -231,10 +231,9 @@ html { overflow-x: hidden; }
 
 .status .header {
 	padding:5px;
-	-webkit-border-radius:3px 3px 0 0;
-	-moz-border-radius:3px 3px 0 0;
-	border-radius:3px 3px 0 0;
-	border-bottom:1px solid #e2d7cc;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
 	color:#6f6b61;
 	-ms-word-break:break-all;
 	word-break:break-all;
@@ -242,6 +241,12 @@ html { overflow-x: hidden; }
 	-webkit-hyphens:auto;
 	-moz-hyphens:auto;
 	hyphens:auto;
+	width:63px;
+	height:63px;
+	float:left;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+	border: 1px solid #ddd;
+	margin: 10px;
 }
 
 .status .status-extra {

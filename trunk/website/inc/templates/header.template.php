@@ -89,6 +89,11 @@ _AddHeaderLink('js', 'maplerme');
 	$('.in').affix();
 	$('.navbar').affix();
 	</script>
+	<script>
+	$(function (){
+	$("#status-more").popover();
+	});
+	</script>
 
 	<style>
 	.moar-inner-navbar {
@@ -352,8 +357,8 @@ endif;
 		</div>
 	</div>
 	
-	<div class="left"></div>
-	<div class="right"></div>
+	<div class="left-bg"></div>
+	<div class="right-bg"></div>
 
 	<div class="container main" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 160px">
 

@@ -108,9 +108,10 @@ WHERE
 		
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
-				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat right -30px #FFF;">
-					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/"><?php echo $this->nickname;?> (@<?php echo $username; ?>)</a> said:
-				</div>
+				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat center -17px #FFF;"><a href="#" id="status-more" rel="popover" data-content="More info added soon!" data-original-title="
+					<?php echo $this->nickname;?> (@<?php echo $username; ?>)" trigger="hover" style="opacity:0;">
+					<img src="#" style="opacity:0;width:50px;height:50px;"/>
+				</div></a>
 				<br />
 				<div class="status-contents">
 				<?php echo $parser->getAsHtml(); ?>
