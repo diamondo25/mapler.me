@@ -184,6 +184,7 @@ namespace MPLRServer
                     {
                         if (!client.Pong)
                         {
+                            client.Logger_WriteLine("Connection Timeout");
                             client.Disconnect();
                         }
                         else

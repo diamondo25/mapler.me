@@ -236,6 +236,8 @@ namespace MPLRServer
                                                 mp.WriteString(kvp.Key);
                                                 mp.WriteString(kvp.Value);
                                             }
+
+                                            mp.SwitchOver(); // Make read packet
                                         }
                                         _exporter.AddPacket(mp);
                                     }

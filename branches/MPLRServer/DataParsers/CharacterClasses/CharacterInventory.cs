@@ -256,21 +256,21 @@ namespace MPLRServer
     {
         public byte Slots { get; private set; }
         public byte Scrolls { get; private set; }
-        public ushort Str { get; private set; }
-        public ushort Dex { get; private set; }
-        public ushort Int { get; private set; }
-        public ushort Luk { get; private set; }
-        public ushort HP { get; private set; }
-        public ushort MP { get; private set; }
-        public ushort Watk { get; private set; }
-        public ushort Matk { get; private set; }
-        public ushort Wdef { get; private set; }
-        public ushort Mdef { get; private set; }
-        public ushort Acc { get; private set; }
-        public ushort Avo { get; private set; }
-        public ushort Hands { get; private set; }
-        public ushort Jump { get; private set; }
-        public ushort Speed { get; private set; }
+        public short Str { get; private set; }
+        public short Dex { get; private set; }
+        public short Int { get; private set; }
+        public short Luk { get; private set; }
+        public short HP { get; private set; }
+        public short MP { get; private set; }
+        public short Watk { get; private set; }
+        public short Matk { get; private set; }
+        public short Wdef { get; private set; }
+        public short Mdef { get; private set; }
+        public short Acc { get; private set; }
+        public short Avo { get; private set; }
+        public short Hands { get; private set; }
+        public short Jump { get; private set; }
+        public short Speed { get; private set; }
 
         public string Name { get; private set; }
         public ushort Flags { get; private set; }

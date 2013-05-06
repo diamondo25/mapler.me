@@ -1204,6 +1204,12 @@ namespace MPLRServer
 
             bool isConnecting = pPacket.ReadBool();
 
+            if (!isConnecting && pConnection.CharData == null)
+            {
+                pConnection.Logger_WriteLine("Not connection AND no data... ohshi-");
+                return;
+            }
+
             tmp = pPacket.ReadShort(); // Contains Message (Not used anymore lol.)
             if (tmp > 0)
             {
