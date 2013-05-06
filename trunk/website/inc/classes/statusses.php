@@ -107,9 +107,13 @@ WHERE
 		$object_id = GetUniqueID();
 		
 ?>
+
+<script type="text/javascript">
+	$("#status-more-<?php echo $this->id;?>").popover();
+</script>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
-				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat center -17px #FFF;"><a href="#" id="status-more" rel="popover" data-content="More info added soon!" data-original-title="
-					<?php echo $this->nickname;?> (@<?php echo $username; ?>)" trigger="hover" style="opacity:0;">
+				<div class="header" style="background: url('http://mapler.me/avatar/<?php echo $this->character; ?>') no-repeat center -17px #FFF;"><a href="#" id="status-more-<?php echo $this->id;?>" rel="popover" data-content="More info added soon!" data-original-title="
+					<?php echo $this->nickname;?> (@<?php echo $username; ?>)" trigger="hover">
 					<img src="#" style="opacity:0;width:50px;height:50px;"/>
 				</div></a>
 				<br />

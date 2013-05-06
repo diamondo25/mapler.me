@@ -89,11 +89,6 @@ _AddHeaderLink('js', 'maplerme');
 	$('.in').affix();
 	$('.navbar').affix();
 	</script>
-	<script>
-	$(function (){
-	$("#status-more").popover();
-	});
-	</script>
 
 	<style>
 	.moar-inner-navbar {

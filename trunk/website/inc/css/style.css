@@ -137,7 +137,7 @@ html { overflow-x: hidden; }
 		background-image: none !important;
 	}
 	
-	.right, .left {
+	.right-bg, .left-bg {
 		display: none;
 	}
 	
