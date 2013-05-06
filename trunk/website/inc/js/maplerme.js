@@ -60,7 +60,7 @@ $(document).ready(function() {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		$.ajax({
 			type: 'POST',
-			url: '//mplr.e.craftnet.nl/api/status/post/',
+			url: '//mapler.me/api/status/post/',
 			data: $(this).serialize(),
 			success: function (e) {
 				if (e.errormsg != undefined) {
