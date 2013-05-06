@@ -46,13 +46,34 @@ $(document).ready(function() {
 	});
 	
 	$('.fademeout').delay(7000).fadeOut(1000, function() {
-		$(this).delete();
+		$(this).remove();
 	});
+	
 	$(window).scroll(function() {
 		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
 			if (didinit)
 				TryRequestMore(false, false);
 		}
+	});
+	
+	$('#statusposter').submit(function () {
+		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
+		$.ajax({
+			type: 'POST',
+			url: '//mplr.e.craftnet.nl/api/status/post/',
+			data: $(this).serialize(),
+			success: function (e) {
+				if (e.errormsg != undefined) {
+					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
+				}
+				else {
+					AddMessageToContent('info', 'Successfully posted status!', '');
+					$('#post-toggle-button').click();
+				}
+				$('#statusposter button[type="submit"]').removeAttr('disabled');
+			}
+		});
+		return false;
 	});
 });
 
@@ -64,15 +85,14 @@ function TryRequestMore(up, init) {
 		type: 'GET',
 		url: '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
 		success: function (data) {
-			if (data.error != undefined) {
-				alert(data.error);
+			if (data.errormsg != undefined) {
+				alert(data.errormsg);
 			}
 			else if (data.amount > 0) {
-				var oridata = $('#statuslist').html();
 				if (up)
-					$('#statuslist').html(data.result + oridata);
+					$('#statuslist').prepend(data.result);
 				else
-					$('#statuslist').html(oridata + data.result);
+					$('#statuslist').append(data.result);
 
 				if (init || !up)
 					latestStatusDown = data.firstid;
@@ -94,15 +114,14 @@ function GetBlogPosts(up, init) {
 		type: 'GET',
 		url: '/api/blog/',
 		success: function (data) {
-			if (data.error != undefined) {
-				alert(data.error);
+			if (data.errormsg != undefined) {
+				alert(data.errormsg);
 			}
 			else if (data.amount > 0) {
-				var oridata = $('#statuslist').html();
 				if (up)
-					$('#statuslist').html(data.result + oridata);
+					$('#statuslist').prepend(data.result);
 				else
-					$('#statuslist').html(oridata + data.result);
+					$('#statuslist').append(data.result);
 
 				if (init || !up)
 					latestStatusDown = data.firstid;
@@ -111,4 +130,22 @@ function GetBlogPosts(up, init) {
 			}
 		}
 	});
+}
+
+function AddMessageToContent(type, text, location) {
+	var obj = $('<p></p>');
+	obj.addClass('lead');
+	obj.addClass('alert');
+	obj.addClass('alert-' + type);
+	
+	obj.html(text);
+	
+	obj = $('<div class="span12"></div>').html(obj);
+	obj = $('<div class="row"></div>').html(obj);
+	
+	obj.delay(7000).fadeOut(1000, function() {
+		$(this).remove();
+	});
+	
+	$('div[class="container main"]').prepend(obj);
 }

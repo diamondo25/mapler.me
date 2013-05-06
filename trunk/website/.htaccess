@@ -27,6 +27,7 @@
 	# Status APIs
 	RewriteRule ^api/list/(.*)/(.*)/$ /actions/ajax/status.php?type=list&lastpost=$1&mode=$2
 	RewriteRule ^api/blog/$ /actions/ajax/status.php?type=blog
+	RewriteRule ^api/status/post/$ /actions/ajax/status.php?type=post
 	RewriteRule ^api/status/(.*)/$ /actions/ajax/status.php?type=responses&statusid=$1
 	
 	# image / ranking rewrites

@@ -144,9 +144,10 @@ function RemoveStatus(id) {
 //}
 
 // If antispam passes, push status
-	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
+	// Disabled...
+	if (false && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
 
-			$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
+		$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
 
 		$reply_to = intval($_POST['reply-to']);
 		$error = '';
@@ -258,7 +259,7 @@ WHERE
 ?>
 
 <div id="post" class="collapse poster" data-spy="affix" data-offset-top="10">
-	<form method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
+	<form id="statusposter" method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
 		<h3 id="myModalLabel">Post a status?</h3>
 		<textarea name="content" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
 		<input type="hidden" name="reply-to" value="-1" />
