@@ -2,12 +2,11 @@
 error_reporting(E_ALL);
 header('Content-type: application/json');
 
-function JSONDie($msg, $statusCode = 200) {
+function JSONDie($msg, $statusCode = 400) {
 	die(json_encode(array('errormsg' => $msg, 'statuscode' => $statusCode)));
 }
 
 function JSONAnswer($data, $statusCode = 200) {
-	header(':', true, $statusCode);
 	$data['statuscode'] = $statusCode;
 	die(json_encode($data));
 }

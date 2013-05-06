@@ -75,6 +75,64 @@ $(document).ready(function() {
 		});
 		return false;
 	});
+	
+	$('body').on('click', '.deletestatus', function () {
+		if (!confirm('Are you sure you want to delete this status?')) return false;
+		// var statusobject = $(this).parent('div[status-id]'); // Bugged? Doesn't work
+		var statusobject = $(this).parent().parent();
+		var statusid = statusobject.attr('status-id');
+		
+		$.ajax({
+			type: 'GET',
+			url: '//mapler.me/api/status/delete/' + statusid + '/',
+			success: function (e) {
+				if (e.errormsg != undefined) {
+					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
+				}
+				else {
+					statusobject.fadeOut(2000, function() {
+						$(this).remove();
+					});
+				}
+			}
+		});
+		
+		return false;
+	});
+	
+	$('a.status-more').popover({
+		placement: 'right',
+		offset: 15,
+		trigger: 'manual',
+		delay: { show: 350, hide: 100 },
+		html: true,
+	});
+
+	var timer, popover_parent;
+	function hidePopover(elem) {
+		$(elem).popover('hide');
+	}
+
+	$('body').on('hover', 'a.status-more', function() {
+			var self = this;
+			clearTimeout(timer);
+			$('.popover').hide(); //Hide any open popovers on other elements.
+			popover_parent = self
+			$(self).popover('show');
+		}, 
+		function() {
+			var self = this;
+			timer = setTimeout(function(){hidePopover(self)},300);
+	});
+	$(document).on({
+		mouseenter: function() {
+			clearTimeout(timer);
+		},
+		mouseleave: function() {
+			var self = this;
+			timer = setTimeout(function(){hidePopover(popover_parent)},300); 
+		}
+		}, '.popover');
 });
 
 var latestStatusUp = -1;

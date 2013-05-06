@@ -2,7 +2,7 @@
 require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/functions.loginaccount.php';
 
-CheckSupportedTypes('responses', 'list', 'blog', 'post');
+CheckSupportedTypes('responses', 'list', 'blog', 'post', 'delete');
 
 require_once __DIR__.'/../../inc/database.php';
 require_once __DIR__.'/../../inc/classes/statusses.php';
@@ -113,6 +113,27 @@ LIMIT 15
 	if ($data === false) JSONDie('No data returned', 204);
 
 	JSONAnswer(array('result' => $data, 'lastid' => $lastid, 'firstid' => $firstid, 'amount' => count($statuses->data)));
+}
+
+elseif ($request_type == 'delete') {
+	RetrieveInputGET('id');
+	// Removing status
+	$id = intval($P['id']);
+
+	$__database->query("DELETE FROM social_statuses WHERE id = ".$id.
+		(
+			$_loginaccount->IsRankOrHigher(RANK_MODERATOR) 
+			? ' AND account_id = '.$_loginaccount->GetId()
+			: ''
+		)
+	);
+
+	if ($__database->affected_rows == 1) {
+		JSONAnswer(array('result' => 'The status was successfully deleted.'));
+	}
+	else {
+		JSONDie('Unable to delete the status.');
+	}
 }
 
 elseif ($request_type == 'post') {
