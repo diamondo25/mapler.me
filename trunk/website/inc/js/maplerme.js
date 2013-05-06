@@ -68,6 +68,7 @@ $(document).ready(function() {
 				}
 				else {
 					AddMessageToContent('info', 'Successfully posted status!', '');
+					$('textarea[name="content"]').val(''); // Empty input
 					$('#post-toggle-button').click();
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
