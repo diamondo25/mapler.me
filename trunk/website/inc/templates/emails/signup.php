@@ -14,7 +14,7 @@
                             <font size='4' color='#fff' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:18px;line-height:25px;font-weight:bold'>Start your adventure!</font></a>
                 </td>
                 </tr></tbody></table><table width='500'><tbody><tr><td height='80'>
-                        <font color='#777' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:12px;line-height:1.5'>If you have any questions or concerns, please <a href='mailto:tyler@thebluecorsair.com' style='color:#222;text-decoration:none'>send us an email!</a>
+                        <font color='#777' face='Helvetica Neue, Arial, Helvetica, sans-serif' style='font-size:12px;line-height:1.5'>If you have any questions or concerns, please <a href='mailto:support@mapler.me' style='color:#222;text-decoration:none'>send us an email!</a>
                     </font></td>
                 </tr></tbody></table></td>
     </tr></tbody></table>
