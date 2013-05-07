@@ -100,40 +100,6 @@ $(document).ready(function() {
 		
 		return false;
 	});
-	
-	$('a.status-more').popover({
-		placement: 'right',
-		offset: 15,
-		trigger: 'manual',
-		delay: { show: 350, hide: 100 },
-		html: true,
-	});
-
-	var timer, popover_parent;
-	function hidePopover(elem) {
-		$(elem).popover('hide');
-	}
-
-	$('body').on('hover', 'a.status-more', function() {
-			var self = this;
-			clearTimeout(timer);
-			$('.popover').hide(); //Hide any open popovers on other elements.
-			popover_parent = self
-			$(self).popover('show');
-		}, 
-		function() {
-			var self = this;
-			timer = setTimeout(function(){hidePopover(self)},300);
-	});
-	$(document).on({
-		mouseenter: function() {
-			clearTimeout(timer);
-		},
-		mouseleave: function() {
-			var self = this;
-			timer = setTimeout(function(){hidePopover(popover_parent)},300); 
-		}
-		}, '.popover');
 });
 
 var latestStatusUp = -1;

@@ -112,9 +112,51 @@ WHERE
 	else
 		$main_char = 'avatar/'.$main_char;
 ?>
+
+
+<script type="text/javascript">
+ $(document).ready(function() {
+  $('.status-more-<?php echo $this->id;?>').popover(
+    {
+      placement: 'right',
+      offset: 15,
+      trigger: 'manual',
+      delay: { show: 350, hide: 100 },
+      html: true,
+    }
+  );
+    var timer,
+        popover_parent;
+    function hidePopover(elem) {
+        $(elem).popover('hide');
+    }
+    $('.status-more-<?php echo $this->id;?>').hover(
+        function() {
+          var self = this;
+          clearTimeout(timer);
+          $('.popover').hide(); //Hide any open popovers on other elements.
+          popover_parent = self
+          $(self).popover('show');            
+        }, 
+        function() {
+          var self = this;
+          timer = setTimeout(function(){hidePopover(self)},300);                 
+    });
+    $(document).on({
+      mouseenter: function() {
+        clearTimeout(timer);
+      },
+      mouseleave: function() {
+        var self = this;
+        timer = setTimeout(function(){hidePopover(popover_parent)},300); 
+      }
+    }, '.popover');
+});
+</script>
+
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header" style="background: url('http://mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;">
-					<a class="status-more" rel="popover" data-content="<i class='icon-share'></i> <a href='//<?php echo $username; ?>.mapler.me/'>Profile</a>" data-original-title="<?php echo $this->nickname;?> (@<?php echo $username; ?>)">
+					<a class="status-more-<?php echo $this->id;?>" rel="popover" data-content="<i class='icon-share'></i> <a href='//<?php echo $username; ?>.mapler.me/'>Profile</a>" data-original-title="<?php echo $this->nickname;?> (@<?php echo $username; ?>)">
 						<img src="#" style="opacity:0;width:50px;height:50px;"/>
 					</a>
 				</div>
