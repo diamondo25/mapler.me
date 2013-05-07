@@ -106,11 +106,13 @@ WHERE
 		
 		$object_id = GetUniqueID();
 
-	$main_char = $this->character;
-	if ($main_char == null)
-		$main_char = 'inc/img/no-character.gif';
-	else
-		$main_char = 'avatar/'.$main_char;
+		$main_char = $this->character;
+		if ($main_char == null)
+			$main_char = 'inc/img/no-character.gif';
+		else
+			$main_char = 'avatar/'.$main_char;
+		$account_rank = $this->account->GetAccountRank();
+		
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
@@ -118,14 +120,9 @@ WHERE
 				<p>
 				<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				
-				<?php
-				$statusacc = Account::Load($this->account_id);
-				if ($statusacc->GetAccountRank() >= RANK_MODERATOR) {
-				?>
-					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($statusacc->GetAccountRank()); ?></span>
-				<?php	
-				}
-				?>
+<?php if ($account_rank >= RANK_MODERATOR): ?>
+					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($account_rank); ?></span>
+<?php endif; ?>
 				
 				</p>
 				</div>

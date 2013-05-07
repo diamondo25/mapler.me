@@ -69,6 +69,7 @@ $(document).ready(function() {
 				else {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
+					$('input[name="reply-to"]').attr('value', '-1');
 					$('#post-toggle-button').click();
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
