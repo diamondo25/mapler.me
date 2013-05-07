@@ -238,10 +238,10 @@ html { overflow-x: hidden; }
 }
 
 .status .header {
-	padding:5px;
-	-webkit-border-radius:3px;
-	-moz-border-radius:3px;
-	border-radius:3px;
+	-webkit-border-radius:3px 3px 0 0;
+	-moz-border-radius:3px 3px 0 0;
+	border-radius:3px 3px 0 0;
+	border-bottom:1px solid #e2d7cc;
 	color:#6f6b61;
 	-ms-word-break:break-all;
 	word-break:break-all;
@@ -249,12 +249,19 @@ html { overflow-x: hidden; }
 	-webkit-hyphens:auto;
 	-moz-hyphens:auto;
 	hyphens:auto;
-	width:63px;
-	height:63px;
-	float:left;
+	font-weight: 400;
+}
+
+.status .header .character{
 	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 	border: 1px solid #ddd;
 	margin: 10px;
+	width:63px;
+	height:63px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	float:left;
 }
 
 .status .status-extra {
