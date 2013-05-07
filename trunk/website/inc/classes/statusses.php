@@ -115,7 +115,19 @@ WHERE
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
 					<div class="character" style="background: url('http://mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div><br/>
-				<p><?php echo $this->nickname;?> <span class="faded">(@<?php echo $username; ?>)</span></p>
+				<p>
+				<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
+				
+				<?php
+				$statusacc = Account::Load($this->account_id);
+				if ($statusacc->GetAccountRank() >= RANK_MODERATOR) {
+				?>
+					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($statusacc->GetAccountRank()); ?></span>
+				<?php	
+				}
+				?>
+				
+				</p>
 				</div>
 				<br />
 				<div class="status-contents">
