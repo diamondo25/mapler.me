@@ -5,10 +5,12 @@ require_once __DIR__.'/../inc/functions.datastorage.php';
 require_once __DIR__.'/../inc/zmap.php';
 require_once __DIR__.'/caching.php';
 
+define("DEBUGGING", isset($_GET['debug']));
+
 $font = "arial.ttf";
 $font_size = "9.25";
 
-if (!isset($_GET['debug'])) {
+if (!DEBUGGING) {
 	error_reporting(0);
 	ini_set('display_errors', 0);
 	header('Content-Type: image/png');
@@ -111,29 +113,9 @@ $gender = $character_data['gender'];
 
 $ds_mark = $character_data['demonmark'];
 
-// Determine which items are visible
-// Credit goes to zOmgnO1 for improved code
 
 $q->free();
 
-// Get character equipment
-$character_equipment = $__database->query("
-SELECT 
-	itemid, slot, display_id 
-FROM 
-	`items` 
-WHERE 
-	`character_id` = " . $internal_id . " 
-AND 
-	`slot` < 0 
-AND 
-	`slot` > -155 
-AND 
-	`inventory` = 0 
-ORDER BY 
-	`slot` ASC
-"
-);
 
 function GetID($row) {
 	$itemid = $row['itemid'];
@@ -161,7 +143,7 @@ function CheckStand($type, $data) {
 		case 146:	// Crossbow
 			$stand = 2;
 			
-			if (isset($_GET['debug']))
+			if (DEBUGGING)
 				echo 'STANCE ITEM: '.$type."\r\n";
 			break;
 		case 144:	// Pole Arm
@@ -169,7 +151,7 @@ function CheckStand($type, $data) {
 				$stand = 1;
 			else
 				$stand = 2;
-			if (isset($_GET['debug']))
+			if (DEBUGGING)
 				echo 'STANCE ITEM: '.$type."\r\n";
 			break;
 	}
@@ -184,17 +166,20 @@ function ParseItem($id) {
 
 	$zvalue = '';
 	$foundinfo = false;
-	if (isset($_GET['debug']))
+	if (DEBUGGING)
 		echo 'Item: '.$id."\r\n";
+	
+	$isface = isset($iteminfo['chu']);
 	foreach ($iteminfo as $key => $value) {
 		if ($key == 'ITEMID') continue;
-		$isface = $itemtype == 2 || $itemtype == 3;
+		//$isface = $itemtype == 2 || $itemtype == 3;
 		$tmp = isset($value[0]) ? $value[0] : ($isface && $key == 'default' ? $value : null);
 		if ($tmp == null) continue;
+
 		foreach ($tmp as $category => $block) {
 			if (!isset($block['z'], $zmap[$block['z']])) continue;
 			$zval = $zmap[$block['z']];
-			if (isset($_GET['debug']))
+			if (DEBUGGING)
 				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
 
 			if ($itemtype == 2 && $key != $using_face) continue;
@@ -220,7 +205,7 @@ function ParseItem($id) {
 			//if ($zmap[$objectdata['islot']] > $zmap['characterEnd']) continue;
 			$zlayers[$zval][] = $objectdata;
 			
-			if ($objectdata['islot'] == 'Cp' && in_array('H1', $objectdata['vslot'])) {
+			if (strpos($objectdata['islot'], 'Cp') !== false && in_array('H1', $objectdata['vslot'])) {
 				$foundHidingCap = true;
 			}
 		}
@@ -233,13 +218,38 @@ ParseItem($face);
 ParseItem($hair);
 ParseItem($skin);
 ParseItem($skin + 10000);
+if (DEBUGGING)
+	echo 'Demon Slayer mark: '.$ds_mark."\r\n";
+
+if ($ds_mark != 0) {
+	ParseItem($ds_mark);
+}
 
 $cashitems = array();
+
+// Get character equipment
+$character_equipment = $__database->query("
+SELECT 
+	itemid, slot, display_id 
+FROM 
+	`items` 
+WHERE 
+	`character_id` = " . $internal_id . " 
+AND 
+	`slot` < 0 
+AND 
+	`slot` > -155 
+AND 
+	`inventory` = 0 
+ORDER BY 
+	`slot` ASC
+"
+);
 
 while ($row2 = $character_equipment->fetch_assoc()) {
 	$slot = abs($row2['slot']) % 100;
 	$iscash = floor(abs($row2['slot']) / 100) == 1;
-	if (isset($_GET['debug']))
+	if (DEBUGGING)
 		echo 'Slot: '.$row2['slot']."\r\n";
 	if (!$iscash) {
 		if (isset($cashitems[$slot])) continue;
@@ -273,7 +283,7 @@ if (isset($_GET['use_bg'])) {
 	}
 }
 
-if (isset($_GET['debug'])) {
+if (DEBUGGING) {
 	print_r($zlayers);
 	print_r($item_locations);
 }
@@ -317,7 +327,7 @@ foreach ($zlayers as $zname => $objects) {
 		
 		if (isset($object['info']['origin']['X'])) $x -= $object['info']['origin']['X'];
 		if (isset($object['info']['origin']['Y'])) $y -= $object['info']['origin']['Y'];
-		if (isset($_GET['debug'])) {
+		if (DEBUGGING) {
 			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' --- Zname '.$zname.'  - Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
 		add_image($img, $x, $y);
@@ -352,7 +362,7 @@ function add_image($location, $x, $y) {
 		$image = imagecreatefrompng($location);
 		imagecopy($im, $image, $x, $y, 0, 0, imagesx($image), imagesy($image));
 	}
-	elseif (isset($_GET['debug'])) {
+	elseif (DEBUGGING) {
 		echo "-- Could not find ".$location." -- <br />";
 	}
 }
