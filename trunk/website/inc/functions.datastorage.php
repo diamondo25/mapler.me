@@ -14,14 +14,16 @@ function GetMapleStoryString($type, $id, $key) {
 		$key = substr($key, 0, 5);
 	}
 
-	$key_name = "data_cache_".$type.'|'.$id.'|'.$key;
+	$key_name = "data_cache_".$type.'|'.$id;
 	
 	if ($apcinstalled && apc_exists($key_name)) {
-		return apc_fetch($key_name);
+		$tmp = apc_fetch($key_name);
+		return $tmp[$key];
 	}
 
 	$q = $__database->query("
 SELECT
+	`key`,
 	`value`
 FROM
 	`strings`
@@ -29,16 +31,18 @@ WHERE
 	`objecttype` = '".$__database->real_escape_string($type)."'
 		AND
 	`objectid` = ".intval($id)."
-		AND
-	`key` = '".$__database->real_escape_string($key)."'
 ");
+
 	if ($q->num_rows >= 1) {
-		$row = $q->fetch_array();
-		$value = $row[0];
+		$buff = array();
+		while ($row = $q->fetch_array())
+			$buff[$row[0]] = $row[1];
 
 		if ($apcinstalled) {
-			apc_add($key_name, $value);
+			apc_add($key_name, $buff);
 		}
+			
+		$value = $buff[$key];
 
 		$q->free();
 		return $value;
