@@ -16,10 +16,14 @@ if (!file_exists($page)) {
 }
 
 require_once __DIR__.'/templates/header.template.php';
-require_once __DIR__.'/templates/additional.menu.php';
 ?>
 		<div class="row">
-			<div class="span12">
+			<div class="span3">
+				<ul class="nav nav-list settings-sidebar">
+					<?php require_once __DIR__.'/templates/additional.menu.php'; ?>
+          		</ul>
+        	</div>
+			<div class="span9">
 				<p class="lead">Mapler.me Administrative Panel :: <?php echo $_loginaccount->GetFullName(); ?> (id: <?php echo $_loginaccount->GetID(); ?>)</p>
 				<?php require_once $page; ?>
 			</div>

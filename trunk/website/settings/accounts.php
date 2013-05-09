@@ -139,7 +139,7 @@ GROUP BY
 
 ?>
 
-<h3>Your Accounts</h3>
+<h2>Your Accounts</h2>
 <p>In order to connect your account to Mapler.me, you must login to your account below. All confidential information is discarded after connecting an account.</p>
 <p class="alert-info alert">Note that if you are using your e-mail address to login into MapleStory, your username shown on this page will not be the same.</p>
 <ul>

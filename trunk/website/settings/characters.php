@@ -112,12 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 
 
 ?>
-
-			<p class="lead">Characters <sub>(Main character and character settings)</sub></p>
 			<form class="form-horizontal" method="post">
 <?php
 $i = 0;
-$chars_per_row = 4;
+$chars_per_row = 3;
 foreach ($cache as $row) {
 	if ($char_config['main_character'] == null) {
 		$char_config['main_character'] = $row['name'];

@@ -14,35 +14,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 
 
 ?>
-			<p class="lead">Profile <sub>(Profile settings and Options)</sub></p>
-			<form class="form-horizontal" method="post">
-				<div class="control-group">
-					<label class="control-label" for="inputName">Name (Full Name)</label>
-					<div class="controls">
-						<input type="text" name="name" id="inputName" value="<?php echo $_loginaccount->GetFullname(); ?>" />
+			<h2>Your Profile</h2>
+			<form id="settings-form" method="post">
+			<div class="span9">
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">Full Name</div>
+						<div class="span4">
+							<input type="text" name="name" id="inputName" value="<?php echo $_loginaccount->GetFullname(); ?>" />
+						</div>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputNick">Nickname</label>
-					<div class="controls">
-						<input type="text" name="nick" id="inputNick" value="<?php echo $_loginaccount->GetNickname(); ?>" />
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">Nickname</div>
+						<div class="span4">
+							<input type="text" name="nick" id="inputNick" value="<?php echo $_loginaccount->GetNickname(); ?>" />
+						</div>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputNick">Bio</label>
-					<div class="controls">
-						<textarea class="span2" style="width:210px;max-width:210px;" type="text" name="bio" id="inputBio"><?php echo $_loginaccount->GetBio(); ?></textarea>
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">Bio</div>
+						<div class="span4">
+							<textarea class="span2" style="min-height:100px;" type="text" name="bio" id="inputBio"><?php echo $_loginaccount->GetBio(); ?></textarea>
+						</div>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label" for="inputEmail">Email</label>
-					<div class="controls">
-						<input type="text" name="email" id="inputEmail" value="<?php echo $_loginaccount->GetEmail(); ?>" />
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">Email</div>
+						<div class="span4">
+							<input type="text" name="email" id="inputEmail" value="<?php echo $_loginaccount->GetEmail(); ?>" />
+						</div>
 					</div>
 				</div>
-				<div class="control-group">
+				<div class="item">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Save</button>
 					</div>
 				</div>
+			</div>
 			</form>

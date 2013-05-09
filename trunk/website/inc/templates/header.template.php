@@ -70,6 +70,11 @@ if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
 	strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
 	_AddHeaderLink('css', 'style.player');
 }
+
+if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
+	strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
+	_AddHeaderLink('css', 'settings.style');
+}
 ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
@@ -181,13 +186,8 @@ else:
 endif;
 ?>
 								</ul>
-<?php if ($_loggedin && strpos($_SERVER['REQUEST_URI'], '/settings/') === FALSE && strpos($_SERVER['REQUEST_URI'], '/manage/') === FALSE): ?>
 								<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
 								<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
-<?php endif; ?>
-<?php
-		require_once __DIR__.'/additional.menu.php';
-?>
 								</li>
 							</ul>
 						</div>
@@ -240,7 +240,7 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 endif;
 ?>
 									<li class="divider"></li>
-									<li><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
+									<li><a href="//<?php echo $domain; ?>/logoff">Sign Out</a></li>
 								</ul>
 <?php
 else:
@@ -314,7 +314,7 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 endif;
 ?>
 									<li class="divider"></li>
-									<li><a href="//<?php echo $domain; ?>/logoff">Log off</a></li>
+									<li><a href="//<?php echo $domain; ?>/logoff">Sign Out</a></li>
 								</ul>
 <?php
 else:

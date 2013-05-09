@@ -44,12 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['
 }
 
 ?>
-
-			<p class="lead">Privacy <sub>(Privacy settings and security)</sub></p>
-			<form class="form-horizontal" method="post">
-				
+			<h2>Password</h2>
+			<form id="settings-form" method="post">
 				<div class="control-group">
-					<label class="control-label" for="oldPW">Old password</label>
+					<label class="control-label" for="oldPW">Current password</label>
 					<div class="controls">
 						<input type="password" name="passwordOld" id="oldPW" value="" />
 					</div>
