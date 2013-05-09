@@ -93,7 +93,7 @@ $q->free();
 foreach ($cache as $row) {
 ?>
 		<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>"/>
+			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>" style="width: 128px; height: 128px;" />
 		</a>
 <?php
 }
@@ -108,19 +108,20 @@ foreach ($cache as $row) {
 	</div>
 	<div class="span12">
 <?php
-	$form = new Form('', 'form-horizontal span4 loginpageform');
+	$form = new Form('', 'form-horizontal loginpageform');
 	$form->AddBlock('E-mail', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
 	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
 	$form->MakeSubmit('Login');
 	$form->End();
 ?>
+	</div>
 	<div class="span12">
-	<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
+		<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
 	</div>
 <?php
 }
 ?>
-	</div>
+</div>
 <?php
 require_once __DIR__.'/inc/footer.php';
 ?>

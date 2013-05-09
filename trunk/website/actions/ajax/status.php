@@ -4,7 +4,7 @@ require_once __DIR__.'/../../inc/functions.loginaccount.php';
 
 CheckSupportedTypes('responses', 'list', 'blog', 'post', 'delete');
 
-require_once __DIR__.'/../../inc/database.php';
+require_once __DIR__.'/../../inc/classes/database.php';
 require_once __DIR__.'/../../inc/classes/statusses.php';
 
 if ($request_type == 'responses') {

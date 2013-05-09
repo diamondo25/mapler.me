@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../database.php';
+require_once __DIR__.'/database.php';
 
 define("ITEM_RECHARGE", 1);
 define("ITEM_EQUIP", 2);

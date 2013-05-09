@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../database.php';
+require_once __DIR__.'/database.php';
 
 class Guild {
 	public $name, $id, $world_id, $world_name, $notice, $ranks, 

@@ -4,7 +4,7 @@
 if (!isset($_SERVER['X-Report-ID'], $_FILES['file']['tmp_name'])) die('Invalid Headers');
 if (!is_uploaded_file($_FILES['file']['tmp_name'])) die('Shoo!');
 
-require_once __DIR__.'/../inc/database.php';
+require_once __DIR__.'/../inc/classes/database.php';
 require_once __DIR__.'/../inc/domains.php';
 
 $id = intval($_SERVER['X-Report-ID']);

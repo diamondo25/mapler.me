@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../inc/database.php';
+require_once __DIR__.'/../inc/classes/database.php';
 require_once __DIR__.'/../inc/functions.php';
 require_once __DIR__.'/../inc/functions.datastorage.php';
 require_once __DIR__.'/../inc/zmap.php';
