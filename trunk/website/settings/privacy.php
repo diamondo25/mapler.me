@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['
 	if ($error == '') {
 		if ($_POST['passwordNew1'] !== $_POST['passwordNew2']) {
 			// Not the same D:
-			$error = 'You entered 2 different passwords. Try again.';
+			$error = 'You entered two different passwords. Try again.';
 		}
 	}
 	
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['
 			}
 		}
 		else {
-			$error = 'wat.';
+			$error = 'Something went wrong!';
 		}
 	}
 	

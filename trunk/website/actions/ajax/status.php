@@ -86,7 +86,7 @@ LEFT JOIN
 WHERE
 ".($P['lastpost'] == -1 ? '' : (" social_statuses.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
 	(
-		override = 1 AND blog = 0 OR 
+		blog = 0 OR 
 		account_id = ".$_loginaccount->GetID()." AND blog = 0 OR 
 		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND blog = 0
 	)
