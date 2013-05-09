@@ -172,7 +172,6 @@ function ParseItem($id) {
 	$isface = isset($iteminfo['chu']);
 	foreach ($iteminfo as $key => $value) {
 		if ($key == 'ITEMID') continue;
-		//$isface = $itemtype == 2 || $itemtype == 3;
 		$tmp = isset($value[0]) ? $value[0] : ($isface && $key == 'default' ? $value : null);
 		if ($tmp == null) continue;
 
