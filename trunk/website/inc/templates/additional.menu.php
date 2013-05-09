@@ -31,6 +31,3 @@ elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 <?php
 }
 ?>
-
-<style>
-</style>
