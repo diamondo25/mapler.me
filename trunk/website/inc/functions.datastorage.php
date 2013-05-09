@@ -2,12 +2,12 @@
 
 
 // Check for APC
-$apcinstalled = function_exists("apc_add") == 1;
+define('APC_INSTALLED', function_exists("apc_add"));
 
 
 
 function GetMapleStoryString($type, $id, $key) {
-	global $__database, $apcinstalled;
+	global $__database;
 
 	if (strlen($key) > 5) {
 		// Yea...
@@ -16,9 +16,14 @@ function GetMapleStoryString($type, $id, $key) {
 
 	$key_name = "data_cache_".$id;
 	
-	if ($apcinstalled && apc_exists($key_name)) {
+	if (APC_INSTALLED && apc_exists($key_name)) {
 		$tmp = apc_fetch($key_name);
-		return $tmp[$type][$key];
+		
+		if (isset($tmp[$type]) && isset($tmp[$type][$key]))
+			$value = $tmp[$type][$key];
+		else
+			$value = NULL;
+		return $value;
 	}
 
 	$q = $__database->query("
@@ -37,11 +42,14 @@ WHERE
 		while ($row = $q->fetch_array())
 			$buff[$row[0]][$row[1]] = $row[2];
 
-		if ($apcinstalled) {
+		if (APC_INSTALLED) {
 			apc_add($key_name, $buff);
 		}
-			
-		$value = $buff[$type][$key];
+		
+		if (isset($buff[$type]) && isset($buff[$type][$key]))
+			$value = $buff[$type][$key];
+		else
+			$value = NULL;
 
 		$q->free();
 		return $value;
@@ -52,11 +60,11 @@ WHERE
 }
 
 function GetItemDefaultStats($id) {
-	global $__database, $apcinstalled;
+	global $__database;
 
 	$key_name = "data_iteminfo_cache_".$id;
 	
-	if ($apcinstalled && apc_exists($key_name)) {
+	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
 	}
 	
@@ -64,7 +72,7 @@ function GetItemDefaultStats($id) {
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
-		if ($apcinstalled) {
+		if (APC_INSTALLED) {
 			apc_add($key_name, $row);
 		}
 
@@ -77,11 +85,11 @@ function GetItemDefaultStats($id) {
 }
 
 function GetPotentialInfo($id) {
-	global $__database, $apcinstalled;
+	global $__database;
 	
 	$key_name = "data_itemoptions_cache".$id;
 	
-	if ($apcinstalled && apc_exists($key_name)) {
+	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
 	}
 
@@ -93,7 +101,7 @@ function GetPotentialInfo($id) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
 	
-	if ($apcinstalled) {
+	if (APC_INSTALLED) {
 		apc_add($key_name, $data);
 	}
 
@@ -101,11 +109,11 @@ function GetPotentialInfo($id) {
 }
 
 function GetNebuliteInfo($itemid) {
-	global $__database, $apcinstalled;
+	global $__database;
 	
 	$key_name = "data_nebulite_cache".$itemid;
 	
-	if ($apcinstalled && apc_exists($key_name)) {
+	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
 	}
 	
@@ -118,7 +126,7 @@ function GetNebuliteInfo($itemid) {
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
 	
-	if ($apcinstalled) {
+	if (APC_INSTALLED) {
 		apc_add($key_name, $data);
 	}
 
@@ -128,10 +136,10 @@ function GetNebuliteInfo($itemid) {
 
 // Only for X Y and some special stuff!!!
 function GetItemWZInfo($itemid) {
-	global $__database, $apcinstalled;
+	global $__database;
 	$key_name = 'data_characterwz_cache'.$itemid;
 	
-	if ($apcinstalled && apc_exists($key_name)) {
+	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
 	}
 	
@@ -170,7 +178,7 @@ WHERE
 
 	$q->free();
 	
-	if ($apcinstalled) {
+	if (APC_INSTALLED) {
 		apc_add($key_name, $item_info);
 	}
 	
