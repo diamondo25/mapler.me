@@ -73,9 +73,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
 
 if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 	strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
-?>
-	<link href='//<?php echo $domain; ?>/inc/css/settings.style.css' rel='stylesheet' type='text/css' />
-<?php
+	_AddHeaderLink('css', 'settings.style');
 }
 ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />

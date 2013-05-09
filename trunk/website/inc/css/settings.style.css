@@ -1,0 +1,85 @@
+/* general */
+
+h2 {
+margin:10px 0px 10px 20px;
+padding-bottom:10px;
+border-bottom: 1px solid rgba(0,0,0,0.3);
+}
+
+#settings-form .item {
+	padding: 15px 0;
+	overflow: hidden;
+}
+
+#settings-form .label {
+	font-size: 18px;
+	text-align: right;
+	padding: 13px 0;
+}
+
+#settings-form input[type=text], #settings-form input[type=password], #settings-form textarea {
+width: 100%;
+height: auto;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+font-size: 18px;
+line-height: normal;
+background: #fff;
+margin: 0;
+padding: 10px;
+}
+
+/* sidebar */
+
+.settings-sidebar {
+  padding: 0;
+  background-color: #fff;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+          box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+.settings-sidebar > li > a {
+  display: block;
+  width: 190px \9;
+  margin: 0 0 -1px;
+  padding: 8px 14px;
+  border: 1px solid #e5e5e5;
+  font-size: 18px;
+}
+.settings-sidebar > li:first-child > a {
+  -webkit-border-radius: 6px 6px 0 0;
+     -moz-border-radius: 6px 6px 0 0;
+          border-radius: 6px 6px 0 0;
+}
+.settings-sidebar > li:last-child > a {
+  -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+}
+.settings-sidebar > .active > a {
+  position: relative;
+  z-index: 2;
+  padding: 9px 15px;
+  border: 0;
+  text-shadow: 0 1px 0 rgba(0,0,0,.15);
+  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+}
+/* Chevrons */
+.settings-sidebar .icon-chevron-right {
+  float: right;
+  margin-top: 2px;
+  margin-right: -6px;
+  opacity: .25;
+}
+.settings-sidebar > li > a:hover {
+  background-color: #f5f5f5;
+}
+.settings-sidebar a:hover .icon-chevron-right {
+  opacity: .5;
+}
