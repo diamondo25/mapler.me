@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 		<h4>Change the stream notice:</h4>
 
 		<form method="post">
-			<textarea name="updatetxt" class="span12" id="updatetxt" style="height:50px;"><?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?></textarea>
+			<textarea name="updatetxt" id="updatetxt" style="height:50px; width: 100%;"><?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?></textarea>
 			<button type="submit" class="btn">Update!</button>
 		</form>
 		
