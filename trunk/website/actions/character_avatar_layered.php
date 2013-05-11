@@ -130,6 +130,8 @@ $zlayers = array();
 $item_locations = array();
 
 $using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
+if (isset($_GET['madface']))
+	$using_face = 'angry';
 
 $stand = 1;
 

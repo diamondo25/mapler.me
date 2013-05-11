@@ -2,23 +2,8 @@
 require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/templates/me.header.template.php';
 
-
-$q = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE
-	account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND blog = 0
-ORDER BY
-	secs_since ASC
-");
-
 $statusses = new Statusses();
-$statusses->FeedData($q);
-$q->free();
-
+$statusses->Load("account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND blog = 0");
 
 
 if ($statusses->Count() == 0) {

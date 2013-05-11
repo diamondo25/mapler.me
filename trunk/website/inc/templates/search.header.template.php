@@ -132,11 +132,11 @@ hr {
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
 		<ul id="filters" class="nav nav-list search-menu">
-          <!-- <li><a href="#" onclick="GetStatus()"><i class="icon-chevron-right"></i> Statuses</a></li> -->
+          <li><a href="#" onclick="GetStatus()"><i class="icon-chevron-right"></i> Statuses</a></li>
           <li><a href="#" onclick="GetPlayer()"><i class="icon-chevron-right"></i> Maplers</a></li>
         </ul>
         <form method="post" action="http://<?php echo $domain; ?>/search/">
-							<input type="text" name="search" placeholder="Search?" />
-							<input type="hidden" name="type" id="stype" value="<?php echo $searchtype; ?>"/>
-						</form>
+			<input type="text" name="search" placeholder="Search?" />
+			<input type="hidden" name="type" id="stype" value="<?php echo $searchtype; ?>"/>
+		</form>
 	</div>

@@ -25,29 +25,11 @@ if ($searching == '') {
 <p class="lead">You searched for <i><?php echo $searching; ?></i>!</p>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'status') {
-$q = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-LEFT JOIN
-	accounts
-	ON
-		social_statuses.account_id = accounts.id
-WHERE
-	content LIKE '%".$__database->real_escape_string($searching)."%'
-ORDER BY
-	secs_since ASC
-LIMIT
-	0, 10
-");
 
 	$statusses = new Statusses();
-	$statusses->FeedData($q);
+	$statusses->Load("content LIKE '%".$__database->real_escape_string($searching)."%'", '0, 10');
 
-if ($q->num_rows == 0) {
-	$q->free();
+	if ($statusses->Count() == 0) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -55,18 +37,18 @@ if ($q->num_rows == 0) {
 </center>
 </div>
 <?php
-	require_once __DIR__.'/../inc/footer.php';
-	die;
-}
-?>
+		require_once __DIR__.'/../inc/footer.php';
+		die;
+	}
 
-<?php
-foreach ($statusses->data as $status) {
+	foreach ($statusses->data as $status) {
 		$status->PrintAsHTML('');
 	}
 } //end of $_GET['type'] == 'status'
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'player') {
-$q = $__database->query("
+
+
+elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'player') {
+	$q = $__database->query("
 SELECT
 	*
 FROM
@@ -79,8 +61,8 @@ LIMIT
 	0, 99
 ");
 
-if ($q->num_rows == 0) {
-	$q->free();
+	if ($q->num_rows == 0) {
+		$q->free();
 ?>
 	<center>
 		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -88,29 +70,30 @@ if ($q->num_rows == 0) {
 		</center>
 	</div>
 <?php
-	require_once __DIR__.'/../inc/footer.php';
-	die;
-}
+		require_once __DIR__.'/../inc/footer.php';
+		die;
+	}
+
 	$characters_per_row = 3;
-$i = 0;
-while ($row = $q->fetch_assoc()) {
-	if ($i % $characters_per_row == 0) {
-		if ($i > 0) {
+	$i = 0;
+	while ($row = $q->fetch_assoc()) {
+		if ($i % $characters_per_row == 0) {
+			if ($i > 0) {
 ?>
 		</div>
 <?php
-		}
+			}
 ?>
 		<div class="row">
 <?php
-	}
-	$i++;
-	$account = Account::Load($row['id']);
-	$main_char = $account->GetMainCharacterName();
-	if ($main_char == null)
-		$main_char = 'inc/img/no-character.gif';
-	else
-		$main_char = 'avatar/'.$main_char;
+		}
+		$i++;
+		$account = Account::Load($row['id']);
+		$main_char = $account->GetMainCharacterName();
+		if ($main_char == null)
+			$main_char = 'inc/img/no-character.gif';
+		else
+			$main_char = 'avatar/'.$main_char;
 ?>
 <div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
 				<div class="caption"><?php echo $account->GetNickname(); ?></div>

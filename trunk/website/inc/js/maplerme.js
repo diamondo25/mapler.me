@@ -92,6 +92,14 @@ $(document).ready(function() {
 					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
 				}
 				else {
+					var char_image = statusobject.find('div[class="character"]');
+					var char_image_url = char_image.css('background-image');
+					char_image_url = char_image_url.replace('url(', '');
+					char_image_url = char_image_url.replace(')', '');
+					char_image_url = char_image_url.replace(/"/g, '');
+					
+					char_image.css('background-image', 'url("' + char_image_url + '?madface")');
+					
 					statusobject.fadeOut(2000, function() {
 						$(this).remove();
 					});

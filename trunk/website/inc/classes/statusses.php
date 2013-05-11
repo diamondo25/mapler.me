@@ -17,6 +17,38 @@ class Statusses {
 	public function Count() {
 		return count($this->data);
 	}
+	
+	public function Load($whereAddition = null, $limit = null) {
+		global $__database;
+		$q = $__database->query("
+SELECT
+	social_statuses.*,
+	accounts.username,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+FROM
+	social_statuses
+LEFT JOIN
+	accounts
+	ON
+		social_statuses.account_id = accounts.id
+".(
+$whereAddition != null 
+? "WHERE ".$whereAddition 
+: ''
+)."
+ORDER BY
+	id DESC
+".(
+$limit != null 
+? "LIMIT ".$limit 
+: ''
+)."
+");
+	
+		$this->FeedData($q);
+		
+		$q->free();
+	}
 }
 
 class Status {
@@ -122,7 +154,7 @@ WHERE
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
-					<div class="character" style="background: url('http://mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div><br/>
+					<div class="character" style="background: url('http://<?php echo $domain; ?>/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div><br/>
 				<p>
 				<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				

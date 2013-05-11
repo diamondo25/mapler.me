@@ -6,40 +6,21 @@ if (!$_loggedin) {
 <?php
 }
 else {
-	$mentioned = @$_loginaccount->GetUsername();
-	
-	$q = $__database->query("
-SELECT
-	social_statuses.*,
-	accounts.username,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-LEFT JOIN
-	accounts
-	ON
-		social_statuses.account_id = accounts.id
-WHERE
-	content LIKE '%".$__database->real_escape_string($mentioned)."%'
-ORDER BY
-	secs_since ASC");
+	$mentioned = '@'.$_loginaccount->GetUsername();
 
 	$statusses = new Statusses();
-	$statusses->FeedData($q);
-	$q->free();
+	$statusses->Load("content LIKE '%".$__database->real_escape_string($mentioned)."%'");
 
 	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
 ?>
 
 <?php
-		if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
+	if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 ?>
 <p class="lead alert alert-info">Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide! F2</a></p>
 <p>This will disappear once you've successfully sent a status!</p>
 <?php
-require_once __DIR__.'/../inc/footer.php';
-die;
-		}
+	}
 ?>
 
 <div class="stream_display row">

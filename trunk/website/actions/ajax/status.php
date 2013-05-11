@@ -10,21 +10,8 @@ require_once __DIR__.'/../../inc/classes/statusses.php';
 if ($request_type == 'responses') {
 	RetrieveInputGET('statusid');
 	
-	$q = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE
-	reply_to = ".intval($P['statusid'])."
-LIMIT 10
-");
-	
 	$statuses = new Statusses();
-	$statuses->FeedData($q);
-	$q->free();
+	$statuses->Load("reply_to = ".intval($P['statusid']), '10');
 	
 	// Buffer all results
 	ob_start();
@@ -38,21 +25,8 @@ LIMIT 10
 
 elseif ($request_type == 'blog') {
 	
-	$q = $__database->query("
-SELECT
-	social_statuses.*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE
-	blog = 1
-ORDER BY
-	id DESC
-");
-	
 	$statuses = new Statusses();
-	$statuses->FeedData($q);
-	$q->free();
+	$statuses->Load("blog = 1");
 	
 	// Buffer all results
 	ob_start();
@@ -73,32 +47,15 @@ elseif ($request_type == 'list') {
 	
 	$P['lastpost'] = intval($P['lastpost']);
 	
-	$q = $__database->query("
-SELECT
-	social_statuses.*,
-	accounts.username,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-LEFT JOIN
-	accounts
-	ON
-		social_statuses.account_id = accounts.id
-WHERE
-".($P['lastpost'] == -1 ? '' : (" social_statuses.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
+	$statuses = new Statusses();
+	$statuses->Load(
+	($P['lastpost'] == -1 ? '' : (" social_statuses.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
 	(
 		override = 1 AND blog = 0 OR 
 		account_id = ".$_loginaccount->GetID()." AND blog = 0 OR 
 		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND blog = 0
-	)
-ORDER BY
-	id DESC
-LIMIT 15
-");
+	)", '15');
 	
-	$statuses = new Statusses();
-	$statuses->FeedData($q);
-	$q->free();
 	$lastid = -1;
 	$firstid = -1;
 	
@@ -124,8 +81,8 @@ elseif ($request_type == 'delete') {
 	$__database->query("DELETE FROM social_statuses WHERE id = ".$id.
 		(
 			$_loginaccount->IsRankOrHigher(RANK_MODERATOR) 
-			? ' AND account_id = '.$_loginaccount->GetId()
-			: ''
+			? ''
+			: ' AND account_id = '.$_loginaccount->GetId()
 		)
 	);
 
@@ -211,7 +168,7 @@ WHERE
 	");
 
 	if ($__database->affected_rows == 1) {
-		JSONAnswer(array('result' => 'Status successfully posted.'), 200);
+		JSONAnswer(array('result' => 'Status successfully posted.', 'post' => $data), 200);
 	}
 	else {
 		JSONDie('Unable to post status due to internal error.', 400);

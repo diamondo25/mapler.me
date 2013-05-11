@@ -27,26 +27,17 @@ if ($q->num_rows == 0) {
 else {
 	$status = new Status($q->fetch_assoc());
 	$status->PrintAsHTML(' span12');
-}
 
-$r = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE
-	reply_to = ".$statusid);
-	
-$statusses = new Statusses();
-$statusses->FeedData($r);
-$r->free();
+	$statusses = new Statusses();
+	$statusses->Load('reply_to = '.$statusid);
 
-if ($statusses->Count() !== 0) {
-	foreach ($statusses->data as $status) {
-		$status->PrintAsHTML(' span6');
+	if ($statusses->Count() !== 0) {
+		foreach ($statusses->data as $status) {
+			$status->PrintAsHTML(' span6');
+		}
 	}
 }
+
 ?>
 	</div>
 <?php

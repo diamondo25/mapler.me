@@ -190,6 +190,30 @@ WHERE
 		
 		return 0;
 	}
+	
+	public function AddAccountNotification($type, $data, $email = true) {
+		$__database->query("
+INSERT INTO
+	account_notifications
+VALUES
+	(
+		NULL,
+		".$this->_id.",
+		'".$__database->real_escape_string($type)."',
+		'".$__database->real_escape_string($data)."',
+		NOW()
+	)
+");
+		
+		if ($email) {
+			// to be made...
+			switch ($type) {
+				case 'status_response': break;
+				case 'friend_request': break;
+				case 'mentioned': break;
+			}
+		}
+	}
 }
 
 ?>
