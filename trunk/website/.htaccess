@@ -1,3 +1,5 @@
+Access-Control-Allow-Origin: http://mapler.me | https://mapler.me
+
 <IfModule mod_rewrite.c>
 	Options +FollowSymLinks
 	Options +Indexes
