@@ -1,5 +1,4 @@
 var _maindomain = 'mapler.me';
-var _maindomain = 'mplr.e.craftnet.nl';
 
 $(document).ready(function() {
 	$('body').on('click', '.mention[status-id]', function() {
