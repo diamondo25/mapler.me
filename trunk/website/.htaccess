@@ -31,6 +31,9 @@
 	RewriteRule ^api/status/post/$ /actions/ajax/status.php?type=post
 	RewriteRule ^api/status/(.*)/$ /actions/ajax/status.php?type=responses&statusid=$1
 	
+	# Info Syncing
+	RewriteRule ^ajax/sync/$ /actions/ajax/polling.php?type=info
+	
 	# image / ranking rewrites
 	
 	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]

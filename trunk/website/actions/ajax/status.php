@@ -13,6 +13,7 @@ if ($request_type == 'responses') {
 	$q = $__database->query("
 SELECT
 	*,
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`,
 	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
 FROM
 	social_statuses
@@ -86,6 +87,7 @@ LEFT JOIN
 WHERE
 ".($P['lastpost'] == -1 ? '' : (" social_statuses.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
 	(
+		override = 1 AND blog = 0 OR 
 		account_id = ".$_loginaccount->GetID()." AND blog = 0 OR 
 		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND blog = 0
 	)

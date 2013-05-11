@@ -45,12 +45,18 @@ class Status {
 SELECT
 	id,
 	nickname,
-	timestamp,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		social_statuses
+	WHERE
+		reply_to = ss.id
+	) AS `reply_count`
 FROM
-	social_statuses
+	social_statuses ss
 WHERE
-	id = ".$id);
+	ss.id = ".$id);
 		if ($q->num_rows == 0) {
 			$q->free();
 			return NULL;
@@ -135,9 +141,9 @@ WHERE
 					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
 <?php endif; ?>
 <?php if ($this->account_id !== 2): ?>
-					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<?php echo $this->GetReplyToCount(); ?>)</a>
+					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<?php echo $reply_info != NULL ? $reply_info['reply_count'] : 0; ?>)</a>
 <?php endif; ?>
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo time() - $this->seconds_since; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php
 	if ($_loggedin) {
 		if ($own_post) {

@@ -1,5 +1,5 @@
 <?php
-if ($_loggedin) {
+if (!$_loggedin) return;
 ?>
 
 <script type="text/javascript">
@@ -127,137 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 ?>
 
-<script type="text/javascript">
-function RemoveStatus(id) {
-	if (confirm("Are you sure you want to delete this status?")) {
-		document.location.href = '?removestatus=' + id;
-	}
-}
-</script>
-
-<?php
-
-// Preventing spamming of form. [disabled]
-//$antispam = true;
-//if ($_loginaccount->GetConfigurationOption('last_status_sent', 0) != 0) {
-//
-//}
-
-// If antispam passes, push status
-	// Disabled...
-	if (false && $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['content'])) {
-
-		$content = nl2br(htmlentities(strip_tags(trim($_POST['content'])), ENT_COMPAT, 'UTF-8'));
-
-		$reply_to = intval($_POST['reply-to']);
-		$error = '';
-		if ($content == '') {
-			$error = 'That status was left blank, retry?';
-		}
-		else {
-			// Check for duplicate
-			$q = $__database->query("
-SELECT
-	1
-FROM
-	social_statuses
-WHERE
-	account_id = ".$_loginaccount->GetId()."
-	AND
-	content = '".$__database->real_escape_string($content)."'
-	AND
-	DATE_ADD(`timestamp`, INTERVAL 24 HOUR) >= NOW()
-				");
-			if ($q->num_rows != 0) {
-				$error = 'You already said that!';
-			}
-			$q->free();
-		}
-		if ($error == '' && $reply_to != -1) {
-			// Check if status exists...
-			$q = $__database->query("
-SELECT
-	1
-FROM
-	social_statuses
-WHERE
-	id = ".$reply_to);
-			if ($q->num_rows == 0) {
-				// No status found!
-				$error = 'Sadly, the status you are trying to reply to has been deleted!';
-			}
-		}
-
-		if ($error == '') {
-			$blog = $_loginaccount->IsRankOrHigher(RANK_MODERATOR) && isset($_POST['blog']) ? 1 : 0;
-
-			$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
-			$has_characters = !empty($char_config['main_character']);
-
-			// set internally
-			$nicknm = $_loginaccount->GetNickname();
-			$chr = $has_characters ? $char_config['main_character'] : '';
-
-			$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
-
-			$__database->query("
-			INSERT INTO
-				social_statuses
-			VALUES
-				(
-					NULL,
-					".$_loginaccount->GetId().",
-					'".$__database->real_escape_string($nicknm)."',
-					'".$__database->real_escape_string($chr)."',
-					'".$__database->real_escape_string($content)."',
-					".$blog.",
-					NOW(),
-					0,
-					".($reply_to == -1 ? 'NULL' : $reply_to)."
-				)
-			");
-
-			if ($__database->affected_rows == 1) {
-?>
-<p class="lead alert-success alert fademeout">The status was successfully posted!</p>
-<?php
-			}
-			else {
-				$error = 'The Maple Admin was not able to deliver your status update because of angry ribbon pigs! Retry?';
-			}
-		}
-
-		if ($error != '') {
-?>
-<p class="lead alert-danger alert fademeout">Error: <?php echo $error; ?></p>
-<?php
-		}
-	}
-	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['removestatus'])) {
-		// Removing status
-		$id = intval($_GET['removestatus']);
-
-		$__database->query("DELETE FROM social_statuses WHERE id = ".$id.
-			(
-				$_loginaccount->IsRankOrHigher(RANK_MODERATOR) 
-				? ' AND account_id = '.$_loginaccount->GetId()
-				: ''
-			));
-
-		if ($__database->affected_rows == 1) {
-?>
-<p class="lead alert-info alert fademeout">The status was successfully deleted.</p>
-<?php
-		}
-		else {
-?>
-<p class="lead alert-info alert fademeout">Unable to delete the status.</p>
-<?php
-		}
-	}
-
-?>
-
 <div id="post" class="collapse poster" data-spy="affix" data-offset-top="10">
 	<form id="statusposter" method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
 		<h3 id="myModalLabel">Post a status?</h3>
@@ -270,6 +139,3 @@ WHERE
 <?php endif; ?>
 	</form>
 </div>
-<?php
-}
-?>

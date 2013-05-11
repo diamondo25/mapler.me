@@ -60,7 +60,7 @@ $(document).ready(function() {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		$.ajax({
 			type: 'POST',
-			url: '//mapler.me/api/status/post/',
+			url: '//mplr.e.craftnet.nl/api/status/post/',
 			data: $(this).serialize(),
 			success: function (e) {
 				if (e.errormsg != undefined) {
@@ -86,7 +86,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: 'GET',
-			url: '//mapler.me/api/status/delete/' + statusid + '/',
+			url: '//mplr.e.craftnet.nl/api/status/delete/' + statusid + '/',
 			success: function (e) {
 				if (e.errormsg != undefined) {
 					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
@@ -101,7 +101,41 @@ $(document).ready(function() {
 		
 		return false;
 	});
+	
+	setInterval(function () {
+		$.ajax({
+			url: '/ajax/sync/',
+			success: function (e) {
+				serverTickCount = e.time;
+				
+				var newTitle = window.document.title;
+				
+				if (newTitle.indexOf(') ') != -1) {
+					newTitle = newTitle.substr(newTitle.indexOf(') ') + 2);
+				}
+				
+				if (e.notifications > 0)
+					newTitle = '(' + e.notifications + ') ' + newTitle;
+
+				window.document.title = newTitle;
+				
+				serverTickCount = e.time;
+				
+				// Update posts
+				
+				$('a[status-post-time]').each(
+					function (index) {
+						$(this).html(time_elapsed_string(serverTickCount - $(this).attr('status-post-time')) + ' ago');
+					}
+				);
+				
+				console.log(e);
+			}
+		});
+	}, 10000);
 });
+
+var serverTickCount = 0;
 
 var latestStatusUp = -1;
 var latestStatusDown = -1;
@@ -174,4 +208,26 @@ function AddMessageToContent(type, text, location) {
 	});
 	
 	$('div[class="container main"]').prepend(obj);
+}
+
+function time_elapsed_string(time) {
+	if (time <= 1) return 'moments';
+
+	var times = {
+		'year' 		: 12 * 30 * 24 * 60 * 60,
+		'month' 	: 30 * 24 * 60 * 60,
+		'day'		: 24 * 60 * 60,
+		'hour'		: 60 * 60,
+		'minute'	: 60,
+		'second'	: 1
+	};
+
+	for (var name in times) {
+		var val = times[name];
+		val = parseFloat(time / val);
+		if (val >= 1.0) {
+			val = parseInt(Math.round(val));
+			return val + ' ' + name + (val > 1 ? 's' : '');
+		}
+	}
 }

@@ -7,13 +7,7 @@ else {
 }
 
 if ($_loggedin) {
-	$notifications = GetNotification();
-	if ($notifications > 0)
-		$title = '('.$notifications.') '.$title;
-
 	$rank = $_loginaccount->GetAccountRank();
-
-	$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 }
 
 function _AddHeaderLink($what, $filename) {
