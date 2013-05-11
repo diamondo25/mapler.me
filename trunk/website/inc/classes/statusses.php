@@ -24,7 +24,15 @@ class Statusses {
 SELECT
 	social_statuses.*,
 	accounts.username,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
+	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`,
+	(
+	SELECT
+		COUNT(*)
+	FROM
+		social_statuses
+	WHERE
+		reply_to = social_statuses.id
+	) AS `reply_count`
 FROM
 	social_statuses
 LEFT JOIN
@@ -52,7 +60,7 @@ $limit != null
 }
 
 class Status {
-	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to;
+	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to, $reply_count;
 	
 	public function __construct($row) {
 		$this->id = (int)$row['id'];
@@ -66,6 +74,7 @@ class Status {
 		$this->override = (int)$row['override'];
 		$this->seconds_since = (int)$row['secs_since'];
 		$this->reply_to = (int)$row['reply_to'];
+		$this->reply_count = (int)$row['reply_count'];
 		
 		$this->ParseContent();
 	}
@@ -76,15 +85,7 @@ class Status {
 		$q = $__database->query("
 SELECT
 	id,
-	nickname,
-	(
-	SELECT
-		COUNT(*)
-	FROM
-		social_statuses
-	WHERE
-		reply_to = ss.id
-	) AS `reply_count`
+	nickname
 FROM
 	social_statuses ss
 WHERE
@@ -96,21 +97,6 @@ WHERE
 		$row = $q->fetch_assoc();
 		$q->free();
 		return $row;
-	}
-	
-	public function GetReplyToCount() {
-		global $__database;
-		
-		$q = $__database->query("
-SELECT
-	COUNT(*)
-FROM
-	social_statuses
-WHERE
-	reply_to = ".$this->id);
-		$row = $q->fetch_row();
-		$q->free();
-		return $row[0];
 	}
 	
 	public function ParseContent() {
@@ -173,7 +159,7 @@ WHERE
 					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
 <?php endif; ?>
 <?php if ($this->account_id !== 2): ?>
-					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<?php echo $reply_info != NULL ? $reply_info['reply_count'] : 0; ?>)</a>
+					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<span class="status-reply-count"><?php echo $this->reply_count; ?></span>)</a>
 <?php endif; ?>
 					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo time() - $this->seconds_since; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php

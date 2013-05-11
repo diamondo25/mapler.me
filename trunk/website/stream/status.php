@@ -5,17 +5,10 @@ $statusid = intval($_GET['id']);
 	<div class="row">
 
 <?php
-$q = $__database->query("
-SELECT
-	*,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`
-FROM
-	social_statuses
-WHERE
-	id = ".$statusid);
+$statusses = new Statusses();
+$statusses->Load("social_statuses.id = ".$statusid);
 
-
-if ($q->num_rows == 0) {
+if ($statusses->Count() == 0) {
 ?>
 	<div class="span12">
 		<center>
@@ -25,7 +18,7 @@ if ($q->num_rows == 0) {
 <?php
 }
 else {
-	$status = new Status($q->fetch_assoc());
+	$status = $statusses->data[0];
 	$status->PrintAsHTML(' span12');
 
 	$statusses = new Statusses();

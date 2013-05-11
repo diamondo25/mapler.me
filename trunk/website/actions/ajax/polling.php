@@ -17,6 +17,36 @@ if ($request_type == 'info') {
 	if ($_loggedin)
 		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 	
+	$status_info = array();
+	if (isset($_POST['shown-statuses'])) {
+		// Check status info
+
+		foreach ($_POST['shown-statuses'] as $oriid) {
+			$id = intval($oriid);
+			if ($id == 0) {
+				$status_info['deleted'][] = $oriid;
+				continue;
+			}
+			$q = $__database->query("
+SELECT
+	COUNT(*) AS `reply_count`
+FROM
+	social_statuses
+WHERE
+	reply_to = ".$id);
+			if ($q->num_rows == 0) {
+				$status_info['deleted'][] = $oriid;
+			}
+			else {
+				$row = $q->fetch_row();
+				$status_info['reply_count'][$oriid] = $row[0];
+			}
+			$q->free();
+		}
+	}
+	
+	$res['status_info'] = $status_info;
+	
 	JSONAnswer($res);
 }
 ?>

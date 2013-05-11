@@ -1,3 +1,5 @@
+var _maindomain = 'mapler.me';
+
 $(document).ready(function() {
 	$('body').on('click', '.mention[status-id]', function() {
 		var poster = $(this).attr('poster');
@@ -33,7 +35,7 @@ $(document).ready(function() {
 		var uniqueid = $(this).attr('unique-id');
 		$.ajax({
 			type: 'GET',
-			url: '/api/status/' + statusid + '/',
+			url: '//' + _maindomain + '/api/status/' + statusid + '/',
 			success: function (data) {
 				if (data.error != undefined) {
 					alert(data.error);
@@ -60,7 +62,7 @@ $(document).ready(function() {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		$.ajax({
 			type: 'POST',
-			url: '//mapler.me/api/status/post/',
+			url: '//' + _maindomain + '/api/status/post/',
 			data: $(this).serialize(),
 			success: function (e) {
 				if (e.errormsg != undefined) {
@@ -86,7 +88,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: 'GET',
-			url: '//mapler.me/api/status/delete/' + statusid + '/',
+			url: '//' + _maindomain + '/api/status/delete/' + statusid + '/',
 			success: function (e) {
 				if (e.errormsg != undefined) {
 					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
@@ -111,8 +113,13 @@ $(document).ready(function() {
 	});
 	
 	setInterval(function () {
+		var statuses = [];
+		$('div[class~="status"][status-id]').each(function (index) { statuses.push(parseInt($(this).attr('status-id'))); });
+	
 		$.ajax({
-			url: '/ajax/sync/',
+			type: 'POST',
+			url: '//' + _maindomain + '/ajax/sync/',
+			data: { 'shown-statuses': statuses },
 			success: function (e) {
 				serverTickCount = e.time;
 				
@@ -129,8 +136,25 @@ $(document).ready(function() {
 				
 				serverTickCount = e.time;
 				
-				// Update posts
+				if (e.status_info.deleted != undefined) {
+					for (var id in e.status_info.deleted) {
+						var postid = e.status_info.deleted[id];
+						$('div[class~="status"][status-id="' + postid + '"]').fadeOut(2000, function() {
+							$(this).remove();
+						});
+					}
+				}
 				
+				// Check posts
+				if (e.status_info.reply_count != undefined) {
+					for (var postid in e.status_info.reply_count) {
+						var count = e.status_info.reply_count[postid];
+						$('.status[status-id="' + postid + '"]').find('.status-reply-count').html(count);
+					}
+				}
+
+				// Update posts
+
 				$('a[status-post-time]').each(
 					function (index) {
 						$(this).html(time_elapsed_string(serverTickCount - $(this).attr('status-post-time')) + ' ago');
@@ -151,7 +175,7 @@ var didinit = false;
 function TryRequestMore(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
+		url: '//' + _maindomain + '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
 		success: function (data) {
 			if (data.errormsg != undefined) {
 				alert(data.errormsg);
@@ -180,7 +204,7 @@ function TryRequestMore(up, init) {
 function GetBlogPosts(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '/api/blog/',
+		url: '//' + _maindomain + '/api/blog/',
 		success: function (data) {
 			if (data.errormsg != undefined) {
 				alert(data.errormsg);
