@@ -1,4 +1,5 @@
 var _maindomain = 'mapler.me';
+var _maindomain = 'mplr.e.craftnet.nl';
 
 $(document).ready(function() {
 	$('body').on('click', '.mention[status-id]', function() {
@@ -135,21 +136,23 @@ $(document).ready(function() {
 				window.document.title = newTitle;
 				
 				serverTickCount = e.time;
-				
-				if (e.status_info.deleted != undefined) {
-					for (var id in e.status_info.deleted) {
-						var postid = e.status_info.deleted[id];
-						$('div[class~="status"][status-id="' + postid + '"]').fadeOut(2000, function() {
-							$(this).remove();
-						});
+				if (e.status_info != undefined) {
+					// Check posts
+
+					if (e.status_info.deleted != undefined) {
+						for (var id in e.status_info.deleted) {
+							var postid = e.status_info.deleted[id];
+							$('div[class~="status"][status-id="' + postid + '"]').fadeOut(2000, function() {
+								$(this).remove();
+							});
+						}
 					}
-				}
-				
-				// Check posts
-				if (e.status_info.reply_count != undefined) {
-					for (var postid in e.status_info.reply_count) {
-						var count = e.status_info.reply_count[postid];
-						$('.status[status-id="' + postid + '"]').find('.status-reply-count').html(count);
+
+					if (e.status_info.reply_count != undefined) {
+						for (var postid in e.status_info.reply_count) {
+							var count = e.status_info.reply_count[postid];
+							$('.status[status-id="' + postid + '"]').find('.status-reply-count').html(count);
+						}
 					}
 				}
 
