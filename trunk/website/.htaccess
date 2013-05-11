@@ -1,4 +1,4 @@
-Access-Control-Allow-Origin: http://mapler.me | https://mapler.me
+Header set Access-Control-Allow-Origin "http://mapler.me"
 
 <IfModule mod_rewrite.c>
 	Options +FollowSymLinks
