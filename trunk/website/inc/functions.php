@@ -3,7 +3,7 @@
 // Note that our database still uses the GMT + 1 time (Holland)
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
-//error_reporting(0);
+error_reporting(0);
 
 require_once __DIR__.'/classes/database.php';
 require_once __DIR__.'/classes/form.php';

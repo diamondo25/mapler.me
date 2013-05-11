@@ -168,7 +168,7 @@ WHERE
 	");
 
 	if ($__database->affected_rows == 1) {
-		JSONAnswer(array('result' => 'Status successfully posted.', 'post' => $data), 200);
+		JSONAnswer(array('result' => 'Status successfully posted.'), 200);
 	}
 	else {
 		JSONDie('Unable to post status due to internal error.', 400);
