@@ -218,12 +218,11 @@ html { overflow-x: hidden; }
 	hyphens:auto
 }
 
-.status, .status-loading {
+.status {
 	overflow:hidden;
 	color:#666;
 	padding:10px;
 	margin-top:15px;
-	margin-bottom:15px;
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
 	border-radius:3px;
@@ -277,11 +276,15 @@ html { overflow-x: hidden; }
 }
 
 .status .status-extra {
-	margin-top: 15px;
-	border-top: 1px solid #e2d7cc;
 	padding-top: 10px;
 	text-align: right;
 	font-size: 12px;
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+
+.status .status-extra:hover {
+	opacity: 1;
 }
 
 .status-picture {
@@ -296,6 +299,18 @@ html { overflow-x: hidden; }
 
 .reply-list {
 	padding-left: 10px;
+}
+
+.mention, .status-time, .deletestatus, .reply-to {
+	border: 1px solid #CCC;
+	padding:3px;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	display: inline-block;
+	cursor: pointer;
+	box-shadow: 1px 1px 2px #DDD;
+	color: #666;
 }
 
 .faded {

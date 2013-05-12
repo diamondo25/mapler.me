@@ -156,17 +156,17 @@ WHERE
 				</div>
 				<div class="status-extra" style="clear:both;">
 <?php if ($reply_info != NULL): ?>
-					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;">In reply to <?php echo $reply_info['nickname']; ?></a>
+					<a href="//mapler.me/stream/status/<?php echo $reply_info['id']; ?>" style="float: left;" class="reply-to">Replied to <?php echo $reply_info['nickname']; ?> <i class="icon-chevron-right"></i></a>
 <?php endif; ?>
 <?php if ($this->account_id !== 2): ?>
-					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> (<span class="status-reply-count"><?php echo $this->reply_count; ?></span>)</a>
+					<a href="#" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> Reply (<span class="status-reply-count"><?php echo $this->reply_count; ?></span>)</a>
 <?php endif; ?>
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo time() - $this->seconds_since; ?>"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo time() - $this->seconds_since; ?>" class="status-time"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php
 	if ($_loggedin) {
 		if ($own_post) {
 ?>
-						- <a class="deletestatus" href="#" onclick="return false;">delete?</a>
+						<a class="deletestatus" href="#" onclick="return false;"><i class="icon-remove"></i></a>
 <?php
 		}
 		elseif (false) {
