@@ -153,6 +153,10 @@ html { overflow-x: hidden; }
 		border-left: none !important;
 	}
 	
+	.status-extra {
+		opacity: 1 !important;
+	}
+	
 }
 
 .navbar .nav>li.open>a, .navbar .nav>li.active>a:hover {
