@@ -6,7 +6,7 @@ $statusid = intval($_GET['id']);
 
 <?php
 $statusses = new Statusses();
-$statusses->Load("social_statuses.id = ".$statusid);
+$statusses->Load("s.id = ".$statusid);
 
 if ($statusses->Count() == 0) {
 ?>
@@ -22,7 +22,7 @@ else {
 	$status->PrintAsHTML(' span12');
 
 	$statusses = new Statusses();
-	$statusses->Load('reply_to = '.$statusid);
+	$statusses->Load('s.reply_to = '.$statusid);
 
 	if ($statusses->Count() !== 0) {
 		foreach ($statusses->data as $status) {
