@@ -4,6 +4,17 @@
 	RewriteEngine On
 	RewriteBase /
 
+	# Status APIs
+	RewriteRule ^api/list/(.*)/(.*)/$ /ajax/status.php?type=list&lastpost=$1&mode=$2
+	RewriteRule ^api/blog/$ /ajax/status.php?type=blog
+	RewriteRule ^api/status/delete/(\d+)/$ /ajax/status.php?type=delete&id=$1
+	RewriteRule ^api/status/post/$ /ajax/status.php?type=post
+	RewriteRule ^api/status/(.*)/$ /ajax/status.php?type=responses&statusid=$1
+	
+	# Info Syncing
+	RewriteRule ^ajax/sync/$ /ajax/polling.php?type=info
+	
+
 	RewriteCond %{REQUEST_FILENAME} !-d 
 	RewriteCond %{REQUEST_FILENAME}\.php -f 
 	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]

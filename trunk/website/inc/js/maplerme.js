@@ -1,5 +1,3 @@
-var _maindomain = 'mapler.me';
-
 $(document).ready(function() {
 	$('body').on('click', '.mention[status-id]', function() {
 		var poster = $(this).attr('poster');
@@ -35,7 +33,7 @@ $(document).ready(function() {
 		var uniqueid = $(this).attr('unique-id');
 		$.ajax({
 			type: 'GET',
-			url: '//' + _maindomain + '/api/status/' + statusid + '/',
+			url: '/api/status/' + statusid + '/',
 			success: function (data) {
 				if (data.error != undefined) {
 					alert(data.error);
@@ -62,7 +60,7 @@ $(document).ready(function() {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		$.ajax({
 			type: 'POST',
-			url: '//' + _maindomain + '/api/status/post/',
+			url: '/api/status/post/',
 			data: $(this).serialize(),
 			success: function (e) {
 				if (e.errormsg != undefined) {
@@ -88,7 +86,7 @@ $(document).ready(function() {
 		
 		$.ajax({
 			type: 'GET',
-			url: '//' + _maindomain + '/api/status/delete/' + statusid + '/',
+			url: '/api/status/delete/' + statusid + '/',
 			success: function (e) {
 				if (e.errormsg != undefined) {
 					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
@@ -118,7 +116,7 @@ $(document).ready(function() {
 	
 		$.ajax({
 			type: 'POST',
-			url: '//' + _maindomain + '/ajax/sync/',
+			url: '/ajax/sync/',
 			data: { 'shown-statuses': statuses },
 			success: function (e) {
 				serverTickCount = e.time;
@@ -177,7 +175,7 @@ var didinit = false;
 function TryRequestMore(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '//' + _maindomain + '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
+		url: '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
 		success: function (data) {
 			if (data.errormsg != undefined) {
 				alert(data.errormsg);
@@ -206,7 +204,7 @@ function TryRequestMore(up, init) {
 function GetBlogPosts(up, init) {
 	$.ajax({
 		type: 'GET',
-		url: '//' + _maindomain + '/api/blog/',
+		url: '/api/blog/',
 		success: function (data) {
 			if (data.errormsg != undefined) {
 				alert(data.errormsg);
@@ -259,8 +257,8 @@ function time_elapsed_string(time) {
 	for (var name in times) {
 		var val = times[name];
 		val = parseFloat(time / val);
+		val = parseInt(Math.round(val));
 		if (val >= 1.0) {
-			val = parseInt(Math.round(val));
 			return val + ' ' + name + (val > 1 ? 's' : '');
 		}
 	}
