@@ -157,6 +157,10 @@ html { overflow-x: hidden; }
 		opacity: 1 !important;
 	}
 	
+	.span1, .span2, .span3, .span4, .span5, .span6, .span7, .span8, .span9, .span10, .span11, .span12 {
+		margin:0px;
+	}
+	
 }
 
 .navbar .nav>li.open>a, .navbar .nav>li.active>a:hover {
@@ -283,8 +287,8 @@ html { overflow-x: hidden; }
 	padding-top: 10px;
 	text-align: right;
 	font-size: 12px;
-	opacity: 0;
-	transition: opacity 0.3s;
+	margin-top: 15px;
+	border-top: 1px solid #e2d7cc;
 }
 
 .status:hover > .status-extra {
