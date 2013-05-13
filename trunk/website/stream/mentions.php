@@ -9,7 +9,7 @@ else {
 	$mentioned = '@'.$_loginaccount->GetUsername();
 
 	$statusses = new Statusses();
-	$statusses->Load("content LIKE '%".$__database->real_escape_string($mentioned)."%'");
+	$statusses->Load("s.content LIKE '%".$__database->real_escape_string($mentioned)."%'");
 
 	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
 ?>

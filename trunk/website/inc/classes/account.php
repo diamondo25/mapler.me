@@ -214,6 +214,63 @@ VALUES
 			}
 		}
 	}
+
+	
+	public static function IsDisallowedUsername($username) {
+		global $__database;
+		$username_regex = "/^[a-z0-9\-\_]+$/";
+		$error = '';
+		$len = strlen($username);
+		$disallowed = array("nexon", "nexonamerica", "wizet", "hacker", "waltzing", "maple", "maplestory", 
+		"staff", "admin", "administrator", "moderator", "team", "hack", "hacking", "mesos", "meso", "fuck", 
+		"shit", "asshole", "nigger", "faggot", "cunt", "pussy", "dick", "vagina", "penis", "mail", "cdn", 
+		"user", "users", "contact", "support", "legal", "sales", "bitch", "whore", "slut");
+		
+		if ($len < 4 || $len > 20) {
+			$error = "A Mapler.me username has to be between four and twenty characters long.";
+		}
+		elseif (preg_match($username_regex, $username) == 0) {
+			$error = "A Mapler.me username may only hold alphanumeric characters.";
+		}
+		else {
+			$nope = false;
+			foreach ($disallowed as $name) {
+				if (strpos($username, $name) !== FALSE) {
+					$nope = true;
+					break;
+				}
+			}
+			if ($nope) {
+				$error = "That username is disallowed, please choose another.";
+			}
+			else {
+				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$__database->real_escape_string($username)."'");
+				if ($result->num_rows == 1) {
+					$error = "This username has already been taken, please try another.";
+				}
+				$result->free();
+			}
+		}
+		return $error;
+	}
+	
+	public static function IsCorrectNickname($nickname) {
+		global $__database;
+		$error = '';
+		$len = strlen($nickname);
+		if ($len < 4 || $len > 20) {
+			$error = "Nickname has to be between four and twenty characters long.";
+		}
+		else {
+			$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$__database->real_escape_string($nickname)."'");
+			if ($result->num_rows == 1) {
+				$error = "This nickname has already been taken.";
+			}
+			$result->free();
+		}
+		
+		return $error;
+	}
 }
 
 ?>

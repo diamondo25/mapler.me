@@ -1,17 +1,41 @@
 <?php
+$error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick'], $_POST['bio'], $_POST['email'])) {
-	$name = htmlentities($_POST['name'], ENT_COMPAT, 'UTF-8');
-	$nick = htmlentities($_POST['nick'], ENT_COMPAT, 'UTF-8');
-	$bio = htmlentities($_POST['bio'], ENT_COMPAT, 'UTF-8');
-	$email = htmlentities($_POST['email'], ENT_COMPAT, 'UTF-8');
+	if ($error == '') {
+		$name = htmlentities($_POST['name'], ENT_COMPAT, 'UTF-8');
+		if (strlen(trim($name)) == 0)
+			$error = 'You have to enter a fullname.';
+	}
 	
-	$_loginaccount->SetFullname($name);
-	$_loginaccount->SetNickname($nick);
-	$_loginaccount->SetBio($bio);
-	$_loginaccount->SetEmail($email);
-	$_loginaccount->Save();
+	if ($error == '') {
+		$nick = htmlentities($_POST['nick'], ENT_COMPAT, 'UTF-8');
+		$error = Account::IsCorrectNickname($name);
+	}
+	if ($error == '') {
+		$email = htmlentities($_POST['email'], ENT_COMPAT, 'UTF-8');
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$error = "The email you entered is invalid.";
+		}
+	}
+	
+	if ($error == '') {
+		$bio = htmlentities($_POST['bio'], ENT_COMPAT, 'UTF-8');
+		$_loginaccount->SetFullname($name);
+		$_loginaccount->SetNickname($nick);
+		$_loginaccount->SetBio($bio);
+		$_loginaccount->SetEmail($email);
+		$_loginaccount->Save();
+?>
+<p class="lead alert-info alert">Successfully changed your information.</p>
+<?php
+	}
 }
 
+if ($error != '') {
+?>
+<p class="lead alert-warn alert">Error: <?php echo $error; ?></p>
+<?php
+}
 
 ?>
 			<h2>Your Profile</h2>

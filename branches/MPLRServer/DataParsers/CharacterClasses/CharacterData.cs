@@ -131,16 +131,20 @@ namespace MPLRServer
             Inventory = new CharacterInventory();
             Inventory.Decode(pConnection, pPacket);
 
-            UnknownIntegerListNumber3 = new Dictionary<int, long>();
+            //UnknownIntegerListNumber3 = new Dictionary<int, long>();
             for (int i = pPacket.ReadInt(); i > 0; i--)
             {
-                UnknownIntegerListNumber3.Add(pPacket.ReadInt(), pPacket.ReadLong());
+                pPacket.ReadInt();
+                pPacket.ReadLong();
+                //UnknownIntegerListNumber3.Add(pPacket.ReadInt(), pPacket.ReadLong());
             }
 
-            UnknownIntegerListNumber4 = new Dictionary<long, long>();
+            //UnknownIntegerListNumber4 = new Dictionary<long, long>();
             for (int i = pPacket.ReadInt(); i > 0; i--)
             {
-                UnknownIntegerListNumber4.Add(pPacket.ReadLong(), pPacket.ReadLong());
+                pPacket.ReadLong();
+                pPacket.ReadLong();
+                //UnknownIntegerListNumber4.Add(pPacket.ReadLong(), pPacket.ReadLong());
             }
 
 

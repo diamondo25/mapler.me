@@ -22,23 +22,23 @@ class Statusses {
 		global $__database;
 		$q = $__database->query("
 SELECT
-	social_statuses.*,
+	s.*,
 	accounts.username,
-	TIMESTAMPDIFF(SECOND, timestamp, NOW()) AS `secs_since`,
+	TIMESTAMPDIFF(SECOND, s.timestamp, NOW()) AS `secs_since`,
 	(
 	SELECT
-		COUNT(*)
+		COUNT(s_inner.id)
 	FROM
-		social_statuses
+		social_statuses s_inner
 	WHERE
-		reply_to = social_statuses.id
+		s_inner.reply_to = s.id
 	) AS `reply_count`
 FROM
-	social_statuses
+	social_statuses s
 LEFT JOIN
 	accounts
 	ON
-		social_statuses.account_id = accounts.id
+		s.account_id = accounts.id
 ".(
 $whereAddition != null 
 ? "WHERE ".$whereAddition 

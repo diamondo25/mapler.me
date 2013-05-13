@@ -27,7 +27,7 @@ if ($searching == '') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'status') {
 
 	$statusses = new Statusses();
-	$statusses->Load("content LIKE '%".$__database->real_escape_string($searching)."%'", '0, 10');
+	$statusses->Load("s.content LIKE '%".$__database->real_escape_string($searching)."%'", '0, 10');
 
 	if ($statusses->Count() == 0) {
 ?>

@@ -198,7 +198,7 @@ namespace MPLRServer
                     }
                 });
 
-            }, null, 0, 10000);
+            }, null, 0, 20000);
         }
 
         static void InitializeValidHeaders()

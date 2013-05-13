@@ -11,7 +11,7 @@ if ($request_type == 'responses') {
 	RetrieveInputGET('statusid');
 	
 	$statuses = new Statusses();
-	$statuses->Load("reply_to = ".intval($P['statusid']), '10');
+	$statuses->Load("s.reply_to = ".intval($P['statusid']), '10');
 	
 	// Buffer all results
 	ob_start();
@@ -26,7 +26,7 @@ if ($request_type == 'responses') {
 elseif ($request_type == 'blog') {
 	
 	$statuses = new Statusses();
-	$statuses->Load("blog = 1");
+	$statuses->Load("s.blog = 1");
 	
 	// Buffer all results
 	ob_start();
@@ -49,11 +49,11 @@ elseif ($request_type == 'list') {
 	
 	$statuses = new Statusses();
 	$statuses->Load(
-	($P['lastpost'] == -1 ? '' : (" social_statuses.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
+	($P['lastpost'] == -1 ? '' : (" s.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
 	(
-		override = 1 AND blog = 0 OR 
-		account_id = ".$_loginaccount->GetID()." AND blog = 0 OR 
-		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND blog = 0
+		s.override = 1 AND s.blog = 0 OR 
+		s.account_id = ".$_loginaccount->GetID()." AND s.blog = 0 OR 
+		FriendStatus(account_id, ".$_loginaccount->GetID().") = 'FRIENDS' AND s.blog = 0
 	)", '15');
 	
 	$lastid = -1;

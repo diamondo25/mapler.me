@@ -3,7 +3,7 @@ require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/templates/me.header.template.php';
 
 $statusses = new Statusses();
-$statusses->Load("account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND blog = 0");
+$statusses->Load("s.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND s.blog = 0");
 
 
 if ($statusses->Count() == 0) {

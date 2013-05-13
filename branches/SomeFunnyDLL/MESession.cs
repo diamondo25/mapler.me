@@ -161,28 +161,39 @@ namespace System
                     {
                         // Get length
                         int newlen = BitConverter.ToInt32(_receiveBuffer, 0);
+                        newlen += 4;
                         _header = false;
                         StartReceive(newlen, false);
                     }
                     else
                     {
-                        byte[] realdata = new byte[_receiveLength];
-                        Buffer.BlockCopy(_receiveBuffer, 0, realdata, 0, _receiveLength);
+                        int checksum = BitConverter.ToInt32(_receiveBuffer, 0);
 
-                        if (_receiveKey != null)
-                            realdata = Crypto.Decrypt(realdata, _receiveKey);
 
-                        MaplePacket packet = new MaplePacket(realdata);
-                        try
+                        byte[] realdata = new byte[_receiveLength - 4];
+                        Buffer.BlockCopy(_receiveBuffer, 4, realdata, 0, realdata.Length);
+                        int curchecksum = realdata.CalculateChecksum();
+
+                        if (checksum != curchecksum)
                         {
-                            OnPacket(packet);
+                            Logger.WriteLine("Invalid Checksum! {0} != {1}", checksum, curchecksum);
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            Logger.WriteLine("Internal Packet Handling Exception");
-                            throw new Exception("Internal Packet Handling Exception", ex);
-                        }
+                            if (_receiveKey != null)
+                                realdata = Crypto.Decrypt(realdata, _receiveKey);
 
+                            MaplePacket packet = new MaplePacket(realdata);
+                            try
+                            {
+                                OnPacket(packet);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.WriteLine("Internal Packet Handling Exception");
+                                throw new Exception("Internal Packet Handling Exception", ex);
+                            }
+                        }
 
                         _header = true;
                         StartReceive(4, false);
@@ -211,13 +222,17 @@ namespace System
             if (_disconnected) return;
             try
             {
-                _socket.Send(BitConverter.GetBytes(pPacket.Length), 0, 4, SocketFlags.None);
 
                 byte[] data = pPacket.ToArray();
                 if (_sendKey != null)
                     data = Crypto.Encrypt(data, _sendKey);
 
-                _socket.Send(data, 0, data.Length, SocketFlags.None);
+                byte[] completeData = new byte[data.Length + 4 + 4];
+                Buffer.BlockCopy(BitConverter.GetBytes(pPacket.Length), 0, completeData, 0, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(data.CalculateChecksum()), 0, completeData, 4, 4);
+                Buffer.BlockCopy(data, 0, completeData, 8, data.Length);
+
+                _socket.Send(completeData, 0, completeData.Length, SocketFlags.None);
             }
             catch (Exception)
             {

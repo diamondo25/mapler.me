@@ -39,6 +39,14 @@ namespace MPLRServer
                     {
                         pConnection.Logger_WriteLine("CLIENT PROBABLY FAILED TO CONNECT!!!");
                     }
+
+                    if (pConnection.CharData != null)
+                    {
+                        // Probably CC-ing or something. record
+
+                        MySQL_Connection.Instance.RunQuery("INSERT INTO connection_log VALUES " + MySQL_Connection.QueryQuery(pConnection.AccountID, pConnection.CharacterInternalID, pConnection.ChannelID, pConnection.ConnectedTimeToServer, new MySQL_Connection.NowType()));
+
+                    }
                 }
             }
         }
