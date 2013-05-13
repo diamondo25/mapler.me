@@ -25,6 +25,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
 elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 ?>
 				<?php BuildURL('General', '/manage/general/'); ?>
+				<?php BuildURL('Statuses', '/manage/statuses/'); ?>
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
 				<?php BuildURL('PHP Info', '/manage/php/'); ?>
 				<?php BuildURL('Log', '/manage/serverlog/'); ?>
