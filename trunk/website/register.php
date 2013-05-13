@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$errorList['username'] = true;
 			}
 			elseif (preg_match($username_regex, $username) == 0) {
-				$error = "A Mapler.me username may only hold alphanumeric characters.";
+				$error = "A Mapler.me username may only hold lowercase alphanumeric characters.";
 				$errorList['username'] = true;
 			}
 			else {
