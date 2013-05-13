@@ -214,6 +214,35 @@ VALUES
 			}
 		}
 	}
+	
+	public function CreateAndSaveToken($type, $days_available = 2) {
+		global $__database;
+		$allowedTypes = array('screenshot', 'reset_password'); // check database
+		if (!in_array($type, $allowedTypes)) return null;
+		
+		$token_len = 12;
+		$token = '';
+		for ($i = 0; $i < $token_len; $i++) {
+			$token .= chr(0x41 + rand(0, 24));
+		}
+		
+		$__database->query("
+INSERT INTO
+	account_tokens
+VALUES
+	(
+		".$this->id.",
+		'".$type."',
+		'".$__database->real_escape_string($token)."',
+		DATE_ADD(NOW(), INTERVAL ".intval($days_available)." DAY)
+	)
+ON DUPLICATE KEY
+	code = VALUES(`code`)
+");
+
+		return $token;
+	}
+	
 
 	
 	public static function IsDisallowedUsername($username) {

@@ -3,12 +3,12 @@ $char_config = $_loginaccount->GetConfigurationOption('character_config', array(
 
 $faces = array();
 $faces[] = array('default', 'Standard');
-$faces[] = array('angry', 'Mad');
-$faces[] = array('blaze', 'Blaze');
-$faces[] = array('bowing', 'Bowing');
-$faces[] = array('cheers', 'Cheering');
+$faces[] = array('angry', 'Angry');
+$faces[] = array('blaze', 'Flaming');
+$faces[] = array('bowing', 'Drool');
+$faces[] = array('cheers', 'Sweetness');
 $faces[] = array('cry', 'Crying');
-$faces[] = array('hot', 'Hot');
+$faces[] = array('hot', 'Dragon Breath');
 
 
 $characternames = array();

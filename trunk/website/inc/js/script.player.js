@@ -214,8 +214,11 @@ function SetItemInfo(event, obj, values) {
 			
 			if (isbonus) hasbonuspotential = true;
 			else haspotential = true;
+			
+			var maxlevel = GetMaxPotentialLevel(potentialinfo.levels);
+			var level = potentiallevel > maxlevel ? maxlevel : potentiallevel;
 
-			var leveldata = potentialinfo.levels[potentiallevel];
+			var leveldata = potentialinfo.levels[level];
 
 			var text = ReplaceIGNText(potentialinfo.name, leveldata);
 
@@ -241,6 +244,14 @@ function SetItemInfo(event, obj, values) {
 	lastSetWindow = GetObj('item_info');
 	
 	MoveWindow(event);
+}
+
+function GetMaxPotentialLevel(potentialLevels) {
+	for (var i = 1; ; i++) {
+		if (potentialLevels[i] == undefined)
+			return i - 1;
+	}
+	return 1; // wut
 }
 
 function ReplaceIGNText(input, strings) {
