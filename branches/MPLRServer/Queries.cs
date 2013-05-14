@@ -74,7 +74,7 @@ namespace MPLRServer
 
                     if (result >= 1)
                     {
-                        pConnection.Logger_WriteLine("Updated character info: {0}", internal_id);
+                        //pConnection.Logger_WriteLine("Updated character info: {0}", internal_id);
                     }
                     else
                     {
