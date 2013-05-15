@@ -171,6 +171,7 @@ else:
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
 <?php if ($_loggedin): ?>
+									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 									<li><a href="//<?php echo $domain; ?>/todo/">To-do / Issues</a></li>
 <?php endif; ?>

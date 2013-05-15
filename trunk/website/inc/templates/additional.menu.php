@@ -27,8 +27,8 @@ elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 				<?php BuildURL('General', '/manage/general/'); ?>
 				<?php BuildURL('Statuses', '/manage/statuses/'); ?>
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
-				<?php BuildURL('PHP Info', '/manage/php/'); ?>
-				<?php BuildURL('Log', '/manage/serverlog/'); ?>
+				<?php BuildURL('Statistics', '/manage/statistics/'); ?>
+				<?php BuildURL('Server Log', '/manage/serverlog/'); ?>
 <?php
 }
 ?>

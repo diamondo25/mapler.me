@@ -105,15 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$error = "Nickname must be at least 4 and at max 20 characters long.";
 				$errorList['nickname'] = true;
 			}
-			else {
-			
-				$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$nickname."'");
-				if ($result->num_rows == 1) {
-					$error = "This nickname has already been taken.";
-					$errorList['nickname'] = true;
-				}
-				$result->free();
-			}
 		}
 		
 		//if (count($errorList) == 0) {

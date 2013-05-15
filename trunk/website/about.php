@@ -6,7 +6,7 @@
 	<h1>#1 <small>To get you started, <span class="muted">what does Mapler.me offer?</span></small></h1>
 	<p><img src="http://cdn.mapler.me/etc/resources/11IPp.png" class="pull-right"/> Mapler.me offers some of the greatest additions to MapleStory such as the ability to view your own characters offline, 
 	socialize with other maplers, and stays up to date on the latest updates from MapleStory.</p>
-	<p>While exploring Mapler.me, you'll be able to participate with the dozens of other maplers that are part of our network. Our goal is to make Mapler.me as MapleStory-like
+	<p>While exploring Mapler.me, you'll be able to participate with the hundreds of other maplers that are part of our network. Our goal is to make Mapler.me as MapleStory-like
 	as the actual game, which is why we've worked with maplers in mind.</p>
 	<p>Some of the amazing features all maplers can try out are:
 		<ul>
@@ -15,6 +15,7 @@
 			<li>Connecting with other maplers by adding friends, and following other mapler's streams</li>
 			<li>An <b>extensive API</b> offered to Mapler+ members to include our site onto their sites or applications</li>
 			<li>Friendly, veteran maplers as our staff; here to help <b>you</b></li>
+			<li>An application fro Android and plugin for Wordpress</li>
 			<li><i>And much, much more..</i></li>
 		</ul>
 	</p>
@@ -88,6 +89,10 @@ $q->free();
 	<p><span class="pull-right" style="border-left:1px solid rgba(0,0,0,0.3);padding-left:10px;margin-left:10px;">You:<br/><img src="//mapler.me/<?php echo $main_char; ?>"></span> You've now gotten the basics of Mapler.me! There are many other features to the site such as social statuses, profiles, and friends, but you'll have to discover those yourself. If you've successfully added a character, you will see your character to the right!</p>
 	<p>Good luck, and happy mapling!<br/>
 	- Mapler.me Staff</p>
+</div>
+
+<div class="status">
+Having trouble with the guide? Here's an alternative guide by Nexon Volunteer Maryse: <a href="http://imgur.com/a/zIqtV#AioUUDm">Mapler.me New Member Journey</a>
 </div>
 
 <?php
