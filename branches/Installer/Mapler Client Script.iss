@@ -6,6 +6,9 @@
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
 #define MyAppExeName "MaplerUpdater.exe"
+#define DebugBuild True
+
+#define WinPcapInstallerName "WinPcap_4_1_3.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -23,7 +26,11 @@ DefaultDirName={pf}\Mapler.me
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 OutputDir=.\
+#if DebugBuild
+OutputBaseFilename=setup_{#MyAppVersion}_debug
+#else
 OutputBaseFilename=setup_{#MyAppVersion}
+#endif
 SetupIconFile=.\..\newlogo.ico
 Compression=lzma
 SolidCompression=yes
@@ -44,8 +51,11 @@ Source: ".\..\TestOmgeving\bin\x86\Release\PacketDotNet.xml"; DestDir: "{app}"; 
 Source: ".\..\TestOmgeving\bin\x86\Release\SharpPcap.xml"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\..\TestOmgeving\bin\x86\Release\Mapler Client.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\..\TestOmgeving\bin\x86\Release\Mapler Client.exe.manifest"; DestDir: "{app}"; Flags: ignoreversion
+#if DebugBuild
+Source: ".\..\TestOmgeving\bin\x86\Release\debugmode.txt"; DestDir: "{app}"; Flags: ignoreversion
+#endif
 Source: ".\..\MaplerUpdater\bin\x86\Release\MaplerUpdater.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\..\WinPcap Installer\*.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\..\WinPcap Installer\{#WinPcapInstallerName}"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -54,8 +64,7 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 ; Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
-[Run]          
-Filename: "{app}\WinPcap_4_1_3.exe"; Flags: shellexec waituntilterminated
+[Run]
+Filename: "{app}\{#WinPcapInstallerName}"; Flags: shellexec waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
 

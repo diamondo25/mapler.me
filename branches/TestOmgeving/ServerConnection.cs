@@ -33,12 +33,12 @@ namespace Mapler_Client
                 {
                     frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
                     {
-                        System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me error!");
+                        System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                     });
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me error!");
+                    System.Windows.Forms.MessageBox.Show("You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                 }
                 Environment.Exit(1);
             }
@@ -60,12 +60,12 @@ namespace Mapler_Client
                         {
                             frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
                             {
-                                System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You are using an outdated version of Mapler.me! Check the site for the latest updates.");
+                                System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You are using an outdated version of Mapler.me! Check the site for the latest updates.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                             });
                         }
                         else
                         {
-                            System.Windows.Forms.MessageBox.Show("You are using an outdated version of Mapler.me! Check the site for the latest updates.");
+                            System.Windows.Forms.MessageBox.Show("You are using an outdated version of Mapler.me! Check the site for the latest updates.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
                         }
                         Environment.Exit(3);
                         return;
