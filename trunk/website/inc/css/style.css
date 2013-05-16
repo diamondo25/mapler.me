@@ -242,6 +242,7 @@ html { overflow-x: hidden; }
 	-moz-box-shadow:0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
 	box-shadow:0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
 	min-width:300px !important;
+	z-index:1;
 }
 
 .status .header {
@@ -306,7 +307,7 @@ html { overflow-x: hidden; }
 }
 
 .reply-list {
-	padding-left: 10px;
+	z-index:2;
 }
 
 .mention, .status-time, .deletestatus, .reply-to {
