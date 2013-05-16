@@ -123,11 +123,7 @@ if ($_loggedin) {
 <style type="text/css">
 
 .avatar {
-	padding: 5px;
-	background: #fff;
-	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
-	border: 1px solid #ddd;
-	margin-bottom: 20px;
+	width:200px;
 }
 
 .name {
