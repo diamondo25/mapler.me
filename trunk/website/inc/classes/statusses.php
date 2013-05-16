@@ -178,8 +178,8 @@ WHERE
 	}
 ?>
 				</div>
-				<div class="reply-list" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
 			</div>
+			<div class="reply-list" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
 <?php    
 	}
 }
