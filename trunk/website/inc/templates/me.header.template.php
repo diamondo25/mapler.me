@@ -128,7 +128,6 @@ if ($_loggedin) {
 	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
 	border: 1px solid #ddd;
 	margin-bottom: 20px;
-	width: 96%;
 }
 
 .name {
@@ -177,7 +176,7 @@ hr {
 </style>
 
 <div class="row">
-	<div class="span3" style="height:100% !important; float: left;">
+	<div class="span3" style="height:100% !important; float: left;text-align:center;">
 <?php
 if ($has_characters):
 ?>

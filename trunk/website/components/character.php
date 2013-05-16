@@ -104,8 +104,8 @@ SELECT
 </div>
 
 <div class="row">
-	<div class="span3">
-		<img src="//mapler.me/ignavatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
+	<div class="span3" style="text-align:center;">
+		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>
