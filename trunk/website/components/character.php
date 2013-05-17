@@ -140,7 +140,7 @@ SELECT
 if (!$_loggedin) {
 ?>
 	<div class="span9" style="margin-left:10px;">
-		<p class="status" style="margin-top:0px;"><i class="icon-ban-circle faded"></i> To view more information and equipment for <?php echo $character_info['name']; ?>, please <a href="//<?php echo $domain; ?>/login/">login</a> or <a href="//<?php echo $domain; ?>/signup/">register!</a></p>
+		<p class="status noclear" style="margin-top:0px;"><i class="icon-ban-circle faded"></i> To view more information and equipment for <?php echo $character_info['name']; ?>, please <a href="//<?php echo $domain; ?>/login/">login</a> or <a href="//<?php echo $domain; ?>/signup/">register!</a></p>
 	</div>
 </div>
 <?php
@@ -150,7 +150,7 @@ if (!$_loggedin) {
 
 elseif ($status == 1 && ($_loggedin && $friend_status = 'FRIENDS' && $friend_status != 'FOREVER_ALONE')) {
 ?>
-		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+		<p class="status noclear" style="margin-top:0px;"><i class="icon-ok faded"></i>
 			<?php echo $account->GetNickName(); ?> has allowed you to view this character.
 		</p>
 <?php
@@ -160,7 +160,7 @@ elseif ($status == 1 && ($_loggedin && IsOwnAccount())) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <div class="span9" style="margin-left:10px;">
-		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+		<p class="status noclear" style="margin-top:0px;"><i class="icon-ok faded"></i>
 <?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		This character can only be seen by friends, set by <?php echo $account->GetNickName(); ?>. 
 <?php else: ?>
@@ -175,7 +175,7 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <div class="span9" style="margin-left:10px;">
-		<p class="status" style="margin-top:0px;"><i class="icon-ok faded"></i>
+		<p class="status noclear" style="margin-top:0px;"><i class="icon-ok faded"></i>
 <?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		This character is currently hidden by <?php echo $account->GetNickName(); ?>. 
 <?php else: ?>
