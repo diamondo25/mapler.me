@@ -173,16 +173,13 @@ namespace MPLRServer
             string name = pPacket.ReadString();
             string successor = pPacket.ReadString();
             string guildname = pPacket.ReadString();
-            pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}, guild {4}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)", guildname);
+            // pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}, guild {4}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)", guildname);
 
-            Queries.SeePlayer(id, name, pConnection.WorldID, level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
+            Queries.SeePlayer(id, name, GameHelper.GetAllianceWorldID(pConnection.WorldID), level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
         }
 
         public static void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
         {
-            // Disabled
-            return;
-
             byte type = pPacket.ReadByte();
             if (type == 0x20)
             {

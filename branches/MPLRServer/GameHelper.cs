@@ -212,5 +212,29 @@ namespace MPLRServer
         {
             return (ushort)(10 + ((pInventory * 30) + pID));
         }
+
+
+        public static byte GetAllianceWorldID(byte pWorldID)
+        {
+            switch (pWorldID)
+            {
+                case 6:
+                case 7:
+                case 8:
+                case 14: return 100; // CMYK
+
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13: return 101; // GAZED
+                    
+                case 5:
+                case 15: return 102; // Bellonova
+
+                default:
+                    return pWorldID;
+            }
+        }
     }
 }

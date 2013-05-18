@@ -112,6 +112,8 @@ namespace MPLRServer
 
         public void Save(byte pWorldID)
         {
+            pWorldID = GameHelper.GetAllianceWorldID(pWorldID);
+
             using (InsertQueryBuilder guildTable = new InsertQueryBuilder("guilds"))
             {
                 guildTable.OnDuplicateUpdate = true;

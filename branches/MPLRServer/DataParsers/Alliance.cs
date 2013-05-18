@@ -34,6 +34,8 @@ namespace MPLRServer
 
         public static void DecodeGuilds(MaplePacket pPacket, byte pWorldID)
         {
+            pWorldID = GameHelper.GetAllianceWorldID(pWorldID);
+
             int guilds = pPacket.ReadInt();
             for (int i = 0; i < guilds; i++)
             {
@@ -45,6 +47,8 @@ namespace MPLRServer
             
         public void Save(byte pWorldID)
         {
+            pWorldID = GameHelper.GetAllianceWorldID(pWorldID);
+
             using (InsertQueryBuilder allianceTable = new InsertQueryBuilder("alliances"))
             {
                 allianceTable.OnDuplicateUpdate = true;

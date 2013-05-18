@@ -16,7 +16,9 @@ namespace MPLRServer
             byte pGender, byte pSkin,
             int pEyes, int pHair,
 
-            byte[] pSlots, string pBoF, string pBoE, string pUE
+            byte[] pSlots, string pBoF, string pBoE, string pUE,
+            long[] pPetIDs, int[] pTraits,
+            string pMarriedWith
             )
         {
             if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(pID) &&
@@ -65,6 +67,19 @@ namespace MPLRServer
                     query.SetColumn("blessingoffairy", pBoF);
                     query.SetColumn("blessingofempress", pBoE);
                     query.SetColumn("ultimateexplorer", pUE);
+
+                    query.SetColumn("petcashid1", pPetIDs[0]);
+                    query.SetColumn("petcashid2", pPetIDs[1]);
+                    query.SetColumn("petcashid3", pPetIDs[2]);
+
+                    query.SetColumn("trait_charisma", pTraits[0]);
+                    query.SetColumn("trait_insight", pTraits[1]);
+                    query.SetColumn("trait_willpower", pTraits[2]);
+                    query.SetColumn("trait_craft_dili", pTraits[3]);
+                    query.SetColumn("trait_empathy", pTraits[4]);
+                    query.SetColumn("trait_charm", pTraits[5]);
+
+                    query.SetColumn("married_with", pMarriedWith);
 
                     query.SetWhereColumn("internal_id", internal_id);
 
@@ -130,6 +145,20 @@ namespace MPLRServer
                     query.AddColumnWithValue("blessingoffairy", pBoF);
                     query.AddColumnWithValue("blessingofempress", pBoE);
                     query.AddColumnWithValue("ultimateexplorer", pUE);
+
+
+                    query.AddColumnWithValue("petcashid1", pPetIDs[0]);
+                    query.AddColumnWithValue("petcashid2", pPetIDs[1]);
+                    query.AddColumnWithValue("petcashid3", pPetIDs[2]);
+
+                    query.AddColumnWithValue("trait_charisma", pTraits[0]);
+                    query.AddColumnWithValue("trait_insight", pTraits[1]);
+                    query.AddColumnWithValue("trait_willpower", pTraits[2]);
+                    query.AddColumnWithValue("trait_craft_dili", pTraits[3]);
+                    query.AddColumnWithValue("trait_empathy", pTraits[4]);
+                    query.AddColumnWithValue("trait_charm", pTraits[5]);
+
+                    query.AddColumnWithValue("married_with", pMarriedWith);
 
                     string q = query.ToString();
 

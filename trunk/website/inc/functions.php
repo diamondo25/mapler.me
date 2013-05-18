@@ -540,6 +540,27 @@ function ValueOrDefault($what, $default) {
 	return isset($what) ? $what : $default;
 }
 
+function GetAllianceWorldID($worldid) {
+	switch ($worldid) {
+		case 6:
+		case 7:
+		case 8:
+		case 14: return 100; // CMYK
+
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13: return 101; // GAZED
+			
+		case 5:
+		case 15: return 102; // Bellonova
+
+		default:
+			return $worldid;
+	}
+}
+
 require_once __DIR__.'/functions.loginaccount.php';
 
 // Set to null by default

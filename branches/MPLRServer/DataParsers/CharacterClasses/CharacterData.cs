@@ -19,6 +19,8 @@ namespace MPLRServer
         public string BlessingOfEmpress { get; private set; }
         public string UltimateExplorer { get; private set; }
 
+        public string MarriedWith { get; private set; }
+
         public class UnknownListOfIntegers
         {
             public const int AmountOfValues = 4;
@@ -56,11 +58,63 @@ namespace MPLRServer
             }
         }
 
+        public class Ring
+        {
+            public enum Type
+            {
+                Couple,
+                Friend,
+                Marriage
+            }
+
+            public Ring.Type RingType { get; private set; }
+            public int FriendID { get; private set; }
+            public string FriendName { get; private set; }
+            public long RingCashID1 { get; private set; }
+            public long RingCashID2 { get; private set; }
+
+            public Ring(Ring.Type pType, MaplePacket pPacket)
+            {
+                RingType = pType;
+                if (pType == Type.Marriage)
+                {
+                    int marriageID = pPacket.ReadInt();
+
+                    int characterID = pPacket.ReadInt();
+                    int partnerID = pPacket.ReadInt();
+                    pPacket.ReadShort(); // Most likely 3, marriage type?
+                    int characterItemID = pPacket.ReadInt();
+                    int partnerItemID = pPacket.ReadInt();
+                    string characterName = pPacket.ReadString(13);
+                    string partnerName = pPacket.ReadString(13);
+
+                    FriendID = partnerID;
+                    FriendName = partnerName;
+                    RingCashID1 = characterItemID;
+                    RingCashID2 = partnerItemID;
+                }
+                else
+                {
+                    FriendID = pPacket.ReadInt();
+                    FriendName = pPacket.ReadString(13);
+                    RingCashID1 = pPacket.ReadLong();
+                    RingCashID2 = pPacket.ReadLong();
+
+                    if (pType == Type.Friend)
+                    {
+                        int itemID = pPacket.ReadInt();
+                    }
+
+                }
+            }
+        }
+
         public List<UnknownListOfIntegers> UnknownIntegerList { get; private set; }
         public List<int> UnknownIntegerListNumber2 { get; private set; }
         public Dictionary<int, long> UnknownIntegerListNumber3 { get; private set; }
         public Dictionary<long, long> UnknownIntegerListNumber4 { get; private set; }
         public List<EvolutionCard> EvolutionCards { get; private set; }
+        public List<Ring> Rings { get; private set; }
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -177,6 +231,7 @@ namespace MPLRServer
             Quests = new CharacterQuests();
             Quests.Decode(pConnection, pPacket);
 
+
             // Match
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
@@ -187,38 +242,34 @@ namespace MPLRServer
                 pPacket.ReadInt();
             }
 
-            // Couple
-            for (int i = pPacket.ReadShort(); i > 0; i--)
+
             {
-                int partnerID = pPacket.ReadInt();
-                string partnerName = pPacket.ReadString(13);
-                long ringCashID1 = pPacket.ReadLong();
-                long ringCashID2 = pPacket.ReadLong();
+
+                Rings = new List<Ring>();
+                MarriedWith = null;
+
+                // Couple
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    Rings.Add(new Ring(Ring.Type.Couple, pPacket));
+                }
+
+                // Friend
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    Rings.Add(new Ring(Ring.Type.Friend, pPacket));
+                }
+
+                // Marriage
+                for (int i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    Ring ring = new Ring(Ring.Type.Marriage, pPacket);
+                    Rings.Add(ring);
+
+                    MarriedWith = ring.FriendName;
+                }
             }
 
-            // Friend
-            for (int i = pPacket.ReadShort(); i > 0; i--)
-            {
-                int partnerID = pPacket.ReadInt();
-                string partnerName = pPacket.ReadString(13);
-                long ringCashID1 = pPacket.ReadLong();
-                long ringCashID2 = pPacket.ReadLong();
-                int itemID = pPacket.ReadInt();
-            }
-
-            // Marriage
-            for (int i = pPacket.ReadShort(); i > 0; i--)
-            {
-                int marriageID = pPacket.ReadInt();
-
-                int characterID = pPacket.ReadInt();
-                int partnerID = pPacket.ReadInt();
-                pPacket.ReadShort(); // Most likely 3
-                int characterItemID = pPacket.ReadInt();
-                int partnerItemID = pPacket.ReadInt();
-                string characterName = pPacket.ReadString(13);
-                string partnerName = pPacket.ReadString(13);
-            }
 
             Inventory.DecodeTeleportRocks(pPacket);
 
@@ -461,7 +512,9 @@ namespace MPLRServer
                 Stats.HonourLevel, Stats.HonourExp, Stats.Mesos, Stats.DemonMark,
                 Stats.Gender, Stats.Skin,
                 Stats.Face, Stats.Hair,
-                Inventory.InventorySlots, BlessingOfTheFairy, BlessingOfEmpress, UltimateExplorer
+                Inventory.InventorySlots, BlessingOfTheFairy, BlessingOfEmpress, UltimateExplorer,
+                Stats.Pets, Stats.Traits, 
+                MarriedWith
                 );
         }
 
@@ -820,6 +873,42 @@ namespace MPLRServer
                             card.ID,
                             card.ItemID,
                             card.Level
+                            );
+
+                    }
+
+                    table.RunQuery();
+                }
+
+
+                MySQL_Connection.Instance.RunQuery("DELETE FROM character_rings WHERE character_id = " + pConnection.CharacterInternalID);
+                using (InsertQueryBuilder table = new InsertQueryBuilder("character_rings"))
+                {
+                    table.AddColumn("character_id");
+                    table.AddColumn("friend_name");
+                    table.AddColumn("cashid1");
+                    table.AddColumn("cashid2");
+                    table.AddColumn("type");
+
+                    foreach (var ring in Rings)
+                    {
+                        string type = "";
+                        switch (ring.RingType)
+                        {
+                            case Ring.Type.Couple: type = "couple"; break;
+                            case Ring.Type.Marriage: type = "marriage"; break;
+                            case Ring.Type.Friend: type = "friend"; break;
+                            default:
+                                Console.WriteLine("derp");
+                                break;
+                        }
+
+                        table.AddRow(
+                            pConnection.CharacterInternalID,
+                            ring.FriendName,
+                            ring.RingCashID1,
+                            ring.RingCashID1,
+                            type
                             );
 
                     }

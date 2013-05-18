@@ -195,7 +195,7 @@ namespace MPLRServer
     class ItemBase
     {
         public int ItemID { get; private set; }
-        public long Expires { get; private set; }
+        public long Expires { get; protected set; }
         public long CashID { get; private set; }
         public short Amount { get; set; }
 
@@ -503,8 +503,11 @@ namespace MPLRServer
             Closeness = pPacket.ReadShort();
             Fullness = pPacket.ReadByte();
 
-
-            pPacket.Skip(8 + 2 + 2 + 4 + 2 + 1 + 4 + 4 + 2);
+            this.Expires = pPacket.ReadLong(); 
+            pPacket.Skip(2 + 2 + 4 + 2 + 1 + 4 + 4 + 2);
+            // Last 2:
+            // - int: -1
+            // - short: 100
             // V.132: + 2
         }
     }

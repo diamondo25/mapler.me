@@ -360,11 +360,14 @@ function get_data($itemid) {
 function add_image($location, $x, $y) {
 	global $im;
 	if (file_exists($location)) {
+		if (DEBUGGING) {
+			echo "Found ".$location."\r\n";
+		}
 		$image = imagecreatefrompng($location);
 		imagecopy($im, $image, $x, $y, 0, 0, imagesx($image), imagesy($image));
 	}
 	elseif (DEBUGGING) {
-		echo "-- Could not find ".$location." -- <br />";
+		echo "-- Could not find ".$location." --\r\n";
 	}
 }
 
@@ -399,17 +402,10 @@ function RenderName($name, $x, $y) {
 		
 		if ($hasemblem) {
 			if ($res[1] != 0 || $res[2] != 0) {
-				add_image($guild_info_location.'/BackGround/0000'.$res[1].'/'.$res[2].'.png', $startWidth - 18, $y + 1);
+				add_image($guild_info_location.'/0000'.$res[1].'/'.$res[2].'.png', $startWidth - 18, $y + 1);
 			}
 			if ($res[3] != 0 || $res[4] != 0) {
-				$name = "";
-				$sort = floor($res[3] / 1000);
-				if ($sort == 2) $name = "Animal";
-				elseif ($sort == 3) $name = "Plant";
-				elseif ($sort == 4) $name = "Pattern";
-				elseif ($sort == 5) $name = "Letter";
-				elseif ($sort == 9) $name = "Etc";
-				add_image($guild_info_location.'/Mark/'.$name.'/0000'.$res[3].'/'.$res[4].'.png', $startWidth - 17, $y + 2);
+				add_image($guild_info_location.'/0000'.$res[3].'/'.$res[4].'.png', $startWidth - 17, $y + 2);
 			}
 		}
 		

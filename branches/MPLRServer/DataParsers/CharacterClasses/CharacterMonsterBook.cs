@@ -13,7 +13,6 @@ namespace MPLRServer
         {
             ChosenCardID = pPacket.ReadInt();
 
-            // Unknown stuff...
             if (pPacket.ReadBool() == false)
             {
                 for (short cards = pPacket.ReadShort(); cards > 0; cards--)
@@ -24,6 +23,7 @@ namespace MPLRServer
             }
             else
             {
+                // Unknown stuff...
                 pPacket.ReadShort();
                 short size = pPacket.ReadShort();
                 pPacket.Skip(size); // Card block
