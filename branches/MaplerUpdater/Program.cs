@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MaplerUpdater
 {
     static class Program
     {
+        private static Mutex _singelton = null;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -15,6 +18,23 @@ namespace MaplerUpdater
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnexpectedExHandler);
+
+            // Check if already running
+            try
+            {
+                Mutex.OpenExisting("Mapler.me_Client");
+            }
+            catch
+            {
+                _singelton = new Mutex(true, "Mapler.me_Client");
+            }
+
+            if (_singelton == null)
+            {
+                MessageBox.Show("You can only run 1 instance of Mapler.me at a time.", "Mapler.me", MessageBoxButtons.OK);
+                return;
+            }
+
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

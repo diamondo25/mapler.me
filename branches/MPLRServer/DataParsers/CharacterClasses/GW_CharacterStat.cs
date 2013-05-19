@@ -63,6 +63,16 @@ namespace MPLRServer
         public int HonourLevel { get; set; }
         public int HonourExp { get; set; }
 
+        public enum TraitVals
+        {
+            Charisma = 0,
+            Insight,
+            Willpower,
+            CraftDiligence,
+            Empathy,
+            Charm
+        }
+
         public GW_CharacterStat()
         {
             SPData = null;

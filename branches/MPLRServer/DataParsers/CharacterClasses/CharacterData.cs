@@ -910,9 +910,6 @@ namespace MPLRServer
                             case Ring.Type.Couple: type = "couple"; break;
                             case Ring.Type.Marriage: type = "marriage"; break;
                             case Ring.Type.Friend: type = "friend"; break;
-                            default:
-                                Console.WriteLine("derp");
-                                break;
                         }
 
                         table.AddRow(

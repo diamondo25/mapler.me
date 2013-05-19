@@ -408,7 +408,7 @@ function GetItemDialogInfo($item, $isequip) {
 	);
 	$info_array['other_info'] = array(
 		'tradeblock' => $tradeblock,
-		'expires' => GetSystemTimeFromFileTime($item->expires),
+		'expires' => (int)GetSystemTimeFromFileTime($item->expires),
 		'quality' => $quality
 	);
 	$info_array['other_info']['locked'] = ($isequip ? $item->HasLock() : 0);
@@ -902,6 +902,56 @@ WHERE
 <?php endif; ?>
 
 </div>
+	<hr/>
+
+<?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
+<?php 	MakeHideToggleButton('evo_rocks'); ?>
+	<p class="lead"><?php echo $character_info['name']; ?>'s Evolution System Cores</p>
+	<table cellpadding="5">
+<?php
+	$q = $__database->query("
+SELECT
+	card, level
+FROM
+	evolution_levels
+WHERE
+	character_id = ".$internal_id."
+ORDER BY
+	`card` ASC
+");
+
+	$i = 0;
+	while ($row = $q->fetch_assoc()) {
+		if ($i % 7 == 0) {
+			if ($i != 0) {
+?>
+		</tr>
+<?php
+			}
+?>
+		<tr>
+<?php
+		}
+		$item = (object)array('itemid' => $row['card'], 'amount' => $row['level'], 'expires' => 3439756800);
+		$info = GetItemDialogInfo($item, false);
+?>
+			<td>
+				<img class="item-icon " potential="0" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<span class="item-amount">x<?php echo $item->amount; ?></span>
+
+			</td>
+<?php
+		$i++;
+	}
+	if ($i != 0) {
+?>
+		</tr>
+<?php
+	}
+?>
+	
+	</table>
+<?php endif; ?>
 
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
@@ -990,6 +1040,8 @@ foreach ($optionlist as $option => $desc) {
 }
 </style>
 
+<?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
+<?php 	MakeHideToggleButton('skills'); ?>
 <div id="skill_list">
 <?php
 	
@@ -1113,10 +1165,13 @@ ORDER BY
 <?php endforeach; ?>
 			</select>
 		</div>
-
+<?php endif; ?>
 	
 	
 	<hr />
+	
+<?php if ($__is_viewing_self || !IsHiddenObject('familiars')): ?>
+<?php 	MakeHideToggleButton('familiars'); ?>
 	<p class="lead"><?php echo $character_info['name']; ?>'s Familiars</p>
 	<table cellspacing="10" cellpadding="6">
 <?php
@@ -1146,6 +1201,10 @@ WHERE
 	}
 ?>
 		</table>
+<?php endif; ?>
+
+
+<!-- /End content block -->
 	</div>
 	
 </div>

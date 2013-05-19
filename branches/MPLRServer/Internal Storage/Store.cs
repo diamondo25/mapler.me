@@ -59,13 +59,13 @@ namespace MPLRServer.Internal_Storage
 
         public void SetChecksumOfSlot(int pCharacterID, byte pWorldID, ushort pInventory, short pSlot, int pChecksum)
         {
-            if (!Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes.ContainsKey(pInventory))
-                Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes.Add(pInventory, new Dictionary<short, int>());
+            if (!KnownCharlist[pCharacterID][pWorldID].SlotHashes.ContainsKey(pInventory))
+                KnownCharlist[pCharacterID][pWorldID].SlotHashes.Add(pInventory, new Dictionary<short, int>());
 
-            if (Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].ContainsKey(pSlot))
-                Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory][pSlot] = pChecksum;
+            if (KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].ContainsKey(pSlot))
+                KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory][pSlot] = pChecksum;
             else
-                Internal_Storage.Store.Instance.KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].Add(pSlot, pChecksum);
+                KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].Add(pSlot, pChecksum);
         }
 
         public void Load()

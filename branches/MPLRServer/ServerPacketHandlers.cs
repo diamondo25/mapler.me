@@ -192,6 +192,11 @@ namespace MPLRServer
 
                     pConnection.Logger_WriteLine("{0} must be in Guild {1}", pConnection.LastLoggedCharacterName, guild.Name);
                 }
+                else
+                {
+                    // Not in a guild, anymore?
+                    MySQL_Connection.Instance.RunQuery("DELETE FROM guild_members WHERE character_id = " + pConnection.CharacterInternalID + " AND world_id = " + GameHelper.GetAllianceWorldID(pConnection.WorldID));
+                }
             }
         }
 
@@ -399,8 +404,9 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x2000000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x2000000 | {0}", value);
+                // Willpower
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Willpower] = pPacket.ReadInt();
+                // pConnection.Logger_WriteLine("0x2000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x4000000))
