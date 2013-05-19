@@ -71,6 +71,7 @@ function time_elapsed_string($etime) {
 			return $r . ' ' . $str . ($r > 1 ? 's' : '');
 		}
 	}
+	return '0 seconds';
 }
 
 function Explode2($seperator, $subseperator, $value) {
@@ -494,7 +495,10 @@ function GetItemIconID($id) {
 function GetItemDataLocation($location, $id) {
 	$inv = GetItemInventory($id);
 	$type = GetItemType($id);
-	if ($type < 5) {
+	if ($type == 996) {
+		$url = $location.'Character/Familiar/'.str_pad($id, 7, '0', STR_PAD_LEFT).'.img/';
+	}
+	elseif ($type < 5) {
 		switch ($type) {
 			case 0:
 			case 1:

@@ -219,12 +219,9 @@ ParseItem($face);
 ParseItem($hair);
 ParseItem($skin);
 ParseItem($skin + 10000);
-if (DEBUGGING)
-	echo 'Demon Slayer mark: '.$ds_mark."\r\n";
 
-if ($ds_mark != 0) {
-	ParseItem($ds_mark);
-}
+ParseItem($gender == 0 ? 1060026 : 1061039);
+
 
 $cashitems = array();
 
@@ -265,6 +262,7 @@ $character_equipment->free();
 if ($ds_mark > 0) {
 	ParseItem($ds_mark);
 }
+
 
 krsort($zlayers);
 
@@ -402,10 +400,10 @@ function RenderName($name, $x, $y) {
 		
 		if ($hasemblem) {
 			if ($res[1] != 0 || $res[2] != 0) {
-				add_image($guild_info_location.'/0000'.$res[1].'/'.$res[2].'.png', $startWidth - 18, $y + 1);
+				add_image($guild_info_location.'/0000'.$res[1].'/'.$res[2].'.png', $startWidth - 18, $y + 0);
 			}
 			if ($res[3] != 0 || $res[4] != 0) {
-				add_image($guild_info_location.'/0000'.$res[3].'/'.$res[4].'.png', $startWidth - 17, $y + 2);
+				add_image($guild_info_location.'/0000'.$res[3].'/'.$res[4].'.png', $startWidth - 17, $y + 1);
 			}
 		}
 		

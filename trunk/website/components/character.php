@@ -105,7 +105,7 @@ SELECT
 
 <div class="row">
 	<div class="span3" style="text-align:center;">
-		<img src="//mapler.me/avatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
+		<img src="//mapler.me/ignavatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>
@@ -117,6 +117,9 @@ SELECT
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
+<?php if (isset($character_info['married_with']) && $character_info['married_with'] != $character_info['name']): ?>
+		<p class="side"><i class="icon-eye-open faded"></i> Married with <a href="//<?php echo $domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
+<?php endif; ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
 		<hr />
 		<p class="side"><i class="icon-tasks"></i> <?php echo $statistics['quests_done']; ?> quests completed</p>
@@ -424,6 +427,41 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/pet_equip.png');
 }
 
+.character_totems {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/totem.png');
+	width: 118px;
+	height: 71px;
+	position: relative;
+	margin-bottom: 15px;
+}
+
+.character_droid {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_android.png');
+	width: 154px;
+	height: 172px;
+	position: relative;
+}
+
+.job-specific-inventory > div {
+	height: 172px;
+	position: relative;
+}
+
+.job-specific-inventory .mechanic {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_mech.png');
+	width: 151px;
+}
+
+.job-specific-inventory .coordinate {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_coordinate.png');
+	width: 154px;
+}
+
+.job-specific-inventory .evan {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_dragon.png');
+	width: 151px;
+}
+
 
 .inventory div {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/item_bg.png');
@@ -433,6 +471,11 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
 }
 
+.char-inventories > div {
+	display: inline-block;
+	float: left;
+	margin-left: 15px;
+}
 
 <?php
 
@@ -496,13 +539,13 @@ $petequips[1] = array();
 $petequips[2] = array();
 
 $normalequips = array();
+$normalequips['normal'] = array();
+$normalequips['Coordinate'] = array();
+$normalequips['Totem'] = array();
+$normalequips['Android'] = array();
+$normalequips['Mechanic'] = array();
+$normalequips['Evan'] = array();
 $cashequips = array();
-$cashequips['Coordinate'] = array();
-$cashequips['Totem'] = array();
-$cashequips['Android'] = array();
-$cashequips['Mechanic'] = array();
-$cashequips['Evan'] = array();
-$cashequips['normal'] = array();
 
 foreach ($equips as $orislot => $item) {
 	$slot = abs($orislot);
@@ -517,25 +560,45 @@ foreach ($equips as $orislot => $item) {
 		$petequips[$block][$display_slot] = $item;
 	}
 	else {
-		if ($orislot > -100) 		$normalequips[$orislot] = $item;
-		elseif ($orislot <= -5000) 	$cashequips['Coordinate'][$orislot] = $item;
-		elseif ($orislot <= -1300) 	$cashequips['Totem'][$orislot] = $item;
-		elseif ($orislot <= -1200) 	$cashequips['Android'][$orislot] = $item;
-		elseif ($orislot <= -1100) 	$cashequips['Mechanic'][$orislot] = $item;
-		elseif ($orislot <= -1000) 	$cashequips['Evan'][$orislot] = $item;
-		elseif ($orislot <= -100) 	$cashequips['normal'][$orislot] = $item;
+		if ($orislot > -100) 		$normalequips['normal'][$orislot] = $item;
+		elseif ($orislot <= -5000) 	$normalequips['Totem'][$orislot] = $item;
+		elseif ($orislot <= -1300) 	$normalequips['Coordinate'][$orislot] = $item;
+		elseif ($orislot <= -1200) 	$normalequips['Android'][$orislot] = $item;
+		elseif ($orislot <= -1100) 	$normalequips['Mechanic'][$orislot] = $item;
+		elseif ($orislot <= -1000) 	$normalequips['Evan'][$orislot] = $item;
+		elseif ($orislot <= -100) 	$cashequips[$orislot] = $item;
+	}
+}
+
+function AddInventoryItems(&$inventory) {
+	foreach ($inventory as $slot => $item) {
+		$slot = abs($slot) % 100;
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($info['iconid']);
+		
+		
+		if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+		}
+?>
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
 	}
 }
 
 ?>
 
-<div class="row">
-	<div class="span3" style="width: 184px;">
+<div class="row char-inventories">
+	<div style="width: 184px;">
 		<div class="character_equips">
 			<div id="normal_equips">
 
 <?php
-foreach ($normalequips as $slot => $item) {
+foreach ($normalequips['normal'] as $slot => $item) {
 	$slot = abs($slot);
 	
 	$info = GetItemDialogInfo($item, true);
@@ -557,7 +620,7 @@ foreach ($normalequips as $slot => $item) {
 			<div id="cash_equips">
 
 <?php
-foreach ($cashequips['normal'] as $slot => $item) {
+foreach ($cashequips as $slot => $item) {
 	$slot = abs($slot) - 100;
 	
 	$info = GetItemDialogInfo($item, true);
@@ -581,6 +644,78 @@ foreach ($cashequips['normal'] as $slot => $item) {
 			</div>
 		</div>
 	</div>
+
+	
+	<div class="char-totems-droid">
+		<div class="character_droid">
+<?php AddInventoryItems($normalequips['Android']); ?>
+		</div>
+		<div class="character_totems">
+<?php AddInventoryItems($normalequips['Totem']); ?>
+		</div>
+	</div>
+
+	<div class="job-specific-inventory">
+<?php
+$job_css_class = '';
+$array_name = '';
+$jobid = $character_info['job'];
+$jobid_group = floor($jobid / 100);
+if ($jobid_group == 65 || $jobid == 6001) { $job_css_class = 'coordinate'; $array_name = 'Coordinate'; }
+elseif ($jobid_group == 35) { $job_css_class = 'mechanic'; $array_name = 'Mechanic'; }
+elseif ($jobid_group == 22 || $jobid == 2001) { $job_css_class = 'evan'; $array_name = 'Evan'; }
+
+if ($job_css_class != '') {
+?>
+		<div class="<?php echo $job_css_class; ?>">
+			<?php AddInventoryItems($normalequips[$array_name]); ?>
+		</div>
+<?php
+}
+?>
+	</div>
+
+	<div style="width: 151px;">
+		<div class="character_pets">
+			<div class="character_pets_holder">
+				<select onchange="ChangePet(this.value)">
+					<option value="0">Pet 1</option>
+					<option value="1">Pet 2</option>
+					<option value="2">Pet 3</option>
+				</select>
+
+<?php
+for ($i = 0; $i < 3; $i++) {
+?>
+				<div class="pet_inventory" style="display: <?php echo $i == 0 ? 'block' : 'none'; ?>;" id="pet_<?php echo $i; ?>">
+<?php
+	foreach ($petequips[$i] as $slot => $item) {
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($item->itemid);
+		
+		
+		if ($info['potentials'] != 0) {
+?>
+					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+<?php
+		}
+?>
+					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+?>
+				</div>
+<?php
+}
+?>
+<!-- so many </div> fml -->
+			</div>
+		</div>
+	</div>
+
+	<hr />
 
 	<div class="span4" id="inventories">
 		<select onchange="ChangeInventory(this.value)">
@@ -644,48 +779,55 @@ for ($inv = 0; $inv < 5; $inv++) {
 		<span id="mesos"><?php echo number_format($character_info['mesos']); ?></span>
 
 	</div>
-
-
-	<div class="span3" style="width: 151px;">
-		<div class="character_pets">
-			<div class="character_pets_holder">
-				<select onchange="ChangePet(this.value)">
-					<option value="0">Pet 1</option>
-					<option value="1">Pet 2</option>
-					<option value="2">Pet 3</option>
-				</select>
-
+	
+	
+	<table class="span4" cellpadding="5">
 <?php
-for ($i = 0; $i < 3; $i++) {
+	$q = $__database->query("
+SELECT
+	`index`,
+	map
+FROM
+	teleport_rock_locations
+WHERE
+	character_id = ".$internal_id."
+	AND
+	map <> 999999999
+");
+
+	$lastgroup = '';
+	$curgroup = '';
+	while ($row = $q->fetch_assoc()) {
+		$index = $row['index'];
+		if ($index < 5) $curgroup = 'Normal';
+		elseif ($index < 5 + 10) $curgroup = 'VIP';
+		elseif ($index < 5 + 10 + 13) $curgroup = 'Hyper';
+		elseif ($index < 5 + 10 + 13 + 13) $curgroup = 'Hyper';
+		
+		if ($lastgroup != $curgroup) {
+			if ($lastgroup != '') {
 ?>
-				<div class="pet_inventory" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>;" id="pet_<?php echo $i; ?>">
+		<tr>
+			<th>&nbsp;</th>
+		</tr>
 <?php
-	foreach ($petequips[$i] as $slot => $item) {
-		
-		$info = GetItemDialogInfo($item, true);
-		
-		$itemwzinfo = GetItemWZInfo($item->itemid);
-		
-		
-		if ($info['potentials'] != 0) {
+			}
 ?>
-					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
+		<tr>
+			<th><?php echo $curgroup.' Rock locations'; ?></th>
+		</tr>
 <?php
+			$lastgroup = $curgroup;
 		}
 ?>
-					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+		<tr>
+			<td><?php echo GetMapname($row['map']); ?></td>
+		</tr>
 <?php
 	}
 ?>
-				</div>
-<?php
-}
-?>
-<!-- so many </div> fml -->
-			</div>
-		</div>
-	</div>
-	
+	</table>
+
 </div>
 
 <script>
@@ -786,8 +928,7 @@ SELECT
 FROM
 	sp_data
 WHERE
-	character_id = ".$internal_id."
-	");
+	character_id = ".$internal_id);
 	
 	$spdata = array();
 	while ($row = $q->fetch_assoc()) {
@@ -805,7 +946,7 @@ WHERE
 	character_id = ".$internal_id."
 ORDER BY
 	skillid / 1000 ASC
-	");
+");
 	
 	// $BlessingOfTheFairy = "A spirit with the power of #c%s# strengthens the character. Increases by one level every time #c%s# goes up 10 levels. With the Empress's Blessing, the higher increase is applied.";
 	
@@ -828,7 +969,7 @@ ORDER BY
 			$first_skill = true;
 			if ($lastgroup != -1) {
 ?>
-	</div>
+			</div>
 <?php
 			}
 			$lastgroup = $block;
@@ -848,12 +989,12 @@ ORDER BY
 			
 			
 ?>
-	<div id="bookname_<?php echo $i; ?>" class="skill_bookname" style="display: none;">
-		<img class="book_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/info.icon.png" />
-		<div class="book_title"><?php echo $book; ?></div>
-	</div>
-	<span id="skillsp_<?php echo $i; ?>" class="skill_sp" style="display: none;"><?php echo $sp; ?></span>
-	<div id="skilllist_<?php echo $i; ?>" class="skill_job scrollable" style="display: none;">
+			<div id="bookname_<?php echo $i; ?>" class="skill_bookname" style="display: none;">
+				<img class="book_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/info.icon.png" />
+				<div class="book_title"><?php echo $book; ?></div>
+			</div>
+			<span id="skillsp_<?php echo $i; ?>" class="skill_sp" style="display: none;"><?php echo $sp; ?></span>
+			<div id="skilllist_<?php echo $i; ?>" class="skill_job scrollable" style="display: none;">
 <?php
 		}
 		
@@ -878,29 +1019,62 @@ ORDER BY
 		// GetSystemTimeFromFileTime($row['expires']);
 		if (!$first_skill) {
 ?>
-		<div class="skill_line"></div>
+				<div class="skill_line"></div>
 <?php
 		}
 		$first_skill = false;
 ?>
-		<div class="skill">
-			<img class="skill_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" />
-			<span class="skill_title"><?php echo $name; ?></span>
-			<span class="skill_level"><?php echo $row['level'].($row['maxlevel'] == '-' ? '' : ' / '.$row['maxlevel']).$extra; ?></span>
-		</div>
+				<div class="skill">
+					<img class="skill_icon" src="//static_images.mapler.me/Skills/<?php echo $block; ?>/<?php echo $row['skillid']; ?>/icon.png" />
+					<span class="skill_title"><?php echo $name; ?></span>
+					<span class="skill_level"><?php echo $row['level'].($row['maxlevel'] == '-' ? '' : ' / '.$row['maxlevel']).$extra; ?></span>
+				</div>
 
 <?php
 	}
 ?>
-	</div>
-	<select onchange="ChangeSkillList(this.value)" class="skilllist_selector">
+			</div>
+			<select onchange="ChangeSkillList(this.value)" class="skilllist_selector">
 <?php foreach ($groups as $id => $name): ?>
-		<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+				<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
 <?php endforeach; ?>
-	</select>
-</div>
+			</select>
+		</div>
 
+	
+	
+	<hr />
+	<p class="lead"><?php echo $character_info['name']; ?>'s Familiars</p>
+	<table cellspacing="10" cellpadding="6">
+<?php
+// Familiars
+	$q = $__database->query("
+SELECT
+	IF(f.name = '', (
+		SELECT `value` FROM strings WHERE objectid = fi.mob_id AND objecttype = 'mob' AND `key` = 'name'
+		), f.name) AS `name`,
+	fi.familiar_id
+FROM
+	familiars f
+LEFT JOIN
+	phpVana_familiar_info fi
+	ON
+		fi.familiar_id = f.mobid
+WHERE
+	f.character_id = ".$internal_id);
+	
+	while ($row = $q->fetch_row()) {
+?>
+			<tr>
+				<td align="center"><img src="<?php echo GetItemDataLocation('//static_images.mapler.me/', $row[1]).'stand.0.png'; ?>" title="<?php echo $row[0]; ?>" /></td>
+				<td><?php echo $row[0]; ?></td>
+			</tr>
+<?php
+	}
+?>
+		</table>
 	</div>
+	
 </div>
 
 <?php

@@ -6,7 +6,7 @@
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
 #define MyAppExeName "MaplerUpdater.exe"
-#define DebugBuild True
+#define DebugBuild False
 
 #define WinPcapInstallerName "WinPcap_4_1_3.exe"
 

@@ -25,7 +25,8 @@ hr {
 	border-top: 1px solid #eee;
 	border-bottom: 1px solid #CCC;
 	width: 95%;
-	margin-bottom:15px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 	clear: both;
 }
 
@@ -56,12 +57,17 @@ hr {
 }
 
 .character_equips > div > img,
-.character_pets_holder > div > img {
+.character_pets_holder > div > img,
+.character_totems  > img,
+.character_droid  > img,
+.job-specific-inventory > div > img {
 	position: absolute;
 }
 
+/* Potential boxes */
 .character_equips > div > div,
-.character_pets_holder > div > div {
+.character_pets_holder > div > div,
+.character_totems > div {
     height: 31px;
     width: 31px;
 }
@@ -236,6 +242,33 @@ hr {
 .character_pets .slot57 { top: 55px; left: 109px; margin-bottom: 0px; }
 
 
+.character_totems .slot0 { top: 25px; left: 76px; margin-bottom: 0px; }
+.character_totems .slot1 { top: 25px; left: 42px; margin-bottom: 0px; }
+.character_totems .slot2 { top: 25px; left: 10px; margin-bottom: 0px; }
+
+
+.job-specific-inventory .coordinate .slot0 { top: 28px; left: 42px; margin-bottom: 0px; } /* Hat */
+.job-specific-inventory .coordinate .slot1 { top: 93px; left: 109px; margin-bottom: 0px; } /* Mantle */
+
+.job-specific-inventory .mechanic .slot0 { top: 87px; left: 45px; margin-bottom: 0px; } /* Engine */
+.job-specific-inventory .mechanic .slot1 { top: 120px; left: 12px; margin-bottom: 0px; } /* Arm */
+.job-specific-inventory .mechanic .slot2 { top: 120px; left: 45px; margin-bottom: 0px; } /* Leg */
+.job-specific-inventory .mechanic .slot3 { top: 87px; left: 76px; margin-bottom: 0px; } /* Frame */
+.job-specific-inventory .mechanic .slot4 { top: 54px; left: 45px; margin-bottom: 0px; } /* Transistor */
+
+.job-specific-inventory .evan .slot0 { top: 54px; left: 10px; margin-bottom: 0px; } /* Cap */
+.job-specific-inventory .evan .slot1 { top: 88px; left: 43px; margin-bottom: 0px; } /* Pendant */
+.job-specific-inventory .evan .slot2 { top: 54px; left: 75px; margin-bottom: 0px; } /* Wings */
+.job-specific-inventory .evan .slot3 { top: 88px; left: 108px; margin-bottom: 0px; } /* Tail */
+
+
+.character_droid .slot0 { top: 27px; left: 45px; margin-bottom: 0px; } /* Cap */
+.character_droid .slot1 { top: 93px; left: 110px; margin-bottom: 0px; } /* Mantle */
+.character_droid .slot2 { top: 61px; left: 77px; margin-bottom: 0px; } /* Face */
+.character_droid .slot3 { top: 93px; left: 45px; margin-bottom: 0px; } /* Clothes */
+.character_droid .slot4 { top: 127px; left: 45px; margin-bottom: 0px; } /* Pants */
+.character_droid .slot5 { top: 127px; left: 77px; margin-bottom: 0px; } /* Shoes */
+.character_droid .slot6 { top: 93px; left: 77px; margin-bottom: 0px; } /* Gloves */
 
 .inventory {
 	position: relative;

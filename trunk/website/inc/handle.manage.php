@@ -15,7 +15,11 @@ if (!file_exists($page)) {
 	die();
 }
 
-require_once __DIR__.'/templates/header.template.php';
+if (isset($_GET['ajax'])) {
+	require_once $page;
+}
+else {
+	require_once __DIR__.'/templates/header.template.php';
 ?>
 		<div class="row">
 			<div class="span3">
@@ -29,5 +33,6 @@ require_once __DIR__.'/templates/header.template.php';
 			</div>
 		</div>
 <?php 
-require_once __DIR__.'/footer.php';
+	require_once __DIR__.'/footer.php';
+}
 ?>

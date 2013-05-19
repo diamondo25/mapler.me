@@ -73,7 +73,7 @@ namespace MPLRServer
             public long RingCashID1 { get; private set; }
             public long RingCashID2 { get; private set; }
 
-            public Ring(Ring.Type pType, MaplePacket pPacket)
+            public Ring(Ring.Type pType, MaplePacket pPacket, string pOwnName = null)
             {
                 RingType = pType;
                 if (pType == Type.Marriage)
@@ -88,10 +88,20 @@ namespace MPLRServer
                     string characterName = pPacket.ReadString(13);
                     string partnerName = pPacket.ReadString(13);
 
-                    FriendID = partnerID;
-                    FriendName = partnerName;
-                    RingCashID1 = characterItemID;
-                    RingCashID2 = partnerItemID;
+                    if (pOwnName != FriendName)
+                    {
+                        FriendID = partnerID;
+                        FriendName = partnerName;
+                        RingCashID1 = characterItemID;
+                        RingCashID2 = partnerItemID;
+                    }
+                    else
+                    {
+                        FriendID = characterID;
+                        FriendName = characterName;
+                        RingCashID1 = partnerItemID;
+                        RingCashID2 = characterItemID;
+                    }
                 }
                 else
                 {
@@ -263,7 +273,7 @@ namespace MPLRServer
                 // Marriage
                 for (int i = pPacket.ReadShort(); i > 0; i--)
                 {
-                    Ring ring = new Ring(Ring.Type.Marriage, pPacket);
+                    Ring ring = new Ring(Ring.Type.Marriage, pPacket, Stats.Name);
                     Rings.Add(ring);
 
                     MarriedWith = ring.FriendName;
@@ -284,27 +294,29 @@ namespace MPLRServer
                 pPacket.ReadShort();
             }
 
-            // Newyear cards... meh
-            pPacket.ReadShort();
-            /*
-             	StartNode("Cards");
-		        for (i = 0; i < tmp; i++) {
-			        StartNode("Card " + i);
-			        AddInt("?");
-			        AddInt("?");
-			        AddString("?");
-			        AddByte("?");
-			        AddLong("?");
-			        AddInt("?");
-			        AddString("?");
-			        AddByte("?");
-			        AddByte("?");
-			        AddLong("?");
-			        AddString("?");
-			        EndNode(false);
-		        }
-		        EndNode(false);
-             */
+            {
+                // Newyear cards... meh
+                pPacket.ReadShort();
+                /*
+                    StartNode("Cards");
+                    for (i = 0; i < tmp; i++) {
+                        StartNode("Card " + i);
+                        AddInt("?");
+                        AddInt("?");
+                        AddString("?");
+                        AddByte("?");
+                        AddLong("?");
+                        AddInt("?");
+                        AddString("?");
+                        AddByte("?");
+                        AddByte("?");
+                        AddLong("?");
+                        AddString("?");
+                        EndNode(false);
+                    }
+                    EndNode(false);
+                 */
+            }
 
             Quests.DecodePQ(pConnection, pPacket);
 
