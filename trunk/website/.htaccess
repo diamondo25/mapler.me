@@ -34,6 +34,9 @@
 	# Info Syncing
 	RewriteRule ^ajax/sync/$ /actions/ajax/polling.php?type=info
 	
+	# Character options
+	RewriteRule ^api/character/visibility$ /actions/ajax/character.php?type=visibility [QSA]
+	
 	# image / ranking rewrites
 	
 	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]

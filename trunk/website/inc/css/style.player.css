@@ -30,6 +30,19 @@ hr {
 	clear: both;
 }
 
+.visibility-toggler {
+	width: 10px;
+	height: 10px;
+	background-color: green;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+}
+
+.hidden-obj {
+	background-color: red;
+}
+
 .side {
 	font-weight: 200;
 	letter-spacing: normal;

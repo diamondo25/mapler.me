@@ -77,10 +77,50 @@ else {
 	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
 	$stat_addition = GetCorrectStat($internal_id);
+	$__is_viewing_self = $friend_status == 'FOREVER_ALONE';
 	
 	$channelid = $character_info['channel_id'];
 	if ($channelid == -1) $channelid = 'Unknown';
 	else $channelid++; // 1 = 0
+	
+	$__hidden_objects = array();
+	
+	function IsHiddenObject($optionName) {
+		global $__database, $internal_id, $__hidden_objects;
+		if (isset($__hidden_objects[$optionName]))
+			return $__hidden_objects[$optionName];
+		$q = $__database->query("
+SELECT
+	option_value
+FROM
+	character_options
+WHERE
+	character_id = ".$internal_id."
+	AND
+	option_key = 'display_".$__database->real_escape_string($optionName)."'
+");
+
+		if ($q->num_rows == 0) {
+			$__hidden_objects[$optionName] = false;
+			return false;
+		}
+		else {
+			$row = $q->fetch_row();
+			$q->free();
+			$__hidden_objects[$optionName] = ($row[0] == 1);
+			return $__hidden_objects[$optionName];
+		}
+	}
+	
+	function MakeHideToggleButton($optionName) {
+		global $character_info, $__is_viewing_self, $__hidden_objects;
+		if (!$__is_viewing_self) return;
+		
+		$hidden = IsHiddenObject($optionName);
+?>
+		<div class="visibility-toggler <?php echo ($hidden ? 'hidden-obj' : ''); ?>" style="display: none;" name="<?php echo $character_info['name']; ?>" option="<?php echo $optionName; ?>"></div>
+<?php
+	}
 	
 	
 	// Some quick count queries
@@ -105,6 +145,9 @@ SELECT
 
 <div class="row">
 	<div class="span3" style="text-align:center;">
+<?php if ($__is_viewing_self): ?>
+		<button class="btn" onclick="ToggleTogglers()">Display/hide visibility modifiers</button>
+<?php endif; ?>
 		<img src="//mapler.me/ignavatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
@@ -118,7 +161,10 @@ SELECT
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
 <?php if (isset($character_info['married_with']) && $character_info['married_with'] != $character_info['name']): ?>
+<?php if ($__is_viewing_self || !IsHiddenObject('marriage')): ?>
+<?php MakeHideToggleButton('marriage'); ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Married with <a href="//<?php echo $domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
+<?php endif; ?>
 <?php endif; ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
 		<hr />
@@ -593,6 +639,8 @@ function AddInventoryItems(&$inventory) {
 ?>
 
 <div class="row char-inventories">
+<?php if ($__is_viewing_self || !IsHiddenObject('equip_general')): ?>
+<?php MakeHideToggleButton('equip_general'); ?>
 	<div style="width: 184px;">
 		<div class="character_equips">
 			<div id="normal_equips">
@@ -644,17 +692,32 @@ foreach ($cashequips as $slot => $item) {
 			</div>
 		</div>
 	</div>
-
+<?php endif; /* Hidden/not hidden check */ ?>
 	
+<?php if ($__is_viewing_self || !(IsHiddenObject('equip_droid_totem') && IsHiddenObject('equip_droid_totem'))): ?>
+<?php 	MakeHideToggleButton('equip_droid_totem'); ?>
 	<div class="char-totems-droid">
-		<div class="character_droid">
-<?php AddInventoryItems($normalequips['Android']); ?>
-		</div>
-		<div class="character_totems">
-<?php AddInventoryItems($normalequips['Totem']); ?>
-		</div>
-	</div>
 
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
+<?php 		MakeHideToggleButton('equip_droid'); ?>
+		<div class="character_droid">
+<?php 		AddInventoryItems($normalequips['Android']); ?>
+		</div>
+<?php 	endif; ?>
+
+
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_totems')): ?>
+<?php 		MakeHideToggleButton('equip_totems'); ?>
+		<div class="character_totems">
+<?php 		AddInventoryItems($normalequips['Totem']); ?>
+		</div>
+<?php 	endif; ?>
+	</div>
+<?php endif; ?>
+
+
+<?php if ($__is_viewing_self || !IsHiddenObject('job_equipment')): ?>
+<?php 	MakeHideToggleButton('job_equipment'); ?>
 	<div class="job-specific-inventory">
 <?php
 $job_css_class = '';
@@ -674,7 +737,10 @@ if ($job_css_class != '') {
 }
 ?>
 	</div>
+<?php endif; ?>
 
+<?php if ($__is_viewing_self || !IsHiddenObject('pets')): ?>
+<?php 	MakeHideToggleButton('pets'); ?>
 	<div style="width: 151px;">
 		<div class="character_pets">
 			<div class="character_pets_holder">
@@ -714,9 +780,12 @@ for ($i = 0; $i < 3; $i++) {
 			</div>
 		</div>
 	</div>
+<?php endif; ?>
 
 	<hr />
 
+<?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
+<?php 	MakeHideToggleButton('inventories'); ?>
 	<div class="span4" id="inventories">
 		<select onchange="ChangeInventory(this.value)">
 			<option value="1">Equipment</option>
@@ -779,8 +848,11 @@ for ($inv = 0; $inv < 5; $inv++) {
 		<span id="mesos"><?php echo number_format($character_info['mesos']); ?></span>
 
 	</div>
+<?php endif; ?>
 	
-	
+
+<?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
+<?php 	MakeHideToggleButton('teleport_rocks'); ?>
 	<table class="span4" cellpadding="5">
 <?php
 	$q = $__database->query("
@@ -827,6 +899,7 @@ WHERE
 	}
 ?>
 	</table>
+<?php endif; ?>
 
 </div>
 

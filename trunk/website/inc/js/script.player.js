@@ -338,4 +338,27 @@ $(document).ready(function () {
 	ChangeSkillList(1);
 	ChangePet(0);
 	ShowCashEquips(false);
+	
+	
+	$('.visibility-toggler').click(function (e) {
+		var clickedObj = $(this);
+		var name = clickedObj.attr('name');
+		var option = clickedObj.attr('option');
+		var ishidden = clickedObj.hasClass('hidden-obj');
+		$.ajax({
+			url: '/api/character/visibility',
+			type: 'GET',
+			data: {name: name, what: option, shown: !ishidden},
+			success: function (data) {
+				clickedObj.toggleClass('hidden-obj');
+			}
+		});
+	});
 });
+
+
+function ToggleTogglers() {
+	$('.visibility-toggler').each(function (elem) { 
+		$(this).toggle();
+	});
+}
