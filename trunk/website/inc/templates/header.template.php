@@ -197,7 +197,7 @@ endif;
 		$main_char = 'avatar/'.$main_char;
 ?>
 							<li class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>">
-								<a href="#" data-toggle="collapse" data-target="#post" style="z-index: 999;" id="post-toggle-button"><i class="icon-plus"></i>Post</a>
+								<a href="#" data-toggle="collapse" data-target="#post" style="z-index: 999;" id="post-toggle-button"><i class="icon-plus"></i></a>
 							</li>
 
 <?php

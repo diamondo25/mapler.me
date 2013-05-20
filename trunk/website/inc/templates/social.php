@@ -129,13 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 <div id="post" class="collapse poster" data-spy="affix" data-offset-top="10">
 	<form id="statusposter" method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
-		<h3 id="myModalLabel">Post a status?</h3>
 		<textarea name="content" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
 		<input type="hidden" name="reply-to" value="-1" />
-		<button type="submit" class="btn btn-large">Post!</button>
-		<button type="button" class="btn btn-large btn-warn" onclick="$('#post-toggle-button').click();">Close</button>
+		<button type="submit" class="btn">Post!</button>
+		<button type="button" class="btn" onclick="$('#post-toggle-button').click();">Close</button>
 <?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR):?>
-		Is this a blog post? <input type="checkbox" name="blog" value="Yes" />
+		Blog post? <input type="checkbox" name="blog" value="Yes" />
 <?php endif; ?>
 	</form>
 </div>
