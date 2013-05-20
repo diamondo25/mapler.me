@@ -11,8 +11,6 @@ if ($request_type == 'info') {
 	$res['notifications'] = $_loggedin ? (int)GetNotification() : 0;
 	
 	$notifications = GetNotification();
-	if ($notifications > 0)
-		$title = '('.$notifications.') '.$title;
 
 	if ($_loggedin)
 		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());

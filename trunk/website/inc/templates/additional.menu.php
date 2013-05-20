@@ -29,6 +29,7 @@ elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
 				<?php BuildURL('Statistics', '/manage/statistics/'); ?>
 				<?php BuildURL('Server Log', '/manage/serverlog/'); ?>
+				<?php BuildURL('Search-a-String', '/manage/searchstring/'); ?>
 <?php
 }
 ?>

@@ -127,8 +127,10 @@ $(document).ready(function() {
 					newTitle = newTitle.substr(newTitle.indexOf(') ') + 2);
 				}
 				
-				if (e.notifications > 0)
+				if (e.notifications > 0) {
 					newTitle = '(' + e.notifications + ') ' + newTitle;
+					$('#notify span').get(0).firstChild.nodeValue = e.notifications;
+				}
 
 				window.document.title = newTitle;
 				
