@@ -17,6 +17,24 @@ else {
 	ini_set('display_errors', 1);
 }
 
+// Create blank template
+$im = imagecreatetruecolor($image_width, $image_height);
+imagesavealpha($im, true);
+$trans = imagecolorallocatealpha($im, 0, 0, 0, 127);
+imagefill($im, 0, 0, $trans);
+
+
+$main_dir = '/var/www/maplestory_images/';
+if (!is_dir($main_dir)) {
+	$main_dir = 'P:/Result/';
+	if (!is_dir($main_dir)) {
+		// your call
+	}
+}
+
+$characterwz = $main_dir.'Character';
+$guild_info_location = $main_dir.'GuildEmblem';
+
 $guildname = $_GET['guild'];
 $worldname = $_GET['world'];
 
