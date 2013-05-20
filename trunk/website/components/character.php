@@ -163,7 +163,7 @@ SELECT
 <?php if (isset($character_info['married_with']) && $character_info['married_with'] != $character_info['name']): ?>
 <?php if ($__is_viewing_self || !IsHiddenObject('marriage')): ?>
 <?php MakeHideToggleButton('marriage'); ?>
-		<p class="side"><i class="icon-eye-open faded"></i> Married with <a href="//<?php echo $domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
+		<p class="side"><i class="icon-heart faded"></i> Married to <a href="//<?php echo $domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
 <?php endif; ?>
 <?php endif; ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
