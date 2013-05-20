@@ -1,4 +1,22 @@
 <?php
+
+require_once __DIR__.'/../inc/classes/database.php';
+require_once __DIR__.'/../inc/functions.datastorage.php';
+require_once __DIR__.'/caching.php';
+
+$font = "arial.ttf";
+$font_size = "9.25";
+
+if (!isset($_GET['debug'])) {
+	error_reporting(0);
+	ini_set('display_errors', 0);
+	header('Content-Type: image/png');
+}
+else {
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
+
 $guildname = $_GET['guild'];
 $worldname = $_GET['world'];
 
@@ -17,7 +35,25 @@ function RenderName($name, $x, $y) {
 	$endWidth = $x + calculateWidth($name)/2;
 	DrawNameBox($im, $startWidth, $y - 17, $endWidth - 1, $y - 2, $background);
 	ImageTTFText($im, $font_size, 0, $startWidth + 3, $y - 5, $fontcolor, $font, $name);
-	$q = $__database->query("SELECT g.name, g.emblem_bg, g.emblem_bg_color, g.emblem_fg, g.emblem_fg_color FROM guild_members c world_data INNER JOIN guilds g ON g.id = c.guild_id WHERE g.name = ".$guildname." AND world_data.world_name ".$worldname."");
+	$q = $__database->query("
+SELECT
+	world_data.world_name,
+	guilds.*,
+	guilds.name,
+	guilds.emblem_bg,
+	guilds.emblem_bg_color,
+	guilds.emblem_fg,
+	guilds.emblem_fg_color
+FROM
+	`guilds`
+LEFT JOIN 
+	`world_data`
+	ON
+		world_data.world_id = guilds.world_id
+WHERE
+	guilds.name = '".$__database->real_escape_string($guildname)."'
+AND
+	world_data.world_name = '".$__database->real_escape_string($worldname)."'");
 	
 	if ($q->num_rows == 1) {
 		$res = $q->fetch_array();

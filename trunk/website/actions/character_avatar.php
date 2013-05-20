@@ -31,8 +31,8 @@ if ($len < 4 || $len > 12) {
 	imagefilledrectangle ($im, 0, 0, $image_width, $image_height, $bgc);
 
 	/* Output an error message */
-	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
-	imagestring ($im, 1, 5, 20, 'Incorrect Charname', $tc);
+	imagestring ($im, 1, 5, 5, 'Error:', $tc);
+	imagestring ($im, 1, 5, 20, 'Incorrect Character', $tc);
 	imagepng($im);
 	imagedestroy($im);
 	die();
@@ -47,7 +47,7 @@ if ($q->num_rows == 0) {
 	imagefilledrectangle ($im, 0, 0, $image_width, $image_height, $bgc);
 
 	/* Output an error message */
-	imagestring ($im, 1, 5, 5, 'I AM ERROR', $tc);
+	imagestring ($im, 1, 5, 5, 'Error:', $tc);
 	imagestring ($im, 1, 5, 20, "Not found.", $tc);
 	imagepng($im);
 	imagedestroy($im);
