@@ -208,8 +208,8 @@ endif;
 <?php
 if ($_loggedin):
 ?>
-								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
-									<div id="user-dropdown" class="info" style="width:200px;height:80px;overflow:hidden;">
+								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;overflow:hidden;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
+									<div id="user-dropdown" class="info" style="width:200px;height:80px;">
 										<img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
 										<div style="position:relative;right:50px;top:15px;">
 											<p style="text-transform:lowercase;margin-bottom:-25px !important;overflow:hidden;text-overflow:ellipsis;"><?php echo $_loginaccount->GetUsername(); ?></p>
