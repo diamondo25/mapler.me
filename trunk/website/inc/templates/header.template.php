@@ -59,6 +59,7 @@ function _AddHeaderLink($what, $filename) {
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 <?php
 _AddHeaderLink('css', 'style');
+_AddHeaderLink('css', 'animate');
 _AddHeaderLink('css', 'font-awesome.min');
 if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
 	strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
@@ -114,7 +115,7 @@ _AddHeaderLink('js', 'maplerme');
 <body>
 	<div class="top-nav">
 		<div class="navbar moar-navbar">
-			<div class="navbar-inner moar-inner-navbar">
+			<div class="navbar-inner moar-inner-navbar animated fadeInDownBig">
 				<div class="container">
 				<?php if ($_loggedin) { ?>
 					<ul class="nav pull-left universal">
@@ -144,7 +145,7 @@ _AddHeaderLink('js', 'maplerme');
 		</div>
 
 
-		<div class="navbar main-navbar">
+		<div class="navbar main-navbar animated fadeInDownBig">
 			<div class="navbar-inner">
 				<div class="container">
 					<div class="nav-collapse">
@@ -208,7 +209,7 @@ endif;
 if ($_loggedin):
 ?>
 								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
-									<div id="user-dropdown" class="info" style="width:200px;height:80px;">
+									<div id="user-dropdown" class="info" style="width:200px;height:80px;overflow:hidden;">
 										<img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
 										<div style="position:relative;right:50px;top:15px;">
 											<p style="text-transform:lowercase;margin-bottom:-25px !important;overflow:hidden;text-overflow:ellipsis;"><?php echo $_loginaccount->GetUsername(); ?></p>
