@@ -115,7 +115,7 @@ _AddHeaderLink('js', 'maplerme');
 <body>
 	<div class="top-nav">
 		<div class="navbar moar-navbar">
-			<div class="navbar-inner moar-inner-navbar animated fadeInDownBig">
+			<div class="navbar-inner moar-inner-navbar">
 				<div class="container">
 				<?php if ($_loggedin) { ?>
 					<ul class="nav pull-left universal">
@@ -145,7 +145,7 @@ _AddHeaderLink('js', 'maplerme');
 		</div>
 
 
-		<div class="navbar main-navbar animated fadeInDownBig">
+		<div class="navbar main-navbar">
 			<div class="navbar-inner">
 				<div class="container">
 					<div class="nav-collapse">
