@@ -99,9 +99,9 @@ html { overflow-x: hidden; }
 	background: #FFF;
 	-webkit-border-radius: 4px;
 	border-radius: 4px !important;
-	-webkit-transition: all .4s ease-in-out;
-	-moz-transition: all .4s ease-in-out;
-	transition: all .4s ease-in-out;
+	-webkit-transition: all .7s ease-in-out;
+	-moz-transition: all .7s ease-in-out;
+	transition: all .7s ease-in-out;
 	margin-right:20px;
 	border: 1px solid rgba(0,0,0,0.2);
 }
@@ -370,9 +370,17 @@ html { overflow-x: hidden; }
     .hidden-tablet {
     	display: none !important;
     }
+    .searchbar {
+	max-width: 125px;
+	}
 }
 
 @media (max-width: 767px) {
+
+	.searchbar {
+	max-width: 125px;
+	}
+	
 	.hidden-desktop {
     	display: inherit !important;
     }

@@ -116,7 +116,7 @@ _AddHeaderLink('js', 'maplerme');
 <body>
 
 <header>
-    <div class="sticky-nav stuck">
+    <div class="sticky-nav stuck span12">
         <nav id="rightmenu">
         	<ul id="menu-rightnav">
         	<li class="dropdown">
