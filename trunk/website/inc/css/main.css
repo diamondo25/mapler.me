@@ -10,10 +10,23 @@ header {
 header .sticky-nav {
 	position: relative;
 	height: 60px;
-	background: #FFFFFF;
 	z-index: 1001;
 	margin:0 auto;
 	
+	border-bottom: 1px solid #fafafa;
+	background: #f6f6f6;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top, #f6f6f6 0%, #eaeaea 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f6f6f6), color-stop(100%,#eaeaea));
+	background: -webkit-linear-gradient(top, #f6f6f6 0%,#eaeaea 100%);
+	background: -o-linear-gradient(top, #f6f6f6 0%,#eaeaea 100%);
+	background: -ms-linear-gradient(top, #f6f6f6 0%,#eaeaea 100%);
+	background: linear-gradient(to bottom, #f6f6f6 0%,#eaeaea 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f6f6', endColorstr='#eaeaea',GradientType=0 );
+	-webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
+	-moz-box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
+	box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
+	margin-bottom: 80px;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;

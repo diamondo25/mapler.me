@@ -90,24 +90,26 @@ html { overflow-x: hidden; }
 }
 
 .searchbar {
-	display: block;
-	width: 60px;
+	width: 130px;
 	height: 14px;
-	margin-top:15px;
-	padding: 6px 27px 6px 12px;
-	color: #666;
-	background: #FFF;
-	-webkit-border-radius: 4px;
-	border-radius: 4px !important;
-	-webkit-transition: all .7s ease-in-out;
-	-moz-transition: all .7s ease-in-out;
-	transition: all .7s ease-in-out;
-	margin-right:20px;
-	border: 1px solid rgba(0,0,0,0.2);
+	display: block;
+	padding: 8px 15px;
+	clear: both;
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 18px !important;
+	color: #938d83;
+	overflow: hidden;
+	border: 0;
 }
 
-.searchbar:focus {
-	width: 100%;
+.searchbar placeholder, ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
+font-weight: 300;
+font-size: 14px;
+line-height: 18px !important;
+color: #938d83;
+overflow: hidden;
+border: 0;
 }
 
 .hide {

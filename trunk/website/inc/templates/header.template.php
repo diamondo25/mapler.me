@@ -88,29 +88,7 @@ _AddHeaderLink('js', 'maplerme');
 
 	<script type="text/javascript">
 	$('.in').affix();
-	$('.navbar').affix();
 	</script>
-
-	<style>
-	.moar-inner-navbar {
-		background: #3487cb !important;
-		border-bottom: 1px solid #133783 !important;
-		position: relative !important;
-		height:40px !important;
-		padding-left: 20px !important;;
-		padding-right: 20px !important;
-		box-shadow: none !important;
-	}
-	
-	.moar-navbar {
-		margin-bottom: 0px ;
-	}
-	
-	.moar-navbar a{
-		color: #FFF;
-		margin: 5px;
-	}
-	</style>
 </head>
 
 <body>
@@ -144,6 +122,13 @@ else:
 									<li><a href="//<?php echo $domain; ?>/settings/friends/"><?php echo GetNotification(); ?> Notifications</a></li>
 									<li class="divider"></li>
 									<?php endif; ?>
+									        		<li> 
+	        		<form method="post" action="http://<?php echo $domain; ?>/search/" style="margin:0 !important;">
+		        		<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
+		        		<input type="hidden" name="type" value="player" />
+		        	</form>
+        		</li>
+									<li class="divider"></li>
 									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
@@ -223,17 +208,6 @@ endif;
 							</li>
 
         	</ul>
-        </nav>
-        
-        <nav id="rightmenu" class="hidemobile">
-        	<ul id="menu-rightnav">
-        		<li> 
-	        		<form method="post" action="http://<?php echo $domain; ?>/search/">
-		        		<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
-		        		<input type="hidden" name="type" value="player" />
-		        	</form>
-        		</li>
-			</ul>
         </nav>
         
         <nav id="menu">
