@@ -59,6 +59,7 @@ function _AddHeaderLink($what, $filename) {
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 <?php
 _AddHeaderLink('css', 'style');
+_AddHeaderLink('css', 'main');
 _AddHeaderLink('css', 'animate');
 _AddHeaderLink('css', 'font-awesome.min');
 if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
@@ -113,47 +114,18 @@ _AddHeaderLink('js', 'maplerme');
 </head>
 
 <body>
-	<div class="top-nav">
-		<div class="navbar moar-navbar">
-			<div class="navbar-inner moar-inner-navbar">
-				<div class="container">
-				<?php if ($_loggedin) { ?>
-					<ul class="nav pull-left universal">
-														
-								<a id="notify" href="//<?php echo $domain; ?>/settings/friends/">
-							<span><?php echo GetNotification(); ?> <i class="icon-bell-alt icon-white"></i> </span>
-						</a>
-					</ul>
-				<?php } ?>
-					<div class="nav-collapse">
-						<ul class="nav">
-							 <li>
-								<form method="post" style="margin: 0px;" class="span10" action="http://<?php echo $domain; ?>/search/">
-									<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
-									<input type="hidden" name="type" value="player" />
-								</form>
-							 </li>
-						</ul>
-					</div>
 
-					<ul class="nav pull-right universal">
-						<a href="http://twitter.com/maplerme"><i class="icon-twitter"></i></a>
-						<a href="http://facebook.com/maplerme"><i class="icon-facebook"></i></a>
-					</ul>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="navbar main-navbar">
-			<div class="navbar-inner">
-				<div class="container">
-					<div class="nav-collapse">
-						<ul class="nav">
-							 <li class="dropdown">
-								<a class="brand" data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#" style="border: none;"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="float:left;width:70px;"/></a>
-
-								<ul class="dropdown-menu" style="margin-left:5px;">
+<header>
+    <div class="sticky-nav stuck">
+        <nav id="rightmenu">
+        	<ul id="menu-rightnav">
+        	<li class="dropdown">
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
+        			<?php if ($_loggedin && GetNotification() != '0'): ?>
+        				(<?php echo GetNotification(); ?><i class="icon-bell-alt icon-white"></i>)
+        			<?php endif; ?>
+        		</a> 
+								<ul class="dropdown-menu" style="">
 <?php
 // Display subdomain pages related to the user
 if (isset($__url_useraccount)):
@@ -168,13 +140,16 @@ if (isset($__url_useraccount)):
 // Display normal pages if not a subdomain
 else:
 ?>
+									<?php if ($_loggedin && GetNotification() != '0'): ?>
+									<li><a href="//<?php echo $domain; ?>/settings/friends/"><?php echo GetNotification(); ?> Notifications</a></li>
+									<li class="divider"></li>
+									<?php endif; ?>
 									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
 <?php if ($_loggedin): ?>
 									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
-									<li><a href="//<?php echo $domain; ?>/todo/">To-do / Issues</a></li>
 <?php endif; ?>
 									<li class="divider"></li>
 									<li><a href="//status.mapler.me/">Server Status</a></li>
@@ -182,42 +157,22 @@ else:
 endif;
 ?>
 								</ul>
-								<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
-								<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
+								
 								</li>
-							</ul>
-						</div>
-						<!-- Login / Main Menu -->
-						<ul class="nav hidden-phone pull-right" style="height: 73px;">
-<?php
-	if ($_loggedin):
-	$main_char = $_loginaccount->GetMainCharacterName();
-	if ($main_char == null)
-		$main_char = 'inc/img/no-character.gif';
-	else
-		$main_char = 'avatar/'.$main_char;
-?>
-							<li class="<?php if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE): ?>hide-settings<?php endif; ?>">
-								<a href="#" data-toggle="collapse" data-target="#post" style="z-index: 999;" id="post-toggle-button"><i class="icon-plus"></i></a>
-							</li>
-
-<?php
-endif;
-?>				
-							<li class="dropdown">
+        	</ul>
+        </nav>
+        
+        <nav id="rightmenu">
+        	<ul id="menu-rightnav">
+        									<li class="dropdown">
 <?php
 if ($_loggedin):
 ?>
 								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;overflow:hidden;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
-									<div id="user-dropdown" class="info" style="width:200px;height:80px;">
-										<img src="//mapler.me/<?php echo $main_char; ?>" style="position:relative;bottom:9px;right:10px;">
-										<div style="position:relative;right:50px;top:15px;">
-											<p style="text-transform:lowercase;margin-bottom:-25px !important;overflow:hidden;text-overflow:ellipsis;"><?php echo $_loginaccount->GetUsername(); ?></p>
+											<span style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></span>
 											<!-- function needed that displays rank as text instead off number -->
-											<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
-										</div>
-									</div>
-									<i class="icon-chevron-down" style="position:relative;left:-2px;bottom:75px;"></i>		 
+											
+									<i class="icon-chevron-down"></i>		 
 
 								</a>
 								<ul class="dropdown-menu" style="margin-right: 9px;">
@@ -266,92 +221,62 @@ else:
 endif;
 ?>
 							</li>
-						</ul>
 
-						<ul class="nav mobile pull-right">
-
+        	</ul>
+        </nav>
+        
+        <nav id="rightmenu" class="hidemobile">
+        	<ul id="menu-rightnav">
+        		<li> 
+	        		<form method="post" action="http://<?php echo $domain; ?>/search/">
+		        		<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
+		        		<input type="hidden" name="type" value="player" />
+		        	</form>
+        		</li>
+			</ul>
+        </nav>
+        
+        <nav id="menu">
+        	<ul id="menu-nav">
+<?php
+	if ($_loggedin):
+	$main_char = $_loginaccount->GetMainCharacterName();
+	if ($main_char == null)
+		$main_char = 'inc/img/no-character.gif';
+	else
+		$main_char = 'avatar/'.$main_char;
+?>
 							<li>
-								<a href="#PostStatus" data-toggle="collapse" data-target="#post"><i class="icon-comment"></i></a>
+								<a href="#" data-toggle="collapse" data-target="#post" style="z-index: 999;" id="post-toggle-button"><i class="icon-plus"></i></a>
 							</li>
-
-							<li class="menu dropdown">
-								<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><i class="icon-chevron-down"></i></a>
-
-								<ul class="dropdown-menu">
-<?php
-if ($_loggedin):
-							$main_char = $_loginaccount->GetMainCharacterName();
-							if ($main_char == null)
-								$main_char = 'inc/img/no-character.gif';
-							else
-								$main_char = 'avatar/'.$main_char;
-?>
-									<li id="user-dropdown">
-										<a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">
-											<img src="//mapler.me/<?php echo $main_char; ?>" width="40" height="40">
-										<div class="info">
-											<p style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></p>
-											<!-- function needed that displays rank as text instead off number -->
-											<span class="ct-label"><?php echo GetRankTitle($rank); ?></span>
-										</div>
-										</a>
-									</li>
-									<li class="divider"></li>
-									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
-									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
-									<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
-
-<?php
-if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
-?>
-									<li class="divider"></li>
-									<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/general/">Manage</a></li>
-<?php
-endif;
-?>
-									<li class="divider"></li>
-									<li><a href="//<?php echo $domain; ?>/logoff">Sign Out</a></li>
-								</ul>
-<?php
-else:
-?>
-								<ul class="dropdown-menu">
-									<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
-										<div class="control-group">
-											<div class="controls">
-												<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
-											</div>
-										</div>
-										<div class="control-group">
-											<div class="controls">
-												<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
-											</div>
-										</div>
-										<div class="control-group">
-											<div class="controls">
-												<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
-												<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
-											</div>
-										</div>
-									</form>
 
 <?php
 endif;
-?>
+?>				
+            </ul>
+        </nav>
+        <?php
+        	if ($_loggedin):
+        ?>
+        <nav id="menu" class="hidemobile">
+        	<ul id="menu-nav">
+        		<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
+        		<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
+			</ul>
+        </nav>
+        <?php
+        	endif;
+        ?>
+        
+    </div>
+</header>
 
-								</ul>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	
+
+		
 	<div class="left-bg"></div>
 	<div class="right-bg"></div>
 
-	<div class="container main" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 160px">
+	<div class="container main" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 90px">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
