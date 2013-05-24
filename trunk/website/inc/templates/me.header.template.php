@@ -186,11 +186,6 @@ endif;
 		
 		<br />
 		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br />
-			<small class="name_extra" style="margin-top:10px;">	
-			<?php if ($__url_useraccount->GetBio() != null): ?>
-				<?php echo $__url_useraccount->GetBio(); ?>
-			<?php endif; ?>
-			</small>
 		</p>
 		<p class="rank"><?php echo GetRankTitle($rank); ?></p>
 		<hr/>

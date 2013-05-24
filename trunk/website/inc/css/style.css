@@ -112,18 +112,6 @@ overflow: hidden;
 border: 0;
 }
 
-.hide {
-  display: none;
-}
-
-.show {
-  display: block;
-}
-
-.hide-settings {
-	display: none;
-}
-
 .brand:hover {
 	background: transparent !important;
 }
@@ -167,8 +155,6 @@ border: 0;
 	z-index: 9000;
 	color:#333;
 }
-
-#notify .notification-badge.zero{ display:none; }
 
 /* Profiles + Specific Pages */
 
@@ -258,6 +244,9 @@ border: 0;
 
 .noclear {
 	clear: none !important;	
+}
+.nomargin {
+	margin: 0 !important;
 }
 
 .status .header {
@@ -483,41 +472,6 @@ footer {
 .label {
 	font-weight: 200;
 	letter-spacing: 1px;
-}
-
-.navbar .nav {
-	position: relative;
-	left: 0;
-	display: block;
-	float: left;
-	margin: 12px 10px 0 0;
-}
-
-.navbar-inner {
-	background: rgba(255,255,255,1) !important;
-	box-shadow: 1px 4px 10px rgba(0,0,0,0.2);
-	height: 85px;
-	padding-left:20px;
-	padding-right:20px;
-}
-
-.navbar .nav > li > a {
-	float: left !important;
-	text-align: center;
-	padding: 5px 8px 5px !important;
-	display: inline-block;
-	line-height: 70px !important;
-	color: #f7921e;
-	text-decoration: none;
-	text-shadow: 1px 1px 1px #FFF !important;
-	margin-right: 0px !important;
-	font-size: 20px;
-	font-weight: 100;
-	border-left: 1px solid rgba(0,0,0,0.2);
-	height: 76px;
-	position: relative;
-	bottom: 13px;
-	padding-left:20px;
 }
 
 .active {
