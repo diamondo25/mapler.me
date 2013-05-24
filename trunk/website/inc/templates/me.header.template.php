@@ -229,13 +229,21 @@ if ($_loggedin && !$is_self) {
 	}
 }
 
-if (count($cache) > 0) {
+if (count($cachez) > 0):
 ?>
 		<p class="side"><i class="icon-comment faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/" style="color:gray;"><?php echo count($cachez); ?> Statuses</a></p>
+<?php
+endif;
+if (count($cache) > 0):
+?>
 		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters" style="color:gray;"><?php echo count($cache); ?> Characters</a></p>
+<?php
+endif;
+if (count($cachey) > 0):
+?>
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/friends" style="color:gray;"><?php echo count($cachey); ?> Friends</a></p>
 <?php
-}
+endif;
 ?>
 	</div>
 <?php
