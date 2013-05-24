@@ -41,40 +41,11 @@ $x->free();
 
 $y = $__database->query("
 SELECT
-	a.*
+	*
 FROM
-(
-	(
-		SELECT
-			friend.account_id AS `account_id`,
-			friend.added_on,
-			friend.accepted_on,
-			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
-			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
-			0 AS `added_by_yourself`
-		FROM
-			friend_list friend
-		WHERE
-			friend.friend_id = ".$__url_useraccount->GetId()."
-	)
-	UNION
-	(
-		SELECT
-			friend.friend_id AS `account_id`,
-			friend.added_on,
-			friend.accepted_on,
-			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
-			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
-			1 AS `added_by_yourself`
-		FROM
-			friend_list friend
-		WHERE
-			friend.account_id = ".$__url_useraccount->GetId()."
-	)
-) a
-
-ORDER BY
-	a.accepted_on DESC
+	friend_list
+WHERE
+	account_id = ".$__url_useraccount->GetId()." AND accepted_on IS NOT NULL
 ");
 
 $cachey = array();
