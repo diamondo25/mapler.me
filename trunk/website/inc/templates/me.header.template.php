@@ -173,7 +173,7 @@ hr {
 </style>
 
 <div class="row">
-	<div class="span3" style="height:100% !important; float: left;text-align:center;">
+	<div class="span3" style="text-align:center;">
 <?php
 if ($has_characters):
 ?>
