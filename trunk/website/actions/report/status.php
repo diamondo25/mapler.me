@@ -67,9 +67,9 @@ $.get('http://mapler.me/api/status/3333/',function (msg){
 <div class="row">
 	<div class="span12">
 		<center>
-			<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/icon.png" width="40px"/> You are reporting this status by @<?php echo $account->GetUsername(); ?>:<br />
-			<pre><?php echo $reportedstatus['content']; ?></pre></p>
+			<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/icon.png" width="40px"/> You are reporting this status by @<?php echo $account->GetUsername(); ?>:</p><br />
 		</center>
+			<pre><?php echo $reportedstatus['content']; ?></pre>
 		<hr />
 		You may view the original status by <a href="//<?php echo $domain; ?>/stream/status/<?php echo $statusid; ?>">clicking here.</a>
 		<hr />
