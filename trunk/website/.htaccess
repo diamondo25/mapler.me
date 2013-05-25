@@ -52,6 +52,10 @@
 	RewriteRule ^player/([^/]*)$ /components/character.php?name=$1
 	RewriteRule ^guild/([^/]*)/([^/]*)$ /components/guild.php?world=$1&name=$2
 	
+	# reporting
+	RewriteRule ^report/status/([^\./]*) /actions/report/status.php?id=$1
+	RewriteRule ^report/mapler/([^\./]*) /actions/report/mapler.php?id=$1
+	
 </IfModule>
 
 Options -Indexes

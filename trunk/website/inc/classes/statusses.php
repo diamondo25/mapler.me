@@ -166,7 +166,7 @@ WHERE
 	if ($_loggedin) {
 		if ($own_post) {
 ?>
-						<a class="deletestatus" href="#" onclick="return false;"><i class="icon-remove"></i></a>
+						<a href="#" class="deletestatus" onclick="return false;"><i class="icon-remove"></i></a>
 <?php
 		}
 		elseif (false) {
@@ -175,6 +175,9 @@ WHERE
 						- <a href="#"></a>
 <?php
 		}
+?>
+<a href="//<?php echo $domain; ?>/report/status/<?php echo $this->id; ?>" class="reportstatus"><i class="icon-flag"></i></a>
+<?php
 	}
 ?>
 				</div>

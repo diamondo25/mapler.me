@@ -314,7 +314,7 @@ border: 0;
 	/* no padding for now */
 }
 
-.mention, .status-time, .deletestatus, .reply-to {
+.mention, .status-time, .deletestatus, .reply-to, .reportstatus {
 	border: 1px solid #CCC;
 	padding:3px;
 	border-radius: 3px;
