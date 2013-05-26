@@ -65,7 +65,7 @@ elseif ($request_type == 'list') {
 		if ($lastid == -1)
 			$lastid = $status->id;
 		$firstid = $status->id;
-		$status->PrintAsHTML(' span12');
+		$status->PrintAsHTML('');
 	}
 	$data = ob_get_clean();
 	if ($data === false) JSONDie('No data returned', 204);

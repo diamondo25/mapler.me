@@ -6,7 +6,6 @@ if (!$_loggedin) {
 <?php
 }
 else {
-	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
 ?>
 
 <?php
@@ -20,9 +19,21 @@ die;
 		}
 ?>
 
-<div class="stream_display row" id="statuslist"></div>
+<div class="row">
+	<div class="span4">
+		<div class="stream-block">
+		<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
+		<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
+		<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
+		</div>
+		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>	
+	</div>
+	
+	<div class="stream_display span8" id="statuslist"></div>
+</div>
+
 <p>
-	<center><button onclick="TryRequestMore(false, false);" class="btn btn-large" type="button">Load more</button></center>
+	<center><button onclick="TryRequestMore(false, false);" class="btn btn-large" type="button">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { TryRequestMore(true, true); });
