@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		<input type="hidden" name="reply-to" value="-1" />
   </div>
   <div class="modal-footer">
-		<button href="#post" role="button" data-toggle="modal" type="submit" class="btn">Post!</button>
+		<button type="submit" class="btn">Post!</button>
 <?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR):?>
 		Blog post? <input type="checkbox" name="blog" value="Yes" />
 <?php endif; ?>
