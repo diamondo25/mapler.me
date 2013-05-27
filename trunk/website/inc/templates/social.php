@@ -127,14 +127,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 ?>
 
-<div id="post" class="collapse poster" data-spy="affix" data-offset-top="10">
-	<form id="statusposter" method="post" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.2);">
-		<textarea name="content" class="post-resize" id="post-status" placeholder="Type your status here!"></textarea>
+<div id="post" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close btn btn-mini" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+    <h3 id="myModalLabel"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" width="30px" style="position:relative;top:5px;"/> Share something?</h3>
+  </div>
+  <div class="modal-body">
+    <form id="statusposter" method="post">
+		<textarea name="content" id="post-status" style="width:99%;max-width:510px;clear:both;" placeholder="Type your status here!"></textarea>
 		<input type="hidden" name="reply-to" value="-1" />
-		<button type="submit" class="btn">Post!</button>
-		<button type="button" class="btn" onclick="$('#post-toggle-button').click();">Close</button>
+  </div>
+  <div class="modal-footer">
+		<button href="#post" role="button" data-toggle="modal" type="submit" class="btn">Post!</button>
 <?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR):?>
 		Blog post? <input type="checkbox" name="blog" value="Yes" />
 <?php endif; ?>
-	</form>
+  </div>
+  </form>
 </div>

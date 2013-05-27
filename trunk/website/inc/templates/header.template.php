@@ -221,7 +221,7 @@ endif;
 		$main_char = 'avatar/'.$main_char;
 ?>
 							<li>
-								<a href="#" data-toggle="collapse" data-target="#post" style="z-index: 999;" id="post-toggle-button"><i class="icon-plus"></i></a>
+								<a href="#post" role="button" data-toggle="modal"><i class="icon-plus"></i></a>
 							</li>
 
 <?php

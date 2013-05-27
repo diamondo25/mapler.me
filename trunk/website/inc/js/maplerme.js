@@ -11,8 +11,10 @@ $(document).ready(function() {
 		}
 		
 		input.val(start + ' ');
-		$('.poster').addClass("in");
-		$('.poster').css("height", "auto");
+
+		$('#post').modal({
+			show: true
+		})
 		
 		$("input[name='reply-to']").attr('value', $(this).attr('status-id'));
 		
@@ -70,7 +72,10 @@ $(document).ready(function() {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
 					$('input[name="reply-to"]').attr('value', '-1');
-					$('#post-toggle-button').click();
+					$('#post').modal({
+						show: false,
+						backdrop: false
+					})
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
 			}
