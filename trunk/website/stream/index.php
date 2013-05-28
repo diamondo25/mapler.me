@@ -19,11 +19,17 @@ die;
 		}
 ?>
 
+<style>
+@media (max-width: 480px) {
+	.container {
+		padding:0px !important;
+	}
+}
+</style>
+
 <div class="row">
 	
-	<div class="stream_display span8" id="statuslist"></div>
-
-	<div class="span4 pull-right">
+	<div class="span4 pull-right no-mobile">
 		<div class="stream-block">
 		<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
 		<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
@@ -31,6 +37,8 @@ die;
 		</div>
 		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>	
 	</div>
+	
+	<div class="stream_display span8" id="statuslist"></div>
 
 </div>
 <p>

@@ -102,7 +102,7 @@ _AddHeaderLink('js', 'maplerme');
 
 <header>
     <div class="sticky-nav stuck span12">
-        <nav id="rightmenu">
+        <nav id="rightmenu" class="no-mobile">
         	<ul id="menu-rightnav">
         	<li class="dropdown">
         		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me

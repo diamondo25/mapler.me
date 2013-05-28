@@ -17,20 +17,14 @@ else:
 			
 			<h1>Mapler.me Client Installer</h1>
 			<p>Simplistic, easy to use, and always there for you, the Mapler.me client is used to update your characters, items, and more.</p>
-			<a href="http://cdn.mapler.me/installers/setupv1005.exe" class="btn btn-success btn-large"
-			style="display: block;
-width: auto;
-padding: 19px 24px;
-margin-bottom: 27px;
-font-size: 30px;
-line-height: 1;
-text-align: center;
--webkit-border-radius: 6px;
--moz-border-radius: 6px;
-border-radius: 6px;"
-			>Download the latest client installer!</a>
+			<a href="http://cdn.mapler.me/installers/setupv1005.exe" class="btn btn-success btn-large download-button">Download the latest client installer!</a>
 			
 			<p>Note: WinPcap is required for the client to function correctly.</p>
+			<hr />
+			<h1>Mapler.me Wordpress Plugin</h1>
+			<p>Easily include your characters and their avatars in your posts, pages, and blog!</p>
+			<a href="http://wordpress.org/plugins/maplerme/" class="btn btn-success btn-large download-button">View plugin on Wordpress.org!</a>
+			<p>You may also download the plugin through your Plugin Manager by searching for "Mapler.me"!</p>
 		</div>
 
 		<div class="span4 offset2">
