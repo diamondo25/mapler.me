@@ -92,7 +92,7 @@ $q->free();
 <?php
 foreach ($cache as $row) {
 ?>
-			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>" class="character pull-left" style="position:relative;top:10px;" />
+			<img style="background: url('//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>') no-repeat center -17px #FFF;position:relative;top:10px;" class="character pull-left" />
 <?php
 }
 ?>
