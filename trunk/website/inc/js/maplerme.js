@@ -72,10 +72,7 @@ $(document).ready(function() {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
 					$('input[name="reply-to"]').attr('value', '-1');
-					$('#post').modal({
-						show: false,
-						backdrop: false
-					})
+					$('#post').modal('hide');
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
 			}

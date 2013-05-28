@@ -76,6 +76,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
 <?php
 _AddHeaderLink('js', 'scripts');
 if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
@@ -89,6 +90,12 @@ _AddHeaderLink('js', 'maplerme');
 	<script type="text/javascript">
 	$('.in').affix();
 	</script>
+	
+	<script>
+	$(function() {
+		$( ".draggable" ).draggable({ containment: "html", scroll: false });
+	});
+  	</script>
 </head>
 
 <body>
@@ -154,7 +161,7 @@ endif;
 if ($_loggedin):
 ?>
 								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;overflow:hidden;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
-											<span style="text-transform:lowercase;"><?php echo $_loginaccount->GetUsername(); ?></span>
+											<span>@<?php echo $_loginaccount->GetUsername(); ?></span>
 											<!-- function needed that displays rank as text instead off number -->
 											
 									<i class="icon-chevron-down"></i>		 
