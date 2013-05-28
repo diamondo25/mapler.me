@@ -102,14 +102,18 @@ _AddHeaderLink('js', 'maplerme');
 
 <header>
     <div class="sticky-nav stuck span12">
-        <nav id="rightmenu" class="no-mobile">
+        <nav id="rightmenu">
         	<ul id="menu-rightnav">
         	<li class="dropdown">
-        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
         			<?php if ($_loggedin && GetNotification() != '0'): ?>
         				(<?php echo GetNotification(); ?><i class="icon-bell-alt icon-white"></i>)
         			<?php endif; ?>
-        		</a> 
+        		</a>
+        		
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle showmobile" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" class="showmobile" style="width:35px;position:relative;top:10px;"/>
+        		</a>
+        		
 								<ul class="dropdown-menu" style="">
 <?php
 // Display subdomain pages related to the user
@@ -153,13 +157,13 @@ endif;
 								</li>
         	</ul>
         </nav>
-        
+<?php
+if ($_loggedin):
+?>        
         <nav id="rightmenu">
         	<ul id="menu-rightnav">
         									<li class="dropdown">
-<?php
-if ($_loggedin):
-?>
+
 								<a data-toggle="dropdown" class="dropdown-toggle" style="z-index:1;overflow:hidden;" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">
 											<span>@<?php echo $_loginaccount->GetUsername(); ?></span>
 											<!-- function needed that displays rank as text instead off number -->
@@ -185,37 +189,20 @@ endif;
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/logoff">Sign Out</a></li>
 								</ul>
+							</li>
+						</ul>
+					</nav>
 <?php
 else:
 ?>
-								<a data-toggle="dropdown" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#">Login <i class="icon-chevron-down"></i></a>
-								<ul class="dropdown-menu">
-									<form class="form-horizontal login" style="margin:10px;" action="//<?php echo $domain; ?>/login/" method="post">
-										<div class="control-group">
-											<div class="controls">
-												<input type="text" id="inputUsername" name="username" placeholder="Email" style="width: 222px;"/>
-											</div>
-										</div>
-										<div class="control-group">
-											<div class="controls">
-												<input type="password" id="inputPassword" name="password" placeholder="Password" style="width: 222px;"/>
-											</div>
-										</div>
-										<div class="control-group">
-											<div class="controls">
-												<button type="submit" class="btn btn-success" style="margin-right:2px;width:240px;">Sign in</button>
-												<button type="button" onclick="document.location = 'http://<?php echo $domain; ?>/register/'" class="btn pull-right" style="display:none;">Register?</button>
-											</div>
-										</div>
-									</form>
-								</ul>
+	<nav id="menu">
+		<ul id="menu-nav">
+			<li><a href="//<?php echo $domain; ?>/login/"><i class="icon-check"></i> Login</a></li>
+		</ul>
+	</nav>
 <?php
 endif;
 ?>
-							</li>
-
-        	</ul>
-        </nav>
         
         <nav id="menu">
         	<ul id="menu-nav">

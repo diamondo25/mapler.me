@@ -67,7 +67,10 @@ else {
 	}
 ?>
 
-<?php
+<div class="row login">
+                <div class="span6 left_box">
+                	
+                	<?php
 $q = $__database->query("
 SELECT
 	name
@@ -77,7 +80,7 @@ WHERE
 	level > 30
 ORDER BY
 	rand()
-	LIMIT 5
+	LIMIT 1
 ");
 $cache = array();
 
@@ -86,42 +89,50 @@ while ($row = $q->fetch_assoc()) {
 }
 $q->free();
 ?>
-
-<div class="row">
-	<div class="span9 offset2 logincharacter">
 <?php
 foreach ($cache as $row) {
 ?>
-		<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>" style="width: 128px; height: 128px;" />
-		</a>
+			<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>" title="<?php echo $row['name']; ?>" class="character pull-left" style="position:relative;top:10px;" />
 <?php
 }
 ?>
-	</div>
-	
-	<div class="span12">
-		<center>
-			<h1>Welcome back, hundreds of other maplers await your return!</h1>
-			<br />
-		</center>
-	</div>
-	<div class="span12">
-<?php
-	$form = new Form('', 'form-horizontal loginpageform');
-	$form->AddBlock('E-mail', 'username', (isset($errorList['username']) ? 'error' : ''), 'text', @$_POST['username']);
-	$form->AddBlock('Password', 'password', (isset($errorList['password']) ? 'error' : ''), 'password');
-	$form->MakeSubmit('Login');
-	$form->End();
-?>
-	</div>
-	<div class="span12">
-		<p>Don't have an account? <a href="/signup/">Join Mapler.me</a>.</p>
-	</div>
+ <h4>Log in to your Mapler.me account</h4>
+
+                    <div class="perk_box">
+                        <div class="perk">
+                            <p><strong>Stay connected with your friends</strong> wherever, whenever you want.</p>
+                        </div>
+                        <div class="perk">
+                            <p><strong>Keep track of your characters</strong> progress, growth, and items.</p>
+                        </div>
+                        <div class="perk">
+                            <p><strong>Join hundreds of other maplers</strong> apart of Mapler.me.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6 signin_box">
+                    <div class="box">
+                        <div class="box_cont">
+                            <div class="form">
+                                <form method="POST">
+                                    <input type="text" name="username" placeholder="Email">
+                                    <input type="password" name="password" placeholder="Password">
+                                    <div class="forgot">
+                                        <span>Don’t have an account?</span>
+                                        <a href="//<?php echo $domain; ?>/signup/">Sign up.</a>
+                                    </div>
+                                    <input type="submit" value="Login!">
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 <?php
 }
 ?>
-</div>
 <?php
 require_once __DIR__.'/inc/footer.php';
 ?>
