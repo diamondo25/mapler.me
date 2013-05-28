@@ -9,6 +9,7 @@ define("RANK_NORMAL", 100);
 // Special
 define("RANK_PLUS", 200); //Membership
 define("RANK_DEVELOPER", 300);
+define("RANK_NEXON_VOLUNTEER", 310); //Membership
 
 // Staff
 define("RANK_MODERATOR", 900);
@@ -24,10 +25,11 @@ $_account_ranks = array(
 	
 	RANK_PLUS 		=> 'Mapler+',
 	RANK_DEVELOPER 	=> 'Mapler+', // mapler plus includes developer status and access?
+	RANK_NEXON_VOLUNTEER 	=> 'Nexon Volunteer', // volunteers (maryse, grant, ciel, etc)
 	
-	RANK_MODERATOR 	=> 'Staff',
-	RANK_NEXON 		=> 'Nexon',
-	RANK_ADMIN 		=> 'Staff'
+	RANK_MODERATOR 	=> 'Moderator',
+	RANK_NEXON 		=> 'Nexon America',
+	RANK_ADMIN 		=> 'Team'
 );
 
 function GetRankTitle($rank) {
