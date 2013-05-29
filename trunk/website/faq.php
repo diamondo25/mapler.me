@@ -77,7 +77,7 @@ margin-bottom: 20px;
 				<p>As mentioned in our Terms of Service, we take privacy very seriously. We require players to manually add characters as we do not store Nexon America account details for your security.</p>
 			</li>
 			<li>
-				<h3>I don't want anyone to be able to see my character nor it's equips, is there an option to hide it?</h3>
+				<h3>I don't want anyone to be able to see my character nor its equips, is there an option to hide it?</h3>
 				<p>To change character privacy options, view your Settings panel then click on Characters. Options to change individual characters are found on this page as well as other configurations.</p>
 			</li>
 			<li>
