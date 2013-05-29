@@ -34,7 +34,7 @@ margin-bottom: 20px;
 		<ol>
 			<li>
 				<h3>What is Mapler.me?</h3>
-				<p>Mapler.me is a social networked dedicated to MapleStory that allows players to interact with other maplers, track your character's progress, and control your Maple "Story".</p>
+				<p>Mapler.me is a social network dedicated to MapleStory that allows players to interact with other maplers, track your character's progress, and control your Maple "Story".</p>
 			</li>
 			<li>
 				<h3>How long has Mapler.me been around for?</h3>
@@ -53,7 +53,7 @@ margin-bottom: 20px;
 				<p>Mapler.me is currently not endorsed with Nexon America, although we follow many regulations that are required for our service to exist. We are obligated to provide complete transparency to Nexon America as mentioned in our Terms of Service.</p>
 			</li>
 			<li>
-				<h3>Why do we have to download a client? What can't you just add our characters yourself?</h3>
+				<h3>Why do we have to download a client? Can you just add our characters yourself?</h3>
 				<p>When you connect a Nexon America account your password and other information is not stored which does not allow us to add characters automatically. Your privacy is very important, and we cannot assume every player wants all of their characters added.</p>
 			</li>
 			<li>
