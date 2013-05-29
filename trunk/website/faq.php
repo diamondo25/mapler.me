@@ -70,7 +70,7 @@ margin-bottom: 20px;
 			</li>
 			<li>
 				<h3>Why do we have to connect our Nexon Account to Mapler.me? This seems suspicious!</h3>
-				<p>First off, we're glad you're protective of your account and it's normal to be! Mapler.me's servers monitor dozens to hundreds of characters every second all working and relaying updates to the site in real-time. To make sure your character knows you're its owner, it checks to see if it's account is on Mapler.me. This ensures that all information is properly stored and that other players can't claim them!</p>
+				<p>First off, we're glad you're protective of your account and its normal to be! Mapler.me's servers monitor dozens to hundreds of characters every second all working and relaying updates to the site in real-time. To make sure your character knows you're its owner, it checks to see if it's account is on Mapler.me. This ensures that all information is properly stored and that other players can't claim them!</p>
 			</li>
 			<li>
 				<h3>I connected my account but I don't see my characters on Mapler.me!</h3>
