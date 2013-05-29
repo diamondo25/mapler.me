@@ -3,7 +3,7 @@
 			<p>
 				<span style="color:#333;">&copy; 2012-2013 Mapler.me</span> – <?php echo $__database->QueriesRan(); ?> queries ran.
 			</p>
-			<p><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a> - <a href="//<?php echo $domain; ?>/support/">Request Support</a> - <a href="//<?php echo $domain; ?>/todo/">To-do / Issues</a></p>
+			<p><a href="//<?php echo $domain; ?>/terms/">Terms of Service</a> - <a href="//<?php echo $domain; ?>/support/">Request Support</a> - <a href="//<?php echo $domain; ?>/faq/">FAQ</a></p>
 		</footer>
 
 	<script type="text/javascript">

@@ -21,6 +21,7 @@
 	RewriteRule ^characters characters.php
 	RewriteRule ^team/ team.php
 	RewriteRule ^developers/ dev.php
+	RewriteRule ^faq/ faq.php
 	RewriteRule ^support/ /actions/support_email.php
 	RewriteRule ^cdn/ /actions/cdn_upload.php
 	

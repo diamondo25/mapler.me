@@ -108,10 +108,10 @@ _AddHeaderLink('js', 'maplerme');
         		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
         			<?php if ($_loggedin && GetNotification() != '0'): ?>
         				(<?php echo GetNotification(); ?><i class="icon-bell-alt icon-white"></i>)
-        			<?php endif; ?>
+        			<?php endif; ?> <i class="icon-chevron-down"></i>
         		</a>
         		
-        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle showmobile" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" class="showmobile" style="width:35px;position:relative;top:10px;"/>
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle showmobile" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" class="showmobile" style="width:35px;position:relative;top:10px;"/> <i class="icon-chevron-down"></i>
         		</a>
         		
 								<ul class="dropdown-menu" style="">
@@ -244,7 +244,7 @@ endif;
 	<div class="left-bg"></div>
 	<div class="right-bg"></div>
 
-	<div class="container main" style="background: rgba(255,255,255,0.7); padding: 20px; border-radius: 5px; margin-top: 90px">
+	<div class="container main" style="background: rgba(255,255,255,0.8); padding: 20px; border-radius: 5px; margin-top: 90px">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {

@@ -267,3 +267,53 @@ function time_elapsed_string(time) {
 		}
 	}
 }
+
+jQuery("html").removeClass("no-js").addClass("js");
+if (navigator.appVersion.indexOf("Mac") != -1) {
+    jQuery("html").addClass("osx")
+}
+if ($.browser.opera) {
+    $(".fade").removeClass("fade");
+    $(".slide").removeClass("slide")
+}
+jQuery(document).ready(function (a) {
+        (function () {
+                a('<i id="back-to-top" class="icon-chevron-up"></i>').appendTo(a("body"));
+                a(window).scroll(function () {
+                        if (a(this).scrollTop() != 0) {
+                            a("#back-to-top").fadeIn()
+                        } else {
+                            a("#back-to-top").fadeOut()
+                        }
+                    });
+                a("#back-to-top").click(function () {
+                        a("body,html").animate({
+                                scrollTop: 0
+                            }, 600)
+                    })
+            })();
+        (function () {
+                a(".faq input[type=text]").keyup(function () {
+                        var b = a(this).val().toLowerCase();
+                        if (b.length > 2) {
+                            a(".faq li").each(function () {
+                                    var d = a(this).find("h3").text();
+                                    var e = a(this).find("p").text();
+                                    var c = (d + e).toLowerCase();
+                                    if (c.indexOf(b) == -1) {
+                                        a(this).hide()
+                                    } else {
+                                        a(this).show()
+                                    }
+                                });
+                            if (!a(".faq li:visible").length) {
+                                a(".no-results").show()
+                            } else {
+                                a(".no-results").hide()
+                            }
+                        } else {
+                            a(".faq li").show()
+                        }
+                    })
+            })()
+    });
