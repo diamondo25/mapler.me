@@ -54,7 +54,7 @@ margin-bottom: 20px;
 			</li>
 			<li>
 				<h3>Why do we have to download a client? Can you just add our characters yourself?</h3>
-				<p>When you connect a Nexon America account your password and other information is not stored which does not allow us to add characters automatically. Your privacy is very important, and we cannot assume every player wants all of their characters added.</p>
+				<p>When you connect a Nexon America account, your password and other information are not stored which does not allow us to add characters automatically. Your privacy is very important, and we cannot assume every player wants all of their characters added.</p>
 			</li>
 			<li>
 				<h3>How does your client work and is it safe?</h3>
