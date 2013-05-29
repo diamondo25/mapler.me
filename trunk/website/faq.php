@@ -90,7 +90,7 @@ margin-bottom: 20px;
 			</li>
 			<li>
 				<h3>There isn't an option to delete a character, how can I do this?</h3>
-				<p>There currently isn't an option to delete characters yourself, although you can request for a staff member to delete one by telling us it's name, or sending a support ticket if it's a hidden or confidential character.</p>
+				<p>There currently isn't an option to delete characters yourself, although you can request for a staff member to delete one by telling us its name, or sending a support ticket if it's a hidden or confidential character.</p>
 			</li>
 			<li>
 				<h3>One of my statuses was deleted and it wasn't me. What happened?</h3>
