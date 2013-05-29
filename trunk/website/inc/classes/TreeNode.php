@@ -1,7 +1,5 @@
 <?php
 
-header('Content-type: text/plain');
-
 class TreeNode extends ArrayObject {
 	public $name;
 	private $parent;

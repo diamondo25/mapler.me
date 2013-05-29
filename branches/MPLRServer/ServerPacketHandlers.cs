@@ -166,6 +166,101 @@ namespace MPLRServer
         }
 
 
+        private static void ParseAvatar(MaplePacket pPacket)
+        {
+            pPacket.ReadByte(); // Gender
+            pPacket.ReadByte(); // Skin
+            pPacket.ReadInt(); // Face
+            int jobid = pPacket.ReadInt(); // Job
+
+            pPacket.ReadByte(); // Hair slot (0)
+            pPacket.ReadInt(); // Hair
+
+            for (int i = 1; i != 0xFF; i++) // Hidden
+            {
+                byte slot = pPacket.ReadByte(); // Slot
+                if (slot == 0xFF) break;
+                pPacket.ReadInt(); // Item ID
+            }
+
+            for (int i = 1; i != 0xFF; i++) // Shown
+            {
+                byte slot = pPacket.ReadByte(); // Slot
+                if (slot == 0xFF) break;
+                pPacket.ReadInt(); // Item ID
+            }
+
+            for (int i = 1; i != 0xFF; i++) // Dunno
+            {
+                byte slot = pPacket.ReadByte(); // Slot
+                if (slot == 0xFF) break;
+                pPacket.ReadInt(); // Item ID
+            }
+
+            pPacket.ReadInt(); // Cash equip
+            pPacket.ReadInt(); // Cash equip
+            pPacket.ReadInt(); // Cash equip
+
+            pPacket.ReadByte(); // 0?
+
+            pPacket.ReadInt(); // Pet ID 1
+            pPacket.ReadInt(); // Pet ID 2
+            pPacket.ReadInt(); // Pet ID 3
+
+            if (jobid / 100 == 31 || jobid == 3001)
+            {
+                pPacket.ReadInt(); // Scar?
+            }
+        }
+
+        public static void HandleTradeData(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            byte type = pPacket.ReadByte();
+            pPacket.ReadByte();
+            if (type == 0x0A)
+            {
+                pPacket.ReadByte();
+                pPacket.ReadShort();
+                int merchid = pPacket.ReadInt();
+                string merchname = pPacket.ReadString();
+                pPacket.ReadByte();
+                while (true)
+                {
+                    byte slot = pPacket.ReadByte();
+                    if (slot == 255) break;
+
+                    pPacket.ReadInt(); // Player ID
+                    ParseAvatar(pPacket);
+                    pPacket.ReadString(); // Player Name
+                    pPacket.ReadShort(); // Job
+                }
+
+                pPacket.ReadShort();
+                pPacket.ReadString(); // Owner name
+                pPacket.ReadShort(); // Shop cash ID
+                pPacket.ReadString(); // Shop name
+                pPacket.ReadInt(); // ???
+                pPacket.ReadByte(); // ???
+
+                byte items = pPacket.ReadByte();
+
+                using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items_trades"))
+                {
+                    for (int i = 0; i < items; i++)
+                    {
+                        short slot = pPacket.ReadShort(); // Slot?
+                        pPacket.ReadShort();
+                        pPacket.ReadInt(); // Price
+                        Queries.SaveItem(pConnection, (ushort)0, slot, ItemBase.DecodeItemData(pPacket), itemsTable, true);
+                    }
+
+                    MySQL_Connection.Instance.RunQuery("DELETE FROM items_trades"); // Clear table
+
+                    itemsTable.RunQuery();
+                }
+            }
+        }
+
         public static void HandleSpawnPlayer(ClientConnection pConnection, MaplePacket pPacket)
         {
             int id = pPacket.ReadInt();
@@ -392,8 +487,9 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x800000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x800000 | {0}", value);
+                // Ambition/Charisma D:
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Charisma] = pPacket.ReadInt();
+                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x1000000))
@@ -406,6 +502,7 @@ namespace MPLRServer
             {
                 // Willpower
                 pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Willpower] = pPacket.ReadInt();
+                didsomething = true;
                 // pConnection.Logger_WriteLine("0x2000000 | {0}", value);
             }
 

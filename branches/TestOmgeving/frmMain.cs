@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using System.Diagnostics;
 using Microsoft.Win32;
 
 namespace Mapler_Client
@@ -73,6 +74,8 @@ namespace Mapler_Client
                 {
                     _statScreen = null;
                 };
+
+
                 _statScreen.Show();
             }
             else
@@ -126,6 +129,27 @@ namespace Mapler_Client
                     }
                 }
             }
+
+            // Check MapleStory version
+
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(_mapleEXE);
+            ushort msver = (ushort)fvi.ProductMinorPart;
+            byte mslocale = (byte)fvi.ProductMajorPart;
+
+            Logger.WriteLine("MapleStory v{0}.{1} locale {2}", fvi.ProductMinorPart, fvi.ProductBuildPart, fvi.ProductMajorPart);
+
+            if (mslocale != ServerConnection.Instance.AcceptedMapleStoryLocale)
+            {
+                MessageBox.Show("This version of MapleStory is not supported by Mapler.me. Please contact Mapler.me at support@mapler.me if you think this is incorrect.", "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if (msver > ServerConnection.Instance.AcceptedMapleStoryVersion) // Newer version?
+            {
+                MessageBox.Show(string.Format("It seems you are trying to start MapleStory version {0}, but Maple.me only accept version {1}! Please wait till the Mapler.me servers are updated for V{0}.", msver, ServerConnection.Instance.AcceptedMapleStoryVersion), "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            
             var process = System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
             for (int i = 0; i < 20; i++)
             {

@@ -230,7 +230,8 @@ namespace MPLRServer
                     "socketstate", 
                     "nebulite1", "nebulite2", "nebulite3",
                     "uniqueid",
-                    "bagid"
+                    "bagid",
+                    "moreflags"
                     );
             }
 
@@ -266,7 +267,8 @@ namespace MPLRServer
                     equip.SocketState, 
                     equip.Nebulite1, equip.Nebulite2, equip.Nebulite3,
                     equip.UniqueID,
-                    pItem.BagID
+                    pItem.BagID,
+                    equip.SetFlags
                 );
             }
             else
@@ -300,7 +302,8 @@ namespace MPLRServer
                     null, 
                     null, null, null,
                     pItem is ItemRechargable ? (pItem as ItemRechargable).UniqueID : 0,
-                    pItem.BagID
+                    pItem.BagID,
+                    null
                     );
 
             }

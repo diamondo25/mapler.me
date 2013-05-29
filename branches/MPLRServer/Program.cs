@@ -222,6 +222,7 @@ namespace MPLRServer
                 // V.125 -> 126| Diff 0x00E8 -> 0x00ED, 0x011B -> 0x0121
                 // V.127 -> 128| Diff 0x00ED -> 0x00EE, 0x0121 -> 0x0122
                 // V.131 -> 132| Diff 0x00EE -> 0x00F4...
+                // V.134 -> 135| Diff 0x00F4 -> 0x00F2... WUT
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
@@ -255,17 +256,18 @@ namespace MPLRServer
                 {
                 }, null));
 
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
-                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
-                tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
+                tmp.Add(0x0023, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
+                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
+                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
                 tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
-                tmp.Add(0x005B, new Handler(ServerPacketHandlers.HandleBuddyList, NeedsCharData));
-                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
-                tmp.Add(0x005E, new Handler(ServerPacketHandlers.HandleAlliance, NeedsCharData));
-                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, NeedsCharData));
-                tmp.Add(0x00F3, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
-                tmp.Add(0x00F4, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
-                tmp.Add(0x0129, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
+                tmp.Add(0x0059, new Handler(ServerPacketHandlers.HandleBuddyList, NeedsCharData));
+                tmp.Add(0x005B, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
+                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleAlliance, NeedsCharData));
+                tmp.Add(0x007B, new Handler(ServerPacketHandlers.HandleFamiliarList, NeedsCharData));
+                tmp.Add(0x00F1, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
+                tmp.Add(0x00F2, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
+                tmp.Add(0x0127, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
+                tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
                 //tmp.Add(530, null);

@@ -79,6 +79,9 @@ namespace MPLRServer
 
                 pack.WriteBytes(GMSKeys.GetKeyForVersion());
 
+                pack.WriteByte(ClientPacketHandlers.LatestLocale);
+                pack.WriteUShort(ClientPacketHandlers.LatestMajorVersion);
+
                 SendPacket(pack);
             }
 
@@ -237,8 +240,8 @@ namespace MPLRServer
                                                 mp.WriteString(kvp.Value);
                                             }
 
-                                            mp.SwitchOver(); // Make read packet
                                         }
+                                        mp.SwitchOver(); // Make read packet
                                         _exporter.AddPacket(mp);
                                     }
 

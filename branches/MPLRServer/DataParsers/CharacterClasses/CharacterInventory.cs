@@ -301,6 +301,11 @@ namespace MPLRServer
         public short Nebulite3 { get; private set; }
 
         public long UniqueID { get; private set; }
+        public int SetFlags { get; private set; }
+        public enum SetFlagTypes
+        {
+            Crafted = 1,
+        }
 
         public override void Decode(MaplePacket pPacket)
         {
@@ -352,9 +357,15 @@ namespace MPLRServer
 
                 {
                     uint flag = pPacket.ReadUInt();
+                    byte tmp = 0;
                     FlaggedValue(flag, 0x01, pPacket, (byte)0, true);
                     FlaggedValue(flag, 0x02, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x04, pPacket, (byte)0, true);
+
+                    FlaggedValue(flag, 0x04, pPacket, tmp);
+                    if ((tmp & 0xFF) != 0)
+                    {
+                        this.SetFlags += (int)SetFlagTypes.Crafted;
+                    }
                 }
             }
 

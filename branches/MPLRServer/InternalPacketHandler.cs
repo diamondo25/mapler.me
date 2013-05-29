@@ -48,6 +48,10 @@ namespace MPLRServer
 
                     }
                 }
+
+                pConnection.CharData = null;
+                pConnection.CharacterInternalID = -1;
+                pConnection.CharacterID = -1;
             }
         }
     }
