@@ -17,7 +17,7 @@ else:
 			
 			<h1>Mapler.me Client Installer</h1>
 			<p>Simplistic, easy to use, and always there for you, the Mapler.me client is used to update your characters, items, and more.</p>
-			<a href="http://cdn.mapler.me/installers/setupv1005.exe" class="btn btn-success btn-large download-button">Download the latest client installer!</a>
+			<a href="http://cdn.mapler.me/installers/setup_1.0.0.10.exe" class="btn btn-success btn-large download-button">Download the latest client installer (V 1.0.0.10)!</a>
 			
 			<p>Note: WinPcap is required for the client to function correctly.</p>
 			<hr />
