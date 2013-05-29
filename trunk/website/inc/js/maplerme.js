@@ -121,7 +121,8 @@ $(document).ready(function() {
 		$.ajax({
 			type: 'POST',
 			url: '/ajax/sync/',
-			data: { 'shown-statuses': statuses, 'last-level': latestLevelTL },
+			//data: { 'shown-statuses': statuses, 'last-level': latestLevelTL },
+			data: { 'shown-statuses': statuses},
 			success: function (e) {
 				serverTickCount = e.time;
 				
@@ -162,17 +163,17 @@ $(document).ready(function() {
 					}
 				}
 
-				if (e.last_level != undefined) {
-					latestLevelTL = e.last_level;
-					for (var levelid in e.levels) {
-						var level = e.levels[levelid];
-						var derp = $('*[status-post-time]').filter(function () {
-							return ($(this).attr('status-post-time') >= level[0]);
-						});
-						if (derp.length == 0) continue; // yep.
-						derp.last().parent().parent().before(level[1]);
-					}
-				}
+				//if (e.last_level != undefined) {
+				//	latestLevelTL = e.last_level;
+				//	for (var levelid in e.levels) {
+				//		var level = e.levels[levelid];
+				//		var derp = $('*[status-post-time]').filter(function () {
+				//			return ($(this).attr('status-post-time') >= level[0]);
+				//		});
+				//		if (derp.length == 0) continue; // yep.
+				//		derp.last().parent().parent().before(level[1]);
+				//	}
+				//}
 
 				// Update posts
 
