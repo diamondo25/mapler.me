@@ -45,8 +45,8 @@ margin-bottom: 20px;
 				<p>Mapler.me currently has over five hundred maplers registered, and hundreds of characters added to the Mapler.me network.</p>
 			</li>
 			<li>
-				<h3>Is this site real and will I be hacked if I use it?</h3>
-				<p>Absolutely not! Mapler.me is trusted by hundreds of maplers and we ensure all character information is stored safely and that everything is secure.</p>
+				<h3>Is Mapler.me safe and will I be hacked?</h3>
+				<p>Mapler.me treats security the same as all other social networks. Your Mapler.me account is securely handled and safe from the Black Wing's hands. Mapler.me is trusted by hundreds of maplers and we ensure all character information is stored safely and that everything is secure.</p>
 			</li>
 			<li>
 				<h3>Is Mapler.me endorsed or affiliated with MapleStory / Nexon America?</h3>
@@ -98,7 +98,7 @@ margin-bottom: 20px;
 			</li>
 			<li>
 				<h3>If I'm banned on Mapler.me, what happens to all my characters I have added?</h3>
-				<p>It is your responsibility to abide by our rules. If your account is permanently banned from Mapler.me all characters and accounts currently connected will remain as-is.</p>
+				<p>It is your responsibility to abide by our rules. If your account is permanently banned from Mapler.me, all characters and accounts currently connected will remain as-is.</p>
 			</li>
 		</ol>
 	</div>
