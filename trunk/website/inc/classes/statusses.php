@@ -120,7 +120,7 @@ WHERE
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
-		global $parser, $_loggedin, $domain, $_loginaccount;
+		global $parser, $_loggedin, $domain, $_loginaccount, $__server_time;
 		$parser->parse($this->content);
 		
 		$username = $this->account->GetUsername();
@@ -161,7 +161,7 @@ WHERE
 <?php if ($this->account_id !== 2): ?>
 					<a href="#post" role="button" data-toggle="modal" class="mention" status-id="<?php echo $this->id; ?>" poster="<?php echo $username; ?>" mentions="<?php echo implode(';', $this->mention_list); ?>"><i class="icon-share-alt"></i> Reply (<span class="status-reply-count"><?php echo $this->reply_count; ?></span>)</a>
 <?php endif; ?>
-					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo time() - $this->seconds_since; ?>" class="status-time"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
+					<a href="//<?php echo $domain; ?>/stream/status/<?php echo $this->id; ?>" status-post-time="<?php echo $__server_time - $this->seconds_since; ?>" class="status-time"><?php echo time_elapsed_string($this->seconds_since); ?> ago</a>
 <?php
 	if ($_loggedin) {
 		if ($own_post) {

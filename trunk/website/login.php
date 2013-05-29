@@ -6,7 +6,7 @@ $error = null;
 if (IsLoggedin()) {
 ?>
 <meta http-equiv="refresh" content="3;URL='/stream/'" />
-<p class="lead alert alert-danger">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
+<p class="lead alert alert-info">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
 	require_once __DIR__.'/inc/footer.php';
 	die(); // Prevent error after login
@@ -52,9 +52,9 @@ if ($_loggedin) {
 	$push_to_page = (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'logoff') === FALSE && strpos($_SERVER['HTTP_REFERER'], 'login') === FALSE) ? $_SERVER['HTTP_REFERER'] : '/stream/';
 
 ?>
-<meta http-equiv="refresh" content="3;URL='<?php echo $push_to_page; ?>'" />
+<meta http-equiv="refresh" content="1;URL='<?php echo $push_to_page; ?>'" />
 
-<p class="lead alert info-danger">You successfully logged in! You'll be redirected in 3 seconds.<br />
+<p class="lead alert alert-success">You successfully logged in! You'll be redirected in 1 second.<br />
 If not, <a href="<?php echo $push_to_page; ?>">click here</a>.
 </p>
 <?php
@@ -68,33 +68,29 @@ else {
 ?>
 
 <div class="row login">
-                <div class="span6 left_box">
-                	
-                	<?php
-$q = $__database->query("
+	<div class="span6 left_box">
+
+<?php
+	$q = $__database->query("
 SELECT
 	name
 FROM
 	characters 
 WHERE
 	level > 30
+	AND
+	NOT job BETWEEN 800 AND 1000
 ORDER BY
 	rand()
 	LIMIT 1
 ");
-$cache = array();
+	$cache = array();
 
-while ($row = $q->fetch_assoc()) {
-	$cache[] = $row;
-}
-$q->free();
-?>
-<?php
-foreach ($cache as $row) {
+	$row = $q->fetch_assoc();
 ?>
 			<img style="background: url('//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>') no-repeat center -17px #FFF;position:relative;top:10px;" class="character pull-left" />
 <?php
-}
+$q->free();
 ?>
  <h4>Log in to your Mapler.me account</h4>
 
@@ -132,7 +128,5 @@ foreach ($cache as $row) {
 
 <?php
 }
-?>
-<?php
 require_once __DIR__.'/inc/footer.php';
 ?>

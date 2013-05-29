@@ -7,6 +7,8 @@ $(document).ready(function() {
 		var start = '@' + poster;
 		for (var id in mentionlist) {
 			if (mentionlist[id] == '') continue;
+			if (mentionlist[id].toLowerCase() == window.MemberName.toLowerCase()) continue;
+			if (start.indexOf(mentionlist[id]) != -1) continue;
 			start += ' @' + mentionlist[id];
 		}
 		
@@ -112,14 +114,14 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	setInterval(function () {
+	var syncer = function () {
 		var statuses = [];
 		$('div[class~="status"][status-id]').each(function (index) { statuses.push(parseInt($(this).attr('status-id'))); });
-	
+
 		$.ajax({
 			type: 'POST',
 			url: '/ajax/sync/',
-			data: { 'shown-statuses': statuses },
+			data: { 'shown-statuses': statuses, 'last-level': latestLevelTL },
 			success: function (e) {
 				serverTickCount = e.time;
 				
@@ -133,6 +135,9 @@ $(document).ready(function() {
 					newTitle = '(' + e.notifications + ') ' + newTitle;
 					$('#notify span').get(0).firstChild.nodeValue = e.notifications;
 				}
+				
+				if (e.membername != undefined)
+					window.MemberName = e.membername;
 
 				window.document.title = newTitle;
 				
@@ -157,6 +162,18 @@ $(document).ready(function() {
 					}
 				}
 
+				if (e.last_level != undefined) {
+					latestLevelTL = e.last_level;
+					for (var levelid in e.levels) {
+						var level = e.levels[levelid];
+						var derp = $('*[status-post-time]').filter(function () {
+							return ($(this).attr('status-post-time') >= level[0]);
+						});
+						if (derp.length == 0) continue; // yep.
+						derp.last().parent().parent().before(level[1]);
+					}
+				}
+
 				// Update posts
 
 				$('a[status-post-time]').each(
@@ -168,10 +185,15 @@ $(document).ready(function() {
 				console.log(e);
 			}
 		});
-	}, 10000);
+	};
+	
+	setInterval(syncer, 10000);
+	syncer();
 });
 
 var serverTickCount = 0;
+
+var latestLevelTL = -1;
 
 var latestStatusUp = -1;
 var latestStatusDown = -1;

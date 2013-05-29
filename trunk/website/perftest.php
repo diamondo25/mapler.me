@@ -1,41 +1,61 @@
 <?php
+require_once 'inc/classes/PNG.php';
+/*
+$png = new PNGReader('P:\Mapler.me\trunk\website\inc\img\goatesbg.png');
+var_dump($png->IsPNG());
+var_dump($png->LoadChunks());
 
-require_once 'inc/functions.php';
-set_time_limit(0);
-apc_clear_cache();
-apc_clear_cache('opcode');
+$png->Close();
+*/
+
+$stance = 'heal';
+$frames = $real_frame_count = 3;
+$does_rewind = false;
+
+$input = 'http://mplr.e.craftnet.nl/ignavatar/RoboticOil?stance='.$stance.'&stance_frame=';
+if ($does_rewind)
+	$frames += ($frames - 1); // Forth and back
 
 
-error_reporting(E_ALL);
+$apng_writer = new APNGWriter('dump.png');
+$apng_writer->WriteHeader(128, 128);
 
-$q = $__database->query("
-SELECT
-	objecttype,
-	objectid,
-	`key`
-FROM
-	`strings`
-");
 
-$i = 0;
 
-while ($row = $q->fetch_row()) {
-	$i++;
-	if ($i % 100 == 0) {
-		$cacheinfo = apc_sma_info();
-		echo 'Memory size: '.memory_get_usage(false).'<br />';
-		echo 'Memory size free APC: '.$cacheinfo['avail_mem'].'<br />';
-	}
-	GetMapleStoryString($row[0], $row[1], $row[2]);
-	
-	if ($row[2] == 'item')
-		GetItemWZInfo($row[1]);
-		GetPotentialInfo($row[1]);
-		GetItemDefaultStats($row[1]);
-	
+
+$apng_writer->WriteAnimationControl($frames, 0);
+$anim_frame_id = 0;
+for ($frame = 0; $frame < $frames; $frame++) {
+	$anim_frame_id = $frame;
+	if ($anim_frame_id >= $real_frame_count)
+		$anim_frame_id = $frames - $frame;
+	file_put_contents('temp'.$frame.'.png', file_get_contents($input.$anim_frame_id));
 }
 
-$q->free();
+$sequence = 0;
+for ($frame = 0; $frame < $frames; $frame++) {
+	echo 'Writing frame '.$frame.'<br />';
+	$png = new PNGReader('temp'.$frame.'.png');
+	$png->LoadChunks();
+	
+	
+	$frame_data = $png->GetChunk('IDAT');
+	$apng_writer->WriteFrameControl($sequence, 128, 128, 0, 0, 200);
+	$sequence++;
+	
+	if ($frame == 0) {
+		$apng_writer->WriteChunk('IDAT', $frame_data[2]);
+	}
+	else {
+		$apng_writer->WriteFrameData($sequence, $frame_data[2]);
+		$sequence++;
+	}
 
+	$png->Close();
+}
+
+$apng_writer->WriteChunk('IEND', '');
+
+$apng_writer->Close();
 
 ?>

@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__.'/classes/database.php';
+require_once __DIR__.'/classes/TreeNode.php';
 
 // Check for APC
 define('APC_INSTALLED', function_exists("apc_add"));
@@ -153,7 +155,8 @@ WHERE
 	`itemid` = ".$itemid
 );
 
-	$item_info = array();
+	$item_info = new TreeNode('main');
+	$temp = false;
 	//$item_info['grouped'] = array();
 	while ($data = $q->fetch_row()) {
 		if ($data[0] == 'info_vslot') {
@@ -162,19 +165,22 @@ WHERE
 		}
 		//$item_info[$data[0]] = $data[1];
 		$split = explode('_', $data[0]);
-		$val = true;
 		$tmp2 = &$item_info;
-		foreach ($split as $name) {
-			//$tmp = $val ? $data[1] : $block;
-			if (!isset($tmp2[$name]))
-				$tmp2[$name] = array();
+		foreach ($split as $idx => $name) {
+			if (!isset($tmp2[$name])) {
+				if (count($split) - 1 == $idx) {
+					$tmp2[$name] = $data[1];
+					//$tmp2 = $tmp2[$name];
+					break;
+				}
+				else {
+					$tmp2[$name] = new TreeNode($name, $tmp2);
+				}
+			}
 			$tmp2 = &$tmp2[$name];
-			$val = false;
 		}
-		$tmp2 = $data[1];
 	}
 	$item_info['ITEMID'] = $itemid;
-	
 
 	$q->free();
 	

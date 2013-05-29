@@ -60,4 +60,14 @@ if ($__database->connect_errno != 0) {
 	die("<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>");
 }
 
+
+function GetServerTime() {
+	global $__database;
+
+	$q = $__database->query("SELECT UNIX_TIMESTAMP(NOW())");
+	$tmp = $q->fetch_row();
+	$q->free();
+	return $tmp[0];
+}
+$__server_time = GetServerTime();
 ?>

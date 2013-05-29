@@ -49,7 +49,7 @@ elseif ($request_type == 'list') {
 	
 	$statuses = new Statusses();
 	$statuses->Load(
-	($P['lastpost'] == -1 ? '' : (" s.id ".($P['mode'] == 'back' ? '<' : '>')." ".$P['lastpost'])." AND")."
+	($P['lastpost'] == -1 ? '' : (" s.timestamp ".($P['mode'] == 'back' ? '<' : '>')." FROM_UNIXTIME(".$P['lastpost']).") AND")."
 	(
 		s.override = 1 AND s.blog = 0 OR 
 		s.account_id = ".$_loginaccount->GetID()." AND s.blog = 0 OR 
@@ -63,8 +63,8 @@ elseif ($request_type == 'list') {
 	ob_start();
 	foreach ($statuses->data as $status) {
 		if ($lastid == -1)
-			$lastid = $status->id;
-		$firstid = $status->id;
+			$lastid = $__server_time - $status->seconds_since; //$status->id;
+		$firstid = $__server_time - $status->seconds_since; //$status->id;
 		$status->PrintAsHTML('');
 	}
 	$data = ob_get_clean();
@@ -151,20 +151,20 @@ WHERE
 	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
 
 	$__database->query("
-	INSERT INTO
-		social_statuses
-	VALUES
-		(
-			NULL,
-			".$_loginaccount->GetId().",
-			'".$__database->real_escape_string($nicknm)."',
-			'".$__database->real_escape_string($chr)."',
-			'".$__database->real_escape_string($content)."',
-			".$blog.",
-			NOW(),
-			0,
-			".($reply_to == -1 ? 'NULL' : $reply_to)."
-		)
+INSERT INTO
+	social_statuses
+VALUES
+	(
+		NULL,
+		".$_loginaccount->GetId().",
+		'".$__database->real_escape_string($nicknm)."',
+		'".$__database->real_escape_string($chr)."',
+		'".$__database->real_escape_string($content)."',
+		".$blog.",
+		NOW(),
+		0,
+		".($reply_to == -1 ? 'NULL' : $reply_to)."
+	)
 	");
 
 	if ($__database->affected_rows == 1) {
