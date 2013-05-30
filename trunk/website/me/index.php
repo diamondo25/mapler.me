@@ -8,9 +8,10 @@ require_once __DIR__.'/../inc/templates/me.header.template.php';
 		<p class="lead nomargin"><i class="icon-quote-left"></i> <?php echo $__url_useraccount->GetBio(); ?> <i class="icon-quote-right"></i></p>
 	</div>
 	
-<?php endif; ?>
 <?php
+endif;
 
+/*
 $statusses = new Statusses();
 $statusses->Load("s.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND s.blog = 0");
 
@@ -34,6 +35,8 @@ else {
 	</div>
 <?php
 }
+*/
 ?>
+	<div class="span9" id="statuslist"></div>
 </div>
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

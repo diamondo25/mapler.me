@@ -20,9 +20,9 @@ function InviteFriend(id) {
 	document.location.href = '?invite=' + id;
 }
 
-function() {
+(function() {
     $( ".draggable" ).draggable();
-  }
+  })();
 </script>
 <?php
 

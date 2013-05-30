@@ -24,7 +24,7 @@ class Statusses {
 SELECT
 	s.*,
 	accounts.username,
-	TIMESTAMPDIFF(SECOND, s.timestamp, NOW()) AS `secs_since`,
+	UNIX_TIMESTAMP(s.timestamp) AS `timestamp`,
 	(
 	SELECT
 		COUNT(s_inner.id)
@@ -63,18 +63,19 @@ class Status {
 	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to, $reply_count;
 	
 	public function __construct($row) {
+		global $__server_time;
 		$this->id = (int)$row['id'];
 		$this->account_id = (int)$row['account_id'];
-		$this->account = Account::Load($this->account_id);
+		$this->account = Account::Load((int)$this->account_id);
 		$this->nickname = $row['nickname'];
 		$this->character = $row['character'];
 		$this->content = $row['content'];
 		$this->blog = (int)$row['blog'];
 		$this->timestamp = $row['timestamp'];
 		$this->override = (int)$row['override'];
-		$this->seconds_since = (int)$row['secs_since'];
 		$this->reply_to = (int)$row['reply_to'];
 		$this->reply_count = (int)$row['reply_count'];
+		$this->seconds_since = $__server_time - $this->timestamp;
 		
 		$this->ParseContent();
 	}

@@ -53,13 +53,6 @@ $(document).ready(function() {
 		$(this).remove();
 	});
 	
-	$(window).scroll(function() {
-		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-			if (didinit)
-				TryRequestMore(false, false);
-		}
-	});
-	
 	$('#statusposter').submit(function () {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		$.ajax({
@@ -114,15 +107,27 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	var syncer = function () {
+	window.syncer = function (requestOlder) {
 		var statuses = [];
 		$('div[class~="status"][status-id]').each(function (index) { statuses.push(parseInt($(this).attr('status-id'))); });
 
+		// $('*[status-post-time]').last()
+		var request_data = { 'shown-statuses': statuses, 'client-time': serverTickCount, 'url': document.location.href, 'has-statusses': $('#statuslist').length > 0 ? 1 : 0 };
+		if (requestOlder) {
+			var oldeststatus = serverTickCount;
+			$('*[status-post-time]').each(function () {
+				if (oldeststatus > $(this).attr('status-post-time'))
+					oldeststatus = $(this).attr('status-post-time');
+			});
+			
+			request_data['client-time'] = oldeststatus;
+			console.log(request_data['client-time']);
+			request_data['older-than'] = true;
+		}
 		$.ajax({
 			type: 'POST',
 			url: '/ajax/sync/',
-			//data: { 'shown-statuses': statuses, 'last-level': latestLevelTL },
-			data: { 'shown-statuses': statuses},
+			data: request_data,
 			success: function (e) {
 				serverTickCount = e.time;
 				
@@ -162,19 +167,17 @@ $(document).ready(function() {
 						}
 					}
 				}
-
-				//if (e.last_level != undefined) {
-				//	latestLevelTL = e.last_level;
-				//	for (var levelid in e.levels) {
-				//		var level = e.levels[levelid];
-				//		var derp = $('*[status-post-time]').filter(function () {
-				//			return ($(this).attr('status-post-time') >= level[0]);
-				//		});
-				//		if (derp.length == 0) continue; // yep.
-				//		derp.last().parent().parent().before(level[1]);
-				//	}
-				//}
-
+				
+				if (e.statuses != undefined) {
+					for (var index in e.statuses) {
+						var status = e.statuses[index];
+						if (requestOlder)
+							$('#statuslist').append(status[1]);
+						else
+							$('#statuslist').prepend(status[1]);
+					}
+					
+				}
 				// Update posts
 
 				$('a[status-post-time]').each(
@@ -188,45 +191,11 @@ $(document).ready(function() {
 		});
 	};
 	
-	setInterval(syncer, 10000);
-	syncer();
+	setInterval(function () { syncer(false); }, 10000);
+	syncer(false);
 });
 
 var serverTickCount = 0;
-
-var latestLevelTL = -1;
-
-var latestStatusUp = -1;
-var latestStatusDown = -1;
-var didinit = false;
-function TryRequestMore(up, init) {
-	$.ajax({
-		type: 'GET',
-		url: '/api/list/' + (up ? latestStatusUp : latestStatusDown) + '/' + (up ? 'up' : 'back') + '/',
-		success: function (data) {
-			if (data.errormsg != undefined) {
-				alert(data.errormsg);
-			}
-			else if (data.amount > 0) {
-				if (up)
-					$('#statuslist').prepend(data.result);
-				else
-					$('#statuslist').append(data.result);
-
-				if (init || !up)
-					latestStatusDown = data.firstid;
-				if (init || up)
-					latestStatusUp = data.lastid;
-				if (init)
-					didinit = true;
-					
-				if (init) {
-					setInterval("TryRequestMore(true, false)", 10000);
-				}
-			}
-		}
-	});
-}
 
 function GetBlogPosts(up, init) {
 	$.ajax({

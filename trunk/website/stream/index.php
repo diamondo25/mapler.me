@@ -42,10 +42,16 @@ die;
 
 </div>
 <p>
-	<center><button onclick="TryRequestMore(false, false);" class="btn btn-large" type="button">Load more statuses..</button></center>
+	<center><button onclick="syncer(true);" class="btn btn-large" type="button">Load more statuses..</button></center>
 </p>
 <script>
-$(document).ready(function() { TryRequestMore(true, true); });
+$(document).ready(function() { 
+	$(window).scroll(function() {
+		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+			syncer(true);
+		}
+	});
+});
 </script>
 <?php
 }
