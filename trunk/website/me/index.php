@@ -38,5 +38,19 @@ else {
 */
 ?>
 	<div class="span9" id="statuslist"></div>
+	
+	<p>
+	<center><button onclick="syncer(true);" class="btn btn-large" type="button">Load more statuses..</button></center>
+</p>
+<script>
+$(document).ready(function() { 
+	$(window).scroll(function() {
+		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+			syncer(true);
+		}
+	});
+});
+</script>
+	
 </div>
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

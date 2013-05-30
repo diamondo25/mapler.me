@@ -141,7 +141,7 @@ WHERE
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
-					<div class="character" style="background: url('http://<?php echo $domain; ?>/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div><br/>
+					<div class="character" style="background: url('http://<?php echo $domain; ?>/<?php echo $main_char; ?>') no-repeat center 0px #FFF;"></div><br/>
 				<p>
 				<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				
