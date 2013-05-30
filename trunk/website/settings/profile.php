@@ -8,10 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 	}
 	
 	if ($error == '') {
-		$nick = htmlentities($_POST['nick'], ENT_COMPAT, 'UTF-8');
-		$error = Account::IsCorrectNickname($name);
-	}
-	if ($error == '') {
 		$email = htmlentities($_POST['email'], ENT_COMPAT, 'UTF-8');
 		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$error = "The email you entered is invalid.";

@@ -95,7 +95,6 @@ if ($_loggedin) {
 
 .avatar {
 	width:200px;
-	margin-bottom:30px;
 }
 
 .name {
