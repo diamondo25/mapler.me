@@ -35,14 +35,12 @@ if ($request_type == 'info') {
 		if (count($correctids) > 0) {
 			$tmp = "
 SELECT
-	reply_to,
-	COUNT(*) AS `reply_count`
+	s.id,
+	(SELECT COUNT(s2.id) FROM social_statuses s2 WHERE s2.reply_to = s.id) AS `reply_count`
 FROM
-	social_statuses
+	social_statuses s
 WHERE
-	reply_to IN (".implode(',', $correctids).")
-GROUP BY
-	reply_to";
+	s.id IN (".implode(',', $correctids).")";
 			$q = $__database->query($tmp);
 			if ($q->num_rows == 0) {
 				// All deleted
@@ -52,7 +50,12 @@ GROUP BY
 			else {
 				while ($row = $q->fetch_row()) {
 					$status_info['reply_count'][$row[0]] = $row[1];
+					if (($key = array_search($row[0], $correctids)) !== false) {
+						unset($correctids[$key]);
+					}
 				}
+				foreach ($correctids as $oriid)
+					$status_info['deleted'][] = $oriid;
 			}
 			$q->free();
 		}
