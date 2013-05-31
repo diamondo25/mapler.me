@@ -175,11 +175,11 @@ $(document).ready(function() {
 						var addAfter = $($('*[status-post-time]').get().reverse()).filter(function() {
 							return $(this).attr('status-post-time') > status[0];
 						});
-						if (addAfter.length > 0) {
+						if (requestOlder && addAfter.length > 0) {
 							$(status[1]).insertAfter(addAfter.first().closest('div[class~="status"]'));
 						}
 						else {
-							$('#statuslist').append(status[1]);
+							$('#statuslist').prepend(status[1]);
 						}
 						
 					}
