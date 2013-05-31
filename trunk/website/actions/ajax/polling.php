@@ -61,6 +61,7 @@ WHERE
 		}
 		
 	}
+	$res['status_info'] = $status_info;
 	
 	
 	$url = isset($_POST['url']) ? parse_url($_POST['url']) : null;
@@ -70,8 +71,6 @@ WHERE
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($url['host'], 0, strpos($url['host'], $domain)), '.');
-		
-		$res['domain'] = $subdomain;
 
 		$whereq = '> '.$_client_time;
 		if (isset($_POST['older-than'])) {
@@ -226,7 +225,6 @@ LIMIT
 		$res['newest_status'] = $highest_date;
 
 	}
-	$res['status_info'] = $status_info;
 	
 	JSONAnswer($res);
 }

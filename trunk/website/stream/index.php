@@ -51,7 +51,6 @@ LEFT JOIN
 	ON
 		c.internal_id = i.character_id
 WHERE
-
 	`GetCharacterAccountID`(c.id) = ".$_loginaccount->GetID()."
 	AND
 	i.expires <> 150842304000000000

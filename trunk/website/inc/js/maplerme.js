@@ -19,6 +19,8 @@ $(document).ready(function() {
 		})
 		
 		$("input[name='reply-to']").attr('value', $(this).attr('status-id'));
+		if (memberName == 'xparasite9')
+			alert('Just set the reply-to: ' + $('input[name="reply-to"]').attr('value'));
 		
 		input.focus();
 		return false;
@@ -28,6 +30,8 @@ $(document).ready(function() {
 		if ($(this).val() == '' && $("input[name='reply-to']").attr('value') != -1) {
 			// Empty? Reset reply
 			$("input[name='reply-to']").attr('value', -1);
+			if (memberName == 'xparasite9')
+				alert('Just cleared dem replyto because the input was empty: ' + $('input[name="reply-to"]').attr('value'));
 		}
 	});
 	
@@ -55,10 +59,16 @@ $(document).ready(function() {
 	
 	$('#statusposter').submit(function () {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
+		var data = $(this).serializeArray();
+		var replyto = 'hirr';
+		data.filter(function (a, b) { if (a.name == 'reply-to') replyto = a.value; });
+		if (memberName == 'xparasite9')
+			if (!confirm('Current reply-to is ' + $('input[name="reply-to"]').attr('value') + ' ; ' + replyto + '... still want to submit?'))
+				return false;
 		$.ajax({
 			type: 'POST',
 			url: '/api/status/post/',
-			data: $(this).serialize(),
+			data: data,
 			success: function (e) {
 				if (e.errormsg != undefined) {
 					AddMessageToContent('alert', 'An error occurred: ' + e.errormsg, '');
@@ -67,6 +77,8 @@ $(document).ready(function() {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
 					$('input[name="reply-to"]').attr('value', '-1');
+					if (memberName == 'xparasite9')
+						alert('Just cleared dem replyto: ' + $('input[name="reply-to"]').attr('value'));
 					$('#post').modal('hide');
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
@@ -148,6 +160,7 @@ $(document).ready(function() {
 				window.document.title = newTitle;
 				
 				serverTickCount = e.time;
+				memberName = e.membername;
 				if (e.status_info != undefined) {
 					// Check posts
 
@@ -190,7 +203,7 @@ $(document).ready(function() {
 				}
 				// Update posts
 
-				$('a[status-post-time]').each(
+				$('*[status-post-time]').each(
 					function (index) {
 						$(this).html(time_elapsed_string(serverTickCount - $(this).attr('status-post-time')) + ' ago');
 					}
@@ -206,6 +219,7 @@ $(document).ready(function() {
 });
 
 var serverTickCount = 0;
+var memberName = '';
 
 function GetBlogPosts(up, init) {
 	$.ajax({
