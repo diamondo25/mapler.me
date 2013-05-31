@@ -46,7 +46,7 @@ FROM
 	friend_list
 WHERE
 	account_id = ".$__url_useraccount->GetId()." AND accepted_on IS NOT NULL
-AND
+OR
 	friend_id = ".$__url_useraccount->GetId()." AND accepted_on IS NOT NULL
 ");
 
