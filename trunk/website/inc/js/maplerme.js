@@ -151,7 +151,7 @@ $(document).ready(function() {
 				
 				if (e.notifications > 0) {
 					newTitle = '(' + e.notifications + ') ' + newTitle;
-					$('#notify span').get(0).firstChild.nodeValue = e.notifications;
+					//$('#notify span').get(0).firstChild.nodeValue = e.notifications;
 				}
 				
 				if (e.membername != undefined)
