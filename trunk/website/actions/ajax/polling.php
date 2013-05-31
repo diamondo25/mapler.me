@@ -180,7 +180,7 @@ LIMIT
 ?>
 			<div class="status">
 				<div class="header">
-					<div class="character" style="background: url('http://<?php echo $domain; ?>/avatar/<?php echo $content[0]; ?>') no-repeat center -21px #FFF;"></div><br/>
+					<div class="character" style="background: url('http://<?php echo $domain; ?>/avatar/<?php echo $content[0]; ?>') no-repeat center -17px #FFF;"></div><br/>
 			<p><a href="//<?php echo $username; ?>.mapler.me/"><?php echo $nickname; ?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 			<?php if ($account_rank >= RANK_MODERATOR): ?>
 					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($account_rank); ?></span>

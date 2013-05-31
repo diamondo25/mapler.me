@@ -31,7 +31,7 @@ die;
 	
 	<div class="span4 pull-right no-mobile">
 		<div class="stream-block">
-		<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -21px #FFF;"></div>
+		<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
 		<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
 		<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
