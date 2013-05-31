@@ -221,7 +221,7 @@ LIMIT
 		}
 		$highest_date = $timestamp;
 
-		$res['statuses'] = array_reverse($stream);
+		$res['statuses'] = $stream;
 		$res['oldest_status'] = $lowest_date;
 		$res['newest_status'] = $highest_date;
 

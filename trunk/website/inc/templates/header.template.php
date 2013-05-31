@@ -256,14 +256,9 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 }
 require_once 'social.php';
 
-$ip = "mc.craftnet.nl";
-$port = 23711;
-$onlinetext = "Mapler.me's servers are currently online!";
-$offlinetext = "Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.";
-
-if(!@fsockopen($ip, $port, $errno, $errstr, 5)) {
+if (!@fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5)) {
 ?>
-	<p class="lead alert alert-danger"><?php echo $offlinetext; ?></p>
+	<p class="lead alert alert-danger">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
 <?php
 }
 ?>

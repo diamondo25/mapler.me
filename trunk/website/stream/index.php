@@ -9,14 +9,14 @@ else {
 ?>
 
 <?php
-		if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
+	if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 ?>
 <p class="lead alert alert-info">Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide! F2</a></p>
 <p>This will disappear once you've successfully sent a status!</p>
 <?php
-require_once __DIR__.'/../inc/footer.php';
-die;
-		}
+		require_once __DIR__.'/../inc/footer.php';
+		die;
+	}
 ?>
 
 <style>
@@ -31,11 +31,55 @@ die;
 	
 	<div class="span4 pull-right no-mobile">
 		<div class="stream-block">
-		<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
-		<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
-		<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
+			<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
+			<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
+			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
-		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>	
+		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>
+<?php
+
+	// Check for expiring items...
+	$q = $__database->query("
+SELECT
+	c.name,
+	GROUP_CONCAT(i.itemid),
+	GROUP_CONCAT(UNIX_TIMESTAMP(FROM_FILETIME(i.expires)))
+FROM
+	items i
+LEFT JOIN
+	characters c
+	ON
+		c.internal_id = i.character_id
+WHERE
+
+	`GetCharacterAccountID`(c.id) = ".$_loginaccount->GetID()."
+	AND
+	i.expires <> 150842304000000000
+	AND
+	TO_FILETIME(NOW()) < i.expires
+	AND
+	TO_FILETIME(DATE_ADD(NOW(), INTERVAL 1 WEEK)) > i.expires
+GROUP BY
+	c.internal_id
+");
+		while ($row = $q->fetch_row()) {
+			$itemids = explode(',', $row[1]);
+			$times = explode(',', $row[2]);
+?>
+		
+		<div class="stream-block">
+			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row[0]; ?>?madface') no-repeat center -17px #FFF; float: right;"></div>
+			<strong>Expiring items</strong><br />
+<?php foreach ($itemids as $index => $itemid): ?>
+			<?php echo GetMapleStoryString('item', $itemid, 'name'); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />
+<?php endforeach; ?>
+		</div>
+<?php
+		
+		
+		}
+
+?>
 	</div>
 	
 	<div class="stream_display span8" id="statuslist"></div>

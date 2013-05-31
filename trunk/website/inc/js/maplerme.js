@@ -171,10 +171,17 @@ $(document).ready(function() {
 				if (e.statuses != undefined) {
 					for (var index in e.statuses) {
 						var status = e.statuses[index];
-						if (requestOlder)
+						
+						var addAfter = $($('*[status-post-time]').get().reverse()).filter(function() {
+							return $(this).attr('status-post-time') > status[0];
+						});
+						if (addAfter.length > 0) {
+							$(status[1]).insertAfter(addAfter.first().closest('div[class~="status"]'));
+						}
+						else {
 							$('#statuslist').append(status[1]);
-						else
-							$('#statuslist').prepend(status[1]);
+						}
+						
 					}
 					
 				}

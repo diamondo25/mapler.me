@@ -97,7 +97,7 @@ imagefill($im, 0, 0, $trans);
 $skin = $face = $hair = $hat = $mask = $eyes = $ears = $top = $pants = $overall = $shoe = $glove = $cape = $shield = $wep = $nxwep = NULL;
 
 // Coordinates for center
-$mainx = 64;
+$mainx = 70;
 $mainy = 84;
 
 $char_body_position = array();
