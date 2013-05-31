@@ -156,7 +156,7 @@ WHERE
 ORDER BY
 	`timestamp` DESC
 LIMIT
-	5
+	15
 ";
 		$q = $__database->query($q);
 
