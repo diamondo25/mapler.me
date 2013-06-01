@@ -1,6 +1,6 @@
 <?php require_once __DIR__.'/../../inc/header.php'; ?>
 
-<?php $statusid = $_GET['id']; 
+<?php $statusid = intval($_GET['id']); 
 	
 $q = $__database->query("
 SELECT
