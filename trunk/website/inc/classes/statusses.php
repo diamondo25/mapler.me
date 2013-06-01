@@ -185,7 +185,7 @@ WHERE
 	}
 ?>
 				</div>
-				<div class="reply-list span6" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>"></div>
+				<div class="reply-list" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>" style="margin: 25px 10px 0px 10px;"></div>
 			</div>
 <?php    
 	}
