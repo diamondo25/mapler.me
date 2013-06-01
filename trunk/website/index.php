@@ -44,7 +44,7 @@ if ($_loggedin) {
 				Ever feel disconnected from your friends, guild, or alliance whenever you're not on MapleStory? With Mapler.me, you can stay connected with <strong>over <?php echo $tmp[0]; ?> maplers</strong> already apart of Mapler.me.
 		</p>
 		<p class="lead">
-			Question? Check out our <a href="//<?php echo $domain; ?>/faq/">FAQ</a>.
+			Have a question? Check out our <a href="//<?php echo $domain; ?>/faq/">FAQ</a>.
 		</p>
 		<p>Stay up to date on the latest news by following us on <a href="http://twitter.com/maplerme">Twitter</a>, or like us on <a href="http://facebook.com/MaplerMe">Facebook</a>!<br />
 		<div class="fb-like" data-href="http://facebook.com/MaplerMe" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div> <a href="https://twitter.com/maplerme" class="twitter-follow-button" data-show-count="false">Follow @maplerme</a>
