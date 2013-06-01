@@ -35,18 +35,27 @@ $(document).ready(function() {
 	$('body').on('click', '.status[status-id]', function() {
 		var statusid = $(this).attr('status-id');
 		var uniqueid = $(this).attr('unique-id');
-		$.ajax({
-			type: 'GET',
-			url: '/api/status/' + statusid + '/',
-			success: function (data) {
-				if (data.error != undefined) {
-					alert(data.error);
+		
+		var replyblock = $(this).find('.reply-list[status-id=' + statusid + ']').first();
+		
+		if (replyblock.html() != '') {
+			replyblock.html('');
+		}
+		else {
+			$.ajax({
+				type: 'GET',
+				url: '/api/status/' + statusid + '/',
+				success: function (data) {
+					if (data.error != undefined) {
+						alert(data.error);
+					}
+					else {
+						replyblock.html(data.result);
+					}
 				}
-				else {
-					$('.reply-list[status-id=' + statusid + '][unique-id=' + uniqueid + ']').html(data.result);
-				}
-			}
-		});
+			});
+			return false;
+		}
 	});
 	
 	$('.fademeout').delay(7000).fadeOut(1000, function() {
@@ -114,7 +123,11 @@ $(document).ready(function() {
 	
 	window.syncer = function (requestOlder) {
 		var statuses = [];
-		$('div[class~="status"][status-id]').each(function (index) { statuses.push(parseInt($(this).attr('status-id'))); });
+		$('div[class~="status"][status-id]').each(function (index) {
+			var statusid = parseInt($(this).attr('status-id'));
+			if ($.inArray(statusid, statuses) == -1)
+				statuses.push(statusid);
+		});
 
 		// $('*[status-post-time]').last()
 		var request_data = { 'shown-statuses': statuses, 'client-time': serverTickCount, 'url': document.location.href, 'has-statusses': $('#statuslist').length > 0 ? 1 : 0 };
@@ -207,7 +220,7 @@ $(document).ready(function() {
 		});
 	};
 	
-	setInterval(function () { syncer(false); }, 10000);
+	setInterval(function () { syncer(false); }, 3000);
 	syncer(false);
 });
 

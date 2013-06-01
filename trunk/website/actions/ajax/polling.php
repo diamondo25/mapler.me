@@ -32,6 +32,7 @@ if ($request_type == 'info') {
 			}
 			$correctids[] = $id;
 		}
+		$correctids = array_unique($correctids);
 		if (count($correctids) > 0) {
 			$tmp = "
 SELECT
@@ -96,8 +97,8 @@ FROM
 SELECT 
 	`when` AS `timestamp`,
 	'timeline_row' AS `type`,
-	CONVERT(CONCAT(c.`name`, X'02', `type`) USING utf8) AS `col1`,
-	CONVERT(`data` USING utf8) AS `col2`,
+	CONVERT(CONCAT(c.`name`, X'02', `type`) USING latin1) AS `col1`,
+	CONVERT(`data` USING latin1) AS `col2`,
 	`GetCharacterInternalIDAccountID`(`objectid`) AS `account_id`
 FROM
 	`timeline`
@@ -122,8 +123,8 @@ SELECT
 		social_statuses s_inner
 	WHERE
 		s_inner.reply_to = ss.id
-	)) USING utf8) AS `col1`,
-	`content` AS `col2`,
+	)) USING latin1) AS `col1`,
+	CONVERT(`content` USING latin1) AS `col2`,
 	`account_id`
 FROM
 	`social_statuses` ss
@@ -199,6 +200,7 @@ LIMIT
 				// hurr
 			}
 			elseif ($type == 'status') {
+				$res['damp'][] = $content[2];
 				$status = new Status(array(
 					'id' => $content[0],
 					'account_id' => $content[1],
