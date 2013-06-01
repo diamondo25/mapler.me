@@ -54,7 +54,6 @@ $(document).ready(function() {
 					}
 				}
 			});
-			return false;
 		}
 	});
 	
@@ -139,8 +138,16 @@ $(document).ready(function() {
 			});
 			
 			request_data['client-time'] = oldeststatus;
-			console.log(request_data['client-time']);
 			request_data['older-than'] = true;
+		}
+		else {
+			var oldeststatus = serverTickCount;
+			$('*[status-post-time]').each(function () {
+				if (oldeststatus < $(this).attr('status-post-time'))
+					oldeststatus = $(this).attr('status-post-time');
+			});
+			
+			request_data['client-time'] = oldeststatus;
 		}
 		$.ajax({
 			type: 'POST',
