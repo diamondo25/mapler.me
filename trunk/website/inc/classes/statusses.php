@@ -146,7 +146,10 @@ WHERE
 				<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				
 <?php if ($account_rank >= RANK_MODERATOR): ?>
-					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($account_rank); ?></span>
+	<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($account_rank); ?></span> 
+<?php endif; ?>
+<?php if ($this->blog !== 0): ?>
+	 <span class="ct-label"><i class="icon-bullhorn"></i> Blog Post</span>
 <?php endif; ?>
 				
 				</p>
