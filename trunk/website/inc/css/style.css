@@ -269,6 +269,10 @@ border: 0;
 	float:right;
 }
 
+.reply-list .status {
+	margin: 25px 10px 0px 10px;
+}
+
 .status .status-extra {
 	padding-top: 10px;
 	text-align: right;
