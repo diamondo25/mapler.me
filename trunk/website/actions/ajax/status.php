@@ -99,7 +99,7 @@ elseif ($request_type == 'post') {
 
 	RetrieveInputPOST('content', 'reply-to');
 
-	$content = nl2br(htmlentities(strip_tags(trim($P['content'])), ENT_COMPAT, 'UTF-8'));
+	$content = nl2br(htmlentities(trim($P['content']), ENT_QUOTES, 'UTF-8'));
 	if ($content == '')
 		JSONDie('No status contents.', 400);
 
