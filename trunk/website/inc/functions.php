@@ -2,7 +2,7 @@
 // Default set to Pacific Time (MapleStory Time)
 // Note that our database still uses the GMT + 1 time (Holland)
 date_default_timezone_set('America/Los_Angeles');
-set_time_limit(10);
+set_time_limit(60);
 error_reporting(0);
 /*
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
