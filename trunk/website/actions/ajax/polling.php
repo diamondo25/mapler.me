@@ -160,7 +160,7 @@ WHERE
 			else 
 				$q .= ' WHERE ';
 			$whereadded = true;
-			$q .= "a.nickname = '".$__database->real_escape_string($subdomain)."'";
+			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}
 
 		$q .= "
