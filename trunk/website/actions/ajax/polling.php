@@ -69,6 +69,10 @@ WHERE
 	$parsed_url = $url == null ? null : parse_url($url);
 	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
 	
+	if ($res['membername'] == 'Diamondo25') {
+		$res['is_ok'] = $is_ok_url;
+		$res['parsed_url'] = $parsed_url;
+	}
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
@@ -165,6 +169,9 @@ ORDER BY
 LIMIT
 	15
 ";
+		if ($res['membername'] == 'Diamondo25') {
+			$res['q'] = $q;
+		}
 		$q = $__database->query($q);
 
 		$stream = array();
