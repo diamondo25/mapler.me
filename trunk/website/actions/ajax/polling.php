@@ -148,7 +148,7 @@ LEFT JOIN
 		a.id = `account_id`
 ";
 		$whereadded = false;
-		if ($_loggedin || $subdomain == '') {
+		if ($_loggedin && $subdomain == '') { // Main screen
 			$whereadded = true;
 			$q .= "
 WHERE
