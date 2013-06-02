@@ -1,13 +1,10 @@
 <?php
-require_once 'inc/classes/PNG.php';
+require_once 'inc/functions.php';
+
+$icon = GetItemIcon(2046086);
+echo $icon;
+
 /*
-$png = new PNGReader('P:\Mapler.me\trunk\website\inc\img\goatesbg.png');
-var_dump($png->IsPNG());
-var_dump($png->LoadChunks());
-
-$png->Close();
-*/
-
 $stance = 'heal';
 $frames = $real_frame_count = 3;
 $does_rewind = false;
@@ -57,5 +54,5 @@ for ($frame = 0; $frame < $frames; $frame++) {
 $apng_writer->WriteChunk('IEND', '');
 
 $apng_writer->Close();
-
+*/
 ?>

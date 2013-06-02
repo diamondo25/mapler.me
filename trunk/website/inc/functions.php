@@ -4,13 +4,13 @@
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(10);
 error_reporting(0);
-
+/*
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
 	die("Died on notice!! Error: {$errstr} on {$errfile}:{$errline}");
 }
 
 set_error_handler('myErrorHandler');
-
+*/
 require_once __DIR__.'/classes/database.php';
 require_once __DIR__.'/classes/form.php';
 require_once __DIR__.'/classes/account.php';
