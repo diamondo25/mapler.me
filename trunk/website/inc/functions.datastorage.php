@@ -4,7 +4,7 @@ require_once __DIR__.'/classes/database.php';
 require_once __DIR__.'/classes/TreeNode.php';
 
 // Check for APC
-define('APC_INSTALLED', function_exists("apc_add"));
+define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
 
 
@@ -16,7 +16,7 @@ function GetMapleStoryString($type, $id, $key) {
 		$key = substr($key, 0, 5);
 	}
 
-	$key_name = "data_cache_".$id;
+	$key_name = 'data_cache_'.$id;
 	
 	if (APC_INSTALLED && apc_exists($key_name)) {
 		$tmp = apc_fetch($key_name);
@@ -36,8 +36,7 @@ SELECT
 FROM
 	`strings`
 WHERE
-	`objectid` = ".intval($id)."
-");
+	`objectid` = ".intval($id));
 
 	if ($q->num_rows >= 1) {
 		$buff = array();
@@ -64,7 +63,7 @@ WHERE
 function GetItemDefaultStats($id) {
 	global $__database;
 
-	$key_name = "data_iteminfo_cache_".$id;
+	$key_name = 'data_iteminfo_cache_'.$id;
 	
 	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
@@ -89,7 +88,7 @@ function GetItemDefaultStats($id) {
 function GetPotentialInfo($id) {
 	global $__database;
 	
-	$key_name = "data_itemoptions_cache".$id;
+	$key_name = 'data_itemoptions_cache'.$id;
 	
 	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
@@ -113,7 +112,7 @@ function GetPotentialInfo($id) {
 function GetNebuliteInfo($itemid) {
 	global $__database;
 	
-	$key_name = "data_nebulite_cache".$itemid;
+	$key_name = 'data_nebulite_cache'.$itemid;
 	
 	if (APC_INSTALLED && apc_exists($key_name)) {
 		return apc_fetch($key_name);
@@ -154,6 +153,8 @@ FROM
 WHERE
 	`itemid` = ".$itemid
 );
+	if ($q->num_rows == 0)
+		return null;
 
 	$item_info = new TreeNode('main');
 	$temp = false;

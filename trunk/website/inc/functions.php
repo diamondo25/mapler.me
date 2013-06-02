@@ -2,8 +2,14 @@
 // Default set to Pacific Time (MapleStory Time)
 // Note that our database still uses the GMT + 1 time (Holland)
 date_default_timezone_set('America/Los_Angeles');
-set_time_limit(60);
+set_time_limit(10);
 error_reporting(0);
+
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+	die("Died on notice!! Error: {$errstr} on {$errfile}:{$errline}");
+}
+
+set_error_handler('myErrorHandler');
 
 require_once __DIR__.'/classes/database.php';
 require_once __DIR__.'/classes/form.php';
@@ -484,7 +490,15 @@ function GetWZItemTypeName($id) {
 
 function GetItemIconID($id) {
 	$type = GetItemType($id);
-	if ($type != 306) return $id;
+	if ($type != 306) {
+		
+		$iteminfo = GetItemWZInfo($id);
+		if ($iteminfo['info']->IsUOL('icon')) {
+			$id = $iteminfo['info']['icon']['..']['..']['ITEMID']; // Hell yea. Get the UOL object, then go back to get the Item ID
+		}
+
+		return $id;
+	}
 
 	$nebtype = ($id / 1000) % 5;
 	$main_id = 3800274;
@@ -537,6 +551,7 @@ function GetItemDataLocation($location, $id) {
 
 function GetItemIcon($id, $addition = '') {
 	$domain = '//static_images.mapler.me/';
+	//$id = GetItemIconID($id);
 	return GetItemDataLocation($domain, $id).'info.icon'.$addition.'.png';
 }
 
@@ -565,7 +580,11 @@ function GetAllianceWorldID($worldid) {
 	}
 }
 
+
+
 require_once __DIR__.'/functions.loginaccount.php';
+
+
 
 // Set to null by default
 $__url_useraccount = null;
@@ -581,4 +600,3 @@ if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdom
 		exit;
 	}
 }
-?>

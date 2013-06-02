@@ -182,12 +182,12 @@ function SetItemInfo(event, obj, values) {
 	};
 	
 	if (isequip) {
-		if ((item.statusflag & 0x0001) != 0 && item.potential1 == 0 && item.potential2 == 0 && item.potential3 == 0) {
+		if ((item.statusflag & 0x0001) != 0) {
 			var row = GetObj('potentials').insertRow(-1);
 			row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
 			haspotential = true;
 		}
-		if ((item.statusflag & 0x0020) != 0 && item.potential4 == 0 && item.potential5 == 0 && item.potential6 == 0) {
+		if ((item.statusflag & 0x0020) != 0 && item.potential4 == 0 && item.potential5 == 0 && item.potential6 == 0) { // Note that this is the correct code. lol
 			var row = GetObj('bonus_potentials').insertRow(-1);
 			row.innerHTML = '<tr> <td width="150px">Hidden Bonus Potential.</td> </tr>';
 			hasbonuspotential = true;

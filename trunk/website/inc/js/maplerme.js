@@ -154,8 +154,6 @@ $(document).ready(function() {
 			url: '/ajax/sync/',
 			data: request_data,
 			success: function (e) {
-				serverTickCount = e.time;
-				
 				var newTitle = window.document.title;
 				
 				if (newTitle.indexOf(') ') != -1) {
@@ -172,8 +170,6 @@ $(document).ready(function() {
 
 				window.document.title = newTitle;
 				
-				serverTickCount = e.time;
-				memberName = e.membername;
 				if (e.status_info != undefined) {
 					// Check posts
 
@@ -213,7 +209,15 @@ $(document).ready(function() {
 						}
 					}
 					
+					if (e.statuses.length == 0 && serverTickCount == 0) {
+						// New stuff. no stuff.
+						$('#statuslist').html('<p class="lead alert alert-info">No statuses to show!</p>');
+					}
 				}
+				
+				serverTickCount = e.time;
+				memberName = e.membername;
+				
 				// Update posts
 
 				$('*[status-post-time]').each(
@@ -283,18 +287,18 @@ function time_elapsed_string(time) {
 		'month' 	: 30 * 24 * 60 * 60,
 		'day'		: 24 * 60 * 60,
 		'hour'		: 60 * 60,
-		'minute'	: 60,
-		'second'	: 1
+		'minute'	: 60
 	};
 
 	for (var name in times) {
 		var val = times[name];
 		val = parseFloat(time / val);
-		val = parseInt(Math.round(val));
+		val = parseInt(Math.floor(val));
 		if (val >= 1.0) {
 			return val + ' ' + name + (val > 1 ? 's' : '');
 		}
 	}
+	return 'less than a minute';
 }
 
 jQuery("html").removeClass("no-js").addClass("js");

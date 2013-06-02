@@ -15,7 +15,7 @@ function GetID($row) {
 	return $itemid;
 }
 
-set_time_limit(10);
+set_time_limit(1000);
 
 define("DEBUGGING", isset($_GET['debug']));
 
@@ -138,6 +138,10 @@ $char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($in
 $char_stance_frame = isset($_GET['stance_frame']) ? $_GET['stance_frame'] : '0';
 $stand = 1;
 
+$standardWeapon = -1;
+$cashWeapon = -1;
+$weaponThingType = -1;
+
 function CheckStand($type, $data) {
 	global $stand;
 	switch ($type) {
@@ -149,7 +153,7 @@ function CheckStand($type, $data) {
 			$stand = 2;
 			
 			if (DEBUGGING)
-				echo 'STANCE ITEM: '.$type."\r\n";
+				echo 'STANCE ITEM: '.$type.' - '.$data['ITEMID']."\r\n";
 			break;
 		case 144:	// Pole Arm
 			if (isset($data['stand1'])) // Snowboards are stand = 1
@@ -157,8 +161,14 @@ function CheckStand($type, $data) {
 			else
 				$stand = 2;
 			if (DEBUGGING)
-				echo 'STANCE ITEM: '.$type."\r\n";
+				echo 'STANCE ITEM: '.$type.' - '.$data['ITEMID']."\r\n";
 			break;
+	}
+	
+	if (isset($data['stand'])) {
+		if (DEBUGGING)
+			echo 'STANCE PROP ITEM: '.$type.' - '.$data['ITEMID']."\r\n";
+		$stand = $data['stand'];
 	}
 }
 
@@ -197,8 +207,19 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 		$shown_items[$slot] = $itemid;
 	}
 	
-	CheckStand(GetItemType($itemid), get_data($itemid));
+	if ($row2['slot'] == -11) {
+		$standardWeapon = $itemid;
+		$weaponThingType = ($standardWeapon / 10000) % 100;
+	}
+	elseif ($row2['slot'] == -111) { // Cash weapon
+		$cashWeapon = $itemid;
+	}
 }
+
+if (isset($shown_items[11])) {
+	CheckStand(GetItemType($standardWeapon), get_data($standardWeapon));
+}
+
 $character_equipment->free();
 
 if ($char_stance == 'stand' || $char_stance == 'walk')
@@ -207,7 +228,7 @@ if ($char_stance == 'stand' || $char_stance == 'walk')
 
 $foundHidingCap = false;
 function ParseItem($id) {
-	global $item_locations, $zlayers, $zmap, $main_dir, $using_face, $foundHidingCap, $char_stance, $char_stance_frame, $char_body_position, $flipped;
+	global $item_locations, $zlayers, $zmap, $main_dir, $using_face, $foundHidingCap, $char_stance, $char_stance_frame, $char_body_position, $flipped, $cashWeapon, $weaponThingType;
 	global $mainx, $mainy;
 	$iteminfo = get_data($id);
 	$itemtype = GetItemType($id);
@@ -221,41 +242,83 @@ function ParseItem($id) {
 		echo 'Item raw type: '.$item_raw_type."\r\n";
 	}
 	
+	$nxwep = $id == $cashWeapon;
+	if ($nxwep) {
+		$iteminfo = $iteminfo[$weaponThingType];
+		$iteminfo['ITEMID'] = $id;
+		if (DEBUGGING)
+			echo 'NX wep Item: '.$weaponThingType."\r\n";
+	}
+	
 
 	$isface = isset($iteminfo[$using_face]);
 	foreach ($iteminfo as $key => $value) {
+		if (DEBUGGING)
+			echo '> '.$key."\r\n";
+		$tmp = null;
 		if ($key == 'ITEMID' || $key == 'info' || !($value instanceof TreeNode)) continue;
-		if ($isface)
+		if ($isface) {
 			if ($key == 'default')
 				$tmp = $value;
 			else
-				$tmp = $value['0'];
+				$tmp = $value->offsetGet('0');
+		}
 		else
 			$tmp = $value[$char_stance_frame];
 		
-		if ($tmp == null) continue;
+		if ($tmp === null) {
+			if (DEBUGGING) {
+				echo 'No info found for '.$key."\r\n";
+			}
+			continue;
+		}
 		
 		$imgkey = $key;
 		
 		if (!($tmp instanceof TreeNode)) {
-			//echo 'Prolly uol->'.$tmp."\r\n";
-			// Prolly UOL
+			if (DEBUGGING) {
+				echo 'Prolly uol->'.$tmp."\r\n";
+			}
 			$tmp = $iteminfo[$key];
 		}
 
-		if ($tmp == null) continue;
+		if ($tmp === null) {
+			if (DEBUGGING) {
+				echo 'No info found for '.$key."\r\n";
+			}
+			continue;
+		}
 
 		$tmp->ksort();
-		if (DEBUGGING)
-			echo '> '.$key."\r\n";
 		
 		foreach ($tmp as $category => $block) {
+			if (DEBUGGING) {
+				echo '>> '.$category."\r\n";
+			}
 			if (!($block instanceof TreeNode)) {
 				// Prolly UOL
 				$block = $tmp[$category];
-				if ($block === null) continue; // Not found!
+
+				if ($block === null) {
+					if (DEBUGGING) {
+						echo 'UOL not found for '.$key.' -> '.$category."\r\n";
+					}
+					continue;
+				}
 			}
-			if (!($block instanceof TreeNode)) continue;
+			if (!($block instanceof TreeNode)) {
+				if (DEBUGGING) {
+					echo 'Thats not a TreeNode! '.$key.' -> '.$category."\r\n";
+				}
+				continue;
+			
+			}
+			if ($block === null) {
+				if (DEBUGGING) {
+					echo 'thing not found for '.$key.' -> '.$category."\r\n";
+				}
+				continue;
+			}
 			
 			$tmptmp = $block;
 			$imgkey = '';
@@ -263,22 +326,54 @@ function ParseItem($id) {
 			while (true) {
 				$imgkey = $tmptmp->name.($imgkey == '' ? '' : '.'.$imgkey);
 				$blockname = $tmptmp->name;
+				if (!isset($tmptmp['..'])) break;
+				if ($tmptmp['..']->isroot) break;
 				if ($tmptmp['..']->name == 'main') break;
 				$tmptmp = $tmptmp['..'];
 			}
 			
-			if (!isset($block['z'], $zmap[$block['z']])) continue;
+			if (!isset($block['z'], $zmap[$block['z']])) {
+				if (DEBUGGING) {
+					echo 'No Z key found for '.$key.' -> '.$category.' -> '.$block->name."\r\n";
+				}
+				continue;
+			}
 			$zval = $zmap[$block['z']];
-			//if (DEBUGGING)
-			//	echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
+			if (DEBUGGING)
+				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
 
-			if ($itemtype == 2 && $key != $using_face && $char_stance != 'rope') continue 2;
-			if ($itemtype == 1 && $category == 'ear') continue; // Android!
+			if ($itemtype == 2 && $key != $using_face && $char_stance != 'rope') {
+				if (DEBUGGING)
+					echo "nope1".$key." : ".$using_face."\r\n";
+				
+				continue 2;
+			}
+			if ($itemtype == 1 && $category == 'ear') { // Android!
+				if (DEBUGGING)
+					echo "nope2\r\n";
+				
+				continue;
+			}
 			if ($itemtype != 2 && 
 				$key != $char_stance && 
-				$key != $using_face) continue 2;
-			if ($itemtype == 121 && $category != 'weapon') continue 2;
-			if ($itemtype == 190) continue 2;
+				$key != $using_face) {
+				if (DEBUGGING)
+					echo "nope3:".$key." : ".$char_stance." : ".$using_face."\r\n";
+				
+				continue 2;
+			}
+			if ($itemtype == 121 && $category != 'weapon') {
+				if (DEBUGGING)
+					echo "nope4\r\n";
+				
+				continue 2;
+			}
+			if ($itemtype == 190) {
+				if (DEBUGGING)
+					echo "nope5\r\n";
+				
+				continue 2;
+			}
 
 
 			$objectdata = array(
@@ -297,9 +392,6 @@ function ParseItem($id) {
 			$mappings = $objectdata['info']['map'];
 			$copy = $mappings->getArrayCopy();
 			krsort($copy);
-			if (DEBUGGING) {
-				echo '>> '.$category."\r\n";
-			}
 			foreach ($copy as $mapname => $mapping) {
 				if (!isset($char_body_position[$mapname])) {
 					if ($flipped)
@@ -307,10 +399,10 @@ function ParseItem($id) {
 					else
 						$char_body_position[$mapname][0] = $x + $mapping['X'];
 					$char_body_position[$mapname][1] = $y + $mapping['Y'];
-					if (DEBUGGING)
-						echo $mapping['X'].', '.$mapping['Y'].' |> '.$x.', '.$y."\r\n";
-					if (DEBUGGING)
-						echo 'Couldnt find map '.$mapname."\r\n";
+					//if (DEBUGGING)
+					//	echo $mapping['X'].', '.$mapping['Y'].' |> '.$x.', '.$y."\r\n";
+					//if (DEBUGGING)
+					//	echo 'Couldnt find map '.$mapname."\r\n";
 				}
 				else {
 					if ($flipped)
@@ -318,15 +410,15 @@ function ParseItem($id) {
 					else
 						$x = $char_body_position[$mapname][0] - $mapping['X'];
 					$y = $char_body_position[$mapname][1] - $mapping['Y'];
-					if (DEBUGGING)
-						echo $mapping['X'].', '.$mapping['Y'].' |> '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
-					if (DEBUGGING)
-						echo 'Found map '.$mapname."\r\n";
+					//if (DEBUGGING)
+					//	echo $mapping['X'].', '.$mapping['Y'].' |> '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
+					//if (DEBUGGING)
+					//	echo 'Found map '.$mapname."\r\n";
 				}
-				if (DEBUGGING)
-					echo $mapping['X'].', '.$mapping['Y'].' > '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
-				if (DEBUGGING)
-					echo 'map '.$x.', '.$y."\r\n";
+				//if (DEBUGGING)
+				//	echo $mapping['X'].', '.$mapping['Y'].' > '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
+				//if (DEBUGGING)
+				//	echo 'map '.$x.', '.$y."\r\n";
 			}
 			if (DEBUGGING)
 				echo 'Final map '.$x.', '.$y."\r\n";
@@ -334,6 +426,8 @@ function ParseItem($id) {
 			$objectdata['y'] = $y;
 
 			$objectdata['image'] = $imgkey.'.png';
+			if (DEBUGGING)
+				echo 'Image '.$objectdata['image']."\r\n";
 			$foundinfo = true;
 			$zlayers[$zval][] = $objectdata;
 			
@@ -346,13 +440,14 @@ function ParseItem($id) {
 		$item_locations[$iteminfo['ITEMID']] = GetItemDataLocation($main_dir, $iteminfo['ITEMID']);
 }
 
-if (DEBUGGING)
+if (DEBUGGING) {
 	print_r($shown_items);
+}
 
 {
 	$iteminfo = get_data($skin);
-	if (DEBUGGING)
-		print_r($iteminfo);
+	//if (DEBUGGING)
+	//	print_r($iteminfo);
 	// Set global position values
 	$map_node = $iteminfo[$char_stance][$char_stance_frame]['body']['map'];
 
@@ -384,6 +479,9 @@ foreach ($shown_items as $slot => $itemid)
 
 krsort($zlayers);
 
+if (DEBUGGING)
+	print_r($zlayers);
+
 if (isset($_GET['use_bg'])) {
 	$bg = GetCharacterOption($internal_id, 'avatar_bg');
 	if ($bg !== null) {
@@ -409,7 +507,7 @@ foreach ($zlayers as $zname => $objects) {
 		if ($object['category'] == 'hairOverHead' && $foundHidingCap) {
 			continue;
 		}
-		if ($object['stance'] == 'stand'.($stand == 1 ? 2 : 1)) continue;
+		// if ($object['stance'] == 'stand'.($stand == 1 ? 2 : 1)) continue;
 		$img = $item_locations[$object['itemid']].$object['image'];
 		$x = $object['x'];
 		$y = $object['y'];
@@ -421,7 +519,7 @@ foreach ($zlayers as $zname => $objects) {
 		}
 		
 		if (DEBUGGING) {
-			echo 'Adding '.$img.' at X '.$x.', Y '.$y.' --- Zname '.$zname.'  - Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
+			echo 'Adding '.$object['itemid'].' -> '.$img.' at X '.$x.', Y '.$y.' --- Zname '.$zname.'  - Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
 		add_image($img, $x, $y, $flipped);
 		
@@ -443,6 +541,9 @@ if (isset($_GET['show_name']))
 if (!isset($_GET['NO_CACHING']))
 	SaveCacheImage($internal_id, $image_mode, $im, $id);
 
+if (DEBUGGING)
+	header('Content-type: text/plain');
+	
 if (!DEBUGGING)
 	imagepng($im);
 imagedestroy($im);

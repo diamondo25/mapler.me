@@ -65,13 +65,13 @@ WHERE
 	$res['status_info'] = $status_info;
 	
 	
-	$url = isset($_POST['url']) ? parse_url($_POST['url']) : null;
-	
-	$is_ok_url = $url != null && strpos($url['host'], $domain) !== false;
+	$url = isset($_POST['url']) ? $_POST['url'] : null;
+	$parsed_url = $url == null ? null : parse_url($url);
+	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
 	
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
-		$subdomain = trim(substr($url['host'], 0, strpos($url['host'], $domain)), '.');
+		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
 
 		$whereq = '> '.$_client_time;
 		if (isset($_POST['older-than'])) {
@@ -83,6 +83,13 @@ WHERE
 			$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
 			$whereq_2 .= ' AND `timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
 		}
+		
+		if (strpos($url, '/'.$domain.'/blog/') !== false) {
+			// No time thingies, only blog posts
+			$whereq_1 = ' 1 = 0 '; // heh
+			$whereq_2 .= ' AND blog = 1';
+		}
+		
 		$q = "
 SELECT
 	UNIX_TIMESTAMP(`timestamp`),
@@ -137,7 +144,7 @@ LEFT JOIN
 		a.id = `account_id`
 ";
 		$whereadded = false;
-		if ($_loggedin) {
+		if ($_loggedin || $subdomain == '') {
 			$whereadded = true;
 			$q .= "
 WHERE
@@ -149,7 +156,7 @@ WHERE
 			else 
 				$q .= ' WHERE ';
 			$whereadded = true;
-			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
+			$q .= "a.nickname = '".$__database->real_escape_string($subdomain)."'";
 		}
 
 		$q .= "
@@ -200,7 +207,6 @@ LIMIT
 				// hurr
 			}
 			elseif ($type == 'status') {
-				$res['damp'][] = $content[2];
 				$status = new Status(array(
 					'id' => $content[0],
 					'account_id' => $content[1],

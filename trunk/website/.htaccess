@@ -68,9 +68,6 @@ ErrorDocument 403 /actions/error/index.php
 ErrorDocument 404 /actions/error/index.php
 ErrorDocument 500 /actions/error/index.php
 
-#Reduce css size by 80%
-AddOutputFilterByType DEFLATE text/css
-
 #Firefox Fix: Allow fonts to be requested from other subdomains (profiles)
 AddType application/vnd.ms-fontobject .eot
 AddType font/ttf .ttf

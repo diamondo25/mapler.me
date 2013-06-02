@@ -86,7 +86,11 @@ else {
 	$__hidden_objects = array();
 	
 	function IsHiddenObject($optionName) {
-		global $__database, $internal_id, $__hidden_objects;
+		global $__database, $internal_id, $__hidden_objects, $_loggedin, $_loginaccount;
+		
+		if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_MODERATOR))
+			return false;
+		
 		if (isset($__hidden_objects[$optionName]))
 			return $__hidden_objects[$optionName];
 		$q = $__database->query("
@@ -408,7 +412,7 @@ function GetItemDialogInfo($item, $isequip) {
 	);
 	$info_array['other_info'] = array(
 		'tradeblock' => $tradeblock,
-		'expires' => (int)GetSystemTimeFromFileTime($item->expires),
+		'expires' => GetSystemTimeFromFileTime($item->expires),
 		'quality' => $quality
 	);
 	$info_array['other_info']['locked'] = ($isequip ? $item->HasLock() : 0);
@@ -431,7 +435,7 @@ function GetItemDialogInfo($item, $isequip) {
 			$potential = 1; // Default color
 		}
 		else {
-			if ($item->potential1 != 0) $potential++;
+			if ($item->potential1 != 0 || $item->potential4 != 0) $potential++;
 			//if ($item->potential2 != 0) $potential++;
 			//if ($item->potential3 != 0) $potential++;
 			//if ($item->potential4 != 0) $potential++;
@@ -447,6 +451,7 @@ function GetItemDialogInfo($item, $isequip) {
 		$iconid += $item->display_id;
 	}
 	
+
 	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid);
 }
 
@@ -665,8 +670,9 @@ foreach ($normalequips['normal'] as $slot => $item) {
 }
 ?>
 			</div>
-			<div id="cash_equips">
 
+
+			<div id="cash_equips">
 <?php
 foreach ($cashequips as $slot => $item) {
 	$slot = abs($slot) - 100;
@@ -819,7 +825,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 			$itemIcon = '';
 			if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
 			
-			$display_id = GetItemIconID($item->itemid);
+			$display_id = GetItemIconID($item->itemid); // For nebulites
 
 			$itemwzinfo = GetItemWZInfo($display_id);
 

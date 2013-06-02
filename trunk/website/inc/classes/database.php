@@ -1,11 +1,11 @@
 <?php
 class ExtendedMysqli extends mysqli {
-	public $last_query = "";
+	public $last_query = '';
 	public $queries = array();
 	
 	public function query($pQuery) {
 		$this->last_query = $pQuery;
-		$this->queries[] = $pQuery;
+		//$this->queries[] = $pQuery;
 		
 		$result = parent::query($pQuery) or die($this->get_debug_info());
 		return $result;
@@ -20,7 +20,7 @@ The server made a boo-boo! Our technical Coolie Zombies are after this problem. 
 -->
 NO_END;
 
-		$error_msg = str_replace("{ERROR_DATA_HERE}", $this->error." (errno. ".$this->errno.")\r\n".$this->last_query, $error_msg);
+		$error_msg = str_replace('{ERROR_DATA_HERE}', $this->error.' (errno. '.$this->errno.")\r\n".$this->last_query, $error_msg);
 		return $error_msg;
 	}
 	
@@ -55,16 +55,16 @@ foreach ($this->queries as $query) {
 }
 
 // Connect to the database
-$__database = new ExtendedMysqli((strpos($_SERVER["DOCUMENT_ROOT"], "/var/www/maplestats_svn/") !== FALSE ? "127.0.0.1" : "mc.craftnet.nl"), "maplestats", "maplederp", "maplestats");
+//$__database = new ExtendedMysqli((strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE ? '127.0.0.1' : 'mc.craftnet.nl'), 'maplestats', 'maplederp', 'maplestats');
+$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {
-	die("<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>");
+	die('<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>');
 }
-
 
 function GetServerTime() {
 	global $__database;
 
-	$q = $__database->query("SELECT UNIX_TIMESTAMP(NOW())");
+	$q = $__database->query('SELECT UNIX_TIMESTAMP(NOW())');
 	$tmp = $q->fetch_row();
 	$q->free();
 	return $tmp[0];
