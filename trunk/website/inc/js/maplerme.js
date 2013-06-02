@@ -78,8 +78,6 @@ $(document).ready(function() {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
 					$('input[name="reply-to"]').attr('value', '-1');
-					if (memberName == 'xparasite9')
-						alert('Just cleared dem replyto: ' + $('input[name="reply-to"]').attr('value'));
 					$('#post').modal('hide');
 				}
 				$('#statusposter button[type="submit"]').removeAttr('disabled');
