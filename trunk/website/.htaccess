@@ -3,6 +3,8 @@
 	Options +Indexes
 	RewriteEngine On
 
+	RedirectMatch 403 /cache(/|$)
+	
 	RewriteRule ^search/([^.]*)/([^/]*)$ /search/index.php?type=$1&type=$2 [L,QSA]
 	
 	RewriteCond %{REQUEST_FILENAME} !-d

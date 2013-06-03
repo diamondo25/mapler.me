@@ -26,10 +26,17 @@ if (!DEBUGGING) {
 	error_reporting(0);
 	ini_set('display_errors', 0);
 	header('Content-Type: image/png');
+	
+	$seconds_to_cache = 60;
+	$ts = gmdate('D, d M Y H:i:s', time() + $seconds_to_cache) . ' GMT';
+	header('Expires: '.$ts);
+	header('Pragma: cache');
+	header('Cache-Control: max-age='.$seconds_to_cache);
 }
 else {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
+	
 }
 
 

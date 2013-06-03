@@ -6,6 +6,36 @@ require_once __DIR__.'/classes/TreeNode.php';
 // Check for APC
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
+function SetCachedObject($key, $value) {
+	$obj_data = serialize($value);
+	if (strlen($obj_data) > 1024 * 100) {
+		// Big things on mem?
+		if (APC_INSTALLED) {
+			apc_add($key, $obj_data);
+			return;
+		}
+		else {
+			// Maybe even discard saving the data? Nah, that would be dumb...
+		}
+	}
+	file_put_contents(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache', $obj_data);
+}
+
+function IsCachedObject($key) {
+	if (APC_INSTALLED && apc_exists($key)) {
+		return true;
+	}
+	return file_exists(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache');
+}
+
+function GetCachedObject($key) {
+	if (!IsCachedObject($key)) return null;
+	if (APC_INSTALLED && apc_exists($key))
+		return unserialize(apc_fetch($key));
+		
+	return unserialize(file_get_contents(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache'));
+}
+
 
 
 function GetMapleStoryString($type, $id, $key) {
@@ -18,8 +48,19 @@ function GetMapleStoryString($type, $id, $key) {
 
 	$key_name = 'data_cache_'.$id;
 	
+	/*
 	if (APC_INSTALLED && apc_exists($key_name)) {
 		$tmp = apc_fetch($key_name);
+		
+		if (isset($tmp[$type]) && isset($tmp[$type][$key]))
+			$value = $tmp[$type][$key];
+		else
+			$value = NULL;
+		return $value;
+	}
+	*/
+	if (IsCachedObject($key_name)) {
+		$tmp = GetCachedObject($key_name);
 		
 		if (isset($tmp[$type]) && isset($tmp[$type][$key]))
 			$value = $tmp[$type][$key];
@@ -43,9 +84,10 @@ WHERE
 		while ($row = $q->fetch_array())
 			$buff[$row[0]][$row[1]] = $row[2];
 
-		if (APC_INSTALLED) {
-			apc_add($key_name, $buff);
-		}
+		//if (APC_INSTALLED) {
+		//	apc_add($key_name, $buff);
+		//}
+		SetCachedObject($key_name, $buff);
 		
 		if (isset($buff[$type]) && isset($buff[$type][$key]))
 			$value = $buff[$type][$key];
@@ -65,17 +107,22 @@ function GetItemDefaultStats($id) {
 
 	$key_name = 'data_iteminfo_cache_'.$id;
 	
-	if (APC_INSTALLED && apc_exists($key_name)) {
-		return apc_fetch($key_name);
-	}
+	//if (APC_INSTALLED && apc_exists($key_name)) {
+	//	return apc_fetch($key_name);
+	//}
 	
+	if (IsCachedObject($key_name)) {
+		return GetCachedObject($key_name);
+	}
+
 	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".$id);
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
-		if (APC_INSTALLED) {
-			apc_add($key_name, $row);
-		}
+		//if (APC_INSTALLED) {
+		//	apc_add($key_name, $row);
+		//}
+		SetCachedObject($key_name, $row);
 
 		$q->free();
 		return $row;
@@ -90,8 +137,12 @@ function GetPotentialInfo($id) {
 	
 	$key_name = 'data_itemoptions_cache'.$id;
 	
-	if (APC_INSTALLED && apc_exists($key_name)) {
-		return apc_fetch($key_name);
+	//if (APC_INSTALLED && apc_exists($key_name)) {
+	//	return apc_fetch($key_name);
+	//}
+	
+	if (IsCachedObject($key_name)) {
+		return GetCachedObject($key_name);
 	}
 
 	$data = array();
@@ -102,9 +153,10 @@ function GetPotentialInfo($id) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
 	
-	if (APC_INSTALLED) {
-		apc_add($key_name, $data);
-	}
+	//if (APC_INSTALLED) {
+	//	apc_add($key_name, $data);
+	//}
+	SetCachedObject($key_name, $data);
 
 	return $data;
 }
@@ -114,8 +166,12 @@ function GetNebuliteInfo($itemid) {
 	
 	$key_name = 'data_nebulite_cache'.$itemid;
 	
-	if (APC_INSTALLED && apc_exists($key_name)) {
-		return apc_fetch($key_name);
+	//if (APC_INSTALLED && apc_exists($key_name)) {
+	//	return apc_fetch($key_name);
+	//}
+	
+	if (IsCachedObject($key_name)) {
+		return GetCachedObject($key_name);
 	}
 	
 	$itemid += 3060000;
@@ -127,9 +183,10 @@ function GetNebuliteInfo($itemid) {
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
 	
-	if (APC_INSTALLED) {
-		apc_add($key_name, $data);
-	}
+	//if (APC_INSTALLED) {
+	//	apc_add($key_name, $data);
+	//}
+	SetCachedObject($key_name, $data);
 
 	return $data;
 }
@@ -140,8 +197,12 @@ function GetItemWZInfo($itemid) {
 	global $__database;
 	$key_name = 'data_characterwz_cache'.$itemid;
 	
-	if (APC_INSTALLED && apc_exists($key_name)) {
-		return apc_fetch($key_name);
+	//if (APC_INSTALLED && apc_exists($key_name)) {
+	//	return apc_fetch($key_name);
+	//}
+	
+	if (IsCachedObject($key_name)) {
+		return GetCachedObject($key_name);
 	}
 	
 	$q = $__database->query("
@@ -185,9 +246,10 @@ WHERE
 
 	$q->free();
 	
-	if (APC_INSTALLED) {
-		apc_add($key_name, $item_info);
-	}
+	//if (APC_INSTALLED) {
+	//	apc_add($key_name, $item_info);
+	//}
+	SetCachedObject($key_name, $item_info);
 	
 	return $item_info;
 }

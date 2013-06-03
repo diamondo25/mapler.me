@@ -118,7 +118,10 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	window.IsSyncing = false;
 	window.syncer = function (requestOlder) {
+		if (window.IsSyncing) return;
+		window.IsSyncing = true;
 		var statuses = [];
 		$('div[class~="status"][status-id]').each(function (index) {
 			var statusid = parseInt($(this).attr('status-id'));
@@ -224,7 +227,7 @@ $(document).ready(function() {
 					}
 				);
 				
-				console.log(e);
+				window.IsSyncing = false;
 			}
 		});
 	};
