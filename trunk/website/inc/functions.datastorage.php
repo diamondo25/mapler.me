@@ -7,36 +7,18 @@ require_once __DIR__.'/classes/TreeNode.php';
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
 function SetCachedObject($key, $value) {
-	return;
-	$obj_data = serialize($value);
-	if (strlen($obj_data) < 1024 * 100) {
-		// Small things on mem?
-		if (APC_INSTALLED) {
-			apc_add($key, $obj_data);
-			return;
-		}
-		else {
-			// Maybe even discard saving the data? Nah, that would be dumb...
-		}
-	}
-	file_put_contents(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache', $obj_data);
+	if (APC_INSTALLED) apc_add($key, $obj_data);
 }
 
 function IsCachedObject($key) {
-	return false;
-	if (APC_INSTALLED && apc_exists($key)) {
-		return true;
-	}
-	return file_exists(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache');
+	return APC_INSTALLED && apc_exists($key);
 }
 
 function GetCachedObject($key) {
-	return null;
 	if (!IsCachedObject($key)) return null;
 	if (APC_INSTALLED && apc_exists($key))
-		return unserialize(apc_fetch($key));
-		
-	return unserialize(file_get_contents(__DIR__.'/../cache/MPLR_CACHE_'.$key.'.cache'));
+		return apc_fetch($key);
+	return null;
 }
 
 
@@ -50,18 +32,7 @@ function GetMapleStoryString($type, $id, $key) {
 	}
 
 	$key_name = 'data_cache_'.$id;
-	
-	/*
-	if (APC_INSTALLED && apc_exists($key_name)) {
-		$tmp = apc_fetch($key_name);
-		
-		if (isset($tmp[$type]) && isset($tmp[$type][$key]))
-			$value = $tmp[$type][$key];
-		else
-			$value = NULL;
-		return $value;
-	}
-	*/
+
 	if (IsCachedObject($key_name)) {
 		$tmp = GetCachedObject($key_name);
 		
@@ -109,11 +80,7 @@ function GetItemDefaultStats($id) {
 	global $__database;
 
 	$key_name = 'data_iteminfo_cache_'.$id;
-	
-	//if (APC_INSTALLED && apc_exists($key_name)) {
-	//	return apc_fetch($key_name);
-	//}
-	
+
 	if (IsCachedObject($key_name)) {
 		return GetCachedObject($key_name);
 	}
@@ -122,9 +89,6 @@ function GetItemDefaultStats($id) {
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
-		//if (APC_INSTALLED) {
-		//	apc_add($key_name, $row);
-		//}
 		SetCachedObject($key_name, $row);
 
 		$q->free();
@@ -140,10 +104,7 @@ function GetPotentialInfo($id) {
 	
 	$key_name = 'data_itemoptions_cache'.$id;
 	
-	//if (APC_INSTALLED && apc_exists($key_name)) {
-	//	return apc_fetch($key_name);
-	//}
-	
+
 	if (IsCachedObject($key_name)) {
 		return GetCachedObject($key_name);
 	}
@@ -155,10 +116,7 @@ function GetPotentialInfo($id) {
 	while ($row = $q->fetch_row()) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
-	
-	//if (APC_INSTALLED) {
-	//	apc_add($key_name, $data);
-	//}
+
 	SetCachedObject($key_name, $data);
 
 	return $data;
@@ -169,10 +127,7 @@ function GetNebuliteInfo($itemid) {
 	
 	$key_name = 'data_nebulite_cache'.$itemid;
 	
-	//if (APC_INSTALLED && apc_exists($key_name)) {
-	//	return apc_fetch($key_name);
-	//}
-	
+
 	if (IsCachedObject($key_name)) {
 		return GetCachedObject($key_name);
 	}
@@ -186,9 +141,7 @@ function GetNebuliteInfo($itemid) {
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
 	
-	//if (APC_INSTALLED) {
-	//	apc_add($key_name, $data);
-	//}
+
 	SetCachedObject($key_name, $data);
 
 	return $data;
@@ -200,10 +153,7 @@ function GetItemWZInfo($itemid) {
 	global $__database;
 	$key_name = 'data_characterwz_cache'.$itemid;
 	
-	//if (APC_INSTALLED && apc_exists($key_name)) {
-	//	return apc_fetch($key_name);
-	//}
-	
+
 	if (IsCachedObject($key_name)) {
 		return GetCachedObject($key_name);
 	}
@@ -249,10 +199,7 @@ WHERE
 	$item_info['ITEMID'] = $itemid;
 
 	$q->free();
-	
-	//if (APC_INSTALLED) {
-	//	apc_add($key_name, $item_info);
-	//}
+
 	SetCachedObject($key_name, $item_info);
 	
 	return $item_info;
