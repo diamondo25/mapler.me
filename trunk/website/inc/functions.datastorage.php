@@ -7,7 +7,7 @@ require_once __DIR__.'/classes/TreeNode.php';
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
 function SetCachedObject($key, $value) {
-	if (APC_INSTALLED) apc_add($key, $obj_data);
+	if (APC_INSTALLED) apc_add($key, $value);
 }
 
 function IsCachedObject($key) {
