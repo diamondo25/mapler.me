@@ -223,7 +223,7 @@ WHERE
 	$item_info = new TreeNode('main');
 	$temp = false;
 	//$item_info['grouped'] = array();
-	gc_disable(); // !!!!!!!!!!!!!!!!!!!!!!!!!!
+
 	while ($data = $q->fetch_row()) {
 		if ($data[0] == 'info_vslot') {
 			preg_match_all('/../i', $data[1], $matches);
@@ -246,7 +246,6 @@ WHERE
 			$tmp2 = &$tmp2[$name];
 		}
 	}
-	gc_enable(); // !!!!!!!!!!!!!!!!!!!!!!!!!!
 	$item_info['ITEMID'] = $itemid;
 
 	$q->free();
