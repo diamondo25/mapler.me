@@ -7,6 +7,7 @@ require_once __DIR__.'/classes/TreeNode.php';
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
 function SetCachedObject($key, $value) {
+	return;
 	$obj_data = serialize($value);
 	if (strlen($obj_data) < 1024 * 100) {
 		// Small things on mem?
@@ -22,6 +23,7 @@ function SetCachedObject($key, $value) {
 }
 
 function IsCachedObject($key) {
+	return false;
 	if (APC_INSTALLED && apc_exists($key)) {
 		return true;
 	}
@@ -29,6 +31,7 @@ function IsCachedObject($key) {
 }
 
 function GetCachedObject($key) {
+	return null;
 	if (!IsCachedObject($key)) return null;
 	if (APC_INSTALLED && apc_exists($key))
 		return unserialize(apc_fetch($key));
