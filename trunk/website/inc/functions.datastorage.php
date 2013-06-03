@@ -8,8 +8,8 @@ define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('ap
 
 function SetCachedObject($key, $value) {
 	$obj_data = serialize($value);
-	if (strlen($obj_data) > 1024 * 100) {
-		// Big things on mem?
+	if (strlen($obj_data) < 1024 * 100) {
+		// Small things on mem?
 		if (APC_INSTALLED) {
 			apc_add($key, $obj_data);
 			return;
