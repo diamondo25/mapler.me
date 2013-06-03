@@ -12,7 +12,7 @@ class TreeNode extends ArrayObject {
 		parent::__construct();
 		$this->name = $name;
 		$this->parent = $parent;
-		$this->isroot = $parent == null ? true : false;
+		$this->isroot = $parent === null ? true : false;
 	}
 	
 	public function offsetGet($index) {
