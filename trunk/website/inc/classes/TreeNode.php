@@ -4,20 +4,20 @@ require_once __DIR__.'/../functions.datastorage.php';
 
 class TreeNode extends ArrayObject {
 	public $name;
-	private $parent;
+	private $parentNode;
 	public $isroot;
 
 	
 	public function __construct($name, $parent = null) {
 		parent::__construct();
 		$this->name = $name;
-		$this->parent = $parent;
-		$this->isroot = $parent === null ? true : false;
+		$this->parentNode = $parent;
+		$this->isroot = $parentNode === null ? true : false;
 	}
 	
 	public function offsetGet($index) {
 		if ($index == '..') {
-			return $this->parent;
+			return $this->parentNode;
 		}
 		
 		if (!parent::offsetExists($index)) return null;
@@ -69,7 +69,7 @@ class TreeNode extends ArrayObject {
 	public function offsetExists($index) {
 		$ret = false;
 		if ($index == '..') {
-			$ret = $this->parent !== null;
+			$ret = $this->parentNode !== null;
 		}
 		else {
 			$ret = parent::offsetExists($index);
@@ -90,7 +90,7 @@ class TreeNode extends ArrayObject {
 		$ret = '';
 		$curnode = $this;
 		while (true) {
-			$curnode = $curnode->parent;
+			$curnode = $curnode->parentNode;
 			if ($curnode === null) break;
 			$ret = '/'.$curnode->name.$ret;
 		}
