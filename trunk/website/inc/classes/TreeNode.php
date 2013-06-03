@@ -9,7 +9,7 @@ class TreeNode extends ArrayObject {
 
 	
 	public function __construct($name, $parent = null) {
-		parent::__construct(array());
+		parent::__construct();
 		$this->name = $name;
 		$this->parent = $parent;
 		$this->isroot = $parent == null ? true : false;
