@@ -146,6 +146,7 @@ else:
 <?php if ($_loggedin): ?>
 									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
+									<li><a href="//<?php echo $domain; ?>/cdn/">CDN <b>*new*</b></a></li>
 <?php endif; ?>
 									<li class="divider"></li>
 									<li><a href="//status.mapler.me/">Server Status</a></li>
