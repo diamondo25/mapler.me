@@ -59,53 +59,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 .lead {
 	font-size:30px;
 }
-.status input[type="file"]
-{
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    border: solid transparent;
-    border-width: 0 0 100px 200px;
-    opacity: 0.0;
-    filter: alpha(opacity=0);
-    -o-transform: translate(250px, -50px) scale(1);
-    -moz-transform: translate(-300px, 0) scale(4);
-    direction: ltr;
-    cursor: pointer;
-}
-.upload
-	{
-    display: inline-block;
-padding: 4px 12px;
-margin-bottom: 0;
-font-size: 14px;
-line-height: 20px;
-text-align: center;
-vertical-align: middle;
-cursor: pointer;
-color: #333;
-text-shadow: 0 1px 1px rgba(255,255,255,0.75);
-background-color: #f5f5f5;
-background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
-background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
-background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
-background-image: -o-linear-gradient(top,#fff,#e6e6e6);
-background-image: linear-gradient(to bottom,#fff,#e6e6e6);
-background-repeat: repeat-x;
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
-border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
-filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
-border: 1px solid #bbb;
-border-bottom-color: #a2a2a2;
--webkit-border-radius: 4px;
--moz-border-radius: 4px;
-border-radius: 4px;
--webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
--moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
-box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
-}
 
 </style>
 <div class="row">
@@ -124,10 +77,8 @@ box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05);
 	<div class="span8">
 		<div class="status">
 			<form method="POST" enctype="multipart/form-data" style="margin:0 !important;">
-				<label class="upload">
-				<span>Select image..</span>
 				<input type="file" name="file" id="file" class="status">
-				</label>&nbsp;
+				<br/>
 				<input type="submit" class="btn" value="Send!">			
 			</form>
 		</div>
