@@ -68,6 +68,9 @@ ErrorDocument 403 /actions/error/index.php
 ErrorDocument 404 /actions/error/index.php
 ErrorDocument 500 /actions/error/index.php
 
+DefaultLanguage en-US
+AddDefaultCharset UTF-8
+
 #Firefox Fix: Allow fonts to be requested from other subdomains (profiles)
 AddType application/vnd.ms-fontobject .eot
 AddType font/ttf .ttf
