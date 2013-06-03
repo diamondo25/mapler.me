@@ -8,11 +8,11 @@ class TreeNode extends ArrayObject {
 	public $isroot;
 
 	
-	public function __construct($name, $parent = null) {
+	public function __construct($name, $_parent = null) {
 		parent::__construct();
 		$this->name = $name;
-		$this->parentNode = $parent;
-		$this->isroot = $parentNode === null ? true : false;
+		$this->parentNode = $_parent;
+		$this->isroot = $this->parentNode === null ? true : false;
 	}
 	
 	public function offsetGet($index) {
