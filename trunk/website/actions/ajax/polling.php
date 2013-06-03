@@ -77,12 +77,12 @@ WHERE
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
 
-		$whereq = '> '.$_client_time;
+		$whereq = '> FROM_UNIXTIME('.$_client_time.')';
 		if (isset($_POST['older-than'])) {
-			$whereq = '< '.$_client_time;
+			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
 		}
-		$whereq_1 = 'UNIX_TIMESTAMP(`when`) '.$whereq.($_client_time == 0 ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		$whereq_2 = 'UNIX_TIMESTAMP(`timestamp`) '.$whereq.($_client_time == 0 ? ' AND `timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_1 = '`when` '.$whereq.($_client_time == 0 ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_2 = '`timestamp` '.$whereq.($_client_time == 0 ? ' AND `timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
 		if (isset($_POST['older-than'])) {
 			$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
 			$whereq_2 .= ' AND `timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
