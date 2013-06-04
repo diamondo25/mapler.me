@@ -589,7 +589,7 @@ require_once __DIR__.'/functions.loginaccount.php';
 // Set to null by default
 $__url_useraccount = null;
 
-if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdomain != 'dev' && $subdomain != 'cdn' && $subdomain != 'status') {
+if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdomain != 'dev' && $subdomain != 'cdn' && $subdomain != 'status' && $subdomain != 'i') {
 	// Tries to receive userdata for the subdomain. If it fails, results in a 404.
 
 	$__url_useraccount = Account::Load($subdomain);
