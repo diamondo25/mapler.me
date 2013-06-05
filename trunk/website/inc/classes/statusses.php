@@ -110,7 +110,7 @@ WHERE
 		
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
-		$this->content = preg_replace('/(http|https|ftp|mailto)\:\/\/([^\<\s\t]+)/i', '<a href="$1://$2" target="_blank" class="status-link"><i class="icon-globe"></i> $1://$2</a>', $this->content);
+		$this->content = preg_replace('/(http|https|ftp|mailto)\:\/\/([^\<\s\t]+)/i', '<a href="$1://$2" target="_blank" class="status-link">$1://$2</a>', $this->content);
 		
 		//@replies
 		$this->content = preg_replace('/(^| )@([a-z0-9_]+)/i', '$1<a href="http://$2.'.$domain.'/">@$2</a>', $this->content);
