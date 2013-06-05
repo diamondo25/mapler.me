@@ -306,6 +306,7 @@ border: 0;
 	display: inline-block;
 	max-width:250px;
 	text-overflow:ellipsis;
+	overflow: hidden;
 }
 
 .reply-list {
