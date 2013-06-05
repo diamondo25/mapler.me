@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 		if(!in_array($ext,$allowed)) {
 			echo "<p class='alert alert-danger'>Error: Only picture files can be uploaded to Mapler.me!</p>";
 		}
-		if(!$imagecheck) {
+		else if(!$imagecheck) {
 			echo "<p class='alert alert-danger'>Error: Only picture files can be uploaded to Mapler.me!</p>";
 		}
 		else {
