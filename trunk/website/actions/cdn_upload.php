@@ -13,12 +13,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 	$allowed =  array('gif','png','jpg','jpeg');
 	$filename = $_FILES['file']['name'];
 	$ext = pathinfo($filename, PATHINFO_EXTENSION);
-		if(!in_array($ext,$allowed) ) {
+	$imagecheck = getimagesize($_FILES['file']['tmp_name']);
+		if(!in_array($ext,$allowed)) {
+			echo "<p class='alert alert-danger'>Error: Only picture files can be uploaded to Mapler.me!</p>";
+		}
+		if(!$imagecheck) {
 			echo "<p class='alert alert-danger'>Error: Only picture files can be uploaded to Mapler.me!</p>";
 		}
 		else {
 			$localFile = $_FILES['file']['tmp_name']; // This is the entire file that was uploaded to a temp location.
 			$filename = md5(basename($_FILES['file']['tmp_name'])) . '.' . $ext;
+			$filenamewithoutextention = md5(basename($_FILES['file']['tmp_name']));
 			$owner = $_loginaccount->GetID();
 			$ftp = '$ftp';
 			$fp = fopen($localFile, 'r');
@@ -26,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 			//Connecting to website.
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_USERPWD, "maplerme:".$ftp."->login");
-			curl_setopt($ch, CURLOPT_URL, 'ftp://direct.cdn.mapler.me/cdn.mapler.me/media/'.$filename);
+			curl_setopt($ch, CURLOPT_URL, 'ftp://direct.cdn.mapler.me/i.mapler.me/i/'.$filename);
 			curl_setopt($ch, CURLOPT_UPLOAD, 1);
 			curl_setopt($ch, CURLOPT_INFILE, $fp);
 			curl_setopt($ch, CURLOPT_INFILESIZE, filesize($localFile));
@@ -38,10 +43,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 		?>
 		<div class="status">
 		<p class='lead'>Your image has been successfully uploaded to Mapler.me!</p>
-		<p>You can find it by visiting <a href='http://cdn.mapler.me/media/<?php echo $filename; ?>' target='_blank'>http://cdn.mapler.me/media/<?php echo $filename; ?></a></p>
+		<center><img src="http://i.mapler.me/i/<?php echo $filename; ?>" class="picture"/></center>
+		<p>View your image! <a href='http://i.mapler.me/view/<?php echo $filenamewithoutextention; ?>' target='_blank'>http://i.mapler.me/view/<?php echo $filenamewithoutextention; ?></a></p>
 		<hr />
-		<p>Direct Link: <pre>http://cdn.mapler.me/media/<?php echo $filename; ?></pre>
-		<p>Signature / BBCode: <pre>[img]http://cdn.mapler.me/media/<?php echo $filename; ?>[/img]</pre></p>
+		<p>Direct Link: <pre>http://i.mapler.me/i/<?php echo $filename; ?></pre>
+		<p>Signature / BBCode: <pre>[img]http://i.mapler.me/i/<?php echo $filename; ?>[/img]</pre></p>
 		</div>
 		<?php
 			$q = $__database->query("
@@ -58,6 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 
 .lead {
 	font-size:30px;
+}
+
+.picture {
+	box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+	border: 1px solid #ddd;
+	margin: 10px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	max-width: 920px;
 }
 
 </style>
