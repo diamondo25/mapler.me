@@ -303,6 +303,9 @@ border: 0;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
+	display: inline-block;
+	max-width:250px;
+	text-overflow:ellipsis;
 }
 
 .reply-list {
