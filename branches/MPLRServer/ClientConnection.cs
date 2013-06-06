@@ -23,6 +23,7 @@ namespace MPLRServer
         public string LastLoggedDate = null;
 
         public CharacterData CharData { get; set; }
+        public List<string> _CharactersInMap { get; set; }
 
         public ushort MapleVersion { get; set; }
 
@@ -87,7 +88,6 @@ namespace MPLRServer
 
             SetKeys(sendkey, recvkey);
 
-
             SendInfoText("Welcome! Please open MapleStory.");
         }
 
@@ -99,6 +99,7 @@ namespace MPLRServer
             _exporter = null;
             CharData = null;
             LastReportID = -1;
+            _CharactersInMap = new List<string>();
         }
 
         public override void SendPacket(MaplePacket pPacket)

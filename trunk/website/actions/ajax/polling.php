@@ -69,7 +69,7 @@ WHERE
 	$parsed_url = $url == null ? null : parse_url($url);
 	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
 	
-	if ($res['membername'] == 'Diamondo25') {
+	if ($_loggedin && $res['membername'] == 'Diamondo25') {
 		$res['is_ok'] = $is_ok_url;
 		$res['parsed_url'] = $parsed_url;
 	}
@@ -169,7 +169,7 @@ ORDER BY
 LIMIT
 	15
 ";
-		if ($res['membername'] == 'Diamondo25') {
+		if ($_loggedin && $res['membername'] == 'Diamondo25') {
 			$res['q'] = $q;
 		}
 		$q = $__database->query($q);

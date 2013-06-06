@@ -61,16 +61,17 @@ namespace Mapler_Client
 
         public static void Upload(string pURL, string pData, string pFilename)
         {
-            WebClient wc = new WebClient();
-            wc.Headers.Set(HttpRequestHeader.UserAgent, "Mozilla/2.0 MaplerMeClient/1.0");
-            wc.Headers.Add("Content-Type", "binary/octet-stream");
-            wc.Headers.Add("X-Data", pData);
-            wc.UploadFileCompleted += (a, b) =>
+            new System.Threading.Thread((a) =>
             {
-                Logger.WriteLine("Screenshot Uploaded");
-            };
+                WebClient wc = new WebClient();
+                wc.Headers.Set(HttpRequestHeader.UserAgent, "Mozilla/2.0 (MMC 1.0)");
+                wc.Headers.Add("X-Data", pData);
 
-            wc.UploadFileAsync(new Uri(pURL), pFilename);
+                wc.UploadFile(new Uri(pURL), pFilename);
+
+                Logger.WriteLine("Screenshot Uploaded");
+                Console.Beep(8000, 500);
+            }).Start();
         }
     }
 }

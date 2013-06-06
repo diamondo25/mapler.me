@@ -527,7 +527,6 @@ namespace Mapler_Client
                 header[1] = (byte)(a / 0x100);
                 header[2] = (byte)(b % 0x100);
                 header[3] = (byte)(b / 0x100);
-                Buffer.BlockCopy(header, 0, pBuffer, 0, 4);
             }
             else
             {

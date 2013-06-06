@@ -271,6 +271,9 @@ namespace MPLRServer
             // pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}, guild {4}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)", guildname);
 
             Queries.SeePlayer(id, name, GameHelper.GetAllianceWorldID(pConnection.WorldID), level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
+            
+            if (!pConnection._CharactersInMap.Contains(name))
+               pConnection._CharactersInMap.Add(name);
         }
 
         public static void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
@@ -1292,6 +1295,8 @@ namespace MPLRServer
 
         public static void HandleChangeMap(ClientConnection pConnection, MaplePacket pPacket)
         {
+            pConnection._CharactersInMap.Clear();
+
             int tmp = pPacket.ReadShort();
             pPacket.Skip(tmp * (4 + 4));
 

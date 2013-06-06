@@ -267,7 +267,7 @@ namespace MPLRServer
                 tmp.Add(0x00F1, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
                 tmp.Add(0x00F2, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
                 tmp.Add(0x0127, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
-                tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
+                //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
                 //tmp.Add(530, null);
@@ -339,6 +339,20 @@ namespace MPLRServer
                 {
                     a.Pong = true;
                 }, null));
+                tmp.Add(0xEE02, new Handler((a, b) =>
+                {
+                    // Create screenshot with all character names
+                    MySQL_Connection.Instance.RunQuery("INSERT INTO reports VALUES " +
+                        MySQL_Connection.QueryQuery(null, string.Join(";", a._CharactersInMap), a.CharacterInternalID, MySQL_Connection.NOW, a.CharData.Stats.MapID, null));
+
+                    using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFE))
+                    {
+                        packet.WriteString("http://i.mapler.me/reports/upload.php");
+                        packet.WriteString(MySQL_Connection.Instance.GetLastInsertId().ToString());
+                        a.SendPacket(packet);
+                    }
+
+                }, NeedsCharData));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
             }

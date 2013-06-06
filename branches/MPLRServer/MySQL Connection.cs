@@ -9,8 +9,11 @@ namespace MPLRServer
 {
     public class MySQL_Connection : IDisposable
     {
+
         public struct NowType { }
         public struct UnescapedValue { public object Value; }
+
+        public static NowType NOW = new NowType();
 
         public MySqlDataReader Reader { get; private set; }
         public bool Stop { get; set; }

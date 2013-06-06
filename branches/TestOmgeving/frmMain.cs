@@ -19,6 +19,8 @@ namespace Mapler_Client
         private frmStats _statScreen = null;
         private string _mapleEXE = null;
 
+        private KeyboardHook _keyboardHook = new KeyboardHook();
+
         public frmMain()
         {
 
@@ -42,12 +44,31 @@ namespace Mapler_Client
 
                 ServerConnection.Initialize();
                 Sniffer.Init();
+
+                _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
+                _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.ToString()), "ERROR");
                 Program.Closing = true;
                 Environment.Exit(1);
+            }
+        }
+
+        void _keyboardHook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            var procs = System.Diagnostics.Process.GetProcessesByName("MapleStory");
+            if (procs.Length == 0 || ServerConnection.Instance == null) return;
+
+            if (e.Modifier == Mapler_Client.ModifierKeys.Alt && e.Key == Keys.R)
+            {
+                Logger.WriteLine("Requesting report screenshot");
+                using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE02))
+                {
+                    ServerConnection.Instance.SendPacket(mp);
+                    Console.Beep(7000, 500);
+                }
             }
         }
 
@@ -149,7 +170,9 @@ namespace Mapler_Client
                 return;
             }
 
-            
+            System.Diagnostics.Process.Start(_mapleEXE, "WebStart");
+
+            /*
             var process = System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
             for (int i = 0; i < 20; i++)
             {
@@ -159,6 +182,7 @@ namespace Mapler_Client
                     break;
                 }
             }
+            */
         }
 
         private void label3_Click(object sender, EventArgs e)
