@@ -193,21 +193,11 @@ LIMIT
 				if ($content[1] == 'levelup') {
 ?>
 			<div class="status">
-				<div class="header">
-					<div class="character" style="background: url('http://<?php echo $domain; ?>/avatar/<?php echo $content[0]; ?>') no-repeat center -17px #FFF;"></div><br/>
-			<p><a href="//<?php echo $username; ?>.mapler.me/"><?php echo $nickname; ?></a> <span class="faded">(@<?php echo $username; ?>)</span>
-			<?php if ($account_rank >= RANK_MODERATOR): ?>
-					<span class="ct-label"><i class="icon-star"></i> <?php echo GetRankTitle($account_rank); ?></span>
-			<?php endif; ?>
+			<p style="margin:0px;"><i class="icon-check-sign"></i>
+			<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
+			<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+			 <span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 			</p>
-			</div>
-			<br/>
-			<div class="status-contents">
-			<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> just reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
-			</div>
-			<div class="status-extra" style="clear:both;">
-			 <span status-post-time="<?php echo $timestamp; ?>" class="status-time" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
-			</div>
 		</div>
 <?php
 				}
