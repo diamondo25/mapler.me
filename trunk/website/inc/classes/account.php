@@ -253,7 +253,12 @@ ON DUPLICATE KEY
 		$disallowed = array("nexon", "nexonamerica", "wizet", "hacker", "waltzing", "maple", "maplestory", 
 		"staff", "admin", "administrator", "moderator", "team", "hack", "hacking", "mesos", "meso", "fuck", 
 		"shit", "asshole", "nigger", "faggot", "cunt", "pussy", "dick", "vagina", "penis", "mail", "cdn", 
-		"user", "users", "contact", "support", "legal", "sales", "bitch", "whore", "slut");
+		"user", "users", "contact", "support", "legal", "sales", "bitch", "whore", "slut", "mapleteam", 
+		"girasol", "hime", "mrbasil", "basilmarket", "southperry", "leafre", "n3x0n", "maplestorysea", 
+		"nexonkorea", "nexn", "w8baby", "gamersoul", "ccplz", "BT", "nexonforums", "mesoseller", 
+		//spoofing names of staff or nexon
+		"hackshield", "tylerliberman", "timbervvoIf", "timbervvolf", "timberwoIf", "diamondo", 
+		"diamondo24", "marys", "maryse1", "marys3", "TyIer", "ThebIuecorsair");
 		
 		if ($len < 4 || $len > 20) {
 			$error = "A Mapler.me username has to be between four and twenty characters long.";
@@ -290,11 +295,6 @@ ON DUPLICATE KEY
 		if ($len < 4 || $len > 20) {
 			$error = "Nickname has to be between four and twenty characters long.";
 		}
-		else {
-			$result = $__database->query("SELECT id FROM accounts WHERE nickname = '".$__database->real_escape_string($nickname)."'");
-			if ($result->num_rows == 1) {
-				$error = "This nickname has already been taken.";
-			}
 			$result->free();
 		}
 		
