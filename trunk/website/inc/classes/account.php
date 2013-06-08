@@ -295,9 +295,6 @@ ON DUPLICATE KEY
 		if ($len < 4 || $len > 20) {
 			$error = "Nickname has to be between four and twenty characters long.";
 		}
-			$result->free();
-		}
-		
 		return $error;
 	}
 }
