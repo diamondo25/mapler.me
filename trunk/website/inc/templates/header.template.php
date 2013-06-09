@@ -194,11 +194,11 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 									<li class="dropdown-submenu">
 										<a tabindex="-1" href="#">Manage</a>
 											<ul class="dropdown-menu">
-												<li><a href="//<?php echo $domain; ?>/general/">General</a></li>
-												<li><a href="//<?php echo $domain; ?>/statuses/">Statuses</a></li>
-												<li><a href="//<?php echo $domain; ?>/revisions/">Revisions</a></li>
-												<li><a href="//<?php echo $domain; ?>/statistics/">Statistics</a></li>
-												<li><a href="//<?php echo $domain; ?>/serverlog/">Log</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/general/">General</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/statuses/">Statuses</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/revisions/">Revisions</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/statistics/">Statistics</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/serverlog/">Log</a></li>
 											</ul>
 									</li>
 <?php
