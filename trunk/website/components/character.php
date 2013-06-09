@@ -966,24 +966,23 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 </script>
 
 <div id="item_info" style="display: none;">
+<div class="top"></div>
 	<div id="item_info_title"></div>
 	<div id="item_info_extra"></div>
-	<div class="icon_holder"><img id="item_info_icon" src="" title="" width="50" height="50" /></div>
+	<div class="icon_holder"><img id="item_info_icon" src="" title="" width="72px" height="72px"/></div>
 	<div id="item_info_description"></div>
 	<div class="item_req_stats">
-		<table border="0" tablepadding="3" tablespacing="3">
 
 <?php
 foreach ($reqlist as $option => $desc) {
 ?>
-			<tr id="item_info_req_row_<?php echo strtolower($option); ?>">
-				<td><?php echo $desc; ?></td>
-				<td id="item_info_req_<?php echo strtolower($option); ?>"></td>
-			</tr>
+			<span id="item_info_req_row_<?php echo strtolower($option); ?>">
+				<?php echo $desc; ?>
+				<span id="item_info_req_<?php echo strtolower($option); ?>"></span>
+			</span><br/>
 <?php
 }
 ?>
-		</table>
 
 	</div>
 	<div id="req_job_list">
@@ -995,7 +994,6 @@ foreach ($reqlist as $option => $desc) {
 		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
 	</div>
 	<div class="item_stats" id="item_stats_block">
-		<hr />
 		<table border="0" tablepadding="3" tablespacing="3">
 
 <?php
@@ -1027,8 +1025,8 @@ foreach ($optionlist as $option => $desc) {
 		</table>
 	</div>
 	<div id="extra_item_info"></div>
-	
 </div>
+<div class="bottom"></div>
 	<hr/>
 
 <p class="lead"><?php echo $character_info['name']; ?>'s Skills</p>
