@@ -177,13 +177,30 @@ if ($_loggedin):
 									<li class="divider"></li>
 									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
-									<li><a href="//<?php echo $domain; ?>/settings/profile/">Settings</a></li>
+									<li class="dropdown-submenu">
+										<a tabindex="-1" href="#">Settings</a>
+											<ul class="dropdown-menu">
+												<li><a href="//<?php echo $domain; ?>/settings/profile/">Profile Settings</a></li>
+												<li><a href="//<?php echo $domain; ?>/settings/accounts/">Accounts</a></li>
+												<li><a href="//<?php echo $domain; ?>/settings/characters/">Characters</a></li>
+												<li><a href="//<?php echo $domain; ?>/settings/friends/">Friend Requests</a></li>
+											</ul>
+									</li>
 
 <?php
 if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 									<li class="divider"></li>
-									<li id="fat-menu"><a href="//<?php echo $domain; ?>/manage/general/">Manage</a></li>
+									<li class="dropdown-submenu">
+										<a tabindex="-1" href="#">Manage</a>
+											<ul class="dropdown-menu">
+												<li><a href="//<?php echo $domain; ?>/general/">General</a></li>
+												<li><a href="//<?php echo $domain; ?>/statuses/">Statuses</a></li>
+												<li><a href="//<?php echo $domain; ?>/revisions/">Revisions</a></li>
+												<li><a href="//<?php echo $domain; ?>/statistics/">Statistics</a></li>
+												<li><a href="//<?php echo $domain; ?>/serverlog/">Log</a></li>
+											</ul>
+									</li>
 <?php
 endif;
 ?>
