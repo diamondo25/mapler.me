@@ -423,11 +423,11 @@ hr {
 }
 
 #item_info #bonus_potentials {
-	color: darkblue;
+	color: white;
 }
 
 #item_info #potentials {
-	color: darkred;
+	color: white;
 }
 
 #item_info .req_job {
