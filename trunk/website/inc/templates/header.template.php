@@ -178,7 +178,7 @@ if ($_loggedin):
 									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
 									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
 									<li class="dropdown-submenu">
-										<a tabindex="-1" href="#">Settings</a>
+										<a tabindex="-1" href="//<?php echo $domain; ?>/settings/profile/">Settings</a>
 											<ul class="dropdown-menu">
 												<li><a href="//<?php echo $domain; ?>/settings/profile/">Profile Settings</a></li>
 												<li><a href="//<?php echo $domain; ?>/settings/accounts/">Accounts</a></li>
@@ -192,7 +192,7 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 ?>
 									<li class="divider"></li>
 									<li class="dropdown-submenu">
-										<a tabindex="-1" href="#">Manage</a>
+										<a tabindex="-1" href="//<?php echo $domain; ?>/manage/general/">Manage</a>
 											<ul class="dropdown-menu">
 												<li><a href="//<?php echo $domain; ?>/manage/general/">General</a></li>
 												<li><a href="//<?php echo $domain; ?>/manage/statuses/">Statuses</a></li>

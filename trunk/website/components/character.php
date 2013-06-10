@@ -136,6 +136,8 @@ SELECT
 ");
 	$statistics = $qcount->fetch_assoc();
 	$qcount->free();
+	
+$avatarurl = 'http://mapler.me/avatar/' . $character_info['name'];
 ?>
 <div class="row">
 	<div class="span12">
@@ -150,9 +152,11 @@ SELECT
 <div class="row">
 	<div class="span3" style="text-align:center;">
 <?php if ($__is_viewing_self): ?>
-		<button class="btn" onclick="ToggleTogglers()">Display/hide visibility modifiers</button>
+		<button class="btn" style="margin-bottom:10px;" onclick="ToggleTogglers()">Display/hide Visibility</button>
 <?php endif; ?>
-		<img src="//mapler.me/ignavatar/<?php echo $character_info['name']; ?>" class="avatar" /><br />
+		<div class="location">
+		<img src="<?php echo $avatarurl ?>" class="h" /><br />
+		</div>
 		<p class="name"><?php echo $character_info['name']; ?><br/>
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 		</p>

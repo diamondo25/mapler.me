@@ -4,6 +4,34 @@
 	width:200px;
 }
 
+.h {
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    transform: scaleX(-1);
+    -ms-filter: fliph; /*IE*/
+    filter: fliph; /*IE*/
+    position: relative;
+    top: 50px;
+    left: 5px;
+}
+
+.location {
+	background: url('http://puu.sh/3cc4q.png');
+	background-position: center -30px;
+	max-width:210px;
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	-moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+	margin: 0px auto 20px;
+	border-radius: 3px;
+	height: 200px;
+}
+
 .name {
 	font-weight: bold;
 	font-family: Helvetica, sans-serif;
