@@ -1,20 +1,37 @@
 <script type="text/javascript">
-function GetStatus() {
-    $('input[name=type]').val('status');
-    $("input").attr("placeholder", "Search for statuses?");
-}
 function GetPlayer() {
-	$('input[name=type]').val('player');
-	$("input").attr("placeholder", "Search for maplers?");
+	$('input[name=type]').val('character');
+	$("input").attr("placeholder", "Search for a character?");
 }
+var $container = $('#character_list');
+// initialize isotope
+$container.isotope({
+  itemSelector : '.char'
+});
+
+// filter items when filter link is clicked
+$('#filters a').click(function(){
+  var selector = $(this).attr('data-filter');
+  $container.isotope({ filter: selector });
+  return false;
+});
+
 </script>
 
 <?php
 //default is status so results always show
-$searchtype = 'status';
+$searchtype = 'character';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type'])) {
 	$typepls = nl2br(htmlentities(strip_tags(trim($_POST['type']))));
 	$searchtype = $typepls;
+}
+
+$searching = '';
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
+	$searchback = nl2br(htmlentities(strip_tags(trim($_POST['search']))));
+	if (!empty($searchback)) {
+		$searching = $searchback;
+	}
 }
 ?>
 
@@ -41,15 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type'])) {
 	letter-spacing: normal;
 	color: #999;
 	font-size: 15px;
-}
-
-hr {
-	margin: 0 auto;
-	border: 0;
-	border-top: 1px solid #eee;
-	border-bottom: 1px solid #CCC;
-	width: 95%;
-	margin-bottom: 15px;
 }
 
 .side {
@@ -131,12 +139,22 @@ hr {
 
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
-		<ul id="filters" class="nav nav-list search-menu">
-          <li><a href="#" onclick="GetStatus()"><i class="icon-chevron-right"></i> Statuses</a></li>
-          <li><a href="#" onclick="GetPlayer()"><i class="icon-chevron-right"></i> Maplers</a></li>
-        </ul>
+		<p class="lead">Search</p>
         <form method="post" action="http://<?php echo $domain; ?>/search/">
-			<input type="text" name="search" placeholder="Search?" />
-			<input type="hidden" name="type" id="stype" value="<?php echo $searchtype; ?>"/>
+			<input type="text" name="search" placeholder="Search for a character?" />
+			<input type="hidden" name="type" id="stype" value="character"/>
+			<p>Tip: Type nothing to view all recent characters!</p>
 		</form>
+		<?php if ($searching == '') { ?>
+		<hr />
+		<ul id="filters" class="nav nav-list search-menu">
+			<li><a href="#" data-filter="*">Show all.</a></li>
+			<li><a href="#" data-filter=".scania">Scania</a></li>
+			<li><a href="#" data-filter=".bera">Bera</a></li>
+			<li><a href="#" data-filter=".broa">Broa</a></li>
+			<li><a href="#" data-filter=".windia">Windia</a></li>
+			<li><a href="#" data-filter=".bellocan, .nova">Bellocan / Nova</a></li>
+		</ul>
+		<p>We're aware worlds are missing. This is currently being tested.</p>
+		<?php } ?>
 	</div>

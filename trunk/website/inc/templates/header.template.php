@@ -135,8 +135,8 @@ else:
 									<?php endif; ?>
 									        		<li> 
 	        		<form method="post" action="http://<?php echo $domain; ?>/search/" style="margin:0 !important;">
-		        		<input type="text" name="search" class="search-query searchbar" placeholder="Search?" />
-		        		<input type="hidden" name="type" value="player" />
+		        		<input type="text" name="search" class="search-query searchbar" placeholder="Find a character?" />
+		        		<input type="hidden" name="type" value="character" />
 		        	</form>
         		</li>
 									<li class="divider"></li>
