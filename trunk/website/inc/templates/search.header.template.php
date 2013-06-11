@@ -3,19 +3,6 @@ function GetPlayer() {
 	$('input[name=type]').val('character');
 	$("input").attr("placeholder", "Search for a character?");
 }
-var $container = $('#character_list');
-// initialize isotope
-$container.isotope({
-  itemSelector : '.char'
-});
-
-// filter items when filter link is clicked
-$('#filters a').click(function(){
-  var selector = $(this).attr('data-filter');
-  $container.isotope({ filter: selector });
-  return false;
-});
-
 </script>
 
 <?php
@@ -154,6 +141,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
 			<li><a href="#" data-filter=".broa">Broa</a></li>
 			<li><a href="#" data-filter=".windia">Windia</a></li>
 			<li><a href="#" data-filter=".bellocan, .nova">Bellocan / Nova</a></li>
+			<li><a href="#" data-filter=".mardia, .kradia, .yellonde, .chaos">Mardia, Kradia, Yellonde, Chaos</a></li>
+			<li><a href="#" data-filter=".galicia, .arcania, .zenith, .el nido, .demethos">Galicia, Arcania, Zenith, El Nido, Demethos</a></li>
+			<li><a href="#" data-filter=".renegades">Renegades</a></li>
 		</ul>
 		<p>We're aware worlds are missing. This is currently being tested.</p>
 		<?php } ?>
