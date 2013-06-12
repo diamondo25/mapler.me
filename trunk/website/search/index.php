@@ -48,7 +48,8 @@ LIMIT
 <?php
 			}
 ?>
-		<div class="row" id="character_list">
+		<div id="character_list">
+		<div class="row">
 <?php
 		}
 		$i++;
@@ -107,6 +108,7 @@ WHERE
 }
 }
 ?>
+</div>
 </div>
 </div>
 </div>
