@@ -4,6 +4,7 @@ require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/templates/search.header.template.php';
 ?>
 <div class="span9 search-results">
+<div id="character_list">
 <?php
 if ($searching == '') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'character') {
@@ -22,7 +23,7 @@ LEFT JOIN
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 15
+	0, 21
 ");
 
 	if ($q->num_rows == 0) {
@@ -41,20 +42,8 @@ LIMIT
 	$characters_per_row = 3;
 	$i = 0;
 	while ($row = $q->fetch_assoc()) {
-		if ($i % $characters_per_row == 0) {
-			if ($i > 0) {
 ?>
-		</div>
-<?php
-			}
-?>
-		<div id="character_list">
-		<div class="row">
-<?php
-		}
-		$i++;
-?>
-<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
 				<center>
 					<br />
 						<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/><br/>
@@ -63,7 +52,7 @@ LIMIT
 				</center>
 			</div>
 <?php
-	}
+}
 }
 }
 elseif (!$searching == '') {
@@ -108,8 +97,6 @@ WHERE
 }
 }
 ?>
-</div>
-</div>
 </div>
 </div>
 <?php require_once __DIR__.'/../inc/footer.php'; ?>
