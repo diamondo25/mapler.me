@@ -6,7 +6,7 @@ function GetPlayer() {
 </script>
 
 <?php
-//default is status so results always show
+// search related functions and set up.
 $searchtype = 'character';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type'])) {
 	$typepls = nl2br(htmlentities(strip_tags(trim($_POST['type']))));
@@ -20,6 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
 		$searching = $searchback;
 	}
 }
+
+$check = strlen($searching);
 ?>
 
 <style type="text/css">
@@ -132,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
 			<input type="hidden" name="type" id="stype" value="character"/>
 			<p>Tip: Type nothing to view all recent characters!</p>
 		</form>
-		<?php if ($searching == '') { ?>
+		<?php if ($check == '0') { ?>
 		<hr />
 		<ul id="filters" class="nav nav-list search-menu">
 			<li><a href="#" data-filter="*">Show all.</a></li>

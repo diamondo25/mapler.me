@@ -6,8 +6,7 @@ require_once __DIR__.'/../inc/templates/search.header.template.php';
 <div class="span9">
 
 <?php
-	$check = strlen($searching);
-	if ($check < 4 || $check > 20) {
+	if ($check != 0 && ($check < 4 || $check > 20)) {
 ?>
 	<center>
 		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -22,7 +21,7 @@ require_once __DIR__.'/../inc/templates/search.header.template.php';
 
 <div id="character_list">
 <?php
-if ($searching == '') {
+if ($check == '0') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'character') {
 	$q = $__database->query("
 SELECT 
@@ -58,7 +57,7 @@ LIMIT
 ?>
 </div>
 <?php
-if (!$searching == '') {
+if (!$check == '0') {
 $q = $__database->query("
 SELECT 
 	*,
