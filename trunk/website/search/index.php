@@ -38,7 +38,7 @@ LEFT JOIN
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 21
+	0, 60
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
