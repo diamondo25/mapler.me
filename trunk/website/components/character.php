@@ -85,10 +85,10 @@ else {
 	
 	$__hidden_objects = array();
 	
-	function IsHiddenObject($optionName) {
+	function IsHiddenObject($optionName, $no_override = false) {
 		global $__database, $internal_id, $__hidden_objects, $_loggedin, $_loginaccount;
 		
-		if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_MODERATOR))
+		if ($_loggedin && !$no_override && $_loginaccount->IsRankOrHigher(RANK_MODERATOR))
 			return false;
 		
 		if (isset($__hidden_objects[$optionName]))
@@ -120,9 +120,9 @@ WHERE
 		global $character_info, $__is_viewing_self, $__hidden_objects;
 		if (!$__is_viewing_self) return;
 		
-		$hidden = IsHiddenObject($optionName);
+		$hidden = IsHiddenObject($optionName, true);
 ?>
-		<div class="visibility-toggler <?php echo ($hidden ? 'hidden-obj' : ''); ?>" style="display: none;" name="<?php echo $character_info['name']; ?>" option="<?php echo $optionName; ?>"></div>
+		<input type="checkbox" class="visibility-toggler" style="display: none;" name="<?php echo $character_info['name']; ?>" option="<?php echo $optionName; ?>" <?php echo (!$hidden ? 'checked' : ''); ?> />
 <?php
 	}
 	
@@ -137,7 +137,7 @@ SELECT
 	$statistics = $qcount->fetch_assoc();
 	$qcount->free();
 	
-$avatarurl = 'http://mapler.me/avatar/' . $character_info['name'];
+$avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=big&flip';
 ?>
 <div class="row">
 	<div class="span12">
@@ -245,7 +245,7 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 ?>
 	
 	<div class="span9" style="margin-left:10px;">
-		<p class="lead"><?php echo $character_info['name']; ?>'s Equipment</p>
+		<p class="lead">Equipment</p>
 <?php
 
 /******************* DRAGONS BE HERE ****************************/
@@ -649,8 +649,8 @@ function AddInventoryItems(&$inventory) {
 
 <div class="row char-inventories">
 <?php if ($__is_viewing_self || !IsHiddenObject('equip_general')): ?>
-<?php MakeHideToggleButton('equip_general'); ?>
 	<div style="width: 184px;">
+<?php MakeHideToggleButton('equip_general'); ?>
 		<div class="character_equips">
 			<div id="normal_equips">
 
@@ -705,20 +705,20 @@ foreach ($cashequips as $slot => $item) {
 <?php endif; /* Hidden/not hidden check */ ?>
 	
 <?php if ($__is_viewing_self || !(IsHiddenObject('equip_droid_totem') && IsHiddenObject('equip_droid_totem'))): ?>
-<?php 	MakeHideToggleButton('equip_droid_totem'); ?>
 	<div class="char-totems-droid">
+<?php 	MakeHideToggleButton('equip_droid_totem'); ?>
 
 <?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
-<?php 		MakeHideToggleButton('equip_droid'); ?>
 		<div class="character_droid">
+<?php 		MakeHideToggleButton('equip_droid'); ?>
 <?php 		AddInventoryItems($normalequips['Android']); ?>
 		</div>
 <?php 	endif; ?>
 
 
 <?php 	if ($__is_viewing_self || !IsHiddenObject('equip_totems')): ?>
-<?php 		MakeHideToggleButton('equip_totems'); ?>
 		<div class="character_totems">
+<?php 		MakeHideToggleButton('equip_totems'); ?>
 <?php 		AddInventoryItems($normalequips['Totem']); ?>
 		</div>
 <?php 	endif; ?>
@@ -727,8 +727,8 @@ foreach ($cashequips as $slot => $item) {
 
 
 <?php if ($__is_viewing_self || !IsHiddenObject('job_equipment')): ?>
-<?php 	MakeHideToggleButton('job_equipment'); ?>
 	<div class="job-specific-inventory">
+<?php 	MakeHideToggleButton('job_equipment'); ?>
 <?php
 $job_css_class = '';
 $array_name = '';
@@ -750,8 +750,8 @@ if ($job_css_class != '') {
 <?php endif; ?>
 
 <?php if ($__is_viewing_self || !IsHiddenObject('pets')): ?>
-<?php 	MakeHideToggleButton('pets'); ?>
 	<div style="width: 151px;">
+<?php 	MakeHideToggleButton('pets'); ?>
 		<div class="character_pets">
 			<div class="character_pets_holder">
 				<select onchange="ChangePet(this.value)">
@@ -795,8 +795,8 @@ for ($i = 0; $i < 3; $i++) {
 	<hr />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
-<?php 	MakeHideToggleButton('inventories'); ?>
 	<div class="span4" id="inventories">
+<?php 	MakeHideToggleButton('inventories'); ?>
 		<select onchange="ChangeInventory(this.value)">
 			<option value="1">Equipment</option>
 			<option value="2">Use</option>
@@ -862,6 +862,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 	
 
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
+	<div>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
 	<table class="span4" cellpadding="5">
 <?php
@@ -909,6 +910,7 @@ WHERE
 	}
 ?>
 	</table>
+	</div>
 <?php endif; ?>
 
 </div>
@@ -916,7 +918,7 @@ WHERE
 
 <?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
 <?php 	MakeHideToggleButton('evo_rocks'); ?>
-	<p class="lead"><?php echo $character_info['name']; ?>'s Evolution System Cores</p>
+	<p class="lead">Evolution System Cores</p>
 	<table cellpadding="5">
 <?php
 	$q = $__database->query("
@@ -1033,7 +1035,9 @@ foreach ($optionlist as $option => $desc) {
 <div class="bottom"></div>
 	<hr/>
 
-<p class="lead"><?php echo $character_info['name']; ?>'s Skills</p>
+<?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
+<?php 	MakeHideToggleButton('skills'); ?>
+<p class="lead">Skills</p>
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -1048,8 +1052,6 @@ foreach ($optionlist as $option => $desc) {
 }
 </style>
 
-<?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
-<?php 	MakeHideToggleButton('skills'); ?>
 <div id="skill_list">
 <?php
 	
@@ -1173,14 +1175,14 @@ ORDER BY
 <?php endforeach; ?>
 			</select>
 		</div>
-<?php endif; ?>
 	
 	
 	<hr />
+<?php endif; ?>
 	
 <?php if ($__is_viewing_self || !IsHiddenObject('familiars')): ?>
 <?php 	MakeHideToggleButton('familiars'); ?>
-	<p class="lead"><?php echo $character_info['name']; ?>'s Familiars</p>
+	<p class="lead">Familiars</p>
 	<table cellspacing="10" cellpadding="6">
 <?php
 // Familiars

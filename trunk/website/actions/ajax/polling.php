@@ -10,7 +10,7 @@ if ($request_type == 'info') {
 	$res = array();
 	$res['time'] = $__server_time;
 	
-	$_client_time = isset($_POST['client-time']) ? intval($_POST['client-time']) : 0;
+	$_client_time = isset($_POST['client-time']) ? intval($_POST['client-time']) : time() - 10000;
 
 	
 	$res['loggedin'] = $_loggedin;
@@ -76,7 +76,7 @@ WHERE
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
-
+		
 		$whereq = '> FROM_UNIXTIME('.$_client_time.')';
 		if (isset($_POST['older-than'])) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
@@ -193,12 +193,12 @@ LIMIT
 				if ($content[1] == 'levelup') {
 ?>
 			<div class="status">
-			<p style="margin:0px;"><i class="icon-check-sign"></i>
-			<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
-			<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
-			 <span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
-			</p>
-		</div>
+				<p style="margin:0px;"><i class="icon-check-sign"></i>
+					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
+					<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
+				</p>
+			</div>
 <?php
 				}
 				// hurr

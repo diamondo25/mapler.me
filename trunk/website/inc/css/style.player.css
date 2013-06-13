@@ -5,15 +5,10 @@
 }
 
 .h {
-    -moz-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    transform: scaleX(-1);
-    -ms-filter: fliph; /*IE*/
-    filter: fliph; /*IE*/
     position: relative;
-    top: 50px;
-    left: 5px;
+	max-width: none;
+	left: -31px;
+	top: -14px;
 }
 
 .location {
@@ -59,16 +54,9 @@ hr {
 }
 
 .visibility-toggler {
-	width: 10px;
-	height: 10px;
-	background-color: green;
-	margin: 0;
-	padding: 0;
-	cursor: pointer;
-}
-
-.hidden-obj {
-	background-color: red;
+	display: block;
+	position: absolute;
+	z-index: 10000;
 }
 
 .side {

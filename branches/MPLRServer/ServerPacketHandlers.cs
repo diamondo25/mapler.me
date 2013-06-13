@@ -511,14 +511,14 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x4000000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x4000000 | {0}", value);
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.CraftDiligence] = pPacket.ReadInt();
+                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x8000000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x8000000 | {0}", value);
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Empathy] = pPacket.ReadInt();
+                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x10000000))
@@ -594,44 +594,41 @@ namespace MPLRServer
 
         public static void HandleSkillUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
-            byte type = pPacket.ReadByte();
-            if (type == 1)
+            pPacket.ReadByte(); // Unstuck
+            pPacket.ReadByte();
+            ushort amount = pPacket.ReadUShort();
+
+            using (InsertQueryBuilder skillTable = new InsertQueryBuilder("skills"))
             {
-                pPacket.ReadByte();
-                ushort amount = pPacket.ReadUShort();
+                skillTable.OnDuplicateUpdate = true;
+                skillTable.AddColumn("character_id", false);
+                skillTable.AddColumn("skillid", false);
+                skillTable.AddColumn("level", true);
+                skillTable.AddColumn("maxlevel", true);
+                skillTable.AddColumn("expires", true);
 
-                using (InsertQueryBuilder skillTable = new InsertQueryBuilder("skills"))
+                for (ushort i = 0; i < amount; i++)
                 {
-                    skillTable.OnDuplicateUpdate = true;
-                    skillTable.AddColumn("character_id", false);
-                    skillTable.AddColumn("skillid", false);
-                    skillTable.AddColumn("level", true);
-                    skillTable.AddColumn("maxlevel", true);
-                    skillTable.AddColumn("expires", true);
+                    int skillid = pPacket.ReadInt();
+                    int level = pPacket.ReadInt();
+                    int masterlevel = pPacket.ReadInt();
+                    long expiration = pPacket.ReadLong();
 
-                    for (ushort i = 0; i < amount; i++)
-                    {
-                        int skillid = pPacket.ReadInt();
-                        int level = pPacket.ReadInt();
-                        int masterlevel = pPacket.ReadInt();
-                        long expiration = pPacket.ReadLong();
+                    Timeline.Instance.PushSkillUP(pConnection.CharacterInternalID, skillid, level);
 
-                        Timeline.Instance.PushSkillUP(pConnection.CharacterInternalID, skillid, level);
-
-                        skillTable.AddRow(pConnection.CharacterInternalID, skillid, level, masterlevel == 0 ? null : (object)masterlevel, expiration);
-                    }
-
-                    if (skillTable.RowCount > 0)
-                    {
-                        string q = skillTable.ToString();
-                        System.IO.File.WriteAllText("insert-update-skills-packet.sql", q);
-                        int result = (int)MySQL_Connection.Instance.RunQuery(q);
-                        pConnection.Logger_WriteLine("Result Skills: {0}", result);
-
-                        pConnection.SendTimeUpdate();
-                    }
-
+                    skillTable.AddRow(pConnection.CharacterInternalID, skillid, level, masterlevel == 0 ? null : (object)masterlevel, expiration);
                 }
+
+                if (skillTable.RowCount > 0)
+                {
+                    string q = skillTable.ToString();
+                    System.IO.File.WriteAllText("insert-update-skills-packet.sql", q);
+                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                    pConnection.Logger_WriteLine("Result Skills: {0}", result);
+
+                    pConnection.SendTimeUpdate();
+                }
+
             }
         }
 
@@ -787,7 +784,7 @@ namespace MPLRServer
                                 var pet = item as ItemPet;
                                 using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
                                 {
-                                    Queries.SavePet(pet, petTable);
+                                    Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
                                     MySQL_Connection.Instance.RunQuery(petTable.ToString());
                                 }
                             }
@@ -1277,7 +1274,7 @@ namespace MPLRServer
                                 var pet = item as ItemPet;
                                 using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
                                 {
-                                    Queries.SavePet(pet, petTable);
+                                    Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
                                     MySQL_Connection.Instance.RunQuery(petTable.ToString());
                                 }
                             }

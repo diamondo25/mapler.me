@@ -312,18 +312,19 @@ namespace MPLRServer
                 Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, pInventory, pSlot, checksum);
         }
 
-        public static void SavePet(ItemPet pPet, InsertQueryBuilder pInsertBuilder)
+        public static void SavePet(int pCharacterInternalID, ItemPet pPet, InsertQueryBuilder pInsertBuilder)
         {
             if (!pInsertBuilder.HasColumns)
             {
                 pInsertBuilder.OnDuplicateUpdate = true;
+                pInsertBuilder.AddColumn("character_id", false);
                 pInsertBuilder.AddColumn("cashid", false);
                 pInsertBuilder.AddColumn("name", true);
                 pInsertBuilder.AddColumn("closeness", true);
                 pInsertBuilder.AddColumn("fullness", true);
                 pInsertBuilder.AddColumn("level", true);
             }
-            pInsertBuilder.AddRow(pPet.CashID, pPet.Petname, pPet.Closeness, pPet.Fullness, pPet.Level);
+            pInsertBuilder.AddRow(pCharacterInternalID, pPet.CashID, pPet.Petname, pPet.Closeness, pPet.Fullness, pPet.Level);
 
         }
 

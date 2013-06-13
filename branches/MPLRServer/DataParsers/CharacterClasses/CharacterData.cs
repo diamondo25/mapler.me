@@ -616,7 +616,7 @@ namespace MPLRServer
 
                                 if (item is ItemPet)
                                 {
-                                    Queries.SavePet(item as ItemPet, petTable);
+                                    Queries.SavePet(pConnection.CharacterInternalID, item as ItemPet, petTable);
                                 }
                             }
                         }
@@ -654,7 +654,7 @@ namespace MPLRServer
 
                                 if (item is ItemPet)
                                 {
-                                    Queries.SavePet(item as ItemPet, petTable);
+                                    Queries.SavePet(pConnection.CharacterInternalID, item as ItemPet, petTable);
                                 }
                             }
                         }
@@ -716,7 +716,7 @@ namespace MPLRServer
 
                             if (item is ItemPet)
                             {
-                                Queries.SavePet(item as ItemPet, petTable);
+                                Queries.SavePet(pConnection.CharacterInternalID, item as ItemPet, petTable);
                             }
                         }
                     }
@@ -733,7 +733,7 @@ namespace MPLRServer
 
                             if (item is ItemPet)
                             {
-                                Queries.SavePet(item as ItemPet, petTable);
+                                Queries.SavePet(pConnection.CharacterInternalID, item as ItemPet, petTable);
                             }
                         }
                     }

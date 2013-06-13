@@ -183,17 +183,33 @@ WHERE
 		$split = explode('_', $data[0]);
 		$tmp2 = &$item_info;
 		foreach ($split as $idx => $name) {
-			if (!isset($tmp2[$name])) {
-				if (count($split) - 1 == $idx) {
-					$tmp2[$name] = $data[1];
-					//$tmp2 = $tmp2[$name];
-					break;
+			try {
+				if (!isset($tmp2[$name])) {
+					if (count($split) - 1 == $idx) {
+						if (is_string($data[1]) && strpos($data[1], '{VEC}') !== false) {
+							$vec = explode(';', substr($data[1], 5));
+							$temp = new TreeNode($name, $tmp2);
+							$temp['X'] = $vec[0];
+							$temp['Y'] = $vec[1];
+							$tmp2[$name] = $temp;
+						}
+						else {
+							$tmp2[$name] = $data[1];
+						}
+						break;
+					}
+					else {
+						$tmp2[$name] = new TreeNode($name, $tmp2);
+					}
 				}
-				else {
-					$tmp2[$name] = new TreeNode($name, $tmp2);
-				}
+				if ($tmp2[$name] instanceof TreeNode)
+					$tmp2 = &$tmp2[$name];
+				else
+					$tmp2 = $tmp2[$name];
 			}
-			$tmp2 = &$tmp2[$name];
+			catch (Exception $ex) {
+				return null;
+			}
 		}
 	}
 	$item_info['ITEMID'] = $itemid;

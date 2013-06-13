@@ -340,17 +340,17 @@ $(document).ready(function () {
 	ShowCashEquips(false);
 	
 	
-	$('.visibility-toggler').click(function (e) {
+	$('.visibility-toggler').change(function (e) {
 		var clickedObj = $(this);
 		var name = clickedObj.attr('name');
 		var option = clickedObj.attr('option');
-		var ishidden = clickedObj.hasClass('hidden-obj');
+		var ishidden = clickedObj[0].checked;
 		$.ajax({
 			url: '/api/character/visibility',
 			type: 'GET',
 			data: {name: name, what: option, shown: !ishidden},
 			success: function (data) {
-				clickedObj.toggleClass('hidden-obj');
+				clickedObj.checked = !ishidden;
 			}
 		});
 	});

@@ -6,7 +6,8 @@ set_time_limit(60);
 error_reporting(0);
 /*
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
-	die("Died on notice!! Error: {$errstr} on {$errfile}:{$errline}");
+	echo "Died on notice!! Error: {$errstr} on {$errfile}:{$errline}";
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline); 
 }
 
 set_error_handler('myErrorHandler');
@@ -509,6 +510,7 @@ function GetItemIconID($id) {
 function GetItemDataLocation($location, $id) {
 	$inv = GetItemInventory($id);
 	$type = GetItemType($id);
+
 	if ($type == 996) {
 		$url = $location.'Character/Familiar/'.str_pad($id, 7, '0', STR_PAD_LEFT).'.img/';
 	}

@@ -42,6 +42,17 @@ else {
 
 $image_width = 128;
 $image_height = 128;
+if (isset($_GET['size'])) {
+	$res = 128;
+	switch ($_GET['size']) {
+		case 'original': $res = 96; break;
+		case 'normal': $res = 128; break;
+		case 'big': $res = 256; break;
+		case 'huge': $res = 384; break; // 128 + 256
+	}
+	$image_width = $res;
+	$image_height = $res;
+}
 
 $charname = isset($_GET['name']) ? $_GET['name'] : 'RoboticOil';
 
@@ -83,6 +94,7 @@ $internal_id = $character_data['internal_id'];
 $character_id = $character_data['id'];
 
 $image_mode = isset($_GET['show_name']) ? 'avatar_ingame' : 'avatar';
+$show_flipped = isset($_GET['flip']);
 
 
 if (!isset($_GET['NO_CACHING']))
@@ -95,7 +107,7 @@ if (!isset($_GET['NO_CACHING']))
 
 
 // Create blank template
-$im = imagecreatetruecolor($image_width, $image_height);
+$im = imagecreatetruecolor(max(256, $image_width), max(256, $image_height));
 imagesavealpha($im, true);
 $trans = imagecolorallocatealpha($im, 0, 0, 0, 127);
 imagefill($im, 0, 0, $trans);
@@ -104,8 +116,8 @@ imagefill($im, 0, 0, $trans);
 $skin = $face = $hair = $hat = $mask = $eyes = $ears = $top = $pants = $overall = $shoe = $glove = $cape = $shield = $wep = $nxwep = NULL;
 
 // Coordinates for center
-$mainx = 70;
-$mainy = 84;
+$mainx = (imagesx($im) / 2) + ($show_flipped ? -6 : 6);
+$mainy = (imagesy($im) / 2) + 18;
 
 $char_body_position = array();
 
@@ -126,6 +138,9 @@ $skin = $character_data['skin'] + 2000;
 $face = $character_data['eyes'];
 $hair = $character_data['hair'];
 $gender = $character_data['gender'];
+$jobid = $character_data['job'];
+
+$is_mercedes = $jobid == 2002 || ($jobid >= 2300 && $jobid <= 2312);
 
 $ds_mark = $character_data['demonmark'];
 
@@ -202,7 +217,7 @@ ORDER BY
 
 while ($row2 = $character_equipment->fetch_assoc()) {
 	$slot = abs($row2['slot']) % 100;
-	$itemid = $row2['itemid'];
+	$itemid = GetID($row2);
 	$iscash = floor(abs($row2['slot']) / 100) == 1;
 	if (DEBUGGING)
 		echo 'Slot: '.$row2['slot']."\r\n";
@@ -227,6 +242,14 @@ if (isset($shown_items[11])) {
 	CheckStand(GetItemType($standardWeapon), get_data($standardWeapon));
 }
 
+if (!isset($shown_items[6])) {
+	$shown_items[6] = $gender == 0 ? 1040036 : 1041046;
+}
+
+if (!isset($shown_items[5])) {
+	$shown_items[5] = $gender == 0 ? 1060026 : 1061039;
+}
+
 $character_equipment->free();
 
 if ($char_stance == 'stand' || $char_stance == 'walk')
@@ -237,9 +260,12 @@ $foundHidingCap = false;
 function ParseItem($id) {
 	global $item_locations, $zlayers, $zmap, $main_dir, $using_face, $foundHidingCap, $char_stance, $char_stance_frame, $char_body_position, $flipped, $cashWeapon, $weaponThingType;
 	global $mainx, $mainy;
+	global $is_mercedes;
+	
 	$iteminfo = get_data($id);
 	$itemtype = GetItemType($id);
 	$item_raw_type = floor($id / 1000);
+	$item_section_id = $id % 1000;
 
 	$zvalue = '';
 	$foundinfo = false;
@@ -247,6 +273,7 @@ function ParseItem($id) {
 		echo 'Item: '.$id."\r\n";
 		echo 'Item type: '.$itemtype."\r\n";
 		echo 'Item raw type: '.$item_raw_type."\r\n";
+		echo 'Item section id: '.$item_section_id."\r\n";
 	}
 	
 	$nxwep = $id == $cashWeapon;
@@ -339,6 +366,8 @@ function ParseItem($id) {
 				$tmptmp = $tmptmp['..'];
 			}
 			
+			$imgkey = str_replace('.origin', '', $imgkey);
+			
 			if (!isset($block['z'], $zmap[$block['z']])) {
 				if (DEBUGGING) {
 					echo 'No Z key found for '.$key.' -> '.$category.' -> '.$block->name."\r\n";
@@ -355,7 +384,7 @@ function ParseItem($id) {
 				
 				continue 2;
 			}
-			if ($itemtype == 1 && $category == 'ear') { // Android!
+			if ($itemtype == 1 && $category == 'ear' && !$is_mercedes) { // Android / Merc!
 				if (DEBUGGING)
 					echo "nope2\r\n";
 				
@@ -387,7 +416,7 @@ function ParseItem($id) {
 				'info' => $block,
 				'type' => $itemtype,
 				'itemid' => $iteminfo['ITEMID'], 
-				'stance' => $blockname, 
+				'stance' => $blockname,
 				'category' => $category,
 				'vslot' => isset($iteminfo['info']['vslot']) ? $iteminfo['info']['vslot'] : array(),
 				'islot' => isset($iteminfo['info']['islot']) ? $iteminfo['info']['islot'] : 'characterStart'
@@ -397,6 +426,9 @@ function ParseItem($id) {
 			$y = $mainy;
 			
 			$mappings = $objectdata['info']['map'];
+			if (!isset($mappings)) {
+				continue;
+			}
 			$copy = $mappings->getArrayCopy();
 			krsort($copy);
 			foreach ($copy as $mapname => $mapping) {
@@ -406,10 +438,6 @@ function ParseItem($id) {
 					else
 						$char_body_position[$mapname][0] = $x + $mapping['X'];
 					$char_body_position[$mapname][1] = $y + $mapping['Y'];
-					//if (DEBUGGING)
-					//	echo $mapping['X'].', '.$mapping['Y'].' |> '.$x.', '.$y."\r\n";
-					//if (DEBUGGING)
-					//	echo 'Couldnt find map '.$mapname."\r\n";
 				}
 				else {
 					if ($flipped)
@@ -417,16 +445,9 @@ function ParseItem($id) {
 					else
 						$x = $char_body_position[$mapname][0] - $mapping['X'];
 					$y = $char_body_position[$mapname][1] - $mapping['Y'];
-					//if (DEBUGGING)
-					//	echo $mapping['X'].', '.$mapping['Y'].' |> '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
-					//if (DEBUGGING)
-					//	echo 'Found map '.$mapname."\r\n";
 				}
-				//if (DEBUGGING)
-				//	echo $mapping['X'].', '.$mapping['Y'].' > '.$char_body_position[$mapname][0].', '.$char_body_position[$mapname][1]."\r\n";
-				//if (DEBUGGING)
-				//	echo 'map '.$x.', '.$y."\r\n";
 			}
+
 			if (DEBUGGING)
 				echo 'Final map '.$x.', '.$y."\r\n";
 			$objectdata['x'] = $x;
@@ -448,7 +469,7 @@ function ParseItem($id) {
 }
 
 if (DEBUGGING) {
-	print_r($shown_items);
+	//print_r($shown_items);
 }
 
 {
@@ -480,14 +501,15 @@ if ($ds_mark > 0) {
 	ParseItem($ds_mark);
 }
 
+
 foreach ($shown_items as $slot => $itemid)
 	ParseItem($itemid);
 
 
 krsort($zlayers);
 
-if (DEBUGGING)
-	print_r($zlayers);
+//if (DEBUGGING)
+//	print_r($zlayers);
 
 if (isset($_GET['use_bg'])) {
 	$bg = GetCharacterOption($internal_id, 'avatar_bg');
@@ -534,27 +556,142 @@ foreach ($zlayers as $zname => $objects) {
 }
 
 
+$extra_layers = array();
+
+function RenderCashItem($itemid) {
+	global $char_body_position, $char_stance, $char_stance_frame;
+	global $mainx, $mainy, $main_dir;
+	global $extra_layers;
+
+	$iteminfo = get_data($itemid);
+	
+	$item_section_id = $itemid % 1000;
+	
+	$support_guys_and_gals = $item_section_id >= 73 && $item_section_id <= 74;
+
+	if (isset($iteminfo['effect']['default']) && !isset($iteminfo['effect'][$char_stance]))
+		$iteminfo['effect'][$char_stance] = $iteminfo['effect']['default'];
+	$iteminfo = $iteminfo['effect'][$char_stance];
+	
+	$block = isset($iteminfo[$char_stance_frame]) ? $iteminfo[$char_stance_frame] : null;
+	
+	if ($block === null) {
+		if (DEBUGGING)
+			echo 'Block not found for: '.$itemid.'!!!'."\r\n";
+		return;
+	}
+	
+	$x = $mainx;
+	$y = $mainy;
+	
+	// If no pos, use mainx/y
+	// If pos, use 
+	$ispos = isset($iteminfo['pos']) && $iteminfo['pos'] != 0;
+	
+	if ($ispos) {
+		$x = $char_body_position['navel'][0];
+		$y = $char_body_position['navel'][1] - 30;
+	}
+
+	if (DEBUGGING)
+		print_r($iteminfo);
+	if (isset($block['origin']['X'])) {
+		if (DEBUGGING)
+			echo 'found xy'."\r\n";
+		$x -= $block['origin']['X'];
+		$y -= $block['origin']['Y'];
+	}
+	
+	$img_location = GetItemDataLocation($main_dir, $itemid).'effect.'.$block['..']->name.'.'.$block->name.'.png';
+	
+	$layer = $block['..']['z'];
+	
+	$extra_layers[$layer][] = array($img_location, $x, $y);
+}
+
+
+//RenderCashItem(5010065);
+//RenderCashItem(5010073);
+if ($jobid == 6000 || $jobid == 6100 || $jobid == 6110 || $jobid == 6111 || $jobid == 6112) {
+	RenderCashItem(5010087); // wings
+	RenderCashItem(5010090); // tail
+	/*
+	// Gauge half?
+	RenderCashItem(5010088); // wings
+	RenderCashItem(5010091); // tail
+	// Gauge full?
+	RenderCashItem(5010089); // wings
+	RenderCashItem(5010092); // tail
+	*/
+}
 
 
 if (DEBUGGING) {
-	print_r($char_body_position);
+	var_export($extra_layers);
 }
 
-// Render name
-if (isset($_GET['show_name']))
-	RenderName($character_data['name'], $image_width/2, $mainy + 20);
 
+if (true || !DEBUGGING) {
+	$w = imagesx($im);
+	$h = imagesy($im);
+	if (count($extra_layers) > 0) {
+		$temp_image = imagecreatetruecolor($w, $h);
+		imagesavealpha($temp_image, true);
+		$trans = imagecolorallocatealpha($temp_image, 0, 0, 0, 127);
+		imagefill($temp_image, 0, 0, $trans);
+		
+		
+		
+		
 
-if (!isset($_GET['NO_CACHING']))
-	SaveCacheImage($internal_id, $image_mode, $im, $id);
-
-if (DEBUGGING)
-	header('Content-type: text/plain');
+		if (isset($extra_layers[-2])) foreach ($extra_layers[-2] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
+		if (isset($extra_layers[-1])) foreach ($extra_layers[-1] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
+		
+		imagecopy($temp_image, $im, 0, 0, 0, 0, $w, $h);
+		
+		if (isset($extra_layers[ 1])) foreach ($extra_layers[ 1] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
+		if (isset($extra_layers[ 2])) foreach ($extra_layers[ 2] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
+		
+		$im = $temp_image;
+	}
+	$final_image = imagecreatetruecolor($image_width, $image_height);
+	imagesavealpha($final_image, true);
+	$trans = imagecolorallocatealpha($final_image, 0, 0, 0, 127);
+	imagefill($final_image, 0, 0, $trans);
 	
-if (!DEBUGGING)
-	imagepng($im);
-imagedestroy($im);
+	// Copy created avatar onto the plane
+	if ($show_flipped) {
+		$im = FlipImage($im);
+	}
+	imagecopy($final_image, $im, 
+		0, 0, 
+		($w / 2) - ($image_width / 2), ($h / 2) - ($image_height / 2), 
+		$image_width, $image_height);
+	imagedestroy($im);
+	$im = $final_image;
+	
+	
+	
+	
+	// Change mainx/y
+	$mainx = (imagesx($im) / 2) + ($show_flipped ? 6 : 0);
+	$mainy = (imagesy($im) / 2) + 18;
+	
+	// Render name
+	if (isset($_GET['show_name']))
+		RenderName($character_data['name'], $mainx, $mainy + 20);
 
+
+	if (!isset($_GET['NO_CACHING']))
+		SaveCacheImage($internal_id, $image_mode, $im, $id);
+
+	if (DEBUGGING)
+		header('Content-type: text/plain');
+
+
+	imagepng($im);
+}
+imagedestroy($im);
 
 
 
@@ -565,21 +702,22 @@ function get_data($itemid) {
 }
 
 // Function to add element to the image
-function add_image($location, $x, $y, $flipped = false) {
+function add_image($img_location, $x, $y, $flipped = false, $to_image = null) {
 	global $im;
-	if (file_exists($location)) {
+	if (file_exists($img_location)) {
 		if (DEBUGGING) {
-			echo "Found ".$location."\r\n";
+			echo "Found ".$img_location."\r\n";
 		}
-		$image = imagecreatefrompng($location);
+		$image = imagecreatefrompng($img_location);
 		if ($flipped) {
 			$image = FlipImage($image);
 		}
 		
-		imagecopy($im, $image, $x, $y, 0, 0, imagesx($image), imagesy($image));
+		imagecopy($to_image === null ? $im : $to_image, $image, $x, $y, 0, 0, imagesx($image), imagesy($image));
+		imagedestroy($image);
 	}
 	elseif (DEBUGGING) {
-		echo "-- Could not find ".$location." --\r\n";
+		echo "-- Could not find ".$img_location." --\r\n";
 	}
 }
 
