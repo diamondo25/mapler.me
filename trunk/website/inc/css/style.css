@@ -100,11 +100,11 @@ border: 0;
 .character-brick{
 	width:288px;
 	overflow:hidden;
-	color:#666;
+	color:#DDD;
 	padding-bottom:15px;
 	margin-top:15px;-webkit-border-radius:3px;
 	-moz-border-radius:3px;border-radius:3px;
-	background:#fff;
+	background:rgba(0,0,0,0.5);
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	box-sizing:border-box;
@@ -114,13 +114,12 @@ border: 0;
 }
 
 .character-brick .caption{
-	background:#f5f1eb;
+	background:rgba(0,0,0,0.5);
 	padding:10px;
 	-webkit-border-radius:3px 3px 0 0;
 	-moz-border-radius:3px 3px 0 0;
 	border-radius:3px 3px 0 0;
-	border-bottom:1px solid #e2d7cc;
-	color:#6f6b61;
+	color:#DDD;
 	-ms-word-break:break-all;
 	word-break:break-all;
 	word-break:break-word;
