@@ -71,7 +71,7 @@ $check = strlen($searching);
 .search-menu {
   width: 228px;
   padding: 0;
-  background-color: #fff;
+  background-color: rgba(0,0,0,0.5);
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
@@ -84,7 +84,8 @@ $check = strlen($searching);
   width: 190px \9;
   margin: 0 0 -1px;
   padding: 8px 14px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #000;
+  color: #DDD;
 }
 .search-menu > li:first-child > a {
   -webkit-border-radius: 6px 6px 0 0;
@@ -101,7 +102,6 @@ $check = strlen($searching);
   z-index: 2;
   padding: 9px 15px;
   border: 0;
-  text-shadow: 0 1px 0 rgba(0,0,0,.15);
   -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
      -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
           box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
@@ -114,7 +114,7 @@ $check = strlen($searching);
   opacity: .25;
 }
 .search-menu > li > a:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0,0,0,0.7);
 }
 .search-menu a:hover .icon-chevron-right {
   opacity: .5;

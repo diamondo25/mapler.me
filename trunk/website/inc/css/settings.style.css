@@ -34,7 +34,7 @@ padding: 10px;
 
 .settings-sidebar {
   padding: 0;
-  background-color: #fff;
+  background-color: rgba(0,0,0,0.5);
   -webkit-border-radius: 6px;
      -moz-border-radius: 6px;
           border-radius: 6px;
@@ -47,8 +47,9 @@ padding: 10px;
   width: 190px \9;
   margin: 0 0 -1px;
   padding: 8px 14px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #000;
   font-size: 18px;
+  color: #DDD;
 }
 .settings-sidebar > li:first-child > a {
   -webkit-border-radius: 6px 6px 0 0;
@@ -78,7 +79,7 @@ padding: 10px;
   opacity: .25;
 }
 .settings-sidebar > li > a:hover {
-  background-color: #f5f5f5;
+  background-color: rgba(0,0,0,0.7);
 }
 .settings-sidebar a:hover .icon-chevron-right {
   opacity: .5;
