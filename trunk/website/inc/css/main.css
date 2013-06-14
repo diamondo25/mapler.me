@@ -167,7 +167,7 @@ nav#rightmenu #menu-rightnav li a:hover {
     line-height: 20px;
 }
 .login .left_box{
-    color: #252527;
+    color: #DDD;
 }
 .login .left_box h4{
     margin: 0px 0 20px 0;
@@ -188,7 +188,7 @@ nav#rightmenu #menu-rightnav li a:hover {
     font-size: 15px;
 }
 .login .left_box .perk_box .perk p strong{
-    color: #333;
+    color: #FFF;
 }
 .login .signin_box{
     float: right;
