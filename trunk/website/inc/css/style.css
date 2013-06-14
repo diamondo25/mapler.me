@@ -139,7 +139,7 @@ border: 0;
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
 	border-radius:3px;
-	background:#fff;
+	background:rgba(255,255,255,0.9);
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	box-sizing:border-box;
@@ -197,7 +197,7 @@ border: 0;
 	-webkit-border-radius:3px;
 	-moz-border-radius:3px;
 	border-radius:3px;
-	background:#fff;
+	background:rgba(255,255,255,0.9);
 	-webkit-box-sizing:border-box;
 	-moz-box-sizing:border-box;
 	box-sizing:border-box;
@@ -212,7 +212,7 @@ border: 0;
 	-webkit-border-radius:3px 3px 0 0;
 	-moz-border-radius:3px 3px 0 0;
 	border-radius:3px 3px 0 0;
-	border-bottom:1px solid #e2d7cc;
+	border-bottom:1px solid #FFF;
 	color:#6f6b61;
 	-ms-word-break:break-all;
 	word-break:break-all;
@@ -256,7 +256,7 @@ border: 0;
 	text-align: right;
 	font-size: 12px;
 	margin-top: 15px;
-	border-top: 1px solid #e2d7cc;
+	border-top: 1px solid #FFF;
 }
 
 .status:hover > .status-extra {
@@ -282,7 +282,7 @@ border: 0;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	display: inline-block;
-	max-width:250px;
+	max-width:350px;
 	text-overflow:ellipsis;
 	overflow: hidden;
 }
