@@ -257,12 +257,7 @@ endif;
     </div>
 </header>
 
-
-		
-	<div class="left-bg"></div>
-	<div class="right-bg"></div>
-
-	<div class="container main" style="background: rgba(255,255,255,0.8); padding: 20px; border-radius: 5px; margin-top: 90px">
+	<div class="container main" style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: 5px; margin-top: 90px">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {

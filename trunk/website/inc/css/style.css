@@ -5,32 +5,10 @@
 /* general */
 
 body {
-	background: #f0fef0 url('../img/goatesbg.png') center no-repeat fixed;
+	background: #0a1625 url('http://nxcache.nexon.net/maplestory/img/bg/ms-body-top.jpg') center 0px no-repeat;
 }
 
 html { overflow-x: hidden; }
-
-.left-bg {
-	background: url('../img/left.png');
-	width:447px;
-	height: 1530px;
-	position: fixed;
-	top: 0px;
-	bottom: 0px;
-	left: 0px;
-	z-index: -998;
-}
-
-.right-bg {
-	background: url('../img/right.png');
-	width:447px;
-	height: 1530px;
-	position: fixed;
-	top: 0px;
-	bottom: 0px;
-	right: 0px;
-	z-index: -999;
-}
 
 .nobreak { white-space: nowrap; }
 
@@ -462,10 +440,6 @@ footer {
 	body, html {
 		background: #FFF !important;
 		background-image: none !important;
-	}
-	
-	.right-bg, .left-bg {
-		display: none;
 	}
 	
 	.navbar .nav > li > a {
