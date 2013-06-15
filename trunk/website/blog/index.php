@@ -19,7 +19,7 @@ require_once __DIR__.'/../inc/header.php';
 	
 		<div class="status">
 		<center>
-			<h2><img src="//cdn.mapler.me/etc/leafre.png"/></h2>
+			<h2><img src="http://leafre.net/images/leafrenet.png"/></h2>
 			Leafre.net is a community dedicated on KMS (Korean MapleStory) owned by <a href="http://kremechoco.mapler.me/" target="_blank">KremeChoco</a> that offers maplers the ability to play with other korean maplers. <a href="http://leafre.net/" target="_blank">Check them out!</a>
 		</center>
 	</div>

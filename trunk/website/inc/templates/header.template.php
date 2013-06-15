@@ -119,6 +119,11 @@ _AddHeaderLink('js', 'maplerme');
 // Display subdomain pages related to the user
 if (isset($__url_useraccount)):
 ?>
+									<?php if ($_loggedin && GetNotification() != '0'): ?>
+									<li><a href="//<?php echo $domain; ?>/settings/friends/"><?php echo GetNotification(); ?> Notifications</a></li>
+									<li class="divider"></li>
+									<?php endif; ?>
+
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_useraccount->GetNickName(); ?></a></li>
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends">Friends</a></li>
