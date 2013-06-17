@@ -329,7 +329,7 @@ jQuery(document).ready(function (a) {
         (function () {
                 a(".faq input[type=text]").keyup(function () {
                         var b = a(this).val().toLowerCase();
-                        if (b.length > 2) {
+                        if (b.length > 3) {
                             a(".faq li").each(function () {
                                     var d = a(this).find("h3").text();
                                     var e = a(this).find("p").text();
@@ -346,7 +346,7 @@ jQuery(document).ready(function (a) {
                                 a(".no-results").hide()
                             }
                         } else {
-                            a(".faq li").show()
+                            a(".faq li").hide()
                         }
                     })
             })()
