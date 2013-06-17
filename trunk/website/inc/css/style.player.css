@@ -360,6 +360,7 @@ hr {
 	float: right;
 	font-size: 10px;
 	margin-right: 48px;
+	color: #000;
 }
 
 
@@ -527,6 +528,7 @@ hr {
 	height: 35px;
 	position: relative;
 	font-size: 10px;
+	color: #000;
 }
 
 .skill .skill_icon {
