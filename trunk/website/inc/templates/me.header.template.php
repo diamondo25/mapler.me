@@ -1,11 +1,9 @@
 <?php
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
-
 $x = $__database->query("
 SELECT
-	chr.id,
-	chr.name,
+	chr.*,
 	w.world_name
 FROM
 	characters chr

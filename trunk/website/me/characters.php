@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
+require_once __DIR__.'/../inc/job_list.php';
 
 $char_config = $__url_useraccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
