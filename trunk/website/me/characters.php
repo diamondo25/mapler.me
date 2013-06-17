@@ -5,8 +5,7 @@ $char_config = $__url_useraccount->GetConfigurationOption('character_config', ar
 
 $q = $__database->query("
 SELECT
-	chr.id,
-	chr.name,
+	chr.*,
 	w.world_name
 FROM
 	characters chr
@@ -84,13 +83,13 @@ foreach ($cache as $row) {
 	$i++;
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
-				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" />&nbsp;<?php echo $row['name']; ?></div>
 				<center>
 					<br />
-					<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>">
 						<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
-					</a>
 					<br />
+					<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br />
+					<small>Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></small>
+					</p>
 				</center>
 			</div>
 
