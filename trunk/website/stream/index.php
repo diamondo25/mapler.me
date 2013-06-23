@@ -30,8 +30,15 @@ else {
 <div class="row">
 	
 	<div class="span4 pull-right no-mobile">
+		<div class="stream-block hide">
+			<a href="#" class="btn btn-large btn-inverse" style="width: 100%;
+max-width: 240px;">
+				Start Mapler.me
+			</a>
+		</div>
+	
 		<div class="stream-block">
-			<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -17px #FFF;"></div>
+			<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>?size=small') no-repeat top rgba(0,0,0,0.5);"></div>
 			<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
 			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
@@ -67,8 +74,8 @@ GROUP BY
 ?>
 		
 		<div class="stream-block">
-			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row[0]; ?>?madface') no-repeat center -17px #FFF; float: right;"></div>
-			<strong>Expiring items</strong><br />
+			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row[0]; ?>?madface&size=small') no-repeat top rgba(0,0,0,0.5); float: right;"></div>
+			<strong>Expiring Items</strong><br />
 <?php foreach ($itemids as $index => $itemid): ?>
 			<?php echo GetMapleStoryString('item', $itemid, 'name'); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />
 <?php endforeach; ?>
