@@ -154,7 +154,7 @@ else:
 									<li><a href="//<?php echo $domain; ?>/cdn/">CDN <b>*new*</b></a></li>
 <?php endif; ?>
 									<li class="divider"></li>
-									<li><a href="//status.mapler.me/">Server Status</a></li>
+									<li><a href="//<?php echo $domain; ?>/team/">Our Team</a></li>
 <?php
 endif;
 ?>
