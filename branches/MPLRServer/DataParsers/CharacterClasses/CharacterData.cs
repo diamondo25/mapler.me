@@ -21,26 +21,6 @@ namespace MPLRServer
 
         public string MarriedWith { get; private set; }
 
-        public class UnknownListOfIntegers
-        {
-            public const int AmountOfValues = 4;
-
-            public int[] Values { get; private set; }
-            public void Decode(ClientConnection pConnection, MaplePacket pPacket)
-            {
-                Values = new int[AmountOfValues];
-
-                string tmp = "";
-
-                for (int i = 0; i < AmountOfValues; i++)
-                {
-                    Values[i] = pPacket.ReadInt();
-                    tmp += string.Format("{0} |", Values[i]);
-                }
-
-                pConnection.Logger_WriteLine("ULOI: {0}", tmp);
-            }
-        }
 
         public class EvolutionCard
         {
@@ -119,7 +99,6 @@ namespace MPLRServer
             }
         }
 
-        public List<UnknownListOfIntegers> UnknownIntegerList { get; private set; }
         public List<int> UnknownIntegerListNumber2 { get; private set; }
         public Dictionary<int, long> UnknownIntegerListNumber3 { get; private set; }
         public Dictionary<long, long> UnknownIntegerListNumber4 { get; private set; }
@@ -171,12 +150,12 @@ namespace MPLRServer
 
             // Unknown stuff here
 
-            UnknownIntegerList = new List<UnknownListOfIntegers>();
             for (int i = pPacket.ReadInt(); i > 0; i--)
             {
-                UnknownListOfIntegers vals = new UnknownListOfIntegers();
-                vals.Decode(pConnection, pPacket);
-                UnknownIntegerList.Add(vals);
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadLong();
             }
 
             // Magical potion pots!!!
@@ -190,6 +169,48 @@ namespace MPLRServer
 
                 pPacket.ReadLong(); // Start date O.o?
                 pPacket.ReadLong(); // End date O.o?
+            }
+
+
+            for (int i = pPacket.ReadInt(); i > 0; i--) // V.137
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt(); 
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+
+            pPacket.ReadInt();
+            for (int i = 6; i > 0; i--)
+            {
+                pPacket.ReadInt();
+            }
+
+
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+            {
+                pPacket.ReadInt();
+            }
+
+
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+
+
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
             }
 
             Inventory = new CharacterInventory();
@@ -511,6 +532,13 @@ namespace MPLRServer
                 pPacket.Skip(32);
             }
 
+            if (pPacket.ReadBool())
+            {
+                pPacket.ReadByte();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+
             pPacket.ReadInt(); // I DONT EVEN D:
         }
 
@@ -530,13 +558,13 @@ namespace MPLRServer
                 );
         }
 
-        public void SaveData(ClientConnection pConnection)
+        public bool SaveData(ClientConnection pConnection)
         {
             int internalid = pConnection.CharacterInternalID = SaveCharacterInfo(pConnection);
             if (internalid == -1)
             {
                 // Failure!
-                return;
+                return false;
             }
 
             using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
@@ -925,6 +953,8 @@ namespace MPLRServer
                     table.RunQuery();
                 }
             }
+
+            return true;
         }
     }
 }

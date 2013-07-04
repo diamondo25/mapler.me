@@ -146,7 +146,7 @@ namespace MPLRServer
                                     var tmp = new List<ClientConnection>(Clients);
                                     foreach (var client in tmp)
                                     {
-                                        client.Save(true, true);
+                                        // client.Save(true, true);
                                         client.Disconnect();
                                     }
 
@@ -223,6 +223,7 @@ namespace MPLRServer
                 // V.127 -> 128| Diff 0x00ED -> 0x00EE, 0x0121 -> 0x0122
                 // V.131 -> 132| Diff 0x00EE -> 0x00F4...
                 // V.134 -> 135| Diff 0x00F4 -> 0x00F2... WUT
+                // V.135 -> 137| Diff 0x00F2 -> 0x00FD... WUT | 0x007B -> 0x007D | 0x0059 -> 0x005A
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
@@ -252,21 +253,22 @@ namespace MPLRServer
                     }
                 }, null));
 
-                tmp.Add(0x0010, new Handler((a, b) =>
+                tmp.Add(0x0011, new Handler((a, b) =>
                 {
                 }, null));
 
-                tmp.Add(0x0023, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
-                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
-                tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
-                tmp.Add(0x0059, new Handler(ServerPacketHandlers.HandleBuddyList, NeedsCharData));
-                tmp.Add(0x005B, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
-                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleAlliance, NeedsCharData));
-                tmp.Add(0x007B, new Handler(ServerPacketHandlers.HandleFamiliarList, NeedsCharData));
-                tmp.Add(0x00F1, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
-                tmp.Add(0x00F2, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
-                tmp.Add(0x0127, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
+                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
+                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
+                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
+                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
+                // 0x0032 = Quest Info Update
+                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, NeedsCharData));
+                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
+                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, NeedsCharData));
+                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, NeedsCharData));
+                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
+                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
+                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
@@ -311,7 +313,7 @@ namespace MPLRServer
                 }, null));
 
                 // Whisper
-                tmp.Add(0x00FC, new Handler((pConnection, pPacket) =>
+                tmp.Add(0xFFFC, new Handler((pConnection, pPacket) =>
                 {
                     byte code = pPacket.ReadByte();
                     if (code == 0x06)

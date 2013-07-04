@@ -19,7 +19,7 @@ namespace MPLRServer
         }
 
         // V.129: +1 (Kanna/Hayato)
-        public const byte EQUIP_INVENTORIES = 9; // DAFUCK PEOPLE
+        public const byte EQUIP_INVENTORIES = 3 + 9; // 3 in main handler, 9 in other handler
         public const byte NORMAL_INVENTORIES = 4;
         public const byte INVENTORIES = NORMAL_INVENTORIES + 1;
 
@@ -278,7 +278,7 @@ namespace MPLRServer
         public byte IncreasesSkills { get; private set; }
 
         public byte ItemLevel { get; private set; }
-        public int ItemEXP { get; private set; }
+        public long ItemEXP { get; private set; }
 
         public int ViciousHammer { get; private set; }
         public ushort BattleModeDamage { get; private set; }
@@ -357,21 +357,23 @@ namespace MPLRServer
 
                 {
                     uint flag = pPacket.ReadUInt();
-                    byte tmp = 0;
                     FlaggedValue(flag, 0x01, pPacket, (byte)0, true);
                     FlaggedValue(flag, 0x02, pPacket, (byte)0, true);
 
+                    byte tmp = 0;
                     FlaggedValue(flag, 0x04, pPacket, tmp);
                     if ((tmp & 0xFF) != 0)
                     {
                         this.SetFlags += (int)SetFlagTypes.Crafted;
                     }
+                    FlaggedValue(flag, 0x08, pPacket, (long)0, true);
+                    FlaggedValue(flag, 0x10, pPacket, (int)0, true);
                 }
             }
 
             this.Name = pPacket.ReadString();
 
-            this.StatusFlags = pPacket.ReadUShort();
+            this.StatusFlags = pPacket.ReadUShort(); // Actually 2 bytes
 
             this.Potential1 = pPacket.ReadUShort();
             this.Potential2 = pPacket.ReadUShort();
@@ -405,7 +407,7 @@ namespace MPLRServer
                 Slots + Scrolls + Str + Dex + Int + Luk + HP + MP + 
                 Watk + Wdef + Matk + Mdef + Acc + Avo + Hands + Jump + 
                 Speed + Flags + ViciousHammer +
-                ItemLevel + ItemEXP + BattleModeDamage +
+                ItemLevel + (int)ItemEXP + (int)(ItemEXP >> 32) + 1 + BattleModeDamage +
                 StatusFlags +
                 Potential1 + Potential2 + Potential3 + Potential4 + Potential5 + Potential6 +
                 DisplayID + SocketState + Nebulite1 + 
@@ -471,6 +473,21 @@ namespace MPLRServer
             else
                 return 0;
         }
+
+        private static long FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, long pTypeValue, bool pLogIfFound = false)
+        {
+            if (pValue.HasFlag(pFlag))
+            {
+                var val = pPacket.ReadLong();
+                if (pLogIfFound)
+                {
+                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
+                }
+                return val;
+            }
+            else
+                return 0;
+        }
     }
 
     class ItemRechargable : ItemBase
@@ -488,7 +505,7 @@ namespace MPLRServer
             Flags = pPacket.ReadShort();
 
             int itemtype = ItemID / 10000;
-            if (itemtype == 233 || itemtype == 207 || itemtype == 287) // Stars, Bullets & Familiars
+            if (itemtype == 233 || itemtype == 207 || itemtype == 287 || itemtype == 288 || itemtype == 289) // Stars, Bullets & Familiars
                 UniqueID = pPacket.ReadLong();
         }
 

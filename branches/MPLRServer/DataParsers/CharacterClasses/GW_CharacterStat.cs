@@ -34,7 +34,7 @@ namespace MPLRServer
 
         public List<KeyValuePair<byte, int>> SPData { get; private set; }
 
-        public int EXP { get; set; }
+        public long EXP { get; set; }
         public int Fame { get; set; }
 
         public int GachaEXP { get; private set; }
@@ -50,7 +50,7 @@ namespace MPLRServer
 
         public int DateThing { get; private set; }
 
-        public int Mesos { get; set; }
+        public long Mesos { get; set; }
 
         public int[] Traits { get; private set; }
         public ushort[] TraitsToday { get; private set; }
@@ -132,7 +132,7 @@ namespace MPLRServer
                 SPData.Add(new KeyValuePair<byte, int>(0, pPacket.ReadShort()));
             }
 
-            this.EXP = pPacket.ReadInt();
+            this.EXP = pPacket.ReadLong();
             this.Fame = pPacket.ReadInt();
             this.GachaEXP = pPacket.ReadInt();
             this.MapID = pPacket.ReadInt();
@@ -142,7 +142,7 @@ namespace MPLRServer
             this.JobSubID = pPacket.ReadShort();
 
 
-            if (this.JobID / 100 == 31 || this.JobID == 3001)
+            if (this.JobID / 100 == 31 || this.JobID / 100 == 36 || this.JobID == 3001 || this.JobID == 3002)
             {
                 this.DemonMark = pPacket.ReadInt();
             }
@@ -171,27 +171,24 @@ namespace MPLRServer
             };
 
 
-            pPacket.Skip(9); // wat
+            pPacket.Skip(21 - 12); // Leftover: 9 bytes
 
-
+            pPacket.ReadInt();
 
             pPacket.ReadByte();
             pPacket.ReadInt();
             pPacket.ReadByte();
-            pPacket.ReadInt();
-
-            this.PVPExp = pPacket.ReadInt();
-            this.PVPRank = pPacket.ReadByte();
-            this.BattlePoints = pPacket.ReadInt();
-            this.BattleRank = pPacket.ReadByte();
-
-
-            pPacket.ReadInt();
+            pPacket.ReadByte();
             pPacket.ReadInt();
             pPacket.ReadByte();
 
+            pPacket.ReadInt();
+            pPacket.ReadInt();
 
-            for (int j = 0; j < 6; j++)
+            pPacket.ReadInt();
+            pPacket.ReadByte(); // != 0 check
+
+            for (int i = 1; i <= 9; i++)
             {
                 pPacket.ReadInt();
                 pPacket.ReadByte();
@@ -205,7 +202,7 @@ namespace MPLRServer
         public void DecodeMesos(MaplePacket pPacket)
         {
             // THIS FUNCTION IS HAAARD
-            this.Mesos = pPacket.ReadInt();
+            this.Mesos = pPacket.ReadLong();
             // Phew, that's done...
         }
     }

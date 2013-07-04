@@ -76,6 +76,13 @@ namespace MPLRServer
             return _packets.Count;
         }
 
+        public void Clear(bool andDelete)
+        {
+            _packets.Clear();
+            if (andDelete)
+                _packets = null;
+        }
+
         public void Save(string pName, ushort pVersion, System.Net.IPEndPoint pHost, System.Net.IPEndPoint pClient)
         {
             using (FileStream stream = new FileStream(pName, FileMode.Create, FileAccess.Write))
@@ -94,7 +101,7 @@ namespace MPLRServer
 
                 stream.Flush();
             }
-            _packets.Clear();
+            Clear(false);
         }
     }
 }

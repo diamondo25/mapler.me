@@ -13,6 +13,7 @@ namespace MPLRServer
                 || pJobID == 2001
                 || pJobID == 2002
                 || pJobID == 3001
+                || pJobID == 3002
                 || pJobID == 2003
                 || pJobID == 5000
                 || pJobID == 2004
@@ -150,17 +151,18 @@ namespace MPLRServer
               || tmp == 2001
               || tmp == 2002
               || tmp == 3001
+                || tmp == 3002
               || tmp == 2003
               || tmp == 5000
               || tmp == 2004
               || tmp == 6000
               || tmp == 6001
               || tmp == 4001
-              || tmp == 4002 
+              || tmp == 4002
                 ) return false;
 
             if (IsBeginnerJob(tmp)) return false;
-            
+
             int jobtype = GetJobType(tmp);
             if (IsEvanJob(tmp))
             {

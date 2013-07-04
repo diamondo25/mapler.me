@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using System.Net.Sockets;
+using System.IO;
 
 namespace MPLRServer
 {
@@ -120,7 +121,11 @@ namespace MPLRServer
             if (_exporter != null)
             {
                 // Try to get logfile ID from DB
-                string filename = "Savefile_";
+
+                if (!Directory.Exists("sessions"))
+                    Directory.CreateDirectory("sessions");
+
+                string filename = "sessions/Savefile_";
                 int packets = _exporter.GetSize();
                 try
                 {
@@ -152,7 +157,9 @@ namespace MPLRServer
         {
             if (MasterThread.Instance.IsInMainThread())
             {
-                Save(false);
+                //Save(false);
+                if (_exporter != null) _exporter.Clear(true);
+                _exporter = null;
                 Logger_WriteLine("Client Disconnected.");
                 Clear();
                 Program.Clients.Remove(this);
@@ -161,7 +168,9 @@ namespace MPLRServer
             {
                 MasterThread.Instance.AddCallback((a) =>
                 {
-                    Save(false);
+                    if (_exporter != null) _exporter.Clear(true);
+                    _exporter = null;
+                    //Save(false);
                     Logger_WriteLine("Client Disconnected.");
                     Clear();
                     Program.Clients.Remove(this);
@@ -227,7 +236,7 @@ namespace MPLRServer
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
 
                                     // Save exception to packet
-                                    using (MaplePacket mp = new MaplePacket(0x9999))
+                                    using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0x9999))
                                     {
                                         mp.WriteString(ex.ToString());
                                         if (ex is MySql.Data.MySqlClient.MySqlException)

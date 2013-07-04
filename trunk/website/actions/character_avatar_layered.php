@@ -204,13 +204,18 @@ SELECT
 FROM 
 	`items` 
 WHERE 
-	`character_id` = " . $internal_id . " 
+	`character_id` = " . $internal_id . "
+AND 
+	`inventory` = 0 
 AND 
 	`slot` < 0 
 AND 
 	`slot` > -200 
-AND 
-	`inventory` = 0 
+/*
+# If you want to hide expired items... uncomment
+AND
+	TO_FILETIME(NOW()) < `expires` 
+*/
 ORDER BY 
 	`slot` DESC
 ");

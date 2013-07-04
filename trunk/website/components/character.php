@@ -16,8 +16,7 @@ LEFT JOIN
 	ON
 		w.world_id = chr.world_id
 WHERE 
-	name = '".$__database->real_escape_string($_GET['name'])."'
-");
+	chr.name = '".$__database->real_escape_string($_GET['name'])."'");
 
 if ($q->num_rows == 0) {
 	$q->free();
@@ -923,13 +922,17 @@ WHERE
 <?php
 	$q = $__database->query("
 SELECT
-	card, level
+	`card`, `level`
 FROM
 	evolution_levels
 WHERE
-	character_id = ".$internal_id."
+	`character_id` = ".$internal_id."
+GROUP BY
+	`card`
 ORDER BY
-	`card` ASC
+	`card` ASC,
+	`block` ASC,
+	`index` ASC
 ");
 
 	$i = 0;
@@ -948,7 +951,7 @@ ORDER BY
 		$info = GetItemDialogInfo($item, false);
 ?>
 			<td>
-				<img class="item-icon " potential="0" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon" potential="0" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 				<span class="item-amount">x<?php echo $item->amount; ?></span>
 
 			</td>

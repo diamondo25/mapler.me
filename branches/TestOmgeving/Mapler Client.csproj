@@ -120,6 +120,7 @@
     <Compile Include="frmStats.Designer.cs">
       <DependentUpon>frmStats.cs</DependentUpon>
     </Compile>
+    <Compile Include="IGO.cs" />
     <Compile Include="KeyboardHook.cs" />
     <Compile Include="MasterThread.cs" />
     <Compile Include="Program.cs" />

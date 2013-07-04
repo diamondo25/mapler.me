@@ -56,12 +56,12 @@ html { overflow-x: hidden; }
 }
 
 .searchbar placeholder, ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
-font-weight: 300;
-font-size: 14px;
-line-height: 18px !important;
-color: #938d83;
-overflow: hidden;
-border: 0;
+	font-weight: 300;
+	font-size: 14px;
+	line-height: 18px !important;
+	color: #938d83;
+	overflow: hidden;
+	border: 0;
 }
 
 .brand:hover {
@@ -391,11 +391,11 @@ footer {
 
 @media (max-width: 480px) {
 	.main {
-		background:#FFF !important;
+		/*background:#FFF !important;*/
 		border-radius: 0px !important;
 	}
 	body, html {
-		background: #FFF !important;
+		background: #0a1625 !important;
 		background-image: none !important;
 	}
 	

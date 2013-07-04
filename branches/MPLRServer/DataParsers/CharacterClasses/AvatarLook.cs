@@ -62,7 +62,7 @@ namespace MPLRServer
             pPacket.ReadInt();
             pPacket.ReadInt();
 
-            if (this.JobID / 100 == 31 || this.JobID == 3001)
+            if (this.JobID / 100 == 31 || this.JobID / 100 == 36 || this.JobID == 3001 || this.JobID == 3002)
             {
                 this.Wings = pPacket.ReadInt();
             }

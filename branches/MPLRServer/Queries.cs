@@ -11,8 +11,8 @@ namespace MPLRServer
             ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pChannelID, byte pLevel,
             short pJob, short pStr, short pDex, short pInt, short pLuk,
             int pHP, int pMaxHP, int pMP, int pMaxMP, short pAP, short pSP,
-            int pEXP, int pFame, int pMap, byte pMapPos,
-            int pHonourLevel, int pHonourEXP, int pMesos, int pDemonMark,
+            long pEXP, int pFame, int pMap, byte pMapPos,
+            int pHonourLevel, int pHonourEXP, long pMesos, int pDemonMark,
             byte pGender, byte pSkin,
             int pEyes, int pHair,
 
@@ -93,7 +93,7 @@ namespace MPLRServer
                     }
                     else
                     {
-                        pConnection.Logger_WriteLine("Failed to update character info");
+                        pConnection.Logger_WriteLine("Failed to update character info: " + q);
                     }
                 }
             }
@@ -129,7 +129,7 @@ namespace MPLRServer
                     query.AddColumnWithValue("skin", pSkin);
                     query.AddColumnWithValue("eyes", pEyes);
                     query.AddColumnWithValue("hair", pHair);
-                    query.AddColumnWithValue("last_update", new MySQL_Connection.NowType());
+                    query.AddColumnWithValue("last_update", MySQL_Connection.NOW);
 
                     query.AddColumnWithValue("honourlevel", pHonourLevel);
                     query.AddColumnWithValue("honourexp", pHonourEXP);
@@ -162,7 +162,7 @@ namespace MPLRServer
 
                     string q = query.ToString();
 
-                    System.IO.File.WriteAllText("sql_addorupdate.sql", q);
+                    System.IO.File.WriteAllText("sql_addorupdate_insert.sql", q);
 
                     int result = (int)MySQL_Connection.Instance.RunQuery(q);
 
@@ -173,7 +173,7 @@ namespace MPLRServer
                     }
                     else
                     {
-                        pConnection.Logger_WriteLine("Failed to insert character info");
+                        pConnection.Logger_WriteLine("Failed to insert character info: " + q);
                     }
                 }
             }

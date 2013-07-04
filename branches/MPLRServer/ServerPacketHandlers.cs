@@ -207,7 +207,7 @@ namespace MPLRServer
             pPacket.ReadInt(); // Pet ID 2
             pPacket.ReadInt(); // Pet ID 3
 
-            if (jobid / 100 == 31 || jobid == 3001)
+            if (jobid / 100 == 31 || jobid / 100 == 36 || jobid == 3001 || jobid == 3002)
             {
                 pPacket.ReadInt(); // Scar?
             }
@@ -473,7 +473,7 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 0x40000))
             {
                 didsomething = true;
-                pConnection.CharData.Stats.Mesos = pPacket.ReadInt();
+                pConnection.CharData.Stats.Mesos = pPacket.ReadLong();
             }
 
             if (CheckFlag(updateFlag, 0x200000))
@@ -492,21 +492,18 @@ namespace MPLRServer
             {
                 // Ambition/Charisma D:
                 pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Charisma] = pPacket.ReadInt();
-                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x1000000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x1000000 | {0}", value);
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Insight] = pPacket.ReadInt();
+                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x2000000))
             {
-                // Willpower
                 pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Willpower] = pPacket.ReadInt();
                 didsomething = true;
-                // pConnection.Logger_WriteLine("0x2000000 | {0}", value);
             }
 
             if (CheckFlag(updateFlag, 0x4000000))
@@ -523,8 +520,8 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x10000000))
             {
-                var value = pPacket.ReadInt();
-                pConnection.Logger_WriteLine("0x10000000 | {0}", value);
+                pConnection.CharData.Stats.Traits[(int)GW_CharacterStat.TraitVals.Charm] = pPacket.ReadInt();
+                didsomething = true;
             }
 
             if (CheckFlag(updateFlag, 0x20000000))
@@ -1292,7 +1289,6 @@ namespace MPLRServer
 
         public static void HandleChangeMap(ClientConnection pConnection, MaplePacket pPacket)
         {
-            pConnection._CharactersInMap.Clear();
 
             int tmp = pPacket.ReadShort();
             pPacket.Skip(tmp * (4 + 4));
@@ -1311,6 +1307,8 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("Not connection AND no data... ohshi-");
                 return;
             }
+
+            pConnection._CharactersInMap.Clear();
 
             tmp = pPacket.ReadShort(); // Contains Message (Not used anymore lol.)
             if (tmp > 0)
@@ -1345,7 +1343,10 @@ namespace MPLRServer
                 }
                 if (!conflicted)
                 {
-                    data.SaveData(pConnection);
+                    if (!data.SaveData(pConnection))
+                    {
+                        return;
+                    }
 
                     pConnection.CharData = data;
 
