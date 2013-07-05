@@ -425,6 +425,7 @@ function GetWZItemTypeName($id) {
 
 		case 121:
 		case 122:
+		case 124:
 		case 130:
 		case 131:
 		case 132:
@@ -462,9 +463,20 @@ function GetWZItemTypeName($id) {
 		case 165:
 			return 'Mechanic';
 
+		case 168:
+			return 'Bits';
+
 		case 180:
 		case 181:
 			return 'PetEquip';
+
+		case 184:
+		case 185:
+		case 186:
+		case 187:
+		case 188:
+		case 189:
+			return 'MonsterBattle';
 
 		case 190:
 		case 191:
