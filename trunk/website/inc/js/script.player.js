@@ -69,7 +69,9 @@ function SetItemInfo(event, obj, values) {
 	SetObjTextIsEquip('reqpop', reqs.pop);
 	SetObjTextIsEquip('itemlevel', item.itemlevel);
 	SetObjTextIsEquip('itemexp', item.itemexp);
+
 	
+	//$('.item_req_stats').first().css('display', isequip ? 'block' : 'none');
 	
 	
 	SetObjText('str', item.str);

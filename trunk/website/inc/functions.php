@@ -13,6 +13,48 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 set_error_handler('myErrorHandler');
 */
 require_once __DIR__.'/classes/database.php';
+
+
+
+// IP ban check right away.
+$__incoming_ip = $_SERVER['REMOTE_ADDR'];
+$q = $__database->query("SELECT 1 FROM ip_ban WHERE ip = '".$__database->real_escape_string($__incoming_ip)."'");
+if ($q->num_rows != 0) {
+?>
+<html>
+<head>
+	<title>Banned.</title>
+	<style>
+html {
+	background-color: red;
+}
+	
+	</style>
+</head>
+<body>
+	<center>You are IP banned from Mapler.me.</center>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
+	<center><a href="mailto:support@mapler.me">I'm pretty sure I'm not</a></center>
+</body>
+</html>
+<?php
+	die();
+}
+
+
+
+
+
+
+
+
 require_once __DIR__.'/classes/form.php';
 require_once __DIR__.'/classes/account.php';
 require_once __DIR__.'/classes/inventory.php';
