@@ -27,6 +27,11 @@ elseif (strpos($_SERVER['SERVER_NAME'], 'maplerme') !== false) {
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], '.maplerme'));
 	$domain = 'maplerme';
 }
+elseif (strpos($_SERVER['SERVER_NAME'], 'mapler.us.to') !== false) {
+	// SOMETHING.maplerme << Local Testing Tyler (Remote Access)
+	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], '.mapler.us.to'));
+	$domain = 'mapler.us.to';
+}
 
 $subdomain = strtolower(trim($subdomain));
 if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], $domain) !== FALSE) {

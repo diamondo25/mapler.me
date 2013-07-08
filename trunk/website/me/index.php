@@ -1,7 +1,14 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
+
+if ($_loggedin && !$__url_useraccount) {
+	echo '<META HTTP-EQUIV="Refresh" Content="0; URL=http://'.$_loginaccount->GetUsername().'.'.$domain.'/">';
+	die;
+}
+
 require_once __DIR__.'/../inc/templates/me.header.template.php';
 ?>
+
 
 <?php if ($__url_useraccount->GetBio() != null): ?>
 	<div class="status span9 noclear">

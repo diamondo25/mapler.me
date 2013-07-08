@@ -350,4 +350,14 @@ jQuery(document).ready(function (a) {
                         }
                     })
             })()
+            keypress.combo("n", function() {
+			$('#post').modal({
+				show: true
+			})
+			input.focus();
+		    });
+		    
+		    keypress.combo("p", function() {
+			    window.location.href = '//mapler.me/me/';
+		    });
     });

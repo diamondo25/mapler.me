@@ -1,9 +1,9 @@
 		<div style="clear:both;"></div>
 		<footer>
-			<p><span>&copy; 2012-2013 Mapler.me</span></p>
+			<p><span>&copy; 2012-<?php echo date('Y'); ?> Mapler.me</span></p>
 			<p><a href="//status.mapler.me">Status</a> - <a href="//<?php echo $domain; ?>/support/">Request Support</a> - <a href="//<?php echo $domain; ?>/faq/">FAQ</a></p>
 			<br />
-			<p><?php echo $__database->QueriesRan(); ?> queries ran - <?php echo function_exists('apc_fetch') ? 'Using APC caching' : 'NOT using APC caching'; ?></p>
+			<p class="faded"><?php echo $__database->QueriesRan(); ?> queries ran - <?php echo function_exists('apc_fetch') ? 'Using APC caching' : 'NOT using APC caching'; ?></p>
 		</footer>
 
 	<script type="text/javascript">
