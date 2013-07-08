@@ -33,8 +33,10 @@ $(document).ready(function() {
 	
 	$('#post-status').bind("focus", keypress.stop_listening);
 	$('#post-status').bind("blur", keypress.listen);
-	$('input').bind("focus", keypress.stop_listening);
-	$('input').bind("blur", keypress.listen);
+	$('input[type=text]').bind("focus", keypress.stop_listening);
+	$('input[type=text]').bind("blur", keypress.listen);
+	$('input[type=password]').bind("focus", keypress.stop_listening);
+	$('input[type=password]').bind("blur", keypress.listen);
 	
 	// Bind click-on-status stuff
 	$('body').on('click', '.status[status-id]', function() {
