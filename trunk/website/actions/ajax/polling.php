@@ -50,13 +50,13 @@ WHERE
 			}
 			else {
 				while ($row = $q->fetch_row()) {
-					$status_info['reply_count'][$row[0]] = $row[1];
+					$status_info['reply_count'][$row[0]] = (int)$row[1];
 					if (($key = array_search($row[0], $correctids)) !== false) {
 						unset($correctids[$key]);
 					}
 				}
 				foreach ($correctids as $oriid)
-					$status_info['deleted'][] = $oriid;
+					$status_info['deleted'][] = (int)$oriid;
 			}
 			$q->free();
 		}
@@ -68,11 +68,6 @@ WHERE
 	$url = isset($_POST['url']) ? $_POST['url'] : null;
 	$parsed_url = $url == null ? null : parse_url($url);
 	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
-	
-	if ($_loggedin && $res['membername'] == 'Diamondo25') {
-		$res['is_ok'] = $is_ok_url;
-		$res['parsed_url'] = $parsed_url;
-	}
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
@@ -244,8 +239,8 @@ LIMIT
 		$highest_date = $timestamp;
 
 		$res['statuses'] = $stream;
-		$res['oldest_status'] = $lowest_date;
-		$res['newest_status'] = $highest_date;
+		$res['oldest_status'] = (int)$lowest_date;
+		$res['newest_status'] = (int)$highest_date;
 
 	}
 	
