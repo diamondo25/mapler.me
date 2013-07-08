@@ -20,6 +20,7 @@ require_once __DIR__.'/classes/database.php';
 $__incoming_ip = $_SERVER['REMOTE_ADDR'];
 $q = $__database->query("SELECT 1 FROM ip_ban WHERE ip = '".$__database->real_escape_string($__incoming_ip)."'");
 if ($q->num_rows != 0) {
+	http_response_code(406); // Not acceptable!
 ?>
 <html>
 <head>
@@ -32,7 +33,7 @@ html {
 	</style>
 </head>
 <body>
-	<center>You are IP banned from Mapler.me.</center>
+	<center>You are IP banned from Mapler.me because you broke the Terms of Service.</center>
 	<br />
 	<br />
 	<br />
@@ -41,7 +42,7 @@ html {
 	<br />
 	<br />
 	<br />
-	<center><a href="mailto:support@mapler.me">I'm pretty sure I'm not</a></center>
+	<center><a href="mailto:support@mapler.me">I'm pretty sure I did not.</a></center>
 </body>
 </html>
 <?php

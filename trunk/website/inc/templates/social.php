@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   </div>
   <div class="modal-body">
   
-  <div class="character pull-left" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center 0px #FFF;"></div>
+  <div class="character pull-left" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -2px #FFF;"></div>
   
     <form id="statusposter" method="post">
 		<textarea name="content" id="post-status" style="width:60%;max-width:310px;clear:both;border:0 !important;" placeholder="Type your status here!"></textarea>

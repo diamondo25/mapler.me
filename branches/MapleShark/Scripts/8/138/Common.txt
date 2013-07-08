@@ -48,7 +48,7 @@ using (ScriptAPI) {
 		AddByte("MapPOS");
 		AddInt("UNK");
 		AddShort("UNK");
-	    if ( a1 / 100 == 31 || a1 == 3001 || a1 == 3002) {
+	    if ( a1 / 100 == 31 || a1 / 100 == 36 || a1 == 3001 || a1 == 3002) {
 		    AddInt("Something?");
     	}
 		AddByte("UNK");
@@ -260,6 +260,8 @@ function is_skill_need_master_level(pSkillID)
               || tmp == 2001
               || tmp == 2002
               || tmp == 3001
+              || tmp == 3002
+              || tmp == 3600
               || tmp == 2003
               || tmp == 5000
               || tmp == 2004

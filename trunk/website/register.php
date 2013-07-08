@@ -1,19 +1,19 @@
 <?php
 require_once __DIR__.'/inc/header.php';
 	
-$x = $__database->query("
+$x = $__database->query('
 SELECT
 	status
 FROM
 	signup_lock
-");
+');
 
 $row = $x->fetch_assoc();
 if($row['status'] == '1') {
 ?>
 	<p>
-		<center class="status lead">
-				<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px"/><br/>
+		<center class='status lead'>
+				<img src='//<?php echo $domain; ?>/inc/img/icon.png' width='200px'/><br/>
 				We're sorry! The amount of new members today has reached it's max.<br/>
 				Come back tomorrow!<br/>
 			<sub>Tip: The limit resets at <b>8AM</b> (PST / MapleStory Time)</sub>
@@ -26,26 +26,38 @@ if($row['status'] == '1') {
 
 
 
-$username_regex = "/^[a-z0-9-_]+$/";
+$username_regex = '/^[a-z0-9-_]+$/';
 
 $error = null;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	if (!CheckArrayOf($_POST, array("username", "password", "password2", "fullname", "email", "nickname"), $errorList)) {
-		$error = "The input you've entered has some errors. Please correct these errors and try again.";
+	if (!CheckArrayOf($_POST, array('username', 'password', 'password2', 'fullname', 'email', 'nickname'), $errorList)) {
+		$error = 'The input you\'ve entered has some errors. Please correct these errors and try again.';
 	}
 	else {
 		// Validate email
 		$email = $__database->real_escape_string($_POST['email']);
 		if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-			$error = "The email you entered is invalid.";
-			$errorList["email"] = true;
+			$error = 'The email you entered is invalid.';
+			$errorList['email'] = true;
+		}
+		else {
+			$email = $__database->real_escape_string($_POST['email']);
+		}
+
+		if (count($errorList) == 0) {
+			$result = $__database->query("SELECT id FROM accounts WHERE email = '".$email."'");
+			if ($result->num_rows == 1) {
+				$error = 'The email you entered is already used.';
+				$errorList['email'] = true;
+			}
+			$result->free();
 		}
 		
 		if (count($errorList) == 0) {
 			// Check ToU
 			$notou = !isset($_POST['tou']);
 			if ($notou) {
-				$error = "You didn't accept our Terms of Service. This is required to sign up for Mapler.me.";
+				$error = 'You didn\'t accept our Terms of Service. This is required to sign up for Mapler.me.';
 				$errorList['ToU'] = true;
 			}
 		}
@@ -53,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (count($errorList) == 0) {
 			// Check passwords
 			if ($_POST['password'] != $_POST['password2']) {
-				$error = "Your passwords didn't match, please try again.";
+				$error = 'Your passwords didn\'t match, please try again.';
 				$errorList['password'] = true;
 			}
 		}
@@ -62,16 +74,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			// Check username
 			$username = $__database->real_escape_string($_POST['username']);
 			$len = strlen($username);
-			$disallowed = array("nexon", "nexonamerica", "wizet", "hacker", "waltzing", "maple", "maplestory", 
-			"staff", "admin", "administrator", "moderator", "team", "hack", "hacking", "mesos", "meso", "fuck", 
-			"shit", "asshole", "nigger", "faggot", "cunt", "pussy", "dick", "vagina", "penis", "mail", "cdn", 
-			"user", "users", "contact", "support", "legal", "sales", "bitch", "whore", "slut");
+			$disallowed = array('nexon', 'nexonamerica', 'wizet', 'hacker', 'waltzing', 'maple', 'maplestory', 
+			'staff', 'admin', 'administrator', 'moderator', 'team', 'hack', 'hacking', 'mesos', 'meso', 'fuck', 
+			'shit', 'asshole', 'nigger', 'faggot', 'cunt', 'pussy', 'dick', 'vagina', 'penis', 'mail', 'cdn', 
+			'user', 'users', 'contact', 'support', 'legal', 'sales', 'bitch', 'whore', 'slut',
+			'maryse');
 			if ($len < 4 || $len > 20) {
-				$error = "A Mapler.me username has to be between four and twenty characters long.";
+				$error = 'A Mapler.me username has to be between four and twenty characters long.';
 				$errorList['username'] = true;
 			}
 			elseif (preg_match($username_regex, $username) == 0) {
-				$error = "A Mapler.me username may only hold lowercase alphanumeric characters.";
+				$error = 'A Mapler.me username may only hold lowercase alphanumeric characters.';
 				$errorList['username'] = true;
 			}
 			else {
@@ -83,13 +96,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					}
 				}
 				if ($nope) {
-					$error = "That username is disallowed, please choose another.";
+					$error = 'That username is disallowed, please choose another.';
 					$errorList['username'] = true;
 				}
 				else {
 					$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
 					if ($result->num_rows == 1) {
-						$error = "This username has already been taken, please try another.";
+						$error = 'This username has already been taken, please try another.';
 						$errorList['username'] = true;
 					}
 					$result->free();
@@ -102,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			$len = strlen($nickname);
 			if ($len < 4 || $len > 20) {
-				$error = "Nickname must be at least 4 and at max 20 characters long.";
+				$error = 'Nickname must be at least 4 and at max 20 characters long.';
 				$errorList['nickname'] = true;
 			}
 		}
@@ -110,12 +123,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		//if (count($errorList) == 0) {
 		//	// Check beta key
 		//	$key = $__database->real_escape_string($_POST['key']);
-		//	$result = $__database->query("SELECT 1 FROM beta_invite_keys WHERE invite_key = '".$key."' AND assigned_to IS NULL");
+		//	$result = $__database->query('SELECT 1 FROM beta_invite_keys WHERE invite_key = ''.$key.'' AND assigned_to IS NULL');
 		//	if ($result->num_rows == 1) {
-		//		$__database->query("UPDATE beta_invite_keys SET assigned_to = '".$username."' WHERE invite_key = '".$key."'");
+		//		$__database->query('UPDATE beta_invite_keys SET assigned_to = ''.$username.'' WHERE invite_key = ''.$key.''');
 		//	}
 		//	else {
-		//		$error = "Incorrect beta code, or it was already used!"; // Default response!
+		//		$error = 'Incorrect beta code, or it was already used!'; // Default response!
 		//		$errorList['key'] = true;
 		//	}
 		//	$result->free();
@@ -132,13 +145,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
 			
 			$ip_address = $_SERVER['REMOTE_ADDR'];
-			$fullname = $__database->real_escape_string($_POST["fullname"]);
-			$email = $__database->real_escape_string($_POST['email']);
+			$fullname = $__database->real_escape_string($_POST['fullname']);
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
-			$statement = $__database->prepare("INSERT INTO accounts 
+			$statement = $__database->prepare('INSERT INTO accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip, registered_on) VALUES
-				(NULL,?,?,?,?,?,?,NOW(),?,NOW())");
+				(NULL,?,?,?,?,?,?,NOW(),?,NOW())');
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 
 				$__database->real_escape_string($salt), $fullname, 
 				$email, $nickname,

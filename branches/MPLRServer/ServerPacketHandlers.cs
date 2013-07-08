@@ -366,7 +366,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 var level = pPacket.ReadByte();
-                Timeline.Instance.PushLevelUP(pConnection.CharacterInternalID, level);
+                Timeline.Instance.PushLevelUP(pConnection.AccountID, pConnection.CharacterInternalID, level);
                 pConnection.CharData.Stats.Level = level;
                 pConnection.Logger_WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, level);
             }
@@ -374,7 +374,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 var jobid = pPacket.ReadShort();
-                Timeline.Instance.PushJobUP(pConnection.CharacterInternalID, (ushort)jobid);
+                Timeline.Instance.PushJobUP(pConnection.AccountID, pConnection.CharacterInternalID, (ushort)jobid);
                 pConnection.CharData.Stats.JobID = jobid;
                 pConnection.Logger_WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, jobid);
             }
@@ -466,7 +466,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 int fame = pPacket.ReadInt();
-                Timeline.Instance.PushGotFame(pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame, fame);
+                Timeline.Instance.PushGotFame(pConnection.AccountID, pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame, fame);
                 pConnection.CharData.Stats.Fame = fame;
             }
 
@@ -611,7 +611,7 @@ namespace MPLRServer
                     int masterlevel = pPacket.ReadInt();
                     long expiration = pPacket.ReadLong();
 
-                    Timeline.Instance.PushSkillUP(pConnection.CharacterInternalID, skillid, level);
+                    Timeline.Instance.PushSkillUP(pConnection.AccountID, pConnection.CharacterInternalID, skillid, level);
 
                     skillTable.AddRow(pConnection.CharacterInternalID, skillid, level, masterlevel == 0 ? null : (object)masterlevel, expiration);
                 }

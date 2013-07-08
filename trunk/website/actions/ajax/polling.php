@@ -95,39 +95,61 @@ WHERE
 		}
 		
 		$q = "
-SELECT
-	UNIX_TIMESTAMP(`timestamp`),
-	`type`,
-	`col1`,
-	`col2`,
-	a.username AS `account_name`,
-	a.nickname,
-	a.account_rank
-FROM
-(
 SELECT 
-	`when` AS `timestamp`,
+	UNIX_TIMESTAMP(`when`),
 	'timeline_row' AS `type`,
 	CONVERT(CONCAT(c.`name`, X'02', `type`) USING latin1) AS `col1`,
 	CONVERT(`data` USING latin1) AS `col2`,
-	`GetCharacterInternalIDAccountID`(`objectid`) AS `account_id`
+	a.username,
+	a.nickname,
+	a.account_rank
 FROM
 	`timeline`
 LEFT JOIN
 	characters c
 	ON
-		c.internal_id = objectid
+		c.internal_id = character_id
+LEFT JOIN
+	accounts a
+	ON
+		a.id = `account_id`
 WHERE
 	`type` = 'levelup'
 	AND
 	".$whereq_1."
+";
+		if ($_loggedin && $subdomain == '') { // Main screen
+			$q .= "
+	AND
+	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
+		}
+		if ($subdomain != '') {
+			$q .= ' AND ';
+			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
+		}
 
-UNION ALL
-
+		$q .= "
+ORDER BY
+	`when` DESC
+LIMIT
+	15
+";
+		$q = $__database->query($q);
+		
+		$found_rows = array();
+		
+		while ($row = $q->fetch_row())
+			$found_rows[] = $row;
+		$q->free();
+		
+		
+		// Get statusses
+		
+		$q = "
 SELECT 
-	`timestamp`,
+	UNIX_TIMESTAMP(`timestamp`),
 	'status' AS `type`,
-	CONVERT(CONCAT(`id`, X'02', `account_id`, X'02', `nickname`, X'02', `character`, X'02', `blog`, X'02', `override`, X'02', IF(`reply_to` IS NULL, '-', `reply_to`), X'02',(
+	CONVERT(CONCAT(ss.`id`, X'02', `account_id`, X'02', ss.`nickname`, X'02', `character`, X'02', `blog`, X'02', `override`, X'02', IF(`reply_to` IS NULL, '-', `reply_to`), X'02',(
 	SELECT
 		COUNT(s_inner.id)
 	FROM
@@ -136,30 +158,25 @@ SELECT
 		s_inner.reply_to = ss.id
 	)) USING latin1) AS `col1`,
 	CONVERT(`content` USING latin1) AS `col2`,
-	`account_id`
+	a.username,
+	a.nickname,
+	a.account_rank
 FROM
 	`social_statuses` ss
-WHERE
-	".$whereq_2."
-) stream
 LEFT JOIN
 	accounts a
 	ON
 		a.id = `account_id`
-";
-		$whereadded = false;
-		if ($_loggedin && $subdomain == '') { // Main screen
-			$whereadded = true;
-			$q .= "
 WHERE
+	".$whereq_2."
+";
+		if ($_loggedin && $subdomain == '') { // Main screen
+			$q .= "
+	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
 		}
 		if ($subdomain != '') {
-			if ($whereadded)
-				$q .= ' AND ';
-			else 
-				$q .= ' WHERE ';
-			$whereadded = true;
+			$q .= ' AND ';
 			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}
 
@@ -169,15 +186,16 @@ ORDER BY
 LIMIT
 	15
 ";
-		if ($_loggedin && $res['membername'] == 'Diamondo25') {
-			$res['q'] = $q;
-		}
 		$q = $__database->query($q);
+		
+		while ($row = $q->fetch_row())
+			$found_rows[] = $row;
+		$q->free();
 
 		$stream = array();
 		$timestamp = $__server_time;
 		$lowest_date = 0;
-		while ($row = $q->fetch_row()) {
+		foreach ($found_rows as $row) {
 			$timestamp = $row[0];
 			$type = $row[1];
 			$content = explode(chr(0x02), $row[2]);

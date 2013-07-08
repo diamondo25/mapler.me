@@ -31,30 +31,30 @@ namespace MPLRServer
             Logger.WriteLine("Initialized Timeline");
         }
 
-        public void PushLevelUP(int pCharInternalID, byte pNewLevel)
+        public void PushLevelUP(int pAccountID, int pCharInternalID, byte pNewLevel)
         {
-            Push(Types.LevelUP, pCharInternalID, pNewLevel.ToString());
+            Push(Types.LevelUP, pAccountID, pCharInternalID, pNewLevel.ToString());
         }
 
-        public void PushJobUP(int pCharInternalID, ushort pJob)
+        public void PushJobUP(int pAccountID, int pCharInternalID, ushort pJob)
         {
-            Push(Types.JobUP, pCharInternalID, pJob.ToString());
+            Push(Types.JobUP, pAccountID, pCharInternalID, pJob.ToString());
         }
 
-        public void PushSkillUP(int pCharInternalID, int pSkill, int pLevel)
+        public void PushSkillUP(int pAccountID, int pCharInternalID, int pSkill, int pLevel)
         {
-            Push(Types.SkillUP, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
+            Push(Types.SkillUP, pAccountID, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
         }
 
-        public void PushGotFame(int pCharInternalID, bool pAdd, int pNewFame)
+        public void PushGotFame(int pAccountID, int pCharInternalID, bool pAdd, int pNewFame)
         {
-            Push(Types.GotFame, pCharInternalID, (pAdd ? "1" : "0") + ";" + pNewFame);
+            Push(Types.GotFame, pAccountID, pCharInternalID, (pAdd ? "1" : "0") + ";" + pNewFame);
         }
 
 
-        public void Push(Types pType, int pObjectID, string pData)
+        public void Push(Types pType, int pAccountID, int pCharInternalID, string pData)
         {
-            MySQL_Connection.Instance.RunQuery(string.Format("INSERT INTO timeline VALUES (NULL, '{0}', NOW(), {1}, '{2}')", _type_name_map[pType], pObjectID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData)));
+            MySQL_Connection.Instance.RunQuery(string.Format("INSERT INTO timeline VALUES (NULL, '{0}', NOW(), {1}, {2}, '{3}')", _type_name_map[pType], pAccountID, pCharInternalID, MySql.Data.MySqlClient.MySqlHelper.EscapeString(pData)));
         }
 
     }

@@ -599,6 +599,8 @@ $normalequips['Totem'] = array();
 $normalequips['Android'] = array();
 $normalequips['Mechanic'] = array();
 $normalequips['Evan'] = array();
+$normalequips['Bits'] = array();
+$normalequips['BitsCase'] = array();
 $cashequips = array();
 
 foreach ($equips as $orislot => $item) {
@@ -615,7 +617,9 @@ foreach ($equips as $orislot => $item) {
 	}
 	else {
 		if ($orislot > -100) 		$normalequips['normal'][$orislot] = $item;
+		elseif ($orislot <= -20000) $normalequips['Bits'][$orislot] = $item;
 		elseif ($orislot <= -5000) 	$normalequips['Totem'][$orislot] = $item;
+		elseif ($orislot <= -1500) 	$normalequips['BitsCase'][$orislot] = $item;
 		elseif ($orislot <= -1300) 	$normalequips['Coordinate'][$orislot] = $item;
 		elseif ($orislot <= -1200) 	$normalequips['Android'][$orislot] = $item;
 		elseif ($orislot <= -1100) 	$normalequips['Mechanic'][$orislot] = $item;

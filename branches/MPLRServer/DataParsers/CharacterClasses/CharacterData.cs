@@ -785,6 +785,7 @@ namespace MPLRServer
 
 
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM quests_running WHERE character_id = " + internalid);
                 using (InsertQueryBuilder questsTable = new InsertQueryBuilder("quests_running"))
                 {
                     questsTable.OnDuplicateUpdate = true;
@@ -801,7 +802,6 @@ namespace MPLRServer
                 }
 
                 MySQL_Connection.Instance.RunQuery("DELETE FROM quests_done WHERE character_id = " + internalid);
-
                 using (InsertQueryBuilder doneTable = new InsertQueryBuilder("quests_done"))
                 {
                     doneTable.AddColumn("character_id", false);
@@ -816,6 +816,7 @@ namespace MPLRServer
                     doneTable.RunQuery("insert-update-quests-done.sql");
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM quests_running_party WHERE character_id = " + internalid);
                 using (InsertQueryBuilder questsTable = new InsertQueryBuilder("quests_running_party"))
                 {
                     questsTable.OnDuplicateUpdate = true;
@@ -846,6 +847,7 @@ namespace MPLRServer
                     doneTable.RunQuery();
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM skills WHERE character_id = " + internalid);
                 using (InsertQueryBuilder skillTable = new InsertQueryBuilder("skills"))
                 {
                     skillTable.OnDuplicateUpdate = true;
@@ -863,6 +865,7 @@ namespace MPLRServer
                     skillTable.RunQuery();
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM sp_data WHERE character_id = " + internalid);
                 using (InsertQueryBuilder spTable = new InsertQueryBuilder("sp_data"))
                 {
                     spTable.OnDuplicateUpdate = true;
@@ -897,6 +900,7 @@ namespace MPLRServer
                     teleportRocks.RunQuery();
                 }
 
+                MySQL_Connection.Instance.RunQuery("DELETE FROM evolution_levels WHERE character_id = " + internalid);
                 using (InsertQueryBuilder table = new InsertQueryBuilder("evolution_levels"))
                 {
                     table.AddColumn("character_id");
