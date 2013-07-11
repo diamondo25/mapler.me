@@ -156,12 +156,11 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 		<div class="location">
 			<img src="<?php echo $avatarurl ?>" class="h" /><br />
 		</div>
-		<p class="name"><?php echo $character_info['name']; ?><br/>
+		<p class="name"><?php echo $character_info['name']; ?><br />
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
 			<div class="progress progress-striped">
 				<div class="bar" style="width: <?php echo GetExpPercentage($character_info['level'], $character_info['exp']); ?>%;"></div>
 			</div>
-		</div>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		<hr />
