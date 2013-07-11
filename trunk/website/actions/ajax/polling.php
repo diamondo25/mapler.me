@@ -8,7 +8,7 @@ CheckSupportedTypes('info');
 
 if ($request_type == 'info') {
 	$res = array();
-	$res['time'] = $__server_time;
+	$res['time'] = (int)$__server_time;
 	
 	$_client_time = isset($_POST['client-time']) ? intval($_POST['client-time']) : time() - 10000;
 
