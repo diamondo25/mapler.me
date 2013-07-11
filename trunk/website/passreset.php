@@ -29,10 +29,10 @@ if (isset($_GET['code'])) {
 				$salt .= chr(0x30 + rand(0, 20));
 			}
 			
-			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
+			$encryptedpassword = GetPasswordHash($password, $salt);
 			
 			$__database->query("DELETE FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset'");
-			$__database->query("UPDATE accounts SET password = '".$__database->real_escape_string($encryptedpassword)."' AND salt = '".$__database->real_escape_string($salt)."' WHERE id = ".$id);
+			$__database->query("UPDATE accounts SET password = '".$encryptedpassword."' AND salt = '".$__database->real_escape_string($salt)."' WHERE id = ".$id);
 		
 ?>
 <p class="lead alert-success alert">Password reset!</p>
