@@ -20,29 +20,18 @@ require_once __DIR__.'/classes/database.php';
 $__incoming_ip = $_SERVER['REMOTE_ADDR'];
 $q = $__database->query("SELECT 1 FROM ip_ban WHERE ip = '".$__database->real_escape_string($__incoming_ip)."'");
 if ($q->num_rows != 0) {
-	http_response_code(406); // Not acceptable!
 ?>
 <html>
 <head>
 	<title>Banned.</title>
-	<style>
-html {
-	background-color: red;
-}
-	
-	</style>
 </head>
 <body>
-	<center>You are IP banned from Mapler.me because you broke the Terms of Service.</center>
-	<br />
-	<br />
-	<br />
-	<br />
-	<br />
-	<br />
-	<br />
-	<br />
-	<center><a href="mailto:support@mapler.me">I'm pretty sure I did not.</a></center>
+	<div style="background: url('http://puu.sh/3ADi8.gif') top center no-repeat;margin: 0 auto; width:500px;height:400px;">
+	<center style="position:relative;top:200px;">
+		<img src="http://puu.sh/3ADER.png" style="z-index:10;"/><br />
+		<a href="mailto:support@mapler.me" style="color:black;text-decoration:none;font-size:20px;border-bottom: 1px dotted black;">Appeal / Report Unintentional Ban</a>
+	</center>
+	</div>
 </body>
 </html>
 <?php
