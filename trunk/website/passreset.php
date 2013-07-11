@@ -72,10 +72,9 @@ if (isset($_GET['code'])) {
 else {
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$username = $__database->real_escape_string($_POST['username']);
+		$email = $__database->real_escape_string($_POST['username']);
 		
-		// $query = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
-		$query = $__database->query("SELECT id, username FROM accounts WHERE email = '".$username."'");
+		$query = $__database->query("SELECT id, username FROM accounts WHERE email = '".$email."'");
 		if ($query->num_rows == 1) {
 			$row = $query->fetch_row();
 			$id = $row[0];
@@ -111,10 +110,10 @@ END;
 				$headers  = 'MIME-Version: 1.0' . "\r\n";
 				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 				$headers .= 'From: Mapler.me <no-reply@mapler.me>' . "\r\n";
-				$headers .= 'To: '.$username . "\r\n";
+				$headers .= 'To: '.$email . "\r\n";
 
 				// Mail it
-				mail($username, $subject, $message, $headers);
+				mail($email, $subject, $message, $headers);
 				
 				$__database->query("
 INSERT INTO 
