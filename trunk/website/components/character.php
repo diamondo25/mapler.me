@@ -137,6 +137,12 @@ SELECT
 	$qcount->free();
 	
 $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=big&flip';
+
+	$expbar = array();
+	$expbar['current'] = $character_info['exp'];
+	$expbar['max'] = GetNextLevelEXP($character_info['level'], $character_info['exp']);
+	$expbar['percentage'] = GetExpPercentage($character_info['level'], $character_info['exp']);
+	$expbar['percentage'] = round($expbar['percentage'] * 100) / 100;
 ?>
 <div class="row">
 	<div class="span12">
@@ -158,8 +164,8 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 		</div>
 		<p class="name"><?php echo $character_info['name']; ?><br />
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
-			<div class="progress progress-striped">
-				<div class="bar" style="width: <?php echo GetExpPercentage($character_info['level'], $character_info['exp']); ?>%;"></div>
+			<div class="progress progress-striped" title="<?php echo $expbar['percentage']; ?>% [<?php echo $expbar['current'].' / '.$expbar['max']; ?>]">
+				<div class="bar" style="width: <?php echo $expbar['percentage']; ?>%;"></div>
 			</div>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
