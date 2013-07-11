@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 	else {
 		$username = $__database->real_escape_string($_POST['username']);
-		$password = $__database->real_escape_string($_POST['password']);
+		$password = $_POST['password'];
 		
 		// $query = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
 		$query = $__database->query("SELECT * FROM accounts WHERE email = '".$username."'");

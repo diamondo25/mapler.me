@@ -21,17 +21,17 @@ if (isset($_GET['code'])) {
 			$id = $row[0];
 			$query->free();
 			
-			$password = $__database->real_escape_string($_POST['password']);
-			
 			
 			$salt = '';
 			for ($i = 0; $i < 8; $i++) {
 				$salt .= chr(0x30 + rand(0, 20));
 			}
 			
-			$encryptedpassword = GetPasswordHash($password, $salt);
+			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
 			
-			$__database->query("DELETE FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset'");
+			echo $encryptedpassword;
+			
+			// $__database->query("DELETE FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset'");
 			$__database->query("UPDATE accounts SET password = '".$encryptedpassword."' AND salt = '".$__database->real_escape_string($salt)."' WHERE id = ".$id);
 		
 ?>
