@@ -81,7 +81,7 @@ else {
 			$username = $row[1];
 			$query->free();
 			// Check if already sent
-			$query = $__database->query("SELECT 1 FROM account_tokens WHERE account_id = ".$id." AND type = 'password_reset' AND till < NOW()");
+			$query = $__database->query("SELECT 1 FROM account_tokens WHERE account_id = ".$id." AND type = 'password_reset' AND till > NOW()");
 		
 			if ($query->num_rows == 0) {
 				$code = md5(time().' -- -- -- -- - '.$id.' - '.$username);

@@ -115,7 +115,9 @@ $q->free();
                                     <input type="password" name="password" placeholder="Password">
                                     <div class="forgot">
                                         <span>Don’t have an account?</span>
-                                        <a href="//<?php echo $domain; ?>/signup/">Sign up.</a>
+                                        <a href="//<?php echo $domain; ?>/signup/">Sign up.</a><br />
+                                        <span>Forgot password?</span>
+                                        <a href="//<?php echo $domain; ?>/resetpassword/">Reset password</a>
                                     </div>
                                     <input type="submit" value="Login!">
                                 </form>
