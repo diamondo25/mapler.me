@@ -204,9 +204,7 @@ else {
 <div class="row">
 <div class="span12">
 <p class="lead">Sign up for a Mapler.me account..</p>
-<img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>Hello, welcome to Mapler.me! Sign up is currently limited each day. After the limit has been reached, creating new accounts will be locked until the next day.</p>
-
-<p>In order to provide a robust, amazing experience, we have opened our doors to a select group of players. We will work together with these individuals to craft a service crafted better than the best Rising Sun Pendant.</p>
+<img src="https://dl.dropbox.com/u/22875564/Random/lulzbean.png" class="pull-right"/><p>You're only a few steps away from joining hundreds of other Maplers!</p>
 </div>
 
 <div class="span12">
