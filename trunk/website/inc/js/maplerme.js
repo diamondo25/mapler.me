@@ -37,6 +37,8 @@ $(document).ready(function() {
 	$('input[type=text]').bind("blur", keypress.listen);
 	$('input[type=password]').bind("focus", keypress.stop_listening);
 	$('input[type=password]').bind("blur", keypress.listen);
+	$('textarea').bind("focus", keypress.stop_listening);
+	$('textarea').bind("blur", keypress.listen);
 	
 	// Bind click-on-status stuff
 	$('body').on('click', '.status[status-id]', function() {
