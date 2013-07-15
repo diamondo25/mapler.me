@@ -56,6 +56,10 @@ foreach ($this->queries as $query) {
 
 // Connect to the database
 $__database = new ExtendedMysqli((strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE ? '127.0.0.1' : 'mc.craftnet.nl'), 'maplestats', 'maplederp', 'maplestats');
+
+$__database_traditional = mysql_connect('mc.craftnet.nl','maplestats','maplederp');
+$__database_traditional_database = mysql_select_db('maplestats', $__database_traditional);
+
 //$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {
 	die('<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>');
