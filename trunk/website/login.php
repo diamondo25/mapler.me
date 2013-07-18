@@ -88,7 +88,7 @@ ORDER BY
 
 	$row = $q->fetch_assoc();
 ?>
-			<img style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px #FFF; position:relative; top:10px;" class="character pull-left" />
+			<img style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);; position:relative; top:10px;" class="character pull-left" />
 <?php
 $q->free();
 ?>

@@ -148,11 +148,12 @@ else:
 									<li class="divider"></li>
 									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 									<li class="divider"></li>
+									<li><a href="//<?php echo $domain; ?>/rankings/">Rankings</a></li>
 									<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
 <?php if ($_loggedin): ?>
 									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
-									<li><a href="//<?php echo $domain; ?>/cdn/">CDN <b>*new*</b></a></li>
+									<li><a href="//<?php echo $domain; ?>/cdn/">CDN</a></li>
 <?php endif; ?>
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/team/">Our Team</a></li>

@@ -147,6 +147,5 @@ $check = strlen($searching);
 			<li><a href="#" data-filter=".galicia, .arcania, .zenith, .el nido, .demethos">Galicia, Arcania, Zenith, El Nido, Demethos</a></li>
 			<li><a href="#" data-filter=".renegades">Renegades</a></li>
 		</ul>
-		<p>We're aware worlds are missing. This is currently being tested.</p>
 		<?php } ?>
 	</div>
