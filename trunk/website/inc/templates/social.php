@@ -146,9 +146,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
   </div>
   <div class="modal-footer">
 		<button type="submit" class="btn">Post!</button>
-<?php if ($_loginaccount->GetAccountRank() >= RANK_MODERATOR):?>
-		Blog post? <input type="checkbox" name="blog" value="Yes" />
-<?php endif; ?>
   </div>
   </form>
 </div>

@@ -88,7 +88,7 @@ ORDER BY
 
 	$row = $q->fetch_assoc();
 ?>
-			<img style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);; position:relative; top:10px;" class="character pull-left" />
+			<img style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5); position:relative; top:10px;" class="character pull-left" />
 <?php
 $q->free();
 ?>
@@ -119,7 +119,9 @@ $q->free();
                                         <span>Forgot password?</span>
                                         <a href="//<?php echo $domain; ?>/resetpassword/">Reset password</a>
                                     </div>
-                                    <input type="submit" value="Login!">
+                                    <center>
+                                    <input type="submit" class="btn btn-inverse btn-large" value="Login!">
+                                    </center>
                                 </form>
                             </div>
 

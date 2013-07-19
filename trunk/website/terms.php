@@ -8,7 +8,7 @@
                     In addition to reviewing this Agreement, please read our Privacy Policy. Your use of the Website constitutes agreement to its terms and conditions as well.
                 </p> <h3>[1] Definition</h3> <ol> <li>'Player' refers to (1) any players accessed through our service and it's information, (2) another individual's character(s) and (3) player information stored in our databases.</li> <li>'User' refers to the individual who registers and uses our service, has collected information using our client, or those who interact with the Mapler.me service.</li> <li>'Link' refers to any Uniform Resource Locator (URL) that represents a page, picture, avatar, or content accessed on Mapler.me.</li> </ol> <h3>[2] Monitoring</h3> <p>
                     Mapler.me has the right to monitor all activities to the website. Upon accepting the terms of use, all users of this website agrees to such monitoring. Mapler.me uses secure methods of collecting allowed information from MapleStory, ignoring all confidential information such as 1) Nexon America account information, 2) Communication between players within buddy, guild, alliance, party, expedition, and all other forms, and 3)  Nevertheless, we do not make any warranties or guarantees that: (1) the Website, or any portion thereof, will be monitored for accuracy or unacceptable use, (2) apparent statements of fact will be authenticated, or (3) we will take any specific action (or any action at all) in the event of a dispute regarding compliance or non-compliance with this Agreement.
-                </p> <h3>[3] User Conducts</h3> <p>
+                </p> <h3>[3] User Conducts (Code of Conduct)</h3> <p>
                     As a condition of use, you promise not to use the Services for any purpose that is unlawful or prohibited by these Terms of Use, or any other purpose not reasonably intended by Mapler.me. We respect other people's rights and we expect you to do the same.
                 </p> <p>
                     By way of example, and not as a limitation, you agree not to use the Services:
@@ -65,13 +65,16 @@
                     <li>All skills the character has learned including mounts and link skills.</li>
                     <li>Guild information including it's name, emblem, ranks, and capacity. This information is used to create publicly viewable guild pages.</li>
                     </ul>
-                    <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regan to entering a new map. Some information collected is currently stored internally for future additions. The client also tracks the following events:</p>
+                    <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regan to entering a new map. Some information collected is currently stored internally for future additions. The client tracks and stores the following information about characters:</p>
                     <ul>
-                    <li>Leveling up</li>
-                    <li>Job Advancements</li>
-                    <li>Being famed (does not record who).</li>
+                    <li>Basic character information (Stats, name, world, level, etc)</li>
+                    <li>All items and equipment on that character</li>
+                    <li>Skills</li>
                     <li>Familiars</li>
-                    <li>Buddy List</li>
+                    <li>Evolving World Cores</li>
+                    <li>Teleport / Hyper Teleport Rock locations</li>
+                    <li>Guild and Alliance information</li>
+                    <li>Levelups, job advancement, and being famed.</li>
                     </ul>
                     
 

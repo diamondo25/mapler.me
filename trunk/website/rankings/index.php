@@ -1,12 +1,5 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
-
-if (!IsLoggedin() || $_loginaccount->GetAccountRank() < RANK_PLUS) {
-	echo '<p class="status"><b>Error:</b> The rankings are currently only viewable by Mapler+ or higher members while it is beta tested.</p>';
-	require_once __DIR__.'/../inc/footer.php';
-	die;
-}
-
 require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/exp_table.php';
 require_once 'pagination.php';

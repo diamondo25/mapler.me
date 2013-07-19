@@ -149,7 +149,7 @@ else:
 									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 									<li class="divider"></li>
 									<li><a href="//<?php echo $domain; ?>/rankings/">Rankings</a></li>
-									<li><a href="//<?php echo $domain; ?>/blog/">Blog</a></li>
+									<li><a href="//blog.mapler.me/">Blog</a></li>
 <?php if ($_loggedin): ?>
 									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
@@ -264,7 +264,7 @@ endif;
     </div>
 </header>
 
-	<div class="container main" style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 5px; margin-top: 90px">
+	<div class="container main" style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 5px; margin-top: 90px; margin-bottom:30px;">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {

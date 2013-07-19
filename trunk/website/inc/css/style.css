@@ -5,7 +5,8 @@
 /* general */
 
 body {
-	background: #0a1625 url('http://nxcache.nexon.net/maplestory/img/bg/ms-body-top.jpg') center 0px no-repeat;
+	background: #0a1625 url('/inc/img/new-bg.png') center 0px fixed;
+	background-size: cover;
 }
 
 html { overflow-x: hidden; }

@@ -29,11 +29,10 @@ if ($_loggedin) {
 <div class="row">
 	<div class="span12">
 <center>
-<img src="http://puu.sh/35aLt.png" style="width:300px;"/>
 <p class="lead woah">Start the next chapter of your Maple 'Story'!</p>
 <a href="//<?php echo $domain; ?>/login/" class="btn btn-success btn-large">Login or register!</a>
 </center>
-	<hr />
+<br/>
 	</div>
 </div>
 <div class="row">
@@ -80,6 +79,3 @@ $q->free();
 	</div>
 
 </div>
-<?php
-require_once('inc/footer.php');
-?>
