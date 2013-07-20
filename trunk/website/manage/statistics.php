@@ -192,6 +192,49 @@ foreach ($values as $date => $amount)
 
 
 
+			<h1>Graph of Character Levels</h1>
+			<div id="levelchart" style="height: 250px;"></div>
+<?php
+
+$q = "
+SELECT
+	`level`,
+	COUNT(*)
+FROM
+	`characters`
+GROUP BY
+	`level`
+ORDER BY
+	`level` DESC
+";
+
+
+$q = $__database->query($q);
+$values = array();
+while ($row = $q->fetch_row()) {
+	$values[$row[0]] = $row[1];
+}
+
+
+?>
+<script>
+new Morris.Bar({
+  element: 'levelchart',
+  data: [
+<?php
+foreach ($values as $level => $amount)
+	echo '{ level: '.$level.', value: '.$amount.' },';
+?>
+  ],
+  xkey: 'level',
+  ykeys: ['value'],
+  labels: ['Amount of characters'],
+  parseTime: false
+});
+</script>
+
+
+
 <?php
 require_once __DIR__.'/../inc/footer.php';
 ?>

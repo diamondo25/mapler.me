@@ -132,7 +132,7 @@ class PS_Pagination {
 		$end = $batch * $this->links_per_page;
 		if ($end == $this->page) {
 			//$end = $end + $this->links_per_page - 1;
-		//$end = $end + ceil($this->links_per_page/2);
+			//$end = $end + ceil($this->links_per_page/2);
 		}
 		if ($end > $this->max_pages) {
 			$end = $this->max_pages;
@@ -142,7 +142,7 @@ class PS_Pagination {
 		
 		for($i = $start; $i <= $end; $i ++) {
 			if ($i == $this->page) {
-				$links .= $prefix . " $i " . $suffix;
+				$links .= $prefix . ' '.$i.' ' . $suffix;
 			} else {
 				$links .= ' ' . $prefix . '<a href="' . $this->php_self . '' . $i . '' . $this->append . '">' . $i . '</a>' . $suffix . ' ';
 			}

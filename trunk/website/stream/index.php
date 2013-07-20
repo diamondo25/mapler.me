@@ -92,13 +92,14 @@ GROUP BY
 
 </div>
 <p>
-	<center><button onclick="syncer(true);" class="btn btn-large" type="button">Load more statuses..</button></center>
+	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { 
 	$(window).scroll(function() {
-		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-			syncer(true);
+		var offsetTillBottom = $(document).height() - ($(window).scrollTop() + $(window).height());
+		if (offsetTillBottom <= 100) {
+			syncer(true, true);
 		}
 	});
 });

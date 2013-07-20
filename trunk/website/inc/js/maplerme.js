@@ -128,8 +128,13 @@ $(document).ready(function() {
 	});
 	
 	window.IsSyncing = false;
-	window.syncer = function (requestOlder) {
-		if (window.IsSyncing) return;
+	window.syncer = function (requestOlder, syncbtn) {
+		if (typeof syncbtn === 'undefined') syncbtn = false;
+		if (!syncbtn && window.IsSyncing) return;
+		if (syncbtn && $('#syncbutton').html() == 'Loading more statuses.....') return;
+		if (syncbtn) {
+			$('#syncbutton').html('Loading more statuses.....');
+		}
 		window.IsSyncing = true;
 		var statuses = [];
 		$('div[class~="status"][status-id]').each(function (index) {
@@ -237,6 +242,9 @@ $(document).ready(function() {
 				);
 				
 				window.IsSyncing = false;
+				if (syncbtn) {
+					$('#syncbutton').html('Load more statuses..');
+				}
 			}
 		});
 	};

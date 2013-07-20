@@ -67,53 +67,56 @@ table tr:hover {
 <div class="row">
 		<div class="span7">
 		<img src="http://i.imm.io/1c51p.png" style="border-radius:3px;"/>
-		<table class="table table-hover">
-		<thead><tr><th>Name</th> <th>Level</th> <th>Class</th></tr></thead>
-		<?php
-			
-	if(!$rs) die(mysql_error());
-	while($row = mysql_fetch_assoc($rs)) {
-	?>
-	<tr class="span3" style="overflow:visible!important;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
-	
-		<td>
-			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);"></div>
-			<img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?>
-		</td>
-		<td>
-			<?php echo $row['level']; ?>
-		</td>
-		<td>
-		<?php echo GetJobname($row['job']); ?>
-		</td>
-	</tr>
-	<?php
-	}
-	?>
-		</table>
-		</div>
-			<div class="span5" style="height:100% !important; float: right;">
-		<p class="title"><img src="http://i.imm.io/1c53T.png" style="border-radius:3px;"/><br/>
-			<small class="more" style="margin-top:10px;">
-			<?php
-			while ($row = $q->fetch_assoc()) {
-			?>
-			<div class="status">
-			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);"></div>
-			<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
-			<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
-			<small><i class="icon-heart"></i> <?php echo $row['fame']; ?></small></p>
-			</div>
-			<?php
-			}
-			?>
-			</small>
-		</p>
+				
 		<?php
 			echo $pager->renderPrev();
 			echo '&nbsp;';
 			echo $pager->renderNext();
 		?>
+		<table class="table table-hover">
+		<thead>
+			<tr>
+				<th colspan="2">Name</th>
+				<th>Level</th>
+				<th>Class</th>
+			</tr>
+		</thead>
+<?php
+while ($row = mysql_fetch_assoc($rs)) {
+?>
+	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
+	
+		<td style="vertical-align: middle">
+			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5); float: none;"></div>
+		</td>
+		<td style="vertical-align: middle">
+			<img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: sub" title="<?php echo $row['world_name']; ?>" /> <?php echo $row['name']; ?>
+		</td>
+		<td style="vertical-align: middle"><?php echo $row['level']; ?><br />(<?php echo $row['exp']; ?> exp)</td>
+		<td style="vertical-align: middle"><?php echo GetJobname($row['job']); ?></td>
+	</tr>
+<?php
+}
+?>
+		</table>
+		</div>
+			<div class="span5" style="height:100% !important; float: right;">
+			<p class="title"><img src="http://i.imm.io/1c53T.png" style="border-radius:3px;"/><br/>
+			<small class="more" style="margin-top:10px;">
+<?php
+while ($row = $q->fetch_assoc()) {
+?>
+			<div class="status">
+				<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);"></div>
+				<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
+				<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
+				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?></small></p>
+			</div>
+<?php
+}
+?>
+			</small>
+		</p>
 		
 	</div>
 

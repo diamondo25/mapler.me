@@ -2,6 +2,7 @@
 require_once __DIR__.'/../../inc/functions.php';
 require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/classes/statusses.php';
+require_once __DIR__.'/../../inc/job_list.php';
 
 CheckSupportedTypes('info');
 
@@ -109,11 +110,11 @@ LEFT JOIN
 	ON
 		a.id = `account_id`
 WHERE
-	`type` = 'levelup'
+	(`type` = 'levelup' OR `type` = 'jobup')
 	AND
 	".$whereq_1."
 ";
-		if ($_loggedin && $subdomain == '') { // Main screen
+		if ($_loggedin && ($subdomain == '' || $subdomain == 'www')) { // Main screen
 			$q .= "
 	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
@@ -165,7 +166,7 @@ LEFT JOIN
 WHERE
 	".$whereq_2."
 ";
-		if ($_loggedin && $subdomain == '') { // Main screen
+		if ($_loggedin && ($subdomain == '' || $subdomain == 'www')) { // Main screen
 			$q .= "
 	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
@@ -209,6 +210,17 @@ LIMIT
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
 					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
 					<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
+				</p>
+			</div>
+<?php
+				}
+				elseif ($content[1] == 'jobup') {
+?>
+			<div class="status">
+				<p style="margin:0px;"><i class="icon-check-sign"></i>
+					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
+					<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>'!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
