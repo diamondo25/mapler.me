@@ -32,21 +32,14 @@ class PS_Pagination {
 	}
 
 	function paginate() {
-		//Check for valid mysql connection
-		if (! $this->conn || ! is_resource($this->conn )) {
-			if ($this->debug)
-				echo "MySQL connection missing<br />";
-			return false;
-		}
-		
 		//Find total number of rows
-		$all_rs = @mysql_query($this->sql );
+		$all_rs = $this->conn->query($this->sql );
 		if (! $all_rs) {
 			if ($this->debug)
 				echo "SQL query failed. Check your query.<br /><br />Error Returned: " . mysql_error();
 			return false;
 		}
-		$this->total_rows = mysql_num_rows($all_rs );
+		$this->total_rows = $all_rs->num_rows;
 		@mysql_close($all_rs );
 		
 		//Return FALSE if no rows found
@@ -71,7 +64,7 @@ class PS_Pagination {
 		$this->offset = $this->rows_per_page * ($this->page - 1);
 		
 		//Fetch the required result set
-		$rs = @mysql_query($this->sql . " LIMIT {$this->offset}, {$this->rows_per_page}" );
+		$rs = $this->conn->query($this->sql . " LIMIT {$this->offset}, {$this->rows_per_page}" );
 		if (! $rs) {
 			if ($this->debug)
 				echo "Pagination query failed. Check your query.<br /><br />Error Returned: " . mysql_error();

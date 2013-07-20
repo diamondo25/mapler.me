@@ -5,7 +5,7 @@ class ExtendedMysqli extends mysqli {
 	
 	public function query($pQuery) {
 		$this->last_query = $pQuery;
-		//$this->queries[] = $pQuery;
+		$this->queries[] = $pQuery;
 		
 		$result = parent::query($pQuery) or die($this->get_debug_info());
 		return $result;
@@ -56,9 +56,6 @@ foreach ($this->queries as $query) {
 
 // Connect to the database
 $__database = new ExtendedMysqli((strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE ? '127.0.0.1' : 'mc.craftnet.nl'), 'maplestats', 'maplederp', 'maplestats');
-
-$__database_traditional = mysql_connect('mc.craftnet.nl','maplestats','maplederp');
-$__database_traditional_database = mysql_select_db('maplestats', $__database_traditional);
 
 //$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {

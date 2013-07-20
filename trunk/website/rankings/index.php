@@ -36,7 +36,7 @@ ORDER BY
 LIMIT
 	0, 3
 ");
-$pager = new PS_Pagination($__database_traditional, $sql, 5, 5, "");
+$pager = new PS_Pagination($__database, $sql, 5, 5, "");
 
 $pager->setDebug(true);
 $rs = $pager->paginate();
@@ -82,7 +82,7 @@ table tr:hover {
 			</tr>
 		</thead>
 <?php
-while ($row = mysql_fetch_assoc($rs)) {
+while ($row = $rs->fetch_assoc()) {
 ?>
 	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 	
