@@ -33,7 +33,7 @@ break;
 # Error 403 - Access Forbidden
 case 403:
 $errorname = 'Error 403 - Access Forbidden';
-$errordesc = '<center><img src="http://mapler.me/inc/img/icon.png"/>
+$errordesc = '<center><img src="http://i.imgur.com/7EsgCvJ.png"/>
   <p>
   Ooops! <b>http://'.$server_name.$requested_url.'</b> &#8212; is forbidden!</p>
   <p>Please use the menu above to return to another page. ♥</p></center>';
@@ -43,7 +43,7 @@ break;
 case 404:
 $errorname = 'Error 404 - Page Not Found';
 $errordesc = '
-<center><img src="http://mapler.me/inc/img/icon.png"/>
+<center><img src="http://i.imgur.com/7EsgCvJ.png"/>
   <p>
   Ooops! <b>http://'.$server_name.$requested_url.'</b> &#8212; cannot be found!</p>
   <p>Please use the menu above to return to another page. ♥</p></center>
@@ -53,7 +53,7 @@ break;
 # Error 500 - Server Configuration Error
 case 500:
 $errorname = 'Error 500 - Server Configuration Error';
-$errordesc = '<center><img src="http://mapler.me/inc/img/icon.png"/>
+$errordesc = '<center><img src="http://i.imgur.com/7EsgCvJ.png"/>
   <p>
   Ooops! Something internally went wrong or the page had a boo-boo! Report this if this happens frequently.</p>
   <p>Please use the menu above to return to another page. ♥</p></center>

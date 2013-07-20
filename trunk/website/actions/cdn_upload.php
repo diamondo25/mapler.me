@@ -84,9 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 		<div class="status">
 			<center>
 				<p style="font-size:40px;">
-					<img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" style="width:50px;position:relative;top:10px;"/>mapler.cdn
+					<img src="//<?php echo $domain; ?>/inc/img/logo.new.png" style="width:200px;position:relative;top:10px;"/><br /><br />mapler.cdn
 				</p>
-			<hr />
 			<p>Finally, something simple!</p>
 			</center>
 		</div>
@@ -97,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['file'])) {
 			<form method="POST" enctype="multipart/form-data" style="margin:0 !important;">
 				<input type="file" name="file" id="file" class="status">
 				<br/>
-				<input type="submit" class="btn" value="Send!">			
+				<input type="submit" class="btn" value="Send file!">			
 			</form>
 		</div>
 	</div>
