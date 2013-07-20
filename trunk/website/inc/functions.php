@@ -4,6 +4,7 @@
 date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 error_reporting(0);
+ini_set('display_errors', 0);
 /*
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
 	echo "Died on notice!! Error: {$errstr} on {$errfile}:{$errline}";
@@ -626,9 +627,27 @@ function GetAllianceWorldID($worldid) {
 	}
 }
 
+function SetMaplerCookie($name, $value, $expiresInDays = 35600) {
+	global $domain;
+	setcookie(
+		'mplr'.$name,
+		$value,
+		time() + ($expiresInDays * 24 * 60 * 60),
+		'/',
+		'.'.$domain,
+		!empty($_SERVER['HTTPS']),
+		true // XSS attack thingy, only in PHP 5.2 >
+	);
+}
+
+function GetMaplerCookie($name) {
+	return isset($_COOKIE['mplr'.$name]) ? $_COOKIE['mplr'.$name] : null;
+}
 
 
 require_once __DIR__.'/functions.loginaccount.php';
+
+
 
 
 

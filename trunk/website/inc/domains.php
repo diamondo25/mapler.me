@@ -22,6 +22,11 @@ elseif (strpos($_SERVER['SERVER_NAME'], 'mplr.e.craftnet.nl') !== false) {
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], '.mplr.e.craftnet.nl'));
 	$domain = 'mplr.e.craftnet.nl';
 }
+elseif (strpos($_SERVER['SERVER_NAME'], 'it.craftnet.nl') !== false) {
+	// SOMETHING.it.craftnet.nl << Localhost testing! points to 127.0.0.1
+	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], '.it.craftnet.nl'));
+	$domain = 'it.craftnet.nl';
+}
 elseif (strpos($_SERVER['SERVER_NAME'], 'maplerme') !== false) {
 	// SOMETHING.maplerme << Local Testing Tyler
 	$subdomain = substr($_SERVER['SERVER_NAME'], 0, strrpos($_SERVER['SERVER_NAME'], '.maplerme'));

@@ -12,7 +12,22 @@ SELECT
 ");
 $tmp = $q->fetch_row(); 
 $q->free();
+
+
+// Build list of dates
+$dates = array();
+$starttime = time();
+$secs_between_days = 60 * 60 * 24;
+$datestr = 'Y-m-d'; // 1000-12-31
+for ($i = 0; $i < 31; $i++) {
+	$dates[] = date($datestr, $starttime - ($i * $secs_between_days));
+}
+
 ?>
+<link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+
 		<center><h1>Mapler.me Statistics</h1></center>
 			<h1><?php echo $tmp[0]; ?> <span class="faded">accounts registered on Mapler.me.</span></h1>
 			
@@ -31,6 +46,152 @@ $q->free();
 			<h1><?php echo $tmp[5]; ?> <span class="faded">statuses posted between all members.</span></h1>
 			
 			<h1><?php echo $tmp[6]; ?> <span class="faded">friendships have been formed.</span></h1>
+			
+			<hr />
+<?php
+
+$values = array_flip($dates);
+foreach ($values as $date => $val)
+	$values[$date] = 0;
+
+$q = "
+SELECT
+	DATE(`registered_on`),
+	COUNT(*)
+FROM
+	`accounts`
+WHERE
+	DATE(`registered_on`) IN ('".implode('\',\'', $dates)."')
+GROUP BY
+	YEAR(`registered_on`),
+	MONTH(`registered_on`),
+	DAY(`registered_on`)
+";
+
+
+$q = $__database->query($q);
+
+while ($row = $q->fetch_row()) {
+	$values[$row[0]] = $row[1];
+}
+
+?>
+
+			<h1>Chart of new players in 31 days</h1>
+			<div id="joinchart" style="height: 250px;"></div>
+<script>
+new Morris.Line({
+  // ID of the element in which to draw the chart.
+  element: 'joinchart',
+  // Chart data records -- each entry in this array corresponds to a point on
+  // the chart.
+  data: [
+<?php
+foreach ($values as $date => $amount)
+	echo '{ date: "'.$date.'", value: '.$amount.' },';
+?>
+  ],
+  // The name of the data record attribute that contains x-values.
+  xkey: 'date',
+  // A list of names of data record attributes that contain y-values.
+  ykeys: ['value'],
+  // Labels for the ykeys -- will be displayed when you hover over the
+  // chart.
+  labels: ['Amount of players']
+});
+</script>
+
+
+			<h1>Posts on the stream in 31 days</h1>
+			<div id="statuschart" style="height: 250px;"></div>
+<?php
+
+$values = array_flip($dates);
+foreach ($values as $date => $val)
+	$values[$date] = 0;
+
+$q = "
+SELECT
+	DATE(`timestamp`),
+	COUNT(*)
+FROM
+	`social_statuses`
+WHERE
+	DATE(`timestamp`) IN ('".implode('\',\'', $dates)."')
+GROUP BY
+	YEAR(`timestamp`),
+	MONTH(`timestamp`),
+	DAY(`timestamp`)
+";
+
+
+$q = $__database->query($q);
+
+while ($row = $q->fetch_row()) {
+	$values[$row[0]] = $row[1];
+}
+
+
+?>
+<script>
+new Morris.Line({
+  element: 'statuschart',
+  data: [
+<?php
+foreach ($values as $date => $amount)
+	echo '{ date: "'.$date.'", value: '.$amount.' },';
+?>
+  ],
+  xkey: 'date',
+  ykeys: ['value'],
+  labels: ['Amount of status updates']
+});
+</script>
+
+			<h1>Chart of MapleStory account creation dates</h1>
+			<div id="creationchart" style="height: 250px;"></div>
+<?php
+
+$q = "
+SELECT
+	YEAR(`creation_date`),
+	COUNT(*),
+	COUNT(DISTINCT account_id),
+	COUNT(DISTINCT CASE WHEN account_id = 2 THEN NULL ELSE account_id END)
+FROM
+	`users`
+WHERE
+	`creation_date` <> '0000-00-00'
+GROUP BY
+	YEAR(`creation_date`)
+";
+
+
+$q = $__database->query($q);
+$values = array();
+while ($row = $q->fetch_row()) {
+	$values[$row[0]] = array($row[1], $row[2], $row[3]);
+}
+
+
+?>
+<script>
+new Morris.Line({
+  element: 'creationchart',
+  data: [
+<?php
+foreach ($values as $date => $amount)
+	echo '{ date: "'.$date.'", value: '.$amount[0].', value_unique_accounts: '.$amount[1].', value_non_dummies: '.$amount[2].' },';
+?>
+  ],
+  xkey: 'date',
+  ykeys: ['value', 'value_unique_accounts', 'value_non_dummies'],
+  labels: ['Amount of accounts created', 'Unique Mapler.me accounts', 'Bound accounts']
+});
+</script>
+
+
+
 <?php
 require_once __DIR__.'/../inc/footer.php';
 ?>

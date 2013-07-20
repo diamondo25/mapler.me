@@ -132,20 +132,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
 <div id="post" class="modal hide fade draggable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close btn btn-mini" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
-    <h3 id="myModalLabel"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" width="30px" style="position:relative;top:5px;"/> Share something?</h3>
-  </div>
-  <div class="modal-body">
-  
-  <div class="character pull-left" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -2px #FFF;"></div>
-  
-    <form id="statusposter" method="post">
-		<textarea name="content" id="post-status" style="width:60%;max-width:310px;clear:both;border:0 !important;" placeholder="Type your status here!"></textarea>
-		<input type="hidden" name="reply-to" value="-1" />
-  </div>
-  <div class="modal-footer">
-		<button type="submit" class="btn">Post!</button>
-  </div>
-  </form>
+	<form id="statusposter" method="post">
+		<div class="modal-header">
+			<button type="button" class="close btn btn-mini" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
+			<h3 id="myModalLabel"><img src="//<?php echo $domain; ?>/inc/img/shadowlogo.png" width="30px" style="position:relative;top:5px;"/> Share something?</h3>
+		</div>
+
+
+		<div class="modal-body">
+				<div class="character pull-left" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -2px #FFF; margin: 0;"></div>
+
+				<textarea name="content" id="post-status" style="width: 420px; max-width: 420px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 60px;" placeholder="Type your status here!"></textarea>
+				<input type="hidden" name="reply-to" value="-1" />
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn">Post!</button>
+		</div>
+	</form>
 </div>
