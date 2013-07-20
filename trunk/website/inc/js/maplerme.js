@@ -171,6 +171,10 @@ $(document).ready(function() {
 			success: function (e) {
 				var newTitle = window.document.title;
 				
+				if (e.loggedin == false && window.location.pathname.indexOf('/stream/') == 0) {
+					document.location = '/login';
+				}
+				
 				if (newTitle.indexOf(') ') != -1) {
 					newTitle = newTitle.substr(newTitle.indexOf(') ') + 2);
 				}
@@ -184,6 +188,7 @@ $(document).ready(function() {
 					window.MemberName = e.membername;
 
 				window.document.title = newTitle;
+				
 				
 				if (e.status_info != undefined) {
 					// Check posts
