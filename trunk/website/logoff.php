@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/inc/header.php'; 
 unset($_SESSION['username']);
+SetMaplerCookie('login_session', '', -100);
 ?>
 	<div class="span12">
 		<center>
