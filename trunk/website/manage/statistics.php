@@ -19,7 +19,7 @@ $dates = array();
 $starttime = time();
 $secs_between_days = 60 * 60 * 24;
 $datestr = 'Y-m-d'; // 1000-12-31
-for ($i = 0; $i < 31; $i++) {
+for ($i = 0; $i < 60; $i++) {
 	$dates[] = date($datestr, $starttime - ($i * $secs_between_days));
 }
 
@@ -50,7 +50,7 @@ for ($i = 0; $i < 31; $i++) {
 			<hr />
 <?php
 
-$values = array_flip($dates);
+$values = array_flip(array_reverse($dates));
 foreach ($values as $date => $val)
 	$values[$date] = 0;
 
@@ -77,10 +77,10 @@ while ($row = $q->fetch_row()) {
 
 ?>
 
-			<h1>Chart of new players in 31 days</h1>
+			<h1>Chart of new Mapler.me accounts in 2 months</h1>
 			<div id="joinchart" style="height: 250px;"></div>
 <script>
-new Morris.Line({
+new Morris.Bar({
   // ID of the element in which to draw the chart.
   element: 'joinchart',
   // Chart data records -- each entry in this array corresponds to a point on
@@ -97,23 +97,24 @@ foreach ($values as $date => $amount)
   ykeys: ['value'],
   // Labels for the ykeys -- will be displayed when you hover over the
   // chart.
-  labels: ['Amount of players']
+  labels: ['Amount of accounts']
 });
 </script>
 
 
-			<h1>Posts on the stream in 31 days</h1>
+			<h1>Posts on the stream in 2 months</h1>
 			<div id="statuschart" style="height: 250px;"></div>
 <?php
 
-$values = array_flip($dates);
+$values = array_flip(array_reverse($dates));
 foreach ($values as $date => $val)
 	$values[$date] = 0;
 
 $q = "
 SELECT
 	DATE(`timestamp`),
-	COUNT(*)
+	COUNT(*),
+	COUNT(DISTINCT account_id)
 FROM
 	`social_statuses`
 WHERE
@@ -128,23 +129,23 @@ GROUP BY
 $q = $__database->query($q);
 
 while ($row = $q->fetch_row()) {
-	$values[$row[0]] = $row[1];
+	$values[$row[0]] = array($row[1], $row[2]);
 }
 
 
 ?>
 <script>
-new Morris.Line({
+new Morris.Bar({
   element: 'statuschart',
   data: [
 <?php
 foreach ($values as $date => $amount)
-	echo '{ date: "'.$date.'", value: '.$amount.' },';
+	echo '{ date: "'.$date.'", value: '.$amount[0].', unique_accounts: '.$amount[1].' },';
 ?>
   ],
   xkey: 'date',
-  ykeys: ['value'],
-  labels: ['Amount of status updates']
+  ykeys: ['value', 'unique_accounts'],
+  labels: ['Amount of status updates', 'Unique accounts']
 });
 </script>
 

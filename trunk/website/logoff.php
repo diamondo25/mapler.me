@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__.'/inc/header.php'; 
+require_once __DIR__.'/inc/functions.php';
 unset($_SESSION['username']);
+session_destroy();
 SetMaplerCookie('login_session', '', -100);
+require_once __DIR__.'/inc/header.php';
 ?>
 	<div class="span12">
 		<center>

@@ -155,7 +155,7 @@ $item_locations = array();
 $using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
 if (isset($_GET['madface']))
 	$using_face = 'angry';
-elseif (isset($_GET['face']))
+elseif (isset($_GET['face']) && !empty($_GET['face']))
 	$using_face = $_GET['face'];
 
 $char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($internal_id, 'avatar_stance', 'stand');

@@ -140,10 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
 		<div class="modal-body">
-				<div class="character pull-left" style="background: url('//mapler.me/<?php echo $main_char; ?>') no-repeat center -2px #FFF; margin: 0;"></div>
-
-				<textarea name="content" id="post-status" style="width: 420px; max-width: 420px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 60px;" placeholder="Type your status here!"></textarea>
-				<input type="hidden" name="reply-to" value="-1" />
+			<?php MakePlayerAvatar($main_char, array('styleappend' => 'float: left; margin: 0;')); ?>
+			<textarea name="content" id="post-status" style="width: 420px; max-width: 420px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 60px;" placeholder="Type your status here!"></textarea>
+			<input type="hidden" name="reply-to" value="-1" />
 		</div>
 		<div class="modal-footer">
 			<button type="submit" class="btn">Post!</button>
