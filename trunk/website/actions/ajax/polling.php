@@ -72,6 +72,7 @@ WHERE
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
+		$is_maindomain = $subdomain == '' || $subdomain == 'www';
 		
 		$whereq = '> FROM_UNIXTIME('.$_client_time.')';
 		if (isset($_POST['older-than'])) {
@@ -114,12 +115,12 @@ WHERE
 	AND
 	".$whereq_1."
 ";
-		if ($_loggedin && ($subdomain == '' || $subdomain == 'www')) { // Main screen
+		if ($_loggedin && $is_maindomain) { // Main screen
 			$q .= "
 	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
 		}
-		if ($subdomain != '') {
+		if (!$is_maindomain) {
 			$q .= ' AND ';
 			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}
@@ -166,12 +167,12 @@ LEFT JOIN
 WHERE
 	".$whereq_2."
 ";
-		if ($_loggedin && ($subdomain == '' || $subdomain == 'www')) { // Main screen
+		if ($_loggedin && $is_maindomain) { // Main screen
 			$q .= "
 	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
 		}
-		if ($subdomain != '') {
+		if (!$is_maindomain) {
 			$q .= ' AND ';
 			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}

@@ -5,14 +5,11 @@ date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 error_reporting(0);
 ini_set('display_errors', 0);
-/*
-function myErrorHandler($errno, $errstr, $errfile, $errline) {
-	echo "Died on notice!! Error: {$errstr} on {$errfile}:{$errline}";
-	throw new ErrorException($errstr, 0, $errno, $errfile, $errline); 
+if (isset($_GET['SUPERDUPERTESTMODE'])) {
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 }
 
-set_error_handler('myErrorHandler');
-*/
 require_once __DIR__.'/classes/database.php';
 
 

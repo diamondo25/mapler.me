@@ -100,6 +100,20 @@ WHERE
 		return $row;
 	}
 	
+	private static $_status_search_for = array(
+		'/(http|https|ftp)\:\/\/([^\<\s\t]+)/i', // URLs
+		'/(^| )@([a-z0-9_]+)/i', // Replies
+		// '/(^| )#([a-z0-9_]+)/i', // Hashtags
+		'/(^| )!([a-z0-9_]+)/i', // Images
+	);
+	
+	private static $_status_replace_with = array(
+		'<a href="$1://$2" target="_blank" class="status-link">$1://$2</a>', // URLs
+		'$1<a href="http://$2.mapler.me/">@$2</a>', // Replies
+		// '$1<a href="//'.$domain.'/search/tag/$2">#$2</a>', // Hashtags
+		'$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', // Images
+	);
+	
 	public function ParseContent() {
 		global $domain;
 		
@@ -110,6 +124,8 @@ WHERE
 		
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
+		$this->content = preg_replace(self::$_status_search_for, self::$_status_replace_with, $this->content);
+		/*
 		$this->content = preg_replace('/(http|https|ftp|mailto)\:\/\/([^\<\s\t]+)/i', '<a href="$1://$2" target="_blank" class="status-link">$1://$2</a>', $this->content);
 		
 		//@replies
@@ -118,6 +134,7 @@ WHERE
 		// $this->content = preg_replace('/(^| )#([a-z0-9_]+)/i', '$1<a href="//'.$domain.'/search/tag/$2">#$2</a>', $this->content);
 		//^images (workaround for the moment)
 		$this->content = preg_replace('/(^| )!([a-z0-9_]+)/i', '$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', $this->content);
+		*/
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
