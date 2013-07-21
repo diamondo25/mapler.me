@@ -19,7 +19,7 @@ require_once __DIR__.'/classes/database.php';
 
 // IP ban check right away.
 $__incoming_ip = $_SERVER['REMOTE_ADDR'];
-$q = $__database->query("SELECT 1 FROM ip_ban WHERE ip = '".$__database->real_escape_string($__incoming_ip)."'");
+$q = $__database->query("SELECT 1 FROM ip_ban WHERE '".$__database->real_escape_string($__incoming_ip)."' LIKE ip");
 if ($q->num_rows != 0) {
 ?>
 <html>
