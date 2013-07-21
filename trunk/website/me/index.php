@@ -17,43 +17,18 @@ require_once __DIR__.'/../inc/templates/me.header.template.php';
 	
 <?php
 endif;
-
-/*
-$statusses = new Statusses();
-$statusses->Load("s.account_id = '".$__database->real_escape_string($__url_useraccount->GetID())."' AND s.blog = 0");
-
-
-if ($statusses->Count() == 0) {
-?>
-	<center>
-		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif"/>
-		<p><?php echo $__url_useraccount->GetNickName(); ?> hasn't posted anything yet!</p>
-	</center>
-<?php
-}
-else {
-?>
-	<div class="span9">
-<?php
-	foreach ($statusses->data as $status) {
-		$status->PrintAsHTML();
-	}
-?>
-	</div>
-<?php
-}
-*/
 ?>
 	<div class="span9" id="statuslist"></div>
-	
-	<p>
-	<center><button onclick="syncer(true);" class="btn btn-large" type="button">Load more statuses..</button></center>
+
+<p>
+	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { 
 	$(window).scroll(function() {
-		if ($(window).scrollTop() + $(window).height() == $(document).height()) {
-			syncer(true);
+		var offsetTillBottom = $(document).height() - ($(window).scrollTop() + $(window).height());
+		if (offsetTillBottom <= 100) {
+			syncer(true, true);
 		}
 	});
 });

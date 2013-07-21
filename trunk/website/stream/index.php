@@ -38,7 +38,7 @@ max-width: 240px;">
 		</div>
 	
 		<div class="stream-block">
-			<div class="character" style="background: url('//mapler.me/<?php echo $main_char; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);"></div>
+			<?php MakePlayerAvatar($main_char); ?>
 			<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
 			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
@@ -74,7 +74,7 @@ GROUP BY
 ?>
 		
 		<div class="stream-block">
-			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row[0]; ?>?madface&size=small') no-repeat center -2px rgba(0,0,0,0.5); float: right;"></div>
+			<?php MakePlayerAvatar($row[0], array('face' => 'angry', 'styleappend' => 'float: right;')); ?>
 			<strong>Expiring Items</strong><br />
 <?php foreach ($itemids as $index => $itemid): ?>
 			<?php echo GetMapleStoryString('item', $itemid, 'name'); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />

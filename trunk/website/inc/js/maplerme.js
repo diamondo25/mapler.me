@@ -248,7 +248,10 @@ $(document).ready(function() {
 				
 				window.IsSyncing = false;
 				if (syncbtn) {
-					$('#syncbutton').html('Load more statuses..');
+					if (requestOlder && e.statuses.length == 0)
+						$('#syncbutton').html('Nothing to show you :(').fadeOut(1000);
+					else
+						$('#syncbutton').html('Load more statuses..');
 				}
 			}
 		});

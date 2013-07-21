@@ -87,7 +87,7 @@ while ($row = $rs->fetch_assoc()) {
 	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 	
 		<td style="vertical-align: middle">
-			<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5); float: none;"></div>
+			<?php MakePlayerAvatar($row['name'], array('styleappend' => 'float: none;')); ?>
 		</td>
 		<td style="vertical-align: middle">
 			<img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: sub" title="<?php echo $row['world_name']; ?>" /> <?php echo $row['name']; ?>
@@ -107,7 +107,7 @@ while ($row = $rs->fetch_assoc()) {
 while ($row = $q->fetch_assoc()) {
 ?>
 			<div class="status">
-				<div class="character" style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5);"></div>
+				<?php MakePlayerAvatar($row['name']); ?>
 				<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
 				<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
 				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?></small></p>

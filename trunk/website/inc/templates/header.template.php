@@ -232,19 +232,16 @@ endif;
         <nav id="menu">
         	<ul id="menu-nav">
 <?php
-	if ($_loggedin):
-	$main_char = $_loginaccount->GetMainCharacterName();
-	if ($main_char == null)
-		$main_char = 'inc/img/no-character.gif';
-	else
-		$main_char = 'avatar/'.$main_char;
+	if ($_loggedin) {
+		// Shouldn't be here...
+		$main_char = $_loginaccount->GetMainCharacterName();
 ?>
 							<li>
 								<a href="#post" role="button" data-toggle="modal"><i class="icon-plus"></i></a>
 							</li>
 
 <?php
-endif;
+	}
 ?>				
             </ul>
         </nav>

@@ -78,8 +78,8 @@ WHERE
 		if (isset($_POST['older-than'])) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
 		}
-		$whereq_1 = '`when` '.$whereq.($_client_time == 0 ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		$whereq_2 = '`timestamp` '.$whereq.($_client_time == 0 ? ' AND `timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_1 = '`when` '.$whereq.($_client_time == 0 && false ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_2 = '`timestamp` '.$whereq.($_client_time == 0 && false ? ' AND `timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
 		if (isset($_POST['older-than'])) {
 			$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
 			$whereq_2 .= ' AND `timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';

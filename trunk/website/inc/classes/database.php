@@ -2,7 +2,7 @@
 class ExtendedMysqli extends mysqli {
 	public $last_query = '';
 	public $queries = array();
-	
+
 	public function query($pQuery) {
 		$this->last_query = $pQuery;
 		$this->queries[] = $pQuery;

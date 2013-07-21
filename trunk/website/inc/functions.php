@@ -641,6 +641,22 @@ function GetMaplerCookie($name) {
 	return isset($_COOKIE['mplr'.$name]) ? $_COOKIE['mplr'.$name] : null;
 }
 
+function MakePlayerAvatar($name, $options = array()) {
+	// global $domain;
+	$size = isset($options['size']) ? $options['size'] : 'small';
+	$styleappend = isset($options['styleappend']) ? $options['styleappend'] : '';
+	$face = isset($options['face']) ? $options['face'] : '';
+	$type = isset($options['ign']) && $options['ign'] == true ? 'ignavatar' : 'avatar';
+	$notfound = $name === null || $name == '';
+	$image = 'http://mapler.me/inc/img/no-character.gif';
+	if (!$notfound) {
+		$image = 'http://mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face;
+	}
+?>
+	<div style="background: url('<?php echo $image; ?>') no-repeat center -2px rgba(0, 0, 0, 0.5);<?php echo $styleappend; ?>" class="character"></div>
+<?php
+}
+
 
 require_once __DIR__.'/functions.loginaccount.php';
 
