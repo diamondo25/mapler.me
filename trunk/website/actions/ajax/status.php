@@ -6,6 +6,7 @@ CheckSupportedTypes('responses', 'list', 'blog', 'post', 'delete');
 
 require_once __DIR__.'/../../inc/classes/database.php';
 require_once __DIR__.'/../../inc/classes/statusses.php';
+require_once __DIR__.'/../../inc/avatar_faces.php';
 
 if ($request_type == 'responses') {
 	RetrieveInputGET('statusid');
@@ -97,7 +98,7 @@ elseif ($request_type == 'delete') {
 elseif ($request_type == 'post') {
 	if (!$_loggedin) JSONDie('Not loggedin', 401);
 
-	RetrieveInputPOST('content', 'reply-to');
+	RetrieveInputPOST('content', 'reply-to', 'usingface');
 
 	$content = nl2br(htmlentities(trim($P['content']), ENT_QUOTES, 'UTF-8'));
 	if ($content == '')
@@ -139,6 +140,9 @@ WHERE
 		}
 	}
 
+	$using_face = MakeOKFace($P['usingface']);
+	
+	
 	$blog = $_loginaccount->IsRankOrHigher(RANK_MODERATOR) && isset($_POST['blog']) ? 1 : 0;
 
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
@@ -163,7 +167,8 @@ VALUES
 		".$blog.",
 		NOW(),
 		0,
-		".($reply_to == -1 ? 'NULL' : $reply_to)."
+		".($reply_to == -1 ? 'NULL' : $reply_to).",
+		'".$using_face."'
 	)
 	");
 

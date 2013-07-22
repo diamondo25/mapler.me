@@ -61,6 +61,7 @@ $limit != null
 
 class Status {
 	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to, $reply_count;
+	public $using_face;
 	
 	public function __construct($row) {
 		global $__server_time;
@@ -76,6 +77,7 @@ class Status {
 		$this->reply_to = (int)$row['reply_to'];
 		$this->reply_count = (int)$row['reply_count'];
 		$this->seconds_since = $__server_time - $this->timestamp;
+		$this->using_face = $row['using_face'];
 		
 		$this->ParseContent();
 	}
@@ -144,7 +146,7 @@ WHERE
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
-					<?php MakePlayerAvatar($main_char); ?><br />
+					<?php MakePlayerAvatar($main_char, array('face' => $this->using_face)); ?><br />
 					<p>
 						<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				

@@ -10,7 +10,8 @@ class Account {
 	private $_username,			$_fullname,			$_email,
 			$_nickname,			$_lastlogin,		$_lastip,
 			$_accountrank,		$_premiumtill,		$_bio,
-			$registered,		$_configuration,	$_lastlogin_secs;
+			$registered,		$_configuration,	$_lastlogin_secs,
+			$_muted;
 			
 	public static function Load($input) {
 		global $__database;
@@ -61,6 +62,7 @@ WHERE
 		$this->_premiumtill = $row['premium_till'];
 		$this->_bio = $row['bio'];
 		$this->_registered = $row['registered_on'];
+		$this->_muted = (int)$row['muted'];
 		$this->_configuration = $row['configuration'] == null ? array() : json_decode($row['configuration'], true);
 		if (!isset($row['last_login_secs_since']))
 			$this->_lastlogin_secs = 1; // Manual load...
@@ -80,7 +82,8 @@ SET
 	account_rank = '".intval($this->_accountrank)."',
 	premium_till = '".$__database->real_escape_string($this->_premiumtill)."',
 	bio = '".$__database->real_escape_string($this->_bio)."',
-	configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."'
+	configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."',
+	muted = ".$this->_muted."
 
 WHERE
 	id = ".$this->_id);
@@ -160,6 +163,19 @@ WHERE
 	
 	public function IsRankOrHigher($rank) {
 		return $this->_accountrank >= $rank;
+	}
+	
+	
+	public function IsMuted() {
+		return $this->_muted == 1;
+	}
+	
+	public function SetMute($value) {
+		$this->_muted = $value;
+	}
+	
+	public function GetMute() {
+		return $this->_muted;
 	}
 	
 	public function GetConfigurationOption($name, $default = null) {

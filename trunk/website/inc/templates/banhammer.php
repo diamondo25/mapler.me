@@ -1,4 +1,4 @@
-<?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
+<?php if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_ADMIN)): ?>
 <script type="text/javascript">
 function Mute(id) {
 	if (confirm("Are you use you want to mute this member?")) {
@@ -18,25 +18,20 @@ function IpBan(id) {
 </script>
 <?php
 
+require_once __DIR__.'/../ranks.php';
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	if (isset($_GET['mute'])) {
 		$name = $_GET['mute'];
 		$id = GetAccountID($name);
 
 		if ($id != NULL) {
-			$__database->query("
-			UPDATE
-				accounts
-			SET
-				mute = '1'
-			WHERE
-				account_id = ".$id."");
-			if ($__database->affected_rows == 1) {
-				// Send mail?
+			$account = Account::Load($id);
+			$account->SetMute(1);
+			$account->Save();
 ?>
 <p class="alert-info alert fademeout">Successfully muted @<?php echo $name; ?>.<p>
 <?php
-			}
 		}
 	}
 	elseif (isset($_GET['ban'])) {
@@ -44,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		$id = GetAccountID($name);
 		if ($id != NULL) {
 			$account = Account::Load($id);
-			$account->SetAccountRank('-100');
+			$account->SetAccountRank(RANK_BANNED);
 			$account->Save();
 ?>
 <p class="alert-info alert fademeout">Successfully banned @<?php echo $name; ?>.<p>
@@ -57,12 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$account = Account::Load($id);
 			$__database->query("
-		INSERT INTO
+		INSERT IGNORE INTO
 			`ip_ban`
 		VALUES
 		(
 			'".$account->GetLastIP()."'
-		) ON DUPLICATE KEY UPDATE ip='".$account->GetLastIP()."'");
+		)");
 			if ($__database->affected_rows == 1) {
 			// Send mail?
 ?>

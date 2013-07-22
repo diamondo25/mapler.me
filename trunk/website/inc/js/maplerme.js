@@ -70,6 +70,11 @@ $(document).ready(function() {
 		$(this).remove();
 	});
 	
+	
+	$('body').on('mouseover', '*[status-post-time]', function (e) {
+		$(this).attr('title', new Date($(this).attr('status-post-time') * 1000));
+	});
+	
 	$('#statusposter').submit(function () {
 		$('#statusposter button[type="submit"]').attr('disabled', 'disabled');
 		var data = $(this).serializeArray();
@@ -126,6 +131,8 @@ $(document).ready(function() {
 		
 		return false;
 	});
+	
+	
 	
 	window.IsSyncing = false;
 	window.syncer = function (requestOlder, syncbtn) {
@@ -325,6 +332,13 @@ function time_elapsed_string(time) {
 		}
 	}
 	return 'less than a minute';
+}
+
+function ChangePostAvatarFace(newface) {
+	var object = $('#statusposter .character');
+	var url = object.css('background-image');
+	url = url.replace(/face=([a-z]*)/g, 'face=' + newface);
+	object.css('background-image', url);
 }
 
 jQuery("html").removeClass("no-js").addClass("js");

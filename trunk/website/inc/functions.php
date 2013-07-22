@@ -18,6 +18,7 @@ require_once __DIR__.'/classes/database.php';
 $__incoming_ip = $_SERVER['REMOTE_ADDR'];
 $q = $__database->query("SELECT 1 FROM ip_ban WHERE '".$__database->real_escape_string($__incoming_ip)."' LIKE ip");
 if ($q->num_rows != 0) {
+	$__database->query("INSERT INTO ip_ban_trigger_log VALUES (NULL, '".$__database->real_escape_string($__incoming_ip)."', NOW())");
 ?>
 <html>
 <head>
@@ -358,10 +359,10 @@ function GetFriendStatus($you, $it) {
 function AccountExists($name) {
 	global $__database;
 
-	$q = $__database->query("SELECT COUNT(*) FROM accounts WHERE username = '".$__database->real_escape_string($name)."'");
-	$tmp = $q->fetch_row();
+	$q = $__database->query("SELECT 1 FROM accounts WHERE username = '".$__database->real_escape_string($name)."'");
+	$found = $q->num_rows == 1;
 	$q->free();
-	return $tmp[0] != 0;
+	return $found;
 }
 
 function GetAccountID($name) {

@@ -129,6 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		}
 	}
 }
+
+require_once __DIR__.'/../avatar_faces.php';
 ?>
 
 <div id="post" class="modal hide fade draggable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -145,6 +147,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			<input type="hidden" name="reply-to" value="-1" />
 		</div>
 		<div class="modal-footer">
+			<select name="usingface" onchange="ChangePostAvatarFace(value)" style="float: left; padding: 2px">
+<?php foreach ($avatar_faces as $faceid => $facename): ?>
+				<option value="<?php echo $faceid; ?>"><?php echo $facename; ?></option>
+<?php endforeach; ?>
+			</select>
 			<button type="submit" class="btn">Post!</button>
 		</div>
 	</form>

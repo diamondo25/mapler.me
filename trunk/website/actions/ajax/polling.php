@@ -74,6 +74,9 @@ WHERE
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
 		$is_maindomain = $subdomain == '' || $subdomain == 'www';
 		
+		// NOTE FOR SELF
+		// Get 10 statuses. Then, use the oldest time as 'AND TIME > OLDEST TIME' for timeline. woop
+		
 		$whereq = '> FROM_UNIXTIME('.$_client_time.')';
 		if (isset($_POST['older-than'])) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
@@ -90,6 +93,77 @@ WHERE
 			$whereq_1 = ' 1 = 0 '; // heh
 			$whereq_2 .= ' AND blog = 1';
 		}
+		
+		
+		// Get statusses
+		
+		$q = "
+SELECT 
+	UNIX_TIMESTAMP(`timestamp`),
+	'status' AS `type`,
+	CONVERT(CONCAT(ss.`id`, X'02', 
+	`account_id`, X'02', 
+	ss.`nickname`, X'02', 
+	`character`, X'02', 
+	`blog`, X'02', 
+	`override`, X'02', 
+	IF(`reply_to` IS NULL, '-', `reply_to`), X'02',(
+	SELECT
+		COUNT(s_inner.id)
+	FROM
+		social_statuses s_inner
+	WHERE
+		s_inner.reply_to = ss.id
+	), X'02',
+	`using_face`) USING latin1) AS `col1`,
+	CONVERT(`content` USING latin1) AS `col2`,
+	a.username,
+	a.nickname,
+	a.account_rank
+FROM
+	`social_statuses` ss
+LEFT JOIN
+	accounts a
+	ON
+		a.id = `account_id`
+WHERE
+	".$whereq_2."
+";
+		if ($_loggedin && $is_maindomain) { // Main screen
+			$q .= "
+	AND
+	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
+		}
+		if (!$is_maindomain) {
+			$q .= ' AND ';
+			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
+		}
+
+		$q .= "
+ORDER BY
+	`timestamp` DESC
+LIMIT
+	15
+";
+		$q = $__database->query($q);
+		
+		$found_rows = array();
+		$oldest_time = 10000000000;
+		$res['oldesttimes'] = array();
+		while ($row = $q->fetch_row()) {
+			$found_rows[] = $row;
+			if ($row[0] < $oldest_time)
+				$oldest_time = $row[0];
+			$res['oldesttimes'][] = (int)$row[0];
+		}
+		$q->free();
+		
+		// Use oldest_time for where query
+		if (count($found_rows) > 0)
+			$whereq_1 .= ' AND `when` > FROM_UNIXTIME('.$oldest_time.')';
+		
+		
+		// Get timeline stuff
 		
 		$q = "
 SELECT 
@@ -133,62 +207,12 @@ LIMIT
 ";
 		$q = $__database->query($q);
 		
-		$found_rows = array();
 		
 		while ($row = $q->fetch_row())
 			$found_rows[] = $row;
 		$q->free();
 		
 		
-		// Get statusses
-		
-		$q = "
-SELECT 
-	UNIX_TIMESTAMP(`timestamp`),
-	'status' AS `type`,
-	CONVERT(CONCAT(ss.`id`, X'02', `account_id`, X'02', ss.`nickname`, X'02', `character`, X'02', `blog`, X'02', `override`, X'02', IF(`reply_to` IS NULL, '-', `reply_to`), X'02',(
-	SELECT
-		COUNT(s_inner.id)
-	FROM
-		social_statuses s_inner
-	WHERE
-		s_inner.reply_to = ss.id
-	)) USING latin1) AS `col1`,
-	CONVERT(`content` USING latin1) AS `col2`,
-	a.username,
-	a.nickname,
-	a.account_rank
-FROM
-	`social_statuses` ss
-LEFT JOIN
-	accounts a
-	ON
-		a.id = `account_id`
-WHERE
-	".$whereq_2."
-";
-		if ($_loggedin && $is_maindomain) { // Main screen
-			$q .= "
-	AND
-	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
-		}
-		if (!$is_maindomain) {
-			$q .= ' AND ';
-			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
-		}
-
-		$q .= "
-ORDER BY
-	`timestamp` DESC
-LIMIT
-	15
-";
-		$q = $__database->query($q);
-		
-		while ($row = $q->fetch_row())
-			$found_rows[] = $row;
-		$q->free();
-
 		$stream = array();
 		$timestamp = $__server_time;
 		$lowest_date = 0;
@@ -239,6 +263,7 @@ LIMIT
 					'override' => $content[5],
 					'reply_to' => $content[6],
 					'reply_count' => $content[7],
+					'using_face' => $content[8],
 					'content' => $info,
 					'timestamp' => $timestamp
 				));
@@ -247,7 +272,7 @@ LIMIT
 				unset($status);
 			}
 			$level_info = ob_get_clean();
-			$stream[] = array($timestamp, $level_info);
+			$stream[] = array((int)$timestamp, $level_info);
 		}
 		$highest_date = $timestamp;
 

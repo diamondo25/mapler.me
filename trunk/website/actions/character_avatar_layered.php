@@ -2,6 +2,7 @@
 require_once __DIR__.'/../inc/classes/database.php';
 require_once __DIR__.'/../inc/functions.php';
 require_once __DIR__.'/../inc/functions.datastorage.php';
+require_once __DIR__.'/../inc/avatar_faces.php';
 require_once __DIR__.'/../inc/zmap.php';
 require_once __DIR__.'/caching.php';
 
@@ -157,6 +158,8 @@ if (isset($_GET['madface']))
 	$using_face = 'angry';
 elseif (isset($_GET['face']) && !empty($_GET['face']))
 	$using_face = $_GET['face'];
+
+if (!isset($avatar_faces[$using_face])) $using_face = 'default';
 
 $char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($internal_id, 'avatar_stance', 'stand');
 $char_stance_frame = isset($_GET['stance_frame']) ? $_GET['stance_frame'] : '0';
