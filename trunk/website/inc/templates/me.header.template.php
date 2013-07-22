@@ -162,10 +162,14 @@ endif;
 		<p class="name_extra">last seen <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago...<br/></p>
 		<hr/>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
+	<div class="btn-group">
 		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage">
-  Manage <?php echo $__url_useraccount->GetNickname(); ?>
-</button>
-<br /><br />
+				Manage
+		</button>
+		<button type="button" class="btn btn-danger" onclick="Ban('<?php echo $__url_useraccount->GetUsername(); ?>')">Ban</button>
+	</div>
+	<br /><br />
+	<hr />
 <?php endif; ?>
 <?php
 if ($_loggedin && !$is_self) {
@@ -225,7 +229,9 @@ if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)):
 ?>
 	<div id="manage" class="collapse">
 		<div class="status span9">
-	<h1><?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]</span>
+	<h1>@<?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]
+	
+	</span>
 		<small>
 			- <?php echo GetRankTitle($__url_useraccount->GetAccountRank()); ?>
 		</small>

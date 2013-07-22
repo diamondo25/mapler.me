@@ -272,6 +272,7 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 	die;
 }
 require_once 'social.php';
+require_once 'banhammer.php';
 
 if (!@fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5)) {
 ?>

@@ -36,13 +36,6 @@ if ($q->num_rows != 0) {
 	die();
 }
 
-
-
-
-
-
-
-
 require_once __DIR__.'/classes/form.php';
 require_once __DIR__.'/classes/account.php';
 require_once __DIR__.'/classes/inventory.php';
