@@ -61,6 +61,7 @@ AND
 		$q = $__database->query("
 SELECT
 	characters.name,
+	w.world_name,
 	guild_members.rank,
 	guild_members.alliance_rank,
 	guild_members.contribution
@@ -70,6 +71,10 @@ LEFT JOIN
 	`characters`
 	ON
 		characters.id = guild_members.character_id
+LEFT JOIN 
+	world_data w
+	ON
+		w.world_id = characters.world_id
 WHERE 
 	guild_members.guild_id = ".$this->id."
 AND

@@ -3,8 +3,10 @@ require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/classes/guild.php';
 
 $guild = new Guild();
+$name = $_GET['name'];
+$world = $_GET['world'];
 
-if (!$guild->LoadByName($_GET['name'], $_GET['world'])) {
+if (!$guild->LoadByName($name, $world)) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -57,7 +59,7 @@ foreach ($guild->members as $character) {
 	
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $character['name']; ?>'">
-				<div class="caption"><img src="//mapler.me/inc/img/worlds/<?php echo $guild->world_name; ?>.png"> <?php echo $character['name']; ?></div>
+				<div class="caption"><img src="//mapler.me/inc/img/worlds/<?php echo $character['world_name']; ?>.png"> <?php echo $character['name']; ?></div>
 				<center>
 					<br />
 					<img src="//<?php echo $domain.$img; ?>" />
