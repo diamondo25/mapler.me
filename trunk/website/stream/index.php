@@ -43,6 +43,41 @@ max-width: 240px;">
 			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
 		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>
+		
+		<div class="stream-block">
+		<?php
+	$rss = new DOMDocument();
+	$rss->load('http://blog.mapler.me/rss');
+	$feed = array();
+	foreach ($rss->getElementsByTagName('item') as $node) {
+		$item = array ( 
+			'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
+			'desc' => $node->getElementsByTagName('description')->item(0)->nodeValue,
+			'link' => $node->getElementsByTagName('link')->item(0)->nodeValue,
+			'date' => $node->getElementsByTagName('pubDate')->item(0)->nodeValue,
+			);
+		array_push($feed, $item);
+	}
+	$limit = 1;
+	for($x=0;$x<$limit;$x++) {
+		$title = str_replace(' & ', ' &amp; ', $feed[$x]['title']);
+		$link = $feed[$x]['link'];
+		$description = $feed[$x]['desc'];
+		if (strlen($description) > 100) {
+
+		// truncate string
+		$desc = substr($description, 0, 100);
+
+		// make sure it ends in a word so assassinate doesn't become ass...
+		$description = substr($desc, 0, strrpos($desc, ' ')).'... <br /><a href="'.$link.'">Read More?</a>'; 
+		}
+		$date = date('l F d, Y', strtotime($feed[$x]['date']));
+		echo '<p><strong><a href="'.$link.'" title="'.$title.'">'.$title.'</a></strong><br />';
+		echo '<small><em>Posted on '.$date.'</em></small></p>';
+		echo '<p>'.$description.'</p>';
+	}
+?>
+	</div>
 <?php
 
 	// Check for expiring items...
