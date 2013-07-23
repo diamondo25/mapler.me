@@ -15,7 +15,7 @@
 			<li>Connecting with other maplers by adding friends, and following other mapler's streams</li>
 			<li>An <b>extensive API</b> offered to Mapler+ members to include our site onto their sites or applications</li>
 			<li>Friendly, veteran maplers as our staff; here to help <b>you</b></li>
-			<li>An application fro Android and plugin for Wordpress</li>
+			<li>An application for Android and plugin for Wordpress</li>
 			<li><i>And much, much more..</i></li>
 		</ul>
 	</p>

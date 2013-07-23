@@ -1,8 +1,13 @@
 <?php if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_ADMIN)): ?>
 <script type="text/javascript">
 function Mute(id) {
-	if (confirm("Are you use you want to mute this member?")) {
+	if (confirm("Are you sure you want to mute this member?")) {
 		document.location.href = '?mute=' + id;
+	}
+}
+function UnMute(id) {
+	if (confirm("Are you sure you want to un-mute this member?")) {
+		document.location.href = '?unmute=' + id;
 	}
 }
 function Ban(id) {
@@ -31,6 +36,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$account->Save();
 ?>
 <p class="alert-info alert fademeout">Successfully muted @<?php echo $name; ?>.<p>
+<?php
+		}
+	}
+	elseif (isset($_GET['unmute'])) {
+		$name = $_GET['unmute'];
+		$id = GetAccountID($name);
+
+		if ($id != NULL) {
+			$account = Account::Load($id);
+			$account->SetMute(0);
+			$account->Save();
+?>
+<p class="alert-info alert fademeout">Successfully muted @<?php echo $name; ?>.<p>
+<?php
+		}
+	}
+	elseif (isset($_GET['ban'])) {
+		$name = $_GET['ban'];
+		$id = GetAccountID($name);
+		if ($id != NULL) {
+			$account = Account::Load($id);
+			$account->SetAccountRank(RANK_BANNED);
+			$account->Save();
+?>
+<p class="alert-info alert fademeout">Successfully banned @<?php echo $name; ?>.<p>
 <?php
 		}
 	}

@@ -166,7 +166,14 @@ endif;
 		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage">
 				Manage
 		</button>
-		<button type="button" class="btn btn-danger" onclick="Ban('<?php echo $__url_useraccount->GetUsername(); ?>')">Ban</button>
+		<?php if ($__url_useraccount->IsMuted()):
+		?>
+		<button type="button" class="btn btn-danger" onclick="UnMute('<?php echo $__url_useraccount->GetUsername(); ?>')">Unmute</button>
+		<?php
+		else:
+		?>
+		<button type="button" class="btn btn-danger" onclick="Mute('<?php echo $__url_useraccount->GetUsername(); ?>')">Mute</button>
+		<?php endif; ?>
 	</div>
 	<br /><br />
 	<hr />

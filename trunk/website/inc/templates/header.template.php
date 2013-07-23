@@ -235,12 +235,15 @@ endif;
 	if ($_loggedin) {
 		// Shouldn't be here...
 		$main_char = $_loginaccount->GetMainCharacterName();
+		
+		if (!$_loginaccount->IsMuted()):
 ?>
 							<li>
 								<a href="#post" role="button" data-toggle="modal"><i class="icon-plus"></i></a>
 							</li>
 
 <?php
+		endif;
 	}
 ?>				
             </ul>
@@ -271,12 +274,18 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 	require_once __DIR__.'/../../inc/footer.php';
 	die;
 }
+if ($_loggedin && !$_loginaccount->IsMuted()):
 require_once 'social.php';
+endif;
 require_once 'banhammer.php';
 
-if (!@fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5)) {
+if (!@fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5)):
 ?>
 	<p class="lead alert alert-danger">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
 <?php
-}
+elseif ($_loggedin && $_loginaccount->IsMuted()):
+?>
+	<p class="lead alert alert-danger">You are currently muted. Posting statuses and sending friend requests disabled.</p>
+<?php
+endif;
 ?>

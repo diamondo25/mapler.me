@@ -27,6 +27,7 @@
 	RewriteRule ^faq/ faq.php
 	RewriteRule ^support/ /actions/support_email.php
 	RewriteRule ^cdn/ /actions/cdn_upload.php
+	RewriteRule ^blankpage/ /actions/blankpage.php
 	RewriteRule ^resetpassword/ /passreset.php [QSA,L]
 	
 	# Status APIs
