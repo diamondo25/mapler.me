@@ -36,7 +36,7 @@ if ($info['stand0'] !== null) {
 	$image_offset[1] = $origin['Y'];
 }
 
-AddImage('stand0.0.png', $x + $image_offset[0], $y + $image_offset[1]);
+AddImage('stand0.0.png', $x - $image_offset[0], $y - $image_offset[1]);
 
 
 imagepng($image);
