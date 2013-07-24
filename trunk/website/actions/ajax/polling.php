@@ -78,20 +78,20 @@ WHERE
 		// Get 10 statuses. Then, use the oldest time as 'AND TIME > OLDEST TIME' for timeline. woop
 		
 		$whereq = '> FROM_UNIXTIME('.$_client_time.')';
-		if (isset($_POST['older-than'])) {
+		if (isset($_POST['older-than']) && $_client_time > 0) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
 		}
 		$whereq_1 = '`when` '.$whereq.($_client_time == 0 && false ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		$whereq_2 = '`timestamp` '.$whereq.($_client_time == 0 && false ? ' AND `timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_2 = '`ss`.`timestamp` '.$whereq.($_client_time == 0 && false ? ' AND `ss`.`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
 		if (isset($_POST['older-than'])) {
 			$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
-			$whereq_2 .= ' AND `timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
+			$whereq_2 .= ' AND `ss`.`timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
 		}
 		
 		if (strpos($url, '/'.$domain.'/blog/') !== false) {
 			// No time thingies, only blog posts
 			$whereq_1 = ' 1 = 0 '; // heh
-			$whereq_2 .= ' AND blog = 1';
+			$whereq_2 .= ' AND `ss`.blog = 1';
 		}
 		
 		
@@ -99,15 +99,15 @@ WHERE
 		
 		$q = "
 SELECT 
-	UNIX_TIMESTAMP(`timestamp`),
+	UNIX_TIMESTAMP(`ss`.`timestamp`),
 	'status' AS `type`,
 	CONVERT(CONCAT(ss.`id`, X'02', 
-	`account_id`, X'02', 
+	ss.`account_id`, X'02', 
 	ss.`nickname`, X'02', 
-	`character`, X'02', 
-	`blog`, X'02', 
-	`override`, X'02', 
-	IF(`reply_to` IS NULL, '-', `reply_to`), X'02',(
+	ss.`character`, X'02', 
+	ss.`blog`, X'02', 
+	ss.`override`, X'02', 
+	IF(ss.`reply_to` IS NULL, '-', `ss`.`reply_to`), X'02',(
 	SELECT
 		COUNT(s_inner.id)
 	FROM
@@ -115,8 +115,10 @@ SELECT
 	WHERE
 		s_inner.reply_to = ss.id
 	), X'02',
-	`using_face`) USING latin1) AS `col1`,
-	CONVERT(`content` USING latin1) AS `col2`,
+	ss.`using_face`, X'02'
+	
+	) USING latin1) AS `col1`,
+	CONVERT(`ss`.`content` USING latin1) AS `col2`,
 	a.username,
 	a.nickname,
 	a.account_rank
@@ -125,14 +127,25 @@ FROM
 LEFT JOIN
 	accounts a
 	ON
-		a.id = `account_id`
+		a.id = `ss`.`account_id`
+LEFT JOIN
+	`social_statuses` ss_reply
+	ON
+		`ss_reply`.`id` = `ss`.`reply_to`
 WHERE
 	".$whereq_2."
 ";
 		if ($_loggedin && $is_maindomain) { // Main screen
 			$q .= "
 	AND
-	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
+	`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+	AND
+	
+	IF(
+		`ss_reply`.`id` IS NOT NULL,
+		`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
+		1
+	)";
 		}
 		if (!$is_maindomain) {
 			$q .= ' AND ';
@@ -141,11 +154,12 @@ WHERE
 
 		$q .= "
 ORDER BY
-	`timestamp` DESC
+	`ss`.`timestamp` DESC
 LIMIT
 	15
 ";
 		$q = $__database->query($q);
+		
 		
 		$found_rows = array();
 		$oldest_time = 10000000000;
@@ -198,7 +212,7 @@ WHERE
 			$q .= ' AND ';
 			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}
-
+	
 		$q .= "
 ORDER BY
 	`when` DESC
@@ -267,6 +281,35 @@ LIMIT
 					'content' => $info,
 					'timestamp' => $timestamp
 				));
+				
+				// If maindomain and loggedin and status is not from self
+				if ($is_maindomain && $_loggedin && $status->account_id != $_loginaccount->GetID()) {
+					// Check if mention is at someone who isn't a friend of $_loginaccount
+					if (strpos($info, '@') == 0 && count($status->mention_list) > 0) { // Check if it's really a mention
+						// Check if is friend...
+						$mentioning = $status->mention_list[0];
+						$q_temp = $__database->query("
+SELECT
+	`FriendStatus`(`id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+FROM
+	accounts
+WHERE
+	username = '".$__database->real_escape_string($mentioning)."'");
+						if ($q_temp->num_rows > 0) {
+							// And? Is it a friend?
+							$row = $q_temp->fetch_row();
+							$q_temp->free();
+							if ($row[0] == 0) {
+								// Nope.
+								unset($status);
+								continue;
+							}
+						}
+						else {
+							$q_temp->free();
+						}
+					}
+				}
 				
 				$status->PrintAsHTML('');
 				unset($status);

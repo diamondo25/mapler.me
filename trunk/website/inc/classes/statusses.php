@@ -60,7 +60,7 @@ $limit != null
 }
 
 class Status {
-	public $id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to, $reply_count;
+	public $id, $account_id, $account, $nickname, $character, $content, $blog, $timestamp, $override, $mention_list, $reply_to, $reply_count;
 	public $using_face;
 	
 	public function __construct($row) {
