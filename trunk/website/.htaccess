@@ -52,8 +52,10 @@
 	# RewriteRule ^ignavatar/([^\./]*) /actions/character_avatar.php?name=$1&show_name [L,QSA]
 	RewriteRule ^ignavatar/([^\./]*) /actions/character_avatar_layered.php?name=$1&show_name [L,QSA]
 	RewriteRule ^infopic/([^\./]*) /actions/character_stats.php?name=$1 [L,QSA]
-	RewriteRule ^guildemblem/(.*)/(.*)/$ /actions/guild_emblem.php?world=$1&guild=$2
-	RewriteRule ^ui/bits/(\d+)/(\d+)/$ /actions/create_bits_ui.php?rows=$1&cols=$2
+	RewriteRule ^guildemblem/(.*)/(.*)/$ /actions/guild_emblem.php?world=$1&guild=$2 [L,QSA]
+	RewriteRule ^ui/bits/(\d+)/(\d+)/$ /actions/create_bits_ui.php?rows=$1&cols=$2 [L,QSA]
+	RewriteRule ^ui/bag/(\d+)/(\d+)/$ /actions/create_bag_ui.php?rows=$1&cols=$2 [L,QSA]
+	RewriteRule ^pet/(\d+)/$ /actions/render_pet.php?id=$1 [L,QSA]
 	
 	# character / player rewrites
 	RewriteRule ^player/([^/]*)$ /components/character.php?name=$1

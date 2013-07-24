@@ -530,6 +530,7 @@ function GetItemIconID($id) {
 	if ($type != 306) {
 		
 		$iteminfo = GetItemWZInfo($id);
+		if ($iteminfo['info'] === null)	return $id;
 		if ($iteminfo['info']->IsUOL('icon')) {
 			$id = $iteminfo['info']['icon']['..']['..']['ITEMID']; // Hell yea. Get the UOL object, then go back to get the Item ID
 		}
@@ -645,6 +646,11 @@ function MakePlayerAvatar($name, $options = array()) {
 	$image = 'http://mapler.me/inc/img/no-character.gif';
 	if (!$notfound) {
 		$image = 'http://mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face;
+	}
+	
+	if (isset($options['onlyurl'])) {
+		echo $image;
+		return;
 	}
 ?>
 	<div style="background: url('<?php echo $image; ?>') no-repeat center -2px rgba(0, 0, 0, 0.5);<?php echo $styleappend; ?>" class="character"></div>

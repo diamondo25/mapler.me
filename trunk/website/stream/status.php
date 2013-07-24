@@ -18,9 +18,28 @@ if ($statusses->Count() == 0) {
 <?php
 }
 else {
-	$status = $statusses->data[0];
+	$status = $statusses->data[0]; // Get first
+	
+	$prestatuses = array();
+	$curid = $status->reply_to;
+	while (true) {
+		// Oh god.
+
+		$sss = new Statusses();
+		$sss->Load("s.id = ".$curid);
+		
+		if ($sss->Count() == 0)
+			break;
+		$status_tmp = $sss->data[0];
+		array_unshift($prestatuses, $status_tmp);
+		$curid = $status_tmp->reply_to;
+	}
+	foreach ($prestatuses as $tmp)
+		$tmp->PrintAsHTML(' span6');
 	$status->PrintAsHTML(' span12');
 
+	
+	// Get replies
 	$statusses = new Statusses();
 	$statusses->Load('s.reply_to = '.$statusid);
 

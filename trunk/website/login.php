@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$_loggedin = true;
 				
 				$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
-
+				/*
 				$code = md5(time().' -- -- -- -- - '.$_loginaccount->GetID().' - '.$_loginaccount->GetUsername());
 				$__database->query("
 INSERT INTO 
@@ -47,6 +47,7 @@ ON DUPLICATE KEY UPDATE
 ");
 
 				SetMaplerCookie('login_session', $code, 10 * 365);
+				*/
 			}
 			else {
 				// $error = "Oops! Your username or password provided was incorrect.";

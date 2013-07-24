@@ -4,19 +4,16 @@ if (!$_loggedin) {
 ?>
 <meta http-equiv="refresh" content="0;URL='/'" />
 <?php
+	die();
 }
-else {
-?>
-
-<?php
-	if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
+if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 ?>
 <p class="lead alert alert-info">Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide! F2</a></p>
 <p>This will disappear once you've successfully sent a status!</p>
 <?php
-		require_once __DIR__.'/../inc/footer.php';
-		die;
-	}
+	require_once __DIR__.'/../inc/footer.php';
+	die;
+}
 ?>
 
 <style>
@@ -45,7 +42,7 @@ max-width: 240px;">
 		<?php require_once __DIR__.'/../inc/templates/stream.notice.template.php'; ?>
 		
 		<div class="stream-block">
-		<?php
+<?php
 	$rss = new DOMDocument();
 	$rss->load('http://blog.mapler.me/rss');
 	$feed = array();
@@ -59,23 +56,25 @@ max-width: 240px;">
 		array_push($feed, $item);
 	}
 	$limit = 1;
-	for($x=0;$x<$limit;$x++) {
+	for($x = 0; $x < $limit; $x++) {
 		$title = str_replace(' & ', ' &amp; ', $feed[$x]['title']);
 		$link = $feed[$x]['link'];
 		$description = $feed[$x]['desc'];
 		if (strlen($description) > 100) {
+			// truncate string
+			$desc = substr($description, 0, 100);
 
-		// truncate string
-		$desc = substr($description, 0, 100);
-
-		// make sure it ends in a word so assassinate doesn't become ass...
-		$description = substr($desc, 0, strrpos($desc, ' ')).'... <br /><a href="'.$link.'">Read More?</a>'; 
+			// make sure it ends in a word so assassinate doesn't become ass...
+			$description = substr($desc, 0, strrpos($desc, ' ')).'... <br /><a href="'.$link.'">Read More?</a>'; 
 		}
 		$date = date('l F d, Y', strtotime($feed[$x]['date']));
 		echo '<p><strong><a href="'.$link.'" title="'.$title.'">'.$title.'</a></strong><br />';
 		echo '<small><em>Posted on '.$date.'</em></small></p>';
 		echo '<p>'.$description.'</p>';
 	}
+	
+	unset($rss);
+	unset($feed);
 ?>
 	</div>
 <?php
@@ -103,9 +102,9 @@ WHERE
 GROUP BY
 	c.internal_id
 ");
-		while ($row = $q->fetch_row()) {
-			$itemids = explode(',', $row[1]);
-			$times = explode(',', $row[2]);
+	while ($row = $q->fetch_row()) {
+		$itemids = explode(',', $row[1]);
+		$times = explode(',', $row[2]);
 ?>
 		
 		<div class="stream-block">
@@ -115,11 +114,8 @@ GROUP BY
 			<?php echo GetMapleStoryString('item', $itemid, 'name'); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />
 <?php endforeach; ?>
 		</div>
-<?php
-		
-		
-		}
-
+<?php	
+	}
 ?>
 	</div>
 	
@@ -140,7 +136,6 @@ $(document).ready(function() {
 });
 </script>
 <?php
-}
 
 require_once __DIR__.'/../inc/footer.php';
 ?>

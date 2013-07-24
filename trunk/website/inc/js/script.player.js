@@ -30,8 +30,7 @@ function SetItemInfo(event, obj, values) {
 	
 	var hasStatsSet = false;
 	
-	var SetObjText = function(name, value, ignoreZero) {
-		if (ignoreZero == undefined) ignoreZero = false;
+	var SetObjText = function(name, value, def_value, ignoreZero) {
 		var isSet = !(value == '' || value == undefined);
 		if (ignoreZero && value == 0)
 			isSet = true;
@@ -39,6 +38,20 @@ function SetItemInfo(event, obj, values) {
 		if (isSet)
 			hasStatsSet = true;
 		GetObj('item_info_row_' + name).style.display = isSet ? '' : 'none';
+		GetObj('item_info_row_' + name).style.color = '';
+		if (isSet && typeof def_value !== 'undefined') {
+			var diff = value - def_value;
+			if (diff > 0) {
+				//	Added
+				value += ' (' + def_value + ' + ' + diff + ')';
+				GetObj('item_info_row_' + name).style.color = 'limegreen';
+			}
+			else if (diff < 0) {
+				// Lost
+				value += ' (' + def_value + ' - ' + diff + ')';
+				GetObj('item_info_row_' + name).style.color = 'orange';
+			}
+		}
 		GetObj('item_info_' + name).innerHTML = value;
 	};
 	
@@ -48,6 +61,14 @@ function SetItemInfo(event, obj, values) {
 	};
 
 	GetObj('item_info_title').innerHTML = obj.getAttribute('item-name');
+	
+	if (item.itemid >= 5000000 && item.itemid < 5010000) { // is pet
+		var nametoshow = item.name;
+		if (nametoshow != obj.getAttribute('item-name'))
+			nametoshow += ' (' + obj.getAttribute('item-name') + ')';
+		GetObj('item_info_title').innerHTML = nametoshow;
+	}
+	
 	if (isequip && item.scrolls != 0) {
 		GetObj('item_info_title').innerHTML += ' (+' + item.scrolls + ')';
 	}
@@ -70,31 +91,30 @@ function SetItemInfo(event, obj, values) {
 	SetObjTextIsEquip('itemlevel', item.itemlevel);
 	SetObjTextIsEquip('itemexp', item.itemexp);
 
+	$('.item_req_stats').css('display', !isequip && $('.item_req_stats > span[style=""]').length == 0 ? 'none' : 'block');
 	
-	//$('.item_req_stats').first().css('display', isequip ? 'block' : 'none');
 	
+	SetObjText('str', item.str, values.default_stats.str, false);
+	SetObjText('dex', item.dex, values.default_stats.dex, false);
+	SetObjText('int', item.int, values.default_stats.int, false);
+	SetObjText('luk', item.luk, values.default_stats.luk, false);
 	
-	SetObjText('str', item.str);
-	SetObjText('dex', item.dex);
-	SetObjText('int', item.int);
-	SetObjText('luk', item.luk);
-	
-	SetObjText('maxhp', item.maxhp);
-	SetObjText('maxmp', item.maxmp);
-	SetObjText('weaponatt', item.weaponatt);
-	SetObjText('weapondef', item.weapondef);
-	SetObjText('magicatt', item.magicatt);
-	SetObjText('magicdef', item.magicdef);
-	SetObjText('acc', item.acc);
-	SetObjText('avo', item.avo);
-	SetObjText('jump', item.jump);
-	SetObjText('speed', item.speed);
-	SetObjText('slots', item.slots);
-	SetObjText('hands', item.hands);
-	SetObjText('hammers', item.hammers, isequip);
+	SetObjText('maxhp', item.maxhp, values.default_stats.maxhp, false);
+	SetObjText('maxmp', item.maxmp, values.default_stats.maxmp, false);
+	SetObjText('weaponatt', item.weaponatt, values.default_stats.weaponatt, false);
+	SetObjText('weapondef', item.weapondef, values.default_stats.weapondef, false);
+	SetObjText('magicatt', item.magicatt, values.default_stats.magicatt, false);
+	SetObjText('magicdef', item.magicdef, values.default_stats.magicdef, false);
+	SetObjText('acc', item.acc, values.default_stats.acc, false);
+	SetObjText('avo', item.avo, values.default_stats.avo, false);
+	SetObjText('jump', item.jump, values.default_stats.jump, false);
+	SetObjText('speed', item.speed, values.default_stats.speed, false);
+	SetObjText('hands', item.hands, values.default_stats.hands, false);
+	SetObjText('slots', item.slots, undefined, isequip);
+	SetObjText('hammers', item.hammers, undefined, isequip);
 	
 	var stars = parseInt(item.statusflag / 0x100);
-	SetObjText('enchantments', stars, isequip);
+	SetObjText('enchantments', stars, undefined, isequip);
 	
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	

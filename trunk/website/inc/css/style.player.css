@@ -5,7 +5,7 @@
 }
 
 .h {
-    position: relative;
+	position: relative;
 	max-width: none;
 	left: -31px;
 	top: -14px;
@@ -97,8 +97,17 @@ hr {
 .character_equips > div > div,
 .character_pets_holder > div > div,
 .character_totems > div {
-    height: 31px;
-    width: 31px;
+	height: 31px;
+	width: 31px;
+}
+
+.potential1,
+.potential2,
+.potential3,
+.potential4,
+.potential5 {
+	height: 31px;
+	width: 31px;
 }
 
 .character_pets_holder {
@@ -113,12 +122,12 @@ hr {
 
 
 .character_pets_holder select {
-    bottom: -2px;
-    height: 20px !important;
-    left: 8px;
-    padding: 0;
-    position: absolute;
-    width: 135px;
+	bottom: -2px;
+	height: 20px !important;
+	left: 8px;
+	padding: 0;
+	position: absolute;
+	width: 135px;
 }
 
 
@@ -300,18 +309,18 @@ hr {
 .character_droid .slot6 { top: 93px; left: 77px; margin-bottom: 0px; } /* Gloves */
 
 .inventory {
-	position: relative;
-	width: 160px;
-	height: 213px;
+	background: none repeat scroll 0 0 transparent;
+	height: 141px;
+	margin-left: 6px;
+	margin-top: 4px;
 	overflow-y: scroll;
-	margin-left: 5px;
-	background: transparent;
-	margin-top: 6px;
+	position: relative;
+	width: 305px;
 }
 
 .inventory div {
-    height: 32px;
-    width: 32px;
+	height: 32px;
+	width: 32px;
 	position: absolute;
 	border: 1px solid lightgray;
 	z-index: 1;
@@ -342,25 +351,40 @@ hr {
 }
 
 #inventories {
-	width: 172px;
-	height: 293px;
+	width: 321px;
+	height: 227px;
 }
 
 #inventories select {
-    height: 20px !important;
-    margin-bottom: 0;
-    margin-left: 8px;
-    margin-top: 27px;
-    padding: 0;
-    width: 156px;
+	height: 20px !important;
+	margin-bottom: 0;
+	margin-left: 8px;
+	margin-top: 27px;
+	padding: 0;
+	width: 306px;
+	padding-right: 2px;
 }
 
-#inventories #mesos {
+#inventories .mesos {
+	color: #000000;
 	display: inline-block;
-	float: right;
 	font-size: 10px;
-	margin-right: 48px;
-	color: #000;
+	margin-left: 28px;
+	margin-top: 4px;
+	text-align: right;
+	width: 73px;
+	padding-right: 2px;
+}
+
+#inventories .maplepoints {
+	color: #000000;
+	display: inline-block;
+	font-size: 10px;
+	margin-left: 62px;
+	margin-top: 4px;
+	text-align: right;
+	width: 75px;
+	padding-right: 2px;
 }
 
 
@@ -381,6 +405,7 @@ hr {
 	z-index: 100;
 	color: rgba(255,255,255,0.8);
 	box-shadow: 0 1px 5px rgba(0,0,0,0.55);
+	height: auto;
 }
 
 #item_info #item_info_extra, #item_info #item_info_description {
@@ -394,7 +419,7 @@ hr {
 }
 
 #item_info #item_info_description {
-	margin-left: 70px;
+	margin-left: 95px;
 }
 
 #item_info #item_info_title {
@@ -430,7 +455,7 @@ hr {
 
 #item_info .item_req_stats {
 	height: 90px;
-	margin-left: 20px;
+	margin-left: 95px;
 	overflow: hidden;
 	font-size: 11px;
 	margin-bottom: 10px;
@@ -589,7 +614,7 @@ hr {
 	right: 12px;
 }
 
-/*  Additions */
+/*	Additions */
 .fb_iframe_widget span {
 	vertical-align: inherit !important;
 }

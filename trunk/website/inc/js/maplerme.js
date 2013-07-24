@@ -41,7 +41,7 @@ $(document).ready(function() {
 	$('textarea').bind("blur", keypress.listen);
 	
 	// Bind click-on-status stuff
-	$('body').on('click', '.status[status-id]', function() {
+	$('body').on('click', '.status[status-id]', function(e) {
 		var statusid = $(this).attr('status-id');
 		var uniqueid = $(this).attr('unique-id');
 		
@@ -64,6 +64,12 @@ $(document).ready(function() {
 				}
 			});
 		}
+		return false;
+	});
+	
+	// Preventing anchors being unclickable
+	$('body').on('click', '.status[status-id] a', function(e) {
+		e.stopPropagation();
 	});
 	
 	$('.fademeout').delay(7000).fadeOut(1000, function() {
@@ -178,7 +184,7 @@ $(document).ready(function() {
 			success: function (e) {
 				var newTitle = window.document.title;
 				
-				if (e.loggedin == false && window.location.pathname.indexOf('/stream/') == 0) {
+				if (e.loggedin == false && window.location.pathname.indexOf('/stream/') != -1) {
 					document.location = '/login';
 				}
 				

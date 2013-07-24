@@ -2,6 +2,9 @@
 require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/exp_table.php';
+require_once __DIR__.'/../inc/classes/character_objects.php';
+
+set_time_limit(0);
 
 $q = $__database->query("
 SELECT 
@@ -32,6 +35,34 @@ if ($q->num_rows == 0) {
 
 $character_info = $q->fetch_assoc();
 $character_account_id = GetCharacterAccountId($character_info['id']);
+
+
+$character_info['guildname'] = '';
+$q2 = $__database->query("
+SELECT
+	g.name
+FROM
+	characters c
+LEFT JOIN
+	guild_members gm
+	ON
+		gm.character_id = c.id
+LEFT JOIN
+	guilds g
+	ON
+		g.id = gm.guild_id
+WHERE
+	c.internal_id = ".$character_info['internal_id']);
+if ($q2->num_rows == 1) {
+	// Try to fetch guildname
+	$row2 = $q2->fetch_row();
+	if ($row2[0] !== null) {
+		$character_info['guildname'] = $row2[0];
+	}
+}
+$q2->free();
+
+
 
 // Check character status
 $friend_status = $_loggedin ? ($character_account_id == $_loginaccount->GetID() ? 'FOREVER_ALONE' : GetFriendStatus($_loginaccount->GetID(), $character_account_id)) : 'NO_FRIENDS';
@@ -278,7 +309,7 @@ $optionlist['hands'] = 'Hands : ';
 $optionlist['jump'] = 'Jump : ';
 $optionlist['speed'] = 'Speed : ';
 $optionlist['enchantments'] = 'Nr of times enchanted : ';
-$optionlist['slots'] = 'Upgrades available : ';
+$optionlist['slots'] = 'Nr of upgrades available : ';
 $optionlist['hammers'] = 'Nr of hammers applied : ';
 
 
@@ -422,6 +453,25 @@ function GetItemDialogInfo($item, $isequip) {
 		'int' => (int)$reqint,
 		'luk' => (int)$reqluk
 	);
+	
+	$info_array['default_stats'] = array(
+		'str' => ValueOrDefault($stats['incstr'], 0),
+		'dex' => ValueOrDefault($stats['incdex'], 0),
+		'int' => ValueOrDefault($stats['incint'], 0),
+		'luk' => ValueOrDefault($stats['incluk'], 0),
+		'maxhp' => ValueOrDefault($stats['incmhp'], 0),
+		'maxmp' => ValueOrDefault($stats['incmmp'], 0),
+		'acc' => ValueOrDefault($stats['incacc'], 0),
+		'avo' => ValueOrDefault($stats['inceva'], 0),
+		'speed' => ValueOrDefault($stats['incspeed'], 0),
+		'hands' => ValueOrDefault($stats['inccraft'], 0),
+		'jump' => ValueOrDefault($stats['incjump'], 0),
+		'weaponatt' => ValueOrDefault($stats['incpad'], 0),
+		'weapondef' => ValueOrDefault($stats['incpdd'], 0),
+		'magicatt' => ValueOrDefault($stats['incmad'], 0),
+		'magicdef' => ValueOrDefault($stats['incmdd'], 0),
+	);
+	
 	$info_array['other_info'] = array(
 		'tradeblock' => $tradeblock,
 		'expires' => GetSystemTimeFromFileTime($item->expires),
@@ -482,13 +532,6 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 
 ?>
 <style type="text/css">
-.character_equips {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/equips_background.png');
-}
-
-.character_pets_holder {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/pet_equip.png');
-}
 
 .character_totems {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/totem.png');
@@ -498,46 +541,23 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 	margin-bottom: 15px;
 }
 
-.character_droid {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_android.png');
-	width: 154px;
-	height: 172px;
-	position: relative;
-}
 
-.job-specific-inventory > div {
-	height: 172px;
-	position: relative;
-}
-
-.job-specific-inventory .mechanic {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_mech.png');
-	width: 151px;
-}
-
-.job-specific-inventory .coordinate {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_coordinate.png');
-	width: 154px;
-}
-
-.job-specific-inventory .evan {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui_dragon.png');
-	width: 151px;
-}
-
-
-.inventory div {
+.inventory div { /* items */
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/item_bg.png');
+}
+.inventory .disabled-slot {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/new_inventory/disabled.png');
 }
 
 #inventories {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/final_ui.png');
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/new_inventory/item-background.png');
 }
 
-.char-inventories > div {
+.character_totems,
+.new-inventory-container {
 	display: inline-block;
 	float: left;
-	margin-left: 15px;
+	margin-left: 0px;
 }
 
 <?php
@@ -569,8 +589,9 @@ $petequip_slots[27] = array(0, -1);
 $petequip_slots[28] = array(0, -1);
 $petequip_slots[29] = array(0, -1);
 $petequip_slots[46] = array(0, -1); // Item Ignore 1
+$petequip_slots[57] = array(0, -1); // Auto buff 1
+$petequip_slots[60] = array(0, -1); // All cure potting
 $petequip_slots[62] = array(0, -1); // Smart Pet
-$petequip_slots[57] = array(0, -1); // Auto buff
 
 // Pet 2
 $petequip_slots[30] = array(1, 14);
@@ -582,6 +603,7 @@ $petequip_slots[35] = array(1, 26);
 $petequip_slots[36] = array(1, 27);
 $petequip_slots[37] = array(1, 21); // Flipped w/ 29
 $petequip_slots[47] = array(1, -1); // Item Ignore 2
+$petequip_slots[58] = array(1, 57); // Auto buff 2
 $petequip_slots[63] = array(1, -1); // Smart Pet [guess]
 
 // Pet 3
@@ -594,6 +616,7 @@ $petequip_slots[43] = array(2, 26);
 $petequip_slots[44] = array(2, 27);
 $petequip_slots[45] = array(2, 21); // Flipped w/ 29
 $petequip_slots[48] = array(2, -1); // Item Ignore 3
+$petequip_slots[59] = array(2, 57); // Auto buff 3
 $petequip_slots[64] = array(2, -1); // Smart Pet [guess]
 
 $petequips = array();
@@ -610,6 +633,7 @@ $normalequips['Mechanic'] = array();
 $normalequips['Evan'] = array();
 $normalequips['Bits'] = array();
 $normalequips['BitsCase'] = array();
+$normalequips['Haku'] = array();
 $cashequips = array();
 
 foreach ($equips as $orislot => $item) {
@@ -629,6 +653,7 @@ foreach ($equips as $orislot => $item) {
 		elseif ($orislot <= -20000) $normalequips['Bits'][$orislot] = $item;
 		elseif ($orislot <= -5000) 	$normalequips['Totem'][$orislot] = $item;
 		elseif ($orislot <= -1500) 	$normalequips['BitsCase'][$orislot] = $item;
+		elseif ($orislot <= -1400) 	$normalequips['Haku'][$orislot] = $item;
 		elseif ($orislot <= -1300) 	$normalequips['Coordinate'][$orislot] = $item;
 		elseif ($orislot <= -1200) 	$normalequips['Android'][$orislot] = $item;
 		elseif ($orislot <= -1100) 	$normalequips['Mechanic'][$orislot] = $item;
@@ -652,80 +677,196 @@ function AddInventoryItems(&$inventory) {
 <?php
 		}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 	}
 }
 
 ?>
 
-<div class="row char-inventories">
-<?php if ($__is_viewing_self || !IsHiddenObject('equip_general')): ?>
-	<div style="width: 184px;">
-<?php MakeHideToggleButton('equip_general'); ?>
-		<div class="character_equips">
-			<div id="normal_equips">
-
-<?php
-foreach ($normalequips['normal'] as $slot => $item) {
-	$slot = abs($slot);
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	
-	
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
+<!-- New inventories -->
+<style type="text/css">
+.new-inventory-container {
+	background: url('/inc/img/ui/new_inventory/background.png') no-repeat;
+	position: relative;
 }
-?>
-			</div>
 
-
-			<div id="cash_equips">
-<?php
-foreach ($cashequips as $slot => $item) {
-	$slot = abs($slot) - 100;
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	
-	
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
+.new-inventory-container,
+.new-inventory-container > div {
+	width: 321px;
+	height: 288px;
 }
-?>
-			</div>
-			<div style="bottom: 3px; right: 20px; position: absolute;">
-				<label><input type="checkbox" onchange="ShowCashEquips(this.checked)" style="display: inline;" /> Show cash items</label>
-			</div>
-		</div>
-	</div>
-<?php endif; /* Hidden/not hidden check */ ?>
-	
-<?php if ($__is_viewing_self || !(IsHiddenObject('equip_droid_totem') && IsHiddenObject('equip_droid_totem'))): ?>
-	<div class="char-totems-droid">
-<?php 	MakeHideToggleButton('equip_droid_totem'); ?>
 
-<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
-		<div class="character_droid">
-<?php 		MakeHideToggleButton('equip_droid'); ?>
-<?php 		AddInventoryItems($normalequips['Android']); ?>
-		</div>
-<?php 	endif; ?>
+.new-inventory-container > select {
+	/* Select buttan */
+    height: 25px;
+    left: 12px;
+    padding: 2px;
+    position: absolute;
+    top: 24px;
+    width: 296px;
+	z-index: 20;
+}
+
+#inv_char {
+	background: url('/inc/img/ui/new_inventory/character.png') no-repeat;
+}
+
+#inv_android {
+	background: url('/inc/img/ui/new_inventory/android.png') no-repeat;
+}
+
+#inv_pet {
+	background: url('/inc/img/ui/new_inventory/pet.png') no-repeat;
+}
+
+#inv_haku {
+	background: url('/inc/img/ui/new_inventory/haku.png') no-repeat;
+}
+
+#inv_coordinate {
+	background: url('/inc/img/ui/new_inventory/coordinate.png') no-repeat;
+}
+
+#inv_mechanic {
+	background: url('/inc/img/ui/new_inventory/mechanic.png') no-repeat;
+}
+
+#inv_evan {
+	background: url('/inc/img/ui/new_inventory/evan.png') no-repeat;
+}
+
+.avatar-container {
+    left: 30px;
+    top: 16px;
+}
+
+.avatar-container {
+	width: 256px;
+	height: 256px;
+	position: absolute;
+	background-position: center 30px;
+	background-repeat: no-repeat;
+}
+
+.avatar-container span {
+    display: block;
+    margin-top: 182px;
+    text-align: center;
+	color: white;
+}
+
+.pet > .avatar-container span {
+	margin-top: 101px;
+}
+.pet > .avatar-container {
+	left: 6px;
+	width: 128px;
+	height: 128px;
+	top: 120px;
+}
+
+#inv_mechanic > .avatar-container {
+	background-position: center 66px;
+	left: 33px;
+}
+
+#inv_mechanic > .avatar-container span {
+	margin-top: 218px;
+}
+
+#inv_pet > select {
+    height: 20px;
+    left: 19px;
+    padding: 0;
+    position: absolute;
+    top: 90px;
+    width: 280px;
+}
+
+.new-inventory-container span.top-col {
+	position: absolute;
+	color: black;
+	font-size: 13px;
+}
+
+.new-inventory-container .slot {
+	position: absolute;
+}
+
+
+.top-col.lt,
+.top-col.rt {
+	top: 52px;
+}
+
+.top-col.lb,
+.top-col.rb {
+	top: 71px;
+}
+
+.top-col.lt,
+.top-col.lb {
+	left: 50px;
+}
+.top-col.rt,
+.top-col.rb {
+	left: 200px;
+}
+</style>
+<?php
+function MakeUsableSlotmap($input) {
+	// Creates [slot] = [x, y] mapping from [x][y] = [slot] mapping
+	$ret = array();
+	for ($i = 0; $i < count($input); $i++) {
+		for ($j = 0; $j < count($input[$i]); $j++) {
+			$ret[$input[$i][$j]] = array($i, $j);
+		}
+	}
+	return $ret;
+}
+
+// -1 = empty
+// -2 = Unknown slot
+$new_inventory_slot_map = array();
+$new_inventory_slot_map['character'] = MakeUsableSlotmap(array(
+	array(55, 56, 01, -1, -1, -1, 53, 54, -1),
+	array(52, 49, 02, -1, -1, -1, 04, 51, -1),
+	array(18, 09, 03, -1, -1, -1, 11, 10, 61),
+	array(14, 08, 05, -1, -1, -1, 12, 13, -2),
+	array(19, 07, 06, 50, 17, 65, 15, 16, -2)
+));
+$new_inventory_slot_map['android'] = MakeUsableSlotmap(array(
+	array(-1, -1, 08, -1, -1, -1, 01, -1, -1),
+	array(-1, 00, -1, -1, -1, -1, -1, -1, -1),
+	array(-1, -1, 03, -1, -1, -1, -1, -1, -1),
+	array(-1, 04, -1, -1, -1, -1, 06, -1, -1),
+	array(-1, -1, -1, 05, -1, -1, -1, -1, -1),
+));
+$new_inventory_slot_map['mechanic'] = MakeUsableSlotmap(array(
+	array(-1, -1, -1, -1, -1, -1, -1, -1, -1),
+	array(-1, -1, -1, -1, -1, -1, -1, 04, -1),
+	array(00, -1, -1, -1, -1, -1, -1, -1, -1),
+	array(-1, 01, -1, -1, -1, -1, -1, 03, -1),
+	array(02, -1, -1, -1, -1, -1, -1, -1, -1),
+));
+$new_inventory_slot_map['pet'] = MakeUsableSlotmap(array(
+	array(14, -1, -1, -1, -1),
+	array(26, 27, -2, -2, -1),
+	array(22, 23, 46, 28, 62),
+	array(24, -2, 25, -2, -1),
+	array(60, -2, 57, -2, -1),
+));
+$new_inventory_slot_map['haku'] = MakeUsableSlotmap(array(
+	array(0) // lol.
+));
+$new_inventory_slot_map['evan'] = MakeUsableSlotmap(array(
+	array(00, -1, -1, -1, -1, -1, -1, -1, 02),
+	array(-1, -1, -1, -1, -1, -1, -1, -1, -1),
+	array(01, -1, -1, -1, -1, -1, -1, -1, 03),
+));
+
+?>
 
 
 <?php 	if ($__is_viewing_self || !IsHiddenObject('equip_totems')): ?>
@@ -734,76 +875,320 @@ foreach ($cashequips as $slot => $item) {
 <?php 		AddInventoryItems($normalequips['Totem']); ?>
 		</div>
 <?php 	endif; ?>
-	</div>
-<?php endif; ?>
 
 
-<?php if ($__is_viewing_self || !IsHiddenObject('job_equipment')): ?>
-	<div class="job-specific-inventory">
-<?php 	MakeHideToggleButton('job_equipment'); ?>
 <?php
 $job_css_class = '';
-$array_name = '';
 $jobid = $character_info['job'];
 $jobid_group = floor($jobid / 100);
-if ($jobid_group == 65 || $jobid == 6001) { $job_css_class = 'coordinate'; $array_name = 'Coordinate'; }
-elseif ($jobid_group == 35) { $job_css_class = 'mechanic'; $array_name = 'Mechanic'; }
-elseif ($jobid_group == 22 || $jobid == 2001) { $job_css_class = 'evan'; $array_name = 'Evan'; }
-
-if ($job_css_class != '') {
-?>
-		<div class="<?php echo $job_css_class; ?>">
-			<?php AddInventoryItems($normalequips[$array_name]); ?>
-		</div>
-<?php
+if ($__is_viewing_self || !IsHiddenObject('job_equipment')) { 
+	if ($jobid_group == 65 || $jobid == 6001) { $job_css_class = 'coordinate'; }
+	elseif ($jobid_group == 35) { $job_css_class = 'mechanic'; }
+	elseif ($jobid_group == 22 || $jobid == 2001) { $job_css_class = 'evan'; }
+	elseif ($jobid_group == 41 || $jobid == 4001 || $jobid_group == 42 || $jobid == 4002) { $job_css_class = 'haku'; }
 }
 ?>
-	</div>
-<?php endif; ?>
+	<div class="new-inventory-container">
+		<select cur-inv="inv_char" onchange="$('#' + $(this).attr('cur-inv')).css('display', 'none'); $(this).attr('cur-inv', $(this).val()); $('#' + $(this).attr('cur-inv')).css('display', '');">
 
-<?php if ($__is_viewing_self || !IsHiddenObject('pets')): ?>
-	<div style="width: 151px;">
-<?php 	MakeHideToggleButton('pets'); ?>
-		<div class="character_pets">
-			<div class="character_pets_holder">
-				<select onchange="ChangePet(this.value)">
-					<option value="0">Pet 1</option>
-					<option value="1">Pet 2</option>
-					<option value="2">Pet 3</option>
-				</select>
+		<option value="inv_char">Character</option>
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_pet')): ?>
+			<option value="inv_pet">Pet</option>
+<?php	endif; ?>
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
+			<option value="inv_android">Android</option>
+<?php	endif; ?>
+<?php	if ($job_css_class == 'mechanic'): ?>
+			<option value="inv_mechanic">Mechanic</option>
+<?php	elseif ($job_css_class == 'coordinate'): ?>
+			<option value="inv_coordinate">Coordinate</option>
+<?php	elseif ($job_css_class == 'haku'): ?>
+			<option value="inv_haku">Haku</option>
+<?php	elseif ($job_css_class == 'evan'): ?>
+			<option value="inv_evan">Dragon</option>
+<?php	endif; ?>
+		</select>
+		<div id="inv_char">
+<?php 	MakeHideToggleButton('equip_general'); ?>
+			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
+			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
+			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
+			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
-for ($i = 0; $i < 3; $i++) {
+$inv_pos_offx = 14;
+$inv_pos_offy = 92;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+if ($__is_viewing_self || !IsHiddenObject('equip_general')):
 ?>
-				<div class="pet_inventory" style="display: <?php echo $i == 0 ? 'block' : 'none'; ?>;" id="pet_<?php echo $i; ?>">
+			<div id="normal_equips">
 <?php
-	foreach ($petequips[$i] as $slot => $item) {
-		
-		$info = GetItemDialogInfo($item, true);
-		
-		$itemwzinfo = GetItemWZInfo($item->itemid);
-		
-		
-		if ($info['potentials'] != 0) {
+foreach ($normalequips['normal'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['character'][$slot])) continue;
+	$pos = $new_inventory_slot_map['character'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
 ?>
-					<div class="item-icon slot<?php echo $slot; ?> potential<?php echo $info['potentials']; ?>" style="position: absolute;"></div>
-<?php
-		}
-?>
-					<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
 <?php
 	}
 ?>
-				</div>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 }
 ?>
-<!-- so many </div> fml -->
+			</div>
+			<div id="cash_equips" style="display: none">
+<?php
+foreach ($cashequips as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['character'][$slot])) continue;
+	$pos = $new_inventory_slot_map['character'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+
+endif; // Do not show items if hidden
+?>
+			</div>
+			
+			<div style="bottom: 3px; right: 100px; position: absolute;">
+				<label style="color: black;"><input type="checkbox" onchange="ShowCashEquips(this.checked)" style="display: inline;" /> Show cash items</label>
 			</div>
 		</div>
-	</div>
-<?php endif; ?>
 
+		
+		
+		
+		
+		
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_pet')): ?>
+		<div id="inv_pet" style="display: none">
+<?php 	MakeHideToggleButton('equip_pet'); ?>
+			<select cur-pet="0" onchange="$('#pet_' + $(this).attr('cur-pet')).css('display', 'none'); $(this).attr('cur-pet', $(this).val()); $('#pet_' + $(this).attr('cur-pet')).css('display', '');">
+				<option value="0">Pet 1</option>
+				<option value="1">Pet 2</option>
+				<option value="2">Pet 3</option>
+			</select>
+<?php
+
+$pets = Pet::LoadPets($character_info['internal_id']);
+
+$inv_pos_offx = 136;
+$inv_pos_offy = 115;
+for ($i = 0; $i < 3; $i++) {
+	$pet = $pets[$i];
+	$isfound = $pet !== null;
+?>
+			<div class="pet" style="display: <?php echo $i == 0 ? 'block' : 'none'; ?>;" id="pet_<?php echo $i; ?>">
+				<span class="top-col lt"><?php echo $isfound ? $pet->name : ''; ?></span>
+				<span class="top-col lb"><?php echo $isfound ? $pet->level : ''; ?></span>
+				<span class="top-col rt"><?php echo $isfound ? $pet->fullness : ''; ?></span>
+				<span class="top-col rb"><?php echo $isfound ? $pet->closeness : ''; ?></span>
+
+				<div class="avatar-container" style="background-image: url('<?php if ($isfound): ?>//<?php echo $domain; ?>/pet/<?php echo $pet->itemid - 5000000; ?>/<?php endif; ?>');"><span><?php echo $isfound ? $pet->name : ''; ?></span></div>
+<?php
+	foreach ($petequips[$i] as $slot => $item) {
+		if (!isset($new_inventory_slot_map['pet'][$slot])) continue;
+	$pos = $new_inventory_slot_map['pet'][$slot];
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($info['iconid']);
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+?>
+			</div>
+<?php
+}
+?>
+		</div>
+<?php	endif; ?>
+
+<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
+		<div id="inv_android" style="display: none">
+<?php 	MakeHideToggleButton('equip_droid'); ?>
+			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
+			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
+			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
+			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
+			<div class="avatar-container" style="background-image: url('');"><span>Android</span></div>
+
+<?php
+$inv_pos_offx = 14;
+$inv_pos_offy = 92;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+foreach ($normalequips['Android'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['android'][$slot])) continue;
+	$pos = $new_inventory_slot_map['android'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+		</div>
+<?php	endif; ?>
+
+
+
+<?php	if ($job_css_class == 'coordinate'): ?>
+		<div id="inv_coordinate" style="display: none">
+<?php 	MakeHideToggleButton('job_equipment'); ?>
+			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
+			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
+			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
+			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+
+<?php
+$inv_pos_offx = 14;
+$inv_pos_offy = 92;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+foreach ($normalequips['Coordinate'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['coordinate'][$slot])) continue;
+	$pos = $new_inventory_slot_map['coordinate'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+		</div>
+
+
+<?php	elseif ($job_css_class == 'mechanic'): ?>
+		<div id="inv_mechanic" style="display: none">
+<?php 	MakeHideToggleButton('job_equipment'); ?>
+			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
+			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
+			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
+			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+
+<?php
+$inv_pos_offx = 18;
+$inv_pos_offy = 94;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+foreach ($normalequips['Mechanic'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['mechanic'][$slot])) continue;
+	$pos = $new_inventory_slot_map['mechanic'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+		</div>
+
+<?php	elseif ($job_css_class == 'haku'): ?>
+		<div id="inv_haku" style="display: none">
+<?php 	MakeHideToggleButton('job_equipment'); ?>
+<?php
+$inv_pos_offx = 159;
+$inv_pos_offy = 169;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+foreach ($normalequips['Haku'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['haku'][$slot])) continue;
+	$pos = $new_inventory_slot_map['haku'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+		</div>
+		
+
+<?php	elseif ($job_css_class == 'evan'): ?>
+		<div id="inv_evan" style="display: none">
+<?php 	MakeHideToggleButton('job_equipment'); ?>
+<?php
+$inv_pos_offx = 9;
+$inv_pos_offy = 106;
+$inv_extra_offx = $inv_extra_offy = 0;
+
+foreach ($normalequips['Evan'] as $slot => $item) {
+	$slot = abs($slot) % 100;
+	if (!isset($new_inventory_slot_map['evan'][$slot])) continue;
+	$pos = $new_inventory_slot_map['evan'][$slot];
+	
+	$info = GetItemDialogInfo($item, true);
+	
+	$itemwzinfo = GetItemWZInfo($info['iconid']);
+	if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+	}
+?>
+				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+}
+?>
+		</div>
+<?php	endif; ?>
+	</div>
+	
+	
 	<hr />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
@@ -830,9 +1215,8 @@ for ($inv = 0; $inv < 5; $inv++) {
 		<div class="character-brick inventory scrollable" id="inventory_<?php echo $inv; ?>" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>; padding: 5px  !important;">
 <?php 
 	for ($i = 0; $i < count($inv1); $i++) {
-
-		$row = floor($i / 4);
-		$col = $i % 4;
+		$row = floor($i / 8);
+		$col = $i % 8;
 		if (isset($inv1[$i])) {
 			$isequip = $inv == 0;
 			$item = $inv1[$i];
@@ -847,7 +1231,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 
 ?>
 			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"  onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmousemove(event)"></div>
-			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: 0;<?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: 0; <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php 
 			if (!$isequip) {
 				// Woop
@@ -862,12 +1246,21 @@ for ($inv = 0; $inv < 5; $inv++) {
 <?php
 		}
 	}
+	
+	for (; $i % 8 != 0; $i++) {
+		$row = floor($i / 8);
+		$col = $i % 8;
+?>
+			<div class="item-icon disabled-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+<?php
+	}
 ?>
 		</div>
 <?php
 }
 ?>
-		<span id="mesos"><?php echo number_format($character_info['mesos']); ?></span>
+		<span class="mesos"><?php echo number_format($character_info['mesos']); ?></span>
+		<span class="maplepoints">0</span>
 
 	</div>
 <?php endif; ?>
@@ -925,7 +1318,6 @@ WHERE
 	</div>
 <?php endif; ?>
 
-</div>
 	<hr/>
 
 <?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
@@ -988,7 +1380,7 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 </script>
 
 <div id="item_info" style="display: none;">
-<div class="top"></div>
+	<div class="top"></div>
 	<div id="item_info_title"></div>
 	<div id="item_info_extra"></div>
 	<div class="icon_holder"><img id="item_info_icon" src="" title="" width="72px" height="72px"/></div>
@@ -1001,7 +1393,8 @@ foreach ($reqlist as $option => $desc) {
 			<span id="item_info_req_row_<?php echo strtolower($option); ?>">
 				<?php echo $desc; ?>
 				<span id="item_info_req_<?php echo strtolower($option); ?>"></span>
-			</span><br/>
+				<br />
+			</span>
 <?php
 }
 ?>
@@ -1020,7 +1413,6 @@ foreach ($reqlist as $option => $desc) {
 
 <?php
 foreach ($optionlist as $option => $desc) {
-	if ($option == 'scrolls') continue;
 ?>
 			<tr id="item_info_row_<?php echo strtolower($option); ?>">
 				<td width="150px"><?php echo $desc; ?></td>
@@ -1047,8 +1439,8 @@ foreach ($optionlist as $option => $desc) {
 		</table>
 	</div>
 	<div id="extra_item_info"></div>
+	<div class="bottom"></div>
 </div>
-<div class="bottom"></div>
 	<hr/>
 
 <?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>

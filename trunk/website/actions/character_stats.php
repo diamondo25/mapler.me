@@ -59,12 +59,27 @@ AddCacheImage($internal_id, 'stats', $row['last_update'], $id);
 
 
 $row['guildname'] = '-';
-$q2 = $__database->query("SELECT guild FROM character_views WHERE name = '".$__database->real_escape_string($charname)."'");
+
+$q2 = $__database->query("
+SELECT
+	g.name
+FROM
+	characters c
+LEFT JOIN
+	guild_members gm
+	ON
+		gm.character_id = c.id
+LEFT JOIN
+	guilds g
+	ON
+		g.id = gm.guild_id
+WHERE
+	c.internal_id = ".$row['internal_id']);
 if ($q2->num_rows == 1) {
 	// Try to fetch guildname
-	$row2 = $q2->fetch_assoc();
-	if ($row2['guild'] != null) {
-		$row['guildname'] = $row2['guild'];
+	$row2 = $q2->fetch_row();
+	if ($row2[0] !== null) {
+		$row['guildname'] = $row2[0];
 	}
 }
 $q2->free();
