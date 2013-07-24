@@ -35,8 +35,8 @@ else {
 		$curid = $status_tmp->reply_to;
 	}
 	foreach ($prestatuses as $tmp)
-		$tmp->PrintAsHTML(' span6');
-	$status->PrintAsHTML(' span12');
+		$tmp->PrintAsHTML(' span8');
+	$status->PrintAsHTML(' span12 selected-status');
 
 	
 	// Get replies
@@ -44,14 +44,21 @@ else {
 	$statusses->Load('s.reply_to = '.$statusid);
 
 	if ($statusses->Count() !== 0) {
-		foreach ($statusses->data as $status) {
-			$status->PrintAsHTML(' span6');
+		foreach ($statusses->data as $tmp) {
+			$tmp->PrintAsHTML(' span8');
 		}
 	}
 }
 
 ?>
 	</div>
+<script>
+$('body').ready(function() {
+	$('html, body').animate({
+		scrollTop: $('div[status-id="<?php echo $status->id; ?>"]').offset().top - $('.sticky-nav').height()
+	}, 2000);
+});
+</script>
 <?php
 require_once __DIR__.'/../inc/footer.php';
 ?>

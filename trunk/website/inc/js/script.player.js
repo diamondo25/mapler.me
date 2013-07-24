@@ -48,7 +48,7 @@ function SetItemInfo(event, obj, values) {
 			}
 			else if (diff < 0) {
 				// Lost
-				value += ' (' + def_value + ' - ' + diff + ')';
+				value += ' (' + def_value + ' - ' + -diff + ')'; // - --10 = - 10 wooop
 				GetObj('item_info_row_' + name).style.color = 'orange';
 			}
 		}
