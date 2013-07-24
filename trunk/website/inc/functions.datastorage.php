@@ -175,7 +175,6 @@ WHERE
 	//$item_info['grouped'] = array();
 
 	while ($data = $q->fetch_row()) {
-		break;
 		if ($data[0] == 'info_vslot') {
 			preg_match_all('/../i', $data[1], $matches);
 			$data[1] = $matches[0];
