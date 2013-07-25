@@ -554,7 +554,9 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 }
 
 .character_totems,
-.new-inventory-container {
+.new-inventory-container,
+.evolution-system,
+#inventories {
 	display: inline-block;
 	float: left;
 	margin-left: 0px;
@@ -849,7 +851,9 @@ function MakeUsableSlotmap($input) {
 	$ret = array();
 	for ($i = 0; $i < count($input); $i++) {
 		for ($j = 0; $j < count($input[$i]); $j++) {
-			$ret[$input[$i][$j]] = array($i, $j);
+			$slot = $input[$i][$j];
+			if ($slot < 0) continue;
+			$ret[$slot] = array($i, $j);
 		}
 	}
 	return $ret;
@@ -893,6 +897,12 @@ $new_inventory_slot_map['evan'] = MakeUsableSlotmap(array(
 	array( 0, -1, -1, -1, -1, -1, -1, -1,  2),
 	array(-1, -1, -1, -1, -1, -1, -1, -1, -1),
 	array( 1, -1, -1, -1, -1, -1, -1, -1,  3),
+));
+$new_inventory_slot_map['coordinate'] = MakeUsableSlotmap(array(
+	array(-1, -1,  0, -1, -1, -1, -2),
+	array(-1, -1, -2, -1, -1, -1, -2),
+	array(-1,  1, -1, -1, -1, -1, -1),
+	array( 4, -1, -2, -1, -1, -1, -1),
 ));
 
 
@@ -1190,7 +1200,7 @@ RenderItems($normalequips['Evan'], 'evan');
 	<hr />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
-	<div class="span4" id="inventories">
+	<div id="inventories">
 <?php 	MakeHideToggleButton('inventories'); ?>
 		<select onchange="ChangeInventory(this.value)">
 			<option value="1">Equipment</option>
@@ -1224,58 +1234,6 @@ for ($inv = 0; $inv < 5; $inv++) {
 	</div>
 <?php endif; ?>
 	
-
-<?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
-	<div>
-<?php 	MakeHideToggleButton('teleport_rocks'); ?>
-	<table class="span4" cellpadding="5">
-<?php
-	$q = $__database->query("
-SELECT
-	`index`,
-	map
-FROM
-	teleport_rock_locations
-WHERE
-	character_id = ".$internal_id."
-	AND
-	map <> 999999999
-");
-
-	$lastgroup = '';
-	$curgroup = '';
-	while ($row = $q->fetch_assoc()) {
-		$index = $row['index'];
-		if ($index < 5) $curgroup = 'Normal';
-		elseif ($index < 5 + 10) $curgroup = 'VIP';
-		elseif ($index < 5 + 10 + 13) $curgroup = 'Hyper';
-		elseif ($index < 5 + 10 + 13 + 13) $curgroup = 'Hyper';
-		
-		if ($lastgroup != $curgroup) {
-			if ($lastgroup != '') {
-?>
-		<tr>
-			<th>&nbsp;</th>
-		</tr>
-<?php
-			}
-?>
-		<tr>
-			<th><?php echo $curgroup.' Rock locations'; ?></th>
-		</tr>
-<?php
-			$lastgroup = $curgroup;
-		}
-?>
-		<tr>
-			<td><?php echo GetMapname($row['map']); ?></td>
-		</tr>
-<?php
-	}
-?>
-	</table>
-	</div>
-<?php endif; ?>
 	
 <?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
 	<div class="evolution-system">
@@ -1340,6 +1298,60 @@ $inv_extra_offx = $inv_extra_offy = 8;
 		</div>
 	</div>
 <?php endif; ?>
+
+
+<?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
+	<div>
+<?php 	MakeHideToggleButton('teleport_rocks'); ?>
+	<table class="span4" cellpadding="5">
+<?php
+	$q = $__database->query("
+SELECT
+	`index`,
+	map
+FROM
+	teleport_rock_locations
+WHERE
+	character_id = ".$internal_id."
+	AND
+	map <> 999999999
+");
+
+	$lastgroup = '';
+	$curgroup = '';
+	while ($row = $q->fetch_assoc()) {
+		$index = $row['index'];
+		if ($index < 5) $curgroup = 'Normal';
+		elseif ($index < 5 + 10) $curgroup = 'VIP';
+		elseif ($index < 5 + 10 + 13) $curgroup = 'Hyper';
+		elseif ($index < 5 + 10 + 13 + 13) $curgroup = 'Hyper';
+		
+		if ($lastgroup != $curgroup) {
+			if ($lastgroup != '') {
+?>
+		<tr>
+			<th>&nbsp;</th>
+		</tr>
+<?php
+			}
+?>
+		<tr>
+			<th><?php echo $curgroup.' Rock locations'; ?></th>
+		</tr>
+<?php
+			$lastgroup = $curgroup;
+		}
+?>
+		<tr>
+			<td><?php echo GetMapname($row['map']); ?></td>
+		</tr>
+<?php
+	}
+?>
+	</table>
+	</div>
+<?php endif; ?>
+
 
 <script>
 var descriptions = <?php echo json_encode($IDlist); ?>;
