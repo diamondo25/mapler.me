@@ -200,10 +200,10 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 			</div>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
-		<hr />
+		<br /><br />
 		<p class="side"> Internal ID: <?php echo $internal_id; ?></p>
 <?php endif; ?>
-		<hr />
+		<br /><br />
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
@@ -214,11 +214,11 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 <?php endif; ?>
 <?php endif; ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
-		<hr />
+		<br /><br />
 		<p class="side"><i class="icon-tasks"></i> <?php echo $statistics['quests_done']; ?> quests completed</p>
 		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests in progress</p>
 		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
-		<hr />
+		<br /><br />
 		
 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		
@@ -226,7 +226,7 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 				
 		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 				
-		<hr />
+		<br /><br />
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
 		<p class="side"><i class="icon-heart faded"></i> <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
 		<p class="side"><i class="icon-th-list faded"></i> <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
@@ -1197,7 +1197,7 @@ RenderItems($normalequips['Evan'], 'evan');
 	</div>
 	
 	
-	<hr />
+	<br /><br />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
 	<div id="inventories">
@@ -1405,16 +1405,16 @@ foreach ($optionlist as $option => $desc) {
 
 	</div>
 	<div class="item_potential_stats" id="item_info_potentials">
-		<hr />
+		<br /><br />
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
 	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
-		<hr />
+		<br /><br />
 		<span id="nebulite_info"></span>
 	</div>
 	<div class="item_potential_stats" id="item_info_bonus_potentials">
-		<hr />
+		<br /><br />
 		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
 		</table>
 	</div>
@@ -1565,7 +1565,7 @@ ORDER BY
 		</div>
 	
 	
-	<hr />
+	<br /><br />
 <?php endif; ?>
 	
 <?php if ($__is_viewing_self || !IsHiddenObject('familiars')): ?>
