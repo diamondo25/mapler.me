@@ -230,7 +230,7 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 	$itemid = GetID($row2);
 	$iscash = floor(abs($row2['slot']) / 100) == 1;
 	if (DEBUGGING)
-		echo 'Slot: '.$row2['slot']."\r\n";
+		echo 'Slot: '.$row2['slot'].' ('.$slot.')'."\r\n";
 	if (!$iscash) {
 		if (isset($shown_items[$slot])) continue;
 		else $shown_items[$slot] = $itemid;
@@ -252,13 +252,18 @@ if (isset($shown_items[11])) {
 	CheckStand(GetItemType($standardWeapon), get_data($standardWeapon));
 }
 
-if (!isset($shown_items[6])) {
+if (!isset($shown_items[5])) {
+	if (DEBUGGING)
+		echo 'Missing slot 5 equip, setting shirt.'."\r\n";
+	$shown_items[5] = $gender == 0 ? 1060026 : 1061039;
+}
+
+if (!isset($shown_items[6]) && GetItemType($shown_items[5]) != 105) {
+	if (DEBUGGING)
+		echo 'Missing slot 6 equip, setting pants.'."\r\n";
 	$shown_items[6] = $gender == 0 ? 1040036 : 1041046;
 }
 
-if (!isset($shown_items[5])) {
-	$shown_items[5] = $gender == 0 ? 1060026 : 1061039;
-}
 
 $character_equipment->free();
 

@@ -813,6 +813,35 @@ function AddInventoryItems(&$inventory) {
 .top-col.rb {
 	left: 200px;
 }
+
+.evolution-system {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/evolvingsystem.png');
+	width: 357px;
+	height: 317px;
+	position: relative;
+	display: inline-block;
+}
+
+.evolution-system .cores {
+	height: 130px;
+	left: 8px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	position: absolute;
+	top: 180px;
+	width: 342px;
+	margin: 0;
+	padding: 0;
+}
+
+.evolution-system .selected-cores {
+	height: 160px;
+	left: 110px;
+	position: absolute;
+	top: 20px;
+	width: 230px;
+	overflow: hidden !important;
+}
 </style>
 <?php
 function MakeUsableSlotmap($input) {
@@ -830,25 +859,25 @@ function MakeUsableSlotmap($input) {
 // -2 = Unknown slot
 $new_inventory_slot_map = array();
 $new_inventory_slot_map['character'] = MakeUsableSlotmap(array(
-	array(55, 56, 01, -1, -1, -1, 53, 54, -1),
-	array(52, 49, 02, -1, -1, -1, 04, 51, -1),
-	array(18, 09, 03, -1, -1, -1, 11, 10, 61),
-	array(14, 08, 05, -1, -1, -1, 12, 13, -2),
-	array(19, 07, 06, 50, 17, 65, 15, 16, -2)
+	array(55, 56,  1, -1, -1, -1, 53, 54, -1),
+	array(52, 49,  2, -1, -1, -1,  4, 51, -1),
+	array(18,  9,  3, -1, -1, -1, 11, 10, 61),
+	array(14,  8,  5, -1, -1, -1, 12, 13, -2),
+	array(19,  7,  6, 50, 17, 65, 15, 16, -2)
 ));
 $new_inventory_slot_map['android'] = MakeUsableSlotmap(array(
-	array(-1, -1, 08, -1, -1, -1, 01, -1, -1),
-	array(-1, 00, -1, -1, -1, -1, -1, -1, -1),
-	array(-1, -1, 03, -1, -1, -1, -1, -1, -1),
-	array(-1, 04, -1, -1, -1, -1, 06, -1, -1),
-	array(-1, -1, -1, 05, -1, -1, -1, -1, -1),
+	array(-1, -1,  8, -1, -1, -1,  1, -1, -1),
+	array(-1,  0, -1, -1, -1, -1, -1, -1, -1),
+	array(-1, -1,  3, -1, -1, -1, -1, -1, -1),
+	array(-1,  4, -1, -1, -1, -1,  6, -1, -1),
+	array(-1, -1, -1,  5, -1, -1, -1, -1, -1),
 ));
 $new_inventory_slot_map['mechanic'] = MakeUsableSlotmap(array(
 	array(-1, -1, -1, -1, -1, -1, -1, -1, -1),
-	array(-1, -1, -1, -1, -1, -1, -1, 04, -1),
-	array(00, -1, -1, -1, -1, -1, -1, -1, -1),
-	array(-1, 01, -1, -1, -1, -1, -1, 03, -1),
-	array(02, -1, -1, -1, -1, -1, -1, -1, -1),
+	array(-1, -1, -1, -1, -1, -1, -1,  4, -1),
+	array( 0, -1, -1, -1, -1, -1, -1, -1, -1),
+	array(-1,  1, -1, -1, -1, -1, -1,  3, -1),
+	array( 2, -1, -1, -1, -1, -1, -1, -1, -1),
 ));
 $new_inventory_slot_map['pet'] = MakeUsableSlotmap(array(
 	array(14, -1, -1, -1, -1),
@@ -861,10 +890,104 @@ $new_inventory_slot_map['haku'] = MakeUsableSlotmap(array(
 	array(0) // lol.
 ));
 $new_inventory_slot_map['evan'] = MakeUsableSlotmap(array(
-	array(00, -1, -1, -1, -1, -1, -1, -1, 02),
+	array( 0, -1, -1, -1, -1, -1, -1, -1,  2),
 	array(-1, -1, -1, -1, -1, -1, -1, -1, -1),
-	array(01, -1, -1, -1, -1, -1, -1, -1, 03),
+	array( 1, -1, -1, -1, -1, -1, -1, -1,  3),
 ));
+
+
+function RenderItems(&$itemset, $slotmap_name) {
+	global $new_inventory_slot_map;
+	foreach ($itemset as $slot => $item) {
+		$slot = abs($slot) % 100;
+		if (!isset($new_inventory_slot_map[$slotmap_name][$slot])) {
+			echo '<!-- NOT FOUND: '.$slotmap_name.': '.$slot.', '.$item->itemid.' ('.GetMapleStoryString("item", $item->itemid, "name").') -->'."\r\n";
+			continue;
+		}
+		$pos = $new_inventory_slot_map[$slotmap_name][$slot];
+		
+		$info = GetItemDialogInfo($item, true);
+		
+		$itemwzinfo = GetItemWZInfo($info['iconid']);
+		if ($info['potentials'] != 0) {
+?>
+				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
+<?php
+		}
+?>
+				<img slot="<?php echo $slot; ?>" class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php
+	}
+}
+
+function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) {
+	for ($i = 0; $i < $slots; $i++) {
+		$row = floor($i / $items_per_row);
+		$col = $i % $items_per_row;
+		
+		if ($max_slots !== null && $max_slots <= $i) {
+			// Draw 'blocked' cell
+?>
+			<div class="item-icon disabled-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+<?php
+		}
+		elseif (isset($itemset[$i])) {
+			$item = $itemset[$i];
+			$isequip = $item->type == ITEM_EQUIP;
+			$info = GetItemDialogInfo($item, $isequip);
+
+			$itemIcon = '';
+			if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
+			
+			$display_id = GetItemIconID($item->itemid); // For nebulites
+
+			$itemwzinfo = GetItemWZInfo($display_id);
+			$uid = substr(uniqid(), -5);
+?>
+			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"  onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"></div>
+			<img class="item-icon" id="item_<?php echo $uid; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php 
+			if (!$isequip) {
+				// Woop
+?>
+			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
+<?php
+			}
+		}
+		else {
+?>
+			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+<?php
+		}
+	}
+}
+
+function RenderItemAtPosition($item, $x, $y, $bgicon = false) {
+	$isequip = $item->type == ITEM_EQUIP;
+	$info = GetItemDialogInfo($item, $isequip);
+	$pos = 'left: '.$x.'px; top: '.$y.'px;';
+	$itemIcon = '';
+	if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
+	
+	$display_id = GetItemIconID($item->itemid); // For nebulites
+
+	$itemwzinfo = GetItemWZInfo($display_id);
+	$uid = substr(uniqid(), -5);
+	if ($bgicon) {
+?>
+	<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php echo $pos; ?>"  onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"></div>
+<?php
+	}
+?>
+	<img class="item-icon" id="item_<?php echo $uid; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php echo $pos; ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+<?php 
+	if (!$isequip) {
+		// Woop
+?>
+	<span class="item-amount" style="<?php echo $pos; ?>" onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
+<?php
+	}
+}
 
 ?>
 
@@ -917,54 +1040,23 @@ if ($__is_viewing_self || !IsHiddenObject('job_equipment')) {
 			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
-$inv_pos_offx = 14;
-$inv_pos_offy = 92;
+$inv_pos_offx = 13;
+$inv_pos_offy = 91;
 $inv_extra_offx = $inv_extra_offy = 0;
 
-if ($__is_viewing_self || !IsHiddenObject('equip_general')):
 ?>
 			<div id="normal_equips">
 <?php
-foreach ($normalequips['normal'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['character'][$slot])) continue;
-	$pos = $new_inventory_slot_map['character'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+if ($__is_viewing_self || !IsHiddenObject('equip_general')):
+	RenderItems($normalequips['normal'], 'character');
+endif;
 ?>
 			</div>
 			<div id="cash_equips" style="display: none">
 <?php
-foreach ($cashequips as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['character'][$slot])) continue;
-	$pos = $new_inventory_slot_map['character'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
-
-endif; // Do not show items if hidden
+if ($__is_viewing_self || !IsHiddenObject('equip_general')):
+	RenderItems($cashequips, 'character');
+endif;
 ?>
 			</div>
 			
@@ -1004,17 +1096,7 @@ for ($i = 0; $i < 3; $i++) {
 
 				<div class="avatar-container" style="background-image: url('<?php if ($isfound): ?>//<?php echo $domain; ?>/pet/<?php echo $pet->itemid - 5000000; ?>/<?php endif; ?>');"><span><?php echo $isfound ? $pet->name : ''; ?></span></div>
 <?php
-	foreach ($petequips[$i] as $slot => $item) {
-		if (!isset($new_inventory_slot_map['pet'][$slot])) continue;
-	$pos = $new_inventory_slot_map['pet'][$slot];
-		
-		$info = GetItemDialogInfo($item, true);
-		
-		$itemwzinfo = GetItemWZInfo($info['iconid']);
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-	}
+	RenderItems($petequips[$i], 'pet');
 ?>
 			</div>
 <?php
@@ -1036,24 +1118,7 @@ for ($i = 0; $i < 3; $i++) {
 $inv_pos_offx = 14;
 $inv_pos_offy = 92;
 $inv_extra_offx = $inv_extra_offy = 0;
-
-foreach ($normalequips['Android'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['android'][$slot])) continue;
-	$pos = $new_inventory_slot_map['android'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+RenderItems($normalequips['Android'], 'android');
 ?>
 		</div>
 <?php	endif; ?>
@@ -1073,24 +1138,7 @@ foreach ($normalequips['Android'] as $slot => $item) {
 $inv_pos_offx = 14;
 $inv_pos_offy = 92;
 $inv_extra_offx = $inv_extra_offy = 0;
-
-foreach ($normalequips['Coordinate'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['coordinate'][$slot])) continue;
-	$pos = $new_inventory_slot_map['coordinate'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+RenderItems($normalequips['Coordinate'], 'coordinate');
 ?>
 		</div>
 
@@ -1109,23 +1157,7 @@ $inv_pos_offx = 18;
 $inv_pos_offy = 94;
 $inv_extra_offx = $inv_extra_offy = 0;
 
-foreach ($normalequips['Mechanic'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['mechanic'][$slot])) continue;
-	$pos = $new_inventory_slot_map['mechanic'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+RenderItems($normalequips['Mechanic'], 'mechanic');
 ?>
 		</div>
 
@@ -1136,24 +1168,7 @@ foreach ($normalequips['Mechanic'] as $slot => $item) {
 $inv_pos_offx = 159;
 $inv_pos_offy = 169;
 $inv_extra_offx = $inv_extra_offy = 0;
-
-foreach ($normalequips['Haku'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['haku'][$slot])) continue;
-	$pos = $new_inventory_slot_map['haku'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+RenderItems($normalequips['Haku'], 'haku');
 ?>
 		</div>
 		
@@ -1165,24 +1180,7 @@ foreach ($normalequips['Haku'] as $slot => $item) {
 $inv_pos_offx = 9;
 $inv_pos_offy = 106;
 $inv_extra_offx = $inv_extra_offy = 0;
-
-foreach ($normalequips['Evan'] as $slot => $item) {
-	$slot = abs($slot) % 100;
-	if (!isset($new_inventory_slot_map['evan'][$slot])) continue;
-	$pos = $new_inventory_slot_map['evan'][$slot];
-	
-	$info = GetItemDialogInfo($item, true);
-	
-	$itemwzinfo = GetItemWZInfo($info['iconid']);
-	if ($info['potentials'] != 0) {
-?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-	}
-?>
-				<img class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php
-}
+RenderItems($normalequips['Evan'], 'evan');
 ?>
 		</div>
 <?php	endif; ?>
@@ -1205,7 +1203,7 @@ foreach ($normalequips['Evan'] as $slot => $item) {
 <?php
 
 
-$inv_pos_offx = 2; // Diff offsets
+$inv_pos_offx = 5; // Diff offsets
 $inv_pos_offy = 2;
 $inv_extra_offx = $inv_extra_offy = 2;
 
@@ -1213,47 +1211,8 @@ for ($inv = 0; $inv < 5; $inv++) {
 	$inv1 = $inventory->GetInventory($inv);
 ?>
 		<div class="character-brick inventory scrollable" id="inventory_<?php echo $inv; ?>" style="display: <?php echo $inv == 0 ? 'block' : 'none'; ?>; padding: 5px  !important;">
-<?php 
-	for ($i = 0; $i < count($inv1); $i++) {
-		$row = floor($i / 8);
-		$col = $i % 8;
-		if (isset($inv1[$i])) {
-			$isequip = $inv == 0;
-			$item = $inv1[$i];
-			$info = GetItemDialogInfo($item, $isequip);
-
-			$itemIcon = '';
-			if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
-			
-			$display_id = GetItemIconID($item->itemid); // For nebulites
-
-			$itemwzinfo = GetItemWZInfo($display_id);
-
-?>
-			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"  onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmousemove(event)"></div>
-			<img class="item-icon" id="item_<?php echo $inv; ?>_<?php echo $i; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php 
-			if (!$isequip) {
-				// Woop
-?>
-			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $inv; ?>_<?php echo $i; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
 <?php
-			}
-		}
-		else {
-?>
-			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
-<?php
-		}
-	}
-	
-	for (; $i % 8 != 0; $i++) {
-		$row = floor($i / 8);
-		$col = $i % 8;
-?>
-			<div class="item-icon disabled-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
-<?php
-	}
+	RenderItemsTable($inv1, max(4 * 8, ceil(count($inv1) / 8) * 8), 8, count($inv1));
 ?>
 		</div>
 <?php
@@ -1317,17 +1276,15 @@ WHERE
 	</table>
 	</div>
 <?php endif; ?>
-
-	<hr/>
-
+	
 <?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
+	<div class="evolution-system">
 <?php 	MakeHideToggleButton('evo_rocks'); ?>
-	<p class="lead">Evolution System Cores</p>
-	<table cellpadding="5">
 <?php
+
 	$q = $__database->query("
 SELECT
-	`card`, `level`
+	`card`, `level`, `block`, `index`
 FROM
 	evolution_levels
 WHERE
@@ -1336,41 +1293,52 @@ GROUP BY
 	`card`
 ORDER BY
 	`card` ASC,
-	`block` ASC,
 	`index` ASC
 ");
 
-	$i = 0;
+	$cores = array();
+	$cores[1] = array();
+	$cores[2] = array();
 	while ($row = $q->fetch_assoc()) {
-		if ($i % 7 == 0) {
-			if ($i != 0) {
-?>
-		</tr>
-<?php
-			}
-?>
-		<tr>
-<?php
-		}
-		$item = (object)array('itemid' => $row['card'], 'amount' => $row['level'], 'expires' => 3439756800);
-		$info = GetItemDialogInfo($item, false);
-?>
-			<td>
-				<img class="item-icon" potential="0" src="<?php echo GetItemIcon($item->itemid); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-				<span class="item-amount">x<?php echo $item->amount; ?></span>
-
-			</td>
-<?php
-		$i++;
+		$cores[(int)$row['block']][(int)$row['index']] = (object)array('itemid' => $row['card'], 'amount' => $row['level'], 'expires' => 3439756800, 'type' => ITEM_RECHARGE, 'bagid' => -1);
 	}
-	if ($i != 0) {
-?>
-		</tr>
-<?php
-	}
-?>
 	
-	</table>
+	$selected_core_positions = array();
+	$selected_core_positions[0] = array(43, 12);
+	// $selected_core_positions[1] = array(17, 17);
+	$selected_core_positions[2] = array(86, 83);
+	//$selected_core_positions[3] = array(86, 83);
+	//$selected_core_positions[4] = array(86, 83);
+	
+	
+	// Right list
+	$selected_core_positions[7] = array(190, 8);
+	$selected_core_positions[8] = array(190, 58);
+	$selected_core_positions[9] = array(190, 108);
+	
+?>
+		<div class="selected-cores inventory">
+<?php
+	foreach ($cores[1] as $slot => $item) {
+		if (!isset($selected_core_positions[$slot])) continue;
+		$pos = $selected_core_positions[$slot];
+		RenderItemAtPosition($item, $pos[0], $pos[1]);
+	}
+?>
+		</div>
+		<div class="cores inventory">
+
+<?php
+$inv_pos_offx = 3; // Diff offsets
+$inv_pos_offy = 2;
+$inv_extra_offx = $inv_extra_offy = 8;
+	
+	
+	RenderItemsTable($cores[2], max(3 * 8, ceil(count($cores[2]) / 8) * 8), 8);
+?>
+		
+		</div>
+	</div>
 <?php endif; ?>
 
 <script>
