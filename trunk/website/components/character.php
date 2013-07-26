@@ -178,7 +178,12 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 <div class="row">
 	<div class="span12">
 	<?php if ($character_info['account_id'] !== '2') { ?>
-		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a>
+		<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/" class="btn btn-mini pull-right" style="margin-bottom: 10px">Return to <?php echo $account->GetNickName(); ?>'s Profile</a> 		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		
+		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
+				
+		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+		
 	<?php } else { ?>
 		<p class="alert alert-warning">Important: This character was incorrectly added to Mapler.me. (Logged in to an account before connecting to Mapler.me). To gain ownership of this character, please try re-adding the account, or send a request through Support with a screenshot of your character in-game saying your username.</p>
 	<?php } ?>
@@ -193,17 +198,18 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 		<div class="location">
 			<img src="<?php echo $avatarurl ?>" class="h" /><br />
 		</div>
+		<div class="invert-box">
 		<p class="name"><?php echo $character_info['name']; ?><br />
 			<small class="name_extra" style="margin-top:10px;">Level <?php echo $character_info['level']; ?> <?php echo GetJobname($character_info['job']); ?></small>
-			<div class="progress progress-striped" title="<?php echo $expbar['percentage']; ?>% [<?php echo $expbar['current'].' / '.$expbar['max']; ?>]">
+			<div class="progress progress-striped" title="<?php echo $expbar['percentage']; ?>% [<?php echo $expbar['current'].' / '.$expbar['max']; ?>]" style="width:90%;margin:0 auto;">
 				<div class="bar" style="width: <?php echo $expbar['percentage']; ?>%;"></div>
 			</div>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
-		<br /><br />
+		<br />
 		<p class="side"> Internal ID: <?php echo $internal_id; ?></p>
 <?php endif; ?>
-		<br /><br />
+		<br />
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
@@ -219,17 +225,10 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests in progress</p>
 		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
 		<br /><br />
-		
-		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-		
-		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
-				
-		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
-				
-		<br /><br />
 		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
 		<p class="side"><i class="icon-heart faded"></i> <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
 		<p class="side"><i class="icon-th-list faded"></i> <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
+	</div>
 	</div>
 	
 <?php	
@@ -1197,7 +1196,7 @@ RenderItems($normalequips['Evan'], 'evan');
 	</div>
 	
 	
-	<br /><br />
+	<br /><br /><br />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('inventories')): ?>
 	<div id="inventories">
@@ -1405,16 +1404,16 @@ foreach ($optionlist as $option => $desc) {
 
 	</div>
 	<div class="item_potential_stats" id="item_info_potentials">
-		<br /><br />
+		<hr />
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
 	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
-		<br /><br />
+		<hr />
 		<span id="nebulite_info"></span>
 	</div>
 	<div class="item_potential_stats" id="item_info_bonus_potentials">
-		<br /><br />
+		<hr />
 		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
 		</table>
 	</div>
