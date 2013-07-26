@@ -282,14 +282,15 @@ endif;
 require_once 'banhammer.php';
 
 //$socket = @fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5);
-$socket = @fsockopen('127.0.0.1', 23711, $errno, $errstr, 5);
+$socket = @fsockopen('127.0.0.1', 23711, $errno, $errstr, 3);
 
 if (!$socket) {
 ?>
 	<p class="lead alert alert-danger">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
 <?php
 }
-else {
+elseif (false) {
+
 	$size = fread($socket, 1);
 	echo $size;
 	
