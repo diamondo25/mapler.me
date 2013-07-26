@@ -368,7 +368,7 @@ namespace MPLRServer
                     // Quest complete
                     long time = pPacket.ReadLong();
 
-                    using (DeleteQueryBuilder dqb = new DeleteQueryBuilder("quest_running"))
+                    using (DeleteQueryBuilder dqb = new DeleteQueryBuilder("quests_running"))
                     {
                         dqb.SetWhereColumn("character_id", pConnection.CharacterInternalID);
                         dqb.SetWhereColumn("questid", id);

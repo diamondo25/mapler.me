@@ -44,7 +44,7 @@
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.panel1.Location = new System.Drawing.Point(532, 12);
+            this.panel1.Location = new System.Drawing.Point(532, 166);
             this.panel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(40, 43);
@@ -74,12 +74,12 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(13, 183);
+            this.label3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(11, 166);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(98, 16);
+            this.label3.Size = new System.Drawing.Size(82, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Last update: ";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -88,25 +88,26 @@
             // 
             this.lblLastUpdate.AutoSize = true;
             this.lblLastUpdate.BackColor = System.Drawing.Color.Transparent;
-            this.lblLastUpdate.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLastUpdate.ForeColor = System.Drawing.Color.Black;
-            this.lblLastUpdate.Location = new System.Drawing.Point(115, 183);
+            this.lblLastUpdate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLastUpdate.ForeColor = System.Drawing.Color.White;
+            this.lblLastUpdate.Location = new System.Drawing.Point(97, 166);
             this.lblLastUpdate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLastUpdate.Name = "lblLastUpdate";
-            this.lblLastUpdate.Size = new System.Drawing.Size(191, 16);
+            this.lblLastUpdate.Size = new System.Drawing.Size(166, 13);
             this.lblLastUpdate.TabIndex = 5;
             this.lblLastUpdate.Text = "(will appear once logged in)";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(14, 9);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(352, 104);
+            this.label1.Padding = new System.Windows.Forms.Padding(4);
+            this.label1.Size = new System.Drawing.Size(360, 112);
             this.label1.TabIndex = 6;
             this.label1.Text = resources.GetString("label1.Text");
             // 

@@ -1426,7 +1426,8 @@ WHERE
 		if ($lastgroup != $curgroup) {
 			if ($lastgroup != '') {
 ?>
-			</table>
+				</table>
+			</div>
 		</div>
 <?php
 			}

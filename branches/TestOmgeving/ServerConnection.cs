@@ -31,19 +31,54 @@ namespace Mapler_Client
         {
             if (!Program.Closing)
             {
-                if (frmMain.Instance != null)
+                Logger.WriteLine("Trying to reconnect...");
+                Sniffer.Instance.Stop();
+                TryReconnect();
+            }
+        }
+
+        private void TryReconnect()
+        {
+            new System.Threading.Thread((a) =>
+            {
+                for (int i = 0; Disconnected && i < 5; i++)
                 {
-                    frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                    Logger.WriteLine("Connection try {0}", i);
+                    try
                     {
-                        System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
-                    });
+                        System.Threading.Thread.Sleep(5000);
+                        Connect();
+                        
+                    }
+                    catch
+                    {
+                        Logger.WriteLine("Still not connected...");
+                    }
+                }
+
+                if (Disconnected)
+                {
+                    if (frmMain.Instance != null)
+                    {
+                        frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate
+                        {
+                            System.Windows.Forms.MessageBox.Show(frmMain.Instance, "You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                        });
+                    }
+                    else
+                    {
+                        System.Windows.Forms.MessageBox.Show("You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    }
+
+                    Environment.Exit(1);
                 }
                 else
                 {
-                    System.Windows.Forms.MessageBox.Show("You were disconnected from Mapler.me.\r\nThis application will now exit.", "Mapler.me server connection error", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
+                    Logger.WriteLine("Starting sniffer again");
+                    Sniffer.Instance.SetUp();
                 }
-                Environment.Exit(1);
-            }
+
+            }).Start();
         }
 
         public override void OnPacket(MaplePacket pPacket)

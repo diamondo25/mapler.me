@@ -17,7 +17,11 @@ namespace System
         private int _receiveLength;
         private bool _header = true;
 
+        public string IP { get; private set; }
+        public ushort Port { get; private set; }
+
         private bool _disconnected = false;
+        public bool Disconnected { get { return _disconnected; } }
 
         public IPEndPoint HostEndPoint { get; private set; }
         public IPEndPoint ClientEndPoint { get; private set; }
@@ -36,14 +40,23 @@ namespace System
         public MESession(string pHostname, ushort pPort)
         {
             _disconnected = true;
+            this.IP = pHostname;
+            this.Port = pPort;
+
+            Connect();
+        }
+
+        protected void Connect()
+        {
+
             IPAddress[] addies;
             try
             {
-                addies = Dns.GetHostAddresses(pHostname);
+                addies = Dns.GetHostAddresses(this.IP);
             }
             catch (Exception ex)
             {
-                throw new Exception(string.Format("Unable to retrieve DNS addresses for hostname '{0}'", pHostname), ex);
+                throw new Exception(string.Format("Unable to retrieve DNS addresses for hostname '{0}'", this.IP), ex);
             }
 
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -54,7 +67,7 @@ namespace System
             {
                 try
                 {
-                    _socket.Connect(addr, pPort);
+                    _socket.Connect(addr, this.Port);
                     lastException = null;
                     break;
                 }
@@ -66,7 +79,7 @@ namespace System
             }
             if (lastException != null)
             {
-                throw new Exception(string.Format("Unable to connect to remote host @ {0}:{1}", lastHost, pPort), lastException);
+                throw new Exception(string.Format("Unable to connect to remote host @ {0}:{1}", lastHost, this.Port), lastException);
             }
             _disconnected = false;
             StartReceive(4, false);
