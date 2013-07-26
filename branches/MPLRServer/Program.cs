@@ -66,8 +66,19 @@ namespace MPLRServer
             });
 
             // For online check!
+            byte[] OnlineCheckInfo = null;
+            {
+                MaplePacket packet = new MaplePacket(ClientPacketHandlers.LatestMajorVersion);
+                packet.WriteByte(ClientPacketHandlers.LatestLocale);
+                packet.WriteInt(Clients.Count);
+                OnlineCheckInfo = packet.ToArray();
+                packet.Dispose();
+                packet = null;
+            }
             Acceptor acceptCheck = new Acceptor(23711, sock =>
             {
+                sock.Send(new byte[] { (byte)OnlineCheckInfo.Length });
+                sock.Send(OnlineCheckInfo);
                 sock.Shutdown(System.Net.Sockets.SocketShutdown.Both);
                 sock.Close();
             });
@@ -91,9 +102,10 @@ namespace MPLRServer
                 {
                     switch (arguments[0])
                     {
-                        case "getkeys": {
-                            GMSKeys.Initialize();
-                            break;
+                        case "getkeys":
+                            {
+                                GMSKeys.Initialize();
+                                break;
                             }
                         case "reload_store":
                             {
@@ -131,9 +143,8 @@ namespace MPLRServer
                             }
                         case "players":
                             {
-                                string names = "";
-                                Clients.ForEach(a => names += a.LastLoggedCharacterName + ", ");
-                                Console.WriteLine("Players online: {0}", names);
+                                string names = string.Join(", ", Clients);
+                                Console.WriteLine("Players online:\r\n{0}", names);
                                 break;
                             }
                         case "close":
@@ -267,7 +278,7 @@ namespace MPLRServer
                 tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnChannelServer));
                 tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, OnChannelServer));
                 tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnChannelServer));
-                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleQuestUpdate, OnChannelServer));
+                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleMessage, OnChannelServer));
                 tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, OnChannelServer));
                 tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, OnChannelServer));
                 tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnChannelServer));

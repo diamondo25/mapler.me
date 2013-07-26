@@ -274,16 +274,43 @@ if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) 
 	require_once __DIR__.'/../../inc/footer.php';
 	die;
 }
+
 if ($_loggedin && !$_loginaccount->IsMuted()):
-require_once 'social.php';
+	require_once 'social.php';
 endif;
+
 require_once 'banhammer.php';
 
-if (!@fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5)):
+//$socket = @fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5);
+$socket = @fsockopen('127.0.0.1', 23711, $errno, $errstr, 5);
+
+if (!$socket) {
 ?>
 	<p class="lead alert alert-danger">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
 <?php
-elseif ($_loggedin && $_loginaccount->IsMuted()):
+}
+else {
+	$size = fread($socket, 1);
+	echo $size;
+	
+	$data = fread($socket, ord($size[0]));
+	$data = unpack('vversion/clocale/Vplayers', $data);
+	
+	switch ($data['locale']) {
+		case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
+		case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
+		case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
+	}
+	
+?>
+	<div class="alert alert-info">
+		Mapler.me currently accepts MapleStory <?php echo $data['locale']; ?> V<?php echo $data['version']; ?><br />
+		There are currently <?php echo $data['players']; ?> maplers online</div>
+	<br />
+<?php
+}
+
+if ($_loggedin && $_loginaccount->IsMuted()):
 ?>
 	<p class="lead alert alert-danger">You are currently muted. Posting statuses and sending friend requests disabled.</p>
 <?php

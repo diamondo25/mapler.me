@@ -38,6 +38,12 @@ namespace MPLRServer
 
         public DateTime ConnectedTimeToServer = DateTime.MinValue;
 
+        public override string ToString()
+        {
+
+            return this.LastLoggedCharacterName + " (@ " + ConnectedToIP + ":" + ConnectedToPort + " | " + WorldID + ", " + ChannelID + ")";
+        }
+
         public ClientConnection(MSBLoader pLoader)
         {
             Pong = true;

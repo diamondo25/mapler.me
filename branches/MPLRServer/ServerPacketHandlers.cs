@@ -224,12 +224,10 @@ namespace MPLRServer
 
             if (!notok && pConnection.UserID != -1)
             {
-                pConnection.Logger_WriteLine("Deleted character with ID {0}", id);
+                pConnection.Logger_WriteLine("Deleting character with ID {0}", id);
 
                 // Oh jolly...
                 // *crosses fingers*
-
-                MySQL_Connection.Instance.RunQuery("DELETE FROM characters WHERE id = " + id + " AND userid = " + pConnection.UserID + " AND worldid = " + pConnection.WorldID);
 
                 // Delete from local cache
                 if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(id))
@@ -237,14 +235,24 @@ namespace MPLRServer
                     if (Internal_Storage.Store.Instance.KnownCharlist[id].ContainsKey(pConnection.WorldID))
                     {
                         var info = Internal_Storage.Store.Instance.KnownCharlist[id][pConnection.WorldID];
-                        var internalid = info.InternalID;
-                        info.SlotHashes.Clear();
+                        if (info.AccountID == pConnection.AccountID)
+                        {
+                            var internalid = info.InternalID;
+                            info.SlotHashes.Clear();
 
-                        Internal_Storage.Store.Instance.KnownCharlist[id].Remove(pConnection.WorldID);
-                        Internal_Storage.Store.Instance.KnownCharlist_INTERNAL.Remove(internalid);
+                            Internal_Storage.Store.Instance.KnownCharlist[id].Remove(pConnection.WorldID);
+                            Internal_Storage.Store.Instance.KnownCharlist_INTERNAL.Remove(internalid);
+
+                            // Delete from server.
+                            MySQL_Connection.Instance.RunQuery("DELETE FROM characters WHERE internal_id = " + internalid);
+                        }
                     }
                 }
+                else
+                {
+                    pConnection.Logger_WriteLine("Unable to delete character: not found!");
 
+                }
             }
             else
             {
@@ -315,15 +323,79 @@ namespace MPLRServer
                pConnection._CharactersInMap.Add(name);
         }
 
-        public static void HandleQuestUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public static void HandleMessage(ClientConnection pConnection, MaplePacket pPacket)
         {
-            
+            byte type = pPacket.ReadByte();
+            if (type == 0x0C)
+            {
+                ushort id = pPacket.ReadUShort();
+                string data = pPacket.ReadString();
+                // Server data update
+                using (InsertQueryBuilder iqb = new InsertQueryBuilder("quests_running_party"))
+                {
+                    iqb.OnDuplicateUpdate = true;
+                    iqb.AddColumn("character_id");
+                    iqb.AddColumn("questid");
+                    iqb.AddColumn("data", true);
+
+                    iqb.AddRow(pConnection.CharacterInternalID, id, data);
+                    iqb.RunQuery();
+                }
+            }
+            else if (type == 0x01)
+            {
+                ushort id = pPacket.ReadUShort();
+                byte mode = pPacket.ReadByte();
+
+                if (mode == 1)
+                {
+                    string text = pPacket.ReadString();
+
+                    using (InsertQueryBuilder iqb = new InsertQueryBuilder("quests_running"))
+                    {
+                        iqb.OnDuplicateUpdate = true;
+                        iqb.AddColumn("character_id");
+                        iqb.AddColumn("questid");
+                        iqb.AddColumn("data", true);
+
+                        iqb.AddRow(pConnection.CharacterInternalID, id, text);
+                        iqb.RunQuery();
+                    }
+
+                }
+                else if (mode == 2)
+                {
+                    // Quest complete
+                    long time = pPacket.ReadLong();
+
+                    using (DeleteQueryBuilder dqb = new DeleteQueryBuilder("quest_running"))
+                    {
+                        dqb.SetWhereColumn("character_id", pConnection.CharacterInternalID);
+                        dqb.SetWhereColumn("questid", id);
+                        dqb.RunQuery();
+                    }
+
+                    using (InsertQueryBuilder iqb = new InsertQueryBuilder("quests_done"))
+                    {
+                        iqb.OnDuplicateUpdate = true;
+                        iqb.AddColumn("character_id");
+                        iqb.AddColumn("questid");
+                        iqb.AddColumn("time", true);
+
+                        iqb.AddRow(pConnection.CharacterInternalID, id, time);
+                        iqb.RunQuery();
+                    }
+
+                }
+            }
         }
 
         public static void HandleSpawnAndroid(ClientConnection pConnection, MaplePacket pPacket)
         {
             Android android = new Android();
             android.Decode(pPacket);
+
+            Logger.WriteLine("Seeing An-droid. Name: {0}, ID: {1}, by {2}", android.Name, android.ID, pConnection.CharacterID);
 
             if (android.ID == pConnection.CharacterID)
             {

@@ -396,6 +396,9 @@ function GetMapname($id, $full = true) {
 			$map = $subname.' - '.$map;
 		}
 	}
+	if ($map == '') {
+		$map = '???';
+	}
 	return $map;
 }
 

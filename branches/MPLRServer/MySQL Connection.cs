@@ -217,19 +217,21 @@ namespace MPLRServer
             {
                 return "NULL";
             }
-            else if (pValue.GetType() == typeof(UnescapedValue))
+
+            Type type = pValue.GetType();
+            if (type == typeof(UnescapedValue))
             {
                 return ((UnescapedValue)pValue).Value.ToString();
             }
-            else if (pValue.GetType() == typeof(string))
+            else if (type == typeof(string))
             {
                 return "'" + MySqlHelper.EscapeString((string)pValue) + "'";
             }
-            else if (pValue.GetType() == typeof(NowType))
+            else if (type == typeof(NowType))
             {
                 return "NOW()";
             }
-            else if (pValue.GetType() == typeof(DateTime))
+            else if (type == typeof(DateTime))
             {
                 return "'" + ((DateTime)pValue).ToString("yyyy-MM-dd HH:mm:ss") + "'";
             }
