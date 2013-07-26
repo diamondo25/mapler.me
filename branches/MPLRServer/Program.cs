@@ -71,13 +71,15 @@ namespace MPLRServer
                 MaplePacket packet = new MaplePacket(ClientPacketHandlers.LatestMajorVersion);
                 packet.WriteByte(ClientPacketHandlers.LatestLocale);
                 packet.WriteInt(Clients.Count);
-                OnlineCheckInfo = packet.ToArray();
+                byte[] temp = packet.ToArray();
+                OnlineCheckInfo = new byte[temp.Length + 1];
+                Buffer.BlockCopy(temp, 0, OnlineCheckInfo, 1, temp.Length);
+                OnlineCheckInfo[0] = (byte)temp.Length;
                 packet.Dispose();
                 packet = null;
             }
             Acceptor acceptCheck = new Acceptor(23711, sock =>
             {
-                sock.Send(new byte[] { (byte)OnlineCheckInfo.Length });
                 sock.Send(OnlineCheckInfo);
                 sock.Shutdown(System.Net.Sockets.SocketShutdown.Both);
                 sock.Close();
