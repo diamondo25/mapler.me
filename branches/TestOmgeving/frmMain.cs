@@ -132,6 +132,8 @@ namespace Mapler_Client
                     return;
                 }
             }
+
+
             var procs = System.Diagnostics.Process.GetProcessesByName("MapleStory");
             if (procs.Length != 0)
             {
@@ -153,7 +155,39 @@ namespace Mapler_Client
 
             // Check MapleStory version
 
-            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(_mapleEXE);
+            if (CheckMapleEXEVersion(_mapleEXE))
+            {
+                System.Diagnostics.Process.Start(_mapleEXE, "WebStart");
+            }
+        }
+
+        public bool CheckRunningEXEVersion()
+        {
+            try
+            {
+                var procs = System.Diagnostics.Process.GetProcessesByName("MapleStory");
+                if (procs.Length > 0)
+                {
+                    var process = procs[0];
+                    StringBuilder sb = new StringBuilder();
+                    Extensions.GetModuleFileName(process.Handle, sb, 255);
+
+                    return CheckMapleEXEVersion(sb.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                // Not allowed to
+                return true;
+            }
+
+            // Not found, so I 'guess' someone is trying to haxor
+            return false;
+        }
+
+        private bool CheckMapleEXEVersion(string pLocation)
+        {
+            FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(pLocation);
             ushort msver = (ushort)fvi.ProductMinorPart;
             byte mslocale = (byte)fvi.ProductMajorPart;
 
@@ -162,27 +196,21 @@ namespace Mapler_Client
             if (mslocale != ServerConnection.Instance.AcceptedMapleStoryLocale)
             {
                 MessageBox.Show("This version of MapleStory is not supported by Mapler.me. Please contact Mapler.me at support@mapler.me if you think this is incorrect.", "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
+                return false;
             }
             else if (msver > ServerConnection.Instance.AcceptedMapleStoryVersion) // Newer version?
             {
-                MessageBox.Show(string.Format("It seems you are trying to start MapleStory version {0}, but Maple.me only accept version {1}! Please wait till the Mapler.me servers are updated for V{0}.", msver, ServerConnection.Instance.AcceptedMapleStoryVersion), "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                MessageBox.Show(string.Format("It seems you are trying to start MapleStory version {0}, but Maple.me only accept version {1}! Please wait till the Mapler.me servers are updated for version {0}.", msver, ServerConnection.Instance.AcceptedMapleStoryVersion), "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
-
-            System.Diagnostics.Process.Start(_mapleEXE, "WebStart");
-
-            /*
-            var process = System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
-            for (int i = 0; i < 20; i++)
+            else if (msver < ServerConnection.Instance.AcceptedMapleStoryVersion) // Older version?
             {
-                System.Threading.Thread.Sleep(1000);
-                if (process.MainWindowHandle != IntPtr.Zero && process.CloseMainWindow())
-                {
-                    break;
-                }
+                MessageBox.Show(string.Format("It seems you are trying to start MapleStory version {0}, but Maple.me only accept version {1}! Please update your client to version {1}.", msver, ServerConnection.Instance.AcceptedMapleStoryVersion), "Mapler.me error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return false;
             }
-            */
+
+            return true;
+
         }
 
         private void label3_Click(object sender, EventArgs e)

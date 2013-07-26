@@ -163,6 +163,9 @@ namespace MPLRServer
             else
                 pConnection.LogFilename += "_";
             pConnection.LogFilename += pConnection.AccountID.ToString();
+
+            // Save IP of loginserver
+            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, 0, 0);
         }
 
 
@@ -210,6 +213,42 @@ namespace MPLRServer
             if (jobid / 100 == 31 || jobid / 100 == 36 || jobid == 3001 || jobid == 3002)
             {
                 pPacket.ReadInt(); // Scar?
+            }
+        }
+
+
+        public static void HandleCharacterDeletion(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            int id = pPacket.ReadInt();
+            bool notok = pPacket.ReadBool();
+
+            if (!notok && pConnection.UserID != -1)
+            {
+                pConnection.Logger_WriteLine("Deleted character with ID {0}", id);
+
+                // Oh jolly...
+                // *crosses fingers*
+
+                MySQL_Connection.Instance.RunQuery("DELETE FROM characters WHERE id = " + id + " AND userid = " + pConnection.UserID + " AND worldid = " + pConnection.WorldID);
+
+                // Delete from local cache
+                if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(id))
+                {
+                    if (Internal_Storage.Store.Instance.KnownCharlist[id].ContainsKey(pConnection.WorldID))
+                    {
+                        var info = Internal_Storage.Store.Instance.KnownCharlist[id][pConnection.WorldID];
+                        var internalid = info.InternalID;
+                        info.SlotHashes.Clear();
+
+                        Internal_Storage.Store.Instance.KnownCharlist[id].Remove(pConnection.WorldID);
+                        Internal_Storage.Store.Instance.KnownCharlist_INTERNAL.Remove(internalid);
+                    }
+                }
+
+            }
+            else
+            {
+                pConnection.Logger_WriteLine("Account failed deleting ID {0}", id);
             }
         }
 
@@ -274,6 +313,31 @@ namespace MPLRServer
             
             if (!pConnection._CharactersInMap.Contains(name))
                pConnection._CharactersInMap.Add(name);
+        }
+
+        public static void HandleQuestUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            
+        }
+
+        public static void HandleSpawnAndroid(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            Android android = new Android();
+            android.Decode(pPacket);
+
+            if (android.ID == pConnection.CharacterID)
+            {
+                // Save android
+                using (InsertQueryBuilder iqb = new InsertQueryBuilder("androids"))
+                {
+                    iqb.OnDuplicateUpdate = true;
+                    iqb.AddColumn("character_id");
+                    iqb.AddColumns(true, "name", "type", "skin", "hair", "face");
+
+                    iqb.AddRow(pConnection.CharacterInternalID, android.Name, android.Type, android.Skin, android.Hair, android.Face);
+                    iqb.RunQuery();
+                }
+            }
         }
 
         public static void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
@@ -1397,6 +1461,9 @@ namespace MPLRServer
             pPacket.ReadByte(); // 0
             pPacket.ReadByte(); // 0
             pPacket.ReadByte(); // 1
+
+
+            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, pConnection.ChannelID, pConnection.WorldID);
 
             pConnection.SendTimeUpdate();
         }

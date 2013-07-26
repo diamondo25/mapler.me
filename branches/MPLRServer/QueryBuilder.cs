@@ -16,6 +16,7 @@ namespace MPLRServer
         private List<Column> _columns = new List<Column>();
         public string TableName { get; private set; }
         public bool OnDuplicateUpdate { get; set; }
+        public bool IgnoreDuplicates { get; set; }
         private List<string> _rows = new List<string>();
         private Dictionary<string, List<object>> _rowsColumned = new Dictionary<string, List<object>>();
         private int _rowsColumnedCount = 0;
@@ -26,6 +27,8 @@ namespace MPLRServer
         public InsertQueryBuilder(string pTableName)
         {
             TableName = pTableName;
+            OnDuplicateUpdate = false;
+            IgnoreDuplicates = false;
         }
 
         ~InsertQueryBuilder()
@@ -85,7 +88,7 @@ namespace MPLRServer
         public void AddRow(params object[] pColumns)
         {
             if (pColumns.Length != _columns.Count) throw new Exception("Incorrect column count!");
-            _rows.Add(MySQL_Connection.QueryQuery(pColumns));
+            _rows.Add(MySQL_Connection.BuildValuesRow(pColumns));
         }
 
         public bool HasRows() { return _rows.Count > 0 || _rowsColumned.Count > 0; }
@@ -94,13 +97,16 @@ namespace MPLRServer
         {
             if (!HasRows()) throw new Exception("Row count = 0");
 
-            string query = "INSERT INTO\r\n\t`" + this.TableName + "`\r\n\t(";
+            if (IgnoreDuplicates && OnDuplicateUpdate) throw new Exception("Can't use both IgnoreDuplicates and OnDuplicateUpdate");
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("INSERT " + (IgnoreDuplicates ? "IGNORE " : "") + "INTO\r\n\t`" + this.TableName + "`\r\n\t(");
             string[] columnlist = new string[_columns.Count];
             for (int i = 0; i < _columns.Count; i++)
                 columnlist[i] = "`" + _columns[i].Name + "`";
 
-            query += string.Join(", ", columnlist);
-            query += ")\r\nVALUES\r\n\t";
+            sb.Append(string.Join(", ", columnlist));
+            sb.Append(")\r\nVALUES\r\n\t");
 
             List<string> tmp = new List<string>(_rows);
             if (_rowsColumnedCount > 0)
@@ -119,11 +125,11 @@ namespace MPLRServer
                     {
                         inputobjects[j] = _rowsColumned[_columns[j].Name][i];
                     }
-                    tmp.Add(MySQL_Connection.QueryQuery(inputobjects));
+                    tmp.Add(MySQL_Connection.BuildValuesRow(inputobjects));
                 }
             }
 
-            query += string.Join(",\r\n\t", tmp);
+            sb.Append(string.Join(",\r\n\t", tmp));
 
             List<string> updatecolumns = new List<string>();
             foreach (Column col in _columns.Where(c => { return c.InUpdate; }))
@@ -131,12 +137,12 @@ namespace MPLRServer
 
             if (updatecolumns.Count > 0)
             {
-                query += "\r\nON DUPLICATE KEY UPDATE\r\n\t";
-                query += string.Join(",\r\n\t", updatecolumns.ToArray());
+                sb.Append("\r\nON DUPLICATE KEY UPDATE\r\n\t");
+                sb.Append(string.Join(",\r\n\t", updatecolumns.ToArray()));
             }
-            query += ";";
+            sb.Append(";");
 
-            return query;
+            return sb.ToString();
         }
 
         public void RunQuery(string pSaveFile = null)
@@ -201,21 +207,24 @@ namespace MPLRServer
         {
             if (_columns.Count == 0) throw new Exception("No columns set");
 
-            string query = "UPDATE `" + TableName + "` SET ";
+            StringBuilder sb = new StringBuilder();
+            sb.Append("UPDATE `" + TableName + "` SET ");
+            string tmp = "";
             foreach (var kvp in _columns)
-                query += string.Format("`{0}` = {1},", kvp.Key, kvp.Value);
+                tmp += string.Format("`{0}` = {1},", kvp.Key, kvp.Value);
 
-            query = query.TrimEnd(',');
+           
+            sb.Append(tmp.TrimEnd(','));
             if (_whereColumns.Count > 0)
             {
-                query += " WHERE ";
+                sb.Append(" WHERE ");
+                tmp = "";
                 foreach (var kvp in _whereColumns)
-                    query += string.Format(" `{0}` = {1} AND", kvp.Key, kvp.Value);
-
-                query = query.Substring(0, query.Length - 4);
+                    tmp += string.Format(" `{0}` = {1} AND", kvp.Key, kvp.Value);
+                sb.Append(tmp.Substring(0, tmp.Length - 4));
             }
 
-            return query;
+            return sb.ToString();
         }
 
         public void RunQuery(string pSaveFile = null)

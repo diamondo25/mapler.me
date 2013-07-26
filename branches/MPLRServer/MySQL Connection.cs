@@ -199,7 +199,7 @@ namespace MPLRServer
         }
 
 
-        public static string QueryQuery(params object[] pParams)
+        public static string BuildValuesRow(params object[] pParams)
         {
             string result = "(";
             foreach (object par in pParams)

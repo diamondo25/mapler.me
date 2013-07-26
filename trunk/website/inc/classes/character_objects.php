@@ -136,4 +136,95 @@ WHERE
 		return time() > $this->expires;
 	}
 }
-?>
+
+
+class Quest {
+	public $id, $data, $completion_time;
+	
+	public static function GetQuest($character_id, $quest_id, $internal_quest) {
+		global $__database;
+		
+		$q = $__database->query("
+SELECT
+	questid,
+	`data`
+FROM
+	quests_running".($internal_quest == true ? '_party' : '')."
+WHERE
+	character_id = ".$character_id."
+	AND
+	questid = ".$quest_id);
+	
+		if ($q->num_rows == 0) {
+			// Check if exists in completed quests
+			$q->free();
+			$q = $__database->query("
+SELECT
+	questid,
+	FROM_FILETIME(`time`) AS `completed`
+FROM
+	quests_done".($internal_quest == true ? '_party' : '')."
+WHERE
+	character_id = ".$character_id."
+	AND
+	questid = ".$quest_id);
+			if ($q->num_rows == 0) {
+				// Does not exist
+				$q->free();
+				return null;
+			}
+			
+			$row = $q->fetch_assoc();
+			$q->free();
+			$quest = new Quest();
+			$quest->id = $row['questid'];
+			$quest->completion_time = $row['completed'];
+			return $quest;
+		}
+		
+		$row = $q->fetch_assoc();
+		$q->free();
+		$quest = new Quest();
+		$quest->id = $row['questid'];
+		$quest->data = $row['data'];
+		$quest->completion_time = null;
+		
+		$quest->data = Explode2(';', '=', $quest->data);
+		return $quest;
+		
+	}
+
+	public function IsCompleted() {
+		return $this->completion_time !== null;
+	}
+}
+
+class Android {
+	public $name, $type, $skin, $face, $hair;
+
+	public static function GetAndroid($character_id) {
+		global $__database;
+		
+		$q = $__database->query("
+SELECT
+	*
+FROM
+	androids
+WHERE
+	character_id = ".$character_id);
+		if ($q->num_rows == 1) {
+			$row = $q->fetch_assoc();
+			$q->free();
+			$droid = new Android();
+			$droid->name = $row['name'];
+			$droid->type = $row['type'];
+			$droid->face = $row['face'];
+			$droid->skin = $row['skin'];
+			$droid->hair = $row['hair'];
+			return $droid;
+		}
+		$q->free();
+		return null;
+	}
+
+}

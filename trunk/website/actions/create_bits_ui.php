@@ -44,6 +44,11 @@ $height = $_rows * ($icon_size['height'] + $icon_margin['top'] + $icon_margin['b
 $height += $padding['top'] + $padding['bottom'];
 $height += $content_margin['top'] + $content_margin['bottom'];
 
+if (isset($_GET['onlysize'])) {
+	header('Content-Type: application/json');
+	die(json_encode(array('width' => $width, 'height' => $height)));
+}
+
 
 $image = imagecreatetruecolor($width, $height);
 imagealphablending($image, false);

@@ -138,31 +138,43 @@ namespace Mapler_Client
             {
                 if (tcpPacket.Syn && tcpPacket.Ack)
                 {
+
                     // Found new connection.
-                    FoundConnection = true;
-                    _currentPortMap = new KeyValuePair<ushort, ushort>(tcpPacket.DestinationPort, tcpPacket.SourcePort);
-                    _currentSession = new Session();
 
-                    MasterThread.Instance.AddCallback((a) =>
+                    // Check version...
+
+                    if (frmMain.Instance.CheckRunningEXEVersion())
                     {
-                        using (MaplePacket p = new MaplePacket(0xEE00))
+                        // Correct version
+                        FoundConnection = true;
+                        _currentPortMap = new KeyValuePair<ushort, ushort>(tcpPacket.DestinationPort, tcpPacket.SourcePort);
+                        _currentSession = new Session();
+
+                        MasterThread.Instance.AddCallback((a) =>
                         {
-                            p.WriteBool(true);
-                            p.WriteString(ipPacket.SourceAddress.ToString());
-                            p.WriteUShort(tcpPacket.SourcePort);
-                            p.SwitchOver();
-                            p.Reset(0);
-                            ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.ClientPacket, p);
-                        }
-                    });
+                            using (MaplePacket p = new MaplePacket(0xEE00))
+                            {
+                                p.WriteBool(true);
+                                p.WriteString(ipPacket.SourceAddress.ToString());
+                                p.WriteUShort(tcpPacket.SourcePort);
+                                p.SwitchOver();
+                                p.Reset(0);
+                                ServerConnection.Instance.ForwardPacket(MaplePacket.CommunicationType.ClientPacket, p);
+                            }
+                        });
 
-                    Logger.WriteLine("[CON] New connection found on {0}!", e.Device.Description);
-                    if (cache != 0)
-                    {
-                        _currentSession.SetOutboundSequence(cache);
-                        cache = 0;
+                        Logger.WriteLine("[CON] New connection found on {0}!", e.Device.Description);
+                        if (cache != 0)
+                        {
+                            _currentSession.SetOutboundSequence(cache);
+                            cache = 0;
+                        }
+                        _currentSession.BufferTCPPacket(tcpPacket, !(_currentPortMap.Key == tcpPacket.SourcePort && _currentPortMap.Value == tcpPacket.DestinationPort));
                     }
-                    _currentSession.BufferTCPPacket(tcpPacket, !(_currentPortMap.Key == tcpPacket.SourcePort && _currentPortMap.Value == tcpPacket.DestinationPort));
+                    else
+                    {
+                        Logger.WriteLine("Incorrect MapleStory version. Ignoring connection.");
+                    }
                 }
                 else if (tcpPacket.Syn && !tcpPacket.Ack) // Heh fix
                 {

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Runtime.InteropServices;
+
 namespace Mapler_Client
 {
     public static class Extensions
@@ -39,5 +41,20 @@ namespace Mapler_Client
             }
             return result;
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [PreserveSig]
+        public static extern uint GetModuleFileName
+        (
+                    [In]
+            IntPtr hModule,
+
+                    [Out]
+            StringBuilder lpFilename,
+
+                    [In]
+            [MarshalAs(UnmanagedType.U4)]
+            int nSize
+        );
     }
 }

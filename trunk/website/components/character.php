@@ -204,12 +204,25 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 			<div class="progress progress-striped" title="<?php echo $expbar['percentage']; ?>% [<?php echo $expbar['current'].' / '.$expbar['max']; ?>]" style="width:90%;margin:0 auto;">
 				<div class="bar" style="width: <?php echo $expbar['percentage']; ?>%;"></div>
 			</div>
+			<center><?php echo $expbar['percentage']; ?>% [<?php echo $expbar['current'].' / '.$expbar['max']; ?>]</center>
 		</p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_MODERATOR): ?>
 		<br />
+		<p class="side"> ID: <?php echo $character_info['id']; ?></p>
 		<p class="side"> Internal ID: <?php echo $internal_id; ?></p>
+		<p class="side"> NX Account ID: <?php echo $character_info['userid']; ?></p>
 <?php endif; ?>
 		<br />
+<?php
+$born_quest = Quest::GetQuest($internal_id, 13261, true);
+$born_at = '<abbr title="We could not determine the creation date...">???</abbr>';
+if ($born_quest !== null && isset($born_quest->data['born'])) {
+	$date = $born_quest->data['born'];
+	$born_at = substr($date, 4, 2).' '.substr($date, 2, 2).'  20'.substr($date, 0, 2);
+}
+
+?>
+		<p class="side"><i class="icon-leaf faded"></i> Created on <?php echo $born_at; ?></p>
 		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
@@ -638,8 +651,7 @@ $normalequips['Haku'] = array();
 $cashequips = array();
 
 foreach ($equips as $orislot => $item) {
-	$slot = abs($orislot);
-	if ($slot > 100) $slot -= 100;
+	$slot = abs($orislot) % 100;
 	
 	if (array_key_exists($slot, $petequip_slots)) {
 		$block = $petequip_slots[$slot][0];
@@ -653,7 +665,7 @@ foreach ($equips as $orislot => $item) {
 		if ($orislot > -100) 		$normalequips['normal'][$orislot] = $item;
 		elseif ($orislot <= -20000) $normalequips['Bits'][$orislot] = $item;
 		elseif ($orislot <= -5000) 	$normalequips['Totem'][$orislot] = $item;
-		elseif ($orislot <= -1500) 	$normalequips['BitsCase'][$orislot] = $item;
+		elseif ($orislot <= -1500) 	$normalequips['BitsCaseBits'][$slot] = $item;
 		elseif ($orislot <= -1400) 	$normalequips['Haku'][$orislot] = $item;
 		elseif ($orislot <= -1300) 	$normalequips['Coordinate'][$orislot] = $item;
 		elseif ($orislot <= -1200) 	$normalequips['Android'][$orislot] = $item;
@@ -738,7 +750,7 @@ function AddInventoryItems(&$inventory) {
 }
 
 .avatar-container {
-    left: 30px;
+    left: 33px;
     top: 16px;
 }
 
@@ -843,6 +855,50 @@ function AddInventoryItems(&$inventory) {
 	width: 230px;
 	overflow: hidden !important;
 }
+
+.bitcase {
+	overflow-y: visible;
+	margin: 0;
+	padding: 0;
+	float: left;
+}
+
+.teleport-rock {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/teleport-bg.png');
+	width: 160px;
+	height: 285px;
+	position: relative;
+	display: inline-block;
+	float: left;
+}
+
+.teleport-rock > span {
+	color: white;
+	font-weight: bold;
+	left: 85px;
+	position: absolute;
+	top: 30px;
+}
+
+.teleport-rock .locations {
+	position: absolute;
+	top: 75px;
+	left: 12px;
+	width: 137px;
+	height: 197px;
+	overflow: scroll;
+}
+
+.teleport-rock .locations td {
+	white-space: nowrap;
+	color: black;
+	padding-left: 5px;
+}
+
+.teleport-rock .locations tr {
+	height: 18px;
+}
+
 </style>
 <?php
 function MakeUsableSlotmap($input) {
@@ -1019,6 +1075,7 @@ if ($__is_viewing_self || !IsHiddenObject('job_equipment')) {
 	elseif ($jobid_group == 22 || $jobid == 2001) { $job_css_class = 'evan'; }
 	elseif ($jobid_group == 41 || $jobid == 4001 || $jobid_group == 42 || $jobid == 4002) { $job_css_class = 'haku'; }
 }
+
 ?>
 	<div class="new-inventory-container">
 		<select cur-inv="inv_char" onchange="$('#' + $(this).attr('cur-inv')).css('display', 'none'); $(this).attr('cur-inv', $(this).val()); $('#' + $(this).attr('cur-inv')).css('display', '');">
@@ -1117,15 +1174,19 @@ for ($i = 0; $i < 3; $i++) {
 <?php 	if ($__is_viewing_self || !IsHiddenObject('equip_droid')): ?>
 		<div id="inv_android" style="display: none">
 <?php 	MakeHideToggleButton('equip_droid'); ?>
+<?php
+$droid = Android::GetAndroid($internal_id);
+
+?>
 			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
 			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
 			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
 			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
-			<div class="avatar-container" style="background-image: url('');"><span>Android</span></div>
+			<div class="avatar-container" style="background-image: url('');"><span><?php echo $droid !== null ? $droid->name : ''; ?></span></div>
 
 <?php
-$inv_pos_offx = 14;
-$inv_pos_offy = 92;
+$inv_pos_offx = 12;
+$inv_pos_offy = 90;
 $inv_extra_offx = $inv_extra_offy = 0;
 RenderItems($normalequips['Android'], 'android');
 ?>
@@ -1232,9 +1293,49 @@ for ($inv = 0; $inv < 5; $inv++) {
 
 	</div>
 <?php endif; ?>
+
+
+<?php if ($__is_viewing_self || !IsHiddenObject('bits')): ?>
+<?php
+
+$bits_quest = Quest::GetQuest($internal_id, 7022, true);
+
+// c=0;e=1;l=3;s=12
+// c = Type of case (3090000)
+// e = Equipped. Is removed when unequipped
+// l = Lines
+// s = Slots
+if ($bits_quest !== null && !$bits_quest->IsCompleted() && isset($bits_quest->data['e']) && $bits_quest->data['e'] == 1):
+	$bits_info = $bits_quest->data;
+	$rows = (int)$bits_info['l'];
+	$cols = (int)$bits_info['s'] / $rows;
+	
+	// Get size
+	$url = "http://".$domain."/ui/bits/".$rows."/".$cols."/";
+	$width_height_array = json_decode(file_get_contents($url.'?onlysize'), true);
+?>
+	<div class="inventory bitcase" style="width: <?php echo $width_height_array['width']; ?>px; height: <?php echo $width_height_array['height']; ?>px; background-image: url('<?php echo $url; ?>');">
+
+<?php 	MakeHideToggleButton('bits'); ?>
+<?php
+
+$inv_pos_offx = 11; // Diff offsets
+$inv_pos_offy = 24;
+$inv_extra_offx = $inv_extra_offy = 4;
+$inv_extra_offy = 2;
+	
+RenderItemsTable($normalequips['BitsCaseBits'], $rows * $cols, $cols);
+
+?>
+	</div>
+<?php
+endif;
+endif;
+
+?>
 	
 	
-<?php if ($__is_viewing_self || !IsHiddenObject('evo_rocks')): ?>
+<?php if ($character_info['level'] >= 100 && ($__is_viewing_self || !IsHiddenObject('evo_rocks'))): ?>
 	<div class="evolution-system">
 <?php 	MakeHideToggleButton('evo_rocks'); ?>
 <?php
@@ -1298,11 +1399,8 @@ $inv_extra_offx = $inv_extra_offy = 8;
 	</div>
 <?php endif; ?>
 
-
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
-	<div>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
-	<table class="span4" cellpadding="5">
 <?php
 	$q = $__database->query("
 SELECT
@@ -1320,7 +1418,7 @@ WHERE
 	$curgroup = '';
 	while ($row = $q->fetch_assoc()) {
 		$index = $row['index'];
-		if ($index < 5) $curgroup = 'Normal';
+		if ($index < 5) $curgroup = 'Regular';
 		elseif ($index < 5 + 10) $curgroup = 'VIP';
 		elseif ($index < 5 + 10 + 13) $curgroup = 'Hyper';
 		elseif ($index < 5 + 10 + 13 + 13) $curgroup = 'Hyper';
@@ -1328,27 +1426,33 @@ WHERE
 		if ($lastgroup != $curgroup) {
 			if ($lastgroup != '') {
 ?>
-		<tr>
-			<th>&nbsp;</th>
-		</tr>
+			</table>
+		</div>
 <?php
 			}
 ?>
-		<tr>
-			<th><?php echo $curgroup.' Rock locations'; ?></th>
-		</tr>
+		<div class="teleport-rock">
+			<span><?php echo $curgroup; ?></span>
+			<div class="locations">
+				<table border="0" cellpadding="0" cellspacing="0">
 <?php
 			$lastgroup = $curgroup;
 		}
 ?>
-		<tr>
-			<td><?php echo GetMapname($row['map']); ?></td>
-		</tr>
+					<tr>
+						<td><?php echo GetMapname($row['map']); ?></td>
+					</tr>
+<?php
+	}
+	
+	if ($curgroup != '') {
+?>
+				</table>
+			</div>
+		</div>
 <?php
 	}
 ?>
-	</table>
-	</div>
 <?php endif; ?>
 
 

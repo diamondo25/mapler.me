@@ -347,5 +347,19 @@ namespace MPLRServer
                 characterViewsTable.RunQuery();
             }
         }
+
+        public static void SaveServerIP(string pIP, ushort pPort, byte pWorldID, byte pChannelID)
+        {
+            using (InsertQueryBuilder iqb = new InsertQueryBuilder("server_ips"))
+            {
+                iqb.OnDuplicateUpdate = true;
+                iqb.AddColumns(false, "ip", "port");
+                iqb.AddColumns(true, "world_id", "channel_id");
+
+                iqb.AddRow(pIP, pPort, pWorldID, pChannelID);
+
+                iqb.RunQuery();
+            }
+        }
     }
 }

@@ -203,11 +203,15 @@ namespace MPLRServer
 
         static void InitializeValidHeaders()
         {
-            Func<ClientConnection, bool> onlywhenloggedin = delegate(ClientConnection a)
+            Func<ClientConnection, bool> OnLoginServer = delegate(ClientConnection a)
             {
                 return a.AccountID != -1;
             };
-            Func<ClientConnection, bool> NeedsCharData = delegate(ClientConnection a)
+            Func<ClientConnection, bool> OnCharacterSelect = delegate(ClientConnection a)
+            {
+                return a.AccountID != -1 && a.WorldID != 255 && a.ChannelID != 255;
+            };
+            Func<ClientConnection, bool> OnChannelServer = delegate(ClientConnection a)
             {
                 return a.CharData != null;
             };
@@ -241,6 +245,7 @@ namespace MPLRServer
                         pConnection.Logger_WriteLine("Selected charid {0} and connects to {1} ({2})", charid, ip, flag);
                     }
                 }, null));
+                tmp.Add(0x000E, new Handler(ServerPacketHandlers.HandleCharacterDeletion, OnCharacterSelect));
                 tmp.Add(0x000F, new Handler((pConnection, pPacket) =>
                 {
                     byte status = pPacket.ReadByte();
@@ -255,20 +260,22 @@ namespace MPLRServer
 
                 tmp.Add(0x0011, new Handler((a, b) =>
                 {
+                    // ping
                 }, null));
 
-                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, NeedsCharData));
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, NeedsCharData));
-                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, NeedsCharData));
-                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, NeedsCharData));
-                // 0x0032 = Quest Info Update
-                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, NeedsCharData));
-                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, NeedsCharData));
-                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, NeedsCharData));
-                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, NeedsCharData));
-                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, NeedsCharData));
-                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, onlywhenloggedin));
-                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, NeedsCharData));
+                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnChannelServer));
+                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnChannelServer));
+                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, OnChannelServer));
+                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnChannelServer));
+                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleQuestUpdate, OnChannelServer));
+                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, OnChannelServer));
+                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, OnChannelServer));
+                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnChannelServer));
+                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, OnChannelServer));
+                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, OnChannelServer));
+                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, OnLoginServer));
+                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnChannelServer));
+                tmp.Add(0x0165, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnChannelServer));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
@@ -332,7 +339,7 @@ namespace MPLRServer
                             }
                         }
                     }
-                }, NeedsCharData));
+                }, OnChannelServer));
 
                 // Internal packets
 
@@ -345,7 +352,7 @@ namespace MPLRServer
                 {
                     // Create screenshot with all character names
                     MySQL_Connection.Instance.RunQuery("INSERT INTO reports VALUES " +
-                        MySQL_Connection.QueryQuery(null, string.Join(";", a._CharactersInMap), a.CharacterInternalID, MySQL_Connection.NOW, a.CharData.Stats.MapID, null));
+                        MySQL_Connection.BuildValuesRow(null, string.Join(";", a._CharactersInMap), a.CharacterInternalID, MySQL_Connection.NOW, a.CharData.Stats.MapID, null));
 
                     using (MaplePacket packet = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0xEEFE))
                     {
@@ -354,7 +361,7 @@ namespace MPLRServer
                         a.SendPacket(packet);
                     }
 
-                }, NeedsCharData));
+                }, OnChannelServer));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
             }

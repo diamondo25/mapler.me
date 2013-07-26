@@ -17,6 +17,9 @@ namespace MPLRServer
         public byte WorldID { get; set; }
         public byte ChannelID { get; set; }
 
+        public string ConnectedToIP { get; set; }
+        public ushort ConnectedToPort { get; set; }
+
         public int LastReportID { get; set; }
 
         public string LogFilename = "Unknown";

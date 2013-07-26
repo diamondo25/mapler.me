@@ -81,7 +81,7 @@ imagefill($im, 0, 0, $trans);
 $skin = $face = $hair = $hat = $mask = $eyes = $ears = $top = $pants = $overall = $shoe = $glove = $cape = $shield = $wep = $nxwep = NULL;
 
 // Coordinates for center
-$mainx = 60;
+$mainx = 58;
 $mainy = 38;
 
 // Some other variables
@@ -91,6 +91,7 @@ if (!is_dir($main_dir)) {
 	$main_dir = 'P:/Result/';
 	if (!is_dir($main_dir)) {
 		// your call
+		$main_dir = 'http://static_images.mapler.me/';
 	}
 }
 
