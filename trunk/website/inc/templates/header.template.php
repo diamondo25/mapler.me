@@ -281,45 +281,6 @@ endif;
 
 require_once 'banhammer.php';
 
-$socket = @fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5);
-//$socket = @fsockopen('127.0.0.1', 23711, $errno, $errstr, 3);
-
-if (!$socket) {
-?>
-	<p class="lead alert alert-danger">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
-<?php
-}
-elseif (true) {
-
-	$size = fread($socket, 1);
-	for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
-		$size = fread($socket, 1);
-	}
-	if (strlen($size) == 1) {
-		$size = ord($size[0]);
-		$data = fread($socket, $size);
-		for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
-			$data .= fread($socket, $size - strlen($data));
-		}
-		if (strlen($data) == $size) {
-			$data = unpack('vversion/clocale/Vplayers', $data);
-			
-			switch ($data['locale']) {
-				case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
-				case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
-				case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
-			}
-		
-?>
-	<div class="alert alert-info">
-		Mapler.me currently accepts MapleStory <?php echo $data['locale']; ?> V<?php echo $data['version']; ?><br />
-		There are currently <?php echo $data['players']; ?> maplers online</div>
-	<br />
-<?php
-		}
-	}
-}
-
 if ($_loggedin && $_loginaccount->IsMuted()):
 ?>
 	<p class="lead alert alert-danger">You are currently muted. Posting statuses and sending friend requests disabled.</p>
