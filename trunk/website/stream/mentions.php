@@ -9,9 +9,9 @@ else {
 	$mentioned = '@'.$_loginaccount->GetUsername();
 
 	$statusses = new Statusses();
-	$statusses->Load("s.content LIKE '%".$__database->real_escape_string($mentioned)."%'");
+	$statusses->Load("s.content LIKE '%".$__database->real_escape_string($mentioned)."%'","35");
 
-	require_once __DIR__.'/../inc/templates/stream.notice.template.php';
+	require_once __DIR__.'/../inc/templates/stream.sidebar.template.php';
 ?>
 
 <?php
@@ -24,11 +24,14 @@ else {
 ?>
 
 <div class="stream_display row">
+<div class="span8">
+<h1>Mentions</h1>
 <?php
 	foreach ($statusses->data as $status) {
-		$status->PrintAsHTML(' span12');
+		$status->PrintAsHTML();
 	}
 ?>
+</div>
 </div>
 <?php
 }
