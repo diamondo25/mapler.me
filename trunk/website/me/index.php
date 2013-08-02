@@ -19,8 +19,7 @@ require_once __DIR__.'/../inc/templates/me.header.template.php';
 endif;
 ?>
 
-	<div class="span9" id="statuslist">
-	<?php
+<?php
  if ($__url_useraccount->GetConfigurationOption('twitch_username') !== 0) {
 $clientId = $__url_useraccount->GetConfigurationOption('twitch_api_code');             // Register your application and get a client ID at http://www.twitch.tv/settings?section=applications
 $twitchusername = $__url_useraccount->GetConfigurationOption('twitch_username');
@@ -33,7 +32,23 @@ if ($json_array['stream'] != NULL) {
 	
 	if ($currentGame = "MapleStory") {
 	?>
-		<div class="status>
+		<div class="span9" style="float:right !important;">
+		<div class="status">
+		<object type="application/x-shockwave-flash" height="398" width="700" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
+			<param name="allowFullScreen" value="true" />
+			<param name="allowScriptAccess" value="always" />
+			<param name="allowNetworking" value="all" />
+			<param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" />
+			<param name="flashvars" value="hostname=www.twitch.tv&channel=<?php echo $twitchusername ?>&auto_play=true&start_volume=25" />
+		</object>
+		</div>
+		</div>
+	<?php
+	}
+	
+	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['debugtwitch'])) {
+	?>
+		<div class="span9" style="float:right !important;">
 		<object type="application/x-shockwave-flash" height="398" width="700" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
 			<param name="allowFullScreen" value="true" />
 			<param name="allowScriptAccess" value="always" />
@@ -47,7 +62,8 @@ if ($json_array['stream'] != NULL) {
 }
 }
 ?>
-	</div>
+
+	<div class="span9" id="statuslist" style="float:right !important;"></div>
 
 <p>
 	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton">Load more statuses..</button></center>
