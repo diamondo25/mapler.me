@@ -178,7 +178,7 @@ namespace MPLRServer
                 }
             }
 
-            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT internal_id FROM characters WHERE id = " + pID) as MySql.Data.MySqlClient.MySqlDataReader)
+            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT internal_id FROM characters WHERE id = " + pID + " AND userid = " + pUserID + " AND world_id = " + pWorldID) as MySql.Data.MySqlClient.MySqlDataReader)
             {
                 if (reader.Read())
                 {
@@ -186,6 +186,7 @@ namespace MPLRServer
                 }
             }
             Logger.WriteLine("!!!!!! Character not found O.O");
+
             return -1;
         }
 

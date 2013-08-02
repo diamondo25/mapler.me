@@ -34,6 +34,9 @@ namespace System
             HostEndPoint = pSocket.LocalEndPoint as IPEndPoint;
             ClientEndPoint = pSocket.RemoteEndPoint as IPEndPoint;
 
+
+            IP = ClientEndPoint.Address.ToString();
+            Port = (ushort)ClientEndPoint.Port;
             StartReceive(4, false);
         }
 
@@ -48,7 +51,9 @@ namespace System
 
         protected void Connect()
         {
-
+            _receiveKey = null;
+            _sendKey = null;
+            _header = true;
             IPAddress[] addies;
             try
             {

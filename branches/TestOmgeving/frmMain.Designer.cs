@@ -63,7 +63,7 @@
             this.btnLaunch.Location = new System.Drawing.Point(11, 124);
             this.btnLaunch.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnLaunch.Name = "btnLaunch";
-            this.btnLaunch.Size = new System.Drawing.Size(295, 27);
+            this.btnLaunch.Size = new System.Drawing.Size(361, 27);
             this.btnLaunch.TabIndex = 3;
             this.btnLaunch.Text = "Launch MapleStory!";
             this.btnLaunch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
@@ -79,9 +79,9 @@
             this.label3.Location = new System.Drawing.Point(11, 166);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(82, 13);
+            this.label3.Size = new System.Drawing.Size(78, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Last update: ";
+            this.label3.Text = "Last update:";
             this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // lblLastUpdate
@@ -90,7 +90,7 @@
             this.lblLastUpdate.BackColor = System.Drawing.Color.Transparent;
             this.lblLastUpdate.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLastUpdate.ForeColor = System.Drawing.Color.White;
-            this.lblLastUpdate.Location = new System.Drawing.Point(97, 166);
+            this.lblLastUpdate.Location = new System.Drawing.Point(93, 166);
             this.lblLastUpdate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblLastUpdate.Name = "lblLastUpdate";
             this.lblLastUpdate.Size = new System.Drawing.Size(166, 13);
@@ -115,11 +115,13 @@
             // 
             this.lblInfo.AutoSize = true;
             this.lblInfo.BackColor = System.Drawing.Color.Transparent;
-            this.lblInfo.Location = new System.Drawing.Point(12, 124);
+            this.lblInfo.ForeColor = System.Drawing.Color.White;
+            this.lblInfo.Location = new System.Drawing.Point(12, 179);
             this.lblInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(0, 14);
+            this.lblInfo.Size = new System.Drawing.Size(25, 14);
             this.lblInfo.TabIndex = 7;
+            this.lblInfo.Text = "test";
             // 
             // notifyIcon1
             // 

@@ -125,7 +125,7 @@ namespace MPLRServer
                     if (slot == 0) break;
                     slot = CharacterInventory.CorrectEquipSlot(i, slot);
 
-                    ItemEquip equip = (ItemEquip)ItemBase.DecodeItemData(pPacket);
+                    ItemEquip equip = (ItemEquip)ItemBase.DecodeItemData(pConnection, pPacket);
 
                     EquipmentItems[i].Add(slot, equip);
                 }
@@ -143,7 +143,7 @@ namespace MPLRServer
                     byte slot = pPacket.ReadByte();
                     if (slot == 0) break;
 
-                    ItemBase item = ItemBase.DecodeItemData(pPacket);
+                    ItemBase item = ItemBase.DecodeItemData(pConnection, pPacket);
                     InventoryItems[i].Add(slot, item);
 
                     if (item.BagID != -1)
@@ -174,7 +174,7 @@ namespace MPLRServer
                         int slotid = pPacket.ReadInt();
                         if (slotid == -1) break;
 
-                        ItemBase item = ItemBase.DecodeItemData(pPacket);
+                        ItemBase item = ItemBase.DecodeItemData(pConnection, pPacket);
                         bi.Items.Add((byte)slotid, item);
                     }
                 }
@@ -201,7 +201,7 @@ namespace MPLRServer
 
         public int BagID { get; set; }
 
-        public static ItemBase DecodeItemData(MaplePacket pPacket)
+        public static ItemBase DecodeItemData(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte type = pPacket.ReadByte();
             ItemBase ret = null;
@@ -223,12 +223,12 @@ namespace MPLRServer
                     }
             }
 
-            ret.Decode(pPacket);
+            ret.Decode(pConnection, pPacket);
 
             return ret;
         }
 
-        public virtual void Decode(MaplePacket pPacket)
+        public virtual void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
             ItemID = pPacket.ReadInt();
 
@@ -301,73 +301,69 @@ namespace MPLRServer
         public short Nebulite3 { get; private set; }
 
         public long UniqueID { get; private set; }
-        public int SetFlags { get; private set; }
+        public string SetFlags { get; private set; }
         public enum SetFlagTypes
         {
             Crafted = 1,
         }
 
-        public override void Decode(MaplePacket pPacket)
+        public override void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
-            base.Decode(pPacket);
+            base.Decode(pConnection, pPacket);
 
+
+            List<string> flagsList = new List<string>();
             {
                 {
                     uint flag = pPacket.ReadUInt();
 
-                    this.Slots = FlaggedValue(flag, 0x01, pPacket, this.Slots);
-                    this.Scrolls = FlaggedValue(flag, 0x02, pPacket, this.Scrolls);
-                    this.Str = FlaggedValue(flag, 0x04, pPacket, this.Str);
-                    this.Dex = FlaggedValue(flag, 0x08, pPacket, this.Dex);
-                    this.Int = FlaggedValue(flag, 0x10, pPacket, this.Int);
-                    this.Luk = FlaggedValue(flag, 0x20, pPacket, this.Luk);
-                    this.HP = FlaggedValue(flag, 0x40, pPacket, this.HP);
-                    this.MP = FlaggedValue(flag, 0x80, pPacket, this.MP);
-                    this.Watk = FlaggedValue(flag, 0x100, pPacket, this.Watk);
-                    this.Matk = FlaggedValue(flag, 0x200, pPacket, this.Matk);
-                    this.Wdef = FlaggedValue(flag, 0x400, pPacket, this.Wdef);
-                    this.Mdef = FlaggedValue(flag, 0x800, pPacket, this.Mdef);
-                    this.Acc = FlaggedValue(flag, 0x1000, pPacket, this.Acc);
-                    this.Avo = FlaggedValue(flag, 0x2000, pPacket, this.Avo);
-                    this.Hands = FlaggedValue(flag, 0x4000, pPacket, this.Hands);
-                    this.Speed = FlaggedValue(flag, 0x8000, pPacket, this.Speed);
-                    this.Jump = FlaggedValue(flag, 0x10000, pPacket, this.Jump);
-                    this.Flags = FlaggedValue(flag, 0x20000, pPacket, this.Flags);
+                    this.Slots = FlaggedValue(pConnection, this.ItemID, flag, 0x01, pPacket, this.Slots);
+                    this.Scrolls = FlaggedValue(pConnection, this.ItemID, flag, 0x02, pPacket, this.Scrolls);
+                    this.Str = FlaggedValue(pConnection, this.ItemID, flag, 0x04, pPacket, this.Str);
+                    this.Dex = FlaggedValue(pConnection, this.ItemID, flag, 0x08, pPacket, this.Dex);
+                    this.Int = FlaggedValue(pConnection, this.ItemID, flag, 0x10, pPacket, this.Int);
+                    this.Luk = FlaggedValue(pConnection, this.ItemID, flag, 0x20, pPacket, this.Luk);
+                    this.HP = FlaggedValue(pConnection, this.ItemID, flag, 0x40, pPacket, this.HP);
+                    this.MP = FlaggedValue(pConnection, this.ItemID, flag, 0x80, pPacket, this.MP);
+                    this.Watk = FlaggedValue(pConnection, this.ItemID, flag, 0x100, pPacket, this.Watk);
+                    this.Matk = FlaggedValue(pConnection, this.ItemID, flag, 0x200, pPacket, this.Matk);
+                    this.Wdef = FlaggedValue(pConnection, this.ItemID, flag, 0x400, pPacket, this.Wdef);
+                    this.Mdef = FlaggedValue(pConnection, this.ItemID, flag, 0x800, pPacket, this.Mdef);
+                    this.Acc = FlaggedValue(pConnection, this.ItemID, flag, 0x1000, pPacket, this.Acc);
+                    this.Avo = FlaggedValue(pConnection, this.ItemID, flag, 0x2000, pPacket, this.Avo);
+                    this.Hands = FlaggedValue(pConnection, this.ItemID, flag, 0x4000, pPacket, this.Hands);
+                    this.Speed = FlaggedValue(pConnection, this.ItemID, flag, 0x8000, pPacket, this.Speed);
+                    this.Jump = FlaggedValue(pConnection, this.ItemID, flag, 0x10000, pPacket, this.Jump);
+                    this.Flags = FlaggedValue(pConnection, this.ItemID, flag, 0x20000, pPacket, this.Flags);
 
-                    this.IncreasesSkills = FlaggedValue(flag, 0x40000, pPacket, this.IncreasesSkills);
+                    this.IncreasesSkills = FlaggedValue(pConnection, this.ItemID, flag, 0x40000, pPacket, this.IncreasesSkills);
 
-                    this.ItemLevel = FlaggedValue(flag, 0x80000, pPacket, this.ItemLevel);
-                    this.ItemEXP = FlaggedValue(flag, 0x100000, pPacket, this.ItemEXP);
+                    this.ItemLevel = FlaggedValue(pConnection, this.ItemID, flag, 0x80000, pPacket, this.ItemLevel);
+                    this.ItemEXP = FlaggedValue(pConnection, this.ItemID, flag, 0x100000, pPacket, this.ItemEXP);
 
 
-                    FlaggedValue(flag, 0x200000, pPacket, (int)0, true);
-                    this.ViciousHammer = FlaggedValue(flag, 0x400000, pPacket, this.ViciousHammer);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x200000, pPacket, (int)0, true);
+                    this.ViciousHammer = FlaggedValue(pConnection, this.ItemID, flag, 0x400000, pPacket, this.ViciousHammer);
 
-                    this.BattleModeDamage = FlaggedValue(flag, 0x800000, pPacket, this.BattleModeDamage);
+                    this.BattleModeDamage = FlaggedValue(pConnection, this.ItemID, flag, 0x800000, pPacket, this.BattleModeDamage);
 
-                    FlaggedValue(flag, 0x1000000, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x2000000, pPacket, (short)0, true);
-                    FlaggedValue(flag, 0x4000000, pPacket, (int)0, true);
-                    FlaggedValue(flag, 0x8000000, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x10000000, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x20000000, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x40000000, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x80000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x1000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x2000000, pPacket, (short)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x4000000, pPacket, (int)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x8000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x10000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x20000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x40000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x80000000, pPacket, (byte)0, true);
                 }
 
                 {
                     uint flag = pPacket.ReadUInt();
-                    FlaggedValue(flag, 0x01, pPacket, (byte)0, true);
-                    FlaggedValue(flag, 0x02, pPacket, (byte)0, true);
-
-                    byte tmp = 0;
-                    FlaggedValue(flag, 0x04, pPacket, tmp);
-                    if ((tmp & 0xFF) != 0)
-                    {
-                        this.SetFlags += (int)SetFlagTypes.Crafted;
-                    }
-                    FlaggedValue(flag, 0x08, pPacket, (long)0, true);
-                    FlaggedValue(flag, 0x10, pPacket, (int)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x01, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x02, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x04, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x08, pPacket, (long)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x10, pPacket, (int)0, true);
                 }
             }
 
@@ -399,6 +395,14 @@ namespace MPLRServer
 
 
             pPacket.ReadInt(); // always -1?
+
+            // Fix setflags
+            if ((this.Flags & 0x80) == 0x80 && this.Name != "")
+            {
+                flagsList.Add("crafted");
+            }
+            
+            this.SetFlags = string.Join(",", flagsList);
         }
 
         public override int GetChecksum()
@@ -415,74 +419,64 @@ namespace MPLRServer
                 (int)UniqueID + (int)(UniqueID >> 32) + 1;
         }
 
-        private static byte FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, bool pLogIfFound = false)
+        private static byte FlaggedValue(ClientConnection pConnection, int pItemID, uint pValue, uint pFlag, MaplePacket pPacket, byte pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
             {
                 var val = pPacket.ReadByte();
                 if (pLogIfFound)
-                {
-                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
-                }
+                    pConnection.Logger_WriteLine("Found flag {0:X8}: {1} | ItemID: {2}", pFlag, val, pItemID);
                 return val;
             }
             else
                 return 0;
         }
 
-        private static short FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, short pTypeValue, bool pLogIfFound = false)
+        private static short FlaggedValue(ClientConnection pConnection, int pItemID, uint pValue, uint pFlag, MaplePacket pPacket, short pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag)) {
                 var val = pPacket.ReadShort();
                 if (pLogIfFound)
-                {
-                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
-                }
+                    pConnection.Logger_WriteLine("Found flag {0:X8}: {1} | ItemID: {2}", pFlag, val, pItemID);
                 return val;
             }
             else
                 return 0;
         }
 
-        private static ushort FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, ushort pTypeValue, bool pLogIfFound = false)
+        private static ushort FlaggedValue(ClientConnection pConnection, int pItemID, uint pValue, uint pFlag, MaplePacket pPacket, ushort pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
             {
                 var val = pPacket.ReadUShort();
                 if (pLogIfFound)
-                {
-                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
-                }
+                    pConnection.Logger_WriteLine("Found flag {0:X8}: {1} | ItemID: {2}", pFlag, val, pItemID);
                 return val;
             }
             else
                 return 0;
         }
 
-        private static int FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, int pTypeValue, bool pLogIfFound = false)
+        private static int FlaggedValue(ClientConnection pConnection, int pItemID, uint pValue, uint pFlag, MaplePacket pPacket, int pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
             {
                 var val = pPacket.ReadInt();
                 if (pLogIfFound)
-                {
-                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
-                }
+                    pConnection.Logger_WriteLine("Found flag {0:X8}: {1} | ItemID: {2}", pFlag, val, pItemID);
                 return val;
             }
             else
                 return 0;
         }
 
-        private static long FlaggedValue(uint pValue, uint pFlag, MaplePacket pPacket, long pTypeValue, bool pLogIfFound = false)
+        private static long FlaggedValue(ClientConnection pConnection, int pItemID, uint pValue, uint pFlag, MaplePacket pPacket, long pTypeValue, bool pLogIfFound = false)
         {
             if (pValue.HasFlag(pFlag))
             {
                 var val = pPacket.ReadLong();
                 if (pLogIfFound)
-                {
-                    Logger.WriteLine("Found flag {0:X8}: {1}", pFlag, val);
-                }
+                    pConnection.Logger_WriteLine("Found flag {0:X8}: {1} | ItemID: {2}", pFlag, val, pItemID);
                 return val;
             }
             else
@@ -496,9 +490,9 @@ namespace MPLRServer
         public short Flags { get; private set; }
         public long UniqueID { get; private set; }
 
-        public override void Decode(MaplePacket pPacket)
+        public override void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
-            base.Decode(pPacket);
+            base.Decode(pConnection, pPacket);
 
             Amount = pPacket.ReadShort();
             CraftName = pPacket.ReadString();
@@ -522,9 +516,9 @@ namespace MPLRServer
         public short Closeness { get; private set; }
         public byte Fullness { get; private set; }
 
-        public override void Decode(MaplePacket pPacket)
+        public override void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
-            base.Decode(pPacket);
+            base.Decode(pConnection, pPacket);
 
             Petname = pPacket.ReadString(13);
             Level = pPacket.ReadByte();

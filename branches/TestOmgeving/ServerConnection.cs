@@ -74,7 +74,8 @@ namespace Mapler_Client
                 }
                 else
                 {
-                    Logger.WriteLine("Starting sniffer again");
+                    Logger.WriteLine("Reconnected. Starting sniffer again");
+                    
                     Sniffer.Instance.SetUp();
                 }
 
@@ -138,8 +139,7 @@ namespace Mapler_Client
 
                     AcceptedMapleStoryLocale = pPacket.ReadByte();
                     AcceptedMapleStoryVersion = pPacket.ReadUShort();
-
-                    // Logger.WriteLine("Initialized keys and valid headers");
+                    Logger.WriteLine("Initialized keys and valid headers");
                 }
                 else if (header == 0xEEFE)
                 {
@@ -173,6 +173,7 @@ namespace Mapler_Client
                 }
                 else if (header == 0xEE01)
                 {
+                    // Pingpong
                     using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE01))
                     {
                         SendPacket(mp);

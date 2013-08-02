@@ -322,7 +322,6 @@ hr {
 	height: 32px;
 	width: 32px;
 	position: absolute;
-	border: 1px solid lightgray;
 	z-index: 1;
 }
 
@@ -437,7 +436,7 @@ hr {
 	margin-right: 5px;
 	float: left;
 	border-radius: 5px;
-	overflow: hidden;
+	overflow: visible;
 }
 
 #item_info_icon {
@@ -446,7 +445,6 @@ hr {
 
 #item_info .item_stats, #item_info .item_potential_stats {
 	clear: both;
-	margin-top: 10px;
 }
 
 #item_info .item_stats > table, #item_info .item_potential_stats > table {
@@ -492,6 +490,11 @@ hr {
 
 #item_info #req_job_list hr {
 	margin: 5px 0;
+}
+
+#item_info hr {
+	padding: 0;
+	margin: 4px 6px;
 }
 
 #item_info #item_potential_stats {

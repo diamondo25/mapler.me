@@ -247,8 +247,10 @@ using (ScriptAPI) {
 			
 			amount = AddShort("amount");
 			for (i = 1; i <= amount; i++) {
+				StartNode(" I > " + i);
 				AddInt("skillid");
-				AddShort("skillid");
+				AddShort("level");
+				EndNode(false);
 			}
 		}
 	    else {
@@ -370,15 +372,15 @@ using (ScriptAPI) {
 		}
 		cnt = AddShort("Couple Records");
 		for (i = 0; i < cnt; i++) {
-			AddField("Unk", 33);
+			AddField("Couple record " + i, 33);
 		}
 		cnt = AddShort("Friend Records");
 		for (i = 0; i < cnt; i++) {
-			AddField("Unk", 37);
+			AddField("Friend Record " + i, 37);
 		}
 		cnt = AddShort("Marriage Records");
 		for (i = 0; i < cnt; i++) {
-			AddField("Unk", 48);
+			AddField("Marriage record " + i, 48);
 		}
 		
 		StartNode("Tele Rocks");

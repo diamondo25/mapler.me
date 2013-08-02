@@ -59,6 +59,8 @@ namespace MPLRServer
             Clients = new List<ClientConnection>();
             StartPinger();
 
+            SessionRestartCache.Start();
+
             // For clients
             Acceptor accept = new Acceptor(23710, sock =>
             {
@@ -70,17 +72,20 @@ namespace MPLRServer
             {
                 MaplePacket packet = new MaplePacket(ClientPacketHandlers.LatestMajorVersion);
                 packet.WriteByte(ClientPacketHandlers.LatestLocale);
-                packet.WriteInt(Clients.Count);
+
                 byte[] temp = packet.ToArray();
+
                 OnlineCheckInfo = new byte[temp.Length + 1];
                 Buffer.BlockCopy(temp, 0, OnlineCheckInfo, 1, temp.Length);
-                OnlineCheckInfo[0] = (byte)temp.Length;
+                OnlineCheckInfo[0] = (byte)(temp.Length + 4);
+
                 packet.Dispose();
                 packet = null;
             }
             Acceptor acceptCheck = new Acceptor(23711, sock =>
             {
                 sock.Send(OnlineCheckInfo);
+                sock.Send(BitConverter.GetBytes(Clients.Count));
                 sock.Shutdown(System.Net.Sockets.SocketShutdown.Both);
                 sock.Close();
             });
@@ -137,9 +142,10 @@ namespace MPLRServer
                             }
                         case "testsession":
                             {
+                                bool raw = arguments.Length > 1;
                                 var verp = new MSBLoader();
                                 var connection = new ClientConnection(verp);
-                                verp.Parse("Savefile.msb");
+                                verp.Parse("Savefile.msb", raw);
 
                                 break;
                             }
@@ -326,6 +332,8 @@ namespace MPLRServer
 
                     pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, pConnection.ChannelID);
                 }, null));
+
+                tmp.Add(0x0027, new Handler(ClientPacketHandlers.HandleCharacterLoadRequest, null));
 
                 // Pong
                 tmp.Add(0x002D, new Handler((pConnection, pPacket) =>

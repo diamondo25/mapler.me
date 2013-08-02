@@ -6,6 +6,8 @@ require_once __DIR__.'/classes/TreeNode.php';
 // Check for APC
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
+gc_disable(); // Disable Garbage Collection (T_T). Prevents Memfaulting apache...
+
 function SetCachedObject($key, $value) {
 	if (APC_INSTALLED) apc_add($key, $value);
 }
@@ -58,9 +60,7 @@ WHERE
 		while ($row = $q->fetch_array())
 			$buff[$row[0]][$row[1]] = $row[2];
 
-		//if (APC_INSTALLED) {
-		//	apc_add($key_name, $buff);
-		//}
+
 		SetCachedObject($key_name, $buff);
 		
 		if (isset($buff[$type]) && isset($buff[$type][$key]))
@@ -182,11 +182,12 @@ WHERE
 		//$item_info[$data[0]] = $data[1];
 		$split = explode('_', $data[0]);
 		$tmp2 = &$item_info;
+		$elements = count($split);
 		foreach ($split as $idx => $name) {
 			try {
 				if (!isset($tmp2[$name])) {
-					if (count($split) - 1 == $idx) {
-						if (is_string($data[1]) && strpos($data[1], '{VEC}') !== false) {
+					if ($elements - 1 == $idx) { // Is last element
+						if (is_string($data[1]) && strpos($data[1], '{VEC}') !== false) { // Is a vector
 							$vec = explode(';', substr($data[1], 5));
 							$temp = new TreeNode($name, $tmp2);
 							$temp['X'] = $vec[0];

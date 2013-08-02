@@ -212,8 +212,12 @@ ORDER BY
 
 $q = $__database->query($q);
 $values = array();
+for ($i = 1; $i <= 250; $i++) {
+	$values[$i] = 0;
+}
+
 while ($row = $q->fetch_row()) {
-	$values[$row[0]] = $row[1];
+	$values[(int)$row[0]] = $row[1];
 }
 
 

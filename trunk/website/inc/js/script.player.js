@@ -75,12 +75,35 @@ function SetItemInfo(event, obj, values) {
 	
 	if (isequip && (gender == 0 || gender == 1)) {
 		GetObj('item_info_title').innerHTML += ' (' + (gender == 0 ? 'Male' : 'Female') + ')';
-		
 	}
 	
 	GetObj('item_info_title').style.color = GetQualityColor(otherinfo.quality);
 	
-	GetObj('item_info_icon').src = obj.src;
+	
+	var iconinfo = $(obj).find('img');
+	var popupicon = $('#item_info_icon');
+	popupicon.attr('src', iconinfo.attr('src'));
+	
+	var offset_top = 0, offset_left = 0, size_rate = (72 / 32);
+	offset_left = parseFloat(iconinfo.css('margin-left')); // Original Offsets
+	offset_top = parseFloat(iconinfo.css('margin-top'));
+	offset_left *= size_rate;
+	offset_top *= size_rate;
+	
+	popupicon.css('margin-left', offset_left + 'px');
+	popupicon.css('margin-top', offset_top + 'px');
+	popupicon.attr('width', iconinfo.width() * size_rate);
+	popupicon.attr('height', iconinfo.height() * size_rate);
+	
+	
+	var wepcatname = 0;
+	if (iconinfo.attr('src').indexOf('Weapon/') != -1) {
+		// Itz a weapon
+		wepcatname = GetWeaponCategoryName(itemid);
+	}
+	SetObjText('weaponcategory', wepcatname, undefined, false);
+	
+	
 	
 	SetObjTextIsEquip('reqlevel', reqs.level);
 	SetObjTextIsEquip('reqstr', reqs.str);
@@ -258,6 +281,13 @@ function SetItemInfo(event, obj, values) {
 	GetObj('item_info').setAttribute('class', potentialName != null ? 'potential' + potentialName : '');
 
 	GetObj('extra_item_info').innerHTML += '';
+	
+	var starstext = '';
+	var i = 0;
+	for (; i < stars; i++)
+		starstext += (i % 5 == 0 && i != 0 ? '&nbsp;' : '') + '<img src="/inc/img/ui/Item/Equip/Star/Star.png" />';
+	
+	GetObj('item_info_stars').innerHTML = starstext;
 
 	
 	GetObj('item_info').style.display = 'block';
@@ -354,6 +384,39 @@ function ChangePet(id) {
 	document.getElementById('pet_' + lastpet).style.display = 'block';
 }
 
+function GetWeaponCategoryName(id) {
+	var catid = Math.floor(id / 10000) % 100;
+	
+	switch (catid) {
+		case 21: return 'Magic Wand';
+		case 22: return 'Soul Shooter';
+		case 30: return 'One-handed Sword';
+		case 31: return 'One-handed Axe';
+		case 32: return 'One-handed Mace';
+		case 33: return 'Dagger';
+		case 34: return 'Katara';
+		case 36: return 'Cane';
+		case 37: return 'Wand';
+		case 38: return 'Staff';
+		case 40: return 'Two-handed Sword';
+		case 41: return 'Two-handed Axe';
+		case 42: return 'Two-handed Mace';
+		case 43: return 'Spear';
+		case 44: return 'Pole Arm';
+		case 45: return 'Bow';
+		case 46: return 'Crossbow';
+		case 47: return 'Claw';
+		case 48: return 'Knuckle';
+		case 49: return 'Gun';
+		case 50: return 'Herbalism tool';
+		case 51: return 'Mining tool';
+		case 52: return 'Dual Bowgun';
+		case 53: return 'Canon';
+		case 70: return undefined;
+		default: return 'FIXMEH: ' + catid;
+	}
+
+}
 
 $(document).ready(function () {
 	ChangeInventory(1);

@@ -18,6 +18,7 @@ namespace MPLRServer
 
             pConnection.Logger_WriteLine("Detected MapleStory version of client: {1}.{2} (locale: {0})", locale, version, subversion);
             pConnection.MapleVersion = version;
+
             pConnection.CharData = null; // Back to the LoginServer!!!
             if (locale != LatestLocale)
             {
@@ -38,6 +39,25 @@ namespace MPLRServer
                 pConnection.Disconnect();
             }
 
+        }
+
+
+        public static void HandleCharacterLoadRequest(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            if (!(pConnection.ConnectedToPort >= 8585 && pConnection.ConnectedToPort <= 8600))
+            {
+                pConnection.Logger_WriteLine("Ignoring Character Load Request; not connected to a channel server");
+                return;
+            }
+
+            int characterid = pPacket.ReadInt();
+            byte[] machineid = pPacket.ReadBytes(16);
+            pConnection.MachineID = machineid;
+
+            if (pConnection.AccountID == -1)
+            {
+                SessionRestartCache.Instance.TryRestartSession(pConnection, characterid, machineid);
+            }
         }
     }
 }

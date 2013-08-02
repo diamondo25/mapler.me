@@ -21,6 +21,11 @@ namespace MPLRServer
                 if (port == 8484)
                 {
                     pConnection.SendInfoText("Mapler.me is awaiting account check! Happy mapling!");
+                    var info = SessionRestartCache.Instance.GetInfoForConnection(pConnection);
+                    if (info != null)
+                        SessionRestartCache.Instance.RemoveInfo(info);
+
+
                     pConnection.WorldID = 255;
                     pConnection.ChannelID = 255;
                 }
@@ -57,6 +62,11 @@ namespace MPLRServer
 
                     }
                 }
+
+                // Delete if there's session info
+                var info = SessionRestartCache.Instance.GetInfoForConnection(pConnection);
+                if (info != null)
+                    SessionRestartCache.Instance.RemoveInfo(info);
 
                 pConnection.CharData = null;
                 pConnection.CharacterInternalID = -1;

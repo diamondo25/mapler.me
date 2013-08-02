@@ -15,7 +15,7 @@ namespace MPLRServer
         public delegate void DOnDisconnect();
         public DOnDisconnect DisconnectHandler;
 
-        public void Parse(string pFile)
+        public void Parse(string pFile, bool pMapleSharkFile)
         {
             using (FileStream stream = new FileStream(pFile, FileMode.Open, FileAccess.Read))
             {
@@ -25,14 +25,34 @@ namespace MPLRServer
                     return;
                 }
 
-                reader.ReadString(); // Local Endpoint
-                reader.ReadUInt16(); // Port
-                reader.ReadString(); // Remote Endpoint
-                reader.ReadUInt16(); // Port
+                string ip2 = reader.ReadString(); // Local Endpoint
+                ushort port2 = reader.ReadUInt16(); // Port
+                string ip = reader.ReadString(); // Remote Endpoint
+                ushort port = reader.ReadUInt16(); // Port
+
+                
 
                 byte locale = reader.ReadByte(); // Locale
                 ushort version = reader.ReadUInt16(); // Version
-                Logger.WriteLine("Emulating socket connection with connection from V{0}", version);
+                Logger.WriteLine("Emulating socket connection with connection from V{0}", version / 100);
+
+
+                MaplePacket p;
+                if (pMapleSharkFile)
+                {
+                    if (ip.Contains(":"))
+                    {
+                        // Shit.
+                        ip = "1.2.3.4";
+                    }
+                    p = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE00);
+                    p.WriteBool(true);
+                    p.WriteString(ip);
+                    p.WriteUShort(port);
+                    p.SwitchOver();
+                    p.Reset(0);
+                    PacketHandler(p);
+                }
 
                 while (stream.Position < stream.Length)
                 {
@@ -59,6 +79,18 @@ namespace MPLRServer
                         throw new Exception("Internal Packet Handling Exception", ex);
                     }
                 }
+
+
+
+                if (pMapleSharkFile)
+                {
+                    p = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE00);
+                    p.WriteBool(false);
+                    p.SwitchOver();
+                    p.Reset(0);
+                    PacketHandler(p);
+                }
+
             }
 
             DisconnectHandler();

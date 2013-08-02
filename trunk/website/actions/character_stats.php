@@ -100,6 +100,8 @@ $before = array(
 	'mmp' => $row['mmp']
 );
 
+$level = $row['level'];
+
 if (isset($stat_addition['str'])) $row['str'] += $stat_addition['str'];
 if (isset($stat_addition['dex'])) $row['dex'] += $stat_addition['dex'];
 if (isset($stat_addition['int'])) $row['int'] += $stat_addition['int'];
@@ -115,6 +117,10 @@ foreach ($potential_stat_addition as $itemid => $stats_tmp) {
 		if (isset($stats['incDEX'])) $row['dex'] += $stats['incDEX'];
 		if (isset($stats['incINT'])) $row['int'] += $stats['incINT'];
 		if (isset($stats['incLUK'])) $row['luk'] += $stats['incLUK'];
+		if (isset($stats['incSTRlv'])) $row['str'] += ($stats['incSTRlv'] * floor($level / 10));
+		if (isset($stats['incDEXlv'])) $row['dex'] += ($stats['incDEXlv'] * floor($level / 10));
+		if (isset($stats['incINTlv'])) $row['int'] += ($stats['incINTlv'] * floor($level / 10));
+		if (isset($stats['incLUKlv'])) $row['luk'] += ($stats['incLUKlv'] * floor($level / 10));
 		
 		if (isset($stats['incMHP'])) $row['mhp'] += $stats['incMHP'];
 		if (isset($stats['incMMP'])) $row['mhp'] += $stats['incMMP'];

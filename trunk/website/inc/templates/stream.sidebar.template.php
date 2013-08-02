@@ -50,49 +50,46 @@ max-width: 240px;">
 	</div>
 	
 	
-<?php
-
-
-$socket = @fsockopen('mc.craftnet.nl', 23711, $errno, $errstr, 5);
-//$socket = @fsockopen('127.0.0.1', 23711, $errno, $errstr, 3);
-
-if (!$socket) {
-?>
 	<div class="stream-block">
-	<p class="notice">Mapler.me's servers are currently offline or undergoing a maintenance! Clients are disabled.</p>
-	</div>
 <?php
-}
-elseif (true) {
-
-	$size = fread($socket, 1);
-	for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
-		$size = fread($socket, 1);
-	}
-	if (strlen($size) == 1) {
-		$size = ord($size[0]);
-		$data = fread($socket, $size);
-		for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
-			$data .= fread($socket, $size - strlen($data));
-		}
-		if (strlen($data) == $size) {
-			$data = unpack('vversion/clocale/Vplayers', $data);
-			
-			switch ($data['locale']) {
-				case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
-				case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
-				case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
+	foreach ($maplerme_servers as $servername => $data) {
+		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
+		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
+		if ($socket) {
+			$size = fread($socket, 1);
+			for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
+				$size = fread($socket, 1);
 			}
-		
+			if (strlen($size) == 1) {
+				$size = ord($size[0]);
+				$data = fread($socket, $size);
+				for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
+					$data .= fread($socket, $size - strlen($data));
+				}
+				if (strlen($data) == $size) {
+					$data = unpack('vversion/clocale/Vplayers', $data);
+					$data['state'] = 'online';
+					
+					switch ($data['locale']) {
+						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
+						case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
+						case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
+					}
+				}
+			}
+			fclose($socket);
+		}
 ?>
-	<div class="stream-block">
-		<span class="label label-success">MapleStory <?php echo $data['locale']; ?> V<?php echo $data['version']; ?></span> <span class="badge badge-success"><?php echo $data['players']; ?> online</span>
+		<div mapler-locale="<?php echo $servername; ?>">
+			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span class="label label-success">MapleStory <?php echo $data['locale']; ?> V<span version><?php echo $data['version']; ?></span></span> <span class="badge badge-success"><span players><?php echo $data['players']; ?></span> online</span></span>
+			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>></span>
+		</div>
+<?php
+	}
+?>
+
 	</div>
 <?php
-		}
-	}
-}
-
 	// Check for expiring items...
 	$q = $__database->query("
 SELECT

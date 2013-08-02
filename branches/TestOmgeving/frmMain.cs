@@ -32,6 +32,7 @@ namespace Mapler_Client
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            lblInfo.Text = "";
             try
             {
                 // Get executable path

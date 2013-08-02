@@ -298,7 +298,7 @@ namespace MPLRServer
                         short slot = pPacket.ReadShort(); // Slot?
                         pPacket.ReadShort();
                         pPacket.ReadInt(); // Price
-                        Queries.SaveItem(pConnection, (ushort)0, slot, ItemBase.DecodeItemData(pPacket), itemsTable, true);
+                        Queries.SaveItem(pConnection, (ushort)0, slot, ItemBase.DecodeItemData(pConnection, pPacket), itemsTable, true);
                     }
 
                     MySQL_Connection.Instance.RunQuery("DELETE FROM items_trades"); // Clear table
@@ -395,8 +395,6 @@ namespace MPLRServer
             Android android = new Android();
             android.Decode(pPacket);
 
-            Logger.WriteLine("Seeing An-droid. Name: {0}, ID: {1}, by {2}", android.Name, android.ID, pConnection.CharacterID);
-
             if (android.ID == pConnection.CharacterID)
             {
                 // Save android
@@ -409,6 +407,8 @@ namespace MPLRServer
                     iqb.AddRow(pConnection.CharacterInternalID, android.Name, android.Type, android.Skin, android.Hair, android.Face);
                     iqb.RunQuery();
                 }
+                Logger.WriteLine("Saved android '{0}' of {1}.", android.Name, pConnection.CharData.Stats.Name);
+
             }
         }
 
@@ -886,7 +886,7 @@ namespace MPLRServer
                     if (type4 == 0) // New Item
                     {
 
-                        ItemBase item = ItemBase.DecodeItemData(pPacket);
+                        ItemBase item = ItemBase.DecodeItemData(pConnection, pPacket);
 
                         if (inv == 0)
                         {
@@ -1382,7 +1382,7 @@ namespace MPLRServer
                         // Add item directly to bag
                         inv -= 1;
 
-                        ItemBase item = ItemBase.DecodeItemData(pPacket);
+                        ItemBase item = ItemBase.DecodeItemData(pConnection, pPacket);
 
                         short from = slot;
                         byte slotfrom = (byte)(from % 100);
@@ -1468,16 +1468,16 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("--------- Done parsing Character Info ----------");
 
                 // Quick duplicate check
-                bool conflicted = false;
+                int conflictedID = -1;
                 using (var reader = MySQL_Connection.Instance.RunQuery("SELECT id FROM characters WHERE id <> " + data.Stats.ID + " AND name = " + MySQL_Connection.Escape(data.Stats.Name)) as MySql.Data.MySqlClient.MySqlDataReader)
                 {
                     if (reader.Read())
                     {
                         // CONFLICTS
-                        conflicted = true;
+                        conflictedID = reader.GetInt32(0);
                     }
                 }
-                if (!conflicted)
+                if (conflictedID == -1)
                 {
                     if (!data.SaveData(pConnection))
                     {
@@ -1495,12 +1495,16 @@ namespace MPLRServer
                     pConnection.LogFilename += "-" + pConnection.CharacterInternalID;
 
                     pConnection.SendInfoText("Your character {0} has been saved!", pConnection.CharData.Stats.Name);
+
+                    // Save SessionRestart Info
+                    SessionRestartCache.Instance.StoreInfo(pConnection.IP, pConnection.MachineID, pConnection.CharacterID, pConnection.WorldID);
+
                 }
                 else
                 {
                     pConnection.LogFilename += "-(CONFLICT)" + data.Stats.Name;
 
-                    pConnection.Logger_WriteLine("!!!!!! FOUND CHARACTER NAME CONFLICT");
+                    pConnection.Logger_WriteLine("!!!!!! FOUND CHARACTER NAME CONFLICT ! Expected Character ID {0}, found Character ID {1} in database!", data.Stats.ID, conflictedID);
                     pConnection.SendInfoText("A different character has already this name! Delete this character via the website first!");
                 }
             }
@@ -1527,15 +1531,19 @@ namespace MPLRServer
                 MySQL_Connection.Instance.RunQuery(string.Format("UPDATE characters SET chp = {0}, map = {1}, pos = {2} WHERE internal_id = {3}", hp, mapid, mappos, pConnection.CharacterInternalID));
             }
 
-            DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
-            pConnection.Logger_WriteLine("Servertime: {0}", servertime.ToString());
+            pPacket.ReadLong();
+            //DateTime servertime = DateTime.FromFileTime(pPacket.ReadLong());
             pPacket.ReadInt(); // 100?
             pPacket.ReadByte(); // 0
             pPacket.ReadByte(); // 0
             pPacket.ReadByte(); // 1
 
+            if (pPacket.Position != pPacket.Length)
+            {
+                Logger.WriteLine("Data not fully read. Halp.: {0} of {1} read", pPacket.Position, pPacket.Length);
+            }
 
-            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, pConnection.ChannelID, pConnection.WorldID);
+            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, pConnection.WorldID, pConnection.ChannelID);
 
             pConnection.SendTimeUpdate();
         }

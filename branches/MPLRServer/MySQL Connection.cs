@@ -219,13 +219,17 @@ namespace MPLRServer
             }
 
             Type type = pValue.GetType();
-            if (type == typeof(UnescapedValue))
-            {
-                return ((UnescapedValue)pValue).Value.ToString();
-            }
-            else if (type == typeof(string))
+            if (type == typeof(string))
             {
                 return "'" + MySqlHelper.EscapeString((string)pValue) + "'";
+            }
+            else if (type == typeof(byte[]))
+            {
+                return "UNHEX('" + ((byte[])pValue).ToByteString("") + "')";
+            }
+            else if (type == typeof(UnescapedValue))
+            {
+                return ((UnescapedValue)pValue).Value.ToString();
             }
             else if (type == typeof(NowType))
             {

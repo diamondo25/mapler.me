@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__.'/../server_info.php';
+
 class ExtendedMysqli extends mysqli {
 	public $last_query = '';
 	public $queries = array();
@@ -55,7 +57,7 @@ foreach ($this->queries as $query) {
 }
 
 // Connect to the database
-$__database = new ExtendedMysqli((strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE ? '127.0.0.1' : 'mc.craftnet.nl'), 'maplestats', 'maplederp', 'maplestats');
+$__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', 'maplestats', SERVER_MYSQL_PORT);
 
 //$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {

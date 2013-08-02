@@ -110,6 +110,7 @@
     <Compile Include="Queries.cs" />
     <Compile Include="QueryBuilder.cs" />
     <Compile Include="ServerPacketHandlers.cs" />
+    <Compile Include="SessionRestartCache.cs" />
     <Compile Include="Timeline.cs" />
   </ItemGroup>
   <ItemGroup>

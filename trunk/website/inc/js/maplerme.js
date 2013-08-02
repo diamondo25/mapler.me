@@ -202,6 +202,24 @@ $(document).ready(function() {
 
 				window.document.title = newTitle;
 				
+				if (typeof e.server_status !== 'undefined' && $('div[mapler-locale]').length > 0) {
+					for (var idx in e.server_status) {
+						var elem = e.server_status[idx];
+						var status = elem.status;
+						var info_element = $('div[mapler-locale="' + idx + '"]');
+						if (status == 'offline') {
+							info_element.find('span[offline-server]').css('display', '');
+							info_element.find('span[online-server]').css('display', 'none');
+						}
+						else {
+							info_element.find('span[offline-server]').css('display', '');
+							info_element.find('span[online-server]').css('display', 'none');
+							info_element.find('span[version]').html(elem.version);
+							info_element.find('span[players]').html(elem.players);
+						
+						}
+					}
+				}
 				
 				if (e.status_info != undefined) {
 					// Check posts
@@ -270,7 +288,7 @@ $(document).ready(function() {
 		});
 	};
 	
-	setInterval(function () { syncer(false); }, 3000);
+	setInterval(function () { syncer(false); }, 8000);
 	syncer(false);
 });
 

@@ -16,6 +16,7 @@ namespace MPLRServer
         public int CharacterInternalID { get; set; }
         public byte WorldID { get; set; }
         public byte ChannelID { get; set; }
+        public byte[] MachineID { get; set; }
 
         public string ConnectedToIP { get; set; }
         public ushort ConnectedToPort { get; set; }
@@ -169,6 +170,10 @@ namespace MPLRServer
                 //Save(false);
                 if (_exporter != null) _exporter.Clear(true);
                 _exporter = null;
+                var info = SessionRestartCache.Instance.GetInfoForConnection(this);
+                if (info != null)
+                    SessionRestartCache.Instance.RemoveInfo(info);
+
                 Logger_WriteLine("Client Disconnected.");
                 Clear();
                 Program.Clients.Remove(this);
@@ -180,6 +185,11 @@ namespace MPLRServer
                     if (_exporter != null) _exporter.Clear(true);
                     _exporter = null;
                     //Save(false);
+
+                    var info = SessionRestartCache.Instance.GetInfoForConnection(this);
+                    if (info != null)
+                        SessionRestartCache.Instance.RemoveInfo(info);
+
                     Logger_WriteLine("Client Disconnected.");
                     Clear();
                     Program.Clients.Remove(this);
@@ -269,12 +279,14 @@ namespace MPLRServer
                             }
                             else
                             {
-                                Logger_WriteLine("No action for {0:X4}", opcode);
+                                if (!IsFake)
+                                    Logger_WriteLine("No action for {0:X4}", opcode);
                             }
                         }
                         else
                         {
-                            Logger_WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", opcode, type);
+                            if (!IsFake)
+                                Logger_WriteLine("Client sent packet {0:X4} for {1} but this one is not handled!", opcode, type);
                         }
                     }
                     else

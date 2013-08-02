@@ -305,6 +305,7 @@ $inventory = new InventoryData($character_info['internal_id']);
 
 
 $optionlist = array();
+$optionlist['weaponcategory'] = 'Weapon Category : ';
 $optionlist['str'] = 'STR : ';
 $optionlist['dex'] = 'DEX : ';
 $optionlist['int'] = 'INT : ';
@@ -399,7 +400,7 @@ function GetItemDialogInfo($item, $isequip) {
 	global $PotentialList, $IDlist, $reqlist, $optionlist, $NebuliteList;
 	
 	if (!array_key_exists($item->itemid, $IDlist)) {
-		$IDlist[$item->itemid] = IGTextToWeb(GetMapleStoryString("item", $item->itemid, "desc"));
+		$IDlist[(int)$item->itemid] = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'desc'));
 	}
 	
 	if ($isequip && $item->potential1 != 0 && !array_key_exists($item->potential1, $PotentialList)) 
@@ -440,6 +441,8 @@ function GetItemDialogInfo($item, $isequip) {
 		}
 		else $tradeblock = 1;
 	}
+	
+	$iscash = ValueOrDefault($stats['cash'], 0);
 	
 	$reqlevel = ValueOrDefault($stats['reqlevel'], 0);
 	$reqstr = ValueOrDefault($stats['reqstr'], 0);
@@ -526,7 +529,7 @@ function GetItemDialogInfo($item, $isequip) {
 	}
 	
 
-	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid);
+	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid, 'iscash' => $iscash);
 }
 
 
@@ -559,6 +562,9 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 }
 .inventory .disabled-slot {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/new_inventory/disabled.png');
+}
+.inventory .no-bg {
+	background-image: none;
 }
 
 #inventories {
@@ -653,7 +659,7 @@ $cashequips = array();
 foreach ($equips as $orislot => $item) {
 	$slot = abs($orislot) % 100;
 	
-	if (array_key_exists($slot, $petequip_slots)) {
+	if ($orislot > -200 && array_key_exists($slot, $petequip_slots)) {
 		$block = $petequip_slots[$slot][0];
 		$display_slot = $petequip_slots[$slot][1];
 		if ($display_slot == -1)
@@ -663,7 +669,7 @@ foreach ($equips as $orislot => $item) {
 	}
 	else {
 		if ($orislot > -100) 		$normalequips['normal'][$orislot] = $item;
-		elseif ($orislot <= -20000) $normalequips['Bits'][$orislot] = $item;
+		elseif ($orislot <= -20000) $normalequips['Bits'][$slot] = $item;
 		elseif ($orislot <= -5000) 	$normalequips['Totem'][$orislot] = $item;
 		elseif ($orislot <= -1500) 	$normalequips['BitsCaseBits'][$slot] = $item;
 		elseif ($orislot <= -1400) 	$normalequips['Haku'][$orislot] = $item;
@@ -699,6 +705,38 @@ function AddInventoryItems(&$inventory) {
 
 <!-- New inventories -->
 <style type="text/css">
+
+.item-slot {
+	z-index: inherit !important;
+	overflow: visible;
+	position: absolute;
+}
+
+.item-slot > .icon {
+	max-width: inherit;
+}
+
+.item-slot > .amount {
+	bottom: 0;
+	color: black;
+	position: absolute;
+	right: 1px;
+	z-index: 3;
+	font-family: Arial;
+	font-size: 12px;
+	text-shadow: -1px -1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF;
+}
+
+.item-slot > .cashitem {
+	background: url('/inc/img/ui/Item/Equip/cash.png') no-repeat;
+	width: 13px;
+	height: 13px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 3;
+}
+
 .new-inventory-container {
 	background: url('/inc/img/ui/new_inventory/background.png') no-repeat;
 	position: relative;
@@ -856,11 +894,50 @@ function AddInventoryItems(&$inventory) {
 	overflow: hidden !important;
 }
 
+.full-bits {
+	float: left;
+	width: 420px;
+}
+
+.selected-bitcase {
+	height: 70px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    width: 200px;
+}
+
+.bitcase-name {
+	color: white;
+    font-weight: bold;
+    left: 60px;
+    position: absolute;
+    top: 40px;
+}
+
 .bitcase {
 	overflow-y: visible;
 	margin: 0;
 	padding: 0;
 	float: left;
+}
+
+.main-bits {
+	background-image: url('//<?php echo $domain; ?>/inc/img/ui/bits/background.png');
+	width: 248px;
+	height: 229px;
+	position: relative;
+    margin: 0;
+    overflow: hidden;
+	float: left;
+}
+
+.bits {
+    height: 141px;
+    left: 2px;
+    top: 70px;
+    width: 231px;
+	position: absolute;
 }
 
 .teleport-rock {
@@ -960,6 +1037,16 @@ $new_inventory_slot_map['coordinate'] = MakeUsableSlotmap(array(
 	array( 4, -1, -2, -1, -1, -1, -1),
 ));
 
+function FindItemInInventoryByItemID($inventory, $itemid) {
+	foreach ($inventory as $slot => $item) {
+		if ($item !== null && $item->itemid == $itemid) {
+			return $item;
+		}
+	}
+	
+	return null;
+}
+
 
 function RenderItems(&$itemset, $slotmap_name) {
 	global $new_inventory_slot_map;
@@ -974,13 +1061,14 @@ function RenderItems(&$itemset, $slotmap_name) {
 		$info = GetItemDialogInfo($item, true);
 		
 		$itemwzinfo = GetItemWZInfo($info['iconid']);
-		if ($info['potentials'] != 0) {
 ?>
-				<div class="item-icon slot potential<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> position: absolute;"></div>
-<?php
-		}
-?>
-				<img slot="<?php echo $slot; ?>" class="item-icon slot" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" />
+
+<?php if ($info['iscash'] == 1): ?>
+				<div class="cashitem"></div>
+<?php endif; ?>
+			</div>
 <?php
 	}
 }
@@ -993,7 +1081,7 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 		if ($max_slots !== null && $max_slots <= $i) {
 			// Draw 'blocked' cell
 ?>
-			<div class="item-icon disabled-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+			<div class="item-slot disabled-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
 <?php
 		}
 		elseif (isset($itemset[$i])) {
@@ -1007,27 +1095,28 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 			$display_id = GetItemIconID($item->itemid); // For nebulites
 
 			$itemwzinfo = GetItemWZInfo($display_id);
-			$uid = substr(uniqid(), -5);
 ?>
-			<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>"  onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"></div>
-			<img class="item-icon" id="item_<?php echo $uid; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php InventoryPosCalc($row, $col); ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php 
-			if (!$isequip) {
-				// Woop
-?>
-			<span class="item-amount" style="<?php InventoryPosCalc($row, $col); ?>" onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+			
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
+<?php if (!$isequip): ?>
+				<span class="amount"><?php echo $item->amount; ?></span>
+<?php endif; ?>
+<?php if ($info['iscash'] == 1): ?>
+				<div class="cashitem"></div>
+<?php endif; ?>
+			</div>
 <?php
-			}
 		}
 		else {
 ?>
-			<div class="item-icon" style="<?php InventoryPosCalc($row, $col); ?>"></div>
+			<div class="item-slot" style="<?php InventoryPosCalc($row, $col); ?>"></div>
 <?php
 		}
 	}
 }
 
-function RenderItemAtPosition($item, $x, $y, $bgicon = false) {
+function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 	$isequip = $item->type == ITEM_EQUIP;
 	$info = GetItemDialogInfo($item, $isequip);
 	$pos = 'left: '.$x.'px; top: '.$y.'px;';
@@ -1038,20 +1127,17 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false) {
 
 	$itemwzinfo = GetItemWZInfo($display_id);
 	$uid = substr(uniqid(), -5);
-	if ($bgicon) {
 ?>
-	<div class="item-icon <?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php echo $pos; ?>"  onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"></div>
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?> <?php echo !$bgicon ? 'no-bg' : ''; ?>" style="<?php echo $pos; ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
+<?php if (!$isequip && $amount): ?>
+				<span class="amount"><?php echo $item->amount; ?></span>
+<?php endif; ?>
+<?php if ($info['iscash'] == 1): ?>
+				<div class="cashitem"></div>
+<?php endif; ?>
+			</div>
 <?php
-	}
-?>
-	<img class="item-icon" id="item_<?php echo $uid; ?>" potential="<?php echo $info['potentials']; ?>" style="<?php echo $pos; ?> margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
-<?php 
-	if (!$isequip) {
-		// Woop
-?>
-	<span class="item-amount" style="<?php echo $pos; ?>" onmouseover="document.getElementById('item_<?php echo $uid; ?>').onmouseover(event)" onmouseout="document.getElementById('item_<?php echo $uid; ?>').onmouseout(event)" onmousemove="document.getElementById('item_<?php echo $uid; ?>').onmousemove(event)"><?php echo $item->amount; ?></span>
-<?php
-	}
 }
 
 ?>
@@ -1295,41 +1381,82 @@ for ($inv = 0; $inv < 5; $inv++) {
 <?php endif; ?>
 
 
+
+
+
+
 <?php if ($__is_viewing_self || !IsHiddenObject('bits')): ?>
-<?php
-
-$bits_quest = Quest::GetQuest($internal_id, 7022, true);
-
-// c=0;e=1;l=3;s=12
-// c = Type of case (3090000)
-// e = Equipped. Is removed when unequipped
-// l = Lines
-// s = Slots
-if ($bits_quest !== null && !$bits_quest->IsCompleted() && isset($bits_quest->data['e']) && $bits_quest->data['e'] == 1):
-	$bits_info = $bits_quest->data;
-	$rows = (int)$bits_info['l'];
-	$cols = (int)$bits_info['s'] / $rows;
-	
-	// Get size
-	$url = "http://".$domain."/ui/bits/".$rows."/".$cols."/";
-	$width_height_array = json_decode(file_get_contents($url.'?onlysize'), true);
-?>
-	<div class="inventory bitcase" style="width: <?php echo $width_height_array['width']; ?>px; height: <?php echo $width_height_array['height']; ?>px; background-image: url('<?php echo $url; ?>');">
-
+	<div class="full-bits">
 <?php 	MakeHideToggleButton('bits'); ?>
 <?php
 
-$inv_pos_offx = 11; // Diff offsets
-$inv_pos_offy = 24;
-$inv_extra_offx = $inv_extra_offy = 4;
-$inv_extra_offy = 2;
-	
-RenderItemsTable($normalequips['BitsCaseBits'], $rows * $cols, $cols);
 
+	$bits_quest = Quest::GetQuest($internal_id, 7022, true);
+	$bits_info = null;
+
+	// c=0;e=1;l=3;s=12
+	// c = Type of case (3090000)
+	// e = Equipped. Is removed when unequipped
+	// l = Lines
+	// s = Slots
+	if ($bits_quest !== null && !$bits_quest->IsCompleted() && isset($bits_quest->data['e']) && $bits_quest->data['e'] == 1):
+		$bits_info = $bits_quest->data;
+		$bits_rows = (int)$bits_info['l'];
+		$bits_cols = (int)$bits_info['s'] / $bits_rows;
+		
+		// Get size
+		$url = "http://".$domain."/ui/bits/".$bits_rows."/".$bits_cols."/";
+		$width_height_array = json_decode(file_get_contents($url.'?onlysize'), true);
+	endif;
+?>
+		<div class="main-bits">
+			<div class="inventory selected-bitcase">
+<?php
+	$bitcase_name = '';
+	if ($bits_info !== null) {
+		$item = FindItemInInventoryByItemID($inventory->GetInventory(2), 3090000 + $bits_info['c']);
+		if ($item !== null) {
+			RenderItemAtPosition($item, 17, 33, false, false);
+			
+			$bitcase_name = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name'));
+		}
+	}
+?>
+				<span class="bitcase-name"><?php echo $bitcase_name; ?></span>
+			</div>
+			<div class="inventory bits">
+<?php
+
+	$inv_pos_offx = 5; // Diff offsets
+	$inv_pos_offy = 2;
+	$inv_extra_offx = $inv_extra_offy = 2;
+
+	RenderItemsTable($normalequips['Bits'], max(6 * 4, ceil(count($normalequips['Bits']) / 6) * 6), 6);
+
+?>
+			</div>
+		</div>
+<?php
+	if ($bits_info !== null):
+?>
+		<div class="inventory bitcase" style="width: <?php echo $width_height_array['width']; ?>px; height: <?php echo $width_height_array['height']; ?>px; background-image: url('<?php echo $url; ?>');">
+
+<?php
+
+		$inv_pos_offx = 11; // Diff offsets
+		$inv_pos_offy = 24;
+		$inv_extra_offx = $inv_extra_offy = 4;
+		$inv_extra_offy = 2;
+			
+		RenderItemsTable($normalequips['BitsCaseBits'], $bits_rows * $bits_cols, $bits_cols);
+
+?>
+		</div>
+<?php
+	endif;
 ?>
 	</div>
 <?php
-endif;
 endif;
 
 ?>
@@ -1465,9 +1592,10 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 
 <div id="item_info" style="display: none;">
 	<div class="top"></div>
+	<center id="item_info_stars"></center>
 	<div id="item_info_title"></div>
 	<div id="item_info_extra"></div>
-	<div class="icon_holder"><img id="item_info_icon" src="" title="" width="72px" height="72px"/></div>
+	<div class="icon_holder"><img id="item_info_icon" src="" title="" /></div>
 	<div id="item_info_description"></div>
 	<div class="item_req_stats">
 

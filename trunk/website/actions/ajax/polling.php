@@ -22,6 +22,46 @@ if ($request_type == 'info') {
 		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 	}
 	
+	
+	$url = isset($_POST['url']) ? $_POST['url'] : null;
+	$parsed_url = $url == null ? null : parse_url($url);
+	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
+	
+	
+	// Check server status
+	
+	$res['server_status'] = array();
+
+	foreach ($maplerme_servers as $servername => $data) {
+		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
+		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
+		if ($socket) {
+			$size = fread($socket, 1);
+			for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
+				$size = fread($socket, 1);
+			}
+			if (strlen($size) == 1) {
+				$size = ord($size[0]);
+				$data = fread($socket, $size);
+				for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
+					$data .= fread($socket, $size - strlen($data));
+				}
+				if (strlen($data) == $size) {
+					$data = unpack('vversion/clocale/Vplayers', $data);
+					$data['state'] = 'online';
+					
+					switch ($data['locale']) {
+						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
+						case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
+						case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
+					}
+				}
+			}
+			fclose($socket);
+		}
+		$res['server_status'][$servername] = $data;
+	}
+	
 	$status_info = array();
 	if (isset($_POST['shown-statuses'])) {
 		// Check status info
@@ -65,10 +105,6 @@ WHERE
 	}
 	$res['status_info'] = $status_info;
 	
-	
-	$url = isset($_POST['url']) ? $_POST['url'] : null;
-	$parsed_url = $url == null ? null : parse_url($url);
-	$is_ok_url = $url != null && strpos($parsed_url['host'], $domain) !== false;
 	
 	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');

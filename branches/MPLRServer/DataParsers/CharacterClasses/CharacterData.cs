@@ -446,7 +446,7 @@ namespace MPLRServer
             if (pPacket.ReadBool())
             {
                 // Wat.
-                ItemBase.DecodeItemData(pPacket);
+                ItemBase.DecodeItemData(pConnection, pPacket);
             }
 
 

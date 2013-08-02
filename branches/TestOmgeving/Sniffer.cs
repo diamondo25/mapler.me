@@ -44,7 +44,6 @@ namespace Mapler_Client
         protected virtual void Dispose(bool disposing)
         {
             Stop();
-            _devices.Clear();
             _devices = null;
         }
 
@@ -54,12 +53,17 @@ namespace Mapler_Client
             foreach (var device in tmp)
                 StopCapture(device);
             tmp.Clear();
+            _devices.Clear();
+
+            FoundConnection = false;
 
             if (_currentSession != null)
             {
                 _currentSession.Dispose();
                 _currentSession = null;
             }
+
+
         }
 
 
@@ -67,8 +71,8 @@ namespace Mapler_Client
         {
             if (_devices.Contains(pDevice))
                 _devices.Remove(pDevice);
-            pDevice.OnPacketArrival -= device_OnPacketArrival;
             pDevice.Close();
+            pDevice.OnPacketArrival -= device_OnPacketArrival;
         }
 
         public void SetUp()

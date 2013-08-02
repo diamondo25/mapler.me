@@ -49,6 +49,8 @@ namespace MaplerUpdater
             System.IO.File.WriteAllText(path, e.ToString());
 
             MessageBox.Show("An unhandled exception has been caught!\r\nPlease contact the us at support@mapler.me with the contents of the following file:\r\n\r\n" + path + "\r\n\r\nThis application will now exit.", "Mapler.me Updater Unhandled exception!!!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Console.WriteLine("Error: {0}", e.ToString());
+            Environment.Exit(1);
         }
     }
 }

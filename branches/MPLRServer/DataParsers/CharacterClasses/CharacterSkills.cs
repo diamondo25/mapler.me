@@ -46,6 +46,7 @@ namespace MPLRServer
                         SkillList.Add(skill.ID, skill);
                 }
 
+                // Link skills
                 for (int i = pPacket.ReadShort(); i > 0; i--)
                 {
                     pPacket.ReadInt();
