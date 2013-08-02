@@ -4,7 +4,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 	if ($error == '') {
 		$name = htmlentities($_POST['name'], ENT_COMPAT, 'UTF-8');
 		if (strlen(trim($name)) == 0)
-			$error = 'You have to enter a fullname.';
+			$error = 'You have to enter a full name.';
 	}
 	
 	if ($error == '') {
@@ -30,6 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 	}
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['topsecret'], $_POST['twitch'])) {
+	if ($error == '') {
+		$twitchtopsecret = htmlentities($_POST['topsecret'], ENT_COMPAT, 'UTF-8');
+		if (strlen(trim($twitchtopsecret)) == 0)
+			$error = 'You have to enter your account\'s API code to allow Twitch.tv to function.';
+	}
+	if ($error == '') {
+		$twitchname = htmlentities($_POST['twitch'], ENT_COMPAT, 'UTF-8');
+		if (strlen(trim($twitchname)) == 0)
+			$error = 'You have to enter your Twitch.tv username to connect it to Mapler.me!';
+	}
+	
+	if ($error == '') {
+		//execute
+		$_loginaccount->SetConfigurationOption('twitch_username', $twitchname);
+		$_loginaccount->SetConfigurationOption('twitch_api_code', $twitchtopsecret);
+	}
+}
+
 if ($error != '') {
 ?>
 <p class="lead alert-warn alert">Error: <?php echo $error; ?></p>
@@ -37,6 +56,13 @@ if ($error != '') {
 }
 
 ?>
+
+<style>
+.label {
+	background-color: transparent !important;
+	}
+</style>
+
 			<h2>Your Profile</h2>
 			<form id="settings-form" method="post">
 			<div class="span9">
@@ -69,6 +95,36 @@ if ($error != '') {
 						<div class="span2 label">Email</div>
 						<div class="span4">
 							<input type="text" name="email" id="inputEmail" value="<?php echo $_loginaccount->GetEmail(); ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="controls">
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+			</form>
+			
+			<br />
+			
+			<h2>Twitch.tv</h2>
+			<p>Automatically display your Twitch.tv stream on your Mapler.me profile whenever you play MapleStory! <br/> Visit <a href="http://www.twitch.tv/settings/applications">http://www.twitch.tv/settings/applications</a> and create an application to obtain an API code.</p>
+			<form id="settings-form" method="post">
+			<div class="span9">
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">Username</div>
+						<div class="span4">
+							<input type="text" name="twitch" id="inputName" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_username'); ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="item">
+					<div class="row">
+						<div class="span2 label">API Code</div>
+						<div class="span4">
+							<input type="text" name="topsecret" id="inputNick" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_api_code'); ?>" />
 						</div>
 					</div>
 				</div>

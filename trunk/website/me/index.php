@@ -18,6 +18,45 @@ require_once __DIR__.'/../inc/templates/me.header.template.php';
 <?php
 endif;
 ?>
+
+<?php
+ if ($__url_useraccount->GetConfigurationOption('twitch_username') !== 0) {
+$clientId = $__url_useraccount->GetConfigurationOption('twitch_api_code');             // Register your application and get a client ID at http://www.twitch.tv/settings?section=applications
+$twitchusername = $__url_useraccount->GetConfigurationOption('twitch_username');
+$json_array = json_decode(file_get_contents('https://api.twitch.tv/kraken/streams/'.$twitchusername.'?client_id='.$clientId), true);
+ 
+if ($json_array['stream'] != NULL) {
+    $channelTitle = $json_array['stream']['channel']['display_name'];
+    $streamTitle = $json_array['stream']['channel']['status'];
+    $currentGame = $json_array['stream']['channel']['game'];
+	
+	if ($currentGame = "MapleStory") {
+	?>
+		<object type="application/x-shockwave-flash" height="378" width="620" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
+			<param name="allowFullScreen" value="true" />
+			<param name="allowScriptAccess" value="always" />
+			<param name="allowNetworking" value="all" />
+			<param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" />
+			<param name="flashvars" value="hostname=www.twitch.tv&channel=<?php echo $twitchusername ?>&auto_play=true&start_volume=25" />
+		</object>
+	<?php
+	}
+	
+	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['debugtwitch'])) {
+	?>
+		<object type="application/x-shockwave-flash" height="378" width="620" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
+			<param name="allowFullScreen" value="true" />
+			<param name="allowScriptAccess" value="always" />
+			<param name="allowNetworking" value="all" />
+			<param name="movie" value="http://www.twitch.tv/widgets/live_embed_player.swf" />
+			<param name="flashvars" value="hostname=www.twitch.tv&channel=<?php echo $twitchusername ?>&auto_play=true&start_volume=25" />
+		</object>
+	<?php
+	}
+}
+}
+?>
+
 	<div class="span9" id="statuslist"></div>
 
 <p>
