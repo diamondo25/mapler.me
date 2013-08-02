@@ -20,7 +20,7 @@ endif;
 ?>
 
 <?php
- if ($__url_useraccount->GetConfigurationOption('twitch_username') !== 0) {
+ if ($__url_useraccount->GetConfigurationOption('twitch_username') !== NULL) {
 $clientId = $__url_useraccount->GetConfigurationOption('twitch_api_code');             // Register your application and get a client ID at http://www.twitch.tv/settings?section=applications
 $twitchusername = $__url_useraccount->GetConfigurationOption('twitch_username');
 $json_array = json_decode(file_get_contents('https://api.twitch.tv/kraken/streams/'.$twitchusername.'?client_id='.$clientId), true);
