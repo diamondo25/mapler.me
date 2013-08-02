@@ -52,6 +52,7 @@ max-width: 240px;">
 	
 	<div class="stream-block">
 <?php
+	require_once __DIR__.'/../server_info.php';
 	foreach ($maplerme_servers as $servername => $data) {
 		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
 		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
@@ -82,7 +83,7 @@ max-width: 240px;">
 ?>
 		<div mapler-locale="<?php echo $servername; ?>">
 			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span class="label label-success">MapleStory <?php echo $data['locale']; ?> V<span version><?php echo $data['version']; ?></span></span> <span class="badge badge-success"><span players><?php echo $data['players']; ?></span> online</span></span>
-			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>></span>
+			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>>Mapler.me server '<?php echo $servername; ?>' is offline...</span>
 		</div>
 <?php
 	}

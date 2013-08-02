@@ -1,7 +1,7 @@
 <?php
 
 $maplerme_servers = array();
-$maplerme_servers['global'] = array('gms.s.mapler.me', 23711);
+$maplerme_servers['global'] = array('direct.mapler.me', 23711);
 //$maplerme_servers['europe'] = array('ems.s.mapler.me', 23711);
 
 if (strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE) {
