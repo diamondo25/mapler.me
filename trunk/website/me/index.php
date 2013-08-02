@@ -34,7 +34,7 @@ if ($json_array['stream'] != NULL) {
 	?>
 		<div class="span9" style="float:right !important;">
 		<div class="status">
-		<object type="application/x-shockwave-flash" height="398" width="700" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
+		<object type="application/x-shockwave-flash" height="398" width="690" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
 			<param name="allowFullScreen" value="true" />
 			<param name="allowScriptAccess" value="always" />
 			<param name="allowNetworking" value="all" />
@@ -49,7 +49,7 @@ if ($json_array['stream'] != NULL) {
 	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['debugtwitch'])) {
 	?>
 		<div class="span9" style="float:right !important;">
-		<object type="application/x-shockwave-flash" height="398" width="700" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
+		<object type="application/x-shockwave-flash" height="398" width="690" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
 			<param name="allowFullScreen" value="true" />
 			<param name="allowScriptAccess" value="always" />
 			<param name="allowNetworking" value="all" />
@@ -66,7 +66,7 @@ if ($json_array['stream'] != NULL) {
 	<div class="span9" id="statuslist" style="float:right !important;"></div>
 
 <p>
-	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton">Load more statuses..</button></center>
+	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton" style="float:right; !important;">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { 
