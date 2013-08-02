@@ -131,14 +131,17 @@ namespace MPLRServer
 
             sb.Append(string.Join(",\r\n\t", tmp));
 
-            List<string> updatecolumns = new List<string>();
-            foreach (Column col in _columns.Where(c => { return c.InUpdate; }))
-                updatecolumns.Add(string.Format("`{0}` = VALUES(`{0}`)", col.Name));
-
-            if (updatecolumns.Count > 0)
+            if (OnDuplicateUpdate)
             {
-                sb.Append("\r\nON DUPLICATE KEY UPDATE\r\n\t");
-                sb.Append(string.Join(",\r\n\t", updatecolumns.ToArray()));
+                List<string> updatecolumns = new List<string>();
+                foreach (Column col in _columns.Where(c => { return c.InUpdate; }))
+                    updatecolumns.Add(string.Format("`{0}` = VALUES(`{0}`)", col.Name));
+
+                if (updatecolumns.Count > 0)
+                {
+                    sb.Append("\r\nON DUPLICATE KEY UPDATE\r\n\t");
+                    sb.Append(string.Join(",\r\n\t", updatecolumns.ToArray()));
+                }
             }
             sb.Append(";");
 

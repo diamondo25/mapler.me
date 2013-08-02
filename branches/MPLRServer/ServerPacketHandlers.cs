@@ -149,6 +149,8 @@ namespace MPLRServer
 
             using (InsertQueryBuilder insertq = new InsertQueryBuilder("users"))
             {
+                insertq.OnDuplicateUpdate = true;
+
                 insertq.AddColumn("account_id");
                 insertq.AddColumns(true, "ID", "username", "admin", "last_check", "quiet_ban_expire", "quiet_ban_reason", "creation_date");
 
@@ -769,6 +771,8 @@ namespace MPLRServer
         {
             using (InsertQueryBuilder familiars = new InsertQueryBuilder("familiars"))
             {
+                familiars.OnDuplicateUpdate = true;
+
                 familiars.AddColumn("character_id");
                 familiars.AddColumn("mobid");
                 familiars.AddColumns(true,
@@ -818,6 +822,7 @@ namespace MPLRServer
             MySQL_Connection.Instance.RunQuery(string.Format("DELETE FROM buddies WHERE character_id = {0}", pConnection.CharacterInternalID));
             using (InsertQueryBuilder buddies = new InsertQueryBuilder("buddies"))
             {
+                buddies.OnDuplicateUpdate = true;
                 buddies.AddColumn("character_id");
                 buddies.AddColumn("friend_id");
                 buddies.AddColumns(true, "friend_name", "group_name");
@@ -909,20 +914,22 @@ namespace MPLRServer
 
                         using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
                         {
+                            itemsTable.OnDuplicateUpdate = true;
                             Queries.SaveItem(pConnection, inv, slot, item, itemsTable);
-                            MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
+                            itemsTable.RunQuery();
 
-                            if (item is ItemPet)
-                            {
-                                var pet = item as ItemPet;
-                                using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
-                                {
-                                    Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
-                                    MySQL_Connection.Instance.RunQuery(petTable.ToString());
-                                }
-                            }
                         }
 
+                        if (item is ItemPet)
+                        {
+                            var pet = item as ItemPet;
+                            using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
+                            {
+                                petTable.OnDuplicateUpdate = true;
+                                Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
+                                petTable.RunQuery();
+                            }
+                        }
 
                     }
                     else if (type4 == 1) // Update amount
@@ -1157,8 +1164,9 @@ namespace MPLRServer
 
                             using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
                             {
+                                itemsTable.OnDuplicateUpdate = true;
                                 Queries.SaveItem(pConnection, inv, slot, ib, itemsTable);
-                                MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
+                                itemsTable.RunQuery();
                             }
 
 
@@ -1399,17 +1407,19 @@ namespace MPLRServer
 
                         using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
                         {
+                            itemsTable.OnDuplicateUpdate = true;
                             Queries.SaveItem(pConnection, invfrom, slotfrom, item, itemsTable);
-                            MySQL_Connection.Instance.RunQuery(itemsTable.ToString());
+                            itemsTable.RunQuery();
 
-                            if (item is ItemPet)
+                        }
+                        if (item is ItemPet)
+                        {
+                            var pet = item as ItemPet;
+                            using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
                             {
-                                var pet = item as ItemPet;
-                                using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
-                                {
-                                    Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
-                                    MySQL_Connection.Instance.RunQuery(petTable.ToString());
-                                }
+                                petTable.OnDuplicateUpdate = true;
+                                Queries.SavePet(pConnection.CharacterInternalID, pet, petTable);
+                                petTable.RunQuery();
                             }
                         }
                     }

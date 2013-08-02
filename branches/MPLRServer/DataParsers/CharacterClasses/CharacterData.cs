@@ -883,6 +883,8 @@ namespace MPLRServer
 
                 using (InsertQueryBuilder teleportRocks = new InsertQueryBuilder("teleport_rock_locations"))
                 {
+                    teleportRocks.OnDuplicateUpdate = true;
+
                     teleportRocks.AddColumn("character_id");
                     teleportRocks.AddColumn("index");
                     teleportRocks.AddColumn("map", true);
