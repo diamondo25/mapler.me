@@ -247,8 +247,10 @@ using (ScriptAPI) {
 			
 			amount = AddShort("amount");
 			for (i = 1; i <= amount; i++) {
+				StartNode("Link skill " + i);
 				AddInt("skillid");
-				AddShort("skillid");
+				AddShort("Level");
+				EndNode(false);
 			}
 		}
 	    else {

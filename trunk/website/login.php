@@ -98,13 +98,9 @@ ORDER BY
 	rand()
 	LIMIT 1
 ");
-	$cache = array();
-
 	$row = $q->fetch_assoc();
-?>
-			<img style="background: url('//mapler.me/avatar/<?php echo $row['name']; ?>?size=small') no-repeat center -2px rgba(0,0,0,0.5); position:relative; top:10px;" class="character pull-left" />
-<?php
-$q->free();
+	MakePlayerAvatar($row['name'], array('face' => 'smile', 'size' => 'small', 'flip' => true));
+	$q->free();
 ?>
  <h4>Log in to your Mapler.me account</h4>
 

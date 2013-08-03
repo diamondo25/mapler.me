@@ -529,7 +529,7 @@ function GetItemDialogInfo($item, $isequip) {
 	}
 	
 
-	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid, 'iscash' => $iscash);
+	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid, 'iscash' => $iscash, 'islocked' => $info_array['other_info']['locked']);
 }
 
 
@@ -737,6 +737,16 @@ function AddInventoryItems(&$inventory) {
 	z-index: 3;
 }
 
+.item-slot > .locked {
+	background: url('/inc/img/ui/Item/Equip/lock.png') no-repeat;
+	width: 13px;
+	height: 14px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 3;
+}
+
 .new-inventory-container {
 	background: url('/inc/img/ui/new_inventory/background.png') no-repeat;
 	position: relative;
@@ -866,7 +876,7 @@ function AddInventoryItems(&$inventory) {
 }
 
 .evolution-system {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/evolvingsystem.png');
+	background-image: url('/inc/img/ui/evolvingsystem.png');
 	width: 357px;
 	height: 317px;
 	position: relative;
@@ -923,7 +933,7 @@ function AddInventoryItems(&$inventory) {
 }
 
 .main-bits {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/bits/background.png');
+	background-image: url('/inc/img/ui/bits/background.png');
 	width: 248px;
 	height: 229px;
 	position: relative;
@@ -941,7 +951,7 @@ function AddInventoryItems(&$inventory) {
 }
 
 .teleport-rock {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/teleport-bg.png');
+	background-image: url('/inc/img/ui/teleport-bg.png');
 	width: 160px;
 	height: 285px;
 	position: relative;
@@ -1068,6 +1078,9 @@ function RenderItems(&$itemset, $slotmap_name) {
 <?php if ($info['iscash'] == 1): ?>
 				<div class="cashitem"></div>
 <?php endif; ?>
+<?php if ($info['islocked'] == 1): ?>
+				<div class="locked"></div>
+<?php endif; ?>
 			</div>
 <?php
 	}
@@ -1105,6 +1118,9 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 <?php if ($info['iscash'] == 1): ?>
 				<div class="cashitem"></div>
 <?php endif; ?>
+<?php if ($info['islocked'] == 1): ?>
+				<div class="locked"></div>
+<?php endif; ?>
 			</div>
 <?php
 		}
@@ -1135,6 +1151,9 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 <?php endif; ?>
 <?php if ($info['iscash'] == 1): ?>
 				<div class="cashitem"></div>
+<?php endif; ?>
+<?php if ($info['islocked'] == 1): ?>
+				<div class="locked"></div>
 <?php endif; ?>
 			</div>
 <?php

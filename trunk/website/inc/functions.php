@@ -640,15 +640,16 @@ function GetMaplerCookie($name) {
 }
 
 function MakePlayerAvatar($name, $options = array()) {
-	// global $domain;
+	global $domain;
 	$size = isset($options['size']) ? $options['size'] : 'small';
 	$styleappend = isset($options['styleappend']) ? $options['styleappend'] : '';
 	$face = isset($options['face']) ? $options['face'] : '';
 	$type = isset($options['ign']) && $options['ign'] == true ? 'ignavatar' : 'avatar';
+	$flip = isset($options['flip']) && $options['flip'] == true;
 	$notfound = $name === null || $name == '';
 	$image = 'http://mapler.me/inc/img/no-character.gif';
 	if (!$notfound) {
-		$image = 'http://mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face;
+		$image = 'http://mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
 	}
 	
 	if (isset($options['onlyurl'])) {
@@ -656,7 +657,7 @@ function MakePlayerAvatar($name, $options = array()) {
 		return;
 	}
 ?>
-	<div style="background: url('<?php echo $image; ?>') no-repeat center -2px rgba(0, 0, 0, 0.5);<?php echo $styleappend; ?>" class="character"></div>
+	<div onclick="document.location.href = '//<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px rgba(0, 0, 0, 0.5); cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 

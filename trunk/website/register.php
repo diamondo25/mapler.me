@@ -12,9 +12,9 @@ $row = $x->fetch_assoc();
 if($row['status'] == '1') {
 ?>
 	<p>
-		<center class='status lead'>
-				<img src='//<?php echo $domain; ?>/inc/img/icon.png' width='200px'/><br/>
-				We're sorry! The amount of new members today has reached it's max.<br/>
+		<center class="status lead">
+				<img src="//<?php echo $domain; ?>/inc/img/icon.png" width="200px" /><br />
+				We're sorry! The amount of new members today has reached it's max.<br />
 				Come back tomorrow!<br/>
 			<sub>Tip: The limit resets at <b>8AM</b> (PST / MapleStory Time)</sub>
 		</center>

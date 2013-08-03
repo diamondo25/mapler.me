@@ -1478,21 +1478,19 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("--------- Done parsing Character Info ----------");
 
                 // Quick duplicate check
-                int conflictedID = -1;
-                using (var reader = MySQL_Connection.Instance.RunQuery("SELECT id FROM characters WHERE id <> " + data.Stats.ID + " AND name = " + MySQL_Connection.Escape(data.Stats.Name)) as MySql.Data.MySqlClient.MySqlDataReader)
+                Tuple<int, byte, byte, ushort> conflicted = null;
+                using (var reader = MySQL_Connection.Instance.RunQuery("SELECT id, level, world_id, job FROM characters WHERE id <> " + data.Stats.ID + " AND name = " + MySQL_Connection.Escape(data.Stats.Name)) as MySql.Data.MySqlClient.MySqlDataReader)
                 {
                     if (reader.Read())
                     {
                         // CONFLICTS
-                        conflictedID = reader.GetInt32(0);
+                        conflicted = new Tuple<int, byte, byte, ushort>(reader.GetInt32(0), reader.GetByte(1), reader.GetByte(2), reader.GetUInt16(3));
                     }
                 }
-                if (conflictedID == -1)
+                if (conflicted == null)
                 {
                     if (!data.SaveData(pConnection))
-                    {
                         return;
-                    }
 
                     pConnection.CharData = data;
 
@@ -1514,7 +1512,10 @@ namespace MPLRServer
                 {
                     pConnection.LogFilename += "-(CONFLICT)" + data.Stats.Name;
 
-                    pConnection.Logger_WriteLine("!!!!!! FOUND CHARACTER NAME CONFLICT ! Expected Character ID {0}, found Character ID {1} in database!", data.Stats.ID, conflictedID);
+                    pConnection.Logger_WriteLine("!!!!!! FOUND CHARACTER NAME CONFLICT ! Expected Character ID {0}, found Character ID {1} in database!", data.Stats.ID, conflicted.Item1);
+                    pConnection.Logger_WriteLine("Level diff: {0} - {1}", data.Stats.Level, conflicted.Item3);
+                    pConnection.Logger_WriteLine("Job diff: {0} - {1}", data.Stats.JobID, conflicted.Item4);
+                    pConnection.Logger_WriteLine("World diff: {0} - {1}", pConnection.WorldID, conflicted.Item2);
                     pConnection.SendInfoText("A different character has already this name! Delete this character via the website first!");
                 }
             }
