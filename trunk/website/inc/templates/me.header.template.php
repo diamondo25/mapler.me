@@ -173,8 +173,8 @@ endif;
 		<button type="button" class="btn btn-danger" onclick="Mute('<?php echo $__url_useraccount->GetUsername(); ?>')">Mute</button>
 		<?php endif; ?>
 	</div>
-	</div>
 <?php endif; ?>
+	</div>
 	<div class="invert-box">
 <?php
 if ($_loggedin && !$is_self) {
@@ -203,6 +203,13 @@ if ($_loggedin && !$is_self) {
 <?php
 	}
 }
+
+if ($_loggedin && $is_self) {
+?>
+<p class="name_extra">You can't friend yourself! :)</p>
+<?php
+}
+
 ?>
 	</div>
 	<div class="invert-box">
