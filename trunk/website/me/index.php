@@ -66,7 +66,7 @@ if ($json_array['stream'] != NULL) {
 	<div class="span9" id="statuslist" style="float:right !important;"></div>
 
 <p>
-	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton" style="float:right; !important;">Load more statuses..</button></center>
+	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton" style="clear:both; !important; float:right;">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { 

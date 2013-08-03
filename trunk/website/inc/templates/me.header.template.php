@@ -147,20 +147,18 @@ hr {
 <?php
 if ($has_characters):
 ?>
-	<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>">
-		<img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
-	</a>
+	<div class="invert-box">
+		<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>">
+			<img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
+		</a>
+	</div>
 <?php
 endif;
 ?>
-		
-		<br />
-		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?><br />
+	<div class="invert-box">
+		<p class="name"><?php echo $__url_useraccount->GetNickname(); ?> <span class="rank"><?php echo GetRankTitle($rank); ?></span><br />
 		</p>
-		<p class="rank"><?php echo GetRankTitle($rank); ?></p>
-		<hr/>
 		<p class="name_extra">last seen <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago...<br/></p>
-		<hr/>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
 	<div class="btn-group">
 		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage">
@@ -175,41 +173,40 @@ endif;
 		<button type="button" class="btn btn-danger" onclick="Mute('<?php echo $__url_useraccount->GetUsername(); ?>')">Mute</button>
 		<?php endif; ?>
 	</div>
-	<br /><br />
-	<hr />
+	</div>
 <?php endif; ?>
+	<div class="invert-box">
 <?php
 if ($_loggedin && !$is_self) {
 	if ($friend_status == 'FRIENDS') {
 ?>
 
 		<p class="name_extra">You are already friends! <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Remove?</button></p>
-		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NO_FRIENDS') {
 ?>
 
 		<p class="name_extra"><button class="btn btn-mini btn-success" onclick="InviteFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Add as a friend?</button></p>
-		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_YOU') {
 ?>
 
 		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <button class="btn btn-mini btn-success" onclick="AcceptFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Accept?</button></p>
-		<hr/>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
 		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Cancel?</button></p>
-		<hr/>
 <?php
 	}
 }
-
+?>
+	</div>
+	<div class="invert-box">
+<?php
 if (count($cachez) > 0):
 ?>
 		<p class="side"><i class="icon-comment faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo count($cachez); ?> Statuses</a></p>
@@ -226,6 +223,7 @@ if (count($cachey) > 0):
 <?php
 endif;
 ?>
+	</div>
 	</div>
 <?php
 if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)): 
