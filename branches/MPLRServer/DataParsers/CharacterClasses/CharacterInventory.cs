@@ -41,39 +41,34 @@ namespace MPLRServer
             // 0 = Normal Equips
             // 1 = Cash Equips. Note, same counting!
             // 2 = Inventory itself
-            // 3 = Afaik Evan dragon. Slot >= 1000
-            // 4 = Mechanic stuff. Slot >= 1100
-            // 5 = Looks like cash items. Slot >= 1200. Android?
-            // 6 = 
-            // 7 = 
+            // 3 = Evan; Slot >= 1000
+            // 4 = Mech; Slot >= 1100
+            // 5 = Android; Slot >= 1200
+            // 6 = Coordinate (AB); Slot >= 1300
+            // 7 = Haku (Hayato and Kanna); Slot >= 1400
+            // 8 = Bits in the case; Slot >= 1500
+            // 9 = Totem; Slot >= 5000
+            // 10 = Bits; Slot >= 20000
             if (pSlot > 0)
-            {
                 return 2;
-            }
+            else if (pSlot <= -20000)
+                return 10;
+            else if (pSlot <= -5000)
+                return 9;
+            else if (pSlot <= -1500)
+                return 8;
             else if (pSlot <= -1400)
-            {
                 return 7;
-            }
             else if (pSlot <= -1300)
-            {
                 return 6;
-            }
             else if (pSlot <= -1200)
-            {
                 return 5;
-            }
             else if (pSlot <= -1100)
-            {
                 return 4;
-            }
             else if (pSlot <= -1000)
-            {
                 return 3;
-            }
             else if (pSlot <= -100)
-            {
                 return 1;
-            }
             // Slot <= 0
             return 0;
         }

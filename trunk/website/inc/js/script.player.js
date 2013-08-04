@@ -7,6 +7,9 @@ function SetItemInfo(event, obj, values) {
 	var isequip = item.inventory == 0;
 	var itemid = item.itemid;
 	var gender = parseInt(itemid / 1000) % 10;
+	var haspotential = false;
+	var hasbonuspotential = false;
+	var hasnebulite = false;
 	
 	var GetObj = function (val) {
 		return document.getElementById(val);
@@ -28,6 +31,14 @@ function SetItemInfo(event, obj, values) {
 		}
 	};
 	
+	var PadReqStat = function (val) {
+		if (val == undefined) return undefined;
+		var tmp = val.toString();
+		for (var i = tmp.length; i < 3; i++)
+			tmp = '0' + tmp;
+		return tmp;
+	};
+	
 	var hasStatsSet = false;
 	
 	var SetObjText = function(name, value, def_value, ignoreZero) {
@@ -41,15 +52,16 @@ function SetItemInfo(event, obj, values) {
 		GetObj('item_info_row_' + name).style.color = '';
 		if (isSet && typeof def_value !== 'undefined') {
 			var diff = value - def_value;
+			value = (value < 0 ? '-' : '+') + value;
 			if (diff > 0) {
 				//	Added
-				value += ' (' + def_value + ' + ' + diff + ')';
-				GetObj('item_info_row_' + name).style.color = 'limegreen';
+				value += ' <span class="stat-diff-info">(' + def_value + ' + ' + diff + ')</span>';
+				GetObj('item_info_row_' + name).style.color = 'cyan';
 			}
 			else if (diff < 0) {
 				// Lost
-				value += ' (' + def_value + ' - ' + -diff + ')'; // - --10 = - 10 wooop
-				GetObj('item_info_row_' + name).style.color = 'orange';
+				//value += ' <span class="stat-diff-info">(' + def_value + ' - ' + -diff + ')</span>'; // - --10 = - 10 wooop
+				GetObj('item_info_row_' + name).style.color = '';
 			}
 		}
 		GetObj('item_info_' + name).innerHTML = value;
@@ -57,7 +69,7 @@ function SetItemInfo(event, obj, values) {
 	
 	var SetObjTextIsEquip = function(name, value) {
 		GetObj('item_info_req_row_' + name).style.display = !isequip && (value == 0 || value == '' || value == undefined) ? 'none' : '';
-		GetObj('item_info_req_' + name).innerHTML = value;
+		GetObj('item_info_req_' + name).innerHTML = PadReqStat(value);
 	};
 
 	GetObj('item_info_title').innerHTML = obj.getAttribute('item-name');
@@ -110,7 +122,7 @@ function SetItemInfo(event, obj, values) {
 	SetObjTextIsEquip('reqdex', reqs.dex);
 	SetObjTextIsEquip('reqint', reqs.int);
 	SetObjTextIsEquip('reqluk', reqs.luk);
-	SetObjTextIsEquip('reqpop', reqs.pop);
+	//SetObjTextIsEquip('reqpop', reqs.pop);
 	SetObjTextIsEquip('itemlevel', item.itemlevel);
 	SetObjTextIsEquip('itemexp', item.itemexp);
 
@@ -142,17 +154,31 @@ function SetItemInfo(event, obj, values) {
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	
 	var description = descriptions[itemid];
-
-	if (description != undefined) {
-		GetObj('item_info_description').style.display = '';
-		GetObj('item_info_description').innerHTML = description;
-	}
-	else {
-		GetObj('item_info_description').style.display = 'none';
+	var description_place = isequip ? 'extra_item_info' : 'item_info_description';
+	GetObj('extra_item_info').style.display = 'none';
+	GetObj('extra_item_info').innerHTML = '';
+	GetObj('item_info_description').style.display = 'none';
+	GetObj('item_info_description').innerHTML = '';
+	
+	
+	GetObj('potentials').innerHTML = ''; // Clear potentials
+	GetObj('bonus_potentials').innerHTML = ''; // Clear potentials
+	GetObj('nebulite_info').innerHTML = ''; // Clear nebulite info
+	
+	// Get potential info
+	if (isequip) {
+		if ((item.statusflag & 0x0001) != 0 && item.potential1 == 0 && item.potential2 == 0 && item.potential3 == 0) {
+			var row = GetObj('potentials').insertRow(-1);
+			row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
+			haspotential = true;
+		}
 	}
 
 	var extrainfo = '';
 	// extrainfo += '<span>Quality: ' + otherinfo.quality + '</span>';
+
+	if (haspotential)
+		extrainfo += '<span style="color: #FF0066;">(Hidden Potential Item)</span>';
 
 	if (otherinfo.oneofakind)
 		extrainfo += '<span>One of a Kind</span>';
@@ -169,7 +195,8 @@ function SetItemInfo(event, obj, values) {
 	if (otherinfo.coldprotection)
 		extrainfo += '<span>Cold prevention</span>';
 	if (otherinfo.tradeblock) {
-		var tradeInfo = 'Untradable';
+		extrainfo += '<span>Untradable<span>';
+		var tradeInfo = '';
 		switch (otherinfo.tradeblock) {
 			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
 			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
@@ -177,7 +204,11 @@ function SetItemInfo(event, obj, values) {
 			case 0x30: tradeInfo = 'Trade disabled when equipped'; break;
 			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
 		}
-		extrainfo += '<span>' + tradeInfo + '</span>';
+		if (tradeInfo != '') {
+			if (description == undefined)
+				description = '';
+			description += '<span style="color: orange;">' + tradeInfo + '</span>';
+		}
 	}
 	if (otherinfo.karmad)
 		extrainfo += '<span>1 time trading (karma\'d)</span>';
@@ -187,6 +218,14 @@ function SetItemInfo(event, obj, values) {
 
 	GetObj('item_info_extra').innerHTML = extrainfo;
 	GetObj('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
+	
+	if (description != undefined && description != '') {
+		GetObj(description_place).style.display = '';
+		if (isequip)
+			description = '<div class="dotline"></div>' + description;
+		GetObj(description_place).innerHTML = description;
+		
+	}
 
 	// Classes
 
@@ -201,18 +240,11 @@ function SetItemInfo(event, obj, values) {
 	
 	
 	
-	
-	GetObj('potentials').innerHTML = ''; // Clear potentials
-	GetObj('bonus_potentials').innerHTML = ''; // Clear potentials
-	GetObj('nebulite_info').innerHTML = ''; // Clear nebulite info
 
 	var potentiallevel = Math.round(reqs.level / 10);
 	if (potentiallevel == 0) potentiallevel = 1;
 	potentiallevel += stars;
 	
-	var haspotential = false;
-	var hasbonuspotential = false;
-	var hasnebulite = false;
 	
 	var GetNebuliteType = function (itemid) {
 		var val = parseInt(itemid / 1000);
@@ -227,14 +259,9 @@ function SetItemInfo(event, obj, values) {
 	};
 	
 	if (isequip) {
-		if ((item.statusflag & 0x0001) != 0) {
-			var row = GetObj('potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td width="150px">Hidden Potential.</td> </tr>';
-			haspotential = true;
-		}
 		if ((item.statusflag & 0x0020) != 0 && item.potential4 == 0 && item.potential5 == 0 && item.potential6 == 0) { // Note that this is the correct code. lol
 			var row = GetObj('bonus_potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td width="150px">Hidden Bonus Potential.</td> </tr>';
+			row.innerHTML = '<tr> <td width="150px" style="color: orange;">Hidden Bonus Potential.</td> </tr>';
 			hasbonuspotential = true;
 		}
 		

@@ -452,6 +452,7 @@ function GetWZItemTypeName($id) {
 
 		case 121:
 		case 122:
+		case 123:
 		case 124:
 		case 130:
 		case 131:

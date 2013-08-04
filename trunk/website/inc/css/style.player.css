@@ -393,7 +393,7 @@ hr {
 
 #item_info {
 	border: 1px solid rgba(255,255,255,1) !important;
-	border-radius: 5px;
+	border-radius: 10px;
 	background: rgba(0,0,0,0.8);
 	background-image: url('http://mapler.me/inc/img/ui/Item/Frame/cover.png');
 	background-position: left top;
@@ -411,9 +411,14 @@ hr {
 	margin-bottom: 5px;
 }
 
-#item_info #item_info_extra span {
+#item_info #item_info_extra > span {
 	text-align: center;
 	display: block;
+	font-size: 12px;
+	color: orange;
+}
+
+#item_info #extra_item_info {
 	font-size: 12px;
 }
 
@@ -422,10 +427,25 @@ hr {
 }
 
 #item_info #item_info_title {
-	text-align: center;
+	text-align: left;
 	margin-bottom: 5px;
-	font-size: 15px;
+	font-size: 13px;
 	color: white;
+	font-weight: bold;
+	padding-left: 7px;
+	background: url('/inc/img/ui/Item/Frame/title-bg-dot.png') left center;
+	background-repeat: no-repeat;
+}
+
+#item_info .dotline {
+	background: url('/inc/img/ui/Item/Frame/dotline_custom.png');
+	background-repeat: repeat-x;
+	height: 2px;
+	margin: 4px -5px;
+}
+
+#item_info .stat-diff-info {
+	color: gray;
 }
 
 #item_info .icon_holder {
@@ -437,6 +457,21 @@ hr {
 	float: left;
 	border-radius: 5px;
 	overflow: visible;
+	position: relative;
+}
+
+#item_info .icon_holder > .potential1 {
+	
+}
+
+#item_info .icon_holder > .cover {
+	background: url('http://mapler.me/inc/img/ui/Item/ItemIcon/cover.png') center center;
+	background-repeat: no-repeat;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 82px;
+	height: 82px;
 }
 
 #item_info_icon {
@@ -455,8 +490,10 @@ hr {
 	height: 90px;
 	margin-left: 95px;
 	overflow: hidden;
-	font-size: 11px;
+	font-size: 10px;
 	margin-bottom: 10px;
+	line-height: 10px;
+	font-family: Arial;
 }
 #item_info .item_req_stats > table {
 	font-size: 9px;

@@ -332,7 +332,7 @@ $reqlist['reqstr'] = 'REQ STR : ';
 $reqlist['reqdex'] = 'REQ DEX : ';
 $reqlist['reqint'] = 'REQ INT : ';
 $reqlist['reqluk'] = 'REQ LUK : ';
-$reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame
+// $reqlist['reqpop'] = 'REQ FAM : '; // pop = population -> Fame // Removed !
 $reqlist['itemlevel'] = 'ITEM LEV : ';
 $reqlist['itemexp'] = 'ITEM EXP : ';
 
@@ -710,6 +710,8 @@ function AddInventoryItems(&$inventory) {
 	z-index: inherit !important;
 	overflow: visible;
 	position: absolute;
+	width: 32px;
+	height: 32px;
 }
 
 .item-slot > .icon {
@@ -717,14 +719,14 @@ function AddInventoryItems(&$inventory) {
 }
 
 .item-slot > .amount {
-	bottom: 0;
-	color: black;
+	bottom: -3px;
+	color: white;
 	position: absolute;
-	right: 1px;
+	left: 1px;
 	z-index: 3;
 	font-family: Arial;
 	font-size: 12px;
-	text-shadow: -1px -1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, 1px 1px 0 #FFFFFF;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
 .item-slot > .cashitem {
@@ -732,7 +734,7 @@ function AddInventoryItems(&$inventory) {
 	width: 13px;
 	height: 13px;
 	position: absolute;
-	bottom: 0;
+	bottom: 1px;
 	right: 0;
 	z-index: 3;
 }
@@ -1614,7 +1616,11 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 	<center id="item_info_stars"></center>
 	<div id="item_info_title"></div>
 	<div id="item_info_extra"></div>
-	<div class="icon_holder"><img id="item_info_icon" src="" title="" /></div>
+	<div class="dotline"></div>
+	<div class="icon_holder">
+		<img id="item_info_icon" src="" title="" />
+		<div class="cover"></div>
+	</div>
 	<div id="item_info_description"></div>
 	<div class="item_req_stats">
 
@@ -1656,27 +1662,26 @@ foreach ($optionlist as $option => $desc) {
 
 	</div>
 	<div class="item_potential_stats" id="item_info_potentials">
-		<hr />
+		<div class="dotline"></div>
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
 	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
-		<hr />
+		<div class="dotline"></div>
 		<span id="nebulite_info"></span>
 	</div>
 	<div class="item_potential_stats" id="item_info_bonus_potentials">
-		<hr />
+		<div class="dotline"></div>
 		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
 		</table>
 	</div>
 	<div id="extra_item_info"></div>
 	<div class="bottom"></div>
 </div>
-	<hr/>
+
+<hr />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
-<?php 	MakeHideToggleButton('skills'); ?>
-<p class="lead">Skills</p>
 <style type="text/css">
 #skill_list {
 	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
@@ -1692,6 +1697,7 @@ foreach ($optionlist as $option => $desc) {
 </style>
 
 <div id="skill_list">
+<?php 	MakeHideToggleButton('skills'); ?>
 <?php
 	
 	// Initialize SP

@@ -654,11 +654,7 @@ if (true || !DEBUGGING) {
 		imagesavealpha($temp_image, true);
 		$trans = imagecolorallocatealpha($temp_image, 0, 0, 0, 127);
 		imagefill($temp_image, 0, 0, $trans);
-		
-		
-		
-		
-
+	
 		if (isset($extra_layers[-2])) foreach ($extra_layers[-2] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
 		if (isset($extra_layers[-1])) foreach ($extra_layers[-1] as $imginfo) add_image($imginfo[0], $imginfo[1], $imginfo[2], false, $temp_image);
 		

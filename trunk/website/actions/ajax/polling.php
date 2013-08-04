@@ -117,11 +117,11 @@ WHERE
 		if (isset($_POST['older-than']) && $_client_time > 0) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
 		}
-		$whereq_1 = '`when` '.$whereq.($_client_time == 0 && false ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		$whereq_2 = '`ss`.`timestamp` '.$whereq.($_client_time == 0 && false ? ' AND `ss`.`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_1 = '`when` '.$whereq; //.($_client_time == 0 ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
+		$whereq_2 = '`ss`.`timestamp` '.$whereq; //.($_client_time == 0 ? ' AND `ss`.`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
 		if (isset($_POST['older-than'])) {
-			$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
-			$whereq_2 .= ' AND `ss`.`timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
+			//$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
+			//$whereq_2 .= ' AND `ss`.`timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY';
 		}
 		
 		if (strpos($url, '/'.$domain.'/blog/') !== false) {
