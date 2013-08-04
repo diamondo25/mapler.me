@@ -16,12 +16,12 @@ $job_names = array(
 		132 => 'Dark Knight',
 
 	200 => 'Magician',
-		211 => 'F/P Mage',
 		210 => 'F/P Wizard',
+		211 => 'F/P Mage',
 		212 => 'F/P Arch Mage',
 
-		221 => 'I/L Mage',
 		220 => 'I/L Wizard',
+		221 => 'I/L Mage',
 		222 => 'I/L Arch Mage',
 
 		230 => 'Cleric',
@@ -53,6 +53,8 @@ $job_names = array(
 		434 => 'Blade Master',
 
 	500 => 'Pirate',
+	501 => 'Cannoneer',
+	
 		510 => 'Brawler',
 		511 => 'Marauder',
 		512 => 'Buccaneer',
@@ -61,7 +63,6 @@ $job_names = array(
 		521 => 'Outlaw',
 		522 => 'Corsair',
 
-		501 => 'Cannoneer',
 		530 => 'Cannoneer',
 		531 => 'Cannoneer',
 		532 => 'Cannoneer',
@@ -106,13 +107,16 @@ $job_names = array(
 	
 	
 	2000 => 'Legend',
-		2100 => 'Aran',
+	2001 => 'Evan',
+	2002 => 'Mercedes',
+	2003 => 'Phantom',
+	
+	2100 => 'Aran',
 		2110 => 'Aran',
 		2111 => 'Aran',
 		2112 => 'Aran',
 
-	2001 => 'Evan',
-		2200 => 'Evan',
+	2200 => 'Evan',
 		2210 => 'Evan',
 		2211 => 'Evan',
 		2212 => 'Evan',
@@ -123,14 +127,12 @@ $job_names = array(
 		2217 => 'Evan',
 		2218 => 'Evan',
 
-	2002 => 'Mercedes',
-		2300 => 'Mercedes',
+	2300 => 'Mercedes',
 		2310 => 'Mercedes',
 		2311 => 'Mercedes',
 		2312 => 'Mercedes',
 
-	2003 => 'Phantom',
-		2400 => 'Phantom',
+	2400 => 'Phantom',
 		2410 => 'Phantom',
 		2411 => 'Phantom',
 		2412 => 'Phantom',
@@ -211,6 +213,13 @@ $job_names = array(
 		6510 => 'Angelic Buster',
 		6511 => 'Angelic Buster',
 		6512 => 'Angelic Buster',
+	
+	
+	10000 => 'Zero',
+		10100 => 'Zero',
+		10110 => 'Zero',
+		10111 => 'Zero',
+		10112 => 'Zero',
 
 	//Additional Jobs + Special
 
@@ -223,6 +232,47 @@ function GetJobname($id) {
 	return $job_names[$id];
 }
 
+function GetJobRank($id) {
+	// 1st, 2nd, etc
+	if ($id >= 2200 && $id <= 2218) // Evan
+		return ($id - 2200) + 1; // 19 'jobs' lol.
+	if ($id >= 430 && $id <= 434)  // Dual Blad(d)er
+		return ($id - 430) + 1;
+	if ($id >= 570 && $id <= 573)  // Jett
+		return ($id - 570) + 1;
+
+	$tmp = $id % 100;
+	
+	switch ($tmp) {
+		case 10:
+		case 20:
+		case 30:
+		case 70: return 2; // 570
+		
+		case 11:
+		case 21:
+		case 31:
+		case 71: return 3; // 571
+		
+		case 12:
+		case 22:
+		case 32:
+		case 72: return 4; // 572
+		
+		default: return 1; // 6000 / 6100
+	}
+}
+
+function MakeOrdinalNumberSuffix($number) {
+	$tmp = $number % 100;
+	if ($tmp >= 11 && $tmp <= 13) $tmp = 4; // Always 'th'
+	switch ($tmp % 10) {
+		case 1: return $tmp.'st';
+		case 2: return $tmp.'nd';
+		case 3: return $tmp.'rd';
+		default: return $tmp.'th';
+	}
+}
 
 function IsRealJob($id) { // Beginner and mining etc is not a real job! :@
 	switch ($id) {

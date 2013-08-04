@@ -36,6 +36,7 @@
 	RewriteRule ^api/status/delete/(\d+)/$ /actions/ajax/status.php?type=delete&id=$1
 	RewriteRule ^api/status/post/$ /actions/ajax/status.php?type=post
 	RewriteRule ^api/status/(.*)/$ /actions/ajax/status.php?type=responses&statusid=$1
+	RewriteRule ^api/item/(.*)/(\d+)/$ /actions/ajax/item_info.php?type=$1&id=$2
 	
 	# Info Syncing
 	RewriteRule ^ajax/sync/$ /actions/ajax/polling.php?type=info

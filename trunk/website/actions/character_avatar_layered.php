@@ -117,7 +117,7 @@ imagefill($im, 0, 0, $trans);
 $skin = $face = $hair = $hat = $mask = $eyes = $ears = $top = $pants = $overall = $shoe = $glove = $cape = $shield = $wep = $nxwep = NULL;
 
 // Coordinates for center
-$mainx = (imagesx($im) / 2) + ($show_flipped ? -6 : 6);
+$mainx = (imagesx($im) / 2) + 3;
 $mainy = (imagesy($im) / 2) + 18;
 
 $char_body_position = array();
@@ -289,6 +289,7 @@ function ParseItem($id) {
 		echo 'Item type: '.$itemtype."\r\n";
 		echo 'Item raw type: '.$item_raw_type."\r\n";
 		echo 'Item section id: '.$item_section_id."\r\n";
+		echo 'Item image at: '.GetItemDataLocation($main_dir, $id)."\r\n";
 	}
 	
 	$nxwep = $id == $cashWeapon;
@@ -344,6 +345,7 @@ function ParseItem($id) {
 			if (DEBUGGING) {
 				echo '>> '.$category."\r\n";
 			}
+			if ($category == 'delay') continue;
 			if (!($block instanceof TreeNode)) {
 				// Prolly UOL
 				$block = $tmp[$category];
@@ -385,13 +387,23 @@ function ParseItem($id) {
 			
 			if (!isset($block['z'], $zmap[$block['z']])) {
 				if (DEBUGGING) {
-					echo 'No Z key found for '.$key.' -> '.$category.' -> '.$block->name."\r\n";
+					echo 'No Z key found for '.$key.' -> '.$category.' -> '.$block->name.' ('.$item_raw_type.')'."\r\n";
 				}
-				continue;
+				if ($item_raw_type == 21) {
+				
+					if (DEBUGGING) {
+						echo 'Fixing Z index for face. Its face.'."\r\n";
+					}
+					$zval = $zmap['face'];
+				}
+				else
+					continue;
 			}
-			$zval = $zmap[$block['z']];
+			else {
+				$zval = $zmap[$block['z']];
+			}
 			if (DEBUGGING)
-				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval.' - '.$zmap['characterEnd']."\r\n";
+				echo $id.' - '.$itemtype.' - '.$key.' - '.$category.' - '.$zval."\r\n";
 
 			if ($itemtype == 2 && $key != $using_face && $char_stance != 'rope') {
 				if (DEBUGGING)
@@ -685,7 +697,7 @@ if (true || !DEBUGGING) {
 	
 	
 	// Change mainx/y
-	$mainx = (imagesx($im) / 2) + ($show_flipped ? 6 : 0);
+	$mainx = (imagesx($im) / 2);
 	$mainy = (imagesy($im) / 2) + 18;
 	
 	// Render name

@@ -153,7 +153,7 @@ function SetItemInfo(event, obj, values) {
 	
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	
-	var description = descriptions[itemid];
+	var description = RequestItemInfo('description', itemid);;
 	var description_place = isequip ? 'extra_item_info' : 'item_info_description';
 	GetObj('extra_item_info').style.display = 'none';
 	GetObj('extra_item_info').innerHTML = '';
@@ -205,8 +205,6 @@ function SetItemInfo(event, obj, values) {
 			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
 		}
 		if (tradeInfo != '') {
-			if (description == undefined)
-				description = '';
 			description += '<span style="color: orange;">' + tradeInfo + '</span>';
 		}
 	}
@@ -219,7 +217,7 @@ function SetItemInfo(event, obj, values) {
 	GetObj('item_info_extra').innerHTML = extrainfo;
 	GetObj('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
 	
-	if (description != undefined && description != '') {
+	if (description != '') {
 		GetObj(description_place).style.display = '';
 		if (isequip)
 			description = '<div class="dotline"></div>' + description;
@@ -265,12 +263,14 @@ function SetItemInfo(event, obj, values) {
 			hasbonuspotential = true;
 		}
 		
+		// GMS has only 1 neb, but can hold 3 lol.
 		if (item.nebulite1 == 0) {
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
 		else if (item.nebulite1 > 0) {
-			var nebuliteinfo = nebuliteInfo[item.nebulite1];
+			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
+			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
 			GetObj('nebulite_info').innerHTML = '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
@@ -281,7 +281,7 @@ function SetItemInfo(event, obj, values) {
 			var isbonus = i >= 4;
 			var potentialid = item['potential' + i];
 			if (potentialid == 0) continue;
-			var potentialinfo = potentialDescriptions[potentialid];
+			var potentialinfo = RequestItemInfo('potentialinfo', potentialid); // potentialDescriptions[potentialid];
 			if (potentialinfo.name == null) continue;
 			
 			if (isbonus) hasbonuspotential = true;
@@ -323,6 +323,28 @@ function SetItemInfo(event, obj, values) {
 	lastSetWindow = GetObj('item_info');
 	
 	MoveWindow(event);
+}
+
+
+window.request_cache = [];
+function RequestItemInfo(what, id) {
+	if (typeof window.request_cache[what] === 'undefined')
+		window.request_cache[what] = [];
+	if (typeof window.request_cache[what][id] !== 'undefined')
+		return window.request_cache[what][id];
+	var ret = JSON.parse(
+		$.ajax({
+			type: 'GET',
+			url: '/api/item/' + what + '/' + id + '/',
+			async: false
+		}).responseText
+	);
+	if (ret.result != undefined)
+		ret = ret.result;
+	else
+		ret = '';
+	window.request_cache[what][id] = ret;
+	return ret;
 }
 
 function GetMaxPotentialLevel(potentialLevels) {
@@ -422,6 +444,7 @@ function GetWeaponCategoryName(id) {
 		case 32: return 'One-handed Mace';
 		case 33: return 'Dagger';
 		case 34: return 'Katara';
+		case 35: return 'Orb';
 		case 36: return 'Cane';
 		case 37: return 'Wand';
 		case 38: return 'Staff';

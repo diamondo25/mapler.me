@@ -398,7 +398,7 @@ function GetItemQuality($item, $stats) {
 
 function GetItemDialogInfo($item, $isequip) {
 	global $PotentialList, $IDlist, $reqlist, $optionlist, $NebuliteList;
-	
+	/*
 	if (!array_key_exists($item->itemid, $IDlist)) {
 		$IDlist[(int)$item->itemid] = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'desc'));
 	}
@@ -422,7 +422,7 @@ function GetItemDialogInfo($item, $isequip) {
 		$NebuliteList[$item->nebulite2] = GetNebuliteInfo($item->nebulite2);
 	if ($isequip && $item->nebulite3 != -1 && !array_key_exists($item->nebulite3, $NebuliteList))
 		$NebuliteList[$item->nebulite3] = GetNebuliteInfo($item->nebulite3);
-
+	*/
 	$stats = GetItemDefaultStats($item->itemid);
 	
 	$tradeblock = 0;

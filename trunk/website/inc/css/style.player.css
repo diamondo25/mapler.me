@@ -131,182 +131,10 @@ hr {
 }
 
 
-/* monster book */
-.character_equips .slot55 { top: 28px; left: 10px; margin-bottom: 0px; }
-
-/* medal */
-.character_equips .slot49 { top: 61px; left: 10px; margin-bottom: 0px; }
-
-/* pocket  */
-.character_equips .slot52 { top: 94px; left: 10px; margin-bottom: 0px; }
-
-/* mantle */
-.character_equips .slot9 { top: 127px; left: 10px; margin-bottom: 0px; }
-
-/* gloves */
-.character_equips .slot8 { top: 160px; left: 10px; margin-bottom: 0px; }
-
-/* taming mob */
-.character_equips .slot18 { top: 226px; left: 10px; margin-bottom: 0px; }
-
-
-
-
-
-
-
-
-/* cap */
-.character_equips .slot1 { top: 28px; left: 43px; margin-bottom: 0px; }
-
-/* face */
-.character_equips .slot2 { top: 61px; left: 43px; margin-bottom: 0px; }
-
-/* Eye acc */
-.character_equips .slot3 { top: 94px; left: 43px; margin-bottom: 0px; }
-
-/* clothes */
-.character_equips .slot5 { top: 127px; left: 43px; margin-bottom: 0px; }
-
-/* pants */
-.character_equips .slot6 { top: 160px; left: 43px; margin-bottom: 0px; }
-
-/* emblem */
-.character_equips .slot61 { top: 193px; left: 43px; margin-bottom: 0px; }
-
-/* saddle */
-.character_equips .slot19 { top: 226px; left: 43px; margin-bottom: 0px; }
-
-
-
-
-
-
-
-/* badge */
-.character_equips .slot56 { top: 28px; left: 76px; margin-bottom: 0px; }
-
-/* pendant */
-.character_equips .slot17 { top: 127px; left: 76px; margin-bottom: 0px; }
-
-/* 2nd pendent (cash) - Note to Erwin: There's a different UI that this requires (but should be fine without it anyway) */
-.character_equips .slot65 { top: 94px; left: 76px; margin-bottom: 0px; }
-
-/* belt */
-.character_equips .slot50 { top: 160px; left: 76px; margin-bottom: 0px; }
-
-/* shoes */
-.character_equips .slot7 { top: 193px; left: 76px; margin-bottom: 0px; }
-
-
-
-
-
-
-/* android */
-.character_equips .slot53 { top: 28px; left: 109px; margin-bottom: 0px; }
-
-/* ring 3 */
-.character_equips .slot15 { top: 61px; left: 109px; margin-bottom: 0px; }
-
-/* ear acc */
-.character_equips .slot4 { top: 94px; left: 109px; margin-bottom: 0px; }
-
-/* weapon */
-.character_equips .slot11 { top: 127px; left: 109px; margin-bottom: 0px; }
-
-/* ring 1 */
-.character_equips .slot12 { top: 160px; left: 109px; margin-bottom: 0px; }
-
-
-
-
-
-
-
-/* android heart */
-.character_equips .slot54 { top: 28px; left: 142px; margin-bottom: 0px; }
-
-/* ring 4 */
-.character_equips .slot16 { top: 61px; left: 142px; margin-bottom: 0px; }
-
-/* shoulder */
-.character_equips .slot51 { top: 94px; left: 142px; margin-bottom: 0px; }
-
-/* orb / shield */
-.character_equips .slot10 { top: 127px; left: 142px; margin-bottom: 0px; }
-
-/* ring 2 */
-.character_equips .slot13 { top: 160px; left: 142px; margin-bottom: 0px; }
-
-
-/* pet thingies */
-
-/* HP POC */
-.character_pets .slot24 { top: 22px; left: 10px; margin-bottom: 0px; }
-
-/* MP POC */
-.character_pets .slot25 { top: 22px; left: 76px; margin-bottom: 0px; }
-
-/* Item pouch */
-.character_pets .slot22 { top: 55px; left: 10px; margin-bottom: 0px; }
-
-/* Meso Magnet */
-.character_pets .slot23 { top: 88px; left: 43px; margin-bottom: 0px; }
-
-/* Wing Boots */
-.character_pets .slot26 { top: 88px; left: 76px; margin-bottom: 0px; }
-
-/* Equip */
-.character_pets .slot14 { top: 88px; left: 109px; margin-bottom: 0px; }
-
-/* Binocular */
-.character_pets .slot27 { top: 154px; left: 10px; margin-bottom: 0px; }
-
-/* Smart Pet 1, 2, 3 */
-.character_pets .slot62,
-.character_pets .slot63,
-.character_pets .slot64 { top: 154px; left: 43px; margin-bottom: 0px; }
-
-/* Magic Scales */
-.character_pets .slot28 { top: 121px; left: 43px; margin-bottom: 0px; }
-
-/* Item Ignore 1, 2, 3 */
-.character_pets .slot46,
-.character_pets .slot47,
-.character_pets .slot48 { top: 121px; left: 10px; margin-bottom: 0px; }
-
-
-.character_pets .slot57 { top: 55px; left: 109px; margin-bottom: 0px; }
-
-
 .character_totems .slot0 { top: 25px; left: 76px; margin-bottom: 0px; }
 .character_totems .slot1 { top: 25px; left: 42px; margin-bottom: 0px; }
 .character_totems .slot2 { top: 25px; left: 10px; margin-bottom: 0px; }
 
-
-.job-specific-inventory .coordinate .slot0 { top: 28px; left: 42px; margin-bottom: 0px; } /* Hat */
-.job-specific-inventory .coordinate .slot1 { top: 93px; left: 109px; margin-bottom: 0px; } /* Mantle */
-
-.job-specific-inventory .mechanic .slot0 { top: 87px; left: 45px; margin-bottom: 0px; } /* Engine */
-.job-specific-inventory .mechanic .slot1 { top: 120px; left: 12px; margin-bottom: 0px; } /* Arm */
-.job-specific-inventory .mechanic .slot2 { top: 120px; left: 45px; margin-bottom: 0px; } /* Leg */
-.job-specific-inventory .mechanic .slot3 { top: 87px; left: 76px; margin-bottom: 0px; } /* Frame */
-.job-specific-inventory .mechanic .slot4 { top: 54px; left: 45px; margin-bottom: 0px; } /* Transistor */
-
-.job-specific-inventory .evan .slot0 { top: 54px; left: 10px; margin-bottom: 0px; } /* Cap */
-.job-specific-inventory .evan .slot1 { top: 88px; left: 43px; margin-bottom: 0px; } /* Pendant */
-.job-specific-inventory .evan .slot2 { top: 54px; left: 75px; margin-bottom: 0px; } /* Wings */
-.job-specific-inventory .evan .slot3 { top: 88px; left: 108px; margin-bottom: 0px; } /* Tail */
-
-
-.character_droid .slot0 { top: 27px; left: 45px; margin-bottom: 0px; } /* Cap */
-.character_droid .slot1 { top: 93px; left: 110px; margin-bottom: 0px; } /* Mantle */
-.character_droid .slot2 { top: 61px; left: 77px; margin-bottom: 0px; } /* Face */
-.character_droid .slot3 { top: 93px; left: 45px; margin-bottom: 0px; } /* Clothes */
-.character_droid .slot4 { top: 127px; left: 45px; margin-bottom: 0px; } /* Pants */
-.character_droid .slot5 { top: 127px; left: 77px; margin-bottom: 0px; } /* Shoes */
-.character_droid .slot6 { top: 93px; left: 77px; margin-bottom: 0px; } /* Gloves */
 
 .inventory {
 	background: none repeat scroll 0 0 transparent;
@@ -398,7 +226,7 @@ hr {
 	background-image: url('http://mapler.me/inc/img/ui/Item/Frame/cover.png');
 	background-position: left top;
 	background-repeat: no-repeat;
-	padding: 5px;
+	padding: 10px;
 	position: absolute;
 	width: 265px;
 	z-index: 100;
@@ -441,7 +269,7 @@ hr {
 	background: url('/inc/img/ui/Item/Frame/dotline_custom.png');
 	background-repeat: repeat-x;
 	height: 2px;
-	margin: 4px -5px;
+	margin: 4px -9px;
 }
 
 #item_info .stat-diff-info {
@@ -487,7 +315,6 @@ hr {
 }
 
 #item_info .item_req_stats {
-	height: 90px;
 	margin-left: 95px;
 	overflow: hidden;
 	font-size: 10px;

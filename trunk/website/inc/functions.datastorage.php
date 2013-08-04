@@ -28,6 +28,8 @@ function GetCachedObject($key) {
 function GetMapleStoryString($type, $id, $key) {
 	global $__database;
 
+	$id = intval($id);
+	
 	if (strlen($key) > 5) {
 		// Yea...
 		$key = substr($key, 0, 5);
@@ -85,7 +87,7 @@ function GetItemDefaultStats($id) {
 		return GetCachedObject($key_name);
 	}
 
-	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".$id);
+	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".intval($id));
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
@@ -112,7 +114,7 @@ function GetPotentialInfo($id) {
 	$data = array();
 	$data['name'] = GetMapleStoryString('item_option', $id, 'desc');
 
-	$q = $__database->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".$id);
+	$q = $__database->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".intval($id));
 	while ($row = $q->fetch_row()) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
@@ -136,7 +138,7 @@ function GetNebuliteInfo($itemid) {
 
 	$data = array();
 
-	$q = $__database->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".$itemid);
+	$q = $__database->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".intval($itemid));
 	$row = $q->fetch_row();
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
@@ -165,7 +167,7 @@ SELECT
 FROM
 	`phpVana_characterwz`
 WHERE
-	`itemid` = ".$itemid
+	`itemid` = ".intval($itemid)
 );
 	if ($q->num_rows == 0)
 		return null;
@@ -284,7 +286,7 @@ SELECT
 FROM
 	character_options
 WHERE
-	character_id = ".$id."
+	character_id = ".intval($id)."
 AND
 	option_key = '".$__database->real_escape_string($key)."'");
 	
@@ -305,7 +307,7 @@ INSERT INTO
 	character_options
 VALUES
 (
-	".$id.",
+	".intval($id).",
 	'".$__database->real_escape_string($key)."',
 	'".$__database->real_escape_string($value)."'
 )

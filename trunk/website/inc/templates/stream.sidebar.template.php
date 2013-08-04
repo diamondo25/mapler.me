@@ -111,6 +111,8 @@ WHERE
 	TO_FILETIME(NOW()) < i.expires
 	AND
 	TO_FILETIME(DATE_ADD(NOW(), INTERVAL 1 WEEK)) > i.expires
+	AND
+	(flags & 0x01) = 0 # Flag 0x01 = Item lock
 GROUP BY
 	c.internal_id
 ");
