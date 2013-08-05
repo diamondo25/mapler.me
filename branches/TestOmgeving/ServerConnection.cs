@@ -39,7 +39,7 @@ namespace Mapler_Client
 
         private void TryReconnect()
         {
-            new System.Threading.Thread((a) =>
+            var tmp = new System.Threading.Thread((a) =>
             {
                 for (int i = 0; Disconnected && i < 5; i++)
                 {
@@ -79,7 +79,9 @@ namespace Mapler_Client
                     Sniffer.Instance.SetUp();
                 }
 
-            }).Start();
+            });
+            tmp.IsBackground = true;
+            tmp.Start();
         }
 
         public override void OnPacket(MaplePacket pPacket)

@@ -230,7 +230,7 @@ namespace MPLRServer
             {
                 return a.AccountID != -1 && a.WorldID != 255 && a.ChannelID != 255;
             };
-            Func<ClientConnection, bool> OnChannelServer = delegate(ClientConnection a)
+            Func<ClientConnection, bool> OnLoadedCharData = delegate(ClientConnection a)
             {
                 return a.CharData != null;
             };
@@ -282,19 +282,20 @@ namespace MPLRServer
                     // ping
                 }, null));
 
-                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnChannelServer));
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnChannelServer));
-                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, OnChannelServer));
-                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnChannelServer));
-                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleMessage, OnChannelServer));
-                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, OnChannelServer));
-                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, OnChannelServer));
-                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnChannelServer));
-                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, OnChannelServer));
-                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, OnChannelServer));
+                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnLoadedCharData));
+                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnLoadedCharData));
+                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, OnLoadedCharData));
+                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnLoadedCharData));
+                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleMessage, OnLoadedCharData));
+                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, OnLoadedCharData));
+                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, OnLoadedCharData));
+                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnLoadedCharData));
+                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, OnLoadedCharData));
+                tmp.Add(0x00CE, new Handler(ServerPacketHandlers.HandleAbilityInfoUpdate, OnLoadedCharData));
+                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, OnLoadedCharData));
                 tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, OnLoginServer));
-                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnChannelServer));
-                tmp.Add(0x0165, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnChannelServer));
+                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnLoadedCharData));
+                tmp.Add(0x0165, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
@@ -340,6 +341,12 @@ namespace MPLRServer
                 {
                 }, null));
 
+                tmp.Add(0x0046, new Handler((pConnection, pPacket) =>
+                {
+                    byte new_channel = pPacket.ReadByte();
+                    pConnection.Logger_WriteLine("Requesting CC to channel {0}", new_channel);
+                }, null));
+
                 // Whisper
                 tmp.Add(0xFFFC, new Handler((pConnection, pPacket) =>
                 {
@@ -360,7 +367,7 @@ namespace MPLRServer
                             }
                         }
                     }
-                }, OnChannelServer));
+                }, OnLoadedCharData));
 
                 // Internal packets
 
@@ -382,7 +389,7 @@ namespace MPLRServer
                         a.SendPacket(packet);
                     }
 
-                }, OnChannelServer));
+                }, OnLoadedCharData));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
             }

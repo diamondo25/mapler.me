@@ -162,7 +162,7 @@ GROUP BY
 <?php else: ?>
 		<form class="form-horizontal" action="" method="post">
 			<div class="control-group">
-				<label class="control-label" for="inputEmail">Email or Username</label>
+				<label class="control-label" for="inputEmail">Nexon Email or Username</label>
 				<div class="controls">
 					<input type="text" id="inputEmail" name="username" placeholder="Email" />
 				</div>

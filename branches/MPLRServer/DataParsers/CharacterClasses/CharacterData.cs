@@ -38,6 +38,7 @@ namespace MPLRServer
             }
         }
 
+
         public class Ring
         {
             public enum Type
@@ -104,6 +105,7 @@ namespace MPLRServer
         public Dictionary<long, long> UnknownIntegerListNumber4 { get; private set; }
         public List<EvolutionCard> EvolutionCards { get; private set; }
         public List<Ring> Rings { get; private set; }
+        public List<Tuple<byte, int, byte>> Abilities { get; private set; }
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -381,12 +383,14 @@ namespace MPLRServer
             }
 
             // Inner Stats
+            Abilities = new List<Tuple<byte, int, byte>>();
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
-                pPacket.ReadByte();
-                pPacket.ReadInt(); // Skill ID
-                pPacket.ReadByte(); // Level
+                byte id = pPacket.ReadByte(); // 'ID'
+                int skillid = pPacket.ReadInt(); // Skill ID
+                byte level = pPacket.ReadByte(); // Level
                 pPacket.ReadByte(); // Rank
+                Abilities.Add(new Tuple<byte, int, byte>(id, skillid, level));
             }
 
             {
@@ -958,9 +962,31 @@ namespace MPLRServer
 
                     table.RunQuery();
                 }
-            }
 
-            return true;
+
+                MySQL_Connection.Instance.RunQuery("DELETE FROM character_abilities WHERE character_id = " + pConnection.CharacterInternalID);
+                using (InsertQueryBuilder table = new InsertQueryBuilder("character_abilities"))
+                {
+                    table.AddColumn("character_id");
+                    table.AddColumn("id");
+                    table.AddColumn("skill_id");
+                    table.AddColumn("level");
+
+                    foreach (var stat in Abilities)
+                    {
+                        table.AddRow(
+                            pConnection.CharacterInternalID,
+                            stat.Item1,
+                            stat.Item2,
+                            stat.Item3
+                            );
+                    }
+
+                    table.RunQuery();
+                }
+
+                return true;
+            }
         }
     }
 }

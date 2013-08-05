@@ -847,6 +847,35 @@ namespace MPLRServer
             }
         }
 
+        public static void HandleAbilityInfoUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            pPacket.ReadByte(); // Unlock
+            if (pPacket.ReadBool() == false) return;
+ 
+            var stat = new Tuple<byte, int, byte>((byte)pPacket.ReadShort(),pPacket.ReadInt(),(byte)pPacket.ReadShort());
+            pPacket.ReadShort();
+
+            using (InsertQueryBuilder table = new InsertQueryBuilder("character_abilities"))
+            {
+                table.OnDuplicateUpdate = true;
+
+                table.AddColumn("character_id");
+                table.AddColumn("id");
+                table.AddColumn("skill_id", true);
+                table.AddColumn("level", true);
+
+                
+                table.AddRow(
+                    pConnection.CharacterInternalID,
+                    stat.Item1,
+                    stat.Item2,
+                    stat.Item3
+                    );
+
+                table.RunQuery();
+            }
+        }
+
         public static void HandleInventorySlotsUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             CharacterInventory inventory = pConnection.CharData.Inventory;
@@ -1450,7 +1479,6 @@ namespace MPLRServer
 
             if (!isConnecting && pConnection.CharData == null)
             {
-                pConnection.Logger_WriteLine("Not connection AND no data... ohshi-");
                 return;
             }
 

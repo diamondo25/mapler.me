@@ -164,6 +164,7 @@ namespace Mapler_Client
 
         public bool CheckRunningEXEVersion()
         {
+            return true; // ---
             try
             {
                 var procs = System.Diagnostics.Process.GetProcessesByName("MapleStory");

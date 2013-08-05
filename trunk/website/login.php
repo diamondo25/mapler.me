@@ -121,16 +121,16 @@ ORDER BY
                         <div class="box_cont">
                             <div class="form">
                                 <form method="POST">
-                                    <input type="text" name="username" placeholder="Email">
-                                    <input type="password" name="password" placeholder="Password">
+                                    <input type="text" name="username" placeholder="Email" />
+                                    <input type="password" name="password" placeholder="Password" />
                                     <div class="forgot">
-                                        <span>Don’t have an account?</span>
+                                        <span>Don’t have a Mapler.me account?</span>
                                         <a href="//<?php echo $domain; ?>/signup/">Sign up.</a><br />
                                         <span>Forgot password?</span>
                                         <a href="//<?php echo $domain; ?>/resetpassword/">Reset password</a>
                                     </div>
                                     <center>
-                                    <input type="submit" class="btn btn-inverse btn-large" value="Login!">
+										<input type="submit" class="btn btn-inverse btn-large" value="Login!">
                                     </center>
                                 </form>
                             </div>
