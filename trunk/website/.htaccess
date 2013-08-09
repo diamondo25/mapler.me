@@ -43,6 +43,7 @@
 	
 	# Character options
 	RewriteRule ^api/character/visibility$ /actions/ajax/character.php?type=visibility [QSA]
+	RewriteRule ^api/character/statistics/(.*)/(.*)$ /actions/ajax/character.php?type=statistics&name=$1&code=$2 [QSA]
 	
 	# image / ranking rewrites
 	

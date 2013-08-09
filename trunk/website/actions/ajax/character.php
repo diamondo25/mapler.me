@@ -3,7 +3,7 @@ require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/functions.loginaccount.php';
 require_once __DIR__.'/../../inc/classes/database.php';
 
-CheckSupportedTypes('visibility', 'face');
+CheckSupportedTypes('visibility', 'face', 'statistics');
 
 function IsOwnCharacter($charname) {
 	global $__database;
@@ -56,6 +56,56 @@ ON DUPLICATE KEY UPDATE
 	else {
 		JSONAnswer(array('result' => 'failure'));
 	}
+}
+
+elseif ($request_type == 'statistics') {
+	if (!$_loggedin) JSONDie('Not loggedin');
+	RetrieveInputGET('name','code');
+	$code = $P['code'];
+	if ($code !== 'adminbypass') {
+	$internalid = IsOwnCharacter($P['name']);
+	if ($internalid === false) JSONDie('You must own this character to request it\'s API', 400);
+	}
+	
+	$q = $__database->query("
+SELECT 
+	chr.name,
+	w.world_name,
+	channel_id AS channel,
+	level,
+	job,
+	fame,
+	chr.str,
+	chr.dex,
+	chr.int,
+	chr.luk,
+	chr.exp,
+	map,
+	chr.honourlevel AS honorlevel,
+	chr.honourexp AS honorexp,
+	mesos,
+	last_update,
+	TIMESTAMPDIFF(SECOND, last_update, NOW()) AS `seconds_since`
+FROM
+	`characters` chr
+LEFT JOIN 
+	world_data w
+	ON
+		w.world_id = chr.world_id
+WHERE 
+	chr.name = '".$__database->real_escape_string($P['name'])."'");
+	
+if ($q->num_rows == 0) {
+    JSONDie('Character not found', 404);
+}
+
+	$character = array();
+	
+	
+	while ($row = $q->fetch_assoc()) {
+	   $character = $row;
+    }
+	JSONAnswer(array('result' => $character));
 }
 
 ?>

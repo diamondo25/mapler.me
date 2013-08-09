@@ -14,8 +14,17 @@ if (!file_exists($page)) {
 	header('Location: http://'.$domain.'/');
 	die();
 }
-
+//gosh dang it
 if (isset($_GET['ajax'])) {
+	require_once $page;
+}
+if (isset($_GET['strings'])) {
+	require_once $page;
+}
+if (isset($_GET['accounts'])) {
+	require_once $page;
+}
+if (isset($_GET['characters'])) {
 	require_once $page;
 }
 else {
