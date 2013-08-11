@@ -28,7 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 
 		<h4>Various functions and information:</h4>
 		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button>
-		<button type="button" class="btn" onclick="location.href = '/manage/info/'">View Apache/Php Info?</button>
+		<button type="button" class="btn" onclick="location.href = '/internal/php/'">PHP Information</button>
+		<button type="button" class="btn" onclick="location.href = '/internal/apc/'">APC(Cache) Information</button>
 		<br />
 		<br />
 <?php

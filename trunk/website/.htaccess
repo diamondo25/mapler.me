@@ -11,8 +11,7 @@
 	RewriteCond %{REQUEST_FILENAME}\.php -f 
 	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
 		
-	# page rewrites
-	
+	# Page Rewrites
 	RewriteRule ^developers/ api.php
 	RewriteRule ^intro/ about.php
 	RewriteRule ^login/ login.php
@@ -30,6 +29,10 @@
 	RewriteRule ^blankpage/ /actions/blankpage.php
 	RewriteRule ^resetpassword/ /passreset.php [QSA,L]
 	
+	# Server Information
+	RewriteRule ^internal/apc/ /actions/apc_info.php
+	RewriteRule ^internal/php/ /actions/php.php
+	
 	# Status APIs
 	RewriteRule ^api/list/(.*)/(.*)/$ /actions/ajax/status.php?type=list&lastpost=$1&mode=$2
 	RewriteRule ^api/blog/$ /actions/ajax/status.php?type=blog
@@ -46,7 +49,6 @@
 	RewriteRule ^api/character/statistics/(.*)/(.*)$ /actions/ajax/character.php?type=statistics&name=$1&code=$2 [QSA]
 	
 	# image / ranking rewrites
-	
 	RewriteRule ^card/([^\./]*) /actions/character_image.php?name=$1 [L,QSA]
 	# RewriteRule ^avatar/([^\./]*) /actions/character_avatar.php?name=$1 [L,QSA]
 	RewriteRule ^avatar/([^\./]*) /actions/character_avatar_layered.php?name=$1 [L,QSA]
