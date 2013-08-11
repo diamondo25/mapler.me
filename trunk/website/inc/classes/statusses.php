@@ -116,6 +116,33 @@ WHERE
 		'$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', // Images
 	);
 	
+	//censoring using regex, let me know if I should use a different method instead.
+	//words replaced with a lock for visual appearance.
+	private static $_status_censor = array(
+		'/fuck(|er|in|ing)/',
+		'/shit(|ing|er)/',
+		'/bitch(|ing)/',
+		'/asshole/',
+		'/fag(|got)/',
+		'/nigger/',
+		'/vagina/',
+		'/pussy/',
+		'/dick/',
+		'/cock/',
+		'/wonderking/',
+		'/Wonderking/',
+		'/cunt/',
+		'/penis/',
+		'/whore/',
+		'/Gamersoul/',
+		'/w8baby/',
+		'/gamekiller/',
+		'/anal/',
+		//basic curse words I could think of.
+	);
+
+	private static $_status_censor_letter = '<img src="//mapler.me/inc/img/ui/Item/Equip/lock.png"/>';
+	
 	public function ParseContent() {
 		global $domain;
 		
@@ -127,6 +154,7 @@ WHERE
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
 		$this->content = preg_replace(self::$_status_search_for, self::$_status_replace_with, $this->content);
+		$this->content = preg_replace(self::$_status_censor, self::$_status_censor_letter, $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {
