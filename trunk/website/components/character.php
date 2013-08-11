@@ -1651,10 +1651,10 @@ foreach ($reqlist as $option => $desc) {
 <?php
 foreach ($optionlist as $option => $desc) {
 ?>
-			<tr id="item_info_row_<?php echo strtolower($option); ?>">
-				<td width="150px"><?php echo $desc; ?></td>
-				<td id="item_info_<?php echo strtolower($option); ?>"></td>
-			</tr>
+			<p id="item_info_row_<?php echo strtolower($option); ?>">
+				<span width="150px"><?php echo $desc; ?></span>
+				<span id="item_info_<?php echo strtolower($option); ?>"></span>
+			</p>
 <?php
 }
 ?>

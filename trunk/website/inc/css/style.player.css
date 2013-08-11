@@ -310,20 +310,25 @@ hr {
 	clear: both;
 }
 
-#item_info .item_stats > table, #item_info .item_potential_stats > table {
+#item_info .item_stats > p, #item_info .item_potential_stats > p {
 	font-size: 11px;
+	line-height: 10px;
+}
+
+#item_info .item_stats > p, #item_info .item_potential_stats > p {
+	font-size: 11px;
+	line-height: 10px;
 }
 
 #item_info .item_req_stats {
 	margin-left: 95px;
 	overflow: hidden;
-	font-size: 10px;
+	font-size: 11px;
 	margin-bottom: 10px;
 	line-height: 10px;
-	font-family: Arial;
 }
 #item_info .item_req_stats > table {
-	font-size: 9px;
+	font-size: 11px;
 }
 
 #item_info #bonus_potentials {
@@ -350,6 +355,8 @@ hr {
 	padding: 2px;
 	border-radius: 3px;
 	background-color: rgba(0,0,0,1);
+	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 #item_info #req_job_list hr {
