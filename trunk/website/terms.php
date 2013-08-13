@@ -68,13 +68,13 @@
                     <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regan to entering a new map. Some information collected is currently stored internally for future additions. The client tracks and stores the following information about characters:</p>
                     <ul>
                     <li>Basic character information (Stats, name, world, level, etc)</li>
-                    <li>All items and equipment on that character</li>
-                    <li>Skills</li>
+                    <li>All items and equipment on that character including their current pet and android.</li>
+                    <li>Skills | Skill Macros [not displayed]</li>
                     <li>Familiars</li>
                     <li>Evolving World Cores</li>
                     <li>Teleport / Hyper Teleport Rock locations</li>
                     <li>Guild and Alliance information</li>
-                    <li>Levelups, job advancement, and being famed.</li>
+                    <li>Levelups, job advancement, experience gain (by percent), and being famed.</li>
                     </ul>
                     
 
@@ -97,7 +97,7 @@
                 </p> <p>
                     Mapler.me directs full legal responsibility of files to their respective users.
                 </p><h3>Last Revision</h3> <p>
-                    This Terms of Service was last updated on May 14, 2013.
+                    This Terms of Service was last updated on <b>August 13, 2013</b>.
                 </p> </div> </div> </div> </div>
       
 <?php require_once __DIR__.'/inc/footer.php'; ?>
