@@ -12,6 +12,21 @@ max-width: 240px;">
 			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
 		</div>
 		
+		
+<?php
+$notice = @file_get_contents('../inc/notice.txt');
+if (!empty($notice)) {
+?>
+	<div class="stream-block" style="box-shadow: 0px 0px 30px #FFF;">
+		<p class="notice" style="margin:0;">
+			<?php echo $notice; ?>
+		</p>
+	</div>
+<?php
+}
+?>
+
+		
 		<div class="stream-block">
 <?php
 	$rss = new DOMDocument();
@@ -130,18 +145,5 @@ GROUP BY
 		</div>
 <?php	
 	}
-?>
-
-<?php
-$notice = @file_get_contents('../inc/notice.txt');
-if (!empty($notice)) {
-?>
-	<div class="stream-block" style="box-shadow: 0px 0px 30px #FFF;">
-		<p class="notice" style="margin:0;">
-			<?php echo $notice; ?>
-		</p>
-	</div>
-<?php
-}
 ?>
 </div>
