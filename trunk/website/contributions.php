@@ -60,6 +60,12 @@
 		<p>Jessica designed and drew our current backgrounds throughout our site, as well as many other graphical elements. We appreciate her time and amazing artwork she's contributed to Mapler.me.</p>
 		</center>
 	</div>
+	<div class="status span12">
+		<center>
+		<p class="lead"><i class="icon-star"></i> Matt (@tigerphace)</p>
+		<p>Matt helped develop and improve several aspects of Mapler.me including preloading of images, password reset improvements, and much more. He has worked together with our team and dedicated his own time towards making a difference.</p>
+		</center>
+	</div>
 	
 <p class="span3">And many more.</p>
 </div>

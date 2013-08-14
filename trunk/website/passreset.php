@@ -12,8 +12,22 @@ if (IsLoggedin()) {
 	die(); // Prevent error after login
 }
 if (isset($_GET['code'])) {
+    
+    $code = $__database->real_escape_string($_GET['code']);
+    $query = $__database->query("SELECT account_id FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
+    
+    if ($query->num_rows == 0) {
+        $query->free();
+?>
+    <br />
+    <p class="lead alert-error alert">The token you requested expired or didn't exist.</p>
+<?php
+        die;
+    }
+    
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		$code = $__database->real_escape_string($_GET['code']);
+        if ($_POST['password'] == $_POST['password-verify']) {
+        $code = $__database->real_escape_string($_GET['code']);
 		$query = $__database->query("SELECT account_id FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
 		
 		if ($query->num_rows == 1) {
@@ -38,32 +52,36 @@ if (isset($_GET['code'])) {
 		}
 		else {
 ?>
-<p class="lead alert-error alert">Token expired or didn't exist.</p>
+<p class="lead alert-error alert">The token you requested expired or didn't exist.</p>
 <?php
 		}
+	}
+	else
+	{
+?>
+<p class="lead alert-error alert">Passwords didn't match.</p>
+<?php
+	}
 	}
 
 ?>
 
 	<div class="row login">
-		<div class="span6 left_box">
+		<div class="span12 left_box">
 
-			<h4>Reset password</h4>
-			<div class="span6 signin_box">
-				<div class="box">
-					<div class="box_cont">
+			<h3>Reset your password below:</h3>
+            <br />
 						<div class="form">
-							<form method="POST">
-								<input type="password" name="password"><br />
-								<input type="submit" value="Reset password">
-							</form>
+                            <form id="pwForm" method="POST">
+                            <input id="txtPass" type="password" name="password" placeholder="New password">
+                            <input id="txtPassVerify" type="password" name="password-verify" placeholder="Confirm password">
+                            <br>
+                            <input id="btnSubmit" type="submit" value="Reset password">
+                            </form>
 						</div>
 
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 <?php
 
 }
@@ -73,7 +91,12 @@ else {
 		$email = $__database->real_escape_string($_POST['username']);
 		
 		$query = $__database->query("SELECT id, username FROM accounts WHERE email = '".$email."'");
-		if ($query->num_rows == 1) {
+        
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$error = "The email you entered is invalid.";
+		}
+        
+		elseif ($query->num_rows == 1) {
 			$row = $query->fetch_row();
 			$id = $row[0];
 			$username = $row[1];
@@ -144,12 +167,9 @@ ON DUPLICATE KEY UPDATE
 ?>
 
 	<div class="row login">
-		<div class="span6 left_box">
-			<h3>Request a password reset</h3>
-
-			<div class="span6 signin_box">
-				<div class="box">
-					<div class="box_cont">
+		<div class="span12">
+			<h3>Request a password change:</h3>
+            <p>If you've forgotten your password to your Mapler.me account, you can request a change by entering the email used for your account below:</p>
 						<div class="form">
 							<form method="POST">
 								<input type="text" name="username" placeholder="Email">
@@ -159,9 +179,6 @@ ON DUPLICATE KEY UPDATE
 
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
 <?php
 }
 require_once __DIR__.'/inc/footer.php';
