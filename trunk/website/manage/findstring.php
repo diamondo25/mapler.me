@@ -29,7 +29,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['3'], $_GET['charac
 	header('Content-type: application/json');
 	require_once __DIR__.'/../inc/classes/database.php';
 	$searching = $__database->real_escape_string($_POST['3']);
-	$q = $__database->query("SELECT internal_id, name, last_update FROM characters WHERE `name` LIKE '%".$searching."%' COLLATE latin1_bin ORDER BY id DESC LIMIT 200");
+	$q = $__database->query("SELECT internal_id, name, last_update FROM characters WHERE `name` LIKE '%".$searching."%' COLLATE latin1_bin ORDER BY internal_id DESC LIMIT 200");
 	
 	$tmp = array();
 	while ($row = $q->fetch_assoc())
