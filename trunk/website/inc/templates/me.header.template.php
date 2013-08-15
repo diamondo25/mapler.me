@@ -102,13 +102,11 @@ if ($_loggedin) {
 	font-family: Helvetica, sans-serif;
 	font-size: 24px;
 	letter-spacing: 0px;
-	color: #FFF;
 }
 
 .name_extra {
 	font-weight: 200;
 	letter-spacing: normal;
-	color: #DDD;
 	font-size: 15px;
 }
 
@@ -124,7 +122,6 @@ hr {
 .side {
 	font-weight: 200;
 	letter-spacing: normal;
-	color: #DDD;
 	font-size: 15px;
 }
 

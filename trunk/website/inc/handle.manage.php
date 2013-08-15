@@ -32,7 +32,7 @@ else {
 ?>
 		<div class="row">
 			<div class="span3">
-				<ul class="nav nav-list settings-sidebar">
+				<ul class="nav nav-list sidebar">
 					<?php require_once __DIR__.'/templates/additional.menu.php'; ?>
           		</ul>
         	</div>

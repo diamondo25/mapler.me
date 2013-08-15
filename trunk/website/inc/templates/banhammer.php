@@ -1,4 +1,3 @@
-<?php if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_ADMIN)): ?>
 <script type="text/javascript">
 function Mute(id) {
 	if (confirm("Are you sure you want to mute this member?")) {
@@ -98,4 +97,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 	}
 }
 ?>
-<?php endif; ?>

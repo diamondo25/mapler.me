@@ -1,5 +1,11 @@
 <?php
 $error = '';
+
+	$themes = array();
+    $themes[] = array('default', 'Default', 'Mapler.me\'s current design.');
+    $themes[] = array('light', 'Light', 'A lighter design with subtle feel.');
+    $themes[] = array('minimal', 'Minimal', 'A minimalistic design.');
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick'], $_POST['bio'], $_POST['email'])) {
 	if ($error == '') {
 		$name = htmlentities($_POST['name'], ENT_COMPAT, 'UTF-8');
@@ -18,11 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 	}
 	
 	if ($error == '') {
+    	$theme = $_POST['theme'];
+    	$themecheck = array('default', 'light', 'minimal');
+    	if (!in_array($theme, $themecheck)) {
+        	$error = "The theme you requested does not exist. Please do not attempt to hack the site.";
+    	}
+	}
+	
+	if ($error == '') {
 		$bio = htmlentities($_POST['bio'], ENT_COMPAT, 'UTF-8');
 		$_loginaccount->SetFullname($name);
 		$_loginaccount->SetNickname($nick);
 		$_loginaccount->SetBio($bio);
 		$_loginaccount->SetEmail($email);
+		$_loginaccount->SetConfigurationOption('theme', $theme);
 		$_loginaccount->Save();
 ?>
 <p class="lead alert-info alert">Successfully changed your information.</p>
@@ -68,7 +83,7 @@ if ($error != '') {
 			<div class="span9">
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">Full Name</div>
+						<div class="span2 label setting-label">Full Name</div>
 						<div class="span4">
 							<input type="text" name="name" id="inputName" value="<?php echo $_loginaccount->GetFullname(); ?>" />
 						</div>
@@ -76,7 +91,7 @@ if ($error != '') {
 				</div>
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">Nickname</div>
+						<div class="span2 label setting-label">Nickname</div>
 						<div class="span4">
 							<input type="text" name="nick" id="inputNick" value="<?php echo $_loginaccount->GetNickname(); ?>" />
 						</div>
@@ -84,7 +99,7 @@ if ($error != '') {
 				</div>
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">Bio</div>
+						<div class="span2 label setting-label">Bio</div>
 						<div class="span4">
 							<textarea class="span2" style="min-height:100px;" type="text" name="bio" id="inputBio"><?php echo $_loginaccount->GetBio(); ?></textarea>
 						</div>
@@ -92,12 +107,25 @@ if ($error != '') {
 				</div>
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">Email</div>
+						<div class="span2 label setting-label">Email</div>
 						<div class="span4">
 							<input type="text" name="email" id="inputEmail" value="<?php echo $_loginaccount->GetEmail(); ?>" />
 						</div>
 					</div>
 				</div>
+				<div class="item">
+				    <div class="row">
+				        <div class="span2 label setting-label">Theme</div>
+				        <div class="span4">
+				            <select name="theme" style="height:35px !important;width: 150px !important;">
+<?php foreach ($themes as $themeid => $data): ?>
+							<option value="<?php echo $data[0]; ?>"><?php echo $data[1]; ?></option>
+<?php endforeach; ?>
+						  </select>
+				        </div>
+				    </div>
+				</div>
+						
 				<div class="item">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary">Save</button>
@@ -114,7 +142,7 @@ if ($error != '') {
 			<div class="span9">
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">Username</div>
+						<div class="span2 label setting-label">Username</div>
 						<div class="span4">
 							<input type="text" name="twitch" id="inputName" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_username'); ?>" />
 						</div>
@@ -122,7 +150,7 @@ if ($error != '') {
 				</div>
 				<div class="item">
 					<div class="row">
-						<div class="span2 label">API Code</div>
+						<div class="span2 label setting-label">API Code</div>
 						<div class="span4">
 							<input type="text" name="topsecret" id="inputNick" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_api_code'); ?>" />
 						</div>

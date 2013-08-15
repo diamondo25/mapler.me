@@ -54,9 +54,7 @@ if (!empty($notice)) {
 			$description = substr($desc, 0, strrpos($desc, ' ')).'... <br /><a href="'.$link.'">Read More?</a>'; 
 		}
 		$date = date('l F d, Y', strtotime($feed[$x]['date']));
-		echo '<p><strong><a href="'.$link.'" title="'.$title.'">'.$title.'</a></strong><br />';
-		echo '<small><em>Posted on '.$date.'</em></small></p>';
-		echo '<p>'.$description.'</p>';
+		echo '<span class="label label-info">Latest Mapler.me News:</span> <strong><a href="'.$link.'" title="'.$title.'">'.$title.'</a></strong>';
 	}
 	
 	unset($rss);

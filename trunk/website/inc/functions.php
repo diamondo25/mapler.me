@@ -658,7 +658,7 @@ function MakePlayerAvatar($name, $options = array()) {
 		return;
 	}
 ?>
-	<div onclick="document.location.href = '//<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px rgba(0, 0, 0, 0.5); cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
+	<div onclick="document.location.href = '//<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 

@@ -67,63 +67,6 @@ $check = strlen($searching);
 	border-radius: 3px;
 	margin-bottom: 10px;
 }
-
-.search-menu {
-  width: 228px;
-  padding: 0;
-  background-color: rgba(0,0,0,0.5);
-  -webkit-border-radius: 6px;
-     -moz-border-radius: 6px;
-          border-radius: 6px;
-  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
-          box-shadow: 0 1px 4px rgba(0,0,0,.065);
-}
-.search-menu > li > a {
-  display: block;
-  width: 190px \9;
-  margin: 0 0 -1px;
-  padding: 8px 14px;
-  border: 1px solid #000;
-  color: #DDD;
-}
-.search-menu > li:first-child > a {
-  -webkit-border-radius: 6px 6px 0 0;
-     -moz-border-radius: 6px 6px 0 0;
-          border-radius: 6px 6px 0 0;
-}
-.search-menu > li:last-child > a {
-  -webkit-border-radius: 0 0 6px 6px;
-     -moz-border-radius: 0 0 6px 6px;
-          border-radius: 0 0 6px 6px;
-}
-.search-menu > .active > a {
-  position: relative;
-  z-index: 2;
-  padding: 9px 15px;
-  border: 0;
-  -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-     -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-          box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
-}
-/* Chevrons */
-.search-menu .icon-chevron-right {
-  float: right;
-  margin-top: 2px;
-  margin-right: -6px;
-  opacity: .25;
-}
-.search-menu > li > a:hover {
-  background-color: rgba(0,0,0,0.7);
-}
-.search-menu a:hover .icon-chevron-right {
-  opacity: .5;
-}
-.search-menu .active .icon-chevron-right,
-.search-menu .active a:hover .icon-chevron-right {
-  background-image: url(../img/glyphicons-halflings-white.png);
-  opacity: 1;
-}
 </style>
 
 <div class="row">
@@ -136,7 +79,7 @@ $check = strlen($searching);
 		</form>
 		<?php if ($check == '0') { ?>
 		<hr />
-		<ul id="filters" class="nav nav-list search-menu">
+		<ul id="filters" class="nav nav-list sidebar">
 			<li><a href="#" data-filter="*">Show all.</a></li>
 			<li><a href="#" data-filter=".scania">Scania</a></li>
 			<li><a href="#" data-filter=".bera">Bera</a></li>

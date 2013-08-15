@@ -57,6 +57,19 @@ function _AddHeaderLink($what, $filename) {
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
+	
+	<!-- Theme -->
+	<link href='http://<?php echo $domain; ?>/inc/css/themes/<?php echo $_loginaccount->GetTheme(); ?>.css' rel='stylesheet' type='text/css' />
+	<!-- End Theme -->
+	
+	<script type="text/javascript">
+	   jQuery.get("http://<?php echo $domain; ?>/inc/css/themes/<?php $_loginaccount->GetTheme(); ?>.css", null, function(data) {
+	var comments = data.match(/\/\*.*\*\//g);
+	for each (var c in comments) 
+		alert(c);
+		});
+	</script>
+	
 <?php
 _AddHeaderLink('css', 'style');
 _AddHeaderLink('css', 'main');
@@ -264,7 +277,7 @@ endif;
     </div>
 </header>
 
-	<div class="container main" style="background: rgba(0,0,0,0.6); padding: 20px; border-radius: 5px; margin-top: 90px; margin-bottom:30px;">
+	<div class="container main" style="padding: 20px; border-radius: 5px; margin-top: 90px; margin-bottom:30px;">
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
@@ -279,7 +292,9 @@ if ($_loggedin && !$_loginaccount->IsMuted()):
 	require_once 'social.php';
 endif;
 
+if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_ADMIN)):
 require_once 'banhammer.php';
+endif;
 
 if ($_loggedin && $_loginaccount->IsMuted()):
 ?>

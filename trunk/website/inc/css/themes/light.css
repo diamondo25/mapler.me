@@ -1,0 +1,120 @@
+/*
+Theme Name: Light
+Author: @Tyler
+Version: 1.0
+*/
+
+/* General */
+
+body {
+    color:#333;
+    background: #0a1625;
+    background: url('http://mapler.me/inc/img/new-bg.png') center fixed;
+    background-size: cover;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color:#333;
+}
+
+.main {
+    background: rgba(255,255,255,0.6);
+}
+
+.character {
+    background-color: rgba(255,255,255,0.5) !important;
+}
+
+footer {
+    color: #333 !important;
+}
+
+/* Status + Stream */
+.stream-block {
+	color:#333;
+	background: rgba(255,255,255,0.5);
+}
+
+.status {
+	color:#333;
+	background: rgba(255,255,255,0.5);
+}
+
+.status .header {
+	border-bottom: 1px dashed #CCC;
+	color: #333;   
+}
+
+.status .status-extra {
+	border-top: 1px dashed #CCC;
+	color:#333;   
+}
+
+.status .status-extra a:hover, .status .status-extra a {
+	color:#333 !important;
+}
+
+.mention, .status-time, .deletestatus, .reply-to, .reportstatus {
+	color: #222;
+}
+
+/* Pages */
+.invert-box {
+    color:#333;
+	background: rgba(255,255,255,0.5);
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.18),0 0 5px 0 rgba(0,0,0,0.2);
+}
+
+.character-brick {
+	color:#333;
+	background:rgba(255,255,255,0.5);
+}
+
+.character-brick .caption {
+	background:rgba(255,255,255,0.2);
+	color:#333;
+}
+
+.name_extra {
+	color: #444;
+}
+
+.name {
+	color: #333;
+}
+
+.side {
+	color: #333;
+}
+
+label {
+    color:#333 !important;
+}
+
+.setting-label {
+    color:#333 !important;
+    text-shadow: none !important;
+}
+
+/* Other */
+.sidebar {
+    background-color: rgba(255,255,255,0.5);
+}
+
+.sidebar > li > a {
+    color: #333;
+    border: 1px solid #FFF;
+    background-color: rgba(255,255,255,0.4);
+}
+
+.sidebar > li > a:hover {
+  background-color: rgba(255,255,255,0.7);
+}

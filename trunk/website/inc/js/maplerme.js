@@ -31,14 +31,6 @@ $(document).ready(function() {
 		}
 	});
 	
-	//preload of background, contributed by @tigerphace
-	var src="http://mapler.me/inc/img/new-bg.png";
-	var $img=$('<img src="'+ src+'">');
-	$img.bind('load',function(){
-		$('body').css('background','#0a1625 url('+ src+') center 0px fixed');
-		$('body').css('background-size','cover');});if($img[0].width){$img.trigger('load');
-		}
-	
 	$('#post-status').bind("focus", keypress.stop_listening);
 	$('#post-status').bind("blur", keypress.listen);
 	$('input[type=text]').bind("focus", keypress.stop_listening);

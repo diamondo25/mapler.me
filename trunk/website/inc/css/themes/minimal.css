@@ -1,0 +1,144 @@
+/*
+Theme Name: Minimal
+Author: @Tyler
+Version: 1.0
+*/
+
+/* General */
+
+body {
+    color:#333;
+    background-size: cover;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color:#333;
+}
+
+.main {
+    background: rgba(255,255,255,0.6);
+}
+
+.character {
+    background-color: rgba(255,255,255,0.5) !important;
+    border: none !important;
+    border-radius: none !important;
+    box-shadow: none !important;
+}
+
+footer {
+    color: #333 !important;
+}
+
+header .sticky-nav {
+    background: #FFF !important;
+    border-bottom: 1px solid #333 !important;
+    border-radius: none !important;
+    box-shadow: none !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+/* Status + Stream */
+.stream-block {
+	color:#333;
+	background: rgba(255,255,255,0.5);
+	box-shadow: none !important;
+	border-radius: none !important;
+}
+
+.status {
+	color:#333;
+	background: rgba(255,255,255,0.5);
+	box-shadow: none !important;
+	border-radius: none !important;
+}
+
+.status .header {
+	border-bottom: 1px dashed #CCC;
+	color: #333;   
+}
+
+.status .status-extra {
+	border-top: 1px dashed #CCC;
+	color:#333;   
+}
+
+.status .status-extra a:hover, .status .status-extra a {
+	color:#333 !important;
+}
+
+.mention, .status-time, .deletestatus, .reply-to, .reportstatus {
+	color: #222;
+}
+
+/* Pages */
+.invert-box {
+    color:#333;
+	background: rgba(255,255,255,0.5);
+	-webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+	box-shadow: none !important;
+	border-radius: none !important;
+}
+
+.character-brick {
+	color:#333;
+	background:rgba(255,255,255,0.5);
+	box-shadow: none !important;
+	border-radius: none !important;
+}
+
+.character-brick .caption {
+	background:rgba(255,255,255,0.2);
+	color:#333;
+}
+
+.name_extra {
+	color: #444;
+}
+
+.name {
+	color: #333;
+}
+
+.side {
+	color: #333;
+}
+
+label {
+    color:#333 !important;
+}
+
+.setting-label {
+    color:#333 !important;
+    text-shadow: none !important;
+}
+
+/* Other */
+.sidebar {
+    background-color: rgba(255,255,255,0.5);
+    box-shadow: none !important;
+}
+
+.sidebar > li > a {
+    color: #333;
+    border: 1px solid #FFF;
+    background-color: rgba(255,255,255,0.4);
+}
+
+.sidebar > li > a:hover {
+  background-color: rgba(255,255,255,0.7);
+}
+
+.sidebar > li > a {
+    border-radius: 0px !important;
+}
+
+.settings > li:last-child > a {
+    border-radius: 0px !important;
+}

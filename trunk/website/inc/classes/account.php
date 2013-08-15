@@ -191,6 +191,15 @@ WHERE
 		}
 	}
 	
+	public function GetTheme($default = 'default') {
+    	$theme = $this->GetConfigurationOption('theme');
+    	
+    	if ($theme === NULL) {
+        	$theme = $default;
+    	}
+    	return $theme;
+	}
+	
 	// Configuraton functions
 	
 	public function GetMainCharacterName() {

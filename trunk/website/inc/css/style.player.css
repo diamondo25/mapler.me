@@ -32,13 +32,11 @@
 	font-family: Helvetica, sans-serif;
 	font-size: 26px;
 	letter-spacing: 1px;
-	color: #FFF;
 }
 
 .name_extra {
 	font-weight: 200;
 	letter-spacing: normal;
-	color: #DDD;
 	font-size: 15px;
 }
 
@@ -62,7 +60,6 @@ hr {
 .side {
 	font-weight: 200;
 	letter-spacing: normal;
-	color: #DDD;
 	font-size: 15px;
 }
 
