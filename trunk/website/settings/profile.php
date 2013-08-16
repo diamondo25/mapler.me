@@ -70,6 +70,8 @@ if ($error != '') {
 <?php
 }
 
+	$currenttheme = $_loginaccount->GetTheme();
+
 ?>
 
 <style>
@@ -119,8 +121,9 @@ if ($error != '') {
 				        <div class="span4">
 				            <select name="theme" style="height:35px !important;width: 150px !important;">
 <?php foreach ($themes as $themeid => $data): ?>
-							<option value="<?php echo $data[0]; ?>"><?php echo $data[1]; ?></option>
+							<option value="<?php echo $data[0]; ?>"<?php echo $currenttheme == $data[0] ? ' selected="selected"' : ''; ?>><?php echo $data[1]; ?></option>
 <?php endforeach; ?>
+
 						  </select>
 				        </div>
 				    </div>
