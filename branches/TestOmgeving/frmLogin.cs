@@ -23,6 +23,22 @@ namespace Mapler_Client
 
         private void frmLogin_Load(object sender, EventArgs e)
         {
+            try
+            {
+                if (File.Exists(_codeloc))
+                    File.Open(_codeloc, FileMode.Open).Close();
+            }
+            catch (Exception)
+            {
+                // Try different path
+                _codeloc = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + System.IO.Path.DirectorySeparatorChar + "Mapler.me" + System.IO.Path.DirectorySeparatorChar;
+                if (!Directory.Exists(_codeloc))
+                    Directory.CreateDirectory(_codeloc);
+                _codeloc += "code.weed";
+
+            }
+
+
             if (File.Exists(_codeloc))
             {
                 string code = File.ReadAllText(_codeloc);

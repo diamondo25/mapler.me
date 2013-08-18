@@ -255,17 +255,11 @@ function ParseItem($id) {
 			krsort($copy);
 			foreach ($copy as $mapname => $mapping) {
 				if (!isset($data_buffer['body_map'][$mapname])) {
-					if ($imageoptions['flipped'])
-						$data_buffer['body_map'][$mapname][0] = $x - $mapping['X'];
-					else
-						$data_buffer['body_map'][$mapname][0] = $x + $mapping['X'];
+					$data_buffer['body_map'][$mapname][0] = $x + $mapping['X'];
 					$data_buffer['body_map'][$mapname][1] = $y + $mapping['Y'];
 				}
 				else {
-					if ($imageoptions['flipped'])
-						$x = $data_buffer['body_map'][$mapname][0] + $mapping['X'];
-					else
-						$x = $data_buffer['body_map'][$mapname][0] - $mapping['X'];
+					$x = $data_buffer['body_map'][$mapname][0] - $mapping['X'];
 					$y = $data_buffer['body_map'][$mapname][1] - $mapping['Y'];
 				}
 			}
@@ -521,6 +515,85 @@ function FindAndAddItemEffect() {
 	}
 }
 
+function RenderTamedMob() {
+	global $options;
+	global $data_buffer, $imageoptions, $zmap;
+	
+	$itemid = $options['tamingmob'];
+	
+	// TamingMob manipulates body X/Y
+	$info = GetItemWZInfo($itemid);
+	
+	$mainx = $imageoptions['mainx'];
+	$mainy = $imageoptions['mainy'];
+	
+	if ($info !== null) {
+		$block = $info[$options['stance']][$options['stance_frame']];
+		
+		foreach ($block as $innerid => $innerblock) {
+			if (!($innerblock instanceof TreeNode)) {
+				continue;
+			}
+			$zval = $innerblock['z'];
+			if ($zval == 'tamingMobBack') {
+				// Nexon'd
+				$zval = 'tamingMobRear';
+			}
+			
+			if (is_string($zval))
+				$zval = $zmap[$zval];
+			
+			$objectdata = array(
+				'info' => $innerblock,
+				'itemid' => $itemid,
+				'category' => 'tamingmob',
+				'vslot' => array(),
+				'islot' => 'Tm',
+			);
+			
+			$x = $mainx;
+			$y = $mainy;
+			
+			$mappings = $objectdata['info']['map'];
+			if (!isset($mappings)) {
+				continue;
+			}
+			else {
+				
+				$imageoptions['mainx'] = $mainx + $mappings['navel']['X'];
+				$imageoptions['mainy'] = $mainy + $mappings['navel']['Y'] + 20;
+			}
+			
+			$copy = $mappings->getArrayCopy();
+			krsort($copy);
+			foreach ($copy as $mapname => $mapping) {
+				if (!isset($data_buffer['body_map'][$mapname])) {
+					$data_buffer['body_map'][$mapname][0] = $x + $mapping['X'];
+					$data_buffer['body_map'][$mapname][1] = $y + $mapping['Y'];
+				}
+				else {
+					$x = $data_buffer['body_map'][$mapname][0] - $mapping['X'];
+					$y = $data_buffer['body_map'][$mapname][1] - $mapping['Y'];
+				}
+			}
+
+			if (DEBUGGING)
+				echo 'Final map '.$x.', '.$y."\r\n";
+			$objectdata['x'] = $x;
+			$objectdata['y'] = $y;
+
+			$objectdata['image'] = $options['stance'].'.'.$options['stance_frame'].'.'.$innerid.'.png';
+			if (DEBUGGING)
+				echo 'Image '.$objectdata['image']."\r\n";
+			$foundinfo = true;
+			$data_buffer['zlayers'][$zval][] = $objectdata;
+		}
+		
+		$data_buffer['item_locations'][$itemid] = GetItemDataLocation($data_buffer['main-dir'], $itemid);
+		$options['stance'] = 'sit';
+	}
+}
+
 
 
 
@@ -535,10 +608,9 @@ $options['slots'] = array();
 $options['name'] = 'MapleDummy';
 $options['face'] = 'default';
 $options['stance'] = 'stand';
-$options['stand_type'] = 1;
 $options['stance_frame'] = '0';
-$options['gender'] = 0;
-$options['tamingmob'] = 0;
+$options['stand_type'] = 1;
+$options['tamingmob'] = 1932016; // 0;
 $options['elven_ears'] = 1;
 $options['guild_name'] = 'Mapler.me';
 $options['guild_emblem_fg'] = 400;
@@ -604,7 +676,25 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 	}
 
 	if (isset($_GET['name'])) {
-		$name = substr($_GET['name'], 0, 12); // max 12 characters
+		$options['name'] = substr($_GET['name'], 0, 12); // max 12 characters
+	}
+	if (isset($_GET['guildname'])) {
+		$options['guild_name'] = substr($_GET['guildname'], 0, 12); // max 12 characters
+	}
+	if (isset($_GET['embleminfo'])) {
+		$embleminfo = explode('.', $_GET['embleminfo']);
+		if (count($embleminfo) == 4) {
+			$options['guild_emblem_bg'] = intval($embleminfo[0]);
+			$options['guild_emblem_bgc'] = intval($embleminfo[1]);
+			$options['guild_emblem_fg'] = intval($embleminfo[2]);
+			$options['guild_emblem_fgc'] = intval($embleminfo[3]);
+		}
+	}
+	if (isset($_GET['elf'])) {
+		$options['elven_ears'] = true;
+	}
+	if (isset($_GET['tamingmob'])) {
+		$options['tamingmob'] = intval($_GET['tamingmob']);
 	}
 
 	foreach ($slots_input as $id => &$value) {
@@ -666,19 +756,18 @@ foreach ($options['slots'] as $slot => $itemid) {
 }
 // Fix up base position
 
+RenderTamedMob();
 {
-	$iteminfo = GetItemWZInfo($skin);
+	
 	// Set global position values
+	
+	$iteminfo = GetItemWZInfo($skin);
 	$map_node = $iteminfo[$options['stance']][$options['stance_frame']]['body']['map'];
 
-	if ($imageoptions['flipped'])
-		$data_buffer['body_map']['navel'][0] = $imageoptions['mainx'] - $map_node['navel']['X'];
-	else
-		$data_buffer['body_map']['navel'][0] = $imageoptions['mainx'] + $map_node['navel']['X'];
+	$data_buffer['body_map']['navel'][0] = $imageoptions['mainx'] + $map_node['navel']['X'];
 	$data_buffer['body_map']['navel'][1] = $imageoptions['mainy'] + $map_node['navel']['Y'];
 	if (DEBUGGING)
 		echo 'Did find map: navel '.$data_buffer['body_map']['navel'][0].', '.$data_buffer['body_map']['navel'][1].' > '.$map_node['navel']['X'].' - '.$map_node['navel']['Y']."\r\n";
-
 }
 
 // Check if main slots are used
@@ -732,7 +821,7 @@ FindAndAddItemEffect();
 
 krsort($data_buffer['zlayers']);
 
-$im = imagecreatetruecolor(max(256, $imageoptions['width']), max(256, $imageoptions['height']));
+$im = imagecreatetruecolor($imageoptions['width'], $imageoptions['height']);
 imagesavealpha($im, true);
 $trans = imagecolorallocatealpha($im, 0, 0, 0, 127);
 imagefill($im, 0, 0, $trans);
@@ -758,7 +847,7 @@ foreach ($data_buffer['zlayers'] as $zname => $objects) {
 		if (DEBUGGING) {
 			echo 'Adding '.$object['itemid'].' -> '.$img.' at X '.$x.', Y '.$y.' --- Zname '.$zname.'  - Zmap value: '.$zval.' - '.implode(';', $object['vslot']).' - '.$object['islot']."\r\n";
 		}
-		DrawImage($img, $x, $y, $imageoptions['flipped']);
+		DrawImage($img, $x, $y, false);
 		
 	}
 }
@@ -774,8 +863,30 @@ $result_width = $imageoptions['width'];
 $result_height = $imageoptions['height'];
 
 if (true || !DEBUGGING) {
+	// Build final image
+	
+	$final_image = imagecreatetruecolor($result_width, $result_height);
+	imagesavealpha($final_image, true);
+	$trans = imagecolorallocatealpha($final_image, 0, 0, 0, 127);
+	imagefill($final_image, 0, 0, $trans);
+	
+	// Copy created avatar onto the plane
+	if ($imageoptions['flipped']) {
+		$im = FlipImage($im);
+	}
+
+	$offsetx = ($result_width / 2) - ($image_width / 2);
+	$offsety = ($result_height / 2) - ($image_height / 2);
+	
+	imagecopy($final_image, $im, 
+		$offsetx, $offsety, 
+		0, 0, 
+		$image_width, $image_height);
+	imagedestroy($im);
+	$im = $final_image;
+	
 	if (count($data_buffer['extra_layers']) > 0) {
-		$temp_image = imagecreatetruecolor($image_width, $image_height);
+		$temp_image = imagecreatetruecolor($result_width, $result_height);
 		imagesavealpha($temp_image, true);
 		$trans = imagecolorallocatealpha($temp_image, 0, 0, 0, 127);
 		imagefill($temp_image, 0, 0, $trans);
@@ -790,26 +901,6 @@ if (true || !DEBUGGING) {
 		
 		$im = $temp_image;
 	}
-	
-	
-	// Build final image
-	
-	$final_image = imagecreatetruecolor($result_width, $result_height);
-	imagesavealpha($final_image, true);
-	$trans = imagecolorallocatealpha($final_image, 0, 0, 0, 127);
-	imagefill($final_image, 0, 0, $trans);
-	
-	// Copy created avatar onto the plane
-	if ($imageoptions['flipped']) {
-		$im = FlipImage($im);
-	}
-	imagecopy($final_image, $im, 
-		0, 0, 
-		0, 0, 
-		$result_width, $result_height);
-	imagedestroy($im);
-	$im = $final_image;
-	
 	
 	
 	

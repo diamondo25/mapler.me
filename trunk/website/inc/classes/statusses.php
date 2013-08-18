@@ -118,12 +118,12 @@ WHERE
 		'$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', // Images
 	);
 	
-	private static $blocklist = array("fuck", "fucking", "motherfucker", "shit", "shitting", "fucker", "bitch", "bitching",
-	"asshole", "fag", "faggot", "nigger", "vagina", "pussy", "dick", "cock", "wonderking",
-	"cunt", "penis", "whore", "gamersoul", "w8baby", "gameKiller", "anal", "masterbate", "slut", "whore",
-	"pute", "gay", "dick", 'boobs');
+	public static $blocklist = array('fuck', 'fucking', 'motherfucker', 'shit', 'shitting', 'fucker', 'bitch', 'bitching',
+	'asshole', 'fag', 'faggot', 'nigger', 'vagina', 'pussy', 'dick', 'cock', 'wonderking',
+	'cunt', 'penis', 'whore', 'gamersoul', 'w8baby', 'gamekiller', 'anal', 'masterbate', 'slut', 'whore',
+	'pute', 'gay', 'dick', 'boobs');
 	
-	private static $censor = "<img src='//mapler.me/inc/img/ui/Item/Equip/lock.png'/>";
+	public static $censor = '<img src="//mapler.me/inc/img/ui/Item/Equip/lock.png" title="Censored!" />';
 	
 	public function ParseContent() {
 		global $domain;
@@ -136,7 +136,13 @@ WHERE
 		$this->mention_list = array_values($matches[1]); // Push all values to mention_list
 		
 		$this->content = preg_replace(self::$_status_search_for, self::$_status_replace_with, $this->content);
-		$this->content = str_ireplace(self::$blocklist, self::$censor, $this->content);
+		
+		$this->content = preg_replace_callback('/(^| |\r\n)([a-zA-Z0-9]+)/', function ($matches) {
+			if (in_array(strtolower($matches[2]), Status::$blocklist))
+				return $matches[1].Status::$censor;
+			return $matches[1].$matches[2];
+		}, $this->content);
+		// $this->content = str_ireplace(self::$blocklist, self::$censor, $this->content);
 	}
 	
 	public function PrintAsHTML($style_addition = '') {

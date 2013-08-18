@@ -109,11 +109,17 @@ function SetItemInfo(event, obj, values) {
 	
 	
 	var wepcatname = 0;
+	var desc = 'Weapon Category:';
 	if (iconinfo.attr('src').indexOf('Weapon/') != -1) {
 		// Itz a weapon
 		wepcatname = GetWeaponCategoryName(itemid);
 	}
+	else {
+		desc = 'Category:';
+		wepcatname = GetItemCategory(itemid);
+	}
 	SetObjText('weaponcategory', wepcatname, undefined, false);
+	$('#item_info_row_weaponcategory').prev().html(desc);
 	
 	
 	
@@ -218,7 +224,8 @@ function SetItemInfo(event, obj, values) {
 	if (otherinfo.karmad)
 		extrainfo += '<span>1 time trading (karma\'d)</span>';
 
-	//extrainfo += '<span>ITEMID ' + itemid + '</span>';
+	//description += '<span>ITEMID ' + itemid + '</span>';
+	//description += '<span>Type ' + GetItemCategory(itemid) + '</span>';
 
 	if (item.name != '' && item.name != undefined) {
 		if (item.moreflags != undefined && item.moreflags.indexOf('crafted') != -1)
@@ -226,6 +233,7 @@ function SetItemInfo(event, obj, values) {
 	}
 	
 	if (isequip) {
+		
 		if ((item.flag & 0x0020) == 0) {
 			
 		}
@@ -457,9 +465,10 @@ function GetWeaponCategoryName(id) {
 	var catid = Math.floor(id / 10000) % 100;
 	
 	switch (catid) {
-		case 21: return 'Magic Wand';
+		case 21: return 'Shining Rod';
 		case 22: return 'Soul Shooter';
 		case 23: return 'Desperado';
+		case 24: return 'Whip Blade';
 		case 30: return 'One-handed Sword';
 		case 31: return 'One-handed Axe';
 		case 32: return 'One-handed Mace';
@@ -482,14 +491,250 @@ function GetWeaponCategoryName(id) {
 		case 50: return 'Herbalism tool';
 		case 51: return 'Mining tool';
 		case 52: return 'Dual Bowgun';
-		case 53: return 'Canon';
+		case 53: return 'Hand Cannon';
+		case 54: return 'Katana';
+		case 55: return 'Fan';
 		case 70: return undefined;
 		default: return 'FIXMEH: ' + catid;
 	}
 
 }
 
-function GetItemCategory(islot) {
+function GetItemSlotsById(itemid) {
+	var itemcatid = Math.floor(itemid / 10000);
+	switch (itemcatid) {
+		case 100: return [1, 1200, 1300];
+		case 101: return [2, 1202, 1302];
+		case 102: return [3];
+		case 103: return [4];
+		case 104:
+		case 105: return [5, 1203];
+		case 106: return [6, 1204];
+		case 107: return [7, 1205];
+		case 108: return [8, 1206, 1304];
+		case 109:
+		case 134:
+		case 135: return [10];
+		case 110: return [9, 1201, 1301];
+		case 111: return [12, 13, 15, 16];
+		case 112: return [17, 65];
+		case 113: return [50];
+		case 114: return [49];
+		case 115: return [51];
+		case 116: return [52];
+		case 117: return [53];
+		case 118: return [56];
+		
+		case 161: return [1100];
+		case 162: return [1101];
+		case 163: return [1102];
+		case 164: return [1103];
+		case 165: return [1104];
+		case 166: return [53]; // 117?
+		case 167: return [54];
+		case 119: return [61];
+		case 168: {
+			var ret = [];
+			for (var i = 1500; i < 1525; i++)
+				ret.push(i);
+			return ret;
+		}
+		case 190: return [18];
+		case 191: return [19];
+		case 192: return [20];
+		case 194: return [1000];
+		case 195: return [1001];
+		case 196: return [1002];
+		case 197: return [1003];
+		
+		case 184: return [5100];
+		case 185: return [5102];
+		case 186: return [5103];
+		case 187: return [5104];
+		case 188: return [5101];
+		case 189: return [5105];
+		
+		case 180:
+			if (itemid == 1802100)
+				return [21, 31, 39];
+			else
+				return [14, 30, 38];
+		case 181:
+			switch (itemid) {
+				case 1812000: return [23, 34, 42];
+				case 1812001: return [22, 33, 41];
+				case 1812002: return [24];
+				case 1812003: return [25];
+				case 1812004: return [26, 35, 43];
+				case 1812005: return [27, 36, 44];
+				case 1812006: return [28, 37, 45];
+				case 1812007: return [46, 47, 48];
+				case 1812008: return [57, 58, 59];
+				case 1812009: return [60];
+				case 1812010: return [62, 63, 64];
+			}
+		case 182: return [21, 31, 39];
+		case 183: return [29, 32, 40];
+		case 120: return [5000, 5001, 5002];
+		default: return [11]; 
+	}
+}
+
+function GetItemCategory(itemid) {
+	var itemcatid = Math.floor(itemid / 10000);
+	if (itemcatid == 150)
+		return 'Herbalism Tool';
+	else if (itemcatid == 151)
+		return 'Mining Tool';
+	
+	var slotid = GetItemSlotsById(itemid);
+	switch (slotid[0]) {
+		case 1: return 'Hat';
+		case 2: return 'Face Accessory';
+		case 3: return 'Eye Accessory';
+		case 4: return 'Earring';
+		case 5: 
+			if (itemcatid == 105)
+				return 'Overall';
+			else
+				return 'Top';
+		case 6: return 'Bottom';
+		case 7: return 'Shoes';
+		case 8: return 'Glove';
+		case 9: return 'Cape';
+		case 10: 
+			if (itemcatid == 134)
+				return 'Katara';
+			else if (itemcatid == 135) {
+				var uwotm8 = itemid - 1350000;
+				if (uwotm8 < 2100)
+					return 'Magic Arrow';
+				else if (uwotm8 >= 2100 && uwotm8 < 2200)
+					return 'Card';
+				else if (uwotm8 >= 2300 && uwotm8 < 2400)
+					return 'Core';
+				else if (uwotm8 >= 2400 && uwotm8 < 2500)
+					return 'Orb';
+				else if (uwotm8 >= 2500 && uwotm8 < 2600)
+					return 'Dragon Essence';
+				else if (uwotm8 >= 2600 && uwotm8 < 2700)
+					return 'Soul Ring';
+				else if (uwotm8 >= 2700 && uwotm8 < 2800)
+					return 'Magnum'; // Ijsjuh
+				else if (uwotm8 >= 2800 && uwotm8 < 2900)
+					return 'Kodachi';
+					
+				uwotm8 = Math.floor(itemid / 10);
+				switch (uwotm8) {
+					case 135220: return 'Medallions';
+					case 135221: return 'Rosary';
+					case 135222: return 'Iron Chain';
+					
+					case 135223:
+					case 135224:
+					case 135225: return 'Magic Book';
+					
+					case 135226: return 'Arrow Fletching';
+					case 135227: return 'Bow Thimble';
+					case 135228: return 'Dagger Scabbard';
+					case 135229: return 'Charm';
+					
+					case 135290: return 'Wrist Band';
+					case 135291: return 'Far Sight';
+					case 135292: return 'Powder Keg';
+					case 135293: return 'Mass';
+					case 135294: return 'Document';
+					case 135295: return 'Magic Marble';
+					case 135296: return 'Arrowhead';
+					case 135297: return 'Jewel';
+				}
+				
+				if (Math.floor(itemid / 1000) == 1353)
+					return 'Controller';
+			}
+			else if (Math.floor(itemid / 1000) == 1099)
+				return 'Demon Aegis';
+			else if (Math.floor(itemid / 1000) == 1098)
+				return 'Soul Shield';
+			else if (Math.floor(itemid / 1000) == 1099)
+				return 'Demon Aegis';
+			
+			return 'Shield'; // hurr
+		case 11: return 'Weapon';
+
+		case 12: return 'Ring';
+		case 17: return 'Pendant';
+		case 18: return 'Tamed Monster';
+		case 19: return 'Saddle';
+		case 20: return 'Monster Equip';
+		case 49: return 'Medal';
+		case 50: return 'Belt';
+		case 51: return 'Shoulder Decoration';
+		case 52: return 'Pocket Item';
+		case 53: return 'Android';
+		case 54: return 'Mechanical Heart';
+		case 56: return 'Badge';
+		case 61: 
+			if (Math.floor(itemid / 100) == 11902) 
+				return 'Power Source';
+			else
+				return 'Emblem';
+	
+		case 1001: return 'Dragon Pendant';
+		case 1002: return 'Dragon Wing Accesory';
+		case 1003: return 'Dragon Tail Accesory';
+		
+		case 1104: return 'Mechanic Transistor';
+		case 1100: return 'Mechanic Engine';
+		case 1101: return 'Mechanic Arm';
+		case 1102: return 'Mechanic Leg';
+		case 1103: return 'Mechanic Frame';
+		case 1500: return 'Bits';
+		
+		// Pets
+		case 14:
+		case 22:
+		case 23:
+		case 24:
+		case 25:
+		case 26:
+		case 27:
+		case 28:
+		case 30:
+		case 33:
+		case 34:
+		case 35:
+		case 36:
+		case 37:
+		case 38:
+		case 41:
+		case 42:
+		case 43:
+		case 44:
+		case 45:
+		case 46:
+		case 47:
+		case 48:
+		case 57:
+		case 58:
+		case 59:
+		case 60:
+		case 62:
+		case 63:
+		case 64:
+			return 'Pet Equip';
+		case 21:
+		case 29:
+		case 31:
+		case 32:
+		case 39:
+		case 40:
+			return 'Pet Ring';
+		default: return 'Dunno :(. Please report if you do!';
+	}
+}
+
+function GetItemCategoryOLD(islot) {
 	switch (islot) {
 		case 'Ba': return 'Badge';
 		case 'Be': return 'Belt';
