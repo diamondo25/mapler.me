@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class CharacterSkills
+   public class CharacterSkills
     {
         public class Skill
         {

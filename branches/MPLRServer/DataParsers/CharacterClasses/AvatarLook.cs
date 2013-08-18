@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class AvatarLook
+   public class AvatarLook
     {
         public Dictionary<byte, int>[] Equips { get; private set; }
         public byte Gender { get; private set; }

@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace CraftNetTools
 {
-    class AppUpdates
+   public class AppUpdates
     {
         private static string _tempfile;
 

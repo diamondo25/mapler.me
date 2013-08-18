@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class InternalPacketHandler
+   public class InternalPacketHandler
     {
         public static void HandleServerConnectionStatus(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -26,7 +26,6 @@ namespace MPLRServer
                         SessionRestartCache.Instance.RemoveInfo(info);
 
 
-                    pConnection.WorldID = 255;
                     pConnection.ChannelID = 255;
                 }
                 else
@@ -72,6 +71,29 @@ namespace MPLRServer
                 pConnection.CharacterInternalID = -1;
                 pConnection.CharacterID = -1;
                 pConnection.ChannelID = 255;
+            }
+        }
+
+
+        public static void HandleTokenCheck(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            string token = pPacket.ReadString();
+            bool okay = false;
+            int accountid = -1;
+
+            okay = Queries.CheckAccountToken(token, out accountid);
+
+            if (!okay)
+            {
+                pConnection.Logger_ErrorLog("Kicked client; token was not valid.");
+                pConnection.Disconnect();
+                return;
+            }
+            else
+            {
+                pConnection.Logger_WriteLine("Accepted client. Logged in with account ID {0}", accountid);
+
+                pConnection.AccountID = accountid;
             }
         }
     }

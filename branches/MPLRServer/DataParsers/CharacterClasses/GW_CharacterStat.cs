@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class GW_CharacterStat
+   public class GW_CharacterStat
     {
         public int ID { get; private set; }
         public string Name { get; private set; }

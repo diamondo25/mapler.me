@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace MPLRServer
 {
-    class Acceptor
+   public class Acceptor
     {
         TcpListener _listener;
         Action<Socket> _action;

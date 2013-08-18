@@ -12,7 +12,7 @@ namespace MPLRServer
             LevelUP = 1, // MySQL counts from 1
             JobUP, 
             SkillUP,
-            GotEXP, // Err...
+            EXPPoint, // Err...
             GotFame,
         }
 
@@ -24,31 +24,36 @@ namespace MPLRServer
             _type_name_map.Add(Types.LevelUP, "levelup");
             _type_name_map.Add(Types.JobUP, "jobup");
             _type_name_map.Add(Types.SkillUP, "skillup");
-            _type_name_map.Add(Types.GotEXP, "gotexp");
+            _type_name_map.Add(Types.EXPPoint, "exppoint");
             _type_name_map.Add(Types.GotFame, "gotfame");
 
             Instance = new Timeline();
             Logger.WriteLine("Initialized Timeline");
         }
 
-        public void PushLevelUP(int pAccountID, int pCharInternalID, byte pNewLevel)
+        public void PushLevelUP(ClientConnection pConnection, byte pNewLevel)
         {
-            Push(Types.LevelUP, pAccountID, pCharInternalID, pNewLevel.ToString());
+            Push(Types.LevelUP, pConnection.AccountID, pConnection.CharacterInternalID, pNewLevel.ToString());
         }
 
-        public void PushJobUP(int pAccountID, int pCharInternalID, ushort pJob)
+        public void PushJobUP(ClientConnection pConnection, ushort pJob)
         {
-            Push(Types.JobUP, pAccountID, pCharInternalID, pJob.ToString());
+            Push(Types.JobUP, pConnection.AccountID, pConnection.CharacterInternalID, pJob.ToString());
         }
 
-        public void PushSkillUP(int pAccountID, int pCharInternalID, int pSkill, int pLevel)
+        public void PushSkillUP(ClientConnection pConnection, int pSkill, int pLevel)
         {
-            Push(Types.SkillUP, pAccountID, pCharInternalID, string.Format("{0};{1}", pSkill, pLevel));
+            Push(Types.SkillUP, pConnection.AccountID, pConnection.CharacterInternalID, string.Format("{0};{1}", pSkill, pLevel));
         }
 
-        public void PushGotFame(int pAccountID, int pCharInternalID, bool pAdd, int pNewFame)
+        public void PushGotFame(ClientConnection pConnection, int pAdd, int pNewFame)
         {
-            Push(Types.GotFame, pAccountID, pCharInternalID, (pAdd ? "1" : "0") + ";" + pNewFame);
+            Push(Types.GotFame, pConnection.AccountID, pConnection.CharacterInternalID, pAdd + ";" + pNewFame);
+        }
+
+        public void PushExpPoint(ClientConnection pConnection, int pVal)
+        {
+            Push(Types.EXPPoint, pConnection.AccountID, pConnection.CharacterInternalID, pVal.ToString() + ";" + pConnection.CharData.Stats.MapID);
         }
 
 

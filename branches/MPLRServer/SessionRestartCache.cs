@@ -7,7 +7,7 @@ using MDR = MySql.Data.MySqlClient.MySqlDataReader;
 
 namespace MPLRServer
 {
-    class RestartInfo
+   public class RestartInfo
     {
         public string IP { get; set; }
         public byte[] MachineID { get; set; }
@@ -23,7 +23,7 @@ namespace MPLRServer
         }
     }
 
-    class SessionRestartCache
+   public class SessionRestartCache
     {
 
         public static SessionRestartCache Instance { get; private set; }
@@ -125,8 +125,8 @@ namespace MPLRServer
 
         public void TryRestartSession(ClientConnection pConnection, int pCharacterID, byte[] pMachineID)
         {
-            RestartInfo info = Cache.Find((i) => { return (i.CharacterID == pCharacterID && i.CompareMachineID(pMachineID) && i.IP == pConnection.IP); });
-            if (info != null)
+            RestartInfo restartInfo = Cache.Find((i) => { return (i.CharacterID == pCharacterID && i.CompareMachineID(pMachineID) && i.IP == pConnection.IP); });
+            if (restartInfo != null)
             {
                 // Found character
                 // NOTE:
@@ -134,31 +134,34 @@ namespace MPLRServer
                 // And the connection resets. And the player changes to the other character.
                 // And a blue moon. Then worlds collide and apocalypse
 
-                if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(info.CharacterID) &&
-                    Internal_Storage.Store.Instance.KnownCharlist[info.CharacterID].ContainsKey(info.WorldID))
-                {
-                    // Okay. We got this
-                    var is_info = Internal_Storage.Store.Instance.KnownCharlist[info.CharacterID][info.WorldID];
+                var info = AccountDataCache.Instance.GetCharInfoByIDAndWorldID(pCharacterID, restartInfo.WorldID);
 
-                    pConnection.AccountID = is_info.AccountID;
-                    pConnection.WorldID = is_info.WorldID;
-                    pConnection.UserID = is_info.UserID;
+                if (info != null)
+                {
+                    if (info.AccountID != pConnection.AccountID)
+                    {
+                        pConnection.Logger_WriteLine("Unable to restore session for {0} (IP: {1})! Account id not the same! (Trying to hack it?)", pCharacterID, pConnection.IP);
+                        return;
+                    }
+                    // Okay. We got this
+                    pConnection.WorldID = info.WorldID;
+                    pConnection.UserID = info.UserID;
                     // Do not set the IDs of the character
                     // pConnection.CharacterInternalID = info.InternalID;
 
-                    Logger.WriteLine("Restored session for characterid {0} world {1} (IP: {2})", pCharacterID, is_info.WorldID, pConnection.IP);
+                    pConnection.Logger_WriteLine("Restored session for characterid {0} world {1} (IP: {2})", pCharacterID, info.WorldID, pConnection.IP);
 
                     // Scratch him off the cache list
-                    Cache.Remove(info);
+                    Cache.Remove(restartInfo);
                 }
                 else
                 {
-                    Logger.WriteLine("Unable to restore session for {0} (IP: {1})! Not found in Internal Storage.", pCharacterID, pConnection.IP);
+                    pConnection.Logger_WriteLine("Unable to restore session for {0} (IP: {1})! Not found in Internal Storage.", pCharacterID, pConnection.IP);
                 }
             }
             else
             {
-                Logger.WriteLine("No info found for character id {0} (IP: {1})", pCharacterID, pConnection.IP);
+                pConnection.Logger_WriteLine("No info found for character id {0} (IP: {1})", pCharacterID, pConnection.IP);
 
             }
         }

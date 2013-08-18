@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class ServerPacketHandlers
+   public class ServerPacketHandlers
     {
         public static void HandleLogin(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -21,7 +21,7 @@ namespace MPLRServer
                 return;
             }
 
-            pConnection.UserID = pPacket.ReadInt();
+            int userid = pPacket.ReadInt();
             byte gender = pPacket.ReadByte(); // Gender or GenderSelect/PinSelect
             pPacket.ReadByte();
             short admin = pPacket.ReadShort();
@@ -39,7 +39,7 @@ namespace MPLRServer
             pPacket.Skip(2); // 1 1
             pPacket.ReadBytes(8); // CC key
 
-            ParseLogin(pConnection, username, admin, gender, create_time, qban_time, qban);
+            ParseLogin(pConnection, username, userid);
         }
 
         public static void HandleLoginFromWeb(ClientConnection pConnection, MaplePacket pPacket)
@@ -55,10 +55,10 @@ namespace MPLRServer
                 return;
             }
 
-            pConnection.UserID = pPacket.ReadInt();
-            byte gender = pPacket.ReadByte(); // Gender or GenderSelect/PinSelect
+            int userid = pPacket.ReadInt();
+            pPacket.ReadByte(); // Gender or GenderSelect/PinSelect
             pPacket.ReadByte();
-            short admin = pPacket.ReadShort();
+            pPacket.ReadShort(); // Admin info!
             pPacket.ReadInt(); // ReadBytes(4)
             pPacket.ReadByte(); // 0x95
             string username = pPacket.ReadString(); // Username
@@ -66,23 +66,95 @@ namespace MPLRServer
             pPacket.ReadByte(); // 0?
 
 
-            byte qban = pPacket.ReadByte(); // Quiet Ban
-            DateTime qban_time = DateTime.FromFileTime(pPacket.ReadLong()); // Quiet Ban Time
-            string username2 = pPacket.ReadString();
-            pConnection.Logger_WriteLine("Username 1: {0} | Username 2: {1}", username, username2);
-            DateTime create_time = DateTime.FromFileTime(pPacket.ReadLong()); // Creation Time
-            pPacket.ReadInt(); // 78?
+            pPacket.ReadByte(); // Quiet Ban
+            pPacket.ReadLong(); // Quiet Ban Time
+            pPacket.ReadString(); // Username. Again.
+            pPacket.ReadLong(); // creation datetime
+            pPacket.ReadInt();
             pPacket.ReadBytes(8); // CC key
-            string herpderp = pPacket.ReadString();
-            if (herpderp != "")
-            {
-                pConnection.Logger_WriteLine("Wat is dit: {0}", herpderp);
-            }
+            pPacket.ReadString();
 
-            ParseLogin(pConnection, username, admin, gender, create_time, qban_time, qban);
+            ParseLogin(pConnection, username, userid);
         }
 
-        private static void ParseLogin(ClientConnection pConnection, string pUsername, short pAdmin, byte pGender, DateTime pCreateTime, DateTime pQBan, byte pQBanReason)
+        private static void ParseLogin(ClientConnection pConnection, string pUsername, int pUserID)
+        {
+            pConnection.Logger_WriteLine("User logged into Nexon account '{1}', userid {0}", pUserID, pUsername);
+
+            if (AccountDataCache.Instance.KnownUserlist.ContainsKey(pUserID))
+            {
+                int tmp = AccountDataCache.Instance.KnownUserlist[pUserID];
+                if (tmp == 2)
+                {
+                    pConnection.Logger_WriteLine("User bound to temporary account. Allocating current account to it.");
+
+                    using (UpdateQueryBuilder q = new UpdateQueryBuilder("users"))
+                    {
+                        q.SetColumn("account_id", pConnection.AccountID);
+                        q.SetColumn("last_check", MySQL_Connection.NOW);
+                        q.SetWhereColumn("ID", pUserID);
+                        q.RunQuery();
+                    }
+
+                    AccountDataCache.Instance.KnownUserlist[pUserID] = pConnection.AccountID;
+                    pConnection.UserID = pUserID;
+                }
+                else if (tmp == pConnection.AccountID)
+                {
+                    // Correct account, continue
+                    pConnection.Logger_WriteLine("User bound to same account. kay");
+
+                    using (UpdateQueryBuilder q = new UpdateQueryBuilder("users"))
+                    {
+                        q.SetColumn("last_check", MySQL_Connection.NOW);
+                        q.SetWhereColumn("ID", pUserID);
+                        q.RunQuery();
+                    }
+
+                    pConnection.UserID = pUserID;
+                }
+                else
+                {
+                    pConnection.Logger_WriteLine("User ID not bound to this account!!! Ignoring...");
+                    pConnection.SendInfoText("WARNING: This Nexon account ({0}) is not yours! Please login into the correct Mapler.me account.", pUsername);
+                    return;
+                }
+            }
+            else
+            {
+                pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
+
+                using (InsertQueryBuilder insertq = new InsertQueryBuilder("users"))
+                {
+                    insertq.OnDuplicateUpdate = true;
+
+                    insertq.AddColumn("account_id");
+                    insertq.AddColumns(true, "ID", "last_check");
+
+                    insertq.AddRow(pConnection.AccountID, pUserID, MySQL_Connection.NOW);
+                    insertq.RunQuery();
+                }
+
+                pConnection.UserID = pUserID;
+                AccountDataCache.Instance.KnownUserlist.Add(pUserID, pConnection.AccountID);
+            }
+
+
+            pConnection.SendInfoText("Identified account {0}. You can now select your character.", pUsername);
+
+            if (pConnection.LogFilename == "Unknown")
+                pConnection.LogFilename = "";
+            else
+                pConnection.LogFilename += "_";
+            pConnection.LogFilename += pConnection.AccountID.ToString();
+
+            // Save IP of loginserver
+            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, 0, 0);
+        }
+
+
+        // Obsolete; uses account check
+        private static void ParseLoginOLD(ClientConnection pConnection, string pUsername, short pAdmin, byte pGender, DateTime pCreateTime, DateTime pQBan, byte pQBanReason)
         {
 
             pConnection.Logger_WriteLine("[{0}] {1} ({2}) Created at {3}, Gender {4}", pConnection.UserID, pUsername, pAdmin, pCreateTime, pGender);
@@ -101,9 +173,9 @@ namespace MPLRServer
                 return -1;
             };
 
-            if (Internal_Storage.Store.Instance.KnownUserlist.ContainsKey(pConnection.UserID))
+            if (AccountDataCache.Instance.KnownUserlist.ContainsKey(pConnection.UserID))
             {
-                int tmp = Internal_Storage.Store.Instance.KnownUserlist[pConnection.UserID];
+                int tmp = AccountDataCache.Instance.KnownUserlist[pConnection.UserID];
                 if (tmp == 2)
                 {
                     pConnection.Logger_WriteLine("User bound to temporary account. Trying to find correct account...");
@@ -113,7 +185,7 @@ namespace MPLRServer
                         pConnection.AccountID = newid;
 
                         pConnection.Logger_WriteLine("Found account for user!");
-                        Internal_Storage.Store.Instance.KnownUserlist[pConnection.UserID] = pConnection.AccountID;
+                        AccountDataCache.Instance.KnownUserlist[pConnection.UserID] = pConnection.AccountID;
                     }
                     else
                     {
@@ -143,7 +215,7 @@ namespace MPLRServer
 
                 pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
 
-                Internal_Storage.Store.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
+                AccountDataCache.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
             }
 
 
@@ -152,9 +224,9 @@ namespace MPLRServer
                 insertq.OnDuplicateUpdate = true;
 
                 insertq.AddColumn("account_id");
-                insertq.AddColumns(true, "ID", "username", "admin", "last_check", "quiet_ban_expire", "quiet_ban_reason", "creation_date");
+                insertq.AddColumns(true, "ID", "last_check");
 
-                insertq.AddRow(pConnection.AccountID, pConnection.UserID, pUsername, pAdmin, new MySQL_Connection.NowType(), pQBan, pQBanReason, pCreateTime);
+                insertq.AddRow(pConnection.AccountID, pConnection.UserID, MySQL_Connection.NOW);
                 insertq.RunQuery();
             }
 
@@ -232,28 +304,15 @@ namespace MPLRServer
                 // *crosses fingers*
 
                 // Delete from local cache
-                if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(id))
+                int internalid = 0;
+                if (AccountDataCache.Instance.DeleteCharacterInfo(id, pConnection.WorldID, pConnection.AccountID, out internalid))
                 {
-                    if (Internal_Storage.Store.Instance.KnownCharlist[id].ContainsKey(pConnection.WorldID))
-                    {
-                        var info = Internal_Storage.Store.Instance.KnownCharlist[id][pConnection.WorldID];
-                        if (info.AccountID == pConnection.AccountID)
-                        {
-                            var internalid = info.InternalID;
-                            info.SlotHashes.Clear();
 
-                            Internal_Storage.Store.Instance.KnownCharlist[id].Remove(pConnection.WorldID);
-                            Internal_Storage.Store.Instance.KnownCharlist_INTERNAL.Remove(internalid);
-
-                            // Delete from server.
-                            MySQL_Connection.Instance.RunQuery("DELETE FROM characters WHERE internal_id = " + internalid);
-                        }
-                    }
+                    MySQL_Connection.Instance.RunQuery("DELETE FROM characters WHERE internal_id = " + internalid);
                 }
                 else
                 {
-                    pConnection.Logger_WriteLine("Unable to delete character: not found!");
-
+                    Logger.WriteLine("Failed to delete character. Invalid accountid, worldid, characterid or maybe not stored?");
                 }
             }
             else
@@ -324,6 +383,19 @@ namespace MPLRServer
             if (!pConnection._CharactersInMap.Contains(name))
                pConnection._CharactersInMap.Add(name);
         }
+
+        public static void HandleMaplePointAmount(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            int amount = pPacket.ReadInt(); // Life can be so easy
+
+            using (UpdateQueryBuilder q = new UpdateQueryBuilder("users"))
+            {
+                q.SetWhereColumn("account_id", pConnection.AccountID);
+                q.SetColumn("maplepoints", amount);
+                q.RunQuery();
+            }
+        }
+
 
         public static void HandleMessage(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -405,8 +477,13 @@ namespace MPLRServer
                     iqb.OnDuplicateUpdate = true;
                     iqb.AddColumn("character_id");
                     iqb.AddColumns(true, "name", "type", "skin", "hair", "face");
+                    for (int i = 1; i <= 7; i++)
+                        iqb.AddColumn("equip" + i, true);
 
-                    iqb.AddRow(pConnection.CharacterInternalID, android.Name, android.Type, android.Skin, android.Hair, android.Face);
+                    iqb.AddRow(pConnection.CharacterInternalID, android.Name, android.Type, android.Skin, android.Hair, android.Face,
+                        android.Equips[0], android.Equips[1], android.Equips[2],
+                        android.Equips[3], android.Equips[4], android.Equips[5], 
+                        android.Equips[6]);
                     iqb.RunQuery();
                 }
                 Logger.WriteLine("Saved android '{0}' of {1}.", android.Name, pConnection.CharData.Stats.Name);
@@ -504,7 +581,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 var level = pPacket.ReadByte();
-                Timeline.Instance.PushLevelUP(pConnection.AccountID, pConnection.CharacterInternalID, level);
+                Timeline.Instance.PushLevelUP(pConnection, level);
                 pConnection.CharData.Stats.Level = level;
                 pConnection.Logger_WriteLine("{0} leveled up to level {1}!!!", pConnection.CharData.Stats.Name, level);
             }
@@ -512,7 +589,7 @@ namespace MPLRServer
             {
                 didsomething = true;
                 var jobid = pPacket.ReadShort();
-                Timeline.Instance.PushJobUP(pConnection.AccountID, pConnection.CharacterInternalID, (ushort)jobid);
+                Timeline.Instance.PushJobUP(pConnection, (ushort)jobid);
                 pConnection.CharData.Stats.JobID = jobid;
                 pConnection.Logger_WriteLine("{0} changed to job {1}!!!", pConnection.CharData.Stats.Name, jobid);
             }
@@ -597,14 +674,25 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 0x10000))
             {
                 didsomething = true;
-                pConnection.CharData.Stats.EXP = pPacket.ReadInt();
+                long newexp = pPacket.ReadLong();
+                byte point = (byte)EXPTable.GetLevelPercentage(pConnection.CharData.Stats.Level, newexp);
+
+                if (pConnection.LastExpPoint != point)
+                {
+                    // Ohhh
+                    Timeline.Instance.PushExpPoint(pConnection, point);
+                }
+
+                pConnection.CharData.Stats.EXP = newexp;
+                pConnection.LastExpPoint = point;
+
             }
 
             if (CheckFlag(updateFlag, 0x20000))
             {
                 didsomething = true;
                 int fame = pPacket.ReadInt();
-                Timeline.Instance.PushGotFame(pConnection.AccountID, pConnection.CharacterInternalID, fame > pConnection.CharData.Stats.Fame, fame);
+                Timeline.Instance.PushGotFame(pConnection, fame - pConnection.CharData.Stats.Fame, fame);
                 pConnection.CharData.Stats.Fame = fame;
             }
 
@@ -749,7 +837,7 @@ namespace MPLRServer
                     int masterlevel = pPacket.ReadInt();
                     long expiration = pPacket.ReadLong();
 
-                    Timeline.Instance.PushSkillUP(pConnection.AccountID, pConnection.CharacterInternalID, skillid, level);
+                    Timeline.Instance.PushSkillUP(pConnection, skillid, level);
 
                     skillTable.AddRow(pConnection.CharacterInternalID, skillid, level, masterlevel == 0 ? null : (object)masterlevel, expiration);
                 }
@@ -973,7 +1061,7 @@ namespace MPLRServer
                         ItemBase item = inventory.InventoryItems[inv - 1][(byte)slot];
                         item.Amount = amount;
 
-                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
+                        AccountDataCache.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
 
                         using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
                         {
@@ -1084,16 +1172,24 @@ namespace MPLRServer
                             slot = CharacterInventory.CorrectEquipSlot(internalInventory, slot);
 
                             if (inventory.EquipmentItems[internalInventory].ContainsKey(slot))
+                            {
                                 inventory.EquipmentItems[internalInventory].Remove(slot);
+                                AccountDataCache.Instance.DeleteItemChecksum(pConnection, 0, slot);
+                            }
                             else
                                 pConnection.Logger_WriteLine("!!! Could not find item @ {0} {1}", inv, slot);
                         }
                         else
                         {
                             if (inventory.InventoryItems[inv - 1].ContainsKey((byte)slot))
+                            {
                                 inventory.InventoryItems[inv - 1].Remove((byte)slot);
+                                AccountDataCache.Instance.DeleteItemChecksum(pConnection, (ushort)(inv - 1), slot);
+                            }
                             else
                                 pConnection.Logger_WriteLine("!!! Could not find item @ {0} {1}", inv, slot);
+
+
                         }
 
                         using (DeleteQueryBuilder itemTable = new DeleteQueryBuilder("items"))
@@ -1105,16 +1201,9 @@ namespace MPLRServer
                         }
                     }
 
-
-
-
-
-
-
-
                     else if (type4 == 4)
                     {
-                        pPacket.ReadInt(); // Unknown..?
+                        pPacket.ReadLong(); // Unknown..?
                     }
                     else if (type4 == 5)
                     {
@@ -1287,7 +1376,7 @@ namespace MPLRServer
                         ItemBase item = inventory.BagItems[invfrom].Items[slotfrom];
                         item.Amount = amount;
 
-                        Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
+                        AccountDataCache.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, inv, slot, item.GetChecksum());
 
                         using (UpdateQueryBuilder itemTable = new UpdateQueryBuilder("items"))
                         {
@@ -1530,6 +1619,8 @@ namespace MPLRServer
 
                     pConnection.LogFilename += "-" + pConnection.CharacterInternalID;
 
+                    pConnection.LastExpPoint = (byte)EXPTable.GetLevelPercentage(data.Stats.Level, data.Stats.EXP);
+
                     pConnection.SendInfoText("Your character {0} has been saved!", pConnection.CharData.Stats.Name);
 
                     // Save SessionRestart Info
@@ -1546,6 +1637,9 @@ namespace MPLRServer
                     pConnection.Logger_WriteLine("World diff: {0} - {1}", pConnection.WorldID, conflicted.Item2);
                     pConnection.SendInfoText("A different character has already this name! Delete this character via the website first!");
                 }
+
+
+                Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, GameHelper.GetAllianceWorldID(pConnection.WorldID), pConnection.ChannelID);
             }
             else
             {
@@ -1582,7 +1676,6 @@ namespace MPLRServer
                 Logger.WriteLine("Data not fully read. Halp.: {0} of {1} read", pPacket.Position, pPacket.Length);
             }
 
-            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, pConnection.WorldID, pConnection.ChannelID);
 
             pConnection.SendTimeUpdate();
         }

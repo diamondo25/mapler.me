@@ -33,6 +33,13 @@ namespace Mapler_Client
         private void Form1_Load(object sender, EventArgs e)
         {
             lblInfo.Text = "";
+
+            if (new frmLogin().ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                this.Close();
+                return;
+            }
+
             try
             {
                 // Get executable path
@@ -43,11 +50,11 @@ namespace Mapler_Client
                     _mapleEXE = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable");
                 }
 
-                ServerConnection.Initialize();
-                Sniffer.Init();
-
                 _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
                 _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
+
+                ServerConnection.Initialize();
+                Sniffer.Init();
             }
             catch (Exception ex)
             {
@@ -78,13 +85,10 @@ namespace Mapler_Client
             Program.Closing = true;
             notifyIcon1.Visible = false;
             if (Sniffer.Instance != null)
-            {
                 Sniffer.Instance.Stop();
-            }
+
             if (ServerConnection.Instance != null)
-            {
                 ServerConnection.Instance.Dispose();
-            }
         }
 
         private void panel1_Click(object sender, EventArgs e)

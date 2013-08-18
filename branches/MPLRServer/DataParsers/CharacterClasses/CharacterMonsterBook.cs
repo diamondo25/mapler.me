@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class CharacterMonsterBook
+    public class CharacterMonsterBook
     {
         public int ChosenCardID { get; private set; }
 

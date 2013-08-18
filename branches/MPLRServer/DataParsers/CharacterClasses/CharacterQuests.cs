@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace MPLRServer
 {
-    class CharacterQuests
+   public class CharacterQuests
     {
         public Dictionary<ushort, string> Running { get; private set; }
         public Dictionary<ushort, long> Done { get; private set; }

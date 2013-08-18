@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace MPLRServer
 {
-    class GMSKeys
+   public class GMSKeys
     {
         private static Dictionary<ushort, byte[]> MapleStoryGlobalKeys = new Dictionary<ushort, byte[]>();
         public static ushort LatestVersion = 0;

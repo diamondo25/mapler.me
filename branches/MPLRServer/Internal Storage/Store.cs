@@ -3,69 +3,113 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MPLRServer.Internal_Storage
+namespace MPLRServer
 {
-    public class Store
+    public class CharacterCacheInfo
     {
-        public class CharInfo
-        {
-            public int ID { get; private set; }
-            public int InternalID { get; private set; }
-            public int AccountID { get; private set; }
-            public int UserID { get; private set; }
-            public byte WorldID { get; private set; }
-            public string Name { get; private set; }
-            public Dictionary<int, Dictionary<short, int>> SlotHashes { get; private set; }
+        public int ID { get; private set; }
+        public int InternalID { get; private set; }
+        public int AccountID { get; private set; }
+        public int UserID { get; private set; }
+        public byte WorldID { get; private set; }
+        public string Name { get; private set; }
+        public Dictionary<int, Dictionary<short, int>> SlotHashes { get; private set; }
 
-            public void Initialize(MySql.Data.MySqlClient.MySqlDataReader pReader)
+        public void Initialize(MySql.Data.MySqlClient.MySqlDataReader pReader)
+        {
+            UserID = pReader.GetInt32("userid");
+            ID = pReader.GetInt32("id");
+            InternalID = pReader.GetInt32("internal_id");
+            Name = pReader.GetString("name");
+            WorldID = pReader.GetByte("world_id");
+
+            AccountID = AccountDataCache.Instance.KnownUserlist[UserID];
+
+            SlotHashes = new Dictionary<int, Dictionary<short, int>>();
+        }
+
+        ~CharacterCacheInfo()
+        {
+            if (SlotHashes != null)
             {
-                UserID = pReader.GetInt32("userid");
-                ID = pReader.GetInt32("id");
-                InternalID = pReader.GetInt32("internal_id");
-                Name = pReader.GetString("name");
-                WorldID = pReader.GetByte("world_id");
-
-                AccountID = Store.Instance.KnownUserlist[UserID];
-
-                SlotHashes = new Dictionary<int, Dictionary<short, int>>();
+                foreach (var kvp in SlotHashes)
+                    kvp.Value.Clear();
+                SlotHashes.Clear();
+                SlotHashes = null;
             }
-        }
 
-        public struct InternalCharBound
-        {
-            public int InternalID { get; set; }
-            public int ID { get; set; }
-            public byte WorldID { get; set; }
         }
+    }
+
+    public class AccountDataCache
+    {
 
         public Dictionary<int, int> KnownUserlist { get; private set; }
-        public Dictionary<int, Dictionary<byte, CharInfo>> KnownCharlist { get; private set; }
-        public Dictionary<int, InternalCharBound> KnownCharlist_INTERNAL { get; private set; }
+        public Dictionary<int, CharacterCacheInfo> KnownCharlist { get; private set; }
 
-        public static Store Instance { get; private set; }
+        public static AccountDataCache Instance { get; private set; }
         public static void Initialize()
         {
-            Instance = new Store();
+            Instance = new AccountDataCache();
             Instance.Load();
         }
 
-        public CharInfo GetCharInfoByIntenalID(int pInternalID)
+        public CharacterCacheInfo GetCharInfoByInternalID(int pInternalID)
         {
-            if (!KnownCharlist_INTERNAL.ContainsKey(pInternalID)) return null;
-            var tmp = KnownCharlist_INTERNAL[pInternalID];
-            if (!KnownCharlist.ContainsKey(tmp.ID) || !KnownCharlist[tmp.ID].ContainsKey(tmp.WorldID)) return null;
-            return KnownCharlist[tmp.ID][tmp.WorldID];
+            if (KnownCharlist.ContainsKey(pInternalID))
+                return KnownCharlist[pInternalID];
+            return null;
+        }
+
+        public CharacterCacheInfo GetCharInfoByIDAndWorldID(int pCharacterID, byte pWorldID)
+        {
+            var info = KnownCharlist.Values.Where(a => { return a.ID == pCharacterID && a.WorldID == pWorldID; }).ToList();
+            if (info.Count == 0)
+                return null;
+            return info.First();
+        }
+
+        public bool DeleteCharacterInfo(int pCharacterID, byte pWorldID, int pAccountID, out int pInternalID)
+        {
+            pInternalID = -1;
+            var info = GetCharInfoByIDAndWorldID(pCharacterID, pWorldID);
+            if (info == null) return false;
+
+            if (info.AccountID != pAccountID) return false;
+
+            pInternalID = info.InternalID;
+            return KnownCharlist.Remove(info.InternalID);
+        }
+
+
+        public void DeleteItemChecksum(ClientConnection pConnection, ushort pInventory, short pSlot)
+        {
+            var info = GetCharInfoByIDAndWorldID(pConnection.CharacterID, pConnection.WorldID);
+            if (info == null)
+                throw new Exception("DeleteItemChecksum when character not found? ID: " + pConnection.CharacterID + "; WorldID: " + pConnection.WorldID);
+
+            if (!info.SlotHashes.ContainsKey(pInventory))
+                return;
+            if (!info.SlotHashes[pInventory].ContainsKey(pSlot))
+                return;
+
+            info.SlotHashes[pInventory].Remove(pSlot);
         }
 
         public void SetChecksumOfSlot(int pCharacterID, byte pWorldID, ushort pInventory, short pSlot, int pChecksum)
         {
-            if (!KnownCharlist[pCharacterID][pWorldID].SlotHashes.ContainsKey(pInventory))
-                KnownCharlist[pCharacterID][pWorldID].SlotHashes.Add(pInventory, new Dictionary<short, int>());
+            var info = GetCharInfoByIDAndWorldID(pCharacterID, pWorldID);
+            if (info == null)
+                throw new Exception("SetChecksumOfSlot when character not found? ID: " + pCharacterID + "; WorldID: " + pWorldID);
 
-            if (KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].ContainsKey(pSlot))
-                KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory][pSlot] = pChecksum;
+
+            if (!info.SlotHashes.ContainsKey(pInventory))
+                info.SlotHashes.Add(pInventory, new Dictionary<short, int>());
+
+            if (info.SlotHashes[pInventory].ContainsKey(pSlot))
+                info.SlotHashes[pInventory][pSlot] = pChecksum;
             else
-                KnownCharlist[pCharacterID][pWorldID].SlotHashes[pInventory].Add(pSlot, pChecksum);
+                info.SlotHashes[pInventory].Add(pSlot, pChecksum);
         }
 
         public void Load()
@@ -74,19 +118,16 @@ namespace MPLRServer.Internal_Storage
             using (var result = MySQL_Connection.Instance.RunQuery("SELECT id, account_id FROM users") as MySql.Data.MySqlClient.MySqlDataReader)
             {
                 while (result.Read())
-                {
                     KnownUserlist.Add(result.GetInt32(0), result.GetInt32(1));
-                }
             }
 
             Logger.WriteLine("Loaded {0} users!", KnownUserlist.Count);
 
-            KnownCharlist = new Dictionary<int, Dictionary<byte, CharInfo>>();
-            KnownCharlist_INTERNAL = new Dictionary<int, InternalCharBound>();
+            KnownCharlist = new Dictionary<int, CharacterCacheInfo>();
 
             LoadBaseData();
 
-            Logger.WriteLine("Loaded {0} characters!", KnownCharlist_INTERNAL.Count);
+            Logger.WriteLine("Loaded {0} characters!", KnownCharlist.Count);
 
             LoadInventoryHashes();
         }
@@ -97,23 +138,10 @@ namespace MPLRServer.Internal_Storage
             {
                 while (result.Read())
                 {
-                    CharInfo ch = new CharInfo();
+                    CharacterCacheInfo ch = new CharacterCacheInfo();
                     ch.Initialize(result);
 
-                    if (!KnownCharlist.ContainsKey(ch.ID))
-                    {
-                        KnownCharlist.Add(ch.ID, new Dictionary<byte, CharInfo>());
-                    }
-
-                    if (!KnownCharlist[ch.ID].ContainsKey(ch.WorldID))
-                        KnownCharlist[ch.ID].Add(ch.WorldID, ch);
-                    else
-                        KnownCharlist[ch.ID][ch.WorldID] = ch;
-
-                    if (!KnownCharlist_INTERNAL.ContainsKey(ch.InternalID))
-                        KnownCharlist_INTERNAL.Add(ch.InternalID, new InternalCharBound() { ID = ch.ID, InternalID = ch.InternalID, WorldID = ch.WorldID });
-                    else
-                        KnownCharlist_INTERNAL[ch.InternalID] = new InternalCharBound() { ID = ch.ID, InternalID = ch.InternalID, WorldID = ch.WorldID };
+                    KnownCharlist.Add(ch.InternalID, ch);
                 }
             }
 
@@ -123,23 +151,21 @@ namespace MPLRServer.Internal_Storage
         {
             if (pInternalID != null && reload)
             {
-                var character = GetCharInfoByIntenalID(pInternalID.Value);
+                var character = GetCharInfoByInternalID(pInternalID.Value);
                 if (character != null)
-                {
                     character.SlotHashes.Clear();
-                }
             }
 
             using (var result = MySQL_Connection.Instance.RunQuery("SELECT character_id, inventory, slot, `checksum` FROM items" + (pInternalID.HasValue ? " WHERE character_id = " + pInternalID.Value : "") + " ORDER BY character_id") as MySql.Data.MySqlClient.MySqlDataReader)
             {
-                CharInfo ch = null;
+                CharacterCacheInfo ch = null;
                 int lastid = 0;
                 while (result.Read())
                 {
                     if (lastid != result.GetInt32("character_id"))
                     {
                         lastid = result.GetInt32("character_id");
-                        ch = GetCharInfoByIntenalID(lastid);
+                        ch = GetCharInfoByInternalID(lastid);
                         if (ch == null)
                         {
                             lastid = 0;

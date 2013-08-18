@@ -8,7 +8,7 @@ using System.IO;
 
 namespace MPLRServer
 {
-    class ClientConnection : MESession
+    public class ClientConnection : MESession
     {
         public int AccountID { get; set; }
         public int UserID { get; set; }
@@ -17,6 +17,7 @@ namespace MPLRServer
         public byte WorldID { get; set; }
         public byte ChannelID { get; set; }
         public byte[] MachineID { get; set; }
+        public byte LastExpPoint { get; set; }
 
         public string ConnectedToIP { get; set; }
         public ushort ConnectedToPort { get; set; }
@@ -39,6 +40,8 @@ namespace MPLRServer
 
         public DateTime ConnectedTimeToServer = DateTime.MinValue;
 
+        private int uniqueid = 0;
+
         public override string ToString()
         {
 
@@ -47,6 +50,7 @@ namespace MPLRServer
 
         public ClientConnection(MSBLoader pLoader)
         {
+            uniqueid = Program.Random.Next(0, 10000);
             Pong = true;
             Program.Clients.Add(this);
             Logger_WriteLine("Fake Client Connected!");
@@ -54,11 +58,14 @@ namespace MPLRServer
             Clear();
             pLoader.PacketHandler += OnPacket;
             pLoader.DisconnectHandler += OnDisconnect;
+
         }
 
         public ClientConnection(Socket pSocket)
             : base(pSocket)
         {
+            uniqueid = Program.Random.Next(0, 10000);
+
             Pong = true;
             IsFake = false;
             Program.Clients.Add(this);
@@ -223,6 +230,8 @@ namespace MPLRServer
             {
                 try
                 {
+                    if (Disconnected) return; // Just to be sure...
+
                     if (_exporter != null)
                         _exporter.AddPacket(pPacket);
 
@@ -250,7 +259,11 @@ namespace MPLRServer
                                 }
                                 catch (Exception ex)
                                 {
-                                    Logger_ErrorLog("Failed parsing {0:X4} for {1}:\r\n{2}", opcode, type, ex.ToString());
+                                    Logger_ErrorLog("Failed parsing {0:X4} for {1}", opcode, type);
+                                    foreach (string line in ex.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        Logger_ErrorLog("{0}", line);
+                                    }
                                     LogFilename += "ERROR";
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
 
@@ -258,7 +271,7 @@ namespace MPLRServer
                                     using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0x9999))
                                     {
                                         mp.WriteString(ex.ToString());
-                                        if (ex is MySql.Data.MySqlClient.MySqlException)
+                                        if (ex.ToString().Contains("MySql.Data.MySqlClient.MySqlException"))
                                         {
                                             Logger_ErrorLog("MySQL exception!");
                                             var queries = MySQL_Connection.Instance.GetRanQueries();
@@ -309,7 +322,7 @@ namespace MPLRServer
         {
             string msg = string.Format(pFormat, pParams);
 
-            Logger.WriteLine("[{0}] {1}", LastLoggedCharacterName, msg);
+            Logger.WriteLine("[{2:X8}|{0}] {1}", LastLoggedCharacterName, msg, uniqueid);
         }
 
 
@@ -317,7 +330,16 @@ namespace MPLRServer
         {
             string msg = string.Format(pFormat, pParams);
 
-            Logger.ErrorLog("[{0}] {1}", LastLoggedCharacterName, msg);
+            Logger.ErrorLog("[{2:X8}|{0}] {1}", LastLoggedCharacterName, msg, uniqueid);
+        }
+
+
+        public int GetCharacterExpForTimeline()
+        {
+            if (CharData == null) return 0;
+
+            float fullPercent = EXPTable.GetLevelPercentage(this.CharData.Stats.Level, this.CharData.Stats.EXP);
+            return (int)Math.Round(fullPercent * 100);
         }
     }
 }

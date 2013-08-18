@@ -5,10 +5,10 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class ClientPacketHandlers
+   public class ClientPacketHandlers
     {
         public const byte LatestLocale = 8;
-        public const ushort LatestMajorVersion = 139; // Packet changes do not occur per minor version
+        public const ushort LatestMajorVersion = 140; // Packet changes do not occur per minor version
 
         public static void HandleVersion(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -54,7 +54,7 @@ namespace MPLRServer
             byte[] machineid = pPacket.ReadBytes(16);
             pConnection.MachineID = machineid;
 
-            if (pConnection.AccountID == -1)
+            if (pConnection.UserID == -1)
             {
                 SessionRestartCache.Instance.TryRestartSession(pConnection, characterid, machineid);
             }

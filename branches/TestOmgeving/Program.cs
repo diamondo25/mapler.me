@@ -12,6 +12,8 @@ namespace Mapler_Client
 
         public static bool Closing = false;
 
+        public static string Token = "";
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

@@ -5,36 +5,51 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class GameHelper
+    public class GameHelper
     {
         public static bool IsBeginnerJob(int pJobID)
         {
             return (pJobID % 1000) == 0
+                || (pJobID < 1000 && (pJobID % 100) == 0)
                 || pJobID == 2001
                 || pJobID == 2002
+                || pJobID == 2003
+                || pJobID == 2004
+
                 || pJobID == 3001
                 || pJobID == 3002
-                || pJobID == 2003
-                || pJobID == 5000
-                || pJobID == 2004
-                || pJobID == 6000
-                || pJobID == 6001;
+
+                || pJobID == 4001
+                || pJobID == 4002
+
+                || pJobID == 6001
+
+                || pJobID == 10000;
         }
 
         public static bool IsExtendedSPJob(int pJobID)
         {
-            return (pJobID / 1000 == 3 ||
-                pJobID / 100 == 22 || pJobID == 2001 || // Evan
-                pJobID / 100 == 23 || pJobID == 2002 || // Mercedes
-                pJobID / 100 == 24 || pJobID == 2003 || // Phantom
-                pJobID / 100 == 27 || pJobID == 2004 || // Luminous
-                pJobID / 100 == 51 || pJobID == 5000 || // Mihile
-                pJobID / 100 == 61 || pJobID == 6000 || // Kaiser
-                pJobID / 100 == 65 || pJobID == 6001 || // Angelic Buster
-                pJobID / 10  == 57 || pJobID == 508  || // Jett
+            int job = pJobID / 100;
+            return (
+                pJobID / 1000 == 3 ||
+                job == 22 || pJobID == 2001 || // Evan
+                job == 23 || pJobID == 2002 || // Mercedes
+                job == 24 || pJobID == 2003 || // Phantom
+                job == 27 || pJobID == 2004 || // Luminous
+                job == 51 || pJobID == 5000 || // Mihile
+                job == 61 || pJobID == 6000 || // Kaiser
+                job == 65 || pJobID == 6001 || // Angelic Buster
+                pJobID / 10 == 57 || pJobID == 508 || // Jett
                 pJobID / 1000 == 4 // JMS specials: Kanna and Hayato
                 );
         }
+
+        public static bool IsScarredJob(int pJobID)
+        {
+            int job = pJobID / 100;
+            return job == 31 || job == 36 || pJobID == 3001 || pJobID == 3002;
+        }
+
 
         public static bool is_ignore_master_level_for_common(int pSkillID)
         {
@@ -230,7 +245,7 @@ namespace MPLRServer
                 case 11:
                 case 12:
                 case 13: return 101; // GAZED
-                    
+
                 case 5:
                 case 15: return 102; // Bellonova
 

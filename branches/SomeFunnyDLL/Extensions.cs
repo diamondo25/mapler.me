@@ -41,7 +41,7 @@ namespace System
         }
         public static int CalculateChecksum(this byte[] pThis)
         {
-            return pThis.Sum(b => b);
+            return (int)pThis.Sum(b => (long)b);
         }
 
         public static bool HasFlag(this int pValue, int pFlag)

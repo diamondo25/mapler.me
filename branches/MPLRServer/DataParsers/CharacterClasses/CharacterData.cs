@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class CharacterData
+    public class CharacterData
     {
         public GW_CharacterStat Stats { get; private set; }
         public CharacterInventory Inventory { get; private set; }
@@ -574,12 +574,11 @@ namespace MPLRServer
             using (InsertQueryBuilder itemsTable = new InsertQueryBuilder("items"))
             using (InsertQueryBuilder petTable = new InsertQueryBuilder("pets"))
             {
-                if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(Stats.ID) &&
-                    Internal_Storage.Store.Instance.KnownCharlist[Stats.ID].ContainsKey(pConnection.WorldID))
+                var info = AccountDataCache.Instance.GetCharInfoByIDAndWorldID(Stats.ID, pConnection.WorldID);
+
+                if (info != null)
                 {
                     // Update info!
-                    var internalinfo = Internal_Storage.Store.Instance.KnownCharlist[Stats.ID][pConnection.WorldID];
-
                     pConnection.CharacterID = Stats.ID;
 
                     CharacterInventory inventory = Inventory;
@@ -593,9 +592,9 @@ namespace MPLRServer
                             var equip = equipdata.Value;
                             bool addrow = false;
 
-                            if (internalinfo.SlotHashes.ContainsKey(0) && internalinfo.SlotHashes[0].ContainsKey(slot))
+                            if (info.SlotHashes.ContainsKey(0) && info.SlotHashes[0].ContainsKey(slot))
                             {
-                                int hash = internalinfo.SlotHashes[0][slot];
+                                int hash = info.SlotHashes[0][slot];
                                 int objhash = equipdata.Value.GetChecksum();
                                 if (hash != objhash)
                                 {
@@ -603,7 +602,7 @@ namespace MPLRServer
                                     addrow = true;
                                 }
 
-                                internalinfo.SlotHashes[0].Remove(slot);
+                                info.SlotHashes[0].Remove(slot);
                             }
                             else
                             {
@@ -624,9 +623,9 @@ namespace MPLRServer
                         {
                             var item = itemdata.Value;
                             bool addrow = false;
-                            if (internalinfo.SlotHashes.ContainsKey(i + 1) && internalinfo.SlotHashes[i + 1].ContainsKey(itemdata.Key))
+                            if (info.SlotHashes.ContainsKey(i + 1) && info.SlotHashes[i + 1].ContainsKey(itemdata.Key))
                             {
-                                int hash = internalinfo.SlotHashes[i + 1][itemdata.Key];
+                                int hash = info.SlotHashes[i + 1][itemdata.Key];
                                 int objhash = itemdata.Value.GetChecksum();
                                 if (hash != objhash)
                                 {
@@ -635,7 +634,7 @@ namespace MPLRServer
                                 }
 
 
-                                internalinfo.SlotHashes[i + 1].Remove(itemdata.Key);
+                                info.SlotHashes[i + 1].Remove(itemdata.Key);
                             }
                             else
                             {
@@ -662,9 +661,9 @@ namespace MPLRServer
                         {
                             var item = itemdata.Value;
                             bool addrow = false;
-                            if (internalinfo.SlotHashes.ContainsKey(i) && internalinfo.SlotHashes[i].ContainsKey(itemdata.Key))
+                            if (info.SlotHashes.ContainsKey(i) && info.SlotHashes[i].ContainsKey(itemdata.Key))
                             {
-                                int hash = internalinfo.SlotHashes[i][itemdata.Key];
+                                int hash = info.SlotHashes[i][itemdata.Key];
                                 int objhash = itemdata.Value.GetChecksum();
                                 if (hash != objhash)
                                 {
@@ -673,7 +672,7 @@ namespace MPLRServer
                                 }
 
 
-                                internalinfo.SlotHashes[i].Remove(itemdata.Key);
+                                info.SlotHashes[i].Remove(itemdata.Key);
                             }
                             else
                             {
@@ -697,7 +696,7 @@ namespace MPLRServer
                     {
                         string removequery = "";
                         bool added = false;
-                        foreach (var hashlist in internalinfo.SlotHashes)
+                        foreach (var hashlist in info.SlotHashes)
                         {
                             foreach (var leftovers in hashlist.Value)
                             {
@@ -772,7 +771,7 @@ namespace MPLRServer
 
                     pConnection.Logger_WriteLine("Done bag items");
 
-                    Internal_Storage.Store.Instance.LoadBaseData(Stats.Name);
+                    AccountDataCache.Instance.LoadBaseData(Stats.Name);
 
                 }
 
@@ -785,7 +784,7 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("Saved pet data");
 
 
-                Internal_Storage.Store.Instance.LoadInventoryHashes(internalid, true);
+                AccountDataCache.Instance.LoadInventoryHashes(internalid, true);
 
 
 

@@ -11,7 +11,7 @@ using PacketDotNet;
 
 namespace Mapler_Client
 {
-    class Sniffer : IDisposable
+   public class Sniffer : IDisposable
     {
         public static Sniffer Instance { get; private set; }
         public static void Init()

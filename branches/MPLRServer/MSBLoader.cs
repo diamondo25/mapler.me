@@ -7,7 +7,7 @@ using System.IO;
 
 namespace MPLRServer
 {
-    class MSBLoader
+   public class MSBLoader
     {
         public delegate void DHandlePacket(MaplePacket pPacket);
         public DHandlePacket PacketHandler;

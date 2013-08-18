@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class Queries
+   public class Queries
     {
         public static int AddOrUpdateCharacter(
             ClientConnection pConnection, int pID, string pName, int pUserID, byte pWorldID, byte pChannelID, byte pLevel,
@@ -21,10 +21,10 @@ namespace MPLRServer
             string pMarriedWith
             )
         {
-            if (Internal_Storage.Store.Instance.KnownCharlist.ContainsKey(pID) &&
-                Internal_Storage.Store.Instance.KnownCharlist[pID].ContainsKey(pWorldID))
+            CharacterCacheInfo cci = AccountDataCache.Instance.GetCharInfoByIDAndWorldID(pID, pWorldID);
+            if (cci != null)
             {
-                int internal_id = Internal_Storage.Store.Instance.KnownCharlist[pID][pWorldID].InternalID;
+                int internal_id = cci.InternalID;
                 using (UpdateQueryBuilder query = new UpdateQueryBuilder("characters"))
                 {
                     query.SetColumn("name", pName);
@@ -51,7 +51,7 @@ namespace MPLRServer
                     query.SetColumn("skin", pSkin);
                     query.SetColumn("eyes", pEyes);
                     query.SetColumn("hair", pHair);
-                    query.SetColumn("last_update", new MySQL_Connection.NowType());
+                    query.SetColumn("last_update", MySQL_Connection.NOW);
 
                     query.SetColumn("honourlevel", pHonourLevel);
                     query.SetColumn("honourexp", pHonourEXP);
@@ -83,17 +83,16 @@ namespace MPLRServer
 
                     query.SetWhereColumn("internal_id", internal_id);
 
-                    string q = query.ToString();
-                    System.IO.File.WriteAllText("sql_addorupdate.sql", q);
-                    int result = (int)MySQL_Connection.Instance.RunQuery(q);
+                    int result = query.RunQuery("sql_addorupdate.sql");
 
                     if (result >= 1)
                     {
                         //pConnection.Logger_WriteLine("Updated character info: {0}", internal_id);
+                        return cci.InternalID;
                     }
                     else
                     {
-                        pConnection.Logger_WriteLine("Failed to update character info: " + q);
+                        pConnection.Logger_WriteLine("Failed to update character info: " + query.ToString());
                     }
                 }
             }
@@ -104,7 +103,7 @@ namespace MPLRServer
                     query.OnDuplicateUpdate = false;
                     query.AddColumnWithValue("internal_id", null);
 
-                    query.AddColumnWithValue("id", pID);
+                    query.AddColumnWithValue("id", pID, false);
                     query.AddColumnWithValue("name", pName);
                     query.AddColumnWithValue("userid", pUserID);
                     query.AddColumnWithValue("world_id", pWorldID);
@@ -168,8 +167,9 @@ namespace MPLRServer
 
                     if (result >= 1)
                     {
-                        int id = MySQL_Connection.Instance.GetLastInsertId();
-                        pConnection.Logger_WriteLine("Inserted character info: {0}", id);
+                        int internalid = MySQL_Connection.Instance.GetLastInsertId();
+                        pConnection.Logger_WriteLine("Inserted character info: {0}", internalid);
+                        return internalid;
                     }
                     else
                     {
@@ -178,14 +178,7 @@ namespace MPLRServer
                 }
             }
 
-            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT internal_id FROM characters WHERE id = " + pID + " AND userid = " + pUserID + " AND world_id = " + pWorldID) as MySql.Data.MySqlClient.MySqlDataReader)
-            {
-                if (reader.Read())
-                {
-                    return reader.GetInt32(0);
-                }
-            }
-            Logger.WriteLine("!!!!!! Character not found O.O");
+            Logger.WriteLine("ERROR WHILE ADDING OR UPDATING CHARACTER");
 
             return -1;
         }
@@ -207,6 +200,21 @@ namespace MPLRServer
             return null;
         }
 
+        public static bool CheckAccountToken(string pToken, out int pAccountID)
+        {
+            pAccountID = -1;
+
+            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT account_id FROM account_tokens WHERE type = 'client_token' AND code = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pToken) + "'") as MySql.Data.MySqlClient.MySqlDataReader)
+            {
+                if (reader.Read())
+                {
+                    pAccountID = reader.GetInt32(0);
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public static void SaveItem(ClientConnection pConnection, ushort pInventory, short pSlot, ItemBase pItem, InsertQueryBuilder itemsTable, bool pDontSetChecksum = false)
         {
             if (!itemsTable.HasColumns)
@@ -232,7 +240,9 @@ namespace MPLRServer
                     "nebulite1", "nebulite2", "nebulite3",
                     "uniqueid",
                     "bagid",
-                    "moreflags"
+                    "moreflags",
+                    "durability",
+                    "max_scissors"
                     );
             }
 
@@ -269,7 +279,9 @@ namespace MPLRServer
                     equip.Nebulite1, equip.Nebulite2, equip.Nebulite3,
                     equip.UniqueID,
                     pItem.BagID,
-                    equip.SetFlags
+                    equip.SetFlags,
+                    equip.Durability,
+                    equip.MaxScissors
                 );
             }
             else
@@ -304,13 +316,15 @@ namespace MPLRServer
                     null, null, null,
                     pItem is ItemRechargable ? (pItem as ItemRechargable).UniqueID : 0,
                     pItem.BagID,
+                    null,
+                    null,
                     null
                     );
 
             }
 
             if (!pDontSetChecksum)
-                Internal_Storage.Store.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, pInventory, pSlot, checksum);
+                AccountDataCache.Instance.SetChecksumOfSlot(pConnection.CharacterID, pConnection.WorldID, pInventory, pSlot, checksum);
         }
 
         public static void SavePet(int pCharacterInternalID, ItemPet pPet, InsertQueryBuilder pInsertBuilder)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mapler_Client
 {
-    class ServerConnection : MESession
+   public class ServerConnection : MESession
     {
         public static ServerConnection Instance { get; private set; }
         public static void Initialize()
@@ -142,6 +142,8 @@ namespace Mapler_Client
                     AcceptedMapleStoryLocale = pPacket.ReadByte();
                     AcceptedMapleStoryVersion = pPacket.ReadUShort();
                     Logger.WriteLine("Initialized keys and valid headers");
+
+                    SendToken(Program.Token);
                 }
                 else if (header == 0xEEFE)
                 {
@@ -185,6 +187,15 @@ namespace Mapler_Client
 
             pPacket.Dispose();
             pPacket = null;
+        }
+
+        public void SendToken(string pToken)
+        {
+            using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ClientPacket, 0xEE03))
+            {
+                mp.WriteString(pToken);
+                SendPacket(mp);
+            }
         }
 
         public void ForwardPacket(MaplePacket.CommunicationType pType, MaplePacket pPacket)

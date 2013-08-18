@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class CommandHandler
+   public class CommandHandler
     {
         public Dictionary<string, Action<ClientConnection, string[]>> CommandHandlers { get; private set; }
 

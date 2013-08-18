@@ -8,9 +8,9 @@ using System.Net.Sockets;
 
 namespace MPLRServer
 {
-    class MSBExporter
+   public class MSBExporter
     {
-        class DumpPacket
+       public class DumpPacket
         {
             public byte[] Data { get; set; }
             public bool Outboud { get; set; }

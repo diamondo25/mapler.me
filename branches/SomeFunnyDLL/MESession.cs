@@ -190,6 +190,9 @@ namespace System
 
                         byte[] realdata = new byte[_receiveLength - 4];
                         Buffer.BlockCopy(_receiveBuffer, 4, realdata, 0, realdata.Length);
+                        if (_receiveKey != null)
+                            realdata = Crypto.Decrypt(realdata, _receiveKey);
+
                         int curchecksum = realdata.CalculateChecksum();
 
                         if (checksum != curchecksum)
@@ -198,8 +201,6 @@ namespace System
                         }
                         else
                         {
-                            if (_receiveKey != null)
-                                realdata = Crypto.Decrypt(realdata, _receiveKey);
 
                             MaplePacket packet = new MaplePacket(realdata);
                             try
@@ -242,12 +243,13 @@ namespace System
             {
 
                 byte[] data = pPacket.ToArray();
+                int checksum = data.CalculateChecksum();
                 if (_sendKey != null)
                     data = Crypto.Encrypt(data, _sendKey);
 
                 byte[] completeData = new byte[data.Length + 4 + 4];
                 Buffer.BlockCopy(BitConverter.GetBytes(pPacket.Length), 0, completeData, 0, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(data.CalculateChecksum()), 0, completeData, 4, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(checksum), 0, completeData, 4, 4);
                 Buffer.BlockCopy(data, 0, completeData, 8, data.Length);
 
                 _socket.Send(completeData, 0, completeData.Length, SocketFlags.None);

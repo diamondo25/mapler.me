@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-    class Program
+   public class Program
     {
 
         public static Random Random { get; private set; }
@@ -44,20 +44,23 @@ namespace MPLRServer
                 Environment.Exit(12);
             }
 
-            Internal_Storage.Store.Initialize();
+            AccountDataCache.Initialize();
             GMSKeys.Initialize();
 
             CommandHandler.Initialize();
             Timeline.Init();
 
             Random = new System.Random();
+            {
+                InitializeValidHeaders();
+                AcceptedIPs = new List<string>();
+                AcceptedIPs.Add("8.31.9"); // Nexon's subnet
 
-            InitializeValidHeaders();
-            AcceptedIPs = new List<string>();
-            AcceptedIPs.Add("8.31.9"); // Nexon's subnet
+                Clients = new List<ClientConnection>();
+                StartPinger();
+            }
 
-            Clients = new List<ClientConnection>();
-            StartPinger();
+            EXPTable.Load();
 
             SessionRestartCache.Start();
 
@@ -118,7 +121,7 @@ namespace MPLRServer
                             {
                                 MasterThread.Instance.AddCallback(a =>
                                 {
-                                    Internal_Storage.Store.Instance.Load();
+                                    AccountDataCache.Instance.Load();
                                 });
 
                                 break;
@@ -222,17 +225,21 @@ namespace MPLRServer
 
         static void InitializeValidHeaders()
         {
-            Func<ClientConnection, bool> OnLoginServer = delegate(ClientConnection a)
+            Func<ClientConnection, bool> NotMaplerLoggedin = delegate(ClientConnection a)
             {
-                return a.AccountID != -1;
+                return a.AccountID == -1;
+            };
+            Func<ClientConnection, bool> IdentifiedAccountAndUser = delegate(ClientConnection a)
+            {
+                return !NotMaplerLoggedin(a) && a.UserID != -1;
             };
             Func<ClientConnection, bool> OnCharacterSelect = delegate(ClientConnection a)
             {
-                return a.AccountID != -1 && a.WorldID != 255 && a.ChannelID != 255;
+                return !NotMaplerLoggedin(a) && a.UserID != -1 && a.ChannelID != 255;
             };
             Func<ClientConnection, bool> OnLoadedCharData = delegate(ClientConnection a)
             {
-                return a.CharData != null;
+                return !NotMaplerLoggedin(a) && a.CharData != null;
             };
 
             ValidHeaders = new Dictionary<ushort, Handler>[(byte)MaplePacket.CommunicationType.AMOUNT];
@@ -292,8 +299,9 @@ namespace MPLRServer
                 tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnLoadedCharData));
                 tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, OnLoadedCharData));
                 tmp.Add(0x00CE, new Handler(ServerPacketHandlers.HandleAbilityInfoUpdate, OnLoadedCharData));
+                tmp.Add(0x00E2, new Handler(ServerPacketHandlers.HandleMaplePointAmount, OnLoadedCharData));
                 tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, OnLoadedCharData));
-                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, OnLoginServer));
+                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, IdentifiedAccountAndUser));
                 tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnLoadedCharData));
                 tmp.Add(0x0165, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
@@ -376,6 +384,7 @@ namespace MPLRServer
                 {
                     a.Pong = true;
                 }, null));
+                /*
                 tmp.Add(0xEE02, new Handler((a, b) =>
                 {
                     // Create screenshot with all character names
@@ -389,7 +398,8 @@ namespace MPLRServer
                         a.SendPacket(packet);
                     }
 
-                }, OnLoadedCharData));
+                }, OnLoadedCharData));*/
+                tmp.Add(0xEE03, new Handler(InternalPacketHandler.HandleTokenCheck, NotMaplerLoggedin));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ClientPacket] = tmp;
             }
@@ -398,7 +408,7 @@ namespace MPLRServer
         }
     }
 
-    class Handler
+    public class Handler
     {
         public Action<ClientConnection, MaplePacket> Handle { get; private set; }
         public Func<ClientConnection, bool> CanHandle { get; private set; }

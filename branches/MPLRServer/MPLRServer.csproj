@@ -96,7 +96,9 @@
     <Compile Include="DataParsers\CharacterClasses\CharacterQuests.cs" />
     <Compile Include="DataParsers\CharacterClasses\CharacterSkills.cs" />
     <Compile Include="DataParsers\CharacterClasses\GW_CharacterStat.cs" />
+    <Compile Include="DataParsers\CharacterClasses\ItemDataParsers.cs" />
     <Compile Include="DataParsers\Guild.cs" />
+    <Compile Include="EXPTable.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="GMSKeys.cs" />
     <Compile Include="Internal Storage\Store.cs" />
