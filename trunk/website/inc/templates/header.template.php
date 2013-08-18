@@ -59,16 +59,19 @@ function _AddHeaderLink($what, $filename) {
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	
 	<!-- Theme -->
+	<?php
+	if ($_loggedin) {
+	?>
 	<link href='http://<?php echo $domain; ?>/inc/css/themes/<?php echo $_loginaccount->GetTheme(); ?>.css' rel='stylesheet' type='text/css' />
+	<?php
+	}
+	else {
+	?>
+    <link href='http://<?php echo $domain; ?>/inc/css/themes/light.css' rel='stylesheet' type='text/css' />
+    <?php
+	}
+	?>
 	<!-- End Theme -->
-	
-	<script type="text/javascript">
-	   jQuery.get("http://<?php echo $domain; ?>/inc/css/themes/<?php $_loginaccount->GetTheme(); ?>.css", null, function(data) {
-	var comments = data.match(/\/\*.*\*\//g);
-	for each (var c in comments) 
-		alert(c);
-		});
-	</script>
 	
 <?php
 _AddHeaderLink('css', 'style');
