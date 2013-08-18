@@ -108,9 +108,10 @@
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(4);
-            this.label1.Size = new System.Drawing.Size(360, 112);
+            this.label1.Size = new System.Drawing.Size(360, 86);
             this.label1.TabIndex = 6;
-            this.label1.Text = resources.GetString("label1.Text");
+            this.label1.Text = "You can now start MapleStory!\r\n\r\n - If you are logged-in on MapleStory already, p" +
+    "lease logoff \r\n   and login again.\r\n\r\nHappy mapling!";
             // 
             // lblInfo
             // 

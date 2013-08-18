@@ -25,7 +25,7 @@ namespace Mapler_Client
 
             string[] args = Environment.GetCommandLineArgs();
 
-            if (false && args.Count(a => { return a == "/updated"; }) == 0)
+            if (args.Count(a => { return a == "/updated"; }) == 0)
             {
                 MessageBox.Show("Please use the MaplerUpdater.exe instead of this binary to launch the Mapler.me software.", "Mapler.me startup", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;

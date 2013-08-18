@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Mapler.me Client"
-#define MyAppVersion "2.0.0.0"
+#define MyAppVersion "2.0.1.1"
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
 #define MyAppExeName "MaplerUpdater.exe"
@@ -67,4 +67,5 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 [Run]
 Filename: "{app}\{#WinPcapInstallerName}"; Flags: shellexec waituntilterminated
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait postinstall skipifnotsilent
 

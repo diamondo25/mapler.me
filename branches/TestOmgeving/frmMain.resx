@@ -160,16 +160,6 @@
         KS6golEN8v595Kg2Q91vDtK86qmTwjoAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>You can now start MapleStory!
-
- - If you haven't added your MapleStory account yet,
-   you can do so on the website, under Settings -&gt; Accounts
- - If you are logged-in on MapleStory already, please logoff 
-   and login again.
-
-Happy mapling!</value>
-  </data>
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

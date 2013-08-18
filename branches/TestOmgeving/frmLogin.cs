@@ -69,7 +69,6 @@ namespace Mapler_Client
             using (WebClient wc = new WebClient())
             {
                 string URL = "http://mapler.me/api/login/";
-                URL = "http://mplr.e.craftnet.nl/api/login/";
                 URL += "?type=" + pMode;
                 wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
 
