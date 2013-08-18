@@ -45,6 +45,7 @@ namespace Mapler_Client
         {
             Stop();
             _devices = null;
+            Instance = null;
         }
 
         public void Stop()

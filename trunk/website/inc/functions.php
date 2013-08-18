@@ -695,6 +695,7 @@ function GetMaplerServerInfo() {
 					
 					switch ($data['locale']) {
 						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.'.$cutversion; break;
+						case 7: $data['locale'] = 'SEA'; $data['version'] = $cutversion; break;
 						case 8: $data['locale'] = 'Global'; $data['version'] = $cutversion; break;
 						case 9: $data['locale'] = 'Europe'; $data['version'] = $cutversion; break;
 					}

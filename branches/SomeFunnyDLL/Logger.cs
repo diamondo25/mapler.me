@@ -10,7 +10,7 @@ namespace System
     {
         public static string Logfile { get; private set; }
         public static string PacketLogfile { get; private set; }
-        public const string Version = "Mapler.me Software V1.0.1.1";
+        public const string Version = "Mapler.me Software V1.0.2.0";
 
         public static bool PacketLogging { get; private set; }
         private static bool _disabledLogging;
@@ -40,7 +40,7 @@ namespace System
 
             try
             {
-                using (var sw = new StreamWriter(Logfile, true))
+                using (var sw = new StreamWriter(File.Open(Logfile, FileMode.Append, FileAccess.Write, FileShare.Write)))
                     sw.Write(text);
             }
             catch { }
@@ -53,7 +53,7 @@ namespace System
 
             try
             {
-                using (var sw = new StreamWriter(Logfile, true))
+                using (var sw = new StreamWriter(File.Open(Logfile, FileMode.Append, FileAccess.Write, FileShare.Write)))
                     sw.Write(string.Format(pInput, pParams));
             }
             catch { }
@@ -81,8 +81,7 @@ namespace System
 
             try
             {
-                using (var fs = new FileStream(PacketLogfile, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite))
-                using (var sw = new StreamWriter(fs))
+                using (var sw = new StreamWriter(File.Open(Logfile, FileMode.Append, FileAccess.ReadWrite, FileShare.ReadWrite)))
                     sw.Write(string.Format(pInput, pParams));
             }
             catch { }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mapler_Client
 {
-   public class ServerConnection : MESession
+    public class ServerConnection : MESession
     {
         public static ServerConnection Instance { get; private set; }
         public static void Initialize()
@@ -20,7 +20,7 @@ namespace Mapler_Client
         public byte[] MapleStoryCryptoKey { get; private set; }
         public ushort AcceptedMapleStoryVersion { get; private set; }
         public byte AcceptedMapleStoryLocale { get; private set; }
-        
+
         public ServerConnection(string pDomain)
             : base(pDomain, 23710)
         {
@@ -37,6 +37,12 @@ namespace Mapler_Client
             }
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            Instance = null;
+        }
+
         private void TryReconnect()
         {
             var tmp = new System.Threading.Thread((a) =>
@@ -48,7 +54,7 @@ namespace Mapler_Client
                     {
                         System.Threading.Thread.Sleep(5000);
                         Connect();
-                        
+
                     }
                     catch
                     {
@@ -75,7 +81,7 @@ namespace Mapler_Client
                 else
                 {
                     Logger.WriteLine("Reconnected. Starting sniffer again");
-                    
+
                     Sniffer.Instance.SetUp();
                 }
 
@@ -95,7 +101,7 @@ namespace Mapler_Client
                     string version = pPacket.ReadString();
                     if (version != Logger.Version)
                     {
-                        
+
                         if (frmMain.Instance != null)
                         {
                             frmMain.Instance.Invoke((System.Windows.Forms.MethodInvoker)delegate

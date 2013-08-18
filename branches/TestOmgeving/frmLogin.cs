@@ -14,7 +14,7 @@ namespace Mapler_Client
 {
     public partial class frmLogin : Form
     {
-        string _codeloc = Environment.CurrentDirectory + System.IO.Path.DirectorySeparatorChar + "code.weed";
+        public static string _codeloc = Environment.CurrentDirectory + System.IO.Path.DirectorySeparatorChar + "code.weed";
 
         public frmLogin()
         {
@@ -40,6 +40,10 @@ namespace Mapler_Client
 
         private void frmLogin_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (this.DialogResult != System.Windows.Forms.DialogResult.OK)
+            {
+                Environment.Exit(0);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -76,6 +80,14 @@ namespace Mapler_Client
 
             btnLogin.Enabled = txtPassword.Enabled = txtUsername.Enabled = true;
             return new Tuple<string, string>(part1, part2);
+        }
+
+        public static void RemoveToken()
+        {
+            if (File.Exists(_codeloc))
+            {
+                File.Delete(_codeloc);
+            }
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

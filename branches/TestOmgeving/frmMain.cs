@@ -19,7 +19,7 @@ namespace Mapler_Client
         private frmStats _statScreen = null;
         private string _mapleEXE = null;
 
-        private KeyboardHook _keyboardHook = new KeyboardHook();
+        private KeyboardHook _keyboardHook;
 
         public frmMain()
         {
@@ -50,6 +50,7 @@ namespace Mapler_Client
                     _mapleEXE = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable");
                 }
 
+                _keyboardHook = new KeyboardHook();
                 _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
                 _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
 
@@ -236,6 +237,39 @@ namespace Mapler_Client
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmLogin.RemoveToken();
+
+            Program.Closing = true;
+            notifyIcon1.Visible = false;
+            if (Sniffer.Instance != null)
+            {
+                Sniffer.Instance.Stop();
+            }
+
+            if (ServerConnection.Instance != null)
+            {
+                ServerConnection.Instance.Dispose();
+            }
+
+            if (_keyboardHook != null)
+            {
+                _keyboardHook.Dispose();
+                _keyboardHook = null;
+            }
+
+            if (new frmLogin().ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                this.Close();
+                return;
+            }
+
+            Form1_Load(null, null);
+            this.Show();
         }
     }
 }
