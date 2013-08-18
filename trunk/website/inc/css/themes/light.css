@@ -18,15 +18,11 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .main {
-    background: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.7);
 }
 
 .character {
     background-color: rgba(255,255,255,0.5) !important;
-}
-
-footer {
-    color: #333 !important;
 }
 
 /* Status + Stream */
@@ -54,7 +50,7 @@ footer {
 	color:#333 !important;
 }
 
-.mention, .status-time, .deletestatus, .reply-to, .reportstatus {
+.mention, .status-time, .deletestatus, .reply-to, .reportstatus, .login .left_box .perk_box .perk p {
 	color: #222;
 }
 
@@ -87,16 +83,9 @@ footer {
 	color: #444;
 }
 
-.name {
-	color: #333;
-}
-
-.side {
-	color: #333;
-}
-
-label {
-    color:#333 !important;
+.name, .side, label, footer, .login .left_box .perk_box .perk p strong, .status .status-extra a:hover, .status .status-extra a,
+ .login .signin_box .box .form .forgot span, .login .signin_box .box .form .forgot, .login .signin_box .box .form .forgot a {
+	color: #333 !important;
 }
 
 .setting-label {

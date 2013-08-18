@@ -74,9 +74,8 @@ function _AddHeaderLink($what, $filename) {
 	<!-- End Theme -->
 	
 <?php
-_AddHeaderLink('css', 'style');
-_AddHeaderLink('css', 'main');
-_AddHeaderLink('css', 'animate');
+_AddHeaderLink('css', 'style.min');
+_AddHeaderLink('css', 'animate.min');
 _AddHeaderLink('css', 'font-awesome.min');
 if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
 	strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
@@ -90,23 +89,6 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 ?>
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js" type="text/javascript"></script>
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
-<?php
-_AddHeaderLink('js', 'scripts');
-if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
-	_AddHeaderLink('js', 'script.player');
-}
-_AddHeaderLink('js', 'jquery.isotope.min');
-_AddHeaderLink('js', 'maplerme');
-_AddHeaderLink('js', 'keypress')
-?>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
-
-	<script type="text/javascript">
-	$('.in').affix();
-	</script>
 	
 	<script>
 	$(function() {
@@ -203,8 +185,7 @@ if ($_loggedin):
 									<li class="dropdown-submenu">
 										<a tabindex="-1" href="//<?php echo $domain; ?>/settings/profile/">Settings</a>
 											<ul class="dropdown-menu">
-												<li><a href="//<?php echo $domain; ?>/settings/profile/">Profile Settings</a></li>
-												<li><a href="//<?php echo $domain; ?>/settings/accounts/">Accounts</a></li>
+												<li><a href="//<?php echo $domain; ?>/settings/general/">General</a></li>
 												<li><a href="//<?php echo $domain; ?>/settings/characters/">Characters</a></li>
 												<li><a href="//<?php echo $domain; ?>/settings/friends/">Friend Requests</a></li>
 											</ul>

@@ -104,7 +104,8 @@ WHERE
 	
 	private static $_status_search_for = array(
 		'/(http|https|ftp)\:\/\/([^\<\s\t]+)/i', // URLs
-		'/(^| )@([a-z0-9_]+)/i', // Replies
+		'/(^| |\r\n)@([a-z0-9_]+)/i', // Replies
+		'/(^| |\r\n)~([a-z0-9_]+)~/i', // Player
 		// '/(^| )#([a-z0-9_]+)/i', // Hashtags
 		'/(^| )!([a-z0-9_]+)/i', // Images
 	);
@@ -112,6 +113,7 @@ WHERE
 	private static $_status_replace_with = array(
 		'<a href="$1://$2" target="_blank" class="status-link">$1://$2</a>', // URLs
 		'$1<a href="http://$2.mapler.me/">@$2</a>', // Replies
+		'$1<a href="http://mapler.me/player/$2">$2</a>', // Player
 		// '$1<a href="//'.$domain.'/search/tag/$2">#$2</a>', // Hashtags
 		'$1<a href="http://cdn.mapler.me/media/$2"><img src="http://cdn.mapler.me/media/$2" class="status-picture" onerror="this.src=\'http://mapler.me/inc/img/no-character.gif\'" /></a>', // Images
 	);

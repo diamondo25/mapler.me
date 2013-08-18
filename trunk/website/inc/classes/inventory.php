@@ -190,6 +190,7 @@ class ItemEquip extends ItemBase {
 	public $nebulite2;
 	public $nebulite3;
 	public $display_id;
+	public $moreflags;
 
 	public function __construct($row) {
 		parent::__construct($row);
@@ -229,6 +230,7 @@ class ItemEquip extends ItemBase {
 		$this->nebulite2 = (int)$row['nebulite2'];
 		$this->nebulite3 = (int)$row['nebulite3'];
 		$this->display_id = (int)$row['display_id'];
+		$this->moreflags = $row['moreflags'];
 	}
 
 	public function HasLock() {

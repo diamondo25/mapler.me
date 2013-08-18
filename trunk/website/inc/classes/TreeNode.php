@@ -30,7 +30,6 @@ class TreeNode extends ArrayObject {
 			for ($i = 0; $i < count($splits); $i++) {
 				$o = $splits[$i];
 				if (!isset($curnode[$o])) {
-					//echo ' > NOT SET: '.$o."\r\n";
 					if ($curnode->isroot && $o == '..' && $i + 1 != count($splits)) {
 						$i++;
 						// Well.. shit
@@ -43,7 +42,6 @@ class TreeNode extends ArrayObject {
 					}
 				}
 				else {
-					//echo 'SET: '.$o."\r\n";
 					$curnode = $curnode[$o];
 				}
 			}

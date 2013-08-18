@@ -110,6 +110,7 @@ $job_names = array(
 	2001 => 'Evan',
 	2002 => 'Mercedes',
 	2003 => 'Phantom',
+	2004 => 'Luminous',
 	
 	2100 => 'Aran',
 		2110 => 'Aran',
@@ -138,8 +139,7 @@ $job_names = array(
 		2412 => 'Phantom',
 
 
-	2004 => 'Luminous',
-		2700 => 'Luminous',
+	2700 => 'Luminous',
 		2710 => 'Luminous',
 		2711 => 'Luminous',
 		2712 => 'Luminous',

@@ -40,7 +40,7 @@
                 <p>As our service collects information from MapleStory, we are legally required to relinquish any requested information collected to Nexon America if needed. This is to keep <b>you</b> (The "User") safe and confirm that safe practices are being used to keep your information safe.
                 
                  <p>
-                    With Nexon America's staff in mind, special privledges are given to any <u>confirmed</u> Nexon America staff which includes but is not limited to:
+                    With Nexon America's staff in mind, special privileges are given to any <u>confirmed</u> Nexon America staff which includes but is not limited to:
                     <ul>
                     <li>searching for any players using the Mapler.me service;</li>
                     <li>modifying of player information, including the deletion, altering, or addition of content;</li>
@@ -50,14 +50,13 @@
                 </p>
                 
                 <p>
-                	When connecting a Nexon America account with your Mapler.me account, a request is sent to Nexon America, which includes information that allows Nexon to track and monitor all connections through our service. This information is not viewable by Mapler.me or it's team, and purpose is to ensure user security and reassurance.
                 <h3>[5] Restrictions</h3>
-                <p>Mapler.me disallows any involement with actions or behavior that is against Nexon America's Terms of Service which includes hacking, botting, exploiting, or the use of unallowed 3rd Party Programs. If a user is thought to be involved with the above statement, Mapler.me reserves the right, in its sole discretion, to replace, delete or remove any content or players from the Site and to restrict, suspend or terminate your access to all or part of the Site, at any time for any reason without prior notice or liability.
+                <p>Mapler.me disallows any involvement with actions or behavior that is against Nexon America's Terms of Service which includes hacking, botting, exploiting, or the use of unallowed 3rd Party Programs. If a user is thought to be involved with the above statement, Mapler.me reserves the right, in its sole discretion, to replace, delete or remove any content or players from the Site and to restrict, suspend or terminate your access to all or part of the Site, at any time for any reason without prior notice or liability.
                 </p>
             
                 <h3>[6] Privacy</h3><p>
                     All information provided by the user is strictly confidential. Mapler.me reserves the right to distribute aggregated demographic information provided by the user, but Mapler.me will never release any personal information about the user without permission. However, Mapler.me reserves the right to release <u>player information</u> if requested by Nexon America as discussed above in Section [4].</p>
-                    <p>By connecting your Nexon America account and <i>successfully</i> adding a character, the following information is collected and stored safely:</p>
+                    <p>By adding a character, the following information is collected and stored safely:</p>
                     <ul>
                     <li>General and statistical information about your character including it's world, statistics, graphical configuration (hair, eyes, and markings), and gender.</li>
                     <li>All of the character's items and currently worn equipment, which is displayed on the character's page for the owner to view publicly.</li>
@@ -65,7 +64,7 @@
                     <li>All skills the character has learned including mounts and link skills.</li>
                     <li>Guild information including it's name, emblem, ranks, and capacity. This information is used to create publicly viewable guild pages.</li>
                     </ul>
-                    <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regan to entering a new map. Some information collected is currently stored internally for future additions. The client tracks and stores the following information about characters:</p>
+                    <p>The Mapler.me client relays updates from characters in real-time including all typical changes such as health regain to entering a new map. Some information collected is currently stored internally for future additions. The client tracks and stores the following information about characters:</p>
                     <ul>
                     <li>Basic character information (Stats, name, world, level, etc)</li>
                     <li>All items and equipment on that character including their current pet and android.</li>
@@ -74,7 +73,7 @@
                     <li>Evolving World Cores</li>
                     <li>Teleport / Hyper Teleport Rock locations</li>
                     <li>Guild and Alliance information</li>
-                    <li>Levelups, job advancement, experience gain (by percent), and being famed.</li>
+                    <li>Level-ups, job advancement, experience gain (by percent), and being famed.</li>
                     </ul>
                     
 
@@ -89,7 +88,7 @@
                     Mapler.me may perform maintenance services at any time. You acknowledge that such maintenance may require downtime, and contents or features on Mapler.me may not load during this time as well as client functionality being disabled.
                 </p> 
                 <p>
-                	Mapler.me requires occasional maintenances to improve, resolve, or update our service. These maintenances can take time, and can result in time without client functionality. We are not responsible for not being able to record in-game progress, changes, or new character classes not initally working perfectly.
+                	Mapler.me requires occasional maintenances to improve, resolve, or update our service. These maintenances can take time, and can result in time without client functionality. We are not responsible for not being able to record in-game progress, changes, or new character classes not initially working perfectly.
                 </p>
                
                <h3>[10] Legal Policy</h3> <p>

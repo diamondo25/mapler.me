@@ -30,7 +30,7 @@ if (!empty($notice)) {
 		<div class="stream-block">
 <?php
 	$rss = new DOMDocument();
-	$rss->load('http://blog.mapler.me/rss');
+	$rss->loadXML(file_get_contents('http://blog.mapler.me/rss'));
 	$feed = array();
 	foreach ($rss->getElementsByTagName('item') as $node) {
 		$item = array ( 
@@ -42,7 +42,7 @@ if (!empty($notice)) {
 		array_push($feed, $item);
 	}
 	$limit = 1;
-	for($x = 0; $x < $limit; $x++) {
+	for($x = 0; $x < $limit && $x < count($item); $x++) {
 		$title = str_replace(' & ', ' &amp; ', $feed[$x]['title']);
 		$link = $feed[$x]['link'];
 		$description = $feed[$x]['desc'];
@@ -65,34 +65,10 @@ if (!empty($notice)) {
 	
 	<div class="stream-block">
 <?php
-	require_once __DIR__.'/../server_info.php';
-	foreach ($maplerme_servers as $servername => $data) {
-		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
-		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
-		if ($socket) {
-			$size = fread($socket, 1);
-			for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
-				$size = fread($socket, 1);
-			}
-			if (strlen($size) == 1) {
-				$size = ord($size[0]);
-				$data = fread($socket, $size);
-				for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
-					$data .= fread($socket, $size - strlen($data));
-				}
-				if (strlen($data) == $size) {
-					$data = unpack('vversion/clocale/Vplayers', $data);
-					$data['state'] = 'online';
-					
-					switch ($data['locale']) {
-						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
-						case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
-						case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
-					}
-				}
-			}
-			fclose($socket);
-		}
+	
+	$serverinfo = GetMaplerServerInfo();
+	
+	foreach ($serverinfo as $servername => $data) {
 ?>
 		<div mapler-locale="<?php echo $servername; ?>">
 			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span class="label label-success">MapleStory <?php echo $data['locale']; ?> V<span version><?php echo $data['version']; ?></span></span> <span class="badge badge-success"><span players><?php echo $data['players']; ?></span> online</span></span>

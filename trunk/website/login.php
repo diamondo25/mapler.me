@@ -109,10 +109,10 @@ ORDER BY
                             <p><strong>Stay connected with your friends</strong> wherever, whenever you want.</p>
                         </div>
                         <div class="perk">
-                            <p><strong>Keep track of your characters</strong> progress, growth, and items.</p>
+                            <p><strong>Keep track of your characters'</strong> progress, growth, and items.</p>
                         </div>
                         <div class="perk">
-                            <p><strong>Join hundreds of other maplers</strong> apart of Mapler.me.</p>
+                            <p><strong>Join thousands of other maplers</strong> apart of Mapler.me.</p>
                         </div>
                     </div>
                 </div>

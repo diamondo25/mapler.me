@@ -19,13 +19,13 @@ $images_location = 'http://static_images.mapler.me/Inventory/Pet/';
 // Add ID to image location
 $images_location .= $petid.'.img/';
 
-$image = imagecreatetruecolor(128, 128);
+$image = imagecreatetruecolor(256, 256);
 imagesavealpha($image, true);
 $trans = imagecolorallocatealpha($image, 0, 0, 0, 127);
 imagefill($image, 0, 0, $trans);
 
-$x = 64;
-$y = 64;
+$x = 128;
+$y = 128;
 
 $info = GetItemWZInfo($petid);
 

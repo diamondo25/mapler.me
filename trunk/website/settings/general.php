@@ -80,7 +80,7 @@ if ($error != '') {
 	}
 </style>
 
-			<h2>Your Profile</h2>
+			<h2>General Settings</h2>
 			<form id="settings-form" method="post">
 			<div class="span9">
 				<div class="item">

@@ -28,11 +28,13 @@ if (!DEBUGGING) {
 	ini_set('display_errors', 0);
 	header('Content-Type: image/png');
 	
-	$seconds_to_cache = 180;
+	$seconds_to_cache = 0;
 	$ts = gmdate('D, d M Y H:i:s', time() + $seconds_to_cache) . ' GMT';
 	header('Expires: '.$ts);
-	header('Pragma: cache');
-	header('Cache-Control: max-age='.$seconds_to_cache);
+	header('Pragma: no-cache');
+	header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+	header('Cache-Control: no-store, no-cache, must-revalidate');
+	header('Cache-Control: post-check=0, pre-check=0', false);
 }
 else {
 	error_reporting(E_ALL);
@@ -154,10 +156,10 @@ $zlayers = array();
 $item_locations = array();
 
 $using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
+if (isset($_GET['face']) && !empty($_GET['face']))
+	$using_face = $_GET['face'];
 if (isset($_GET['madface']))
 	$using_face = 'angry';
-elseif (isset($_GET['face']) && !empty($_GET['face']))
-	$using_face = $_GET['face'];
 
 if (!isset($avatar_faces[$using_face])) $using_face = 'default';
 

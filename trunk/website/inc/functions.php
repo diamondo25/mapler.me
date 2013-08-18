@@ -45,6 +45,7 @@ require_once __DIR__.'/domains.php';
 require_once __DIR__.'/ranks.php';
 require_once __DIR__.'/functions.datastorage.php';
 require_once __DIR__.'/bbcode.php';
+require_once __DIR__.'/server_info.php';
 
 function GetUniqueID() {
 	return substr(uniqid(), -5);
@@ -202,8 +203,8 @@ function IGTextToWeb($data, $extraOptions = array()) {
 				if ($endTag != '') {
 					$result .= $endTag;
 				}
-				$result .= '*';
 				$result .= '<span style="color: darkorange;">';
+				$result .= '*';
 				$endTag = '</span>';
 			}
 			elseif ($nc == 'd') { // Purple
@@ -246,7 +247,9 @@ function GetInventoryName($id) {
 function GetSystemTimeFromFileTime($time) {
 	if ($time == 3439756800)
 		return '';
-	return date("Y-m-d h:i:s", $time);
+	if ($time == 3439670400)
+		return 'Permanent';
+	return date('Y-m-d h:i:s', $time);
 }
 
 
@@ -422,6 +425,10 @@ function GetItemInventory($id) {
 
 function GetWZItemTypeName($id) {
 	$tmp = GetItemType($id);
+	
+	if ($id < 10000) {
+		return str_pad($id, 8, '0', STR_PAD_LEFT).'.img';
+	}
 
 	switch ($tmp) {
 		case 100: return 'Cap';
@@ -661,6 +668,46 @@ function MakePlayerAvatar($name, $options = array()) {
 	<div onclick="document.location.href = '//<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
+
+
+function GetMaplerServerInfo() {
+	global $maplerme_servers;
+	$result = array();
+	foreach ($maplerme_servers as $servername => $data) {
+		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
+		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
+		if ($socket) {
+			$size = fread($socket, 1);
+			for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
+				$size = fread($socket, 1);
+			}
+			if (strlen($size) == 1) {
+				$size = ord($size[0]);
+				$data = fread($socket, $size);
+				for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
+					$data .= fread($socket, $size - strlen($data));
+				}
+				if (strlen($data) == $size) {
+					$data = unpack('vversion/clocale/Vplayers', $data);
+					$data['state'] = 'online';
+					
+					$cutversion = substr($data['version'], 0, -2).'.'.substr($data['version'], -2);
+					
+					switch ($data['locale']) {
+						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.'.$cutversion; break;
+						case 8: $data['locale'] = 'Global'; $data['version'] = $cutversion; break;
+						case 9: $data['locale'] = 'Europe'; $data['version'] = $cutversion; break;
+					}
+				}
+			}
+			fclose($socket);
+		}
+		$result[$servername] = $data;
+	}
+	
+	return $result;
+}
+
 
 
 require_once __DIR__.'/functions.loginaccount.php';

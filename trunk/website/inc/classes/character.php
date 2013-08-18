@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/database.php';
-require_once __DIR__.'/../inventory.php';
-require_once __DIR__.'/../character_objects.php';
+require_once __DIR__.'/inventory.php';
+require_once __DIR__.'/character_objects.php';
 
 class Character {
 	private $internal_id;

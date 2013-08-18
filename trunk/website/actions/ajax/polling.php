@@ -30,37 +30,7 @@ if ($request_type == 'info') {
 	
 	// Check server status
 	
-	$res['server_status'] = array();
-
-	foreach ($maplerme_servers as $servername => $data) {
-		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
-		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
-		if ($socket) {
-			$size = fread($socket, 1);
-			for ($i = 0; strlen($size) < 1 && $i < 10; $i++) {
-				$size = fread($socket, 1);
-			}
-			if (strlen($size) == 1) {
-				$size = ord($size[0]);
-				$data = fread($socket, $size);
-				for ($i = 0; strlen($data) < $size && $i < 10; $i++) {
-					$data .= fread($socket, $size - strlen($data));
-				}
-				if (strlen($data) == $size) {
-					$data = unpack('vversion/clocale/Vplayers', $data);
-					$data['state'] = 'online';
-					
-					switch ($data['locale']) {
-						case 2: $data['locale'] = 'Korea'; $data['version'] = '1.2.'.$data['version']; break;
-						case 8: $data['locale'] = 'Global'; $data['version'] /= 100; break;
-						case 9: $data['locale'] = 'Europe'; $data['version'] /= 100; break;
-					}
-				}
-			}
-			fclose($socket);
-		}
-		$res['server_status'][$servername] = $data;
-	}
+	$res['server_status'] = GetMaplerServerInfo();
 	
 	$status_info = array();
 	if (isset($_POST['shown-statuses'])) {
@@ -169,8 +139,7 @@ LEFT JOIN
 	ON
 		`ss_reply`.`id` = `ss`.`reply_to`
 WHERE
-	".$whereq_2."
-";
+	".$whereq_2;
 		if ($_loggedin && $is_maindomain) { // Main screen
 			$q .= "
 	AND

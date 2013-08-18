@@ -186,22 +186,29 @@ function SetItemInfo(event, obj, values) {
 	if (otherinfo.questitem)
 		extrainfo += '<span>Quest item</span>';
 
-	if (otherinfo.locked)
-		extrainfo += '<span>Sealed untill ' + otherinfo.expires + '</span>';
-	else if (otherinfo.expires != '')
-		extrainfo += '<span>Expires on ' + otherinfo.expires + '</span>';
+	if (otherinfo.expires != '')
+		if (otherinfo.expires == 'Permanent') {
+			extrainfo += '<span>Permanent Item</span>';
+		}
+		else {
+			if (otherinfo.locked)
+				extrainfo += '<span>Sealed untill ' + otherinfo.expires + '</span>';
+			else if (itemid > 5000000 && itemid < 5010000)
+				extrainfo += '<span>Water of Life dries up on ' + otherinfo.expires + '</span>';
+			else
+				extrainfo += '<span>Expires on ' + otherinfo.expires + '</span>';
+		}
 	if (otherinfo.skiped)
 		extrainfo += '<span>Prevents slipping</span>';
 	if (otherinfo.coldprotection)
 		extrainfo += '<span>Cold prevention</span>';
 	if (otherinfo.tradeblock) {
-		extrainfo += '<span>Untradable<span>';
+		extrainfo += '<span>' + (otherinfo.tradeblock == 0x30 ? 'Trade disabled when equipped' : 'Untradable') + '<span>';
 		var tradeInfo = '';
 		switch (otherinfo.tradeblock) {
 			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
 			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
 			case 0x21: tradeInfo = 'Use the Platinum Scissors of Karma to enable an item to be traded one time'; break;
-			case 0x30: tradeInfo = 'Trade disabled when equipped'; break;
 			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
 		}
 		if (tradeInfo != '') {
@@ -213,6 +220,19 @@ function SetItemInfo(event, obj, values) {
 
 	//extrainfo += '<span>ITEMID ' + itemid + '</span>';
 
+	if (item.name != '' && item.name != undefined) {
+		if (item.moreflags != undefined && item.moreflags.indexOf('crafted') != -1)
+			description += '<span style="color: limegreen;">- Crafted by: ' + item.name + '</span>';
+	}
+	
+	if (isequip) {
+		if ((item.flag & 0x0020) == 0) {
+			
+		}
+		if (item.max_scissors == 0) {
+			
+		}
+	}
 
 	GetObj('item_info_extra').innerHTML = extrainfo;
 	GetObj('item_info_extra').style.display = extrainfo == '' ? 'none' : 'block';
@@ -257,9 +277,9 @@ function SetItemInfo(event, obj, values) {
 	};
 	
 	if (isequip) {
-		if ((item.statusflag & 0x0020) != 0 && item.potential4 == 0 && item.potential5 == 0 && item.potential6 == 0) { // Note that this is the correct code. lol
+		if ((item.statusflag & 0x0020) != 0) { // Note that this is the correct code. lol
 			var row = GetObj('bonus_potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td width="150px" style="color: orange;">Hidden Bonus Potential.</td> </tr>';
+			row.innerHTML = '<tr> <td width="150px" style="color: orange;">Hidden(?) Bonus Potential.</td> </tr>';
 			hasbonuspotential = true;
 		}
 		
@@ -439,6 +459,7 @@ function GetWeaponCategoryName(id) {
 	switch (catid) {
 		case 21: return 'Magic Wand';
 		case 22: return 'Soul Shooter';
+		case 23: return 'Desperado';
 		case 30: return 'One-handed Sword';
 		case 31: return 'One-handed Axe';
 		case 32: return 'One-handed Mace';
@@ -466,6 +487,31 @@ function GetWeaponCategoryName(id) {
 		default: return 'FIXMEH: ' + catid;
 	}
 
+}
+
+function GetItemCategory(islot) {
+	switch (islot) {
+		case 'Ba': return 'Badge';
+		case 'Be': return 'Belt';
+		case 'Bi': return 'Bit';
+		case 'Cp': return 'Cap';
+		case 'Fc': return 'Face';
+		case 'Gv': return 'Glove';
+		case 'Hr': return 'Hair';
+		case 'HrCp': return 'Hair Cap';
+		case 'Ma': return 'Overall';
+		case 'Mb': return 'Monsterbook'; // Must say which set you chose actually... 'Selecting [name]'
+		case 'Me': return 'Medal';
+		case 'Pe': return 'Necklace'; // Pendant?
+		case 'Pa': return 'Pants';
+		case 'Po': return 'Totem'; // Or Pocket?
+		case 'Ri': return 'Ring';
+		case 'Sd': return 'Saddle';
+		case 'Sh': return 'Shoulder Decoration';
+		case 'Si': return 'Shield';
+		case 'Tm': return 'Taming Mob';
+		case 'Wp': return 'Weapon';
+	}
 }
 
 $(document).ready(function () {

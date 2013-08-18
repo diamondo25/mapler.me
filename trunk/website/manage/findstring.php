@@ -3,7 +3,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['1'], $_GET['strings'])
 	header('Content-type: application/json');
 	require_once __DIR__.'/../inc/classes/database.php';
 	$searching = $__database->real_escape_string($_POST['1']);
-	$q = $__database->query("SELECT objecttype, objectid, `key`, `value` FROM strings WHERE `value` LIKE '%".$searching."%' COLLATE latin1_bin OR `objectid` LIKE '%".$searching."%' ORDER BY objectid DESC LIMIT 200");
+	$q = $__database->query("SELECT objecttype, objectid, `key`, `value` FROM strings WHERE `value` LIKE '%".$searching."%' OR `objectid` LIKE '%".$searching."%' ORDER BY objectid DESC LIMIT 200");
 	
 	$tmp = array();
 	while ($row = $q->fetch_assoc())
@@ -16,7 +16,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['2'], $_GET['accoun
 	header('Content-type: application/json');
 	require_once __DIR__.'/../inc/classes/database.php';
 	$searching = $__database->real_escape_string($_POST['2']);
-	$q = $__database->query("SELECT id, username, email, last_ip, account_rank FROM accounts WHERE `username` LIKE '%".$searching."%' COLLATE latin1_bin OR `last_ip` LIKE '%".$searching."%' ORDER BY id DESC LIMIT 200");
+	$q = $__database->query("SELECT id, username, email, last_ip, account_rank FROM accounts WHERE `username` LIKE '%".$searching."%' OR `last_ip` LIKE '%".$searching."%' ORDER BY id DESC LIMIT 200");
 	
 	$tmp = array();
 	while ($row = $q->fetch_assoc())
@@ -29,7 +29,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['3'], $_GET['charac
 	header('Content-type: application/json');
 	require_once __DIR__.'/../inc/classes/database.php';
 	$searching = $__database->real_escape_string($_POST['3']);
-	$q = $__database->query("SELECT internal_id, name, last_update FROM characters WHERE `name` LIKE '%".$searching."%' COLLATE latin1_bin ORDER BY internal_id DESC LIMIT 200");
+	$q = $__database->query("SELECT internal_id, name, last_update FROM characters WHERE `name` LIKE '%".$searching."%' ORDER BY internal_id DESC LIMIT 200");
 	
 	$tmp = array();
 	while ($row = $q->fetch_assoc())
@@ -44,17 +44,17 @@ require_once __DIR__.'/../inc/header.php';
 
 <style>
 input[type=text] {
-padding: 14px;
-box-shadow: none;
-font-size: 16px;
+	padding: 14px;
+	box-shadow: none;
+	font-size: 16px;
 }
 
 .search_button {
-padding: 14px 28px;
-margin: -10px 0 0 -70px;
-border-radius: 0 3px 3px 0;
--moz-border-radius: 0 3px 3px 0;
--webkit-border-radius: 0 3px 3px 0;
+	padding: 14px 28px;
+	margin: -10px 0 0 -70px;
+	border-radius: 0 3px 3px 0;
+	-moz-border-radius: 0 3px 3px 0;
+	-webkit-border-radius: 0 3px 3px 0;
 }
 </style>
 
@@ -116,7 +116,12 @@ function SearchCharacters() {
 			for (var index in data) {
 				var dmp = '';
 				for (var col in data[index]) {
-					dmp += '<td>' + data[index][col] + '</td>';
+					if (col == 'name') {
+						dmp += '<td><a href="/player/' + data[index][col] + '">' + data[index][col] + '</a></td>';
+					}
+					else {
+						dmp += '<td>' + data[index][col] + '</td>';
+					}
 				}
 				totaldump += '<tr>' + dmp + '</tr>';
 			}

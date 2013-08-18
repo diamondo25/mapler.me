@@ -13,9 +13,8 @@ function BuildURL($name, $url) {
 <?php
 if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
 ?>
-				<?php BuildURL('Profile', '/settings/profile/'); ?>
+				<?php BuildURL('General', '/settings/general/'); ?>
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
-				<?php BuildURL('Accounts', '/settings/accounts/'); ?>
 				<?php BuildURL('Characters', '/settings/characters/'); ?>
 				<?php BuildURL('Friends', '/settings/friends/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>

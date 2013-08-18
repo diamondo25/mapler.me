@@ -305,6 +305,7 @@ $inventory = new InventoryData($character_info['internal_id']);
 
 
 $optionlist = array();
+//$optionlist['itemcategory'] = 'Category : ';
 $optionlist['weaponcategory'] = 'Weapon Category : ';
 $optionlist['str'] = 'STR : ';
 $optionlist['dex'] = 'DEX : ';
@@ -321,9 +322,9 @@ $optionlist['avo'] = 'Avoidability : ';
 $optionlist['hands'] = 'Hands : ';
 $optionlist['jump'] = 'Jump : ';
 $optionlist['speed'] = 'Speed : ';
-$optionlist['enchantments'] = 'Nr of times enchanted : ';
-$optionlist['slots'] = 'Nr of upgrades available : ';
-$optionlist['hammers'] = 'Nr of hammers applied : ';
+$optionlist['enchantments'] = 'Times enchanted : ';
+$optionlist['slots'] = 'Upgrades available : ';
+$optionlist['hammers'] = 'Hammers applied : ';
 
 
 $reqlist = array();
@@ -397,50 +398,21 @@ function GetItemQuality($item, $stats) {
 
 
 function GetItemDialogInfo($item, $isequip) {
-	global $PotentialList, $IDlist, $reqlist, $optionlist, $NebuliteList;
-	/*
-	if (!array_key_exists($item->itemid, $IDlist)) {
-		$IDlist[(int)$item->itemid] = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'desc'));
-	}
-	
-	if ($isequip && $item->potential1 != 0 && !array_key_exists($item->potential1, $PotentialList)) 
-		$PotentialList[$item->potential1] = GetPotentialInfo($item->potential1);
-	if ($isequip && $item->potential2 != 0 && !array_key_exists($item->potential2, $PotentialList))
-		$PotentialList[$item->potential2] = GetPotentialInfo($item->potential2);
-	if ($isequip && $item->potential3 != 0 && !array_key_exists($item->potential3, $PotentialList))
-		$PotentialList[$item->potential3] = GetPotentialInfo($item->potential3);
-	if ($isequip && $item->potential4 != 0 && !array_key_exists($item->potential4, $PotentialList))
-		$PotentialList[$item->potential4] = GetPotentialInfo($item->potential4);
-	if ($isequip && $item->potential5 != 0 && !array_key_exists($item->potential5, $PotentialList))
-		$PotentialList[$item->potential5] = GetPotentialInfo($item->potential5);
-	if ($isequip && $item->potential6 != 0 && !array_key_exists($item->potential6, $PotentialList))
-		$PotentialList[$item->potential6] = GetPotentialInfo($item->potential6);
-	
-	if ($isequip && $item->nebulite1 != -1 && !array_key_exists($item->nebulite1, $NebuliteList))
-		$NebuliteList[$item->nebulite1] = GetNebuliteInfo($item->nebulite1);
-	if ($isequip && $item->nebulite2 != -1 && !array_key_exists($item->nebulite2, $NebuliteList))
-		$NebuliteList[$item->nebulite2] = GetNebuliteInfo($item->nebulite2);
-	if ($isequip && $item->nebulite3 != -1 && !array_key_exists($item->nebulite3, $NebuliteList))
-		$NebuliteList[$item->nebulite3] = GetNebuliteInfo($item->nebulite3);
-	*/
+	global $reqlist, $optionlist;
 	$stats = GetItemDefaultStats($item->itemid);
 	
 	$tradeblock = 0;
-	if ($stats['tradeblock'] == 1) {
-		if ($stats['accountsharetag'] == 1) { // Account shareable
-			$tradeblock = 0x10;
-		}
-		elseif ($stats['tradeavailable'] == 1) { // Karma
-			$tradeblock = 0x20;
-		}
-		elseif ($stats['tradeavailable'] == 2) { // Plat Karma
-			$tradeblock = 0x21;
-		}
-		elseif ($stats['equiptradeblock'] == 1) { // Blocked when equipped
-			$tradeblock = 0x30;
-		}
-		else $tradeblock = 1;
-	}
+	
+	if ($stats['accountsharetag'] == 1) // Account shareable
+		$tradeblock = 0x10;
+	elseif ($stats['tradeavailable'] == 1) // Scissors
+		$tradeblock = 0x20;
+	elseif ($stats['tradeavailable'] == 2) // Plat Scissors
+		$tradeblock = 0x21;
+	elseif ($stats['equiptradeblock'] == 1) // Blocked when equipped
+		$tradeblock = 0x30;
+	elseif ($stats['tradeblock'] == 1)
+		$tradeblock = 1;
 	
 	$iscash = ValueOrDefault($stats['cash'], 0);
 	
@@ -595,8 +567,8 @@ $inv_extra_offx = $inv_extra_offy = 0;
 $equips = $inventory->GetEquips();
 
 $petequip_slots = array();
-$petequip_slots[24] = array(0, -1); // Auto HP
-$petequip_slots[25] = array(0, -1); // Auto MP
+$petequip_slots[24] = array(-1, -1); // Auto HP
+$petequip_slots[25] = array(-1, -1); // Auto MP
 
 // Pet 1
 $petequip_slots[14] = array(0, -1);
@@ -665,7 +637,14 @@ foreach ($equips as $orislot => $item) {
 		if ($display_slot == -1)
 			$display_slot = $slot;
 		
-		$petequips[$block][$display_slot] = $item;
+		if ($block == -1) {
+			$petequips[0][$display_slot] = $item;
+			$petequips[1][$display_slot] = $item;
+			$petequips[2][$display_slot] = $item;
+		}
+		else {
+			$petequips[$block][$display_slot] = $item;
+		}
 	}
 	else {
 		if ($orislot > -100) 		$normalequips['normal'][$orislot] = $item;
@@ -817,6 +796,7 @@ function AddInventoryItems(&$inventory) {
     margin-top: 182px;
     text-align: center;
 	color: white;
+	font-size: 12px;
 }
 
 .pet > .avatar-container span {
@@ -1521,6 +1501,7 @@ ORDER BY
 	$selected_core_positions[7] = array(190, 8);
 	$selected_core_positions[8] = array(190, 58);
 	$selected_core_positions[9] = array(190, 108);
+	var_export($cores[1]);
 	
 ?>
 		<div class="selected-cores inventory">

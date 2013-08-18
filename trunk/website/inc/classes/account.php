@@ -203,7 +203,19 @@ WHERE
 	// Configuraton functions
 	
 	public function GetMainCharacterName() {
+		global $__database;
 		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+		$name = $config['main_character'];
+		if ($name !== null) {
+			// Check if exists
+			$q = $__database->query("SELECT id FROM characters WHERE name = '".$__database->real_escape_string($name)."'");
+			if ($q->num_rows == 0) {
+				$name = null;
+				$config['main_character'] = null;
+				$this->SetConfigurationOption('character_config', $config);
+			}
+			$q->free();
+		}
 		return $config['main_character'];
 	}
 	

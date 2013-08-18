@@ -63,24 +63,25 @@ elseif ($request_type == 'statistics') {
 	RetrieveInputGET('name','code');
 	$code = $P['code'];
 	if ($code !== 'adminbypass') {
-	$internalid = IsOwnCharacter($P['name']);
-	if ($internalid === false) JSONDie('You must own this character to request it\'s API', 400);
+		$internalid = IsOwnCharacter($P['name']);
+		if ($internalid === false) JSONDie('You must own this character to request it\'s API', 400);
 	}
 	
 	$q = $__database->query("
 SELECT 
 	chr.name,
+	chr.world_id,
 	w.world_name,
-	channel_id AS channel,
-	level,
-	job,
-	fame,
+	chr.channel_id AS channel,
+	chr.level,
+	chr.job,
+	chr.fame,
 	chr.str,
 	chr.dex,
 	chr.int,
 	chr.luk,
 	chr.exp,
-	map,
+	chr.map,
 	chr.honourlevel AS honorlevel,
 	chr.honourexp AS honorexp,
 	mesos,
@@ -95,17 +96,14 @@ LEFT JOIN
 WHERE 
 	chr.name = '".$__database->real_escape_string($P['name'])."'");
 	
-if ($q->num_rows == 0) {
-    JSONDie('Character not found', 404);
-}
+	if ($q->num_rows == 0) {
+		JSONDie('Character not found', 404);
+	}
 
-	$character = array();
+	$row = $q->fetch_assoc();
+	$q->free();
 	
-	
-	while ($row = $q->fetch_assoc()) {
-	   $character = $row;
-    }
-	JSONAnswer(array('result' => $character));
+	JSONAnswer(array('result' => $row));
 }
 
 ?>
