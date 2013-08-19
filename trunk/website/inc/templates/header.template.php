@@ -90,6 +90,9 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
 	
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+	
 	<script>
 	$(function() {
 		$( ".draggable" ).draggable({ containment: "html", scroll: false });
@@ -203,6 +206,7 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 												<li><a href="//<?php echo $domain; ?>/manage/revisions/">Revisions</a></li>
 												<li><a href="//<?php echo $domain; ?>/manage/statistics/">Statistics</a></li>
 												<li><a href="//<?php echo $domain; ?>/manage/serverlog/">Log</a></li>
+												<li><a href="//<?php echo $domain; ?>/manage/findstring/">Search</a></li>
 											</ul>
 									</li>
 <?php

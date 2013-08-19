@@ -93,7 +93,12 @@ function SearchAccounts() {
 			for (var index in data) {
 				var dmp = '';
 				for (var col in data[index]) {
+				if (col == 'username') {
+						dmp += '<td><a href="//' + data[index][col] + '.mapler.me/">' + data[index][col] + '</a></td>';
+					}
+				else {
 					dmp += '<td>' + data[index][col] + '</td>';
+					}
 				}
 				totaldump += '<tr>' + dmp + '</tr>';
 			}
