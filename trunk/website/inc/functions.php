@@ -175,7 +175,7 @@ function IGTextToWeb($data, $extraOptions = array()) {
 				if ($endTag != '') {
 					$result .= $endTag;
 				}
-				$result .= '<span style="color: blue;">';
+				$result .= '<span style="color: lightblue;">';
 				$endTag = '</span>';
 			}
 			elseif ($nc == 'g') { // Green
