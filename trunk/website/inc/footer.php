@@ -22,7 +22,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
 }
 _AddHeaderLink('js', 'jquery.isotope.min');
 _AddHeaderLink('js', 'maplerme.min');
-_AddHeaderLink('js', 'keypress')
+_AddHeaderLink('js', 'keypress');
 ?>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>	
 
