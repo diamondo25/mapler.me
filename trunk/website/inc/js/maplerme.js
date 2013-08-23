@@ -369,10 +369,6 @@ jQuery("html").removeClass("no-js").addClass("js");
 if (navigator.appVersion.indexOf("Mac") != -1) {
     jQuery("html").addClass("osx")
 }
-if ($.browser.opera) {
-    $(".fade").removeClass("fade");
-    $(".slide").removeClass("slide")
-}
 jQuery(document).ready(function (a) {
         (function () {
                 a('<i id="back-to-top" class="icon-chevron-up"></i>').appendTo(a("body"));
