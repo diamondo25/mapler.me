@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 require_once __DIR__.'/../avatar_faces.php';
 ?>
 
-<div id="post" class="modal hide fade draggable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="post" class="modal hide fade draggable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width: 480px;">
 	<form id="statusposter" method="post">
 		<div class="modal-header">
 			<button type="button" class="close btn btn-mini" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i></button>
@@ -143,7 +143,7 @@ require_once __DIR__.'/../avatar_faces.php';
 
 		<div class="modal-body">
 			<?php MakePlayerAvatar($main_char, array('styleappend' => 'float: left; margin: 0;')); ?>
-			<textarea name="content" id="post-status" style="width: 420px; max-width: 420px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 60px;" placeholder="Type your status here!"></textarea>
+			<textarea name="content" id="post-status" style="width: 330px; max-width: 330px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 60px;" placeholder="Type your status here!"></textarea>
 			<input type="hidden" name="reply-to" value="-1" />
 		</div>
 		<div class="modal-footer">

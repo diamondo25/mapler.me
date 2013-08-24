@@ -262,7 +262,7 @@ namespace MPLRServer
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}", opcode, type);
                                     foreach (string line in ex.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
                                     {
-                                        Logger_ErrorLog("{0}", line);
+                                        Logger_WriteLine("{0}", line);
                                     }
                                     LogFilename += "ERROR";
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");

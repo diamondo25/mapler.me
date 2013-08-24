@@ -25,8 +25,15 @@ namespace Mapler_Client
         {
             try
             {
-                if (File.Exists(_codeloc))
+                if (!File.Exists(_codeloc))
+                {
+                    File.Create(_codeloc).Close();
+                    File.Delete(_codeloc);
+                }
+                else
+                {
                     File.Open(_codeloc, FileMode.Open).Close();
+                }
             }
             catch (Exception)
             {
@@ -35,7 +42,6 @@ namespace Mapler_Client
                 if (!Directory.Exists(_codeloc))
                     Directory.CreateDirectory(_codeloc);
                 _codeloc += "code.weed";
-
             }
 
 
@@ -49,7 +55,11 @@ namespace Mapler_Client
                     OpenMainWindow();
                 }
                 else
+                {
                     MessageBox.Show(result.Item2);
+                    if (result.Item2.Contains("Invalid key"))
+                        File.Delete(_codeloc);
+                }
             }
 
         }

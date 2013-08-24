@@ -76,7 +76,7 @@ using (ScriptAPI) {
 			EndNode(false);
 		}
 	
-        LoadChar();
+        jobid =  LoadChar();
 		
 		AddByte("?");
 		if (AddByte("HasBlessing") == 0x01)
@@ -445,9 +445,12 @@ using (ScriptAPI) {
 		
 		// ONLY IF WHUNTER
 		StartNode("Hunt Data"); // & 0x200000
-		//AddByte("Level");
-		for (i = 0; i < 5; i++) {
-           // AddInt("Val " + i);			
+		if (jobid / 100 == 33) {
+		    AddByte("Level");
+	    	for (i = 0; i < 5; i++) {
+              AddInt("Val " + i);			
+		
+		    }
 		}
 		EndNode(false);
 		// END

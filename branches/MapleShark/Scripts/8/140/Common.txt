@@ -86,6 +86,8 @@ using (ScriptAPI) {
 		AddInt("part1");
 		AddInt("part2");
 	    EndNode(false);
+		
+		return job;
 	}
 }
 

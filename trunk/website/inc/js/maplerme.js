@@ -97,6 +97,7 @@ $(document).ready(function() {
 				else {
 					AddMessageToContent('info', 'Successfully posted status!', '');
 					$('textarea[name="content"]').val(''); // Empty input
+					$('select[name="usingface"]').val('');
 					$('input[name="reply-to"]').attr('value', '-1');
 					$('#post').modal('hide');
 				}
@@ -121,12 +122,9 @@ $(document).ready(function() {
 				}
 				else {
 					var char_image = statusobject.find('div[class="character"]');
-					var char_image_url = char_image.css('background-image');
-					char_image_url = char_image_url.replace('url(', '');
-					char_image_url = char_image_url.replace(')', '');
-					char_image_url = char_image_url.replace(/"/g, '');
-					
-					char_image.css('background-image', 'url("' + char_image_url + '?madface")');
+					var url = char_image.css('background-image');
+					url = url.replace(/face=([a-z]*)/g, 'face=angry');
+					char_image.css('background-image', url);
 					
 					statusobject.fadeOut(2000, function() {
 						$(this).remove();
@@ -212,8 +210,8 @@ $(document).ready(function() {
 							info_element.find('span[online-server]').css('display', 'none');
 						}
 						else {
-							info_element.find('span[offline-server]').css('display', '');
-							info_element.find('span[online-server]').css('display', 'none');
+							info_element.find('span[offline-server]').css('display', 'none');
+							info_element.find('span[online-server]').css('display', '');
 							info_element.find('span[version]').html(elem.version);
 							info_element.find('span[players]').html(elem.players);
 						

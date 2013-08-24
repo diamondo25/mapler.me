@@ -91,7 +91,7 @@ namespace MPLRServer
             _dateUpdator = new Timer((a) =>
             {
                 Interlocked.Exchange(ref _curdate, DateTime.Now.Ticks);
-            }, null, 0, 1000);
+            }, null, 0, 500);
         }
 
         public static void Load(string pServerName, int pTicksBeforeSleep = -100)

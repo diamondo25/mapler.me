@@ -351,7 +351,7 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadInt();
                 pPacket.ReadInt();
-                pPacket.ReadInt();
+                pPacket.ReadInt(); // Caught mob
             }
 
             Quests.DecodePQDone(pConnection, pPacket);

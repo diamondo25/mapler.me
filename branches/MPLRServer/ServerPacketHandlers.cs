@@ -34,12 +34,12 @@ namespace MPLRServer
 
             byte qban = pPacket.ReadByte(); // Quiet Ban
             DateTime qban_time = DateTime.FromFileTime(pPacket.ReadLong()); // Quiet Ban Time
-            DateTime create_time = DateTime.FromFileTime(pPacket.ReadLong()); // Creation Time
+            DateTime creationtime = DateTime.FromFileTime(pPacket.ReadLong()); // Creation Time
             pPacket.ReadInt(); // 78?
             pPacket.Skip(2); // 1 1
             pPacket.ReadBytes(8); // CC key
 
-            ParseLogin(pConnection, username, userid);
+            ParseLogin(pConnection, userid, username, creationtime);
         }
 
         public static void HandleLoginFromWeb(ClientConnection pConnection, MaplePacket pPacket)
@@ -69,15 +69,15 @@ namespace MPLRServer
             pPacket.ReadByte(); // Quiet Ban
             pPacket.ReadLong(); // Quiet Ban Time
             pPacket.ReadString(); // Username. Again.
-            pPacket.ReadLong(); // creation datetime
+            DateTime creationtime = DateTime.FromFileTime(pPacket.ReadLong()); // creation datetime
             pPacket.ReadInt();
             pPacket.ReadBytes(8); // CC key
             pPacket.ReadString();
 
-            ParseLogin(pConnection, username, userid);
+            ParseLogin(pConnection, userid, username, creationtime);
         }
 
-        private static void ParseLogin(ClientConnection pConnection, string pUsername, int pUserID)
+        private static void ParseLogin(ClientConnection pConnection, int pUserID, string pUsername, DateTime pCreationDate)
         {
             pConnection.Logger_WriteLine("User logged into Nexon account '{1}', userid {0}", pUserID, pUsername);
 
@@ -92,6 +92,7 @@ namespace MPLRServer
                     {
                         q.SetColumn("account_id", pConnection.AccountID);
                         q.SetColumn("last_check", MySQL_Connection.NOW);
+                        q.SetColumn("creation_date", pCreationDate);
                         q.SetWhereColumn("ID", pUserID);
                         q.RunQuery();
                     }
@@ -129,9 +130,12 @@ namespace MPLRServer
                     insertq.OnDuplicateUpdate = true;
 
                     insertq.AddColumn("account_id");
-                    insertq.AddColumns(true, "ID", "last_check");
+                    insertq.AddColumn("ID");
+                    insertq.AddColumn("creation_date");
+                    insertq.AddColumn("last_check", true);
+                    insertq.AddColumn("maplepoints");
 
-                    insertq.AddRow(pConnection.AccountID, pUserID, MySQL_Connection.NOW);
+                    insertq.AddRow(pConnection.AccountID, pUserID, pCreationDate, MySQL_Connection.NOW, 0);
                     insertq.RunQuery();
                 }
 
