@@ -28,6 +28,7 @@
 	RewriteRule ^cdn/ /actions/cdn_upload.php
 	RewriteRule ^blankpage/ /actions/blankpage.php
 	RewriteRule ^resetpassword/ /passreset.php [QSA,L]
+	RewriteRule ^goodbye/ /actions/deleteaccount.php
 	
 	# Server Information
 	RewriteRule ^internal/apc/ /actions/apc_info.php

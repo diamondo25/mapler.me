@@ -6,8 +6,8 @@ $error = null;
 if (IsLoggedin()) {
 ?>
 <meta http-equiv="refresh" content="3;URL='/stream/'" />
-<p class="lead alert alert-info">You are already logged in! You'll be redirected to the main page in 3 seconds. If not, <a href="/">click here</a>.</p>
 <?php
+    DisplayError(3);
 	require_once __DIR__.'/inc/footer.php';
 	die(); // Prevent error after login
 }

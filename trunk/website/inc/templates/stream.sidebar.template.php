@@ -8,8 +8,9 @@ max-width: 240px;">
 	
 		<div class="stream-block">
 			<?php MakePlayerAvatar($main_char); ?>
-			<p style="margin:0;border-bottom:1px solid rgba(0,0,0,0.1);margin-bottom:10px;">@<?php echo $_loginaccount->GetUsername(); ?> <span class="ct-label"><?php echo GetRankTitle($rank); ?></span><br/>
-			<sup><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">View my profile..</a></sup></p>
+			<p>@<?php echo $_loginaccount->GetUsername(); ?><br/>
+			<i class="icon-comments"></i> <span id="memberstatuses"></span></p>
+			<p><i class="icon-star"></i> <?php echo GetRankTitle($rank); ?></p>
 		</div>
 		
 		

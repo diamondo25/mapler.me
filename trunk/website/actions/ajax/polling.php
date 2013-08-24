@@ -20,6 +20,13 @@ if ($request_type == 'info') {
 	if ($_loggedin) {
 		$res['membername'] = $_loginaccount->GetUsername();
 		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
+		
+		$statuscount = $__database->query("SELECT id FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
+		$statuscounter = array();
+		while ($statusarray = $statuscount->fetch_assoc()) {
+    		$statuscounter[] = $statusarray;
+        }
+        $res['memberstatuses'] = count($statuscounter);
 	}
 	
 	

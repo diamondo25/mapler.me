@@ -25,7 +25,6 @@ margin-bottom: 20px;
 		<div class="center">
 			<img src="http://cdn.mapler.me/media/67549be4c8a03cbd248d1c97410a18e8.png" style="border-radius:5px;"/>
 			<input type="text" value="" placeholder="Start typing ...">
-			<a type="" class="search_button btn btn-info"><i class="icon-search icon-white"></i></a>
 		</div>
 </div>
 

@@ -91,7 +91,7 @@ $q->free();
 
 <div class="status">
 	<h1>#5 <small>Exploring Mapler.me, <span class="muted">and you're on your way.</span></small></h1>
-	<p><span class="pull-right" style="border-left:1px solid rgba(0,0,0,0.3);padding-left:10px;margin-left:10px;">You:<br/><img src="//mapler.me/<?php echo $main_char; ?>"></span> You've now gotten the basics of Mapler.me! There are many other features to the site such as social statuses, profiles, and friends, but you'll have to discover those yourself. If you've successfully added a character, you will see your character to the right!</p>
+	<p><span class="pull-right" style="border-left:1px solid rgba(0,0,0,0.3);padding-left:10px;margin-left:10px;">You:<br/><img src="//mapler.me/avatar/<?php echo $main_char; ?>"></span> You've now gotten the basics of Mapler.me! There are many other features to the site such as social statuses, profiles, and friends, but you'll have to discover those yourself. If you've successfully added a character, you will see your character to the right!</p>
 	<p>Good luck, and happy mapling!<br/>
 	- Mapler.me Staff</p>
 </div>

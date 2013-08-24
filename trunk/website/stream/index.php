@@ -8,8 +8,13 @@ if (!$_loggedin) {
 }
 if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 ?>
-<p class="lead alert alert-info">Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide! F2</a></p>
-<p>This will disappear once you've successfully sent a status!</p>
+<div class="row">
+<?php require_once __DIR__.'/../inc/templates/stream.sidebar.template.php'; ?>
+<div class="span8">
+<p class="lead alert alert-info"><i class="icon-star"></i> Hello, it seems you're new! Get started with Mapler.me and <a href="//<?php echo $domain; ?>/about?guide">view our guide!</a></p>
+<p>The <b>stream</b> will be shown when you've posted a status! Click the <b class="label label-info">+</b> in the menu above.</p>
+</div>
+</div>
 <?php
 	require_once __DIR__.'/../inc/footer.php';
 	die;

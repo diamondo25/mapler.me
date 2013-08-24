@@ -24,12 +24,12 @@ if ($_loggedin) {
 </style>
 <div class="row">
 	<div class="span12">
-		<p class="alert alert-info lead">Mapler.me just went through some <strong>major</strong> changes! Read about them on <strong><a href="http://blog.mapler.me">our blog</a></strong>!</p> 
 		<center>
 		<p class="lead woah">Start the next chapter of your Maple 'Story'!</p>
+		<br />
 		<a href="//<?php echo $domain; ?>/login/" class="btn btn-success btn-large">Login or register!</a>
 		</center>
-		<br/>
+		<br/><br/>
 	</div>
 </div>
 <div class="row">

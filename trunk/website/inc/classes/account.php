@@ -191,7 +191,7 @@ WHERE
 		}
 	}
 	
-	public function GetTheme($default = 'default') {
+	public function GetTheme($default = 'light') {
     	$theme = $this->GetConfigurationOption('theme');
     	
     	if ($theme === NULL) {

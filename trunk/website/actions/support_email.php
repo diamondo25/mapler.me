@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email_content'])) {
 </div>
 	<form method="POST">
 		<textarea class="span12" style="height:200px;" name="email_content" placeholder="Describe your issue or request. Provide any details such as error messages, screenshots, or URL(s)."></textarea>
-		<input type="submit" class="span12 btn btn-large" value="Request support!">
+		<input type="submit" class="span12 btn btn-large btn-info" value="Request support!">
 	</form>
 
 <?php

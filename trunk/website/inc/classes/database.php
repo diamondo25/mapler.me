@@ -14,13 +14,23 @@ class ExtendedMysqli extends mysqli {
 	}
 	
 	public function get_debug_info() {
+		if (isset($_GET['dbdebug'])) {
 		$error_msg = <<<NO_END
+<h2>Oh noes!</h2>
+The server made a boo-boo! Our technical Coolie Zombies are after this problem. For now, <a href="/">please return to the landing page of Mapler.me</a>!
+{ERROR_DATA_HERE}
+NO_END;
+
+}
+    else {
+        $error_msg = <<<NO_END
 <h2>Oh noes!</h2>
 The server made a boo-boo! Our technical Coolie Zombies are after this problem. For now, <a href="/">please return to the landing page of Mapler.me</a>!
 <!--
 {ERROR_DATA_HERE}
 -->
 NO_END;
+    }
 
 		$error_msg = str_replace('{ERROR_DATA_HERE}', $this->error.' (errno. '.$this->errno.")\r\n".$this->last_query, $error_msg);
 		return $error_msg;

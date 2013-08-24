@@ -80,6 +80,16 @@ if ($error != '') {
 	}
 </style>
 
+<script type="text/javascript">
+function DeleteAccount() {
+	if (confirm("Are you sure you want to delete your account?")) {
+	   if (confirm("All content, statuses, and characters will be removed. Are you 100% sure?")) {
+		document.location.href = '/goodbye/';
+		}
+	}
+}
+</script>
+
 			<h2>General Settings</h2>
 			<form id="settings-form" method="post">
 			<div class="span9">
@@ -166,3 +176,16 @@ if ($error != '') {
 				</div>
 			</div>
 			</form>
+			
+			<div class="span9">
+			<h2>Other options:</h2>
+			<div class="span9">
+				<div class="item">
+					<div class="row">
+						<div class="span6">
+						<button class="btn btn-danger" onclick="DeleteAccount()">Delete Account</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			

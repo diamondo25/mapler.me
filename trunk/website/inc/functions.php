@@ -713,9 +713,28 @@ function GetMaplerServerInfo() {
 
 require_once __DIR__.'/functions.loginaccount.php';
 
-
-
-
+function DisplayError($type) {
+    if ($type == '1' || $type == 'notloggedin') {
+        //Not logged in.
+        echo '<p class="lead alert alert-info"><i class="icon-question-sign"></i> You must be logged in to view this page.</p>';
+    }
+    elseif ($type == '2' || $type == 'nopermission') {
+        //Not of a certain rank, or admin only.
+        echo '<p class="lead alert alert-danger"><i class="icon-exclamation-sign"></i> You do not have permission to view this page.</p>';
+    }
+    elseif ($type == '3' || $type == 'alreadyloggedin') {
+        //Already logged in error, for pages like login and password reset.
+        echo '<p class="lead alert alert-info"><i class="icon-question-sign"></i> You are already logged in. Redirecting shortly...</p>';
+    }
+    elseif ($type == '4' || $type == 'muted') {
+        //Muted
+        echo '<p class="lead alert alert-danger"><i class="icon-exclamation-sign"></i> You are currently muted. Posting statuses and sending friend requests disabled.</p>';
+    }
+    elseif ($type == '5' || $type == 'banned') {
+        //Banned (not IP Banned)
+        echo '<p class="lead alert alert-danger"><i class="icon-exclamation-sign"></i> You are currently restricted from using Mapler.me. <a href="http://mapler.me/support/">Request support?</a></p>';
+    }
+}
 
 // Set to null by default
 $__url_useraccount = null;

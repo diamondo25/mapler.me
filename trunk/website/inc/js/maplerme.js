@@ -268,6 +268,9 @@ $(document).ready(function() {
 				
 				serverTickCount = e.time;
 				memberName = e.membername;
+				memberStatuses = e.memberstatuses;
+				
+				$('#memberstatuses').html(memberStatuses + ' statuses');
 				
 				// Update posts
 
@@ -288,7 +291,7 @@ $(document).ready(function() {
 		});
 	};
 	
-	setInterval(function () { syncer(false); }, 8000);
+	setInterval(function () { syncer(false); }, 1000);
 	syncer(false);
 });
 

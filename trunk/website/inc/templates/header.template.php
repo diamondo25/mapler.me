@@ -142,7 +142,7 @@ else:
 									<?php endif; ?>
 									        		<li> 
 	        		<form method="post" action="http://<?php echo $domain; ?>/search/" style="margin:0 !important;">
-		        		<input type="text" name="search" class="search-query searchbar" placeholder="Find a character?" />
+		        		<input type="text" name="search" class="search-query searchbar flat" style="margin-left: 8px;" placeholder="Find a character?" />
 		        		<input type="hidden" name="type" value="character" />
 		        	</form>
         		</li>
@@ -269,11 +269,11 @@ endif;
 
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
-?>
-		<p class="lead alert alert-danger">You are currently restricted from using Mapler.me. <a href="//<?php echo $domain; ?>/support/">Request support?</a></p>
-<?php
+    if (strpos($_SERVER['REQUEST_URI'], '/support/') === FALSE) {
+    DisplayError(5);
 	require_once __DIR__.'/../../inc/footer.php';
 	die;
+	}
 }
 
 if ($_loggedin && !$_loginaccount->IsMuted()):
@@ -285,8 +285,6 @@ require_once 'banhammer.php';
 endif;
 
 if ($_loggedin && $_loginaccount->IsMuted()):
-?>
-	<p class="lead alert alert-danger">You are currently muted. Posting statuses and sending friend requests disabled.</p>
-<?php
+DisplayError(4);
 endif;
 ?>

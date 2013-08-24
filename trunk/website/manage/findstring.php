@@ -142,15 +142,12 @@ function SearchCharacters() {
 
 	<form onsubmit="SearchStrings(); return false;">
 		<input type="text" id="what1" class="span7" onkeyup="SearchStrings()"  placeholder="Search for strings ..."/>
-		<a type="" class="search_button btn btn-info"><i class="icon-search icon-white"></i></a>
 	</form>
 	<form onsubmit="SearchAccounts(); return false;">
 		<input type="text" id="what2" class="span7" onkeyup="SearchAccounts()" placeholder="Search for Mapler.me accounts ..."/>
-		<a type="" class="search_button btn btn-info"><i class="icon-search icon-white"></i></a>
 	</form>
 	<form onsubmit="SearchCharacters(); return false;">
 		<input type="text" id="what3" class="span7" onkeyup="SearchCharacters()" placeholder="Search for characters ..."/>
-		<a type="" class="search_button btn btn-info"><i class="icon-search icon-white"></i></a>
 	</form>
 	
 <span id="rowcount"></span>
