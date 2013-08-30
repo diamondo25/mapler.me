@@ -1501,8 +1501,6 @@ ORDER BY
 	$selected_core_positions[7] = array(190, 8);
 	$selected_core_positions[8] = array(190, 58);
 	$selected_core_positions[9] = array(190, 108);
-	var_export($cores[1]);
-	
 ?>
 		<div class="selected-cores inventory">
 <?php
@@ -1594,53 +1592,76 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 
 <div id="item_info" style="display: none;">
 	<div class="top"></div>
+	
 	<center id="item_info_stars"></center>
 	<div id="item_info_title"></div>
+	
 	<div id="item_info_extra"></div>
+	
 	<div class="dotline"></div>
+	
 	<div class="icon_holder">
 		<img id="item_info_icon" src="" title="" />
 		<div class="cover"></div>
 	</div>
+	
 	<div id="item_info_description"></div>
+	
 	<div class="item_req_stats">
-
-<?php
-foreach ($reqlist as $option => $desc) {
-?>
-			<span id="item_info_req_row_<?php echo strtolower($option); ?>">
-				<?php echo $desc; ?>
-				<span id="item_info_req_<?php echo strtolower($option); ?>"></span>
-				<br />
-			</span>
-<?php
-}
-?>
-
+		<div class="req-block">
+			<div type="level">
+				<div class="digit" nr="1"></div>
+				<div class="digit" nr="0"></div>
+				<div class="digit" nr="0"></div>
+			</div>
+			
+			<br />
+			
+			<div style="float: right;">
+				<div type="int">
+					<div class="digit" nr="9"></div>
+					<div class="digit" nr="0"></div>
+					<div class="digit" nr="0"></div>
+				</div>
+				<div type="luk">
+					<div class="digit" nr="1"></div>
+					<div class="digit" nr="0"></div>
+					<div class="digit" nr="4"></div>
+				</div>
+			</div>
+			<div type="str">
+				<div class="digit" nr="3"></div>
+				<div class="digit" nr="0"></div>
+				<div class="digit" nr="0"></div>
+			</div>
+			<div type="dex">
+				<div class="digit" nr="8"></div>
+				<div class="digit" nr="0"></div>
+				<div class="digit" nr="0"></div>
+			</div>
+		</div>
 	</div>
 	<div id="req_job_list">
-		<span class="req_job" id="item_info_reqjob_0">Beginner</span>
-		<span class="req_job" id="item_info_reqjob_1">Warrior</span>
-		<span class="req_job" id="item_info_reqjob_2">Magician</span>
-		<span class="req_job" id="item_info_reqjob_3">Bowman</span>
-		<span class="req_job" id="item_info_reqjob_4">Thief</span>
-		<span class="req_job" id="item_info_reqjob_5">Pirate</span>
+		<div class="req_job" job="0"></div>
+		<div class="req_job" job="1"></div>
+		<div class="req_job" job="2"></div>
+		<div class="req_job" job="3"></div>
+		<div class="req_job" job="4"></div>
+		<div class="req_job" job="5"></div>
+		<center class="req_job only_job"></center>
 	</div>
 	<div class="item_stats" id="item_stats_block">
-		<table border="0" tablepadding="3" tablespacing="3">
-
+		<div class="dotline"></div>
 <?php
 foreach ($optionlist as $option => $desc) {
 ?>
-			<p id="item_info_row_<?php echo strtolower($option); ?>">
-				<span width="150px"><?php echo $desc; ?></span>
-				<span id="item_info_<?php echo strtolower($option); ?>"></span>
-			</p>
+		<p id="item_info_row_<?php echo strtolower($option); ?>">
+			<span width="150px"><?php echo $desc; ?></span>
+			<span id="item_info_<?php echo strtolower($option); ?>"></span>
+		</p>
 <?php
 }
 ?>
-		</table>
-
 	</div>
 	<div class="item_potential_stats" id="item_info_potentials">
 		<div class="dotline"></div>

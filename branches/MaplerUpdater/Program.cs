@@ -9,7 +9,7 @@ namespace MaplerUpdater
 {
     static class Program
     {
-        private static Mutex _singelton = null;
+        private static Mutex _singleton = null;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -26,10 +26,10 @@ namespace MaplerUpdater
             }
             catch
             {
-                _singelton = new Mutex(true, "Mapler.me_Client");
+                _singleton = new Mutex(true, "Mapler.me_Client");
             }
 
-            if (_singelton == null)
+            if (_singleton == null)
             {
                 MessageBox.Show("You can only run 1 instance of Mapler.me at a time.", "Mapler.me", MessageBoxButtons.OK);
                 return;

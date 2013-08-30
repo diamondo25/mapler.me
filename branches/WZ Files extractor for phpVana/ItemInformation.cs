@@ -30,8 +30,8 @@ namespace WZ_Files_extractor_for_phpVana
         {
             _acceptedColumns.Add("itemid", ColumnTypes.Int);
 
-            //_columnFails.Add("reqjob2", "reqjob");
             _acceptedColumns.Add("reqjob", ColumnTypes.Short);
+            _columnFails.Add("reqjob2", "reqspecjob");
             _acceptedColumns.Add("reqspecjob", ColumnTypes.Short);
             _acceptedColumns.Add("reqrace", ColumnTypes.Short);
             _acceptedColumns.Add("reqlevel", ColumnTypes.Short);
@@ -67,6 +67,7 @@ namespace WZ_Files_extractor_for_phpVana
             _acceptedColumns.Add("incswim", ColumnTypes.Short);
             _acceptedColumns.Add("incfatigue", ColumnTypes.Short);
 
+            _acceptedColumns.Add("bdr", ColumnTypes.Short);
             _columnFails.Add("recoveryhp", "hprecovery");
             _acceptedColumns.Add("hprecovery", ColumnTypes.Int);
             _columnFails.Add("recoverymp", "mprecovery");

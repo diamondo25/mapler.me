@@ -10,6 +10,7 @@ function SetItemInfo(event, obj, values) {
 	var haspotential = false;
 	var hasbonuspotential = false;
 	var hasnebulite = false;
+	var itemslots = isequip ? GetItemSlotsById(itemid) : [0];
 	
 	var GetObj = function (val) {
 		return document.getElementById(val);
@@ -68,8 +69,38 @@ function SetItemInfo(event, obj, values) {
 	};
 	
 	var SetObjTextIsEquip = function(name, value) {
-		GetObj('item_info_req_row_' + name).style.display = !isequip && (value == 0 || value == '' || value == undefined) ? 'none' : '';
-		GetObj('item_info_req_' + name).innerHTML = PadReqStat(value);
+		var object = $('.req-block div[type="' + name + '"]');
+		
+		if (!isequip) {
+			object.hide();
+		}
+		else {
+			object.show();
+			
+			var digit1 = Math.floor(value / 100);
+			var digit2 = Math.floor(value / 10) % 10;
+			var digit3 = value % 10;
+			var digits = object.find('div.digit');
+			digits.eq(2).attr('nr', digit1);
+			digits.eq(1).attr('nr', digit2);
+			digits.eq(0).attr('nr', digit3);
+			
+			digits = digits.add(object);
+			
+			if (name == 'level') {
+				if (value != 0)
+					digits.attr('yellow', 'nope');
+				else
+					digits.removeAttr('yellow');
+			}
+			else {
+			
+				if (value != 0)
+					digits.removeAttr('disabled');
+				else
+					digits.attr('disabled', 'nope');
+			}
+		}
 	};
 
 	GetObj('item_info_title').innerHTML = obj.getAttribute('item-name');
@@ -85,7 +116,7 @@ function SetItemInfo(event, obj, values) {
 		GetObj('item_info_title').innerHTML += ' (+' + item.scrolls + ')';
 	}
 	
-	if (isequip && (gender == 0 || gender == 1)) {
+	if (isequip && (gender == 0 || gender == 1) && Math.floor(itemid / 10000) != 168 /* Bits test */) {
 		GetObj('item_info_title').innerHTML += ' (' + (gender == 0 ? 'Male' : 'Female') + ')';
 	}
 	
@@ -109,28 +140,28 @@ function SetItemInfo(event, obj, values) {
 	
 	
 	var wepcatname = 0;
-	var desc = 'Weapon Category:';
-	if (iconinfo.attr('src').indexOf('Weapon/') != -1) {
+	var desc = 'Category:';
+	if (itemslots[0] == 11) {
 		// Itz a weapon
 		wepcatname = GetWeaponCategoryName(itemid);
 	}
 	else {
-		desc = 'Category:';
 		wepcatname = GetItemCategory(itemid);
 	}
 	SetObjText('weaponcategory', wepcatname, undefined, false);
-	$('#item_info_row_weaponcategory').prev().html(desc);
+	$('#item_info_row_weaponcategory > span').first().html(desc);
+	
+	$('#item_info > .dotline').first().css('display', isequip ? 'block' : 'none');
 	
 	
-	
-	SetObjTextIsEquip('reqlevel', reqs.level);
-	SetObjTextIsEquip('reqstr', reqs.str);
-	SetObjTextIsEquip('reqdex', reqs.dex);
-	SetObjTextIsEquip('reqint', reqs.int);
-	SetObjTextIsEquip('reqluk', reqs.luk);
+	SetObjTextIsEquip('level', reqs.level);
+	SetObjTextIsEquip('str', reqs.str);
+	SetObjTextIsEquip('dex', reqs.dex);
+	SetObjTextIsEquip('int', reqs.int);
+	SetObjTextIsEquip('luk', reqs.luk);
 	//SetObjTextIsEquip('reqpop', reqs.pop);
-	SetObjTextIsEquip('itemlevel', item.itemlevel);
-	SetObjTextIsEquip('itemexp', item.itemexp);
+	//SetObjTextIsEquip('itemlevel', item.itemlevel);
+	//SetObjTextIsEquip('itemexp', item.itemexp);
 
 	$('.item_req_stats').css('display', !isequip && $('.item_req_stats > span[style=""]').length == 0 ? 'none' : 'block');
 	
@@ -394,7 +425,8 @@ function SetJob(id, flag, neededflag) {
 	var correct = (flag & neededflag) == neededflag;
 	if (neededflag == 0x80 && flag != 255)
 		correct = false;
-	document.getElementById('item_info_reqjob_' + id).setAttribute("class", "req_job" + (correct ? ' needed_job' : ''));
+	
+	$('div.req_job[job="' + id + '"]').attr('able', correct ? 1 : 2);
 
 }
 
@@ -522,7 +554,7 @@ function GetItemSlotsById(itemid) {
 		case 114: return [49];
 		case 115: return [51];
 		case 116: return [52];
-		case 117: return [53];
+		case 117: return [55];
 		case 118: return [56];
 		
 		case 161: return [1100];
@@ -673,6 +705,7 @@ function GetItemCategory(itemid) {
 		case 52: return 'Pocket Item';
 		case 53: return 'Android';
 		case 54: return 'Mechanical Heart';
+		case 55: return 'Codex';
 		case 56: return 'Badge';
 		case 61: 
 			if (Math.floor(itemid / 100) == 11902) 

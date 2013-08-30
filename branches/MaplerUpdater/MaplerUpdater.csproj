@@ -82,6 +82,8 @@
     <None Include="Resources\largericon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="loader.png" />
+    <None Include="loader_bar.png" />
     <Content Include="newlogo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

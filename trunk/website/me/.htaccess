@@ -14,10 +14,9 @@
 	# Info Syncing
 	RewriteRule ^ajax/sync/$ /ajax/polling.php?type=info
 	
-
-	RewriteCond %{REQUEST_FILENAME} !-d 
-	RewriteCond %{REQUEST_FILENAME}\.php -f 
-	RewriteRule ^(.*)([^/]*)$ $1.php [QSA]
+	
+	RewriteRule ^friends/$ friends.php [L,QSA]
+	RewriteRule ^characters/$ characters.php [L,QSA]
 </IfModule>
 
 Options -Indexes

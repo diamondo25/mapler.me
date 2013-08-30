@@ -194,6 +194,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="background-craftypixel.png" />
+    <None Include="launch-normal.png" />
+    <None Include="launch-pressed.png" />
+    <None Include="launch-hover.png" />
     <Content Include="newlogo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

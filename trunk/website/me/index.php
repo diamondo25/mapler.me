@@ -20,17 +20,17 @@ endif;
 ?>
 
 <?php
- if ($__url_useraccount->GetConfigurationOption('twitch_username') !== NULL) {
-$clientId = $__url_useraccount->GetConfigurationOption('twitch_api_code');             // Register your application and get a client ID at http://www.twitch.tv/settings?section=applications
-$twitchusername = $__url_useraccount->GetConfigurationOption('twitch_username');
-$json_array = json_decode(file_get_contents('https://api.twitch.tv/kraken/streams/'.$twitchusername.'?client_id='.$clientId), true);
- 
-if ($json_array['stream'] != NULL) {
-    $channelTitle = $json_array['stream']['channel']['display_name'];
-    $streamTitle = $json_array['stream']['channel']['status'];
-    $currentGame = $json_array['stream']['channel']['game'];
-	
-	if ($currentGame = "MapleStory") {
+if ($__url_useraccount->GetConfigurationOption('twitch_username') !== NULL) {
+	$clientId = $__url_useraccount->GetConfigurationOption('twitch_api_code');             // Register your application and get a client ID at http://www.twitch.tv/settings?section=applications
+	$twitchusername = $__url_useraccount->GetConfigurationOption('twitch_username');
+	$json_array = json_decode(file_get_contents('https://api.twitch.tv/kraken/streams/'.$twitchusername.'?client_id='.$clientId), true);
+	 
+	if ($json_array['stream'] != NULL) {
+		$channelTitle = $json_array['stream']['channel']['display_name'];
+		$streamTitle = $json_array['stream']['channel']['status'];
+		$currentGame = $json_array['stream']['channel']['game'];
+		
+		if ($currentGame = "MapleStory") {
 	?>
 		<div class="span9" style="float:right !important;">
 		<div class="status">
@@ -43,11 +43,10 @@ if ($json_array['stream'] != NULL) {
 		</object>
 		</div>
 		</div>
-	<?php
-	}
-	
-	elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['debugtwitch'])) {
-	?>
+<?php
+		}
+		elseif ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['debugtwitch'])) {
+?>
 		<div class="span9" style="float:right !important;">
 		<object type="application/x-shockwave-flash" height="398" width="690" id="live_embed_player_flash" data="http://www.twitch.tv/widgets/live_embed_player.swf?channel=<?php echo $twitchusername ?>" bgcolor="#000000">
 			<param name="allowFullScreen" value="true" />
@@ -58,8 +57,8 @@ if ($json_array['stream'] != NULL) {
 		</object>
 		</div>
 	<?php
+		}
 	}
-}
 }
 ?>
 

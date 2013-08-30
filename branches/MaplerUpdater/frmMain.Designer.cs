@@ -28,28 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.prgrsUpdate = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(201, 74);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Arial", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(0, 89);
+            this.label1.Font = new System.Drawing.Font("Verdana", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(0, 85);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(228, 30);
             this.label1.TabIndex = 1;
@@ -57,29 +45,40 @@
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
+            // prgrsUpdate
+            // 
+            this.prgrsUpdate.Location = new System.Drawing.Point(53, 89);
+            this.prgrsUpdate.Name = "prgrsUpdate";
+            this.prgrsUpdate.Size = new System.Drawing.Size(121, 23);
+            this.prgrsUpdate.Step = 1;
+            this.prgrsUpdate.TabIndex = 2;
+            this.prgrsUpdate.Visible = false;
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(228, 118);
+            this.BackgroundImage = global::MaplerUpdater.Properties.Resources.loader;
+            this.ClientSize = new System.Drawing.Size(227, 118);
+            this.Controls.Add(this.prgrsUpdate);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.pictureBox1);
             this.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.MaximumSize = new System.Drawing.Size(227, 118);
+            this.MinimumSize = new System.Drawing.Size(227, 118);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mapler.me Client Updater";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.Shown += new System.EventHandler(this.frmMain_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
         public System.Windows.Forms.Label label1;
+        public System.Windows.Forms.ProgressBar prgrsUpdate;
     }
 }
 

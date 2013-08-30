@@ -1,11 +1,16 @@
 <?php
+$title = 'Mapler.me &middot; MapleStory Social Network';
 if (isset($__url_useraccount)) {
-	$title = $__url_useraccount->GetNickname()." &middot; Mapler.me";
+	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
 }
-else {
-	$title = "Mapler.me &middot; MapleStory Social Network";
+elseif (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
+	$title = substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1).' &middot; '.$title;
 }
-
+/*
+elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
+	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
+}
+*/
 if ($_loggedin) {
 	$rank = $_loginaccount->GetAccountRank();
 }
@@ -57,22 +62,12 @@ function _AddHeaderLink($what, $filename) {
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
-	
-	<!-- Theme -->
-	<?php
-	if ($_loggedin) {
-	?>
+
+<?php if ($_loggedin): ?>
 	<link href='http://<?php echo $domain; ?>/inc/css/themes/<?php echo $_loginaccount->GetTheme(); ?>.css' rel='stylesheet' type='text/css' />
-	<?php
-	}
-	else {
-	?>
+<?php else: ?>
     <link href='http://<?php echo $domain; ?>/inc/css/themes/light.css' rel='stylesheet' type='text/css' />
-    <?php
-	}
-	?>
-	<!-- End Theme -->
-	
+<?php endif; ?>
 <?php
 _AddHeaderLink('css', 'style.min');
 _AddHeaderLink('css', 'animate.min');
@@ -90,8 +85,8 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 	<link rel="shortcut icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" />
 	<link rel="icon" href="//<?php echo $domain; ?>/inc/img/favicon.ico" type="image/x-icon" />
 	
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js" type="text/javascript"></script>
 	
 	<script>
 	$(function() {
@@ -127,8 +122,8 @@ if (isset($__url_useraccount)):
 									<?php endif; ?>
 
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_useraccount->GetNickName(); ?></a></li>
-									<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters">Characters</a></li>
-									<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends">Friends</a></li>
+									<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters/">Characters</a></li>
+									<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends/">Friends</a></li>
 									<li class="divider"></li>
 									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
 
@@ -152,7 +147,7 @@ else:
 									<li><a href="//<?php echo $domain; ?>/rankings/">Rankings</a></li>
 									<li><a href="//blog.mapler.me/">Blog</a></li>
 <?php if ($_loggedin): ?>
-									<li><a href="//<?php echo $domain; ?>/about?guide">Guide</a></li>
+									<li><a href="//<?php echo $domain; ?>/guide/">Guide</a></li>
 									<li><a href="//<?php echo $domain; ?>/downloads/">Downloads</a></li>
 									<li><a href="//<?php echo $domain; ?>/cdn/">CDN</a></li>
 <?php endif; ?>
@@ -183,8 +178,8 @@ if ($_loggedin):
 								<ul class="dropdown-menu" style="margin-right: 9px;">
 									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/">Profile</a></li>
 									<li class="divider"></li>
-									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters">Characters</a></li>
-									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends">Friends</a></li>
+									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/characters/">Characters</a></li>
+									<li><a href="//<?php echo $_loginaccount->GetUsername(); ?>.<?php echo $domain; ?>/friends/">Friends</a></li>
 									<li class="dropdown-submenu">
 										<a tabindex="-1" href="//<?php echo $domain; ?>/settings/profile/">Settings</a>
 											<ul class="dropdown-menu">
@@ -213,7 +208,7 @@ if ($_loginaccount->GetAccountRank() >= RANK_ADMIN):
 endif;
 ?>
 									<li class="divider"></li>
-									<li><a href="//<?php echo $domain; ?>/logoff">Sign Out</a></li>
+									<li><a href="//<?php echo $domain; ?>/logoff/">Sign Out</a></li>
 								</ul>
 							</li>
 						</ul>

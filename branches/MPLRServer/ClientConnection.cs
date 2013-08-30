@@ -260,10 +260,8 @@ namespace MPLRServer
                                 catch (Exception ex)
                                 {
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}", opcode, type);
-                                    foreach (string line in ex.ToString().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
-                                    {
-                                        Logger_WriteLine("{0}", line);
-                                    }
+                                    Logger_WriteLine(ex.ToString());
+
                                     LogFilename += "ERROR";
                                     SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
 
@@ -322,15 +320,16 @@ namespace MPLRServer
         {
             string msg = string.Format(pFormat, pParams);
 
-            Logger.WriteLine("[{2:X8}|{0}] {1}", LastLoggedCharacterName, msg, uniqueid);
+            foreach (var line in msg.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                Logger.WriteLine("[{2:X8}|{0}] {1}", LastLoggedCharacterName, line, uniqueid);
         }
 
 
         public void Logger_ErrorLog(string pFormat, params object[] pParams)
         {
             string msg = string.Format(pFormat, pParams);
-
-            Logger.ErrorLog("[{2:X8}|{0}] {1}", LastLoggedCharacterName, msg, uniqueid);
+            foreach (var line in msg.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
+                Logger.ErrorLog("!!! [{2:X8}|{0}] {1}", LastLoggedCharacterName, line, uniqueid);
         }
 
 

@@ -271,5 +271,31 @@ namespace Mapler_Client
             Form1_Load(null, null);
             this.Show();
         }
+
+        private void picStart_MouseDown(object sender, MouseEventArgs e)
+        {
+            picStart.Image = global::Mapler_Client.Properties.Resources.launch_pressed;
+        }
+
+        private void ResetButton(object sender, EventArgs e)
+        {
+            picStart.Image = global::Mapler_Client.Properties.Resources.launch_normal;
+        }
+
+        private void picStart_Click(object sender, EventArgs e)
+        {
+            btnLaunch_Click(sender, e);
+        }
+
+        private void picStart_MouseUp(object sender, MouseEventArgs e)
+        {
+            ResetButton(sender, e);
+        }
+
+        private void picStart_MouseHover(object sender, EventArgs e)
+        {
+            picStart.Image = global::Mapler_Client.Properties.Resources.launch_hover;
+
+        }
     }
 }

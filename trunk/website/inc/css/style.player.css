@@ -320,7 +320,7 @@ hr {
 }
 
 #item_info .item_req_stats {
-	margin-left: 95px;
+	margin-left: 80px;
 	overflow: hidden;
 	font-size: 11px;
 	margin-bottom: 10px;
@@ -337,23 +337,137 @@ hr {
 }
 
 #item_info .req_job {
-	font-size: 9px;
-	color: white;
-	text-transform: uppercase;
+	width: 25px;
+	height: 24px;
+	background-position: center top;
+	background-repeat: no-repeat;
+	position: absolute;
+	margin: 0 auto;
 }
 
-#item_info .needed_job {
-	color: orange;
+#item_info .req_job[job="0"] { top: 7px; left: 11px; }
+#item_info .req_job[job="1"] { top: 7px; left: 52px; }
+#item_info .req_job[job="2"] { top: 7px; left: 92px; }
+#item_info .req_job[job="3"] { top: 7px; left: 131px; }
+#item_info .req_job[job="4"] { top: 10px; left: 163px; }
+#item_info .req_job[job="5"] { top: 10px; left: 198px; }
+
+#item_info .req_job[job="0"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/0.png'); }
+#item_info .req_job[job="1"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/1.png'); }
+#item_info .req_job[job="2"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/2.png'); }
+#item_info .req_job[job="3"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/3.png'); }
+#item_info .req_job[job="4"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/4.png'); }
+#item_info .req_job[job="5"][able="0"] { background-image: url('/inc/img/ui/Item/Equip/Job/disable/5.png'); }
+
+#item_info .req_job[job="0"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/0.png'); }
+#item_info .req_job[job="1"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/1.png'); }
+#item_info .req_job[job="2"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/2.png'); }
+#item_info .req_job[job="3"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/3.png'); }
+#item_info .req_job[job="4"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/4.png'); }
+#item_info .req_job[job="5"][able="1"] { background-image: url('/inc/img/ui/Item/Equip/Job/enable/5.png'); }
+
+#item_info div.req-block div[type] {
+	background-position: left top;
+	background-repeat: no-repeat;
+	width: 76px;
+	height: 9px;
 }
+
+#item_info div.req-block div[type="level"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqLEV.png'); }
+#item_info div.req-block div[type="int"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqINT.png'); }
+#item_info div.req-block div[type="dex"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqDEX.png'); }
+#item_info div.req-block div[type="luk"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqLUK.png'); }
+#item_info div.req-block div[type="str"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqSTR.png'); }
+#item_info div.req-block div[type="pop"] { background-image: url('/inc/img/ui/Item/Equip/Can/reqPOP.png'); }
+
+#item_info div.req-block div[type="level"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqLEV.png'); }
+#item_info div.req-block div[type="int"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqINT.png'); }
+#item_info div.req-block div[type="dex"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqDEX.png'); }
+#item_info div.req-block div[type="luk"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqLUK.png'); }
+#item_info div.req-block div[type="str"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqSTR.png'); }
+#item_info div.req-block div[type="pop"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/reqPOP.png'); }
+
+#item_info div.req-block div[type="level"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqLEV.png'); }
+#item_info div.req-block div[type="int"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqINT.png'); }
+#item_info div.req-block div[type="dex"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqDEX.png'); }
+#item_info div.req-block div[type="luk"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqLUK.png'); }
+#item_info div.req-block div[type="str"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqSTR.png'); }
+#item_info div.req-block div[type="pop"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/reqPOP.png'); }
+
+#item_info div.digit {
+	display: inline-block;
+	float: right;
+	width: 5px;
+	height: 5px;
+	margin-right: 2px;
+	background-position: top center;
+	background-repeat: no-repeat;
+}
+
+#item_info div.digit[nr="0"] { background-image: url('/inc/img/ui/Item/Equip/Can/0.png'); }
+#item_info div.digit[nr="1"] { background-image: url('/inc/img/ui/Item/Equip/Can/1.png'); }
+#item_info div.digit[nr="2"] { background-image: url('/inc/img/ui/Item/Equip/Can/2.png'); }
+#item_info div.digit[nr="3"] { background-image: url('/inc/img/ui/Item/Equip/Can/3.png'); }
+#item_info div.digit[nr="4"] { background-image: url('/inc/img/ui/Item/Equip/Can/4.png'); }
+#item_info div.digit[nr="5"] { background-image: url('/inc/img/ui/Item/Equip/Can/5.png'); }
+#item_info div.digit[nr="6"] { background-image: url('/inc/img/ui/Item/Equip/Can/6.png'); }
+#item_info div.digit[nr="7"] { background-image: url('/inc/img/ui/Item/Equip/Can/7.png'); }
+#item_info div.digit[nr="8"] { background-image: url('/inc/img/ui/Item/Equip/Can/8.png'); }
+#item_info div.digit[nr="9"] { background-image: url('/inc/img/ui/Item/Equip/Can/9.png'); }
+#item_info div.digit[nr="+"] { background-image: url('/inc/img/ui/Item/Equip/Can/+.png'); }
+#item_info div.digit[nr="-"] { background-image: url('/inc/img/ui/Item/Equip/Can/-.png'); }
+#item_info div.digit[nr="%"] { background-image: url('/inc/img/ui/Item/Equip/Can/%.png'); }
+
+#item_info div.digit[nr="0"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/0.png'); }
+#item_info div.digit[nr="1"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/1.png'); }
+#item_info div.digit[nr="2"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/2.png'); }
+#item_info div.digit[nr="3"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/3.png'); }
+#item_info div.digit[nr="4"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/4.png'); }
+#item_info div.digit[nr="5"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/5.png'); }
+#item_info div.digit[nr="6"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/6.png'); }
+#item_info div.digit[nr="7"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/7.png'); }
+#item_info div.digit[nr="8"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/8.png'); }
+#item_info div.digit[nr="9"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/9.png'); }
+#item_info div.digit[nr="+"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/+.png'); }
+#item_info div.digit[nr="-"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/-.png'); }
+#item_info div.digit[nr="%"][yellow] { background-image: url('/inc/img/ui/Item/Equip/YellowNumber/%.png'); }
+
+#item_info div.digit[nr="0"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/0.png'); }
+#item_info div.digit[nr="1"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/1.png'); }
+#item_info div.digit[nr="2"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/2.png'); }
+#item_info div.digit[nr="3"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/3.png'); }
+#item_info div.digit[nr="4"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/4.png'); }
+#item_info div.digit[nr="5"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/5.png'); }
+#item_info div.digit[nr="6"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/6.png'); }
+#item_info div.digit[nr="7"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/7.png'); }
+#item_info div.digit[nr="8"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/8.png'); }
+#item_info div.digit[nr="9"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/9.png'); }
+#item_info div.digit[nr="+"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/+.png'); }
+#item_info div.digit[nr="-"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/-.png'); }
+#item_info div.digit[nr="%"][cannot] { background-image: url('/inc/img/ui/Item/Equip/Cannot/%.png'); }
+
+#item_info div.digit[nr="0"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/0.png'); }
+#item_info div.digit[nr="1"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/1.png'); }
+#item_info div.digit[nr="2"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/2.png'); }
+#item_info div.digit[nr="3"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/3.png'); }
+#item_info div.digit[nr="4"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/4.png'); }
+#item_info div.digit[nr="5"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/5.png'); }
+#item_info div.digit[nr="6"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/6.png'); }
+#item_info div.digit[nr="7"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/7.png'); }
+#item_info div.digit[nr="8"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/8.png'); }
+#item_info div.digit[nr="9"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/9.png'); }
+#item_info div.digit[nr="+"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/+.png'); }
+#item_info div.digit[nr="-"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/-.png'); }
+#item_info div.digit[nr="%"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/%.png'); }
 
 #item_info #req_job_list {
 	clear: both;
-	padding-top: 10px;
-	padding: 2px;
-	border-radius: 3px;
-	background-color: rgba(0,0,0,1);
+	background-image: url('/inc/img/ui/Item/Equip/Job/normal.png');
 	margin-bottom: 10px;
 	margin-top: 10px;
+	width: 237px;
+	height: 24px;
+	position: relative;
 }
 
 #item_info #req_job_list hr {
