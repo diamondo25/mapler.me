@@ -17,6 +17,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
 				<?php BuildURL('Characters', '/settings/characters/'); ?>
 				<?php BuildURL('Friends', '/settings/friends/'); ?>
+                <?php BuildURL('Connections', '/settings/connections/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>
 				<?php //BuildURL('Memberships', '/panel/settings/memberships/'); ?>
 <?php

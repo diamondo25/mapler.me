@@ -55,11 +55,10 @@ $rs = $pager->paginate();
 	font-weight: 200;
 	letter-spacing: normal;
 	font-size: 15px;
-	color: #FFF;
 }
 
 table tr:hover {
-	background: rgba(255,255,255,0.2) !important;
+	background: rgba(255,255,255,0.3) !important;
 }
 
 </style>

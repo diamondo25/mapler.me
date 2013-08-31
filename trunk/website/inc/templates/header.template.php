@@ -69,7 +69,7 @@ function _AddHeaderLink($what, $filename) {
     <link href='http://<?php echo $domain; ?>/inc/css/themes/light.css' rel='stylesheet' type='text/css' />
 <?php endif; ?>
 <?php
-_AddHeaderLink('css', 'style.min');
+_AddHeaderLink('css', 'style');
 _AddHeaderLink('css', 'animate.min');
 _AddHeaderLink('css', 'font-awesome.min');
 if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
@@ -102,7 +102,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
         <nav id="rightmenu">
         	<ul id="menu-rightnav">
         	<li class="dropdown">
-        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="/inc/img/logo.celebration.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
         			<?php if ($_loggedin && GetNotification() != '0'): ?>
         				(<?php echo GetNotification(); ?><i class="icon-bell-alt icon-white"></i>)
         			<?php endif; ?> <i class="icon-chevron-down"></i>

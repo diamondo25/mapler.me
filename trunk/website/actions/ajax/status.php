@@ -7,6 +7,7 @@ CheckSupportedTypes('responses', 'list', 'blog', 'post', 'delete');
 require_once __DIR__.'/../../inc/classes/database.php';
 require_once __DIR__.'/../../inc/classes/statusses.php';
 require_once __DIR__.'/../../inc/avatar_faces.php';
+require_once __DIR__.'/../../inc/codebird.php';
 
 if ($request_type == 'responses') {
 	RetrieveInputGET('statusid');
@@ -101,6 +102,26 @@ elseif ($request_type == 'post') {
 	RetrieveInputPOST('content', 'reply-to', 'usingface');
 
 	$content = nl2br(htmlentities(trim($P['content']), ENT_QUOTES, 'UTF-8'));
+    
+            //Tweet post yo.
+            $CONSUMER_KEY = 'AeH4Ka2jIhiBWASIQUEQ';
+            $CONSUMER_SECRET = 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw';
+        
+            \Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
+            $cb = \Codebird\Codebird::getInstance();
+            
+            $oauth_token = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
+            $oauth_token_secret = $_loginaccount->GetConfigurationOption('twitter_oauth_token_secret');
+            //all status requests have to start with status=
+            //need to cut off anything over 140 characters btw.
+            $status = 'status='.$P['content'].' #maplerme';
+            
+            //Checks if the person has a Twitter account added. If so, bombs away.
+            if($oauth_token != '') {
+                $cb->setToken($oauth_token, $oauth_token_secret);
+                $reply = $cb->statuses_update($status);
+            }
+
 	if ($content == '')
 		JSONDie('No status contents.', 400);
 

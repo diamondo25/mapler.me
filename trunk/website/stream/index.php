@@ -37,7 +37,7 @@ if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 
 </div>
 <p>
-	<center><button onclick="syncer(true, true);" class="btn btn-large" type="button" id="syncbutton">Load more statuses..</button></center>
+	<center><button onclick="syncer(true, true);" class="btn btn-large btn-info" type="button" id="syncbutton">Load more statuses..</button></center>
 </p>
 <script>
 $(document).ready(function() { 

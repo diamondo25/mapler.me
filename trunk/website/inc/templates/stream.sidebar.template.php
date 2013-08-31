@@ -27,8 +27,7 @@ if (!empty($notice)) {
 }
 ?>
 
-		
-		<div class="stream-block">
+<p class="lead alert alert-info">
 <?php
 	$rss = new DOMDocument();
 	$rss->loadXML(file_get_contents('http://blog.mapler.me/rss'));
@@ -55,31 +54,28 @@ if (!empty($notice)) {
 			$description = substr($desc, 0, strrpos($desc, ' ')).'... <br /><a href="'.$link.'">Read More?</a>'; 
 		}
 		$date = date('l F d, Y', strtotime($feed[$x]['date']));
-		echo '<span class="label label-info">Latest Mapler.me News:</span> <strong><a href="'.$link.'" title="'.$title.'">'.$title.'</a></strong>';
+		echo '<i class="icon-book"></i> <b>Mapler.me News:</b><br/><a href="'.$link.'" title="'.$title.'">'.$title.'</a>';
 	}
 	
 	unset($rss);
 	unset($feed);
 ?>
-	</div>
+</p>
 	
-	
-	<div class="stream-block">
 <?php
 	
 	$serverinfo = GetMaplerServerInfo();
 	
 	foreach ($serverinfo as $servername => $data) {
 ?>
-		<div mapler-locale="<?php echo $servername; ?>">
-			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span class="label label-success">MapleStory <?php echo $data['locale']; ?> V<span version><?php echo $data['version']; ?></span></span> <span class="badge badge-success"><span players><?php echo $data['players']; ?></span> online</span></span>
+		<p mapler-locale="<?php echo $servername; ?>" class="lead alert alert-info">
+			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span><strong>MapleStory <?php echo $data['locale']; ?></strong> – </span></span> <span><span players><?php echo $data['players']; ?></span> maplers currently updating their character(s) in real-time.</span></span>
 			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>>Mapler.me server '<?php echo $servername; ?>' is offline...</span>
-		</div>
+		</p>
 <?php
 	}
 ?>
 
-	</div>
 <?php
 	// Check for expiring items...
 	$q = $__database->query("
