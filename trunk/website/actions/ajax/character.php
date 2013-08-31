@@ -59,13 +59,7 @@ ON DUPLICATE KEY UPDATE
 }
 
 elseif ($request_type == 'statistics') {
-	if (!$_loggedin) JSONDie('Not loggedin');
-	RetrieveInputGET('name','code');
-	$code = $P['code'];
-	if ($code !== 'adminbypass') {
-		$internalid = IsOwnCharacter($P['name']);
-		if ($internalid === false) JSONDie('You must own this character to request it\'s API', 400);
-	}
+	RetrieveInputGET('name');
 	
 	$q = $__database->query("
 SELECT 
