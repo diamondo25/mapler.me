@@ -218,12 +218,12 @@ if (count($cachez) > 0):
 endif;
 if (count($cache) > 0):
 ?>
-		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters"><?php echo count($cache); ?> Characters</a></p>
+		<p class="side"><i class="icon-book faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/characters/"><?php echo count($cache); ?> Characters</a></p>
 <?php
 endif;
 if (count($cachey) > 0):
 ?>
-		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/friends"><?php echo count($cachey); ?> Friends</a></p>
+		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $subdomain.".".$domain; ?>/friends/"><?php echo count($cachey); ?> Friends</a></p>
 <?php
 endif;
 ?>

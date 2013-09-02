@@ -388,7 +388,7 @@ footer {
 		border-radius: 0px !important;
 	}
 	body, html {
-		background: #0a1625 !important;
+		background: #FFF !important;
 		background-image: none !important;
 	}
 	
@@ -1264,8 +1264,7 @@ header .sticky-nav {
 	margin:0 auto;
 	padding-left: 20px;
 	padding-right: 20px;
-	border-bottom: 1px solid #fafafa;
-	background: #f6f6f6;
+	background: rgba(255,255,255,0.9);
 	-webkit-box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
 	-moz-box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
 	box-shadow: 0px 1px 1px rgba(0,0,0,.15), 0px 2px 1px rgba(0,0,0,.10), 0px 3px 1px rgba(0,0,0,.05);
