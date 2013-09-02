@@ -154,7 +154,7 @@ $twitterenabled = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
 <?php endforeach; ?>
 			</select>
             
-			<button type="submit" class="btn">Post! <?php if ($twitterenabled != '') { ?>(+<i class="icon-twitter"></i>)<?php } ?></button>
+			<button type="submit" class="btn btn-info">Post! <?php if ($twitterenabled != '') { ?>(+<i class="icon-twitter"></i>)<?php } ?></button>
 		</div>
 	</form>
 </div>

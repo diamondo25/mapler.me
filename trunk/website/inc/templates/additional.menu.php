@@ -16,7 +16,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE) {
 				<?php BuildURL('General', '/settings/general/'); ?>
 				<?php BuildURL('Privacy', '/settings/privacy/'); ?>
 				<?php BuildURL('Characters', '/settings/characters/'); ?>
-				<?php BuildURL('Friends', '/settings/friends/'); ?>
+				<?php BuildURL('Friend Requests', '/settings/friends/'); ?>
                 <?php BuildURL('Connections', '/settings/connections/'); ?>
 				<?php //BuildURL('Notifications', '/panel/settings/notifications/'); ?>
 				<?php //BuildURL('Memberships', '/panel/settings/memberships/'); ?>
@@ -29,7 +29,7 @@ elseif (strpos($_SERVER['REQUEST_URI'], '/manage/') !== FALSE) {
 				<?php BuildURL('Revisions', '/manage/revisions/'); ?>
 				<?php BuildURL('Statistics', '/manage/statistics/'); ?>
 				<?php BuildURL('Server Log', '/manage/serverlog/'); ?>
-				<?php BuildURL('Search-a-String', '/manage/findstring/'); ?>
+				<?php BuildURL('Search', '/manage/findstring/'); ?>
 <?php
 }
 ?>

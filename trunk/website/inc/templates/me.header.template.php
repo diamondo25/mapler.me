@@ -75,7 +75,7 @@ while ($rowz = $z->fetch_assoc()) {
 $has_characters = count($cache) != 0;
 $main_character_info = $has_characters ? $cache[0] : null;
 $main_character_name = $has_characters ? ($selected_main_character != null ? $selected_main_character : $main_character_info['name']) : '';
-$main_character_image = $has_characters ? '//'.$domain.'/ignavatar/'.$main_character_name : '';
+$main_character_image = $has_characters ? '//'.$domain.'/avatar/'.$main_character_name : '';
 
 $rank = $__url_useraccount->GetAccountRank();
 
@@ -137,6 +137,18 @@ hr {
 	margin-bottom: 10px;
 }
 
+.character_display {
+    background: url('<?php echo $main_character_image; ?>?flip') no-repeat;
+    background-size: cover;
+    height: 180px;
+    border: 0px !important;
+    box-shadow: none !important;
+}
+
+.modal-title h4, .modal, .modal-body {
+    color: #000 !important;
+}
+
 </style>
 
 <div class="row">
@@ -144,10 +156,7 @@ hr {
 <?php
 if ($has_characters):
 ?>
-	<div class="invert-box">
-		<a href="//<?php echo $domain; ?>/player/<?php echo $main_character_name; ?>">
-			<img id="default_character" class="avatar" src="<?php echo $main_character_image; ?>" alt="<?php echo $main_character_name; ?>"/>
-		</a>
+	<div class="invert-box character_display">
 	</div>
 <?php
 endif;
@@ -157,8 +166,7 @@ endif;
 		</p>
 		<p class="name_extra">last seen <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago...<br/></p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
-	<div class="btn-group">
-		<button type="button" class="btn btn-info" data-toggle="collapse" data-target="#manage">
+		<button type="button" class="btn btn-info" data-toggle="modal" href="#myModal">
 				Manage
 		</button>
 		<?php if ($__url_useraccount->IsMuted()):
@@ -169,46 +177,43 @@ endif;
 		?>
 		<button type="button" class="btn btn-danger" onclick="Mute('<?php echo $__url_useraccount->GetUsername(); ?>')">Mute</button>
 		<?php endif; ?>
-	</div>
 <?php endif; ?>
 	</div>
-	<div class="invert-box">
 <?php
 if ($_loggedin && !$is_self) {
 	if ($friend_status == 'FRIENDS') {
 ?>
 
-		<p class="name_extra">You are already friends! <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Remove?</button></p>
+		<p class="name_extra invert-box">You are already friends! <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Remove?</button></p>
 <?php
 	}
 	elseif ($friend_status == 'NO_FRIENDS') {
 ?>
 
-		<p class="name_extra"><button class="btn btn-mini btn-success" onclick="InviteFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Add as a friend?</button></p>
+		<p class="name_extra invert-box"><button class="btn btn-mini btn-success" onclick="InviteFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Add as a friend?</button></p>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_YOU') {
 ?>
 
-		<p class="name_extra"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <button class="btn btn-mini btn-success" onclick="AcceptFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Accept?</button></p>
+		<p class="name_extra invert-box"><?php echo $__url_useraccount->GetNickname(); ?> is still waiting for your friend approval. <button class="btn btn-mini btn-success" onclick="AcceptFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Accept?</button></p>
 <?php
 	}
 	elseif ($friend_status == 'NOT_ACCEPTED_FRIEND') {
 ?>
 
-		<p class="name_extra">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Cancel?</button></p>
+		<p class="name_extra invert-box">You are still waiting for <?php echo $__url_useraccount->GetNickname(); ?>'s friend approval. <button class="btn btn-mini btn-danger" onclick="RemoveFriend('<?php echo $__url_useraccount->GetUsername(); ?>')">Cancel?</button></p>
 <?php
 	}
 }
 
 if ($_loggedin && $is_self) {
 ?>
-<p class="name_extra">You can't friend yourself! :)</p>
 <?php
 }
 
 ?>
-	</div>
+
 	<div class="invert-box">
 <?php
 if (count($cachez) > 0):
@@ -236,17 +241,21 @@ if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)):
 		$__url_useraccount->Save();
 	}
 ?>
-	<div id="manage" class="collapse">
-		<div class="status span9">
-	<h1>@<?php echo $__url_useraccount->GetNickname(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="myModalLabel">Manage: @<?php echo $__url_useraccount->GetUsername(); ?> <span style="font-size:15px !important;">[<?php echo $__url_useraccount->GetLastIP(); ?>]
 	
 	</span>
 		<small>
 			- <?php echo GetRankTitle($__url_useraccount->GetAccountRank()); ?>
 		</small>
-	</h1>
-	<p class="alert"><?php echo $__url_useraccount->GetNickname(); ?> was last online <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago!</p>
-	
+</h3>
+        </div>
+        <div class="modal-body" style="overflow-y:auto;height:400px;">
+          <p class="alert alert-info"><?php echo $__url_useraccount->GetNickname(); ?> was last online <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago!</p>
+          
 	<?php
 	$currentrank = $__url_useraccount->GetAccountRank();
 	?>
@@ -259,8 +268,9 @@ if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)):
 	</select>
 	<br />
 	<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>
-
 	</form>
+	
+<br />
 
 <hr />
 	<?php
@@ -280,8 +290,8 @@ if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)):
 <?php
 	}
 ?>
-	</div>
-	</div>
+        </div>
+</div>
 <?php
 endif;
 ?>

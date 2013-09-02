@@ -121,11 +121,11 @@ if (isset($__url_useraccount)):
 									<li class="divider"></li>
 									<?php endif; ?>
 
-									<li><a href="//<?php echo $subdomain.".".$domain; ?>/"><?php echo $__url_useraccount->GetNickName(); ?></a></li>
+									<li><a href="//<?php echo $subdomain.".".$domain; ?>/">Profile</a></li>
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/characters/">Characters</a></li>
 									<li><a href="//<?php echo $subdomain.".".$domain; ?>/friends/">Friends</a></li>
 									<li class="divider"></li>
-									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Stream<?php else: ?>//<?php echo $domain; ?>">Home<?php endif; ?></a></li>
+									<li style="font-weight:500;"><a href="<?php if ($_loggedin): ?>//<?php echo $domain; ?>/stream/">Back to Stream<?php else: ?>//<?php echo $domain; ?>">Back to Home<?php endif; ?></a></li>
 
 <?php
 // Display normal pages if not a subdomain
@@ -186,6 +186,7 @@ if ($_loggedin):
 												<li><a href="//<?php echo $domain; ?>/settings/general/">General</a></li>
 												<li><a href="//<?php echo $domain; ?>/settings/characters/">Characters</a></li>
 												<li><a href="//<?php echo $domain; ?>/settings/friends/">Friend Requests</a></li>
+												<li><a href="//<?php echo $domain; ?>/settings/connections/">Connections</a></li>
 											</ul>
 									</li>
 

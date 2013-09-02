@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['nick']
 		$_loginaccount->SetConfigurationOption('theme', $theme);
 		$_loginaccount->Save();
 ?>
-<p class="lead alert-info alert">Successfully changed your information.</p>
+<p class="lead alert-info alert"><i class="icon-check"></i> Successfully updated.</p>
 <?php
 	}
 }
@@ -148,34 +148,6 @@ function DeleteAccount() {
 			</form>
 			
 			<br />
-			
-			<h2>Twitch.tv</h2>
-			<p>Automatically display your Twitch.tv stream on your Mapler.me profile whenever you play MapleStory! <br/> Visit <a href="http://www.twitch.tv/settings/applications">http://www.twitch.tv/settings/applications</a> and create an application to obtain an API code.</p>
-			<form id="settings-form" method="post">
-			<div class="span9">
-				<div class="item">
-					<div class="row">
-						<div class="span2 label setting-label">Username</div>
-						<div class="span4">
-							<input type="text" name="twitch" id="inputName" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_username'); ?>" />
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="row">
-						<div class="span2 label setting-label">API Code</div>
-						<div class="span4">
-							<input type="text" name="topsecret" id="inputNick" value="<?php echo $_loginaccount->GetConfigurationOption('twitch_api_code'); ?>" />
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="controls">
-						<button type="submit" class="btn btn-primary">Save</button>
-					</div>
-				</div>
-			</div>
-			</form>
 			
 			<div class="span9">
 			<h2>Other options:</h2>
