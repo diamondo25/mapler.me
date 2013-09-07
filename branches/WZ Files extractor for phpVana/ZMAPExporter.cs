@@ -11,15 +11,10 @@ namespace WZ_Files_extractor_for_phpVana
 {
     class ZMAPExporter : BaseExtractor
     {
-        public ZMAPExporter(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            exDir += Path.DirectorySeparatorChar;
-            this.wzDir = wzDir;
-        }
+        public ZMAPExporter(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version) { }
 
-        public void Start()
+
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["Base"];
 

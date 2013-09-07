@@ -135,6 +135,7 @@ namespace MPLRServer
             this.EXP = pPacket.ReadLong();
             this.Fame = pPacket.ReadInt();
             this.GachaEXP = pPacket.ReadInt();
+            pPacket.ReadInt(); // V.141, unknown
             this.MapID = pPacket.ReadInt();
             this.MapPos = pPacket.ReadByte();
 
@@ -188,11 +189,12 @@ namespace MPLRServer
             pPacket.ReadInt();
             pPacket.ReadByte(); // != 0 check
 
+            // List of Parttime jobs?
             for (int i = 1; i <= 9; i++)
             {
-                pPacket.ReadInt();
-                pPacket.ReadByte();
-                pPacket.ReadInt();
+                pPacket.ReadInt(); // Character ID
+                pPacket.ReadByte(); // Level
+                pPacket.ReadInt(); // Job ID
             }
 
             pPacket.ReadInt();

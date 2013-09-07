@@ -190,7 +190,8 @@ function SetItemInfo(event, obj, values) {
 	
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
 	
-	var description = RequestItemInfo('description', itemid);;
+	var description = RequestItemInfo('description', itemid);
+	if (description != '') description = '<span>' + description + '</span>';
 	var description_place = isequip ? 'extra_item_info' : 'item_info_description';
 	GetObj('extra_item_info').style.display = 'none';
 	GetObj('extra_item_info').innerHTML = '';
@@ -323,11 +324,11 @@ function SetItemInfo(event, obj, values) {
 		}
 		
 		// GMS has only 1 neb, but can hold 3 lol.
-		if (item.nebulite1 == 0) {
+		if ((item.statusflag & 0x0003) != 0 && (item.statusflag & 0x0010) == 0) {
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
-		else if (item.nebulite1 > 0) {
+		else if ((item.statusflag & 0x0010) != 0 && item.nebulite1 > 0) {
 			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
 		

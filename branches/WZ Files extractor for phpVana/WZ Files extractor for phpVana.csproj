@@ -101,6 +101,7 @@
     <Compile Include="CharacterExtractor.cs" />
     <Compile Include="EffectsExporter.cs" />
     <Compile Include="EtcExporter.cs" />
+    <Compile Include="MapExporter.cs" />
     <Compile Include="MapleCryptoLib\AESEncryption.cs" />
     <Compile Include="MapleCryptoLib\CryptoConstants.cs" />
     <Compile Include="MapleCryptoLib\MapleCrypto.cs" />

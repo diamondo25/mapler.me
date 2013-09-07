@@ -19,7 +19,7 @@ namespace MPLRServer
         }
 
         // V.129: +1 (Kanna/Hayato)
-        public const byte EQUIP_INVENTORIES = 3 + 9; // 3 in main handler, 9 in other handler
+        public const byte EQUIP_INVENTORIES = 3 + 10; // 3 in main handler, 9 in other handler (noted as i >= 36)
         public const byte NORMAL_INVENTORIES = 4;
         public const byte INVENTORIES = NORMAL_INVENTORIES + 1;
 
@@ -48,11 +48,11 @@ namespace MPLRServer
             // 7 = Haku (Hayato and Kanna); Slot >= 1400
             // 8 = Bits in the case; Slot >= 1500
             // 9 = Totem; Slot >= 5000
-            // 10 = Bits; Slot >= 20000
+            // 11 = Bits; Slot >= 20000
             if (pSlot > 0)
                 return 2;
             else if (pSlot <= -20000)
-                return 10;
+                return 11;
             else if (pSlot <= -5000)
                 return 9;
             else if (pSlot <= -1500)

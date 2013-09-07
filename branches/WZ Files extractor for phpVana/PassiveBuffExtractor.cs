@@ -13,15 +13,10 @@ namespace WZ_Files_extractor_for_phpVana
 {
     public class PassiveBuffExtractor : BaseExtractor
     {
-        public PassiveBuffExtractor(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            exDir += Path.DirectorySeparatorChar + "Skills" + Path.DirectorySeparatorChar;
-            this.wzDir = wzDir;
-        }
+        public PassiveBuffExtractor(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version, "Skills") { }
 
-        public void Start()
+
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["Skill"];
 

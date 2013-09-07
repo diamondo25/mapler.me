@@ -59,7 +59,14 @@ namespace Mapler_Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format("Error while initializing stuff!\r\n\r\n{0}", ex.ToString()), "ERROR");
+                if (ex.ToString().Contains("Unable to connect"))
+                {
+                    MessageBox.Show("It looks like Mapler.me has a server check or update ongoing! Please check the website for more information.\r\n\r\nThe program will now exit.", "Mapler.me connection error!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("An error occurred while initializing everything!\r\nContact us at support@mapler.me if you want more information about this error.\r\n{0}\r\n\r\nThe program will now exit.", ex.ToString()), "ERROR");
+                }
                 Program.Closing = true;
                 Environment.Exit(1);
             }

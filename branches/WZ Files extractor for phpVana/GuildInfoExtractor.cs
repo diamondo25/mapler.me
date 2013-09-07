@@ -13,16 +13,10 @@ namespace WZ_Files_extractor_for_phpVana
 {
     class GuildInfoExtractor : BaseExtractor
     {
-        public GuildInfoExtractor(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            exDir += Path.DirectorySeparatorChar + "GuildEmblem" + Path.DirectorySeparatorChar;
-            this.wzDir = wzDir;
-        }
+        public GuildInfoExtractor(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version, "GuildEmblem") { }
 
 
-        public void Start()
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["UI"];
 

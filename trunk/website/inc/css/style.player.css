@@ -249,6 +249,10 @@ hr {
 	font-size: 12px;
 }
 
+#item_info #extra_item_info > span {
+	display: block;
+}
+
 #item_info #item_info_description {
 	margin-left: 95px;
 }

@@ -107,7 +107,7 @@ namespace WZ_Files_extractor_for_phpVana
             {
                 (new System.Threading.Thread(() =>
                 {
-                    new StringsExtractor(wzExtractionDir.Text, wzFilesDir.Text, version).StartExtractStrings();
+                    new StringsExtractor(wzExtractionDir.Text, wzFilesDir.Text, version).Start();
                     RunNext();
                 })
                 {

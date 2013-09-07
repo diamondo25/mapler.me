@@ -13,15 +13,10 @@ namespace WZ_Files_extractor_for_phpVana
 {
     public class StringsExtractor : BaseExtractor
     {
+        public StringsExtractor(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version) { }
 
-        public StringsExtractor(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            this.wzDir = wzDir;
-        }
 
-        public void StartExtractStrings()
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["String"];
 

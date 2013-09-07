@@ -254,6 +254,7 @@ namespace MPLRServer
                 // V.131 -> 132| Diff 0x00EE -> 0x00F4...
                 // V.134 -> 135| Diff 0x00F4 -> 0x00F2... WUT
                 // V.135 -> 137| Diff 0x00F2 -> 0x00FD... WUT | 0x007B -> 0x007D | 0x0059 -> 0x005A
+                // V.140 -> 141| Diff 0x00FD -> 0x010C... 0x0032 -> 0x0033 | 0x0165 -> 0x0177
                 //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
                 tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
 
@@ -272,7 +273,7 @@ namespace MPLRServer
                     }
                 }, null));
                 tmp.Add(0x000E, new Handler(ServerPacketHandlers.HandleCharacterDeletion, OnCharacterSelect));
-                tmp.Add(0x000F, new Handler((pConnection, pPacket) =>
+                tmp.Add(0x0010, new Handler((pConnection, pPacket) =>
                 {
                     byte status = pPacket.ReadByte();
                     if (status == 1)
@@ -289,21 +290,21 @@ namespace MPLRServer
                     // ping
                 }, null));
 
-                tmp.Add(0x0024, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnLoadedCharData));
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnLoadedCharData));
-                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleStatUpdate, OnLoadedCharData));
-                tmp.Add(0x002B, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnLoadedCharData));
-                tmp.Add(0x0032, new Handler(ServerPacketHandlers.HandleMessage, OnLoadedCharData));
-                tmp.Add(0x005A, new Handler(ServerPacketHandlers.HandleBuddyList, OnLoadedCharData));
-                tmp.Add(0x005C, new Handler(ServerPacketHandlers.HandleGuild, OnLoadedCharData));
-                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleAlliance, OnLoadedCharData));
-                tmp.Add(0x007D, new Handler(ServerPacketHandlers.HandleFamiliarList, OnLoadedCharData));
-                tmp.Add(0x00CE, new Handler(ServerPacketHandlers.HandleAbilityInfoUpdate, OnLoadedCharData));
-                tmp.Add(0x00E2, new Handler(ServerPacketHandlers.HandleMaplePointAmount, OnLoadedCharData));
-                tmp.Add(0x00FC, new Handler(ServerPacketHandlers.HandleSkillMacros, OnLoadedCharData));
-                tmp.Add(0x00FD, new Handler(ServerPacketHandlers.HandleChangeMap, IdentifiedAccountAndUser));
-                tmp.Add(0x0132, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnLoadedCharData));
-                tmp.Add(0x0165, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
+                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnLoadedCharData));
+                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnLoadedCharData));
+                tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, OnLoadedCharData));
+                tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnLoadedCharData));
+                tmp.Add(0x0033, new Handler(ServerPacketHandlers.HandleMessage, OnLoadedCharData));
+                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleBuddyList, OnLoadedCharData));
+                tmp.Add(0x005F, new Handler(ServerPacketHandlers.HandleGuild, OnLoadedCharData));
+                tmp.Add(0x0060, new Handler(ServerPacketHandlers.HandleAlliance, OnLoadedCharData));
+                tmp.Add(0x0081, new Handler(ServerPacketHandlers.HandleFamiliarList, OnLoadedCharData));
+                tmp.Add(0x00D2, new Handler(ServerPacketHandlers.HandleAbilityInfoUpdate, OnLoadedCharData));
+                tmp.Add(0x00E6, new Handler(ServerPacketHandlers.HandleMaplePointAmount, OnLoadedCharData));
+                tmp.Add(0x010B, new Handler(ServerPacketHandlers.HandleSkillMacros, OnLoadedCharData));
+                tmp.Add(0x010C, new Handler(ServerPacketHandlers.HandleChangeMap, IdentifiedAccountAndUser));
+                tmp.Add(0x0143, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnLoadedCharData));
+                tmp.Add(0x0177, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
                 // Testing more data throughput
@@ -317,10 +318,11 @@ namespace MPLRServer
             }
 
             {
+                // V.140 -> 141: 0x0014 -> 0x003F, Pong: 0x002D -> 0x0046
                 // Client Packets
                 var tmp = new Dictionary<ushort, Handler>();
                 //tmp.Add(0x0015, null); // Login Packet
-                tmp.Add(0x0014, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
+                tmp.Add(0x003F, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
 
                 // Select Channel
                 tmp.Add(0x001B, new Handler((pConnection, pPacket) =>
@@ -345,11 +347,11 @@ namespace MPLRServer
                 tmp.Add(0x0027, new Handler(ClientPacketHandlers.HandleCharacterLoadRequest, null));
 
                 // Pong
-                tmp.Add(0x002D, new Handler((pConnection, pPacket) =>
+                tmp.Add(0x0046, new Handler((pConnection, pPacket) =>
                 {
                 }, null));
 
-                tmp.Add(0x0046, new Handler((pConnection, pPacket) =>
+                tmp.Add(0x0052, new Handler((pConnection, pPacket) =>
                 {
                     byte new_channel = pPacket.ReadByte();
                     pConnection.Logger_WriteLine("Requesting CC to channel {0}", new_channel);

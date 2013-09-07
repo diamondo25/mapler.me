@@ -31,16 +31,10 @@ namespace WZ_Files_extractor_for_phpVana
         };
 
 
-        public CharacterExtractor(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            exDir += Path.DirectorySeparatorChar + "Character" + Path.DirectorySeparatorChar;
-            this.wzDir = wzDir;
-        }
+        public CharacterExtractor(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version, "Character") { }
 
 
-        public void Start()
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["Character"];
 

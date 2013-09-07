@@ -48,7 +48,8 @@ namespace CraftNetTools
 
                         pLabel.Invoke((MethodInvoker)delegate
                         {
-                            pLabel.Text = "Downloading update...";
+                            pLabel.Visible = false;
+                            MaplerUpdater.frmMain.Instance.prgrsUpdate.Visible = true;
                         });
 
                         wc.DownloadProgressChanged += wc_DownloadProgressChanged;
@@ -73,7 +74,9 @@ namespace CraftNetTools
         {
             MaplerUpdater.frmMain.Instance.label1.Invoke((MethodInvoker)delegate
             {
+                MaplerUpdater.frmMain.Instance.label1.Visible = true;
                 MaplerUpdater.frmMain.Instance.label1.Text = "Starting update...";
+                MaplerUpdater.frmMain.Instance.prgrsUpdate.Visible = false;
             });
 
             Process.Start(_tempfile, "/silent");
@@ -84,7 +87,7 @@ namespace CraftNetTools
         {
             MaplerUpdater.frmMain.Instance.label1.Invoke((MethodInvoker)delegate
             {
-                MaplerUpdater.frmMain.Instance.label1.Text = "Download at " + e.ProgressPercentage + "%";
+                MaplerUpdater.frmMain.Instance.prgrsUpdate.Value = e.ProgressPercentage;
             });
         }
     }

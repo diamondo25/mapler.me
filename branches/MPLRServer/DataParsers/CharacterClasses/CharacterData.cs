@@ -174,6 +174,8 @@ namespace MPLRServer
             }
 
 
+            /*
+             *  REMOVED V.141?!
             for (int i = pPacket.ReadInt(); i > 0; i--) // V.137
             {
                 pPacket.ReadInt();
@@ -214,6 +216,8 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadInt();
             }
+
+            */
 
             Inventory = new CharacterInventory();
             Inventory.Decode(pConnection, pPacket);
@@ -500,7 +504,8 @@ namespace MPLRServer
 
             {
                 // V.134
-                pPacket.ReadString(); // Creating
+                // FARM INFO. Creating... = not yet created farm. Else: farmname
+                pPacket.ReadString(); // Creating...
                 pPacket.ReadInt();
                 pPacket.ReadInt();
                 pPacket.ReadInt();
@@ -512,6 +517,13 @@ namespace MPLRServer
                 pPacket.ReadInt();
 
                 pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+            // Something's incorrect here <<<<
+            {
+                // V.141
+                pPacket.ReadInt();
+                pPacket.ReadLong(); // A bit off here, should be filetime value
                 pPacket.ReadInt();
             }
 
@@ -543,7 +555,9 @@ namespace MPLRServer
                 pPacket.ReadInt();
             }
 
-            pPacket.ReadInt(); // I DONT EVEN D:
+
+            // Removed in V.141
+            //pPacket.ReadInt(); // I DONT EVEN D:
         }
 
         public int SaveCharacterInfo(ClientConnection pConnection)

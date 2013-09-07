@@ -11,15 +11,10 @@ namespace WZ_Files_extractor_for_phpVana
 {
     class EtcExporter : BaseExtractor
     {
-        public EtcExporter(string extractionDir, string wzDir, WzMapleVersion version)
-        {
-            Version = version;
-            exDir = extractionDir;
-            exDir += Path.DirectorySeparatorChar;
-            this.wzDir = wzDir;
-        }
+        public EtcExporter(string extractionDir, string wzDir, WzMapleVersion version) : base(extractionDir, wzDir, version) { }
 
-        public void Start()
+
+        public override void Start()
         {
             WzFile file = MapleFileCache.Instance["Etc"];
             WzDirectory familiarscwz = MapleFileCache.Instance["Character"].GetObjectFromPath("Character.wz/Familiar") as WzDirectory;
@@ -28,7 +23,7 @@ namespace WZ_Files_extractor_for_phpVana
             familiarscwz.ParseImages();
 
             string familiarDir = exDir + "Character" + Path.DirectorySeparatorChar + "Familiar" + Path.DirectorySeparatorChar;
-            if (false)
+            //if (false)
             {
                 foreach (WzSubProperty prop in (file.WzDirectory["FamiliarInfo.img"] as WzImage).WzProperties)
                 {

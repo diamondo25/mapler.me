@@ -20,6 +20,19 @@ namespace WZ_Files_extractor_for_phpVana
 
         const int IMG_W = 36, IMG_H = 36;
 
+        public BaseExtractor(string extractionDir, string wzDir, WzMapleVersion version, string pExtractDir = "")
+        {
+            Version = version;
+            exDir = extractionDir;
+            exDir += Path.DirectorySeparatorChar + pExtractDir + Path.DirectorySeparatorChar;
+            this.wzDir = wzDir;
+        }
+
+        public virtual void Start()
+        {
+
+        }
+
         public void ExportProps(IWzImageProperty pProp, string pName)
         {
             if (pProp.WzProperties == null) return;
