@@ -307,6 +307,7 @@ namespace MPLRServer
                 tmp.Add(0x0177, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
                 //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
 
+                tmp.Add(0x030E, new Handler(ServerPacketHandlers.HandleKeymap, OnLoadedCharData));
                 // Testing more data throughput
                 //tmp.Add(530, null);
                 //tmp.Add(435, null);
@@ -325,7 +326,7 @@ namespace MPLRServer
                 tmp.Add(0x003F, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
 
                 // Select Channel
-                tmp.Add(0x001B, new Handler((pConnection, pPacket) =>
+                tmp.Add(0x0043, new Handler((pConnection, pPacket) =>
                 {
                     byte requestType = pPacket.ReadByte();
                     if (requestType != 2)
@@ -378,6 +379,11 @@ namespace MPLRServer
                         }
                     }
                 }, OnLoadedCharData));
+
+
+                tmp.Add(0x0134, new Handler(ClientPacketHandlers.HandleKeymapUpdate, OnLoadedCharData));
+
+
 
                 // Internal packets
 

@@ -23,6 +23,10 @@ for ($i = 0; $i < 60; $i++) {
 	$dates[] = date($datestr, $starttime - ($i * $secs_between_days));
 }
 
+$dates_month = array();
+for ($i = 0; $i < 31; $i++) {
+	$dates_month[] = date($datestr, $starttime - ($i * $secs_between_days));
+}
 ?>
 <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
@@ -158,7 +162,8 @@ SELECT
 	YEAR(`creation_date`),
 	COUNT(*),
 	COUNT(DISTINCT account_id),
-	COUNT(DISTINCT CASE WHEN account_id = 2 THEN NULL ELSE account_id END)
+	COUNT(CASE WHEN account_id = 2 THEN NULL ELSE account_id END),
+	COUNT(CASE WHEN account_id <> 2 THEN NULL ELSE 2 END)
 FROM
 	`users`
 WHERE
@@ -171,7 +176,7 @@ GROUP BY
 $q = $__database->query($q);
 $values = array();
 while ($row = $q->fetch_row()) {
-	$values[$row[0]] = array($row[1], $row[2], $row[3]);
+	$values[$row[0]] = array($row[1], $row[2], $row[3], $row[4]);
 }
 
 
@@ -182,12 +187,12 @@ new Morris.Line({
   data: [
 <?php
 foreach ($values as $date => $amount)
-	echo '{ date: "'.$date.'", value: '.$amount[0].', value_unique_accounts: '.$amount[1].', value_non_dummies: '.$amount[2].' },';
+	echo '{ date: "'.$date.'", value: '.$amount[0].', value_unique_accounts: '.$amount[1].', value_non_dummies: '.$amount[2].', value_dummies: '.$amount[3].' },';
 ?>
   ],
   xkey: 'date',
-  ykeys: ['value', 'value_unique_accounts', 'value_non_dummies'],
-  labels: ['Amount of accounts created', 'Unique Mapler.me accounts', 'Bound accounts']
+  ykeys: ['value', 'value_unique_accounts', 'value_dummies', 'value_non_dummies'],
+  labels: ['Amount of accounts created', 'Unique Mapler.me accounts', 'Unassigned accounts', 'Bound accounts']
 });
 </script>
 
@@ -235,6 +240,54 @@ foreach ($values as $level => $amount)
   ykeys: ['value'],
   labels: ['Amount of characters'],
   parseTime: false
+});
+</script>
+
+			<h1>Graph of Levels per Day</h1>
+			<div id="level2chart" style="height: 250px;"></div>
+<?php
+
+$values = array_flip(array_reverse($dates));
+foreach ($values as $date => $val)
+	$values[$date] = array(0,0,0);
+
+$q = "
+SELECT
+	DATE(`when`),
+	COUNT(CASE WHEN `type` = 'levelup' THEN 1 ELSE NULL END),
+	COUNT(CASE WHEN `type` = 'skillup' THEN 1 ELSE NULL END),
+	COUNT(CASE WHEN `type` = 'jobup' THEN 1 ELSE NULL END)
+FROM
+	`timeline`
+WHERE
+	DATE(`when`) IN ('".implode('\',\'', $dates)."')
+GROUP BY
+	YEAR(`when`),
+	MONTH(`when`),
+	DAY(`when`)
+";
+
+
+$q = $__database->query($q);
+
+while ($row = $q->fetch_row()) {
+	$values[$row[0]] = array($row[1], $row[2], $row[3]);
+}
+
+
+?>
+<script>
+new Morris.Bar({
+  element: 'level2chart',
+  data: [
+<?php
+foreach ($values as $level => $amount)
+	echo '{ level: "'.$level.'", value1: '.$amount[0].', value2: '.$amount[1].', value3: '.$amount[2].' },';
+?>
+  ],
+  xkey: 'level',
+  ykeys: ['value1', 'value2', 'value3'],
+  labels: ['Levelups', 'Skillups', 'Jobups']
 });
 </script>
 

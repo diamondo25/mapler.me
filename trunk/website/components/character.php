@@ -799,14 +799,14 @@ function AddInventoryItems(&$inventory) {
 	font-size: 12px;
 }
 
-.pet > .avatar-container span {
-	margin-top: 101px;
-}
 .pet > .avatar-container {
-	left: 6px;
-	width: 128px;
-	height: 128px;
-	top: 120px;
+	left: -55px;
+	width: 256px;
+	height: 256px;
+	top: 65px;
+}
+.pet > .avatar-container span {
+	margin-top: 156px;
 }
 
 #inv_mechanic > .avatar-container {
@@ -966,6 +966,10 @@ function AddInventoryItems(&$inventory) {
 
 .teleport-rock .locations tr {
 	height: 18px;
+}
+
+select {
+	z-index: 20;
 }
 
 </style>

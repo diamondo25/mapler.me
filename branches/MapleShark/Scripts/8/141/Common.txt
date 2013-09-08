@@ -22,7 +22,16 @@ using (ScriptAPI) {
 		AddInt("MaxMP");
 		AddShort("AP");
 		a1 = job;
-		if (a1 / 1000 == 3 || 
+        adventurer = a1 % 1000 / 100;
+        if (a1 / 100 == 27)
+            adventurer = 2;
+        if (a1 / 100 == 36)
+            adventurer = 4;
+
+		if (
+                a1 / 1000 == 1 ||
+                a1 / 1000 == 3 ||
+                adventurer == 5 || adventurer == 3 || adventurer == 1 ||
                     a1 / 100 == 22 || a1 == 2001 || 
                     a1 / 100 == 23 || a1 == 2002 || 
                     a1 / 100 == 24 || a1 == 2003 || 

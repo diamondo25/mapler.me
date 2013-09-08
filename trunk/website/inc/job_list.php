@@ -3,50 +3,50 @@ $job_names = array(
 	0   => 'Beginner',
 
 	100 => 'Warrior',
-		110 => 'Fighter',
+	110 => 'Fighter',
 		111 => 'Crusader',
 		112 => 'Hero',
 
-		120 => 'Page',
+	120 => 'Page',
 		121 => 'White Knight',
 		122 => 'Paladin',
 
-		130 => 'Spearman',
+	130 => 'Spearman',
 		131 => 'Dragon Knight',
 		132 => 'Dark Knight',
 
 	200 => 'Magician',
-		210 => 'F/P Wizard',
+	210 => 'F/P Wizard',
 		211 => 'F/P Mage',
 		212 => 'F/P Arch Mage',
 
-		220 => 'I/L Wizard',
+	220 => 'I/L Wizard',
 		221 => 'I/L Mage',
 		222 => 'I/L Arch Mage',
 
-		230 => 'Cleric',
+	230 => 'Cleric',
 		231 => 'Priest',
 		232 => 'Bishop',
 
 	300 => 'Bowman',
-		310 => 'Hunter',
+	310 => 'Hunter',
 		311 => 'Ranger',
 		312 => 'Bow Master',
 
-		320 => 'Crossbowman',
+	320 => 'Crossbowman',
 		321 => 'Sniper',
 		322 => 'Crossbow Master',
 
 	400 => 'Thief',
-		410 => 'Assassin',
+	410 => 'Assassin',
 		411 => 'Hermit',
 		412 => 'Night Lord',
 
-		420 => 'Bandit',
+	420 => 'Bandit',
 		421 => 'Chief Bandit',
 		422 => 'Shadower',
 
-		430 => 'Blade Recruit',
+	430 => 'Blade Recruit',
 		431 => 'Blade Acolyte',
 		432 => 'Blade Specialist',
 		433 => 'Blade Lord',
@@ -54,21 +54,21 @@ $job_names = array(
 
 	500 => 'Pirate',
 	501 => 'Cannoneer',
+	508 => 'Jett',
 	
-		510 => 'Brawler',
+	510 => 'Brawler',
 		511 => 'Marauder',
 		512 => 'Buccaneer',
 
-		520 => 'Gunslinger',
+	520 => 'Gunslinger',
 		521 => 'Outlaw',
 		522 => 'Corsair',
 
-		530 => 'Cannoneer',
+	530 => 'Cannoneer',
 		531 => 'Cannoneer',
 		532 => 'Cannoneer',
 
-	508 => 'Jett',
-		570 => 'Jett',
+	570 => 'Jett',
 		571 => 'Jett',
 		572 => 'Jett',
 
@@ -79,27 +79,27 @@ $job_names = array(
 
 
 	1000 => 'Noblesse',
-		1100 => 'Dawn Warrior',
+	1100 => 'Dawn Warrior',
 		1110 => 'Dawn Warrior',
 		1111 => 'Dawn Warrior',
 		1112 => 'Dawn Warrior', // 4th job does have a 'skill tab', but no skills
 
-		1200 => 'Blaze Wizard',
+	1200 => 'Blaze Wizard',
 		1210 => 'Blaze Wizard',
 		1211 => 'Blaze Wizard',
 		1212 => 'Blaze Wizard', // 4th job does have a 'skill tab', but no skills
 
-		1300 => 'Wind Archer',
+	1300 => 'Wind Archer',
 		1310 => 'Wind Archer',
 		1311 => 'Wind Archer',
 		1312 => 'Wind Archer', // 4th job does have a 'skill tab', but no skills
 
-		1400 => 'Night Walker',
+	1400 => 'Night Walker',
 		1410 => 'Night Walker',
 		1411 => 'Night Walker',
 		1412 => 'Night Walker', // 4th job does have a 'skill tab', but no skills
 
-		1500 => 'Thunder Breaker',
+	1500 => 'Thunder Breaker',
 		1510 => 'Thunder Breaker',
 		1511 => 'Thunder Breaker',
 		1512 => 'Thunder Breaker', // 4th job does have a 'skill tab', but no skills
@@ -297,10 +297,12 @@ function IsRealJob($id) { // Beginner and mining etc is not a real job! :@
 		case 6000:
 		case 6001:
 
+		case 10000:
 
 		// All non-jobs
 		case 7000:
 		case 7100:
+		case 7200:
 
 		case 8000:
 

@@ -25,7 +25,7 @@ $trans = imagecolorallocatealpha($image, 0, 0, 0, 127);
 imagefill($image, 0, 0, $trans);
 
 $x = 128;
-$y = 128;
+$y = 128 - 10;
 
 $info = GetItemWZInfo($petid);
 

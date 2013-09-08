@@ -30,8 +30,16 @@ namespace MPLRServer
         public static bool IsExtendedSPJob(int pJobID)
         {
             int job = pJobID / 100;
+            int adventurer = pJobID % 1000 / 100;
+            if (pJobID / 100 == 27)
+                adventurer = 2;
+            if (pJobID / 100 == 36)
+                adventurer = 4;
+
             return (
+                pJobID / 1000 == 1 ||
                 pJobID / 1000 == 3 ||
+                adventurer == 5 || adventurer == 3 || adventurer == 1 || // Revamped adventurers
                 job == 22 || pJobID == 2001 || // Evan
                 job == 23 || pJobID == 2002 || // Mercedes
                 job == 24 || pJobID == 2003 || // Phantom

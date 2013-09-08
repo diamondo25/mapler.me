@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-   public class ClientPacketHandlers
+    public class ClientPacketHandlers
     {
         public const byte LatestLocale = 8;
         public const ushort LatestMajorVersion = 141; // Packet changes do not occur per minor version
@@ -41,7 +41,6 @@ namespace MPLRServer
 
         }
 
-
         public static void HandleCharacterLoadRequest(ClientConnection pConnection, MaplePacket pPacket)
         {
             if (!(pConnection.ConnectedToPort >= 8585 && pConnection.ConnectedToPort <= 8600))
@@ -57,6 +56,44 @@ namespace MPLRServer
             if (pConnection.UserID == -1)
             {
                 SessionRestartCache.Instance.TryRestartSession(pConnection, characterid, machineid);
+            }
+        }
+
+        public static void HandleKeymapUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            int mode = pPacket.ReadInt();
+            if (mode == 0)
+            {
+                Dictionary<byte, KeyValuePair<byte, int>> modifieds = new Dictionary<byte, KeyValuePair<byte, int>>();
+                int amount = pPacket.ReadInt();
+                for (int i = 0; i < amount; i++)
+                {
+                    int idx = pPacket.ReadInt();
+                    byte type = pPacket.ReadByte();
+                    int value = pPacket.ReadInt();
+
+                    if (idx < 0 || idx > 89)
+                    {
+                        pConnection.Logger_WriteLine("ERROR: Keymap contained invalid index!");
+                        return;
+                    }
+
+                    if (modifieds.ContainsKey((byte)idx)) continue; // -.-''
+
+                    modifieds.Add((byte)idx, new KeyValuePair<byte, int>(type, value));
+                }
+                
+                if (modifieds.Count == 0) return;
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("UPDATE character_keymaps SET ");
+                foreach (var kvp in modifieds)
+                    sb.AppendFormat("map_{0}_type = {1}, map_{0}_value = {2},", kvp.Key, kvp.Value.Key, kvp.Value.Value);
+
+                sb.Append(" WHERE character_id = " + pConnection.CharacterInternalID);
+
+                MySQL_Connection.Instance.RunQuery(sb.ToString().Replace(", WHERE", " WHERE"));
+
             }
         }
     }

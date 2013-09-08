@@ -170,7 +170,7 @@ namespace Mapler_Client
 
             if (CheckMapleEXEVersion(_mapleEXE))
             {
-                System.Diagnostics.Process.Start(_mapleEXE, "WebStart");
+                System.Diagnostics.Process.Start(_mapleEXE, "GameLaunching");
             }
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-   public class ServerPacketHandlers
+    public class ServerPacketHandlers
     {
         public static void HandleLogin(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -383,9 +383,9 @@ namespace MPLRServer
             // pConnection.Logger_WriteLine("I see {0}! ID {1} Level {2}{3}, guild {4}", name, id, level, successor.Length == 0 ? "" : " (" + name + "'s Successor)", guildname);
 
             Queries.SeePlayer(id, name, GameHelper.GetAllianceWorldID(pConnection.WorldID), level, guildname, pConnection.CharData.Stats.MapID, pConnection.CharacterInternalID);
-            
+
             if (!pConnection._CharactersInMap.Contains(name))
-               pConnection._CharactersInMap.Add(name);
+                pConnection._CharactersInMap.Add(name);
         }
 
         public static void HandleMaplePointAmount(ClientConnection pConnection, MaplePacket pPacket)
@@ -486,7 +486,7 @@ namespace MPLRServer
 
                     iqb.AddRow(pConnection.CharacterInternalID, android.Name, android.Type, android.Skin, android.Hair, android.Face,
                         android.Equips[0], android.Equips[1], android.Equips[2],
-                        android.Equips[3], android.Equips[4], android.Equips[5], 
+                        android.Equips[3], android.Equips[4], android.Equips[5],
                         android.Equips[6]);
                     iqb.RunQuery();
                 }
@@ -564,7 +564,7 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 4)) // Eyes
             {
                 didsomething = true;
-                pConnection.CharData.Stats.Hair =  pPacket.ReadInt();
+                pConnection.CharData.Stats.Hair = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 8))
             {
@@ -610,7 +610,7 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 0x100))
             {
                 didsomething = true;
-                pConnection.CharData.Stats.Int =  pPacket.ReadShort();
+                pConnection.CharData.Stats.Int = pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x200))
             {
@@ -635,12 +635,12 @@ namespace MPLRServer
             if (CheckFlag(updateFlag, 0x2000))
             {
                 didsomething = true;
-               pConnection.CharData.Stats.MaxMP = pPacket.ReadInt();
+                pConnection.CharData.Stats.MaxMP = pPacket.ReadInt();
             }
             if (CheckFlag(updateFlag, 0x4000))
             {
                 didsomething = true;
-               pConnection.CharData.Stats.AP =  pPacket.ReadShort();
+                pConnection.CharData.Stats.AP = pPacket.ReadShort();
             }
             if (CheckFlag(updateFlag, 0x8000))
             {
@@ -943,8 +943,8 @@ namespace MPLRServer
         {
             pPacket.ReadByte(); // Unlock
             if (pPacket.ReadBool() == false) return;
- 
-            var stat = new Tuple<byte, int, byte>((byte)pPacket.ReadShort(),pPacket.ReadInt(),(byte)pPacket.ReadShort());
+
+            var stat = new Tuple<byte, int, byte>((byte)pPacket.ReadShort(), pPacket.ReadInt(), (byte)pPacket.ReadShort());
             pPacket.ReadShort();
 
             using (InsertQueryBuilder table = new InsertQueryBuilder("character_abilities"))
@@ -956,7 +956,7 @@ namespace MPLRServer
                 table.AddColumn("skill_id", true);
                 table.AddColumn("level", true);
 
-                
+
                 table.AddRow(
                     pConnection.CharacterInternalID,
                     stat.Item1,
@@ -1677,11 +1677,38 @@ namespace MPLRServer
 
             if (pPacket.Position != pPacket.Length)
             {
-                Logger.WriteLine("Data not fully read. Halp.: {0} of {1} read", pPacket.Position, pPacket.Length);
+                pConnection.Logger_WriteLine("Data not fully read. Halp.: {0} of {1} read", pPacket.Position, pPacket.Length);
             }
 
 
             pConnection.SendTimeUpdate();
+        }
+
+
+        public static void HandleKeymap(ClientConnection pConnection, MaplePacket pPacket)
+        {
+            byte mode = pPacket.ReadByte();
+            if (mode == 0)
+            {
+                // Keymap
+                if (pPacket.Length - pPacket.Position != (1 + 4) * 89)
+                {
+                    pConnection.Logger_ErrorLog("Keymap size not correct. {0} != {1}", pPacket.Length - pPacket.Position, (1 + 4) * 89);
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("DELETE FROM character_keymaps WHERE character_id = " + pConnection.CharacterInternalID + ";");
+                sb.Append("INSERT INTO character_keymaps VALUES (" + pConnection.CharacterInternalID);
+                for (int i = 0; i < 89; i++)
+                    sb.Append("," + pPacket.ReadByte() + "," + pPacket.ReadInt());
+
+                sb.Append(");");
+
+                MySQL_Connection.Instance.RunQuery(sb.ToString());
+
+                pConnection.Logger_WriteLine("Saved keymap!");
+            }
         }
     }
 }

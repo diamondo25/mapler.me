@@ -37,6 +37,9 @@ namespace MPLRServer
 
         public static byte GetEquipInventoryFromSlot(short pSlot)
         {
+            if (pSlot > 100) // Impossible!
+                pSlot = (short)-(pSlot);
+
             // MSB - 1
             // 0 = Normal Equips
             // 1 = Cash Equips. Note, same counting!

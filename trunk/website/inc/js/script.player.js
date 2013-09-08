@@ -725,6 +725,10 @@ function GetItemCategory(itemid) {
 		case 1103: return 'Mechanic Frame';
 		case 1500: return 'Bits';
 		
+		case 5000: 
+		case 5001: 
+		case 5002: return 'Totem';
+		
 		// Pets
 		case 14:
 		case 22:
