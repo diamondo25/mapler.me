@@ -5,7 +5,7 @@ date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 error_reporting(0);
 ini_set('display_errors', 0);
-if (isset($_GET['SUPERDUPERTESTMODE'])) {
+if (isset($_GET['debugsite'])) {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 }

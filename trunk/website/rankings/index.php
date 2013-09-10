@@ -18,7 +18,7 @@ LEFT JOIN
 		w.world_id = chr.world_id
 WHERE NOT job BETWEEN 800 AND 1000 ORDER BY `level` DESC, `exp` DESC';
 
-// top 3
+// top 5
 $q = $__database->query("
 SELECT *,
 	w.world_name,
@@ -34,7 +34,7 @@ WHERE NOT
 ORDER BY
 	level DESC
 LIMIT
-	0, 3
+	0, 5
 ");
 $pager = new PS_Pagination($__database, $sql, 5, 5, "");
 
@@ -65,13 +65,15 @@ table tr:hover {
 
 <div class="row">
 		<div class="span7">
-		<img src="http://i.imm.io/1c51p.png" style="border-radius:3px;"/>
-				
-		<?php
-			echo $pager->renderPrev();
-			echo '&nbsp;';
-			echo $pager->renderNext();
-		?>
+		<p class="alert alert-info lead"><b><i class="icon-reorder"></i> Rankings</b></p>
+		<center>		
+    		<?php
+    			echo $pager->renderPrev();
+    			echo '&nbsp;';
+    			echo $pager->renderNext();
+    		?>
+		</center>
+		<br />
 		<table class="table table-hover">
 		<thead>
 			<tr>
@@ -100,7 +102,7 @@ while ($row = $rs->fetch_assoc()) {
 		</table>
 		</div>
 			<div class="span5" style="height:100% !important; float: right;">
-			<p class="title"><img src="http://i.imm.io/1c53T.png" style="border-radius:3px;"/><br/>
+			<p class="alert alert-info lead"><b><i class="icon-star"></i> Top 5</b></p>
 			<small class="more" style="margin-top:10px;">
 <?php
 while ($row = $q->fetch_assoc()) {
@@ -109,7 +111,7 @@ while ($row = $q->fetch_assoc()) {
 				<?php MakePlayerAvatar($row['name']); ?>
 				<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
 				<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
-				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?></small></p>
+				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?> Fame</small></p>
 			</div>
 <?php
 }

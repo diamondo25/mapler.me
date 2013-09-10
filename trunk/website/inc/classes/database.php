@@ -14,7 +14,7 @@ class ExtendedMysqli extends mysqli {
 	}
 	
 	public function get_debug_info() {
-		if (isset($_GET['dbdebug'])) {
+		if (isset($_GET['debugdb'])) {
 		$error_msg = <<<NO_END
 <h2>Oh noes!</h2>
 The server made a boo-boo! Our technical Coolie Zombies are after this problem. For now, <a href="/">please return to the landing page of Mapler.me</a>!
@@ -71,7 +71,27 @@ $__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', '
 
 //$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {
-	die('<strong>Mapler.me is experiencing some inconstancies. Try reloading your page!</strong>');
+include '../domains.php';
+?>
+<link href='/inc/css/style.min.css' rel='stylesheet' type='text/css' />
+<link href='/inc/css/font-awesome.min.css' rel='stylesheet' type='text/css' />
+<div class="container">
+    <div class="row">
+        <div class="span12" style="margin-top:50px;">
+            <center>
+                <p class="lead alert alert-danger">
+                <span style="font-size:80px;line-height:85px;"><i class="icon-remove"></i>  hi. i'm an error.</span><br/>
+                Mapler.me is experiencing some inconstancies.<br />
+                Try reloading your page. If this continues to occur, please <a href="mailto:support@mapler.me">report this to us.</a></p>
+            </center>
+                <p class="alert alert-info">
+                    <b>Useful Information:</b> It is <?php echo date('F d, j:iA, o'); ?> – <b>IP:</b> <?php echo $_SERVER['REMOTE_ADDR']; ?>
+                </p>
+        </div>
+    </div>
+</div>
+<?php
+die();
 }
 
 function GetServerTime() {

@@ -4,7 +4,7 @@
 if (!$_loggedin):
 DisplayError('nopermission');
 ?>
-<p>Mapler.me offers an extensive <b>{JSON}</b> API for developers to create applications crafted by Nexon America!</p>
+<p class="status lead">Mapler.me offers an extensive <b>{JSON}</b> API for developers to take advantage of our extensive framework.</p>
 
 <?php
 else:
@@ -29,10 +29,12 @@ else:
 </style>
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
-		<p class="title">Mapler.me {API}<br/>
+		<p class="title">Developer APIs<br/>
 			<small class="more" style="margin-top:10px;">
-			<?php echo $_loginaccount->GetFullName(); ?> - <?php echo $_loginaccount->GetAccountRank(); ?>
+			@<?php echo $_loginaccount->GetUsername(); ?> - <?php echo $_loginaccount->GetAccountRank(); ?>
 			</small>
+			
+			<p>Mapler.me offers an extensive <b>{JSON}</b> API for developers to take advantage of our extensive framework.</p>
 		</p>
 	</div>
 </div>

@@ -36,7 +36,7 @@ class PS_Pagination {
 		$all_rs = $this->conn->query($this->sql );
 		if (! $all_rs) {
 			if ($this->debug)
-				echo "SQL query failed. Check your query.<br /><br />Error Returned: " . mysql_error();
+				echo "<p class='alert alert-danger lead'>An error occurred loading the rankings.</p>";
 			return false;
 		}
 		$this->total_rows = $all_rs->num_rows;
@@ -67,7 +67,7 @@ class PS_Pagination {
 		$rs = $this->conn->query($this->sql . " LIMIT {$this->offset}, {$this->rows_per_page}" );
 		if (! $rs) {
 			if ($this->debug)
-				echo "Pagination query failed. Check your query.<br /><br />Error Returned: " . mysql_error();
+				echo "<p class='alert alert-danger lead'>An error occurred while loading the rankings.</p>";
 			return false;
 		}
 		return $rs;
@@ -95,25 +95,25 @@ class PS_Pagination {
 		}
 	}
 	
-	function renderNext($tag = '[Next 5]') {
+	function renderNext($tag = 'Next <i class="icon-caret-right"></i>') {
 		if ($this->total_rows == 0)
 			return FALSE;
 		
 		if ($this->page < $this->max_pages) {
-			return '<a href="' . $this->php_self . '' . ($this->page + 1) . '' . $this->append . '">' . $tag . '</a>';
+			return '<a class="btn btn-info" href="' . $this->php_self . '' . ($this->page + 1) . '' . $this->append . '">' . $tag . '</a>';
 		} else {
-			return $tag;
+			return "";
 		}
 	}
 	
-	function renderPrev($tag = '[Previous 5]') {
+	function renderPrev($tag = '<i class="icon-caret-left"></i> Previous') {
 		if ($this->total_rows == 0)
 			return FALSE;
 		
 		if ($this->page > 1) {
-			return ' <a href="' . $this->php_self . '' . ($this->page - 1) . '' . $this->append . '">' . $tag . '</a>';
+			return ' <a class="btn btn-info" href="' . $this->php_self . '' . ($this->page - 1) . '' . $this->append . '">' . $tag . '</a>';
 		} else {
-			return " $tag";
+			return "";
 		}
 	}
 	
