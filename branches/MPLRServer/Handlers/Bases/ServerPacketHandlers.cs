@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MPLRServer
 {
-    public class ServerPacketHandlers
+    public abstract class IServerPacketHandlers
     {
-        public static void HandleLogin(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleLogin(ClientConnection pConnection, MaplePacket pPacket)
         {
             int error = pPacket.ReadInt();
             pPacket.ReadShort();
@@ -42,7 +42,7 @@ namespace MPLRServer
             ParseLogin(pConnection, userid, username, creationtime);
         }
 
-        public static void HandleLoginFromWeb(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleLoginFromWeb(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte error = pPacket.ReadByte();
             if (error != 0)
@@ -77,7 +77,7 @@ namespace MPLRServer
             ParseLogin(pConnection, userid, username, creationtime);
         }
 
-        private static void ParseLogin(ClientConnection pConnection, int pUserID, string pUsername, DateTime pCreationDate)
+        protected void ParseLogin(ClientConnection pConnection, int pUserID, string pUsername, DateTime pCreationDate)
         {
             pConnection.Logger_WriteLine("User logged into Nexon account '{1}', userid {0}", pUserID, pUsername);
 
@@ -157,96 +157,6 @@ namespace MPLRServer
         }
 
 
-        // Obsolete; uses account check
-        private static void ParseLoginOLD(ClientConnection pConnection, string pUsername, short pAdmin, byte pGender, DateTime pCreateTime, DateTime pQBan, byte pQBanReason)
-        {
-
-            pConnection.Logger_WriteLine("[{0}] {1} ({2}) Created at {3}, Gender {4}", pConnection.UserID, pUsername, pAdmin, pCreateTime, pGender);
-
-            pConnection.AccountID = 2;
-
-            Func<int> GetWebLoginID = delegate
-            {
-                using (var result = MySQL_Connection.Instance.RunQuery("SELECT account_id FROM users_weblogin WHERE name = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pUsername) + "'") as MySql.Data.MySqlClient.MySqlDataReader)
-                {
-                    if (result.Read())
-                    {
-                        return result.GetInt32(0);
-                    }
-                }
-                return -1;
-            };
-
-            if (AccountDataCache.Instance.KnownUserlist.ContainsKey(pConnection.UserID))
-            {
-                int tmp = AccountDataCache.Instance.KnownUserlist[pConnection.UserID];
-                if (tmp == 2)
-                {
-                    pConnection.Logger_WriteLine("User bound to temporary account. Trying to find correct account...");
-                    var newid = GetWebLoginID();
-                    if (newid != -1)
-                    {
-                        pConnection.AccountID = newid;
-
-                        pConnection.Logger_WriteLine("Found account for user!");
-                        AccountDataCache.Instance.KnownUserlist[pConnection.UserID] = pConnection.AccountID;
-                    }
-                    else
-                    {
-                        pConnection.Logger_WriteLine("No account found, using temporary...");
-                    }
-                }
-                else
-                {
-                    pConnection.AccountID = tmp;
-                }
-                pConnection.Logger_WriteLine("Already known (Account ID: {0})", pConnection.AccountID);
-            }
-            else
-            {
-                // Check if exists in users_weblogin
-
-                int id = GetWebLoginID();
-                if (id == -1)
-                {
-                    pConnection.Logger_WriteLine("ACCOUNT NOT REGISTERED!!! Using temp (2)");
-                    pConnection.AccountID = 2;
-                }
-                else
-                {
-                    pConnection.AccountID = id;
-                }
-
-                pConnection.Logger_WriteLine("Creating user for accountID {0}", pConnection.AccountID);
-
-                AccountDataCache.Instance.KnownUserlist.Add(pConnection.UserID, pConnection.AccountID);
-            }
-
-
-            using (InsertQueryBuilder insertq = new InsertQueryBuilder("users"))
-            {
-                insertq.OnDuplicateUpdate = true;
-
-                insertq.AddColumn("account_id");
-                insertq.AddColumns(true, "ID", "last_check");
-
-                insertq.AddRow(pConnection.AccountID, pConnection.UserID, MySQL_Connection.NOW);
-                insertq.RunQuery();
-            }
-
-            pConnection.SendInfoText("Identified account {0} (made at {1})", pUsername, pCreateTime);
-
-            if (pConnection.LogFilename == "Unknown")
-                pConnection.LogFilename = "";
-            else
-                pConnection.LogFilename += "_";
-            pConnection.LogFilename += pConnection.AccountID.ToString();
-
-            // Save IP of loginserver
-            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, 0, 0);
-        }
-
-
         private static void ParseAvatar(MaplePacket pPacket)
         {
             pPacket.ReadByte(); // Gender
@@ -295,7 +205,7 @@ namespace MPLRServer
         }
 
 
-        public static void HandleCharacterDeletion(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleCharacterDeletion(ClientConnection pConnection, MaplePacket pPacket)
         {
             int id = pPacket.ReadInt();
             bool notok = pPacket.ReadBool();
@@ -325,7 +235,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleTradeData(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleTradeData(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte type = pPacket.ReadByte();
             pPacket.ReadByte();
@@ -373,7 +283,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleSpawnPlayer(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleSpawnPlayer(ClientConnection pConnection, MaplePacket pPacket)
         {
             int id = pPacket.ReadInt();
             byte level = pPacket.ReadByte();
@@ -388,7 +298,7 @@ namespace MPLRServer
                 pConnection._CharactersInMap.Add(name);
         }
 
-        public static void HandleMaplePointAmount(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleMaplePointAmount(ClientConnection pConnection, MaplePacket pPacket)
         {
             int amount = pPacket.ReadInt(); // Life can be so easy
 
@@ -401,7 +311,7 @@ namespace MPLRServer
         }
 
 
-        public static void HandleMessage(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleMessage(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte type = pPacket.ReadByte();
             if (type == 0x0C)
@@ -468,7 +378,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleSpawnAndroid(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleSpawnAndroid(ClientConnection pConnection, MaplePacket pPacket)
         {
             Android android = new Android();
             android.Decode(pPacket);
@@ -495,7 +405,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleGuild(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte type = pPacket.ReadByte();
             if (type == 0x20)
@@ -517,7 +427,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleAlliance(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleAlliance(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte type = pPacket.ReadByte();
             if (type == 0x0C)
@@ -537,13 +447,13 @@ namespace MPLRServer
             }
         }
 
-        public static bool CheckFlag(long pFlag, long pExpectedFlag)
+        public virtual bool CheckFlag(long pFlag, long pExpectedFlag)
         {
             return (pFlag & pExpectedFlag) == pExpectedFlag;
         }
 
 
-        public static void HandleStatUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleStatUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             pPacket.ReadByte();
             long updateFlag = pPacket.ReadLong();
@@ -800,7 +710,7 @@ namespace MPLRServer
         }
 
 
-        public static void HandleSkillMacros(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleSkillMacros(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte count = pPacket.ReadByte();
             if (count == 0) return;
@@ -819,7 +729,7 @@ namespace MPLRServer
             MySQL_Connection.Instance.RunQuery(q);
         }
 
-        public static void HandleSkillUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleSkillUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             pPacket.ReadByte(); // Unstuck
             pPacket.ReadByte();
@@ -859,7 +769,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleFamiliarList(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleFamiliarList(ClientConnection pConnection, MaplePacket pPacket)
         {
             using (InsertQueryBuilder familiars = new InsertQueryBuilder("familiars"))
             {
@@ -906,7 +816,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleBuddyList(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleBuddyList(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte mode = pPacket.ReadByte();
             if (mode != 0x07) return;
@@ -939,7 +849,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleAbilityInfoUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleAbilityInfoUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             pPacket.ReadByte(); // Unlock
             if (pPacket.ReadBool() == false) return;
@@ -968,7 +878,7 @@ namespace MPLRServer
             }
         }
 
-        public static void HandleInventorySlotsUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleInventorySlotsUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             CharacterInventory inventory = pConnection.CharData.Inventory;
             byte inv = pPacket.ReadByte();
@@ -993,7 +903,7 @@ namespace MPLRServer
             pConnection.SendTimeUpdate();
         }
 
-        public static void HandleInventoryUpdate(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleInventoryUpdate(ClientConnection pConnection, MaplePacket pPacket)
         {
             CharacterInventory inventory = pConnection.CharData.Inventory;
 
@@ -1555,7 +1465,7 @@ namespace MPLRServer
         }
 
 
-        public static void HandleChangeMap(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleChangeMap(ClientConnection pConnection, MaplePacket pPacket)
         {
 
             int tmp = pPacket.ReadShort();
@@ -1685,7 +1595,7 @@ namespace MPLRServer
         }
 
 
-        public static void HandleKeymap(ClientConnection pConnection, MaplePacket pPacket)
+        public virtual void HandleKeymap(ClientConnection pConnection, MaplePacket pPacket)
         {
             byte mode = pPacket.ReadByte();
             if (mode == 0)
@@ -1710,5 +1620,6 @@ namespace MPLRServer
                 pConnection.Logger_WriteLine("Saved keymap!");
             }
         }
+
     }
 }

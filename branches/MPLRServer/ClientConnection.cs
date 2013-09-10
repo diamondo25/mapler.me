@@ -96,10 +96,22 @@ namespace MPLRServer
                 foreach (string ip in Program.AcceptedIPs)
                     pack.WriteString(ip);
 
-                pack.WriteBytes(GMSKeys.GetKeyForVersion());
 
-                pack.WriteByte(ClientPacketHandlers.LatestLocale);
-                pack.WriteUShort(ClientPacketHandlers.LatestMajorVersion);
+#if LOCALE_GMS
+                pack.WriteBool(true);
+                pack.WriteBytes(GMSKeys.GetKeyForVersion());
+#elif LOCALE_KMS
+                pack.WriteBool(false);
+#else
+                pack.WriteBool(true);
+                pack.WriteBytes(new byte[] { 0x13, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0xB4, 0x00, 0x00, 0x00,
+            0x1B, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00 });
+
+#endif
+
+
+                pack.WriteByte(ServerMapleInfo.LOCALE);
+                pack.WriteUShort(ServerMapleInfo.VERSION);
 
                 SendPacket(pack);
             }
@@ -162,7 +174,7 @@ namespace MPLRServer
                 filename += ".msb";
 
                 Logger_WriteLine("Saving packets to '{0}' ({1} packets logged)", filename, _exporter.GetSize());
-                _exporter.Save(filename, ClientPacketHandlers.LatestMajorVersion, base.HostEndPoint, base.ClientEndPoint);
+                _exporter.Save(filename, ServerMapleInfo.VERSION, base.HostEndPoint, base.ClientEndPoint);
                 if (pReset)
                     _exporter = new MSBExporter();
                 else if (pClean)

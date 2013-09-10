@@ -12,7 +12,8 @@ using System.Threading;
 
 namespace MPLRServer
 {
-   public class GMSKeys
+#if LOCALE_GMS
+    public class GMSKeys
     {
         private static Dictionary<ushort, byte[]> MapleStoryGlobalKeys = new Dictionary<ushort, byte[]>();
         public static ushort LatestVersion = 0;
@@ -35,7 +36,7 @@ namespace MPLRServer
                 }
                 MapleStoryGlobalKeys.Add(version, realkey);
             }
-            
+
         }
 
         public static void Initialize()
@@ -88,4 +89,5 @@ namespace MPLRServer
             return null;
         }
     }
+#endif
 }

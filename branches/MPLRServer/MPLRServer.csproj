@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,52 +25,50 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Debug|AnyCPU'">
+    <OutputPath>bin\GMS_Debug\</OutputPath>
+    <DefineConstants>DEBUG;LOCALE_GMS</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Debug|x86'">
+    <OutputPath>bin\x86\GMS_Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|AnyCPU'">
+    <OutputPath>bin\GMS_Release\</OutputPath>
+    <DefineConstants>LOCALE_GMS</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|x86'">
+    <OutputPath>bin\x86\GMS_Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|AnyCPU'">
+    <OutputPath>bin\EMS_Debug\</OutputPath>
+    <DefineConstants>DEBUG;LOCALE_EMS</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|x86'">
+    <OutputPath>bin\x86\EMS_Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|AnyCPU'">
+    <OutputPath>bin\EMS_Release\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants>LOCALE_EMS</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|x86'">
+    <OutputPath>bin\x86\EMS_Release\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -85,7 +84,12 @@
   <ItemGroup>
     <Compile Include="Acceptor.cs" />
     <Compile Include="ClientConnection.cs" />
-    <Compile Include="ClientPacketHandlers.cs" />
+    <Compile Include="Handlers\Bases\ClientPacketHandlers.cs" />
+    <Compile Include="Handlers\Bases\ServerPacketHandlers.cs" />
+    <Compile Include="Handlers\EMS\ClientPacketHandler.cs" />
+    <Compile Include="Handlers\EMS\OpcodeEnumeration.cs" />
+    <Compile Include="Handlers\EMS\ServerPacketHandlers.cs" />
+    <Compile Include="Handlers\GMS\ClientPacketHandlers.cs" />
     <Compile Include="CommandHandler.cs" />
     <Compile Include="DataParsers\Alliance.cs" />
     <Compile Include="DataParsers\Android.cs" />
@@ -101,6 +105,8 @@
     <Compile Include="EXPTable.cs" />
     <Compile Include="GameHelper.cs" />
     <Compile Include="GMSKeys.cs" />
+    <Compile Include="Handlers\GMS\OpcodeEnumeration.cs" />
+    <Compile Include="Handlers\Version.cs" />
     <Compile Include="Internal Storage\Store.cs" />
     <Compile Include="InternalPacketHandler.cs" />
     <Compile Include="MasterThread.cs" />
@@ -111,7 +117,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries.cs" />
     <Compile Include="QueryBuilder.cs" />
-    <Compile Include="ServerPacketHandlers.cs" />
+    <Compile Include="Handlers\GMS\ServerPacketHandlers.cs" />
     <Compile Include="SessionRestartCache.cs" />
     <Compile Include="Timeline.cs" />
   </ItemGroup>
@@ -151,6 +157,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

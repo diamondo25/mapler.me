@@ -143,7 +143,8 @@ namespace Mapler_Client
                         AcceptedIPs.Add(ip);
                     }
 
-                    MapleStoryCryptoKey = pPacket.ReadBytes(32);
+                    if (pPacket.ReadBool())
+                        MapleStoryCryptoKey = pPacket.ReadBytes(32);
 
                     AcceptedMapleStoryLocale = pPacket.ReadByte();
                     AcceptedMapleStoryVersion = pPacket.ReadUShort();

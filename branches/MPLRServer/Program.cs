@@ -45,7 +45,9 @@ namespace MPLRServer
             }
 
             AccountDataCache.Initialize();
+#if LOCALE_GMS
             GMSKeys.Initialize();
+#endif
 
             CommandHandler.Initialize();
             Timeline.Init();
@@ -54,7 +56,11 @@ namespace MPLRServer
             {
                 InitializeValidHeaders();
                 AcceptedIPs = new List<string>();
-                AcceptedIPs.Add("8.31.9"); // Nexon's subnet
+#if LOCALE_GMS
+                AcceptedIPs.Add("8.31.9"); // GMS
+#elif LOCALE_EMS
+                AcceptedIPs.Add("109.234.77"); // EMS
+#endif
 
                 Clients = new List<ClientConnection>();
                 StartPinger();
@@ -73,8 +79,8 @@ namespace MPLRServer
             // For online check!
             byte[] OnlineCheckInfo = null;
             {
-                MaplePacket packet = new MaplePacket(ClientPacketHandlers.LatestMajorVersion);
-                packet.WriteByte(ClientPacketHandlers.LatestLocale);
+                MaplePacket packet = new MaplePacket(ServerMapleInfo.VERSION);
+                packet.WriteByte(ServerMapleInfo.LOCALE);
 
                 byte[] temp = packet.ToArray();
 
@@ -98,8 +104,16 @@ namespace MPLRServer
             Logger.WriteLine("|                                             |");
             Logger.WriteLine("|              Mapler.me Server               |");
             Logger.WriteLine("|                                             |");
+#if LOCALE_GMS
+            Logger.WriteLine("|                   GLOBAL                    |");
+#elif LOCALE_EMS
+            Logger.WriteLine("|                   EUROPE                    |");
+#elif LOCALE_KMS
+            Logger.WriteLine("|                   KOREA                     |");
+#endif
+            Logger.WriteLine("|                                             |");
             Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
-            Logger.WriteLine("|           Build For: {0,3} Locale {1,1}           |", ClientPacketHandlers.LatestMajorVersion, ClientPacketHandlers.LatestLocale);
+            Logger.WriteLine("|           Build For: {0,3} Locale {1,1}           |", ServerMapleInfo.VERSION, ServerMapleInfo.LOCALE);
             Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
 
 
@@ -112,11 +126,13 @@ namespace MPLRServer
                 {
                     switch (arguments[0])
                     {
+#if LOCALE_GMS
                         case "getkeys":
                             {
                                 GMSKeys.Initialize();
                                 break;
                             }
+#endif
                         case "reload_store":
                             {
                                 MasterThread.Instance.AddCallback(a =>
@@ -255,25 +271,23 @@ namespace MPLRServer
                 // V.134 -> 135| Diff 0x00F4 -> 0x00F2... WUT
                 // V.135 -> 137| Diff 0x00F2 -> 0x00FD... WUT | 0x007B -> 0x007D | 0x0059 -> 0x005A
                 // V.140 -> 141| Diff 0x00FD -> 0x010C... 0x0032 -> 0x0033 | 0x0165 -> 0x0177
-                //tmp.Add(0x0000, new Handler(ServerPacketHandlers.HandleLogin, null));
-                tmp.Add(0x0002, new Handler(ServerPacketHandlers.HandleLoginFromWeb, null));
-
-                tmp.Add(0x000B, new Handler((pConnection, pPacket) =>
+#if LOCALE_EMS
+                tmp.Add((ushort)ServerOpcodes.LOGIN_NORMAL, new Handler(ServerPacketHandlers.Instance.HandleLogin, null));
+#else
+                tmp.Add((ushort)ServerOpcodes.LOGIN_AFTER_WORLDSELECT, new Handler(ServerPacketHandlers.Instance.HandleLoginFromWeb, null));
+#endif
+                tmp.Add((ushort)ServerOpcodes.CHARACTER_CHOOSE, new Handler((pConnection, pPacket) =>
                 {
                     short status = pPacket.ReadShort();
                     if (status == 0)
                     {
                         string ip = string.Format("{0}.{1}.{2}.{3} port {4}", pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadUShort());
                         int charid = pPacket.ReadInt();
-                        byte flag = pPacket.ReadByte();
-                        pPacket.ReadInt();
-                        pPacket.ReadByte();
-                        //string chains = pPacket.ReadString(8);
-                        pConnection.Logger_WriteLine("Selected charid {0} and connects to {1} ({2})", charid, ip, flag);
+                        pConnection.Logger_WriteLine("Selected charid {0} and connects to {1}", charid, ip);
                     }
                 }, null));
-                tmp.Add(0x000E, new Handler(ServerPacketHandlers.HandleCharacterDeletion, OnCharacterSelect));
-                tmp.Add(0x0010, new Handler((pConnection, pPacket) =>
+                tmp.Add((ushort)ServerOpcodes.CHARACTER_DELETE, new Handler(ServerPacketHandlers.Instance.HandleCharacterDeletion, OnCharacterSelect));
+                tmp.Add((ushort)ServerOpcodes.CONNECT_TO_SERVER, new Handler((pConnection, pPacket) =>
                 {
                     byte status = pPacket.ReadByte();
                     if (status == 1)
@@ -285,35 +299,29 @@ namespace MPLRServer
                     }
                 }, null));
 
-                tmp.Add(0x0011, new Handler((a, b) =>
+                tmp.Add((ushort)ServerOpcodes.PING, new Handler((a, b) =>
                 {
                     // ping
                 }, null));
 
-                tmp.Add(0x0025, new Handler(ServerPacketHandlers.HandleInventoryUpdate, OnLoadedCharData));
-                tmp.Add(0x0026, new Handler(ServerPacketHandlers.HandleInventorySlotsUpdate, OnLoadedCharData));
-                tmp.Add(0x0027, new Handler(ServerPacketHandlers.HandleStatUpdate, OnLoadedCharData));
-                tmp.Add(0x002C, new Handler(ServerPacketHandlers.HandleSkillUpdate, OnLoadedCharData));
-                tmp.Add(0x0033, new Handler(ServerPacketHandlers.HandleMessage, OnLoadedCharData));
-                tmp.Add(0x005D, new Handler(ServerPacketHandlers.HandleBuddyList, OnLoadedCharData));
-                tmp.Add(0x005F, new Handler(ServerPacketHandlers.HandleGuild, OnLoadedCharData));
-                tmp.Add(0x0060, new Handler(ServerPacketHandlers.HandleAlliance, OnLoadedCharData));
-                tmp.Add(0x0081, new Handler(ServerPacketHandlers.HandleFamiliarList, OnLoadedCharData));
-                tmp.Add(0x00D2, new Handler(ServerPacketHandlers.HandleAbilityInfoUpdate, OnLoadedCharData));
-                tmp.Add(0x00E6, new Handler(ServerPacketHandlers.HandleMaplePointAmount, OnLoadedCharData));
-                tmp.Add(0x010B, new Handler(ServerPacketHandlers.HandleSkillMacros, OnLoadedCharData));
-                tmp.Add(0x010C, new Handler(ServerPacketHandlers.HandleChangeMap, IdentifiedAccountAndUser));
-                tmp.Add(0x0143, new Handler(ServerPacketHandlers.HandleSpawnPlayer, OnLoadedCharData));
-                tmp.Add(0x0177, new Handler(ServerPacketHandlers.HandleSpawnAndroid, OnLoadedCharData));
-                //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.HandleTradeData, NeedsCharData));
+                tmp.Add((ushort)ServerOpcodes.INVENTORY_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleInventoryUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.INVENTORY_SLOTS_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleInventorySlotsUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.STAT_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleStatUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.SKILL_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleSkillUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.MESSAGE, new Handler(ServerPacketHandlers.Instance.HandleMessage, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.BUDDYLIST, new Handler(ServerPacketHandlers.Instance.HandleBuddyList, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.GUILD, new Handler(ServerPacketHandlers.Instance.HandleGuild, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.ALLIANCE, new Handler(ServerPacketHandlers.Instance.HandleAlliance, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.FAMILIARS, new Handler(ServerPacketHandlers.Instance.HandleFamiliarList, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.ABILITY_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleAbilityInfoUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.MAPLEPOINTS, new Handler(ServerPacketHandlers.Instance.HandleMaplePointAmount, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.SKILL_MACROS, new Handler(ServerPacketHandlers.Instance.HandleSkillMacros, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.CHANGE_MAP, new Handler(ServerPacketHandlers.Instance.HandleChangeMap, IdentifiedAccountAndUser));
+                tmp.Add((ushort)ServerOpcodes.SPAWN_PLAYER, new Handler(ServerPacketHandlers.Instance.HandleSpawnPlayer, OnLoadedCharData));
+                tmp.Add((ushort)ServerOpcodes.SPAWN_ANDROID, new Handler(ServerPacketHandlers.Instance.HandleSpawnAndroid, OnLoadedCharData));
+                //tmp.Add(0x02B1, new Handler(ServerPacketHandlers.Instance.HandleTradeData, NeedsCharData));
 
-                tmp.Add(0x030E, new Handler(ServerPacketHandlers.HandleKeymap, OnLoadedCharData));
-                // Testing more data throughput
-                //tmp.Add(530, null);
-                //tmp.Add(435, null);
-                //tmp.Add(569, null);
-                //tmp.Add(566, null);
-                //tmp.Add(567, null);
+                tmp.Add((ushort)ServerOpcodes.KEYMAP_UPDATE, new Handler(ServerPacketHandlers.Instance.HandleKeymap, OnLoadedCharData));
 
                 ValidHeaders[(byte)MaplePacket.CommunicationType.ServerPacket] = tmp;
             }
@@ -322,12 +330,11 @@ namespace MPLRServer
                 // V.140 -> 141: 0x0014 -> 0x003F, Pong: 0x002D -> 0x0046
                 // Client Packets
                 var tmp = new Dictionary<ushort, Handler>();
-                //tmp.Add(0x0015, null); // Login Packet
-                tmp.Add(0x003F, new Handler(ClientPacketHandlers.HandleVersion, null)); // Client Version
+                tmp.Add((ushort)ClientOpcodes.VERSION_INFO, new Handler(ClientPacketHandlers.Instance.HandleVersion, null)); // Client Version
 
-                // Select Channel
-                tmp.Add(0x0043, new Handler((pConnection, pPacket) =>
+                tmp.Add((ushort)ClientOpcodes.SELECT_CHANNEL, new Handler((pConnection, pPacket) =>
                 {
+#if LOCALE_GMS
                     byte requestType = pPacket.ReadByte();
                     if (requestType != 2)
                     {
@@ -338,6 +345,16 @@ namespace MPLRServer
                         pPacket.Skip(4); // Unknown, 0? Prolly login mode
                         pPacket.Skip(1); // ...?
                     }
+#elif LOCALE_EMS
+                    byte requestType = pPacket.ReadByte();
+                    if (requestType != 0)
+                    {
+                        pConnection.Logger_WriteLine("Error selecting channel! {0}", requestType);
+
+                        return;
+                    }
+#endif
+
                     pConnection.WorldID = pPacket.ReadByte();
                     pConnection.ChannelID = pPacket.ReadByte(); // Channel ID
                     pPacket.ReadInt(); // Client LAN IP -.-: 192.168.0.212
@@ -345,21 +362,21 @@ namespace MPLRServer
                     pConnection.Logger_WriteLine("User selected World {0} Channel {1}", pConnection.WorldID, pConnection.ChannelID);
                 }, null));
 
-                tmp.Add(0x0027, new Handler(ClientPacketHandlers.HandleCharacterLoadRequest, null));
+                tmp.Add((ushort)ClientOpcodes.CHARACTER_LOAD, new Handler(ClientPacketHandlers.Instance.HandleCharacterLoadRequest, null));
 
                 // Pong
-                tmp.Add(0x0046, new Handler((pConnection, pPacket) =>
+                tmp.Add((ushort)ClientOpcodes.PONG, new Handler((pConnection, pPacket) =>
                 {
                 }, null));
 
-                tmp.Add(0x0052, new Handler((pConnection, pPacket) =>
+                tmp.Add((ushort)ClientOpcodes.CHANGE_CHANNEL_REQUEST, new Handler((pConnection, pPacket) =>
                 {
                     byte new_channel = pPacket.ReadByte();
                     pConnection.Logger_WriteLine("Requesting CC to channel {0}", new_channel);
                 }, null));
 
                 // Whisper
-                tmp.Add(0xFFFC, new Handler((pConnection, pPacket) =>
+                tmp.Add((ushort)ClientOpcodes.WHISPER, new Handler((pConnection, pPacket) =>
                 {
                     byte code = pPacket.ReadByte();
                     if (code == 0x06)
@@ -381,7 +398,7 @@ namespace MPLRServer
                 }, OnLoadedCharData));
 
 
-                tmp.Add(0x0134, new Handler(ClientPacketHandlers.HandleKeymapUpdate, OnLoadedCharData));
+                tmp.Add((ushort)ClientOpcodes.KEYMAP_UPDATE, new Handler(ClientPacketHandlers.Instance.HandleKeymapUpdate, OnLoadedCharData));
 
 
 

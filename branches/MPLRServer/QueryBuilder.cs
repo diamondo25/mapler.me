@@ -100,7 +100,7 @@ namespace MPLRServer
             if (IgnoreDuplicates && OnDuplicateUpdate) throw new Exception("Can't use both IgnoreDuplicates and OnDuplicateUpdate");
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("INSERT " + (IgnoreDuplicates ? "IGNORE " : "") + "INTO\r\n\t`" + this.TableName + "`\r\n\t(");
+            sb.Append("INSERT " + (IgnoreDuplicates ? "IGNORE " : "") + "INTO\r\n\t" + this.TableName + "\r\n\t(");
             string[] columnlist = new string[_columns.Count];
             for (int i = 0; i < _columns.Count; i++)
                 columnlist[i] = "`" + _columns[i].Name + "`";
@@ -211,7 +211,7 @@ namespace MPLRServer
             if (_columns.Count == 0) throw new Exception("No columns set");
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("UPDATE `" + TableName + "` SET ");
+            sb.Append("UPDATE " + TableName + " SET ");
             string tmp = "";
             foreach (var kvp in _columns)
                 tmp += string.Format("`{0}` = {1},", kvp.Key, kvp.Value);
@@ -278,7 +278,7 @@ namespace MPLRServer
         {
             if (_whereColumns.Count == 0) throw new Exception("No columns set");
 
-            string query = "DELETE FROM `" + TableName + "` WHERE ";
+            string query = "DELETE FROM " + TableName + " WHERE ";
             foreach (var kvp in _whereColumns)
                 query += string.Format(" `{0}` = {1} AND", kvp.Key, kvp.Value);
 

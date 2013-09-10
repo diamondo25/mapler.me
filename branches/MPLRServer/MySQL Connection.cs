@@ -9,6 +9,12 @@ namespace MPLRServer
 {
     public class MySQL_Connection : IDisposable
     {
+        private const string DATABASE = 
+#if LOCALE_GMS
+            "maplestats";
+#elif LOCALE_EMS
+            "maplestats_ems";
+#endif
 
         public struct NowType { }
         public struct UnescapedValue { public object Value; }
@@ -30,8 +36,7 @@ namespace MPLRServer
         {
             string ip = "127.0.0.1";
             if (System.IO.File.Exists("local")) ip = "mc.craftnet.nl";
-
-            Instance = new MySQL_Connection("maplestats", "maplederp", "maplestats", ip);
+            Instance = new MySQL_Connection("maplestats", "maplederp", DATABASE, ip);
         }
 
         ~MySQL_Connection()
