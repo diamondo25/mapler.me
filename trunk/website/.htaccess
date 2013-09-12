@@ -25,7 +25,10 @@
 	RewriteRule ^characters/$ 				characters.php [L]
 	RewriteRule ^team/$ 					team.php [L]
 	RewriteRule ^developers/$ 				dev.php [L]
+	
 	RewriteRule ^faq/$ 						faq.php [L]
+	RewriteRule ^faq/([^\./]*) faq.php?id=$1 [L,QSA]
+	
 	RewriteRule ^support/$ 					/actions/support_email.php [L]
 	RewriteRule ^cdn/$ 						/actions/cdn_upload.php [L]
 	RewriteRule ^blankpage/$ 				/actions/blankpage.php [L]
