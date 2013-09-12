@@ -102,16 +102,16 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
         <nav id="rightmenu">
         	<ul id="menu-rightnav">
         	<li class="dropdown">
-        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="/inc/img/logo.celebration.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle hidden-phone" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/logo.celebration.png" style="width:35px;position:relative;top:10px;"/> <b>mapler</b>.me
         			<?php if ($_loggedin && GetNotification() != '0'): ?>
         				(<?php echo GetNotification(); ?><i class="icon-bell-alt icon-white"></i>)
         			<?php endif; ?> <i class="icon-chevron-down"></i>
         		</a>
         		
-        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle showmobile" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="http://mapler.me/inc/img/shadowlogo.png" class="showmobile" style="width:35px;position:relative;top:10px;"/>
+        		<a id="goUp" data-toggle="dropdown" class="dropdown-toggle showmobile" data-toggle="dropdown" data-hover="dropdown" data-delay="100" data-close-others="true" href="#"><img src="//<?php echo $domain; ?>/inc/img/logo.celebration.png" class="showmobile" style="width:35px;position:relative;top:10px;"/>
         		</a>
         		
-								<ul class="dropdown-menu" style="">
+								<ul class="dropdown-menu">
 <?php
 // Display subdomain pages related to the user
 if (isset($__url_useraccount)):
