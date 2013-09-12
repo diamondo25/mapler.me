@@ -391,8 +391,8 @@ jQuery(document).ready(function (a) {
                         var b = a(this).val().toLowerCase();
                         if (b.length > 3) {
                             a(".faq li").each(function () {
-                                    var d = a(this).find("h3").text();
-                                    var e = a(this).find("p").text();
+                                    var d = a(this).find("#searchfor").text();
+                                    var e = a(this).find("#searchfor").text();
                                     var c = (d + e).toLowerCase();
                                     if (c.indexOf(b) == -1) {
                                         a(this).hide()

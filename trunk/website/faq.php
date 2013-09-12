@@ -107,8 +107,8 @@ $q->free();
 foreach ($questions as $row) {
 ?>
 			<li style="display:none;">
-				<h3><?php echo $row['title']; ?> <span class="ct-label"><a href="//<?php echo $domain; ?>/faq/<?php echo $row['id']; ?>"><i class="icon-share-sign"></i> Direct Link</a></span></h3>
-				<p><?php echo $row['content']; ?></p>
+				<h3><span id="searchfor"><?php echo $row['title']; ?></span> <span class="ct-label"><a href="//<?php echo $domain; ?>/faq/<?php echo $row['id']; ?>"><i class="icon-share-sign"></i> Direct Link</a></span></h3>
+				<p id="searchfor"><?php echo $row['content']; ?></p>
 			</li>
 <?php
 }
