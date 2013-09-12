@@ -37,8 +37,6 @@ namespace MPLRServer
         public long EXP { get; set; }
         public int Fame { get; set; }
 
-        public int GachaEXP { get; private set; }
-
         public int MapID { get; set; }
         public byte MapPos { get; set; }
 
@@ -90,8 +88,11 @@ namespace MPLRServer
             this.Face = pPacket.ReadInt();
             this.Hair = pPacket.ReadInt();
 
+#if LOCALE_EMS
+            this.Pets = new long[3] { 0, 0, 0 }; // Not defined!?
+#else
             this.Pets = new long[3] { pPacket.ReadLong(), pPacket.ReadLong(), pPacket.ReadLong() };
-
+#endif
 
             this.Level = pPacket.ReadByte();
 
@@ -134,12 +135,19 @@ namespace MPLRServer
 
             this.EXP = pPacket.ReadLong();
             this.Fame = pPacket.ReadInt();
-            this.GachaEXP = pPacket.ReadInt();
+#if LOCALE_GMS
+            pPacket.ReadInt(); // Gacha EXP
             pPacket.ReadInt(); // V.141, unknown
+#elif LOCALE_EMS
+            pPacket.ReadLong();
+            pPacket.ReadLong();
+#endif
             this.MapID = pPacket.ReadInt();
             this.MapPos = pPacket.ReadByte();
 
-            this.Unknown2 = pPacket.ReadInt();
+#if LOCALE_GMS
+            pPacket.ReadInt();
+#endif
             this.JobSubID = pPacket.ReadShort();
 
 
@@ -199,6 +207,10 @@ namespace MPLRServer
 
             pPacket.ReadInt();
             pPacket.ReadInt();
+
+#if LOCALE_EMS
+            pPacket.ReadInt();
+#endif
         }
 
         public void DecodeMesos(MaplePacket pPacket)

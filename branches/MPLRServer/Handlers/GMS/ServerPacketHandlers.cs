@@ -6,7 +6,7 @@ using System.Text;
 namespace MPLRServer
 {
 #if LOCALE_GMS
-    public class ServerPacketHandlers : IServerPacketHandler
+    public class ServerPacketHandlers : IServerPacketHandlers
     {
         private static ServerPacketHandlers _instance;
         public static ServerPacketHandlers Instance { get { return _instance = _instance ?? new ServerPacketHandlers(); } }

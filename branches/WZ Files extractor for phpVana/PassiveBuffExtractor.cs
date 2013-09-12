@@ -31,7 +31,16 @@ namespace WZ_Files_extractor_for_phpVana
         public void ExtractSkills(WzSubProperty pSubProperty)
         {
             var parent = pSubProperty.Parent as WzImage;
-            int jobid = currentID = Convert.ToInt32(parent.Name.Replace(".img", ""));
+
+            int jobid = currentID = 0;
+            try
+            {
+                jobid = currentID = Convert.ToInt32(parent.Name.Replace(".img", ""));
+            }
+            catch
+            {
+                return;
+            }
             if (parent["info"] != null && parent["info"]["icon"] != null)
             {
                 ExportIfExists(exDir + jobid + Path.DirectorySeparatorChar, parent["info"]["icon"], "info");

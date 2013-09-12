@@ -48,13 +48,15 @@ using (ScriptAPI) {
 		
 		AddLong("Flag");
 		
+		StartNode("UNK");
+		AddInt("Value 1");
+		AddInt("Value 2");
+		AddInt("Value 3");
+		EndNode(false);
+		
+		
 		
 	    AddByte("?");
-		
-		AddInt("new v132");
-		AddInt("new v132");
-		AddInt("new v132");
-		
 		
 		StartNode("loop");
 		amount = AddByte("UnknownLoop");
@@ -68,7 +70,6 @@ using (ScriptAPI) {
 		    AddLong("Value " + i);
 		}
 		EndNode(false);
-	    AddByte("?");
 		
 		if (AddByte("???") == 0x01) {
 			StartNode("Data");
@@ -85,17 +86,26 @@ using (ScriptAPI) {
 	
         LoadChar();
 		
+		AddByte("Buddylist");
 		AddByte("?");
+		
 		if (AddByte("HasBlessing") == 0x01)
 		    AddString("Blesser");
 		if (AddByte("HasBlessing") == 0x01)
 		    AddString("Blesser");
 		if (AddByte("HasBlessing") == 0x01)
 		    AddString("Blesser");
+		
+		
 		
 		StartNode("Inventory");
 		
-		AddLong("New > function");
+		AddLong("Mesos");
+		
+		StartNode("EMS sub 1");
+		AddByte("Unk bool check");
+		AddInt("Unk integer");
+		EndNode(false);
 		
 		amount = AddInt("???");
 		for (i = 0; i < amount; i++) {
@@ -104,11 +114,7 @@ using (ScriptAPI) {
 			AddInt("V3 " + i);
 			AddLong("V4 " + i);
 		}
-	    
-		for (i = AddInt("unk"); i > 0; i--)
-		    AddField("Pot Info", 4 + 4 + 4 + 4 + 4 + 8 + 8);
-		
-		/*
+
 		StartNode("Block");
 		amount = AddInt("???");
 		for (i = 0; i < amount; i++) {
@@ -144,9 +150,9 @@ using (ScriptAPI) {
 			AddInt("V2 " + i);
 			AddInt("V3 " + i);
 			AddInt("V4 " + i);
+			AddString("String " + i);
 		}
 	    EndNode(true);
-		
 		StartNode("Block");
 		amount = AddInt("???");
 		for (i = 0; i < amount; i++) {
@@ -154,15 +160,16 @@ using (ScriptAPI) {
 			AddInt("V2 " + i);
 			AddInt("V3 " + i);
 			AddInt("V4 " + i);
+			AddString("String " + i);
 		}
 	    EndNode(true);
-		*/
+		
 	    for (i = 1; i <= 5; i++)
 		    AddByte("Max Slots " + i);
 		
 		AddLong("Something?");
 		
-		for (i = 1; i <= 10 + 3; i++) {
+		for (i = 1; i <= 3; i++) {
 	    	StartNode("Inv " + i);
 	    	while (true) {
 	    	    slot = AddShort("Slot ID");
@@ -175,6 +182,20 @@ using (ScriptAPI) {
 	
 		}
 		
+		AddByte("EMS bool");
+		
+		for (i = 1; i <= ((24 / 4) + 1 + 1); i++) {
+	    	StartNode("Inv " + i);
+	    	while (true) {
+	    	    slot = AddShort("Slot ID");
+	    	    if (slot == 0x00) break;
+	    		StartNode("? " + slot);
+	    		DecodeItem();
+	    		EndNode(false);
+	    	}
+	    	EndNode(false);
+	
+		}
 			
 		for (i = 2; i <= 5; i++) {
 	    	StartNode("Inv " + i);
@@ -395,47 +416,13 @@ using (ScriptAPI) {
 		    AddInt("Rock Location: " + i);
 		EndNode(false);
 		
-		StartNode("Monsterbook");
-		AddInt("Selected Char");
-		if (AddByte("Mode") == 0x00) {
-			amount = AddShort("cards");
-			for (i = 1; i <= amount; i++) {
-				StartNode("Card " + i);
-				AddShort("ID");
-				AddByte("Level");
-				EndNode(false);
-			}
-		}
-		else {
-			AddShort("Unk");
-			size = AddShort("Size");
-			AddField("Cards", size);
-			size = AddShort("Size");
-			AddField("Levels", size);
-		}
 		
-		EndNode(false);
-		
-		AddInt("-1"); // & 0x1000
-		
-		tmp = AddShort("?x2"); // & 0x2000
-		AddField("Data of above", tmp * 2); // Short list
-		
-	    tmp = AddShort("NewYear Cards"); // & 0x40
-		StartNode("Cards");
-		for (i = 0; i < tmp; i++) {
-			StartNode("Card " + i);
-			AddInt("?");
-			AddInt("?");
-			AddString("?");
-			AddByte("?");
-			AddLong("?");
-			AddInt("?");
-			AddString("?");
-			AddByte("?");
-			AddByte("?");
-			AddLong("?");
-			AddString("?");
+		StartNode("Unknown? looks like pquest"); // & 0x40000
+		amount = AddShort("?x2");
+		for (i = 1; i <= amount; i++) {
+			StartNode("Block " + i);
+			AddShort("ID");
+			AddString("Data");
 			EndNode(false);
 		}
 		EndNode(false);
@@ -466,7 +453,7 @@ using (ScriptAPI) {
 		for (i = 0; i < tmp; i++) {
 			StartNode("Block " + i);
 			AddShort("...");
-			AddLong("...");
+			AddInt("...");
 			EndNode(false);
 		}
 		EndNode(false);
@@ -489,19 +476,19 @@ using (ScriptAPI) {
 			EndNode(false);
 		}
 		
-		StartNode("????");
+		StartNode("Stolen skills");
 		for (i = 1; i <= 13; i++) {
-			AddInt("UNK");
+			AddInt("Stolen skill " + i);
 		}
 		EndNode(false);
 		
-		StartNode("????"); // 0x10000000
+		StartNode("Chosen skills?"); // 0x10000000
 		for (i = 1; i <= 4; i++) {
-			AddInt("UNK");
+			AddInt("Chosen " + i);
 		}
 		EndNode(false);
 		
-		StartNode("Block"); // 0x80000000
+		StartNode("Abilities"); // 0x80000000
 		tmp = AddShort("hurr");
 		for (i = 0; i < tmp; i++) {
 	    	StartNode("Block " + i);
@@ -513,28 +500,13 @@ using (ScriptAPI) {
 		}
 		EndNode(false);
 		
-		// NEW V134
-		tmp = AddInt("NEW V134");
-		for (i = 0; i < tmp; i++) {
-			AddString("????");
-			
-			AddInt("Wutwut");
-			AddString("Wuuuut");
-			tmp2 = AddInt("WUUUUUUUUU..??");
-			for (j = 0; j < tmp2; j++) {
-				AddByte("BYTE " + j);
-			}
-		}
-	
-		AddByte("OOK NIEUW V134");
-		
 		
 		// & 1
 		AddInt("Honour Level");
 		AddInt("Honour EXP");
 		
 		// & 2
-		StartNode("Evolutions");
+		StartNode("NOT EVO");
 		tmp = AddByte("?");
 		if (tmp == 1) {
 			while (true) {
@@ -588,7 +560,11 @@ using (ScriptAPI) {
 		AddLong("....");
 		EndNode(false);
 		
-		StartNode("New v.132"); // & 0x20000
+		
+		AddByte("EMS unk byte");
+		AddByte("EMS unk byte");
+		
+		StartNode("EVO systtem"); // & 0x20000
 		amnt = AddShort("amount 1");
 		for (; amnt > 0; amnt--) {
 			StartNode("block");
@@ -607,63 +583,18 @@ using (ScriptAPI) {
 		}
 		EndNode(false);
 		
-		// 0x20
-		StartNode("New v.134");
-		amnt = AddByte("amount 1");
+		StartNode("Decode some item EMS"); // & 0x04
+		if (AddByte("unk") == 1) {
+			DecodeItem();
+			AddInt("---");
+			AddInt("---");
+		}
+		EndNode(false);
+		
+		
+		amnt = AddShort("EMS loop 20 bytes");
 		for (; amnt > 0; amnt--) {
-			StartNode("block");
-			AddInt("1");
-			AddLong("2");
-			EndNode(false);
-		}
-		EndNode(false);
-		
-		// 0x40
-		StartNode("Farm info");
-		AddString("Farm name");
-		for (i = 0; i < 5; i++)
-    		AddInt("ie " + i);
-		AddByte("?2ddd!");
-    	AddInt("ie2 ");
-    	AddInt("ie3 ");
-    	AddInt("ie4 ");
-		
-		
-    	AddInt("nog1 ");
-    	AddInt("nog11 ");
-		EndNode(false);
-		
-		StartNode("v.141");
-		AddInt("1");
-		AddLong("2");
-		AddInt("3");
-		EndNode(false);
-		
-		
-		{
-	    	AddByte("unk");
-	    	AddField("WAT DE FUCK", 84); // & 0x40000
-		}
-		tmp = AddShort("hmm"); // & 0x200
-		for (i = 0; i < tmp; i++) {
-			AddShort("...1");
-			AddShort("...2");
-		}
-		
-		StartNode("3ewfew2"); // &0x200000
-		AddInt("....");
-		AddInt("....");
-		AddInt("....");
-		AddInt("....");
-		AddField("....", 32);
-		EndNode(false);
-		
-		if (AddByte("val") == 0x01) {
-			
-			AddByte("derp");
-			
-			AddInt("222");
-			AddInt("222");
+            AddField("Unknown " + amnt, 20);
 		}
 		
 	}

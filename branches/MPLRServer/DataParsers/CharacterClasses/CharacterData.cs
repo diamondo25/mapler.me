@@ -111,13 +111,20 @@ namespace MPLRServer
         {
             pPacket.Skip(8); // Flag
 
+#if LOCALE_GMS
             pPacket.Skip(1);
+#endif
 
-            { // V.132
+            {
+                // Added GMS V.132 
                 pPacket.ReadInt();
                 pPacket.ReadInt();
                 pPacket.ReadInt();
             }
+
+#if LOCALE_EMS
+            pPacket.Skip(1);
+#endif
 
             int tmp = pPacket.ReadByte();
             pPacket.Skip(tmp * 4);
@@ -126,7 +133,9 @@ namespace MPLRServer
             pPacket.Skip(tmp * (4 + 8));
 
 
+#if LOCALE_GMS
             pPacket.Skip(1);
+#endif
 
             if (pPacket.ReadBool())
             {
@@ -140,6 +149,9 @@ namespace MPLRServer
             Stats.Decode(pPacket);
 
             this.BuddylistSize = pPacket.ReadByte();
+#if LOCALE_EMS
+            pPacket.ReadByte();
+#endif
 
             if (pPacket.ReadBool()) BlessingOfTheFairy = pPacket.ReadString();
             else BlessingOfTheFairy = null;
@@ -149,6 +161,12 @@ namespace MPLRServer
             else UltimateExplorer = null;
 
             Stats.DecodeMesos(pPacket); // .-.
+
+#if LOCALE_EMS
+            pPacket.ReadByte(); // Bool check
+            pPacket.ReadInt();
+#endif
+
 
             // Unknown stuff here
 
@@ -160,6 +178,7 @@ namespace MPLRServer
                 pPacket.ReadLong();
             }
 
+#if LOCALE_GMS
             // Magical potion pots!!!
             for (int i = pPacket.ReadInt(); i > 0; i--) // V.126
             {
@@ -172,10 +191,11 @@ namespace MPLRServer
                 pPacket.ReadLong(); // Start date O.o?
                 pPacket.ReadLong(); // End date O.o?
             }
+#endif
 
 
-            /*
-             *  REMOVED V.141?!
+#if LOCALE_EMS
+            // REMOVED GMS V.141?!
             for (int i = pPacket.ReadInt(); i > 0; i--) // V.137
             {
                 pPacket.ReadInt();
@@ -206,6 +226,7 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadInt();
                 pPacket.ReadInt();
+                pPacket.ReadString();
             }
 
 
@@ -215,9 +236,10 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadInt();
                 pPacket.ReadInt();
+                pPacket.ReadString();
             }
 
-            */
+#endif
 
             Inventory = new CharacterInventory();
             Inventory.Decode(pConnection, pPacket);
@@ -310,7 +332,7 @@ namespace MPLRServer
 
             Inventory.DecodeTeleportRocks(pPacket);
 
-
+#if LOCALE_GMS
             Monsterbook = new CharacterMonsterBook();
             Monsterbook.Decode(pPacket);
 
@@ -344,6 +366,13 @@ namespace MPLRServer
                     EndNode(false);
                  */
             }
+#else
+            for (int i = pPacket.ReadShort(); i > 0; i--)
+            {
+                pPacket.ReadShort();
+                pPacket.ReadString();
+            }
+#endif
 
             Quests.DecodePQ(pConnection, pPacket);
 
@@ -397,6 +426,7 @@ namespace MPLRServer
                 Abilities.Add(new Tuple<byte, int, byte>(id, skillid, level));
             }
 
+#if LOCALE_GMS
             {
                 // V.134
                 for (int i = pPacket.ReadInt(); i > 0; i--)
@@ -414,6 +444,7 @@ namespace MPLRServer
 
                 pPacket.ReadByte();
             }
+#endif
 
             Stats.HonourLevel = pPacket.ReadInt();
             Stats.HonourExp = pPacket.ReadInt();
@@ -455,6 +486,7 @@ namespace MPLRServer
             {
                 // Wat.
                 ItemBase.DecodeItemData(pConnection, pPacket);
+                pPacket.ReadInt();
             }
 
 
@@ -472,6 +504,10 @@ namespace MPLRServer
                 pPacket.ReadLong();
             }
 
+#if LOCALE_EMS
+            pPacket.ReadBool();
+            pPacket.ReadBool();
+#endif
             {
                 EvolutionCards = new List<EvolutionCard>();
 
@@ -493,6 +529,25 @@ namespace MPLRServer
 
             }
 
+#if LOCALE_EMS
+            if (pPacket.ReadBool())
+            {
+                // Wat.
+                ItemBase.DecodeItemData(pConnection, pPacket);
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+#endif
+
+#if LOCALE_EMS
+            // No farm info
+
+            for (short i = pPacket.ReadShort(); i > 0; i--)
+            {
+                pPacket.Skip(20);
+            }
+
+#else
             {
                 // V.134
                 for (byte i = pPacket.ReadByte(); i > 0; i--)
@@ -519,7 +574,17 @@ namespace MPLRServer
                 pPacket.ReadInt();
                 pPacket.ReadInt();
             }
-            // Something's incorrect here <<<<
+
+#if LOCALE_GMS
+            if (pPacket.ReadBool())
+            {
+                // Wat.
+                ItemBase.DecodeItemData(pConnection, pPacket);
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+#endif
+
             {
                 // V.141
                 pPacket.ReadInt();
@@ -548,16 +613,41 @@ namespace MPLRServer
                 pPacket.Skip(32);
             }
 
-            if (pPacket.ReadBool())
             {
-                pPacket.ReadByte();
-                pPacket.ReadInt();
-                pPacket.ReadInt();
-            }
+                if (pPacket.ReadInt() > 0)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        pPacket.Skip(4 + 4 + 4);
+                        pPacket.ReadString();
+                        pPacket.Skip(4 * 7);
+                        pPacket.Skip(8 * 4);
+                        pPacket.Skip(4 * 4);
+                        pPacket.Skip(1 * 5);
+                        pPacket.Skip(4 * 3);
+                        pPacket.ReadString();
+                        pPacket.Skip(4 * 2);
+                        pPacket.ReadByte();
 
+                        byte tmptmp = pPacket.ReadByte();
+                        if ((tmptmp & 0x01) != 0)
+                        {
+                            pPacket.ReadInt();
+                            pPacket.ReadString();
+                            pPacket.Skip(24);
+                        }
+
+                        for (int j = pPacket.ReadInt(); j > 0; j++)
+                        {
+                            pPacket.Skip(4 * 9);
+                        }
+                    }
+                }
+            }
 
             // Removed in V.141
             //pPacket.ReadInt(); // I DONT EVEN D:
+#endif
         }
 
         public int SaveCharacterInfo(ClientConnection pConnection)

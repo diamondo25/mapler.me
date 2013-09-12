@@ -37,9 +37,11 @@ namespace MPLRServer
                 adventurer = 4;
 
             return (
-                pJobID / 1000 == 1 ||
+#if !LOCALE_EMS
+                pJobID / 1000 == 1 && (adventurer == 5 || adventurer == 3 || adventurer == 1) || // Revamped KoC
+#endif
+                
                 pJobID / 1000 == 3 ||
-                adventurer == 5 || adventurer == 3 || adventurer == 1 || // Revamped adventurers
                 job == 22 || pJobID == 2001 || // Evan
                 job == 23 || pJobID == 2002 || // Mercedes
                 job == 24 || pJobID == 2003 || // Phantom

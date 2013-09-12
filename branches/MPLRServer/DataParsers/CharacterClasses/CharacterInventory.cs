@@ -18,8 +18,14 @@ namespace MPLRServer
             }
         }
 
+#if LOCALE_GMS
         // V.129: +1 (Kanna/Hayato)
+        public const byte EQUIP_INVENTORIES = 3 + 9 + 1; // 3 in main handler, 9 in other handler (noted as i >= 36) and 1 bits
+#elif LOCALE_EMS
+        public const byte EQUIP_INVENTORIES = 3 + 7 + 1; // 3 in main handler, 6 in other handler (noted as i >= 24) and 1 bits
+#else // KMS?
         public const byte EQUIP_INVENTORIES = 3 + 10; // 3 in main handler, 9 in other handler (noted as i >= 36)
+#endif
         public const byte NORMAL_INVENTORIES = 4;
         public const byte INVENTORIES = NORMAL_INVENTORIES + 1;
 
@@ -112,7 +118,41 @@ namespace MPLRServer
 
 
             EquipmentItems = new Dictionary<short, ItemEquip>[EQUIP_INVENTORIES];
+#if LOCALE_EMS
+            for (byte i = 0; i < 3; i++)
+            {
+                EquipmentItems[i] = new Dictionary<short, ItemEquip>();
 
+                while (true)
+                {
+                    short slot = pPacket.ReadShort();
+                    if (slot == 0) break;
+                    slot = CharacterInventory.CorrectEquipSlot(i, slot);
+
+                    ItemEquip equip = (ItemEquip)ItemBase.DecodeItemData(pConnection, pPacket);
+
+                    EquipmentItems[i].Add(slot, equip);
+                }
+            }
+
+            pPacket.ReadBool(); // EMS only -.-
+
+            for (byte i = 3; i < EQUIP_INVENTORIES; i++)
+            {
+                EquipmentItems[i] = new Dictionary<short, ItemEquip>();
+
+                while (true)
+                {
+                    short slot = pPacket.ReadShort();
+                    if (slot == 0) break;
+                    slot = CharacterInventory.CorrectEquipSlot(i, slot);
+
+                    ItemEquip equip = (ItemEquip)ItemBase.DecodeItemData(pConnection, pPacket);
+
+                    EquipmentItems[i].Add(slot, equip);
+                }
+            }
+#else
             for (byte i = 0; i < EQUIP_INVENTORIES; i++)
             {
                 EquipmentItems[i] = new Dictionary<short, ItemEquip>();
@@ -128,6 +168,7 @@ namespace MPLRServer
                     EquipmentItems[i].Add(slot, equip);
                 }
             }
+#endif
 
             InventoryItems = new Dictionary<byte, ItemBase>[NORMAL_INVENTORIES];
             BagItems = new Dictionary<int, BagItem>();

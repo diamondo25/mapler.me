@@ -70,7 +70,8 @@ namespace WZ_Files_extractor_for_phpVana
 
             {
                 var list = file.WzDirectory["Familiar.img"];
-                ExtractItems((list as WzImage)["skill"] as WzSubProperty, "familiar_skill");
+                if (list != null)
+                    ExtractItems((list as WzImage)["skill"] as WzSubProperty, "familiar_skill");
             }
 
             {

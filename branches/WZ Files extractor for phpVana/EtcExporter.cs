@@ -18,54 +18,58 @@ namespace WZ_Files_extractor_for_phpVana
         {
             WzFile file = MapleFileCache.Instance["Etc"];
             WzDirectory familiarscwz = MapleFileCache.Instance["Character"].GetObjectFromPath("Character.wz/Familiar") as WzDirectory;
-            WzFile mobfile = MapleFileCache.Instance["Mob"];
 
-            familiarscwz.ParseImages();
-
-            string familiarDir = exDir + "Character" + Path.DirectorySeparatorChar + "Familiar" + Path.DirectorySeparatorChar;
-            //if (false)
+            if (familiarscwz != null)
             {
-                foreach (WzSubProperty prop in (file.WzDirectory["FamiliarInfo.img"] as WzImage).WzProperties)
+                WzFile mobfile = MapleFileCache.Instance["Mob"];
+
+                familiarscwz.ParseImages();
+
+                string familiarDir = exDir + "Character" + Path.DirectorySeparatorChar + "Familiar" + Path.DirectorySeparatorChar;
+                //if (false)
                 {
-                    int famid = int.Parse(prop.Name);
-                    int mobid = prop["mob"].ToInt();
-                    string tempdir = familiarDir + string.Format("{0:D7}.img", famid) + Path.DirectorySeparatorChar;
-
-                    WzSubProperty charwzProp = familiarscwz.GetImageByName(string.Format("{0}.img", famid))["info"] as WzSubProperty;
-                    WzSubProperty skillSubProp = prop["skill"] as WzSubProperty;
-                    FamiliarInfoSQL.Instance.AddFamiliar(famid, prop["consume"].ToInt(), mobid, charwzProp["grade"].ToInt(), charwzProp["range"].ToInt(), skillSubProp == null ? 0 : skillSubProp["id"].ToInt());
-
-                    // Export images, too
-
-                    WzImage mobimg = mobfile.WzDirectory[string.Format("{0:D7}.img", mobid)] as WzImage;
-
-                    if (mobimg["info"] != null && mobimg["info"]["link"] != null)
+                    foreach (WzSubProperty prop in (file.WzDirectory["FamiliarInfo.img"] as WzImage).WzProperties)
                     {
-                        // ---
-                        Console.WriteLine("Nekson leik links");
-                        mobimg = mobfile.WzDirectory[string.Format("{0:D7}.img", mobimg["info"]["link"].ToInt())] as WzImage;
-                    }
+                        int famid = int.Parse(prop.Name);
+                        int mobid = prop["mob"].ToInt();
+                        string tempdir = familiarDir + string.Format("{0:D7}.img", famid) + Path.DirectorySeparatorChar;
 
-                    if (mobimg["stand"] != null)
-                    {
-                        WzSubProperty subprop = mobimg["stand"] as WzSubProperty;
-                        ExportIfExists(tempdir, subprop["0"], "stand");
-                        foreach (var prop2 in subprop["0"].WzProperties)
+                        WzSubProperty charwzProp = familiarscwz.GetImageByName(string.Format("{0}.img", famid))["info"] as WzSubProperty;
+                        WzSubProperty skillSubProp = prop["skill"] as WzSubProperty;
+                        FamiliarInfoSQL.Instance.AddFamiliar(famid, prop["consume"].ToInt(), mobid, charwzProp["grade"].ToInt(), charwzProp["range"].ToInt(), skillSubProp == null ? 0 : skillSubProp["id"].ToInt());
+
+                        // Export images, too
+
+                        WzImage mobimg = mobfile.WzDirectory[string.Format("{0:D7}.img", mobid)] as WzImage;
+
+                        if (mobimg["info"] != null && mobimg["info"]["link"] != null)
                         {
-                            ExportIfExists(tempdir, prop2, "stand.0");
+                            // ---
+                            Console.WriteLine("Nekson leik links");
+                            mobimg = mobfile.WzDirectory[string.Format("{0:D7}.img", mobimg["info"]["link"].ToInt())] as WzImage;
+                        }
+
+                        if (mobimg["stand"] != null)
+                        {
+                            WzSubProperty subprop = mobimg["stand"] as WzSubProperty;
+                            ExportIfExists(tempdir, subprop["0"], "stand");
+                            foreach (var prop2 in subprop["0"].WzProperties)
+                            {
+                                ExportIfExists(tempdir, prop2, "stand.0");
+                            }
+                        }
+                        else if (mobimg["fly"] != null)
+                        {
+                            WzSubProperty subprop = mobimg["fly"] as WzSubProperty;
+                            ExportIfExists(tempdir, subprop["0"], "stand");
+                            foreach (var prop2 in subprop["0"].WzProperties)
+                            {
+                                ExportIfExists(tempdir, prop2, "stand.0");
+                            }
                         }
                     }
-                    else if (mobimg["fly"] != null)
-                    {
-                        WzSubProperty subprop = mobimg["fly"] as WzSubProperty;
-                        ExportIfExists(tempdir, subprop["0"], "stand");
-                        foreach (var prop2 in subprop["0"].WzProperties)
-                        {
-                            ExportIfExists(tempdir, prop2, "stand.0");
-                        }
-                    }
+
                 }
-
             }
 
             this.currentID = 90000000;

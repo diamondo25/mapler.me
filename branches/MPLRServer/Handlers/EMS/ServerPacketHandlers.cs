@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
+#if LOCALE_EMS
     public class ServerPacketHandlers : IServerPacketHandlers
     {
         private static ServerPacketHandlers _instance;
@@ -45,4 +46,5 @@ namespace MPLRServer
             ParseLogin(pConnection, userid, username, creationtime);
         }
     }
+#endif
 }

@@ -185,6 +185,7 @@ namespace WZ_Files_extractor_for_phpVana
         private void ExtractionDirButton_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = wzExtractionDir.Text;
             if (fbd.ShowDialog() == DialogResult.OK)
                 wzExtractionDir.Text = fbd.SelectedPath;
         }
@@ -192,6 +193,7 @@ namespace WZ_Files_extractor_for_phpVana
         private void WzFilesDirButton_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.SelectedPath = wzFilesDir.Text;
             if (fbd.ShowDialog() == DialogResult.OK)
                 wzFilesDir.Text = fbd.SelectedPath;
         }

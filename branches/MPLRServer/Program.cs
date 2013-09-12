@@ -71,7 +71,7 @@ namespace MPLRServer
             SessionRestartCache.Start();
 
             // For clients
-            Acceptor accept = new Acceptor(23710, sock =>
+            Acceptor accept = new Acceptor(ServerMapleInfo.MAPLER_PORT, sock =>
             {
                 new ClientConnection(sock);
             });
@@ -91,7 +91,7 @@ namespace MPLRServer
                 packet.Dispose();
                 packet = null;
             }
-            Acceptor acceptCheck = new Acceptor(23711, sock =>
+            Acceptor acceptCheck = new Acceptor(ServerMapleInfo.MAPLER_PORT_SERVER_INFO, sock =>
             {
                 sock.Send(OnlineCheckInfo);
                 sock.Send(BitConverter.GetBytes(Clients.Count));
@@ -115,6 +115,7 @@ namespace MPLRServer
             Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
             Logger.WriteLine("|           Build For: {0,3} Locale {1,1}           |", ServerMapleInfo.VERSION, ServerMapleInfo.LOCALE);
             Logger.WriteLine("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+");
+            Logger.WriteLine("Accepting connections on {0}, and info requests on {1}", ServerMapleInfo.MAPLER_PORT, ServerMapleInfo.MAPLER_PORT_SERVER_INFO);
 
 
             while (true)

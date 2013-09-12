@@ -197,10 +197,14 @@ namespace MPLRServer
 
             this.DisplayID = pPacket.ReadUShort();
 
+#if LOCALE_GMS
             this.SocketState = pPacket.ReadUShort();
             this.Nebulite1 = pPacket.ReadShort();
             this.Nebulite2 = pPacket.ReadShort();
             this.Nebulite3 = pPacket.ReadShort();
+#else
+            pPacket.ReadShort();
+#endif
 
             if (CashID == 0)
                 this.UniqueID = pPacket.ReadLong();
@@ -211,6 +215,15 @@ namespace MPLRServer
 
 
             pPacket.ReadInt(); // always -1?
+
+#if LOCALE_EMS
+            pPacket.ReadLong();
+            pPacket.ReadLong();
+            pPacket.ReadInt();
+            for (int i = 0; i < 3; i++)
+                pPacket.ReadInt();
+
+#endif
 
             // Fix setflags
             if ((this.Flags & 0x80) == 0x80 && this.Name != "")

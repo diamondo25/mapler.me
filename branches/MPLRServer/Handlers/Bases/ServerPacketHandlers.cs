@@ -287,6 +287,9 @@ namespace MPLRServer
         {
             int id = pPacket.ReadInt();
             byte level = pPacket.ReadByte();
+#if LOCALE_EMS
+            pPacket.ReadByte();
+#endif
             string name = pPacket.ReadString();
             string successor = pPacket.ReadString();
             string guildname = pPacket.ReadString();
@@ -1474,6 +1477,9 @@ namespace MPLRServer
             int channelid = pPacket.ReadInt();
             pConnection.ChannelID = (byte)channelid;
 
+#if LOCALE_EMS
+            pPacket.ReadByte();
+#endif
             pPacket.Skip(1 + 4);
             pPacket.Skip(1); // Portals taken
             pPacket.Skip(4);
@@ -1601,16 +1607,16 @@ namespace MPLRServer
             if (mode == 0)
             {
                 // Keymap
-                if (pPacket.Length - pPacket.Position != (1 + 4) * 89)
+                if (pPacket.Length - pPacket.Position != (1 + 4) * ServerMapleInfo.KEYMAP_SLOTS)
                 {
-                    pConnection.Logger_ErrorLog("Keymap size not correct. {0} != {1}", pPacket.Length - pPacket.Position, (1 + 4) * 89);
+                    pConnection.Logger_ErrorLog("Keymap size not correct. {0} != {1}", pPacket.Length - pPacket.Position, (1 + 4) * ServerMapleInfo.KEYMAP_SLOTS);
                     return;
                 }
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("DELETE FROM character_keymaps WHERE character_id = " + pConnection.CharacterInternalID + ";");
                 sb.Append("INSERT INTO character_keymaps VALUES (" + pConnection.CharacterInternalID);
-                for (int i = 0; i < 89; i++)
+                for (int i = 0; i < ServerMapleInfo.KEYMAP_SLOTS; i++)
                     sb.Append("," + pPacket.ReadByte() + "," + pPacket.ReadInt());
 
                 sb.Append(");");

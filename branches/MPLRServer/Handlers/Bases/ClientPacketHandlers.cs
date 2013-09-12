@@ -70,7 +70,7 @@ namespace MPLRServer
                     byte type = pPacket.ReadByte();
                     int value = pPacket.ReadInt();
 
-                    if (idx < 0 || idx > 89)
+                    if (idx < 0 || idx > ServerMapleInfo.KEYMAP_SLOTS)
                     {
                         pConnection.Logger_WriteLine("ERROR: Keymap contained invalid index!");
                         return;

@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace MPLRServer
 {
-   public class CharacterQuests
+    public class CharacterQuests
     {
         public Dictionary<ushort, string> Running { get; private set; }
         public Dictionary<ushort, long> Done { get; private set; }
@@ -16,6 +16,21 @@ namespace MPLRServer
 
         CultureInfo provider = CultureInfo.InvariantCulture;
 
+        private long DecodeTimeFromInt(ClientConnection pConnection, uint pValue)
+        {
+
+            long ft = 0;
+            DateTime temp;
+            if (DateTime.TryParseExact(pValue.ToString(), "yyMMddHHmm", provider, DateTimeStyles.None, out temp))
+                ft = temp.ToFileTime();
+            else
+            {
+                pConnection.Logger_WriteLine("Unable to parse {0} as date. GG nexon.", pValue);
+                ft = 150842304000000000L; // GG Nexon.
+            }
+
+            return ft;
+        }
 
         public void Decode(ClientConnection pConnection, MaplePacket pPacket)
         {
@@ -53,18 +68,7 @@ namespace MPLRServer
                 var id = pPacket.ReadUShort();
                 var date = pPacket.ReadUInt();
 
-
-                long ft = 0;
-                DateTime temp;
-                if (DateTime.TryParseExact(date.ToString(), "yyMMddHHmm", provider, DateTimeStyles.None, out temp))
-                {
-                    ft = temp.ToFileTime();
-                }
-                else
-                {
-                    pConnection.Logger_WriteLine("Unable to parse {0} as date. GG nexon. Quest ID: {1}", date, id);
-                    ft = 150842304000000000L; // GG Nexon.
-                }
+                long ft = DecodeTimeFromInt(pConnection, date);
 
                 if (!Done.ContainsKey(id))
                     Done.Add(id, ft);
@@ -102,7 +106,13 @@ namespace MPLRServer
             for (int i = pPacket.ReadShort(); i > 0; i--)
             {
                 ushort id = pPacket.ReadUShort();
+#if LOCALE_EMS
+                var date = pPacket.ReadUInt();
+
+                long time = DecodeTimeFromInt(pConnection, date);
+#else
                 long time = pPacket.ReadLong();
+#endif
                 if (!PartyQuestsDone.ContainsKey(id))
                     PartyQuestsDone.Add(id, time);
                 else

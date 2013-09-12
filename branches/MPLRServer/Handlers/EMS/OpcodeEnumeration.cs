@@ -34,9 +34,9 @@
 
         SPAWN_PLAYER = 0x0117,
 
-        SPAWN_ANDROID = 0x0177,
+        SPAWN_ANDROID = 0x0145,
 
-        KEYMAP_UPDATE = 0x030E,
+        KEYMAP_UPDATE = 0x028C,
     }
 
     public enum ClientOpcodes : ushort

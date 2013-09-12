@@ -35,13 +35,14 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Debug|AnyCPU'">
-    <OutputPath>bin\GMS_Debug\</OutputPath>
+    <OutputPath>bin\GMS_Release\</OutputPath>
     <DefineConstants>DEBUG;LOCALE_GMS</DefineConstants>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Debug|x86'">
     <OutputPath>bin\x86\GMS_Debug\</OutputPath>
+    <DefineConstants>DEBUG;LOCALE_GMS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|AnyCPU'">
     <OutputPath>bin\GMS_Release\</OutputPath>
@@ -50,6 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|x86'">
     <OutputPath>bin\x86\GMS_Release\</OutputPath>
+    <DefineConstants>LOCALE_GMS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|AnyCPU'">
     <OutputPath>bin\EMS_Debug\</OutputPath>
@@ -59,6 +61,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|x86'">
     <OutputPath>bin\x86\EMS_Debug\</OutputPath>
+    <DefineConstants>DEBUG;LOCALE_EMS</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|AnyCPU'">
     <OutputPath>bin\EMS_Release\</OutputPath>
@@ -69,6 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|x86'">
     <OutputPath>bin\x86\EMS_Release\</OutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <DefineConstants>LOCALE_EMS</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -106,7 +110,7 @@
     <Compile Include="GameHelper.cs" />
     <Compile Include="GMSKeys.cs" />
     <Compile Include="Handlers\GMS\OpcodeEnumeration.cs" />
-    <Compile Include="Handlers\Version.cs" />
+    <Compile Include="Handlers\ServerMapleInfo.cs" />
     <Compile Include="Internal Storage\Store.cs" />
     <Compile Include="InternalPacketHandler.cs" />
     <Compile Include="MasterThread.cs" />
