@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			UPDATE
-				friend_list
+				maplestats.friend_list
 			SET
 				accepted_on = NOW()
 			WHERE
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			DELETE FROM
-				friend_list
+				maplestats.friend_list
 			WHERE
 				(
 					account_id = ".$id."
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			DELETE FROM
-				friend_list
+				maplestats.friend_list
 			WHERE
 				(
 					account_id = ".$id."
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL && GetFriendStatus($_loginaccount->GetID(), $id) == 'NO_FRIENDS') {
 			$__database->query("
 			INSERT INTO
-				friend_list
+				maplestats.friend_list
 			VALUES
 			(
 				".$_loginaccount->GetID().",

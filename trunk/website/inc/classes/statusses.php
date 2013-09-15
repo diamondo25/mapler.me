@@ -36,7 +36,7 @@ SELECT
 FROM
 	social_statuses s
 LEFT JOIN
-	accounts
+	maplestats.accounts
 	ON
 		s.account_id = accounts.id
 ".(

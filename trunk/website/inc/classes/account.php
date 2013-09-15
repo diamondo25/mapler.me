@@ -23,10 +23,10 @@ class Account {
 		
 		$temp = "
 SELECT 
-	accounts.*,
+	maplestats.accounts.*,
 	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `last_login_secs_since`
 FROM 
-	accounts 
+	maplestats.accounts 
 WHERE
 ";
 		if (is_numeric($input))
@@ -74,7 +74,7 @@ WHERE
 		global $__database;
 		$__database->query("
 UPDATE
-	accounts
+	maplestats.accounts
 SET
 	full_name = '".$__database->real_escape_string($this->_fullname)."',
 	email = '".$__database->real_escape_string($this->_email)."',
@@ -187,7 +187,7 @@ WHERE
 		$this->_configuration[$name] = $value;
 		
 		if ($save) {
-			$__database->query("UPDATE accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
+			$__database->query("UPDATE maplestats.accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
 		}
 	}
 	
@@ -231,7 +231,7 @@ WHERE
 	public function AddAccountNotification($type, $data, $email = true) {
 		$__database->query("
 INSERT INTO
-	account_notifications
+	maplestats.account_notifications
 VALUES
 	(
 		NULL,
@@ -265,7 +265,7 @@ VALUES
 		
 		$__database->query("
 INSERT INTO
-	account_tokens
+	maplestats.account_tokens
 VALUES
 	(
 		".$this->id.",
@@ -315,7 +315,7 @@ ON DUPLICATE KEY
 				$error = "That username is disallowed, please choose another.";
 			}
 			else {
-				$result = $__database->query("SELECT id FROM accounts WHERE username = '".$__database->real_escape_string($username)."'");
+				$result = $__database->query("SELECT id FROM maplestats.accounts WHERE username = '".$__database->real_escape_string($username)."'");
 				if ($result->num_rows == 1) {
 					$error = "This username has already been taken, please try another.";
 				}

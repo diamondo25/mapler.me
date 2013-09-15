@@ -67,7 +67,7 @@ function CheckStand($type, $data) {
 
 function BuildCodeString($slots, $name) {
 	$tmp = '';
-	foreach ($slots AS $key=>$value)
+	foreach ($slots AS $key => $value)
 		$tmp .= 'slot['.$key.']='.$value.'&';
 	
 	$tmp .= 'name='.$name;
@@ -610,7 +610,7 @@ $options['face'] = 'default';
 $options['stance'] = 'stand';
 $options['stance_frame'] = '0';
 $options['stand_type'] = 1;
-$options['tamingmob'] = 1932016; // 0;
+$options['tamingmob'] = 0; // 1932016 - Mechanic
 $options['elven_ears'] = 1;
 $options['guild_name'] = 'Mapler.me';
 $options['guild_emblem_fg'] = 400;
@@ -651,6 +651,7 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 	
 	// Parse code
 	if (isset($_GET['code'])) {
+		if (DEBUGGING) echo "Got code request!!!! > ".$_GET['code']."\r\n";
 		$tmp = $_GET['code'];
 		$tmp = base64_decode($tmp);
 		$tmp = gzuncompress($tmp);
@@ -664,6 +665,7 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 
 	if (isset($_GET['slot'])) {
 		$slots_input = $_GET['slot'];
+		if (DEBUGGING) echo "Got slots from URL!!!\r\n";
 	}
 	else {
 		// Default items
@@ -672,6 +674,7 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 		$slots_input[] = 1042003;
 		$slots_input[] = 1062007;
 		$slots_input[] = 1322013;
+		if (DEBUGGING) echo "Using default slots...!!!\r\n";
 		
 	}
 
@@ -730,33 +733,59 @@ $imageoptions['mainy'] = ($imageoptions['height'] / 2) + 18;
 // Load data for items...
 
 $used_wz_dirs = array();
-$has_body = false;
-$has_head = false;
-$skin = 2000;
+$skin = 0;
+$face = 0;
+$hair = 0;
 
 $prerender = array();
 
 foreach ($options['slots'] as $slot => $itemid) {
-	$data = GetItemWZInfo($itemid);
-	if (!isset($data['info'])) {
-		unset($options['slots'][$slot]);
-		continue;
-	}
 	
 	$absgroup = floor($itemid / 1000);
 	if ($absgroup == 2) {
-		$has_body = true;
-		$skin = $itemid % 10000;
+		$skin = $itemid % 1000;
+		if (DEBUGGING)
+			echo "Found body: ".$itemid." > ".$skin."\r\n";
+		unset($options['slots'][$slot]);
 	}
 	elseif ($absgroup == 12) {
-		$has_head = true;
-		$skin = $itemid % 10000;
+		$skin = $itemid % 1000;
+		if (DEBUGGING)
+			echo "Found head: ".$itemid." > ".$skin."\r\n";
+		unset($options['slots'][$slot]);
+	}
+	elseif ($absgroup == 20) {
+		$face = $itemid % 10000;
+		if (DEBUGGING)
+			echo "Found face: ".$itemid." > ".$face."\r\n";
+		unset($options['slots'][$slot]);
+	}
+	elseif ($absgroup == 30) {
+		$hair = $itemid % 10000;
+		if (DEBUGGING)
+			echo "Found hair: ".$itemid." > ".$hair."\r\n";
+		unset($options['slots'][$slot]);
+	}
+	else {
+		$data = GetItemWZInfo($itemid);
+		if (!isset($data['info'])) {
+			if (DEBUGGING)
+				echo "Skipping item ".$itemid."\r\n";
+			unset($options['slots'][$slot]);
+			continue;
+		}
 	}
 	$used_wz_dirs[GetWZItemTypeName($itemid)] = $itemid;
 }
 // Fix up base position
 
-RenderTamedMob();
+
+$skin = 2000 + ($skin % 1000);
+
+if ($options['tamingmob'] > 0)
+	RenderTamedMob();
+
+
 {
 	
 	// Set global position values
@@ -772,15 +801,11 @@ RenderTamedMob();
 
 // Check if main slots are used
 
-if (!$has_body)
-	ParseItem($skin);
-if (!$has_head)
-	ParseItem(10000 + $skin);
+ParseItem($skin);
+ParseItem(10000 + $skin);
 	
-if (!isset($used_wz_dirs['Face']))
-	ParseItem(20000);
-if (!isset($used_wz_dirs['Hair']))
-	ParseItem(30000);
+ParseItem(20000 + $face);
+ParseItem(30000 + $hair);
 
 	
 // Sort equipment by ID

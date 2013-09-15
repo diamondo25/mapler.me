@@ -19,7 +19,7 @@ if ($request_type == 'info') {
 
 	if ($_loggedin) {
 		$res['membername'] = $_loginaccount->GetUsername();
-		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
+		$__database->query("UPDATE maplestats.accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 		
 		$statuscount = $__database->query("SELECT id FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
 		$statuscounter = array();
@@ -138,7 +138,7 @@ SELECT
 FROM
 	`social_statuses` ss
 LEFT JOIN
-	accounts a
+	maplestats.accounts a
 	ON
 		a.id = `ss`.`account_id`
 LEFT JOIN
@@ -207,7 +207,7 @@ LEFT JOIN
 	ON
 		c.internal_id = character_id
 LEFT JOIN
-	accounts a
+	maplestats.accounts a
 	ON
 		a.id = `account_id`
 WHERE
@@ -304,7 +304,7 @@ LIMIT
 SELECT
 	`FriendStatus`(`id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 FROM
-	accounts
+	maplestats.accounts
 WHERE
 	username = '".$__database->real_escape_string($mentioning)."'");
 						if ($q_temp->num_rows > 0) {

@@ -247,7 +247,7 @@ function SetItemInfo(event, obj, values) {
 			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
 			case 0x20: tradeInfo = 'Use the Scissors of Karma to enable an item to be traded one time'; break;
 			case 0x21: tradeInfo = 'Use the Platinum Scissors of Karma to enable an item to be traded one time'; break;
-			case 0x10: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
+			case 0x30: tradeInfo = 'Can be traded once within an account (Cannot be traded after being moved)'; break;
 		}
 		if (tradeInfo != '') {
 			description += '<span style="color: orange;">' + tradeInfo + '</span>';

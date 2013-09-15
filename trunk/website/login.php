@@ -59,18 +59,18 @@ function _AddHeaderLink($what, $filename) {
 	<link href='http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic' rel='stylesheet' type='text/css' />
 	
 	<!-- Theme -->
-	<?php
-	if ($_loggedin) {
-	?>
+<?php
+if ($_loggedin) {
+?>
 	<link href='http://<?php echo $domain; ?>/inc/css/themes/<?php echo $_loginaccount->GetTheme(); ?>.css' rel='stylesheet' type='text/css' />
-	<?php
-	}
-	else {
-	?>
+<?php
+}
+else {
+?>
     <link href='http://<?php echo $domain; ?>/inc/css/themes/light.css' rel='stylesheet' type='text/css' />
-    <?php
-	}
-	?>
+<?php
+}
+?>
 	<!-- End Theme -->
 	
 <?php
@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$username = $__database->real_escape_string($_POST['username']);
 		$password = $_POST['password'];
 		
-		// $query = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
-		$query = $__database->query("SELECT * FROM accounts WHERE email = '".$username."'");
+		// $query = $__database->query("SELECT * FROM maplestats.accounts WHERE username = '".$username."'");
+		$query = $__database->query("SELECT * FROM maplestats.accounts WHERE email = '".$username."'");
 		if ($query->num_rows == 1) {
 			$row = $query->fetch_assoc();
 			
@@ -160,12 +160,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				
 				$_loggedin = true;
 				
-				$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
+				$__database->query("UPDATE maplestats.accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 				/*
 				$code = md5(time().' -- -- -- -- - '.$_loginaccount->GetID().' - '.$_loginaccount->GetUsername());
 				$__database->query("
 INSERT INTO 
-	account_tokens 
+	maplestats.account_tokens 
 VALUES 
 	(".$_loginaccount->GetID().", 'login_token', '".$code."', DATE_ADD(NOW(), INTERVAL 10 YEAR))
 ON DUPLICATE KEY UPDATE
@@ -190,7 +190,7 @@ ON DUPLICATE KEY UPDATE
 }
 ?> 
     <div class="login">
-        <form method="POST" style="padding-top:180px;">
+        <form action="" method="post" style="padding-top:180px;">
         <?php
 if ($_loggedin) {
 	$push_to_page = (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'logoff') === FALSE && strpos($_SERVER['HTTP_REFERER'], 'login') === FALSE) ? $_SERVER['HTTP_REFERER'] : '/stream/';

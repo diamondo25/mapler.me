@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		}
 
 		if (count($errorList) == 0) {
-			$result = $__database->query("SELECT id FROM accounts WHERE email = '".$email."'");
+			$result = $__database->query("SELECT id FROM maplestats.accounts WHERE email = '".$email."'");
 			if ($result->num_rows == 1) {
 				$error = 'The email you entered is already used.';
 				$errorList['email'] = true;
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 					$errorList['username'] = true;
 				}
 				else {
-					$result = $__database->query("SELECT id FROM accounts WHERE username = '".$username."'");
+					$result = $__database->query("SELECT id FROM maplestats.accounts WHERE username = '".$username."'");
 					if ($result->num_rows == 1) {
 						$error = 'This username has already been taken, please try another.';
 						$errorList['username'] = true;
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$fullname = $__database->real_escape_string($_POST['fullname']);
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
-			$statement = $__database->prepare('INSERT INTO accounts 
+			$statement = $__database->prepare('INSERT INTO maplestats.accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip, registered_on) VALUES
 				(NULL,?,?,?,?,?,?,NOW(),?,NOW())');
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 

@@ -16,7 +16,7 @@ FROM
 			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
 			0 AS `added_by_yourself`
 		FROM
-			friend_list friend
+			maplestats.friend_list friend
 		WHERE
 			friend.friend_id = ".$__url_useraccount->GetId()."
 	)
@@ -30,7 +30,7 @@ FROM
 			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
 			1 AS `added_by_yourself`
 		FROM
-			friend_list friend
+			maplestats.friend_list friend
 		WHERE
 			friend.account_id = ".$__url_useraccount->GetId()."
 	)

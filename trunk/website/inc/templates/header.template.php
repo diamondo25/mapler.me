@@ -266,9 +266,9 @@ endif;
 <?php
 if ($_loggedin && $_loginaccount->GetAccountRank() <= RANK_AWAITING_ACTIVATION) {
     if (strpos($_SERVER['REQUEST_URI'], '/support/') === FALSE) {
-    DisplayError(5);
-	require_once __DIR__.'/../../inc/footer.php';
-	die;
+		DisplayError(5);
+		require_once __DIR__.'/../../inc/footer.php';
+		die;
 	}
 }
 
@@ -277,10 +277,10 @@ if ($_loggedin && !$_loginaccount->IsMuted()):
 endif;
 
 if ($_loggedin && $_loginaccount->IsRankOrHigher(RANK_ADMIN)):
-require_once 'banhammer.php';
+	require_once 'banhammer.php';
 endif;
 
 if ($_loggedin && $_loginaccount->IsMuted()):
-DisplayError(4);
+	DisplayError(4);
 endif;
 ?>
