@@ -51,6 +51,6 @@ define('KMS', false && $subdomain == 'kms');
 if (EMS)		define('CURRENT_LOCALE', 'ems');
 elseif (GMS)	define('CURRENT_LOCALE', 'gms');
 elseif (KMS)	define('CURRENT_LOCALE', 'kms');
-else			define('CURRENT_LOCALE', 'fail');
+else			define('CURRENT_LOCALE', 'gms'); // Fallback on old system :/
 
 ?>

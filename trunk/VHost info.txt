@@ -1,15 +1,16 @@
 # Test case @ home. note the session.cookie_domain
 # Don't forget NameVirtualHost
+# Replace MPLR_DOMAIN with yourdoma.in !!!!
 
 NameVirtualHost *:80
 
 
 <VirtualHost *:80>
-	DocumentRoot P:/Mapler.me/trunk/website
-	ServerName mplr.e.craftnet.nl
-	ServerAlias mplr.e.craftnet.nl www.mplr.e.craftnet.nl
-	php_value session.cookie_domain .mplr.e.craftnet.nl
-	<Directory P:/Mapler.me/trunk/website/>
+	DocumentRoot /[document root of mapler website]/
+	ServerName MPLR_DOMAIN
+	ServerAlias MPLR_DOMAIN www.MPLR_DOMAIN gms.MPLR_DOMAIN ems.MPLR_DOMAIN kms.MPLR_DOMAIN
+	php_value session.cookie_domain .MPLR_DOMAIN
+	<Directory /[document root of mapler website]/>
 		AllowOverride All
 		Options +Indexes
 		Order allow,deny
@@ -18,44 +19,14 @@ NameVirtualHost *:80
 </VirtualHost>
 
 <VirtualHost *:80>
-	DocumentRoot P:/Mapler.me/trunk/website/me/
-	ServerName test.mplr.e.craftnet.nl
-	ServerAlias *.mplr.e.craftnet.nl
-	php_value session.cookie_domain .mplr.e.craftnet.nl
-	<Directory P:/Mapler.me/trunk/website/me/>
+	DocumentRoot /[document root of mapler website]/me/
+	ServerName test.MPLR_DOMAIN
+	ServerAlias *.MPLR_DOMAIN
+	php_value session.cookie_domain .MPLR_DOMAIN
+	<Directory /[document root of mapler website]/me/>
 		AllowOverride All
 		Options +Indexes
 		Order allow,deny
 		Allow from all
-	</Directory>
-</VirtualHost>
-
-
-# ------------------------------------------------------------------------------ #
-# Live case @ mc.craftnet.nl / mapler.me / etc..
-
-NameVirtualHost *:80
-
-<VirtualHost *:80>
-	DocumentRoot "/var/www/maplestats/"
-	CustomLog logs/maplestats common
-	ServerName mapler.me
-	ServerAlias www.mapler.me direct.mapler.me
-	php_value session.cookie_domain .mapler.me
-	<Directory "/var/www/maplestats/">
-		Allow from all
-		Options +Indexes
-	</Directory>
-</VirtualHost>
-
-<VirtualHost *:80>
-	DocumentRoot "/var/www/maplestats/me/"
-	CustomLog logs/maplestats common
-	ServerName test.mapler.me
-	ServerAlias *.mapler.me
-	php_value session.cookie_domain .mapler.me
-	<Directory "/var/www/maplestats/me/">
-		Allow from all
-		Options +Indexes
 	</Directory>
 </VirtualHost>
