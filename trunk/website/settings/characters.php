@@ -121,7 +121,7 @@ foreach ($cache as $row) {
 		$char_config['main_character'] = $row['name'];
 	}
 	$shown_option_value = isset($char_config['characters'][$row['name']]) ? $char_config['characters'][$row['name']] : 0; // Default = 0
-	$shown_face_value = GetCharacterOption($row['internal_id'], $row['locale'], 'avatar_face', CURRENT_LOCALE, 'default');
+	$shown_face_value = GetCharacterOption($row['internal_id'], 'avatar_face', $row['locale'], 'default');
 	$data_domain = $row['locale'].'.'.$domain;
 	if ($i % $chars_per_row == 0) {
 		if ($i > 0) {
