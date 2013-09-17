@@ -233,7 +233,7 @@ $born_at = '<abbr title="We could not determine the creation date...">???</abbr>
 if ($born_quest !== null && isset($born_quest->data['born'])) {
 	$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	$date = $born_quest->data['born'];
-	$born_at = substr($date, 4, 2).' '.$months[intval(substr($date, 2, 2))].'  20'.substr($date, 0, 2);
+	$born_at = substr($date, 4, 2).' '.$months[intval(substr($date, 2, 2)) - 1].'  20'.substr($date, 0, 2);
 }
 
 ?>
