@@ -1587,7 +1587,7 @@ WHERE
 		}
 ?>
 					<tr>
-						<td><?php echo GetMapname($row['map']); ?></td>
+						<td><?php echo GetMapname($row['map'], CURRENT_LOCALE); ?></td>
 					</tr>
 <?php
 	}
