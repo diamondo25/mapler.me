@@ -1,17 +1,6 @@
 <?php
 require_once __DIR__.'/inc/header.php';
 
-$s = $__database->query("
-SELECT
-	(SELECT COUNT(*) FROM accounts),
-	(SELECT COUNT(*) FROM ".DB_GMS.".characters) + (SELECT COUNT(*) FROM ".DB_EMS.".characters,
-	(SELECT COUNT(*) FROM".DB_GMS.". items) + (SELECT COUNT(*) FROM".DB_EMS.". items)
-");
-$tmp = $s->fetch_row(); 
-$s->free();
-
-$statusses = new Statusses();
-$statusses->Load("s.blog = 0","5");
 
 if ($_loggedin) {
 ?>
@@ -19,6 +8,18 @@ if ($_loggedin) {
 <?php
 	die;
 }
+
+$s = $__database->query("
+SELECT
+	(SELECT COUNT(*) FROM accounts),
+	(SELECT COUNT(*) FROM ".DB_GMS.".characters) + (SELECT COUNT(*) FROM ".DB_EMS.".characters),
+	(SELECT COUNT(*) FROM ".DB_GMS.".items) + (SELECT COUNT(*) FROM ".DB_EMS.".items)
+");
+$tmp = $s->fetch_row(); 
+$s->free();
+
+$statusses = new Statusses();
+$statusses->Load("s.blog = 0","5");
 ?>
 <style>
 .woah {

@@ -91,7 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 				$char_config['characters'][$charname] = $value;
 			}
 			foreach ($char_face_options as $charname => $value) {
-				SetCharacterOption($name_internal_id_list[$charname], 'avatar_face', $avatar_faces[$value][0]);
+				$locale = substr($charname, 0, strpos($charname, ':'));
+				SetCharacterOption($name_internal_id_list[$charname], 'avatar_face', $locale, $avatar_faces[$value][0]);
 			}
 			
 			$_loginaccount->SetConfigurationOption('character_config', $char_config);
@@ -120,7 +121,7 @@ foreach ($cache as $row) {
 	if ($char_config['main_character'] == null) {
 		$char_config['main_character'] = $row['name'];
 	}
-	$shown_option_value = isset($char_config['characters'][$row['name']]) ? $char_config['characters'][$row['name']] : 0; // Default = 0
+	$shown_option_value = isset($char_config['characters'][$row['internal_name']]) ? $char_config['characters'][$row['internal_name']] : 0; // Default = 0
 	$shown_face_value = GetCharacterOption($row['internal_id'], 'avatar_face', $row['locale'], 'default');
 	$data_domain = $row['locale'].'.'.$domain;
 	if ($i % $chars_per_row == 0) {
