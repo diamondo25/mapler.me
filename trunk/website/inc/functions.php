@@ -1,16 +1,18 @@
 <?php
-// Default set to Pacific Time (MapleStory Time)
-// Note that our database still uses the GMT + 1 time (Holland)
-date_default_timezone_set('America/Los_Angeles');
-set_time_limit(60);
-error_reporting(0);
-ini_set('display_errors', 0);
-mb_internal_encoding('UTF-8');
-
 if (isset($_GET['debugsite'])) {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 }
+else {
+	set_time_limit(60);
+	error_reporting(0);
+}
+// Default set to Pacific Time (MapleStory Time)
+// Note that our database still uses the GMT + 1 time (Holland)
+date_default_timezone_set('America/Los_Angeles');
+ini_set('display_errors', 0);
+//mb_internal_encoding('UTF-8');
+
 
 require_once __DIR__.'/classes/database.php';
 
