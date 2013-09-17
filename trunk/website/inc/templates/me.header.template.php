@@ -2,7 +2,8 @@
 $main_character = $__url_useraccount->GetMainCharacterName();
 $main_character_image = $main_character !== null ? '//'.$main_character['locale'].'.'.$domain.'/avatar/'.$main_character['name'] : '';
 
-$is_self = $_loginaccount !== null && $__url_useraccount->GetID() == $_loginaccount->GetID();
+$is_self = $_loggedin && $__url_useraccount->GetID() == $_loginaccount->GetID();
+$friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), $__url_useraccount->GetID()) : '';
 
 ?>
 
