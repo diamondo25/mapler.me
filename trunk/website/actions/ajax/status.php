@@ -103,24 +103,24 @@ elseif ($request_type == 'post') {
 
 	$content = nl2br(htmlentities(trim($P['content']), ENT_QUOTES, 'UTF-8'));
     
-            //Tweet post yo.
-            $CONSUMER_KEY = 'AeH4Ka2jIhiBWASIQUEQ';
-            $CONSUMER_SECRET = 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw';
-        
-            \Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
-            $cb = \Codebird\Codebird::getInstance();
-            
-            $oauth_token = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
-            $oauth_token_secret = $_loginaccount->GetConfigurationOption('twitter_oauth_token_secret');
-            //all status requests have to start with status=
-            //need to cut off anything over 140 characters btw.
-            $status = 'status='.$P['content'].' #maplerme';
-            
-            //Checks if the person has a Twitter account added. If so, bombs away.
-            if($oauth_token != '') {
-                $cb->setToken($oauth_token, $oauth_token_secret);
-                $reply = $cb->statuses_update($status);
-            }
+	//Tweet post yo.
+	$CONSUMER_KEY = 'AeH4Ka2jIhiBWASIQUEQ';
+	$CONSUMER_SECRET = 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw';
+
+	\Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
+	$cb = \Codebird\Codebird::getInstance();
+	
+	$oauth_token = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
+	$oauth_token_secret = $_loginaccount->GetConfigurationOption('twitter_oauth_token_secret');
+	//all status requests have to start with status=
+	//need to cut off anything over 140 characters btw.
+	$status = 'status='.$P['content'].' #maplerme';
+	
+	//Checks if the person has a Twitter account added. If so, bombs away.
+	if($oauth_token != '') {
+		$cb->setToken($oauth_token, $oauth_token_secret);
+		$reply = $cb->statuses_update($status);
+	}
 
 	if ($content == '')
 		JSONDie('No status contents.', 400);
@@ -167,13 +167,12 @@ WHERE
 	$blog = $_loginaccount->IsRankOrHigher(RANK_MODERATOR) && isset($_POST['blog']) ? 1 : 0;
 
 	$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
-	$has_characters = !empty($char_config['main_character']);
 
 	// set internally
 	$nicknm = $_loginaccount->GetNickname();
-	$chr = $has_characters ? $char_config['main_character'] : '';
+	$chr = $char_config['main_character'] !== null ? $char_config['main_character'] : '';
 
-	$_loginaccount->SetConfigurationOption('last_status_sent', date("Y-m-d H:i:s"));
+	$_loginaccount->SetConfigurationOption('last_status_sent', date('Y-m-d H:i:s'));
 
 	$__database->query("
 INSERT INTO
