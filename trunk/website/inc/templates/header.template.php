@@ -4,7 +4,7 @@ if (isset($__url_useraccount)) {
 	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
 }
 elseif (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
-	$title = substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1).' &middot; '.$title;
+	$title = urldecode(substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1)).' &middot; '.$title;
 }
 /*
 elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
@@ -47,8 +47,8 @@ function _AddHeaderLink($what, $filename) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?php echo $title; ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><?php echo $title; ?></title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />

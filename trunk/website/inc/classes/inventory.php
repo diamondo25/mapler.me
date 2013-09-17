@@ -10,46 +10,25 @@ class InventoryData {
 	private $bags;
 	private $equips;
 	
-	// $emulateData SEE character.php; push the full array
-	public function __construct($character_id, $emulateData = null) {
-		global $__database;
-		
+	public function __construct($character_id, $locale) {
+		$db = ConnectCharacterDatabase($locale);		
 		$this->equips = array();
 		
-		if ($emulateData != null) {
-			$row = array(
-				$emulateData['own_data']['eqp_slots'],
-				$emulateData['own_data']['use_slots'], 
-				$emulateData['own_data']['setup_slots'], 
-				$emulateData['own_data']['etc_slots'],
-				$emulateData['own_data']['cash_slots']
-			);
-		}
-		else {
-			$q = $__database->query("SELECT eqp_slots, use_slots, setup_slots, etc_slots, cash_slots FROM characters WHERE internal_id = ".$character_id);
-			$row = $q->fetch_row();
-			$q->free();
-		}
+		$q = $db->query("SELECT eqp_slots, use_slots, setup_slots, etc_slots, cash_slots FROM characters WHERE internal_id = ".$character_id);
+		$row = $q->fetch_row();
+		$q->free();
 		
 		$this->inventories = new SplFixedArray(count($row));
 		for ($i = 0; $i < count($row); $i++) {
 			$this->inventories[$i] = new SplFixedArray($row[$i]);
 		}
 		
-		if ($emulateData != null) {
-			$rows = array_filter($emulateData['items'], 'FilterOnlyInventories');
-			for ($i = 0; $i < count($rows); $i++) {
-				$rows[$i]['expires'] = ceil(($rows[$i]['expires'] / 10000000) - 11644473600);
-			}
+		$q = $db->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
+		$rows = array();
+		while ($row = $q->fetch_assoc()) {
+			$rows[] = $row;
 		}
-		else {
-			$q = $__database->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory < 10"); // Only inventory items
-			$rows = array();
-			while ($row = $q->fetch_assoc()) {
-				$rows[] = $row;
-			}
-			$q->free();
-		}
+		$q->free();
 		
 		foreach ($rows as $row) {
 			$inv = $row['inventory'];
@@ -62,7 +41,7 @@ class InventoryData {
 				if ($slot >= $this->inventories[$inv]->getSize()) {
 					$this->inventories[$inv]->setSize($slot + ($slot % 4) + 1);
 				}
-				$item = ItemBase::MakeItem($row, $emulateData);
+				$item = ItemBase::MakeItem($row, $locale);
 				$this->inventories[$inv][$slot] = $item;
 				
 				if ($item->bagid != -1) {
@@ -71,22 +50,14 @@ class InventoryData {
 			}
 		}
 		
-		
-		if ($emulateData != null) {
-			$rows = array_filter($emulateData['items'], 'FilterOnlyBags');
-			for ($i = 0; $i < count($rows); $i++) {
-				$rows[$i]['expires'] = ceil(($rows[$i]['expires'] / 10000000) - 11644473600);
-			}
+	
+		$q = $db->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
+	
+		$rows = array();
+		while ($row = $q->fetch_assoc()) {
+			$rows[] = $row;
 		}
-		else {
-			$q = $__database->query("SELECT *, ceil((expires / 10000000) - 11644473600) as expires FROM items WHERE character_id = ".$character_id." AND inventory >= 10"); // Only bag items
-		
-			$rows = array();
-			while ($row = $q->fetch_assoc()) {
-				$rows[] = $row;
-			}
-			$q->free();
-		}
+		$q->free();
 		
 		foreach ($rows as $row) {
 			$bagid = $row['inventory'];
@@ -128,11 +99,11 @@ class ItemBase {
 		$this->bagid = (int)$row['bagid'];
 	}
 	
-	public static function MakeItem($row, $emulateData) {
+	public static function MakeItem($row, $locale) {
 		if ($row['inventory'] == 0)
 			$item = new ItemEquip($row);
 		elseif (GetItemType($row['itemid']) == 500)
-			$item = new ItemPet($row, $emulateData);
+			$item = new ItemPet($row, $locale);
 		else
 			$item = new ItemBase($row);
 		return $item;
@@ -261,26 +232,16 @@ class ItemEquip extends ItemBase {
 class ItemPet extends ItemBase {
 	public $name, $closeness, $fullness, $level;
 	
-	public function __construct($row, $emulateData = null) {
-		global $__database;
+	public function __construct($row, $locale) {
+		$db = ConnectCharacterDatabase($locale);
 		$this->type = ITEM_PET;
 		
 		parent::__construct($row);
 		
 		$temp = null;
-		if ($emulateData != null) {
-			foreach ($emulateData['pets'] as $petrow) {
-				if ($petrow['cashid'] == $this->cashid) {
-					$temp = $petrow;
-					break;
-				}
-			}
-		}
-		else {
-			$q = $__database->query("SELECT * FROM pets WHERE cashid = ".$this->cashid." LIMIT 1");
-			$temp = $q->fetch_assoc();
-			$q->free();
-		}
+		$q = $db->query("SELECT * FROM pets WHERE cashid = ".$this->cashid." LIMIT 1");
+		$temp = $q->fetch_assoc();
+		$q->free();
 		
 		$this->name = $temp['name'];
 		$this->closeness = (int)$temp['closeness'];

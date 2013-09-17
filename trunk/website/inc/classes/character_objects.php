@@ -37,7 +37,7 @@ class Pet {
 	public $expires;
 	public $petslot, $equip, $nametag;
 	
-	public function __construct($data, $petslot) {
+	public function __construct($data, $petslot, $locale) {
 		$this->petslot = $petslot;
 		$this->character_id = $data['character_id'];
 		$this->cashid = $data['cashid'];
@@ -45,11 +45,11 @@ class Pet {
 		$this->closeness = $data['closeness'];
 		$this->fullness = $data['fullness'];
 		$this->level = $data['level'];
-		$this->LoadEquipsAndExtraInfo();
+		$this->LoadEquipsAndExtraInfo($locale);
 	}
 	
-	private function LoadEquipsAndExtraInfo() {
-		global $__database;
+	private function LoadEquipsAndExtraInfo($locale) {
+		$db = ConnectCharacterDatabase($locale);
 		$equipslot = 14;
 		$nameslot = 21;
 		if ($this->petslot == 2) {
@@ -64,7 +64,7 @@ class Pet {
 		$this->equip = -1;
 		$this->nametag = -1;
 		
-		$q = $__database->query("
+		$q = $db->query("
 SELECT
 	slot, itemid, expires
 FROM
@@ -93,9 +93,9 @@ WHERE
 		}
 	}
 	
-	public static function LoadPet($character_id, $cashid, $petslot = -1) {
-		global $__database;
-		$q = $__database->query("
+	public static function LoadPet($character_id, $locale, $cashid, $petslot = -1) {
+		$db = ConnectCharacterDatabase($locale);
+		$q = $db->query("
 SELECT
 	*
 FROM
@@ -110,11 +110,11 @@ WHERE
 		return $pet;
 	}
 	
-	public static function LoadPets($character_id) {
-		global $__database;
+	public static function LoadPets($character_id, $locale) {
+		$db = ConnectCharacterDatabase($locale);
 		$ret = array(null, null, null);
 		
-		$q = $__database->query("
+		$q = $db->query("
 SELECT
 	petcashid1, petcashid2, petcashid3
 FROM
@@ -141,10 +141,10 @@ WHERE
 class Quest {
 	public $id, $data, $completion_time;
 	
-	public static function GetQuest($character_id, $quest_id, $internal_quest) {
-		global $__database;
+	public static function GetQuest($character_id, $locale, $quest_id, $internal_quest) {
+		$db = ConnectCharacterDatabase($locale);
 		
-		$q = $__database->query("
+		$q = $db->query("
 SELECT
 	questid,
 	`data`
@@ -158,7 +158,7 @@ WHERE
 		if ($q->num_rows == 0) {
 			// Check if exists in completed quests
 			$q->free();
-			$q = $__database->query("
+			$q = $db->query("
 SELECT
 	questid,
 	FROM_FILETIME(`time`) AS `completed`
@@ -202,10 +202,10 @@ WHERE
 class Android {
 	public $name, $type, $skin, $face, $hair;
 
-	public static function GetAndroid($character_id) {
-		global $__database;
+	public static function GetAndroid($character_id, $locale) {
+		$db = ConnectCharacterDatabase($locale);
 		
-		$q = $__database->query("
+		$q = $db->query("
 SELECT
 	*
 FROM

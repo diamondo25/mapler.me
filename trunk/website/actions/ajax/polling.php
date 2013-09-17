@@ -130,8 +130,8 @@ SELECT
 	), X'02',
 	ss.`using_face`, X'02'
 	
-	) USING latin1) AS `col1`,
-	CONVERT(`ss`.`content` USING latin1) AS `col2`,
+	) USING utf8) AS `col1`,
+	CONVERT(`ss`.`content` USING utf8) AS `col2`,
 	a.username,
 	a.nickname,
 	a.account_rank
@@ -195,8 +195,8 @@ LIMIT
 SELECT 
 	UNIX_TIMESTAMP(`when`),
 	'timeline_row' AS `type`,
-	CONVERT(CONCAT(c.`name`, X'02', `type`) USING latin1) AS `col1`,
-	CONVERT(`data` USING latin1) AS `col2`,
+	CONVERT(CONCAT(c.`name`, X'02', `type`) USING utf8) AS `col1`,
+	CONVERT(`data` USING utf8) AS `col2`,
 	a.username,
 	a.nickname,
 	a.account_rank

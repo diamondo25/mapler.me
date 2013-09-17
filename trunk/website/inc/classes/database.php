@@ -30,6 +30,8 @@ class ExtendedMysqli extends mysqli {
 		$this->last_query = $pQuery;
 		$this->queries[] = $pQuery;
 		
+		parent::query("SET NAMES 'utf8'");
+		
 		$result = parent::query($pQuery) or die($this->get_debug_info());
 		return $result;
 	}

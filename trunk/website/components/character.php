@@ -228,7 +228,7 @@ SELECT
 		<p class="side"><i class="icon-tag faded"></i> Guild: <a href="//<?php echo $locale_domain; ?>/guild/<?php echo $character_info['world_name']; ?>/<?php echo $character_info['guildname']; ?>"><?php echo $character_info['guildname']; ?></a></p>
 <?php endif; ?>
 <?php
-$born_quest = Quest::GetQuest($internal_id, 13261, true);
+$born_quest = Quest::GetQuest($internal_id, CURRENT_LOCALE, 13261, true);
 $born_at = '<abbr title="We could not determine the creation date...">???</abbr>';
 if ($born_quest !== null && isset($born_quest->data['born'])) {
 	$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
@@ -316,7 +316,7 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 
 /******************* DRAGONS BE HERE ****************************/
 
-$inventory = new InventoryData($character_info['internal_id']);
+$inventory = new InventoryData($character_info['internal_id'], CURRENT_LOCALE);
 
 
 $optionlist = array();
@@ -1252,7 +1252,7 @@ endif;
 			</select>
 <?php
 
-$pets = Pet::LoadPets($character_info['internal_id']);
+$pets = Pet::LoadPets($internal_id, CURRENT_LOCALE);
 
 $inv_pos_offx = 136;
 $inv_pos_offy = 115;
@@ -1281,7 +1281,7 @@ for ($i = 0; $i < 3; $i++) {
 		<div id="inv_android" style="display: none">
 <?php 	MakeHideToggleButton('equip_droid'); ?>
 <?php
-$droid = Android::GetAndroid($internal_id);
+$droid = Android::GetAndroid($internal_id, CURRENT_LOCALE);
 
 ?>
 			<span class="top-col lt"><?php echo $character_info['name']; ?></span>
@@ -1411,7 +1411,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 <?php
 
 
-	$bits_quest = Quest::GetQuest($internal_id, 7022, true);
+	$bits_quest = Quest::GetQuest($internal_id, CURRENT_LOCALE, 7022, true);
 	$bits_info = null;
 
 	// c=0;e=1;l=3;s=12
