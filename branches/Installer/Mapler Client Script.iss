@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Mapler.me Client"
-#define MyAppVersion "2.0.2.1"
+#define MyAppVersion "2.0.2.2"
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
 #define MyAppExeName "MaplerUpdater.exe"

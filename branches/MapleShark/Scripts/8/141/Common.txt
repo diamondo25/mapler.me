@@ -29,7 +29,7 @@ using (ScriptAPI) {
             adventurer = 4;
 
 		if (
-                a1 / 1000 == 1 && (adventurer == 5 || adventurer == 3 || adventurer == 1) ||
+                a1 / 1000 == 1 && (adventurer == 5 || adventurer == 3 || adventurer == 1 || adventurer == 0) ||
                 a1 / 1000 == 3 ||
                 
                     a1 / 100 == 22 || a1 == 2001 || 

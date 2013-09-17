@@ -12,9 +12,6 @@ namespace MPLRServer
         public static Dictionary<ushort, Handler>[] ValidHeaders { get; private set; }
         public static List<string> AcceptedIPs { get; private set; }
 
-        public static string SQL_EquipReplace { get; private set; }
-        public static string SQL_ItemReplace { get; private set; }
-
         public static List<ClientConnection> Clients { get; private set; }
 
         // lolname

@@ -34,6 +34,13 @@ namespace Mapler_Client
         {
             lblInfo.Text = "";
 
+
+            if (new frmGateway().ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                this.Close();
+                return;
+            }
+
             if (new frmLogin().ShowDialog() != System.Windows.Forms.DialogResult.OK)
             {
                 this.Close();
@@ -54,7 +61,7 @@ namespace Mapler_Client
                 _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
                 _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
 
-                ServerConnection.Initialize();
+                ServerConnection.Initialize(frmGateway.GatewayHostname, frmGateway.GatewayPort);
                 Sniffer.Init();
             }
             catch (Exception ex)

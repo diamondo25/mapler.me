@@ -37,11 +37,10 @@ namespace MPLRServer
                 adventurer = 4;
 
             return (
-#if !LOCALE_EMS
-                pJobID / 1000 == 1 && (adventurer == 5 || adventurer == 3 || adventurer == 1) || // Revamped KoC
-#endif
-                
                 pJobID / 1000 == 3 ||
+#if !LOCALE_EMS
+                pJobID / 1000 == 1 && (adventurer == 5 || adventurer == 3 || adventurer == 1 || adventurer == 2) || // Revamped KoC
+#endif
                 job == 22 || pJobID == 2001 || // Evan
                 job == 23 || pJobID == 2002 || // Mercedes
                 job == 24 || pJobID == 2003 || // Phantom
@@ -243,6 +242,7 @@ namespace MPLRServer
 
         public static byte GetAllianceWorldID(byte pWorldID)
         {
+#if LOCALE_GMS
             switch (pWorldID)
             {
                 case 6:
@@ -262,6 +262,9 @@ namespace MPLRServer
                 default:
                     return pWorldID;
             }
+#else
+            return pWorldID;
+#endif
         }
     }
 }

@@ -43,6 +43,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Debug|x86'">
     <OutputPath>bin\x86\GMS_Debug\</OutputPath>
     <DefineConstants>DEBUG;LOCALE_GMS</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|AnyCPU'">
     <OutputPath>bin\GMS_Release\</OutputPath>
@@ -52,6 +55,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'GMS_Release|x86'">
     <OutputPath>bin\x86\GMS_Release\</OutputPath>
     <DefineConstants>LOCALE_GMS</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|AnyCPU'">
     <OutputPath>bin\EMS_Debug\</OutputPath>
@@ -62,6 +67,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Debug|x86'">
     <OutputPath>bin\x86\EMS_Debug\</OutputPath>
     <DefineConstants>DEBUG;LOCALE_EMS</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|AnyCPU'">
     <OutputPath>bin\EMS_Release\</OutputPath>
@@ -71,8 +79,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'EMS_Release|x86'">
     <OutputPath>bin\x86\EMS_Release\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DefineConstants>LOCALE_EMS</DefineConstants>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -126,12 +135,6 @@
     <Compile Include="Timeline.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SomeFunnyDLL\AHA.csproj">
-      <Project>{381f198d-832f-4d40-a9c4-09c59a4cfba9}</Project>
-      <Name>AHA</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
@@ -161,7 +164,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SomeFunnyDLL\AHA.csproj">
+      <Project>{381f198d-832f-4d40-a9c4-09c59a4cfba9}</Project>
+      <Name>AHA</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

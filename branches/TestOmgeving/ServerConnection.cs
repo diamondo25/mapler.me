@@ -8,11 +8,11 @@ namespace Mapler_Client
     public class ServerConnection : MESession
     {
         public static ServerConnection Instance { get; private set; }
-        public static void Initialize()
+        public static void Initialize(string pHostname, ushort pPort)
         {
-            string domain = "mc.craftnet.nl";
+            string domain = pHostname;
             if (System.IO.File.Exists("server.txt")) domain = System.IO.File.ReadAllText("server.txt");
-            Instance = new ServerConnection(domain);
+            Instance = new ServerConnection(domain, pPort);
         }
 
         private List<ushort>[] _validHeaders;
@@ -21,8 +21,8 @@ namespace Mapler_Client
         public ushort AcceptedMapleStoryVersion { get; private set; }
         public byte AcceptedMapleStoryLocale { get; private set; }
 
-        public ServerConnection(string pDomain)
-            : base(pDomain, 23710)
+        public ServerConnection(string pHostname, ushort pPort)
+            : base(pHostname, pPort)
         {
             AcceptedIPs = new List<string>();
         }
