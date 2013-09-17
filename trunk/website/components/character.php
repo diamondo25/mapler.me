@@ -690,7 +690,7 @@ function AddInventoryItems(&$inventory) {
 <?php
 		}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 	}
 }
@@ -1074,7 +1074,7 @@ function RenderItems(&$itemset, $slotmap_name) {
 		$itemwzinfo = GetItemWZInfo($info['iconid'], CURRENT_LOCALE);
 ?>
 			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
-				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" />
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid, CURRENT_LOCALE); ?>" />
 
 <?php if ($info['iscash'] == 1): ?>
 				<div class="cashitem"></div>
@@ -1112,7 +1112,7 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 ?>
 			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
 			
-				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, CURRENT_LOCALE, $itemIcon); ?>" />
 <?php if (!$isequip): ?>
 				<span class="amount"><?php echo $item->amount; ?></span>
 <?php endif; ?>
@@ -1146,7 +1146,7 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 	$uid = substr(uniqid(), -5);
 ?>
 			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?> <?php echo !$bgicon ? 'no-bg' : ''; ?>" style="<?php echo $pos; ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
-				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, CURRENT_LOCALE, $itemIcon); ?>" />
 <?php if (!$isequip && $amount): ?>
 				<span class="amount"><?php echo $item->amount; ?></span>
 <?php endif; ?>

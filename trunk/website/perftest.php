@@ -1,7 +1,7 @@
 <?php
 require_once 'inc/functions.php';
 
-$icon = GetItemIcon(2046086);
+$icon = GetItemIcon(2046086, CURRENT_LOCALE);
 echo $icon;
 
 /*

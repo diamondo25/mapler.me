@@ -600,7 +600,7 @@ function GetItemDataLocation($location, $id) {
 	return $url;
 }
 
-function GetItemIcon($id, $addition = '', $locale) {
+function GetItemIcon($id, $locale, $addition = '') {
 	global $subdomain;
 	$data_domain = '';
 	if ($locale == 'ems') $data_domain = 'EMS/';
