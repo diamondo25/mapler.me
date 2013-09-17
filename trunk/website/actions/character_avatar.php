@@ -795,7 +795,7 @@ imagedestroy($im);
 
 // Function to phrase data into an array
 function get_data($itemid) {
-	return GetItemWZInfo($itemid);
+	return GetItemWZInfo($itemid, CURRENT_LOCALE);
 }
 
 // Function to add element to the image

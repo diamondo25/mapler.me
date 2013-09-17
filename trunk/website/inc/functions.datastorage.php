@@ -2,31 +2,37 @@
 
 require_once __DIR__.'/classes/database.php';
 require_once __DIR__.'/classes/TreeNode.php';
+require_once __DIR__.'/domains.php';
 
 // Check for APC
 define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('apc_add'));
 
 gc_disable(); // Disable Garbage Collection (T_T). Prevents Memfaulting apache...
 
-function SetCachedObject($key, $value) {
-	if (APC_INSTALLED) apc_add($key, $value);
+function SetCachedObject($key, $value, $locale) {
+	global $subdomain;
+	$tmp = $key.'_'.$locale;
+	if (APC_INSTALLED) apc_add($tmp, $value);
 }
 
-function IsCachedObject($key) {
-	return APC_INSTALLED && apc_exists($key);
+function IsCachedObject($key, $locale) {
+	global $subdomain;
+	$tmp = $key.'_'.$locale;
+	return APC_INSTALLED && apc_exists($tmp);
 }
 
-function GetCachedObject($key) {
-	if (!IsCachedObject($key)) return null;
-	if (APC_INSTALLED && apc_exists($key))
-		return apc_fetch($key);
+function GetCachedObject($key, $locale) {
+	global $subdomain;
+	$tmp = $key.'_'.$locale;
+	if (APC_INSTALLED && apc_exists($tmp))
+		return apc_fetch($tmp);
 	return null;
 }
 
 
 
-function GetMapleStoryString($type, $id, $key) {
-	global $__database;
+function GetMapleStoryString($type, $id, $key, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
 	$id = intval($id);
 	
@@ -37,8 +43,8 @@ function GetMapleStoryString($type, $id, $key) {
 
 	$key_name = 'data_cache_'.$id;
 
-	if (IsCachedObject($key_name)) {
-		$tmp = GetCachedObject($key_name);
+	if (IsCachedObject($key_name, $locale)) {
+		$tmp = GetCachedObject($key_name, $locale);
 		
 		if (isset($tmp[$type]) && isset($tmp[$type][$key]))
 			$value = $tmp[$type][$key];
@@ -47,7 +53,7 @@ function GetMapleStoryString($type, $id, $key) {
 		return $value;
 	}
 
-	$q = $__database->query("
+	$q = $db->query("
 SELECT
 	`objecttype`,
 	`key`,
@@ -63,7 +69,7 @@ WHERE
 			$buff[$row[0]][$row[1]] = $row[2];
 
 
-		SetCachedObject($key_name, $buff);
+		SetCachedObject($key_name, $buff, $locale);
 		
 		if (isset($buff[$type]) && isset($buff[$type][$key]))
 			$value = $buff[$type][$key];
@@ -78,20 +84,20 @@ WHERE
 	return NULL;
 }
 
-function GetItemDefaultStats($id) {
-	global $__database;
+function GetItemDefaultStats($id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
 	$key_name = 'data_iteminfo_cache_'.$id;
 
-	if (IsCachedObject($key_name)) {
-		return GetCachedObject($key_name);
+	if (IsCachedObject($key_name, $locale)) {
+		return GetCachedObject($key_name, $locale);
 	}
 
-	$q = $__database->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".intval($id));
+	$q = $db->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".intval($id));
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
-		SetCachedObject($key_name, $row);
+		SetCachedObject($key_name, $row, $locale);
 
 		$q->free();
 		return $row;
@@ -101,66 +107,66 @@ function GetItemDefaultStats($id) {
 	return NULL;
 }
 
-function GetPotentialInfo($id) {
-	global $__database;
+function GetPotentialInfo($id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 	
 	$key_name = 'data_itemoptions_cache'.$id;
 	
 
-	if (IsCachedObject($key_name)) {
-		return GetCachedObject($key_name);
+	if (IsCachedObject($key_name, $locale)) {
+		return GetCachedObject($key_name, $locale);
 	}
 
 	$data = array();
-	$data['name'] = GetMapleStoryString('item_option', $id, 'desc');
+	$data['name'] = GetMapleStoryString('item_option', $id, 'desc', $locale);
 
-	$q = $__database->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".intval($id));
+	$q = $db->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".intval($id));
 	while ($row = $q->fetch_row()) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
 
-	SetCachedObject($key_name, $data);
+	SetCachedObject($key_name, $data, $locale);
 
 	return $data;
 }
 
-function GetNebuliteInfo($itemid) {
-	global $__database;
+function GetNebuliteInfo($itemid, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 	
 	$key_name = 'data_nebulite_cache'.$itemid;
 	
 
-	if (IsCachedObject($key_name)) {
-		return GetCachedObject($key_name);
+	if (IsCachedObject($key_name, $locale)) {
+		return GetCachedObject($key_name, $locale);
 	}
 	
 	$itemid += 3060000;
 
 	$data = array();
 
-	$q = $__database->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".intval($itemid));
+	$q = $db->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".intval($itemid));
 	$row = $q->fetch_row();
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
 	
 
-	SetCachedObject($key_name, $data);
+	SetCachedObject($key_name, $data, $locale);
 
 	return $data;
 }
 
 
 // Only for X Y and some special stuff!!!
-function GetItemWZInfo($itemid) {
-	global $__database;
+function GetItemWZInfo($itemid, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 	$key_name = 'data_characterwz_cache'.$itemid;
 	
 
-	if (IsCachedObject($key_name)) {
-		return GetCachedObject($key_name);
+	if (IsCachedObject($key_name, $locale)) {
+		return GetCachedObject($key_name, $locale);
 	}
 	
-	$q = $__database->query("
+	$q = $db->query("
 SELECT
 	`key`,
 	`value`
@@ -219,16 +225,16 @@ WHERE
 
 	$q->free();
 
-	SetCachedObject($key_name, $item_info);
+	SetCachedObject($key_name, $item_info, $locale);
 	
 	return $item_info;
 }
 
 
-function GetItemPotentialBuffs($internal_id) {
-	global $__database;
+function GetItemPotentialBuffs($internal_id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
-	$q = $__database->query("
+	$q = $db->query("
 SELECT
 	i.itemid,
 	i.potential1,
@@ -259,13 +265,13 @@ WHERE
 		$obj = array();
 		for ($i = 1; $i <= 6; $i++) {
 			if ($row['potential'.$i] == 0) continue;
-			$potentialinfo = GetPotentialInfo($row['potential'.$i]);
+			$potentialinfo = GetPotentialInfo($row['potential'.$i], $locale);
 
 			$obj[] = $potentialinfo['levels'][$level];
 		}
 		for ($i = 1; $i <= 3; $i++) {
 			if ($row['nebulite'.$i] == -1) continue;
-			$nebinfo = GetNebuliteInfo($row['nebulite'.$i]);
+			$nebinfo = GetNebuliteInfo($row['nebulite'.$i], $locale);
 
 			$obj[] = $nebinfo['info'];
 		}
@@ -278,9 +284,10 @@ WHERE
 }
 
 
-function GetCharacterOption($id, $key, $default = null) {
-	global $__database;
-	$q = $__database->query("
+function GetCharacterOption($id, $key, $locale, $default = null) {
+	$db = ConnectCharacterDatabase($locale);
+
+	$q = $db->query("
 SELECT
 	option_value
 FROM
@@ -288,7 +295,7 @@ FROM
 WHERE
 	character_id = ".intval($id)."
 AND
-	option_key = '".$__database->real_escape_string($key)."'");
+	option_key = '".$db->real_escape_string($key)."'");
 	
 	if ($q->num_rows == 0) {
 		$q->free();
@@ -300,16 +307,17 @@ AND
 }
 
 
-function SetCharacterOption($id, $key, $value) {
-	global $__database;
-	$q = $__database->query("
+function SetCharacterOption($id, $key, $locale, $value) {
+	$db = ConnectCharacterDatabase($locale);
+	
+	$q = $db->query("
 INSERT INTO
 	character_options
 VALUES
 (
 	".intval($id).",
-	'".$__database->real_escape_string($key)."',
-	'".$__database->real_escape_string($value)."'
+	'".$db->real_escape_string($key)."',
+	'".$db->real_escape_string($value)."'
 )
 ON DUPLICATE KEY UPDATE
 	option_value = VALUES(`option_value`)");

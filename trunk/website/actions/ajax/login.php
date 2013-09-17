@@ -19,7 +19,7 @@ if ($request_type == 'login') {
 	
 	if ($amount > 10) die('ERROR:Too many failed requests. Try again in a day');
 	
-	$q = $__database->query("SELECT id, password, salt FROM maplestats.accounts WHERE email = '".$__database->real_escape_string($P['email'])."'");
+	$q = $__database->query("SELECT id, password, salt FROM accounts WHERE email = '".$__database->real_escape_string($P['email'])."'");
 	
 	if ($q->num_rows == 0){
 		$__database->query("INSERT INTO login_requests VALUES (NULL, '".$addr."', NOW(), 'login')");
@@ -39,7 +39,7 @@ if ($request_type == 'login') {
 SELECT 
 	at.`code`
 FROM 
-	maplestats.account_tokens at
+	".DB_ACCOUNTS.".account_tokens at
 WHERE
 	at.account_id = ".$row[0]."
 	AND
@@ -53,7 +53,7 @@ WHERE
 		$code = md5(time().' --- '.$row[0].' - '.$P['email']);
 		$__database->query("
 INSERT INTO 
-	maplestats.account_tokens 
+	".DB_ACCOUNTS.".account_tokens 
 VALUES 
 	(".$row[0].", 'client_token', '".$code."', DATE_ADD(NOW(), INTERVAL 1 YEAR))
 ON DUPLICATE KEY UPDATE
@@ -87,7 +87,7 @@ elseif ($request_type == 'check_code') {
 SELECT 
 	at.`code`
 FROM 
-	maplestats.account_tokens at
+	".DB_ACCOUNTS.".account_tokens at
 WHERE
 	at.`code` = '".$__database->real_escape_string($P['code'])."'
 	AND

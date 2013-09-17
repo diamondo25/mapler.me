@@ -1,13 +1,12 @@
 	<div class="span4 pull-right no-mobile">
 		<div class="stream-block hide">
-			<a href="#" class="btn btn-large btn-inverse" style="width: 100%;
-max-width: 240px;">
+			<a href="#" class="btn btn-large btn-inverse" style="width: 100%; max-width: 240px;">
 				Start Mapler.me
 			</a>
 		</div>
 	
 		<div class="stream-block">
-			<?php MakePlayerAvatar($main_char); ?>
+			<?php MakePlayerAvatar($__login_main_character['name'], $__login_main_character['locale']); ?>
 			<p>@<?php echo $_loginaccount->GetUsername(); ?><br/>
 			<i class="icon-comments"></i> <span id="memberstatuses"></span></p>
 			<p><i class="icon-star"></i> <?php echo GetRankTitle($rank); ?></p>
@@ -18,11 +17,11 @@ max-width: 240px;">
 $notice = @file_get_contents('../inc/notice.txt');
 if (!empty($notice)) {
 ?>
-	<div class="stream-block" style="box-shadow: 0px 0px 30px #FFF;">
-		<p class="notice" style="margin:0;">
-			<?php echo $notice; ?>
-		</p>
-	</div>
+		<div class="stream-block" style="box-shadow: 0px 0px 30px #FFF;">
+			<p class="notice" style="margin:0;">
+				<?php echo $notice; ?>
+			</p>
+		</div>
 <?php
 }
 ?>
@@ -78,7 +77,7 @@ if (!empty($notice)) {
 
 <?php
 	// Check for expiring items...
-	$q = $__database->query("
+	$query = "
 SELECT
 	c.name,
 	GROUP_CONCAT(i.itemid),
@@ -101,20 +100,24 @@ WHERE
 	(flags & 0x01) = 0 # Flag 0x01 = Item lock
 GROUP BY
 	c.internal_id
-");
-	while ($row = $q->fetch_row()) {
-		$itemids = explode(',', $row[1]);
-		$times = explode(',', $row[2]);
+";
+	foreach (array('gms', 'ems') as $locale) {
+		$db = ConnectCharacterDatabase($locale);
+		$q = $db->query($query);
+		while ($row = $q->fetch_row()) {
+			$itemids = explode(',', $row[1]);
+			$times = explode(',', $row[2]);
 ?>
 		
 		<div class="stream-block">
-			<?php MakePlayerAvatar($row[0], array('face' => 'angry', 'styleappend' => 'float: right;')); ?>
+			<?php MakePlayerAvatar($row[0], $locale, array('face' => 'angry', 'styleappend' => 'float: right;')); ?>
 			<strong>Expiring Items</strong><br />
 <?php foreach ($itemids as $index => $itemid): ?>
-			<?php echo GetMapleStoryString('item', $itemid, 'name'); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />
+			<?php echo GetMapleStoryString('item', $itemid, 'name', $locale); ?> expires in <?php echo time_elapsed_string($times[$index] - $__server_time); ?>!<br />
 <?php endforeach; ?>
 		</div>
 <?php	
+		}
 	}
 ?>
 </div>

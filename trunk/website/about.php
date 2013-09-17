@@ -1,6 +1,7 @@
-<?php require_once __DIR__.'/inc/header.php';
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['guide']) && $_loggedin) {
-	?>
+<?php 
+require_once __DIR__.'/inc/header.php';
+if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['guide']) && $_loggedin) {
+?>
 	
 <style>
 h1 small {
@@ -31,12 +32,23 @@ h1 small {
 
 <?php
 $q = $__database->query("
-SELECT
-	name
-FROM
-	characters 
-WHERE
-	level > '30' 
+(
+	SELECT
+		name
+	FROM
+		".DB_GMS.".characters 
+	WHERE
+		level > '30'
+)
+UNION
+(
+	SELECT
+		name
+	FROM
+		".DB_EMS.".characters 
+	WHERE
+		level > '30'
+)
 ORDER BY
 	rand()
 	LIMIT 1
@@ -101,8 +113,8 @@ Having trouble with the guide? Here's an alternative guide by Nexon Volunteer Ma
 </div>
 
 <?php
-	}
-	else {
+}
+else {
 ?>
 
 	<div class="featurette">
@@ -126,4 +138,5 @@ Having trouble with the guide? Here's an alternative guide by Nexon Volunteer Ma
  
 <?php 
 }
-require_once __DIR__.'/inc/footer.php'; ?>
+require_once __DIR__.'/inc/footer.php';
+?>

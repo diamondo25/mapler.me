@@ -1,12 +1,20 @@
 <?php
+require_once __DIR__.'/../inc/domains.php';
 require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/exp_table.php';
 require_once __DIR__.'/../inc/classes/character_objects.php';
 
+
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+
 set_time_limit(0);
 
-$q = $__database->query("
+$q = $__char_db->query("
 SELECT 
 	*,
 	w.world_name,
@@ -19,13 +27,13 @@ LEFT JOIN
 	ON
 		w.world_id = chr.world_id
 WHERE 
-	chr.name = '".$__database->real_escape_string($_GET['name'])."'");
+	chr.name = '".$__char_db->real_escape_string($_GET['name'])."'");
 
 if ($q->num_rows == 0) {
 	$q->free();
 ?>
 <center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<img src="//<?php echo $locale_domain; ?>/inc/img/no-character.gif" />
 	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
@@ -34,11 +42,11 @@ if ($q->num_rows == 0) {
 }
 
 $character_info = $q->fetch_assoc();
-$character_account_id = GetCharacterAccountId($character_info['id']);
+$character_account_id = GetCharacterAccountId($character_info['id'], CURRENT_LOCALE);
 
 
 $character_info['guildname'] = '';
-$q2 = $__database->query("
+$q2 = $__char_db->query("
 SELECT
 	g.name
 FROM
@@ -66,12 +74,12 @@ $q2->free();
 
 // Check character status
 $friend_status = $_loggedin ? ($character_account_id == $_loginaccount->GetID() ? 'FOREVER_ALONE' : GetFriendStatus($_loginaccount->GetID(), $character_account_id)) : 'NO_FRIENDS';
-$status = GetCharacterStatus($character_info['id']);
+$status = GetCharacterStatus($character_info['id'], CURRENT_LOCALE);
 
 if ($status == 1 && (!$_loggedin || ($_loggedin && $friend_status != 'FRIENDS' && $friend_status != 'FOREVER_ALONE' && $_loginaccount->GetAccountRank() < RANK_MODERATOR))) {
 ?>
 <center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<img src="//<?php echo $locale_domain; ?>/inc/img/no-character.gif" />
 	<p>Only friends are allowed to view this character!</p>
 </center>
 <?php
@@ -82,7 +90,7 @@ elseif ($status == 2 && ($_loggedin && $friend_status != 'FOREVER_ALONE' && $_lo
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<img src="//<?php echo $locale_domain; ?>/inc/img/no-character.gif" />
 	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
@@ -94,7 +102,7 @@ elseif ($status == 2 && !$_loggedin) {
 	// displays the same error as not found to not tell if exists or not.
 ?>
 <center>
-	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
+	<img src="//<?php echo $locale_domain; ?>/inc/img/no-character.gif" />
 	<p>Character not found! The character may have been removed or hidden.</p>
 </center>
 <?php
@@ -106,7 +114,7 @@ elseif ($status == 2 && !$_loggedin) {
 else {
 	$account = Account::Load($character_info['account_id']);
 	$internal_id = $character_info['internal_id'];
-	$stat_addition = GetCorrectStat($internal_id);
+	$stat_addition = GetCorrectStat($internal_id, CURRENT_LOCALE);
 	$__is_viewing_self = $friend_status == 'FOREVER_ALONE';
 	
 	$channelid = $character_info['channel_id'];
@@ -116,14 +124,14 @@ else {
 	$__hidden_objects = array();
 	
 	function IsHiddenObject($optionName, $no_override = false) {
-		global $__database, $internal_id, $__hidden_objects, $_loggedin, $_loginaccount;
+		global $__char_db, $internal_id, $__hidden_objects, $_loggedin, $_loginaccount;
 		
 		if ($_loggedin && !$no_override && $_loginaccount->IsRankOrHigher(RANK_MODERATOR))
 			return false;
 		
 		if (isset($__hidden_objects[$optionName]))
 			return $__hidden_objects[$optionName];
-		$q = $__database->query("
+		$q = $__char_db->query("
 SELECT
 	option_value
 FROM
@@ -131,7 +139,7 @@ FROM
 WHERE
 	character_id = ".$internal_id."
 	AND
-	option_key = 'display_".$__database->real_escape_string($optionName)."'
+	option_key = 'display_".$__char_db->real_escape_string($optionName)."'
 ");
 
 		if ($q->num_rows == 0) {
@@ -158,7 +166,7 @@ WHERE
 	
 	
 	// Some quick count queries
-	$qcount = $__database->query("
+	$qcount = $__char_db->query("
 SELECT
 	(SELECT COUNT(DISTINCT a.questid) FROM (SELECT questid FROM quests_done WHERE character_id = ".$internal_id." UNION ALL SELECT questid FROM quests_done_party WHERE character_id = ".$internal_id.") a) as `quests_done`,
 	(SELECT COUNT(DISTINCT a.questid) FROM (SELECT questid FROM quests_running WHERE character_id = ".$internal_id." UNION ALL SELECT questid FROM quests_running_party WHERE character_id = ".$internal_id.") a) as `quests_left`,
@@ -167,7 +175,7 @@ SELECT
 	$statistics = $qcount->fetch_assoc();
 	$qcount->free();
 	
-$avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=big&flip';
+	$avatarurl = 'http://'.$locale_domain.'/ignavatar/' . $character_info['name'].'?size=big&flip';
 
 	$expbar = array();
 	$expbar['current'] = $character_info['exp'];
@@ -182,7 +190,7 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 		
 		<a href="https://twitter.com/share" class="twitter-share-button" data-text="Check out the character <?php echo $character_info['name']; ?> on #maplerme!" data-dnt="true"></a>
 				
-		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+		<div class="fb-like" style="position:relative;right:20px;" data-href="http://<?php echo $locale_domain; ?>/player/<?php echo $character_info['name']; ?>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
 		
 	<?php } else { ?>
 		<p class="alert alert-warning">Important: This character was incorrectly added to Mapler.me. (Logged in to an account before connecting to Mapler.me). To gain ownership of this character, please try re-adding the account, or send a request through Support with a screenshot of your character in-game saying your username.</p>
@@ -214,22 +222,29 @@ $avatarurl = 'http://'.$domain.'/ignavatar/' . $character_info['name'].'?size=bi
 <?php endif; ?>
 		<br />
 <?php
+
+?>
+<?php if ($character_info['guildname'] != ''): ?>
+		<p class="side"><i class="icon-tag faded"></i> Guild: <a href="//<?php echo $locale_domain; ?>/guild/<?php echo $character_info['world_name']; ?>/<?php echo $character_info['guildname']; ?>"><?php echo $character_info['guildname']; ?></a></p>
+<?php endif; ?>
+<?php
 $born_quest = Quest::GetQuest($internal_id, 13261, true);
 $born_at = '<abbr title="We could not determine the creation date...">???</abbr>';
 if ($born_quest !== null && isset($born_quest->data['born'])) {
+	$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
 	$date = $born_quest->data['born'];
-	$born_at = substr($date, 4, 2).' '.substr($date, 2, 2).'  20'.substr($date, 0, 2);
+	$born_at = substr($date, 4, 2).' '.$months[intval(substr($date, 2, 2))].'  20'.substr($date, 0, 2);
 }
 
 ?>
-		<p class="side"><i class="icon-leaf faded"></i> Created on <?php echo $born_at; ?></p>
-		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map']); ?></p>
+		<p class="side"><i class="icon-leaf faded"></i> Created: <?php echo $born_at; ?></p>
+		<p class="side"><i class="icon-home faded"></i> <?php echo GetMapname($character_info['map'], CURRENT_LOCALE); ?></p>
 		<p class="side"><i class="icon-globe faded"></i> <?php echo $character_info['world_name']; ?></p>
 		<p class="side"><i class="icon-map-marker faded"></i> Channel <?php echo $channelid; ?></p>
 <?php if (isset($character_info['married_with']) && $character_info['married_with'] != $character_info['name']): ?>
 <?php if ($__is_viewing_self || !IsHiddenObject('marriage')): ?>
 <?php MakeHideToggleButton('marriage'); ?>
-		<p class="side"><i class="icon-heart faded"></i> Married to <a href="//<?php echo $domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
+		<p class="side"><i class="icon-heart faded"></i> Married to <a href="//<?php echo $locale_domain; ?>/player/<?php echo $character_info['married_with']; ?>"><?php echo $character_info['married_with']; ?></a></p>
 <?php endif; ?>
 <?php endif; ?>
 		<p class="side"><i class="icon-eye-open faded"></i> Last seen <?php echo time_elapsed_string($character_info['secs_since']); ?> ago</p>
@@ -238,9 +253,9 @@ if ($born_quest !== null && isset($born_quest->data['born'])) {
 		<p class="side"><i class="icon-tasks faded"></i> <?php echo $statistics['quests_left']; ?> quests in progress</p>
 		<p class="side"><i class="icon-briefcase faded"></i> <?php echo $statistics['skills']; ?> skills learned</p>
 		<br /><br />
-		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
-		<p class="side"><i class="icon-heart faded"></i> <a href="//<?php echo $domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
-		<p class="side"><i class="icon-th-list faded"></i> <a href="//<?php echo $domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
+		<p class="side"><i class="icon-user faded"></i> <a href="//<?php echo $locale_domain; ?>/avatar/<?php echo $character_info['name']; ?>">Avatar</a></p>
+		<p class="side"><i class="icon-heart faded"></i> <a href="//<?php echo $locale_domain; ?>/card/<?php echo $character_info['name']; ?>">Player Card</a></p>
+		<p class="side"><i class="icon-th-list faded"></i> <a href="//<?php echo $locale_domain; ?>/infopic/<?php echo $character_info['name']; ?>">Statistics</a></p>
 	</div>
 	</div>
 	
@@ -399,7 +414,7 @@ function GetItemQuality($item, $stats) {
 
 function GetItemDialogInfo($item, $isequip) {
 	global $reqlist, $optionlist;
-	$stats = GetItemDefaultStats($item->itemid);
+	$stats = GetItemDefaultStats($item->itemid, CURRENT_LOCALE);
 	
 	$tradeblock = 0;
 	
@@ -521,7 +536,7 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 <style type="text/css">
 
 .character_totems {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/totem.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/Item/totem.png');
 	width: 118px;
 	height: 71px;
 	position: relative;
@@ -530,17 +545,17 @@ top: <?php echo ($row * (33 + $inv_extra_offy)) + $inv_pos_offy; ?>px; left: <?p
 
 
 .inventory div { /* items */
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/Item/item_bg.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/Item/item_bg.png');
 }
 .inventory .disabled-slot {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/new_inventory/disabled.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/new_inventory/disabled.png');
 }
 .inventory .no-bg {
 	background-image: none;
 }
 
 #inventories {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/new_inventory/item-background.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/new_inventory/item-background.png');
 }
 
 .character_totems,
@@ -666,7 +681,7 @@ function AddInventoryItems(&$inventory) {
 		
 		$info = GetItemDialogInfo($item, true);
 		
-		$itemwzinfo = GetItemWZInfo($info['iconid']);
+		$itemwzinfo = GetItemWZInfo($info['iconid'], CURRENT_LOCALE);
 		
 		
 		if ($info['potentials'] != 0) {
@@ -675,7 +690,7 @@ function AddInventoryItems(&$inventory) {
 <?php
 		}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid']); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 	}
 }
@@ -1049,16 +1064,16 @@ function RenderItems(&$itemset, $slotmap_name) {
 	foreach ($itemset as $slot => $item) {
 		$slot = abs($slot) % 100;
 		if (!isset($new_inventory_slot_map[$slotmap_name][$slot])) {
-			echo '<!-- NOT FOUND: '.$slotmap_name.': '.$slot.', '.$item->itemid.' ('.GetMapleStoryString("item", $item->itemid, "name").') -->'."\r\n";
+			echo '<!-- NOT FOUND: '.$slotmap_name.': '.$slot.', '.$item->itemid.' ('.GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE).') -->'."\r\n";
 			continue;
 		}
 		$pos = $new_inventory_slot_map[$slotmap_name][$slot];
 		
-		$info = GetItemDialogInfo($item, true);
+		$info = GetItemDialogInfo($item, CURRENT_LOCALE, true);
 		
-		$itemwzinfo = GetItemWZInfo($info['iconid']);
+		$itemwzinfo = GetItemWZInfo($info['iconid'], CURRENT_LOCALE);
 ?>
-			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
 				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid); ?>" />
 
 <?php if ($info['iscash'] == 1): ?>
@@ -1091,11 +1106,11 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 			$itemIcon = '';
 			if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
 			
-			$display_id = GetItemIconID($item->itemid); // For nebulites
+			$display_id = GetItemIconID($item->itemid, CURRENT_LOCALE); // For nebulites
 
-			$itemwzinfo = GetItemWZInfo($display_id);
+			$itemwzinfo = GetItemWZInfo($display_id, CURRENT_LOCALE);
 ?>
-			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
 			
 				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
 <?php if (!$isequip): ?>
@@ -1125,12 +1140,12 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 	$itemIcon = '';
 	if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
 	
-	$display_id = GetItemIconID($item->itemid); // For nebulites
+	$display_id = GetItemIconID($item->itemid, CURRENT_LOCALE); // For nebulites
 
-	$itemwzinfo = GetItemWZInfo($display_id);
+	$itemwzinfo = GetItemWZInfo($display_id, CURRENT_LOCALE);
 	$uid = substr(uniqid(), -5);
 ?>
-			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?> <?php echo !$bgicon ? 'no-bg' : ''; ?>" style="<?php echo $pos; ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name")); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?> <?php echo !$bgicon ? 'no-bg' : ''; ?>" style="<?php echo $pos; ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
 				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, $itemIcon); ?>" />
 <?php if (!$isequip && $amount): ?>
 				<span class="amount"><?php echo $item->amount; ?></span>
@@ -1194,7 +1209,7 @@ if ($__is_viewing_self || !IsHiddenObject('job_equipment')) {
 			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
 			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
 			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
-			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], CURRENT_LOCALE, array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
 $inv_pos_offx = 13;
@@ -1251,7 +1266,7 @@ for ($i = 0; $i < 3; $i++) {
 				<span class="top-col rt"><?php echo $isfound ? $pet->fullness : ''; ?></span>
 				<span class="top-col rb"><?php echo $isfound ? $pet->closeness : ''; ?></span>
 
-				<div class="avatar-container" style="background-image: url('<?php if ($isfound): ?>//<?php echo $domain; ?>/pet/<?php echo $pet->itemid - 5000000; ?>/<?php endif; ?>');"><span><?php echo $isfound ? $pet->name : ''; ?></span></div>
+				<div class="avatar-container" style="background-image: url('<?php if ($isfound): ?>//<?php echo $locale_domain; ?>/pet/<?php echo $pet->itemid - 5000000; ?>/<?php endif; ?>');"><span><?php echo $isfound ? $pet->name : ''; ?></span></div>
 <?php
 	RenderItems($petequips[$i], 'pet');
 ?>
@@ -1293,7 +1308,7 @@ RenderItems($normalequips['Android'], 'android');
 			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
 			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
 			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
-			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], CURRENT_LOCALE, array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
 $inv_pos_offx = 14;
@@ -1311,7 +1326,7 @@ RenderItems($normalequips['Coordinate'], 'coordinate');
 			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
 			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
 			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
-			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], CURRENT_LOCALE, array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
 $inv_pos_offx = 18;
@@ -1423,7 +1438,7 @@ for ($inv = 0; $inv < 5; $inv++) {
 		if ($item !== null) {
 			RenderItemAtPosition($item, 17, 33, false, false);
 			
-			$bitcase_name = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name'));
+			$bitcase_name = IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name', CURRENT_LOCALE));
 		}
 	}
 ?>
@@ -1472,7 +1487,7 @@ endif;
 <?php 	MakeHideToggleButton('evo_rocks'); ?>
 <?php
 
-	$q = $__database->query("
+	$q = $__char_db->query("
 SELECT
 	`card`, `level`, `block`, `index`
 FROM
@@ -1533,7 +1548,7 @@ $inv_extra_offx = $inv_extra_offy = 8;
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
 <?php
-	$q = $__database->query("
+	$q = $__char_db->query("
 SELECT
 	`index`,
 	map
@@ -1690,15 +1705,15 @@ foreach ($optionlist as $option => $desc) {
 <?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
 <style type="text/css">
 #skill_list {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/bg_final.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/skill/bg_final.png');
 }
 
 .skill_line {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/line.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/skill/line.png');
 }
 
 .skill {
-	background-image: url('//<?php echo $domain; ?>/inc/img/ui/skill/skill.png');
+	background-image: url('//<?php echo $locale_domain; ?>/inc/img/ui/skill/skill.png');
 }
 </style>
 
@@ -1708,7 +1723,7 @@ foreach ($optionlist as $option => $desc) {
 	
 	// Initialize SP
 	
-	$q = $__database->query("
+	$q = $__char_db->query("
 SELECT
 	slot, amount
 FROM
@@ -1723,7 +1738,7 @@ WHERE
 	$q->free();
 	
 	
-	$q = $__database->query("
+	$q = $__char_db->query("
 SELECT
 	skillid, level, maxlevel, ceil((expires/10000000) - 11644473600) as expires
 FROM
@@ -1747,9 +1762,9 @@ ORDER BY
 	$jobtreeid = 0;
 	
 	while ($row = $q->fetch_assoc()) {
-		$name = GetMapleStoryString('skill', $row['skillid'], 'name');
+		$name = GetMapleStoryString('skill', $row['skillid'], 'name', CURRENT_LOCALE);
 		if ($name == NULL) continue;
-		$potentialMaxLevel = GetMapleStoryString('skill', $row['skillid'], 'mlvl');
+		$potentialMaxLevel = GetMapleStoryString('skill', $row['skillid'], 'mlvl', CURRENT_LOCALE);
 		$block = floor($row['skillid'] / 10000);
 		if ($lastgroup != $block && $lastgroup < 9200) {
 			$first_skill = true;
@@ -1759,7 +1774,7 @@ ORDER BY
 <?php
 			}
 			$lastgroup = $block;
-			$book = $block >= 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname");
+			$book = $block >= 9200 ? 'Profession info' : GetMapleStoryString("skill", $lastgroup, "bname", CURRENT_LOCALE);
 			$groups[++$i] = $book;
 			
 			$sp = 0;
@@ -1831,13 +1846,13 @@ ORDER BY
 	<br /><br />
 <?php endif; ?>
 	
-<?php if ($__is_viewing_self || !IsHiddenObject('familiars')): ?>
+<?php if (!EMS && ($__is_viewing_self || !IsHiddenObject('familiars'))): ?>
 <?php 	MakeHideToggleButton('familiars'); ?>
 	<p class="lead">Familiars</p>
 	<table cellspacing="10" cellpadding="6">
 <?php
 // Familiars
-	$q = $__database->query("
+	$q = $__char_db->query("
 SELECT
 	IF(f.name = '', (
 		SELECT `value` FROM strings WHERE objectid = fi.mob_id AND objecttype = 'mob' AND `key` = 'name'
@@ -1872,6 +1887,6 @@ WHERE
 
 <?php
 }
-// $__database->GetRanQueries();
+// $__char_db->GetRanQueries();
 require_once __DIR__.'/../inc/footer.php';
 ?>

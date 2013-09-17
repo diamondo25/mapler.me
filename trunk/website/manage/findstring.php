@@ -16,7 +16,7 @@ elseif ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['2'], $_GET['accoun
 	header('Content-type: application/json');
 	require_once __DIR__.'/../inc/classes/database.php';
 	$searching = $__database->real_escape_string($_POST['2']);
-	$q = $__database->query("SELECT id, username, email, last_ip, account_rank FROM maplestats.accounts WHERE `username` LIKE '%".$searching."%' OR `last_ip` LIKE '%".$searching."%' ORDER BY id DESC LIMIT 200");
+	$q = $__database->query("SELECT id, username, email, last_ip, account_rank FROM accounts WHERE `username` LIKE '%".$searching."%' OR `last_ip` LIKE '%".$searching."%' ORDER BY id DESC LIMIT 200");
 	
 	$tmp = array();
 	while ($row = $q->fetch_assoc())

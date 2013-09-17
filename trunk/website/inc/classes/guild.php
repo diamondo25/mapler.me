@@ -8,9 +8,9 @@ class Guild {
 		$icon_bg, $icon_bgc, $icon_fg, $icon_fgc;
 	public $members;
 		
-	public function LoadByName($name, $world) {
-		global $__database;
-		$q = $__database->query("
+	public function LoadByName($name, $world, $locale) {
+		$db = ConnectCharacterDatabase($locale);
+		$q = $db->query("
 SELECT
 	world_data.world_name,
 	guilds.*
@@ -21,9 +21,9 @@ LEFT JOIN
 	ON
 		world_data.world_id = guilds.world_id
 WHERE 
-	guilds.name = '".$__database->real_escape_string($name)."'
+	guilds.name = '".$db->real_escape_string($name)."'
 AND
-	world_data.world_name = '".$__database->real_escape_string($world)."'");
+	world_data.world_name = '".$db->real_escape_string($world)."'");
 		if ($q->num_rows == 0) {
 			return false;
 		}
@@ -50,15 +50,15 @@ AND
 		
 		$q->free();
 		
-		$this->LoadCharacterList();
+		$this->LoadCharacterList($locale);
 		
 		return true;
 	}
 	
-	private function LoadCharacterList() {
-		global $__database;
+	private function LoadCharacterList($locale) {
+		$db = ConnectCharacterDatabase($locale);
 		
-		$q = $__database->query("
+		$q = $db->query("
 SELECT
 	characters.name,
 	w.world_name,

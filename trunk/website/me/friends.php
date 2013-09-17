@@ -10,29 +10,25 @@ FROM
 	(
 		SELECT
 			friend.account_id AS `account_id`,
-			friend.added_on,
-			friend.accepted_on,
-			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
-			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
-			0 AS `added_by_yourself`
+			friend.accepted_on
 		FROM
-			maplestats.friend_list friend
+			friend_list friend
 		WHERE
 			friend.friend_id = ".$__url_useraccount->GetId()."
+			AND
+			friend.accepted_on IS NOT NULL
 	)
 	UNION
 	(
 		SELECT
 			friend.friend_id AS `account_id`,
-			friend.added_on,
-			friend.accepted_on,
-			TIMESTAMPDIFF(SECOND, friend.added_on, NOW()) AS `added_on_secs`,
-			TIMESTAMPDIFF(SECOND, friend.accepted_on, NOW()) AS `accepted_on_secs`,
-			1 AS `added_by_yourself`
+			friend.accepted_on
 		FROM
-			maplestats.friend_list friend
+			friend_list friend
 		WHERE
 			friend.account_id = ".$__url_useraccount->GetId()."
+			AND
+			friend.accepted_on IS NOT NULL
 	)
 ) a
 
@@ -60,27 +56,23 @@ while ($row = $q->fetch_assoc()) {
 	$account = Account::Load($row['account_id']);
 	
 	$main_char = $account->GetMainCharacterName();
-	if ($main_char == null)
-		$main_char = 'inc/img/no-character.gif';
+	if ($main_char === null)
+		$image_url = '//'.$domain.'/inc/img/no-character.gif';
 	else
-		$main_char = 'ignavatar/'.$main_char;
+		$image_url = '//'.$main_char['locale'].'.'.$domain.'/ignavatar/'.$main_char['name'];
 		
-	$did_add = $row['accepted_on'] != NULL;
-?>
-<?php
-if ($did_add):
 ?>
 			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/'">
 				<div class="caption"><?php echo $account->GetNickname(); ?></div>
 				<center>
 					<br />
 					<a href="//<?php echo $account->GetUsername(); ?>.<?php echo $domain; ?>/">
-						<img src="//<?php echo $domain; ?>/<?php echo $main_char; ?>"/>
+						<img src="<?php echo $image_url; ?>"/>
 					</a>
 					<br />
 				</center>
 			</div>
-<?php endif;
+<?php
 }
 ?>
 		</div>

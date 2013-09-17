@@ -6,7 +6,7 @@ $guild = new Guild();
 $name = $_GET['name'];
 $world = $_GET['world'];
 
-if (!$guild->LoadByName($name, $world)) {
+if (!$guild->LoadByName($name, $world, CURRENT_LOCALE)) {
 ?>
 <center>
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
@@ -58,11 +58,11 @@ foreach ($guild->members as $character) {
 	$img = !isset($character['name']) ? '/inc/img/no-character.gif' : '/avatar/'.$character['name'];
 	
 ?>
-			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $character['name']; ?>'">
-				<div class="caption"><img src="//mapler.me/inc/img/worlds/<?php echo $character['world_name']; ?>.png"> <?php echo $character['name']; ?></div>
+			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo CURRENT_LOCALE.'.'.$domain; ?>/player/<?php echo $character['name']; ?>'">
+				<div class="caption"><img src="//<?php echo CURRENT_LOCALE.'.'.$domain; ?>/inc/img/worlds/<?php echo $character['world_name']; ?>.png"> <?php echo $character['name']; ?></div>
 				<center>
 					<br />
-					<img src="//<?php echo $domain.$img; ?>" />
+					<img src="//<?php echo CURRENT_LOCALE.'.'.$domain.$img; ?>" />
 					<br />
 					<br />
 					<?php echo $guild->ranks[$character['rank'] - 1]; ?>

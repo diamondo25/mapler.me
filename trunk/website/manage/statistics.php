@@ -2,13 +2,13 @@
 require_once __DIR__.'/../inc/header.php';
 $q = $__database->query("
 SELECT
-	(SELECT COUNT(*) FROM accounts),
-	(SELECT COUNT(*) FROM characters),
-	(SELECT COUNT(*) FROM items),
+	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".accounts),
+	(SELECT COUNT(*) FROM ".DB_GMS.".characters) + (SELECT COUNT(*) FROM ".DB_EMS.".characters),
+	(SELECT COUNT(*) FROM ".DB_GMS.".items) + (SELECT COUNT(*) FROM ".DB_EMS.".items),
 	(SELECT COUNT(*) FROM strings),
 	(SELECT COUNT(*) FROM timeline WHERE type = 'levelup'),
-	(SELECT COUNT(*) FROM social_statuses),
-	(SELECT COUNT(*) FROM friend_list WHERE accepted_on IS NOT NULL)
+	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".social_statuses),
+	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".friend_list WHERE accepted_on IS NOT NULL)
 ");
 $tmp = $q->fetch_row(); 
 $q->free();
@@ -63,7 +63,7 @@ SELECT
 	DATE(`registered_on`),
 	COUNT(*)
 FROM
-	`accounts`
+	".DB_ACCOUNTS.".`accounts`
 WHERE
 	DATE(`registered_on`) IN ('".implode('\',\'', $dates)."')
 GROUP BY

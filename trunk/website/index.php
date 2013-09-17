@@ -4,8 +4,8 @@ require_once __DIR__.'/inc/header.php';
 $s = $__database->query("
 SELECT
 	(SELECT COUNT(*) FROM accounts),
-	(SELECT COUNT(*) FROM characters),
-	(SELECT COUNT(*) FROM items)
+	(SELECT COUNT(*) FROM ".DB_GMS.".characters) + (SELECT COUNT(*) FROM ".DB_EMS.".characters,
+	(SELECT COUNT(*) FROM".DB_GMS.". items) + (SELECT COUNT(*) FROM".DB_EMS.". items)
 ");
 $tmp = $s->fetch_row(); 
 $s->free();

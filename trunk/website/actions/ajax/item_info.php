@@ -12,18 +12,18 @@ if (!is_numeric($P['id'])) JSONDie('Error');
 $id = $P['id'];
 
 if ($request_type == 'description') {
-	$result = IGTextToWeb(GetMapleStoryString('item', $id, 'desc'));
+	$result = IGTextToWeb(GetMapleStoryString('item', $id, 'desc', CURRENT_LOCALE));
 	JSONAnswer(array('result' => $result));
 }
 elseif ($request_type == 'name') {
-	$result = IGTextToWeb(GetMapleStoryString('item', $id, 'name'));
+	$result = IGTextToWeb(GetMapleStoryString('item', $id, 'name', CURRENT_LOCALE));
 	JSONAnswer(array('result' => $result));
 }
 elseif ($request_type == 'nebuliteinfo') {
-	$result = GetNebuliteInfo($id);
+	$result = GetNebuliteInfo($id, CURRENT_LOCALE);
 	JSONAnswer(array('result' => $result));
 }
 elseif ($request_type == 'potentialinfo') {
-	$result = GetPotentialInfo($id);
+	$result = GetPotentialInfo($id, CURRENT_LOCALE);
 	JSONAnswer(array('result' => $result));
 }

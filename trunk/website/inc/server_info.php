@@ -13,3 +13,7 @@ else {
 	define('SERVER_MYSQL_PORT', 3306);
 }
 
+define('DB_ACCOUNTS', 'maplestats');
+define('DB_GMS', 'maplestats');
+define('DB_EMS', 'maplestats_ems');
+//define('DB_KMS', 'maplestats_kms');

@@ -19,7 +19,7 @@ if ($request_type == 'info') {
 
 	if ($_loggedin) {
 		$res['membername'] = $_loginaccount->GetUsername();
-		$__database->query("UPDATE maplestats.accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
+		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 		
 		$statuscount = $__database->query("SELECT id FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
 		$statuscounter = array();
@@ -138,7 +138,7 @@ SELECT
 FROM
 	`social_statuses` ss
 LEFT JOIN
-	maplestats.accounts a
+	accounts a
 	ON
 		a.id = `ss`.`account_id`
 LEFT JOIN
@@ -191,7 +191,7 @@ LIMIT
 		
 		// Get timeline stuff
 		
-		$q = "
+		$query = "
 SELECT 
 	UNIX_TIMESTAMP(`when`),
 	'timeline_row' AS `type`,
@@ -207,7 +207,7 @@ LEFT JOIN
 	ON
 		c.internal_id = character_id
 LEFT JOIN
-	maplestats.accounts a
+	".DB_ACCOUNTS.".accounts a
 	ON
 		a.id = `account_id`
 WHERE
@@ -216,28 +216,38 @@ WHERE
 	".$whereq_1."
 ";
 		if ($_loggedin && $is_maindomain) { // Main screen
-			$q .= "
+			$query .= "
 	AND
 	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
 		}
 		if (!$is_maindomain) {
-			$q .= ' AND ';
-			$q .= "a.username = '".$__database->real_escape_string($subdomain)."'";
+			$query .= ' AND ';
+			$query .= "a.username = '".$__database->real_escape_string($subdomain)."'";
 		}
 	
-		$q .= "
+		$query .= "
 ORDER BY
 	`when` DESC
 LIMIT
 	15
 ";
-		$q = $__database->query($q);
+
+		$_gms_db = ConnectCharacterDatabase('gms');
+		$_ems_db = ConnectCharacterDatabase('ems');
 		
+		// GMS
+		$q = $_gms_db->query($query);
 		
 		while ($row = $q->fetch_row())
 			$found_rows[] = $row;
 		$q->free();
 		
+		// EMS
+		$q = $_ems_db->query($query);
+		
+		while ($row = $q->fetch_row())
+			$found_rows[] = $row;
+		$q->free();
 		
 		$stream = array();
 		$timestamp = $__server_time;
@@ -304,7 +314,7 @@ LIMIT
 SELECT
 	`FriendStatus`(`id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 FROM
-	maplestats.accounts
+	".DB_ACCOUNTS.".accounts
 WHERE
 	username = '".$__database->real_escape_string($mentioning)."'");
 						if ($q_temp->num_rows > 0) {

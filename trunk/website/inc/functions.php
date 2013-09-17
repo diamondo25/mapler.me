@@ -5,6 +5,7 @@ date_default_timezone_set('America/Los_Angeles');
 set_time_limit(60);
 error_reporting(0);
 ini_set('display_errors', 0);
+
 if (isset($_GET['debugsite'])) {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
@@ -253,12 +254,12 @@ function GetSystemTimeFromFileTime($time) {
 }
 
 
-function GetCorrectStat($internal_id) {
-	global $__database;
+function GetCorrectStat($internal_id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
 	// Item buffs
 	$tmp = NULL;
-	$q = $__database->query("SELECT SUM(`str`) AS `str`, SUM(`dex`) AS `dex`, SUM(`int`) AS `int`, SUM(`luk`) AS `luk`, SUM(`maxhp`) AS `mhp`, SUM(`maxmp`) AS `mmp` FROM `items` WHERE `character_id` = ".intval($internal_id)." AND slot < 0");
+	$q = $db->query("SELECT SUM(`str`) AS `str`, SUM(`dex`) AS `dex`, SUM(`int`) AS `int`, SUM(`luk`) AS `luk`, SUM(`maxhp`) AS `mhp`, SUM(`maxmp`) AS `mmp` FROM `items` WHERE `character_id` = ".intval($internal_id)." AND slot < 0");
 	if ($q->num_rows >= 1) {
 		$tmp = $q->fetch_assoc();
 	}
@@ -279,10 +280,10 @@ function CalculateSkillValue($what, $x) {
 	return $value;
 }
 
-function GetSkillBuffs($internal_id) {
-	global $__database;
+function GetSkillBuffs($internal_id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
-	$q = $__database->query("
+	$q = $db->query("
 SELECT
 	s.skillid,
 	s.level,
@@ -309,10 +310,10 @@ WHERE
 }
 
 
-function GetCharacterName($id) {
-	global $__database;
+function GetCharacterName($id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
-	$q = $__database->query("SELECT name FROM characters WHERE id = ".intval($id));
+	$q = $db->query("SELECT name FROM characters WHERE id = ".intval($id));
 	if ($q->num_rows >= 1) {
 		$tmp = $q->fetch_row();
 		$q->free();
@@ -322,24 +323,24 @@ function GetCharacterName($id) {
 	return 'Unknown Character';
 }
 
-function GetCharacterAccountId($id) {
-	global $__database;
+function GetCharacterAccountId($id, $locale) {
+	$db = ConnectCharacterDatabase($locale);
 
-	$q = $__database->query("SELECT GetCharacterAccountId(".intval($id).")");
+	$q = $db->query("SELECT GetCharacterAccountId(".intval($id).")");
 	$tmp = $q->fetch_row();
 	$q->free();
 	return $tmp[0];
 }
 
-function GetCharacterStatus($id, $account = NULL) {
+function GetCharacterStatus($id, $locale, $account = NULL) {
 	global $__database;
 	
-	$accountLoaded = $account != NULL;
+	$accountLoaded = $account !== NULL;
 	if (!$accountLoaded) {
-		$account = Account::Load(intval(GetCharacterAccountId($id)));
+		$account = Account::Load(intval(GetCharacterAccountId($id, $locale)));
 	}
 	
-	$name = GetCharacterName($id);
+	$name = GetCharacterName($id, $locale);
 	
 	$value = $account->GetCharacterDisplayValue($name);
 	
@@ -391,10 +392,10 @@ function GetNotification() {
 	return $tmp[0];
 }
 
-function GetMapname($id, $full = true) {
-	$map = GetMapleStoryString('map', $id, 'name');
+function GetMapname($id, $locale, $full = true) {
+	$map = GetMapleStoryString('map', $id, 'name', $locale);
 	if ($full) {
-		$subname = GetMapleStoryString('map', $id, 'street');
+		$subname = GetMapleStoryString('map', $id, 'street', $locale);
 		if ($subname != NULL) {
 			$map = $subname.' - '.$map;
 		}
@@ -536,11 +537,11 @@ function GetWZItemTypeName($id) {
 	}
 }
 
-function GetItemIconID($id) {
-	$type = GetItemType($id);
+function GetItemIconID($id, $locale) {
+	$type = GetItemType($id, $locale);
 	if ($type != 306) {
 		
-		$iteminfo = GetItemWZInfo($id);
+		$iteminfo = GetItemWZInfo($id, $locale);
 		if ($iteminfo['info'] === null)	return $id;
 		if ($iteminfo['info']->IsUOL('icon')) {
 			$id = $iteminfo['info']['icon']['..']['..']['ITEMID']; // Hell yea. Get the UOL object, then go back to get the Item ID
@@ -599,8 +600,14 @@ function GetItemDataLocation($location, $id) {
 	return $url;
 }
 
-function GetItemIcon($id, $addition = '') {
-	$domain = '//static_images.mapler.me/';
+function GetItemIcon($id, $addition = '', $locale) {
+	global $subdomain;
+	$data_domain = '';
+	if ($locale == 'ems') $data_domain = 'EMS/';
+	//elseif ($locale == 'kms') $data_domain = 'KMS/';
+	else $data_domain = '';
+	
+	$domain = '//static_images.mapler.me/'.$data_domain;
 	//$id = GetItemIconID($id);
 	return GetItemDataLocation($domain, $id).'info.icon'.$addition.'.png';
 }
@@ -609,25 +616,28 @@ function ValueOrDefault($what, $default) {
 	return isset($what) ? $what : $default;
 }
 
-function GetAllianceWorldID($worldid) {
-	switch ($worldid) {
-		case 6:
-		case 7:
-		case 8:
-		case 14: return 100; // CMYK
+function GetAllianceWorldID($worldid, $locale) {
+	if ($locale == 'gms') {
+		switch ($worldid) {
+			case 6:
+			case 7:
+			case 8:
+			case 14: return 100; // CMYK
 
-		case 9:
-		case 10:
-		case 11:
-		case 12:
-		case 13: return 101; // GAZED
-			
-		case 5:
-		case 15: return 102; // Bellonova
+			case 9:
+			case 10:
+			case 11:
+			case 12:
+			case 13: return 101; // GAZED
+				
+			case 5:
+			case 15: return 102; // Bellonova
 
-		default:
-			return $worldid;
+			default:
+				return $worldid;
+		}
 	}
+	return $worldid;
 }
 
 function SetMaplerCookie($name, $value, $expiresInDays = 35600) {
@@ -647,17 +657,18 @@ function GetMaplerCookie($name) {
 	return isset($_COOKIE['mplr'.$name]) ? $_COOKIE['mplr'.$name] : null;
 }
 
-function MakePlayerAvatar($name, $options = array()) {
-	global $domain;
+function MakePlayerAvatar($name, $locale, $options = array()) {
+	global $domain, $subdomain;
 	$size = isset($options['size']) ? $options['size'] : 'small';
 	$styleappend = isset($options['styleappend']) ? $options['styleappend'] : '';
 	$face = isset($options['face']) ? $options['face'] : '';
 	$type = isset($options['ign']) && $options['ign'] == true ? 'ignavatar' : 'avatar';
 	$flip = isset($options['flip']) && $options['flip'] == true;
+	
 	$notfound = $name === null || $name == '';
 	$image = 'http://mapler.me/inc/img/no-character.gif';
 	if (!$notfound) {
-		$image = 'http://mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
+		$image = 'http://'.$locale.'.'.$domain.'/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
 	}
 	
 	if (isset($options['onlyurl'])) {
@@ -665,7 +676,7 @@ function MakePlayerAvatar($name, $options = array()) {
 		return;
 	}
 ?>
-	<div onclick="document.location.href = '//<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
+	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 
@@ -739,7 +750,9 @@ function DisplayError($type) {
 // Set to null by default
 $__url_useraccount = null;
 
-if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdomain != 'dev' && $subdomain != 'cdn' && $subdomain != 'status' && $subdomain != 'i') {
+if ($subdomain != '' && $subdomain != 'www' && $subdomain != 'direct' && $subdomain != 'dev' && $subdomain != 'cdn' && $subdomain != 'status' && $subdomain != 'i' && 
+	$subdomain != 'ems' && $subdomain != 'gms' && $subdomain != 'kms' 
+	) {
 	// Tries to receive userdata for the subdomain. If it fails, results in a 404.
 
 	$__url_useraccount = Account::Load($subdomain);

@@ -33,7 +33,7 @@ class TreeNode extends ArrayObject {
 					if ($curnode->isroot && $o == '..' && $i + 1 != count($splits)) {
 						$i++;
 						// Well.. shit
-						$temp = GetItemWZInfo(intval($splits[$i]));
+						$temp = GetItemWZInfo(intval($splits[$i]), CURRENT_LOCALE);
 						if ($temp == null) return null;
 						$curnode = $temp;
 					}

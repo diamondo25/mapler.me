@@ -80,7 +80,7 @@ $foundHidingCap = false;
 function ParseItem($id) {
 	global $options, $imageoptions, $data_buffer, $foundHidingCap, $zmap;
 
-	$iteminfo = GetItemWZInfo($id);
+	$iteminfo = GetItemWZInfo($id, CURRENT_LOCALE);
 	$itemtype = GetItemType($id);
 	$item_raw_type = floor($id / 1000);
 	$item_section_id = $id % 1000;
@@ -429,7 +429,7 @@ function FindAndAddSetEffect() {
 	
 	$itemids = array_flip($options['slots']);
 	
-	$setitemdata = GetItemWZInfo(90000000);
+	$setitemdata = GetItemWZInfo(90000000, CURRENT_LOCALE);
 
 	$seturi = null;
 	foreach ($setitemdata as $setid => $moredata) {
@@ -450,7 +450,7 @@ function FindAndAddSetEffect() {
 		
 		$id = substr($seturi, strrpos($seturi, '/') + 1);
 		
-		$effectitemdata = GetItemWZInfo(94000000);
+		$effectitemdata = GetItemWZInfo(94000000, CURRENT_LOCALE);
 		
 		if (!isset($effectitemdata[''.$id])) return;
 		$block = $effectitemdata[''.$id];
@@ -479,7 +479,7 @@ function FindAndAddItemEffect() {
 	
 	$itemids = array_flip($options['slots']);
 	
-	$itemeffdata = GetItemWZInfo(92000000);
+	$itemeffdata = GetItemWZInfo(92000000, CURRENT_LOCALE);
 
 	$effectid = null;
 	foreach ($itemeffdata as $setid => $moredata) {
@@ -522,7 +522,7 @@ function RenderTamedMob() {
 	$itemid = $options['tamingmob'];
 	
 	// TamingMob manipulates body X/Y
-	$info = GetItemWZInfo($itemid);
+	$info = GetItemWZInfo($itemid, CURRENT_LOCALE);
 	
 	$mainx = $imageoptions['mainx'];
 	$mainy = $imageoptions['mainy'];
@@ -767,7 +767,7 @@ foreach ($options['slots'] as $slot => $itemid) {
 		unset($options['slots'][$slot]);
 	}
 	else {
-		$data = GetItemWZInfo($itemid);
+		$data = GetItemWZInfo($itemid, CURRENT_LOCALE);
 		if (!isset($data['info'])) {
 			if (DEBUGGING)
 				echo "Skipping item ".$itemid."\r\n";
@@ -790,7 +790,7 @@ if ($options['tamingmob'] > 0)
 	
 	// Set global position values
 	
-	$iteminfo = GetItemWZInfo($skin);
+	$iteminfo = GetItemWZInfo($skin, CURRENT_LOCALE);
 	$map_node = $iteminfo[$options['stance']][$options['stance_frame']]['body']['map'];
 
 	$data_buffer['body_map']['navel'][0] = $imageoptions['mainx'] + $map_node['navel']['X'];
@@ -816,7 +816,7 @@ asort($options['slots']);
 // Fix stand
 
 foreach ($options['slots'] as $slot => $itemid) {
-	$data = GetItemWZInfo($itemid);
+	$data = GetItemWZInfo($itemid, CURRENT_LOCALE);
 	CheckStand(GetItemType($itemid), $data);
 }
 

@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			UPDATE
-				maplestats.friend_list
+				friend_list
 			SET
 				accepted_on = NOW()
 			WHERE
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			DELETE FROM
-				maplestats.friend_list
+				friend_list
 			WHERE
 				(
 					account_id = ".$id."
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL) {
 			$__database->query("
 			DELETE FROM
-				maplestats.friend_list
+				friend_list
 			WHERE
 				(
 					account_id = ".$id."
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		if ($id != NULL && GetFriendStatus($_loginaccount->GetID(), $id) == 'NO_FRIENDS') {
 			$__database->query("
 			INSERT INTO
-				maplestats.friend_list
+				friend_list
 			VALUES
 			(
 				".$_loginaccount->GetID().",
@@ -143,7 +143,7 @@ $twitterenabled = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
 
 
 		<div class="modal-body">
-			<?php MakePlayerAvatar($main_char, array('styleappend' => 'float: left; margin: 0;')); ?>
+			<?php MakePlayerAvatar($__login_main_character['name'], $__login_main_character['locale'], array('styleappend' => 'float: left; margin: 0;')); ?>
 			<textarea name="content" id="post-status" style="width: 340px; max-width: 340px; clear:both;border:1 !important; margin-bottom: 0; margin-left: 10px; min-height: 62px;" placeholder="Type your status here!"></textarea>
 			<input type="hidden" name="reply-to" value="-1" />
 		</div>

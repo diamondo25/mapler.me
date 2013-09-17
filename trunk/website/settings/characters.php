@@ -1,19 +1,12 @@
 <?php
-$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+require_once __DIR__.'/../inc/avatar_faces.php';
 
-$faces = array();
-$faces[] = array('default', 'Standard');
-$faces[] = array('angry', 'Angry');
-$faces[] = array('blaze', 'Flaming');
-$faces[] = array('bowing', 'Drool');
-$faces[] = array('cheers', 'Sweetness');
-$faces[] = array('cry', 'Crying');
-$faces[] = array('hot', 'Dragon Breath');
+$char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 
 
 $characternames = array();
 
-$q = $__database->query("
+$query = "
 SELECT 
 	chr.internal_id,
 	chr.id,
@@ -34,18 +27,25 @@ WHERE
 ORDER BY 
 	chr.world_id ASC,
 	chr.level DESC
-");
+";
+
 
 // printing table rows
 $cache = array();
 $name_internal_id_list = array();
 
-while ($row = $q->fetch_assoc()) {
-	$cache[] = $row;
-	$characternames[] = $row['name'];
-	$name_internal_id_list[$row['name']] = $row['internal_id'];
+foreach (array('gms', 'ems') as $locale) {
+	$db = ConnectCharacterDatabase($locale);
+	$q = $db->query($query);
+	while ($row = $q->fetch_assoc()) {
+		$row['locale'] = $locale;
+		$row['internal_name'] = $locale.':'.$row['name'];
+		$cache[] = $row;
+		$characternames[] = $row['internal_name'];
+		$name_internal_id_list[$row['internal_name']] = $row['internal_id'];
+	}
+	$q->free();
 }
-$q->free();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $_POST['main_character'])) {
 	$char_options = $_POST['char_shown_option'];
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 		}
 
 		foreach ($char_face_options as $charname => $value) {
-			if (!in_array($charname, $characternames) || !isset($faces[$value])) {
+			if (!in_array($charname, $characternames) || !isset($avatar_faces[$value])) {
 				$found = false;
 				break;
 			}
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 				$char_config['characters'][$charname] = $value;
 			}
 			foreach ($char_face_options as $charname => $value) {
-				SetCharacterOption($name_internal_id_list[$charname], 'avatar_face', $faces[$value][0]);
+				SetCharacterOption($name_internal_id_list[$charname], 'avatar_face', $avatar_faces[$value][0]);
 			}
 			
 			$_loginaccount->SetConfigurationOption('character_config', $char_config);
@@ -121,7 +121,8 @@ foreach ($cache as $row) {
 		$char_config['main_character'] = $row['name'];
 	}
 	$shown_option_value = isset($char_config['characters'][$row['name']]) ? $char_config['characters'][$row['name']] : 0; // Default = 0
-	$shown_face_value = GetCharacterOption($row['internal_id'], 'avatar_face', 'default');
+	$shown_face_value = GetCharacterOption($row['internal_id'], $row['locale'], 'avatar_face', CURRENT_LOCALE, 'default');
+	$data_domain = $row['locale'].'.'.$domain;
 	if ($i % $chars_per_row == 0) {
 		if ($i > 0) {
 ?>
@@ -134,18 +135,18 @@ foreach ($cache as $row) {
 	}
 ?>
 				<div class="span3 character-brick" style="min-width: 174px;">
-				<div class="caption"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: middle;" />&nbsp;<?php echo $row['name']; ?></div>
+				<div class="caption"><img src="//<?php echo $data_domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: middle;" />&nbsp;<?php echo $row['name']; ?></div>
 					<center>
 						<br />
-						<a href="//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-							<img src="//<?php echo $domain; ?>/avatar/<?php echo $row['name']; ?>"/>
+						<a href="//<?php echo $data_domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
+							<img src="//<?php echo $data_domain; ?>/avatar/<?php echo $row['name']; ?>"/>
 						</a>
 						<br />
 						<br />
 						<br />
 						This character is shown: 
 						<br />
-						<select name="char_shown_option[<?php echo $row['name']; ?>]" style="height:35px !important;width: 150px !important;">
+						<select name="char_shown_option[<?php echo $row['internal_name']; ?>]" style="height:35px !important;width: 150px !important;">
 							<option value="0"<?php echo $shown_option_value == 0 ? ' selected="selected"' : ''; ?>>Always</option>
 							<option value="1"<?php echo $shown_option_value == 1 ? ' selected="selected"' : ''; ?>>Only for friends</option>
 							<option value="2"<?php echo $shown_option_value == 2 ? ' selected="selected"' : ''; ?>>Never</option>
@@ -153,13 +154,13 @@ foreach ($cache as $row) {
 						<br />
 						Using face: 
 						<br />
-						<select name="char_face_option[<?php echo $row['name']; ?>]" style="height:35px !important;width: 150px !important;">
-<?php foreach ($faces as $faceid => $data): ?>
-							<option value="<?php echo $faceid; ?>"<?php echo $shown_face_value == $data[0] ? ' selected="selected"' : ''; ?>><?php echo $data[1]; ?></option>
+						<select name="char_face_option[<?php echo $row['internal_name']; ?>]" style="height:35px !important;width: 150px !important;">
+<?php foreach ($avatar_faces as $facename => $text): ?>
+							<option value="<?php echo $facename; ?>"<?php echo $shown_face_value == $facename ? ' selected="selected"' : ''; ?>><?php echo $text; ?></option>
 <?php endforeach; ?>
 						</select>
 						<br />
-						<input type="radio" name="main_character" value="<?php echo $row['name']; ?>"<?php echo $char_config['main_character'] == $row['name'] ? ' checked="checked"' : ''; ?> /> Main character
+						<input type="radio" name="main_character" value="<?php echo $row['internal_name']; ?>"<?php echo $char_config['main_character'] == $row['internal_name'] ? ' checked="checked"' : ''; ?> /> Main character
 					</center>
 				</div>
 <?php

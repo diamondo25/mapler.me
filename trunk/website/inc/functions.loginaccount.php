@@ -22,9 +22,9 @@ if (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE && GetMaplerCookie('log
 SELECT 
 	a.username
 FROM 
-	maplestats.account_tokens at
+	account_tokens at
 LEFT JOIN
-	maplestats.accounts a
+	accounts a
 	ON
 		a.id = at.account_id
 WHERE 
@@ -65,7 +65,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE && isset($_SESSION['use
 SELECT 
 	at.`code`
 FROM 
-	maplestats.account_tokens at
+	account_tokens at
 WHERE
 	at.account_id = ".$_loginaccount->GetID()."
 	AND
@@ -79,7 +79,7 @@ WHERE
 			$code = md5(time().' -- -- -- -- - '.$_loginaccount->GetID().' - '.$_loginaccount->GetUsername());
 			$__database->query("
 INSERT INTO 
-	maplestats.account_tokens 
+	account_tokens 
 VALUES 
 	(".$_loginaccount->GetID().", 'login_token', '".$code."', DATE_ADD(NOW(), INTERVAL 10 YEAR))
 ON DUPLICATE KEY UPDATE

@@ -6,6 +6,7 @@ require_once __DIR__.'/../inc/avatar_faces.php';
 require_once __DIR__.'/../inc/zmap.php';
 require_once __DIR__.'/caching.php';
 
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
 
 function GetID($row) {
 	$itemid = $row['itemid'];
@@ -39,6 +40,7 @@ if (!DEBUGGING) {
 else {
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
+	header('Content-Type: plain/text');
 	
 }
 
@@ -75,7 +77,7 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-$q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
+$q = $__char_db->query("SELECT * FROM characters WHERE name = '".$__char_db->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	$im = imagecreatetruecolor ($image_width, $image_height);
 	$bgc = imagecolorallocate ($im, 255, 255, 255);
@@ -131,8 +133,14 @@ if (!is_dir($main_dir)) {
 	$main_dir = 'P:/Result/';
 	if (!is_dir($main_dir)) {
 		// your call
+		die();
 	}
 }
+
+if (GMS) $main_dir .= '';
+elseif (EMS) $main_dir .= 'EMS/';
+elseif (KMS) $main_dir .= 'KMS/';
+
 
 $characterwz = $main_dir.'Character';
 $guild_info_location = $main_dir.'GuildEmblem';
@@ -155,7 +163,7 @@ $q->free();
 $zlayers = array();
 $item_locations = array();
 
-$using_face = GetCharacterOption($internal_id, 'avatar_face', 'default');
+$using_face = GetCharacterOption($internal_id, 'avatar_face', CURRENT_LOCALE, 'default');
 if (isset($_GET['face']) && !empty($_GET['face']))
 	$using_face = $_GET['face'];
 if (isset($_GET['madface']))
@@ -163,7 +171,7 @@ if (isset($_GET['madface']))
 
 if (!isset($avatar_faces[$using_face])) $using_face = 'default';
 
-$char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($internal_id, 'avatar_stance', 'stand');
+$char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($internal_id, 'avatar_stance', CURRENT_LOCALE, 'stand');
 $char_stance_frame = isset($_GET['stance_frame']) ? $_GET['stance_frame'] : '0';
 $stand = 1;
 
@@ -205,7 +213,7 @@ function CheckStand($type, $data) {
 $shown_items = array();
 
 // Get character equipment
-$character_equipment = $__database->query("
+$character_equipment = $__char_db->query("
 SELECT 
 	itemid, slot, display_id 
 FROM 
@@ -723,7 +731,7 @@ imagedestroy($im);
 
 // Function to phrase data into an array
 function get_data($itemid) {
-	return GetItemWZInfo($itemid);
+	return GetItemWZInfo($itemid, CURRENT_LOCALE);
 }
 
 // Function to add element to the image
@@ -768,7 +776,7 @@ function RenderName($name, $x, $y) {
 	global $im;
 	global $font;
 	global $font_size;
-	global $__database;
+	global $__char_db;
 	global $guild_info_location;
 
 	$background = imagecolorallocatealpha($im, 0, 0, 0, 33);
@@ -778,7 +786,7 @@ function RenderName($name, $x, $y) {
 	$endWidth = $x + calculateWidth($name)/2;
 	DrawNameBox($im, $startWidth, $y - 17, $endWidth - 1, $y - 2, $background);
 	ImageTTFText($im, $font_size, 0, $startWidth + 3, $y - 5, $fontcolor, $font, $name);
-	$q = $__database->query("SELECT g.name, g.emblem_bg, g.emblem_bg_color, g.emblem_fg, g.emblem_fg_color FROM guild_members c INNER JOIN guilds g ON g.id = c.guild_id WHERE c.character_id = ".$character_id);
+	$q = $__char_db->query("SELECT g.name, g.emblem_bg, g.emblem_bg_color, g.emblem_fg, g.emblem_fg_color FROM guild_members c INNER JOIN guilds g ON g.id = c.guild_id WHERE c.character_id = ".$character_id);
 	
 	if ($q->num_rows == 1) {
 		$res = $q->fetch_array();

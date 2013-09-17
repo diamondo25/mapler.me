@@ -36,7 +36,7 @@ SELECT
 FROM
 	social_statuses s
 LEFT JOIN
-	maplestats.accounts
+	accounts
 	ON
 		s.account_id = accounts.id
 ".(
@@ -155,14 +155,19 @@ WHERE
 		$reply_info = $this->reply_to == NULL ? NULL : $this->GetReplyInfo($this->reply_to);
 		
 		$object_id = GetUniqueID();
+		
+		if (strpos($this->character, ':') === false)
+			$this->character = 'gms:'.$this->character;
 
-		$main_char = $this->character;
+		$tmp = explode(':', $this->character);
+		$main_char = $tmp[1];
+		$locale = $tmp[0];
 		$account_rank = $this->account->GetAccountRank();
 		
 ?>
 			<div class="status<?php echo ($this->override == 1) ? ' notification' : ''; ?><?php echo $style_addition; ?>" status-id="<?php echo $this->id; ?>" unique-id="<?php echo $object_id; ?>">
 				<div class="header">
-					<?php MakePlayerAvatar($main_char, array('face' => $this->using_face)); ?><br />
+					<?php MakePlayerAvatar($main_char, $locale, array('face' => $this->using_face)); ?><br />
 					<p>
 						<a href="//<?php echo $username; ?>.mapler.me/"><?php echo $this->nickname;?></a> <span class="faded">(@<?php echo $username; ?>)</span>
 				

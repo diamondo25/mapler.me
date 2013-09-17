@@ -1,9 +1,30 @@
 <?php
 require_once __DIR__.'/../server_info.php';
+require_once __DIR__.'/../domains.php';
 
 class ExtendedMysqli extends mysqli {
 	public $last_query = '';
 	public $queries = array();
+	private static $_character_db_connections = array();
+	
+	public function TryGetCharacterDbConnection($locale) {
+		global $subdomain;
+		
+		$type = $locale === null ? $subdomain : $locale;
+		
+		if (isset(self::$_character_db_connections[$type]))
+			return self::$_character_db_connections[$type];
+		
+		$connection = null;
+		switch (strtolower($type)) {
+			case 'ems': $connection = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', DB_EMS, SERVER_MYSQL_PORT); break;
+			//case 'kms': $connection = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', DB_KMS, SERVER_MYSQL_PORT); break;
+			case 'gms': $connection = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', DB_GMS, SERVER_MYSQL_PORT); break;
+		}
+		
+		self::$_character_db_connections[$type] = $connection;
+		return $connection;
+	}
 
 	public function query($pQuery) {
 		$this->last_query = $pQuery;
@@ -20,7 +41,6 @@ class ExtendedMysqli extends mysqli {
 The server made a boo-boo! Our technical Coolie Zombies are after this problem. For now, <a href="/">please return to the landing page of Mapler.me</a>!
 {ERROR_DATA_HERE}
 NO_END;
-
 }
     else {
         $error_msg = <<<NO_END
@@ -67,20 +87,18 @@ foreach ($this->queries as $query) {
 }
 
 // Connect to the database
-$__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', 'maplestats', SERVER_MYSQL_PORT);
+$__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, DB_ACCOUNTS, 'maplederp', 'maplestats', SERVER_MYSQL_PORT);
 
-//$__database = new ExtendedMysqli('127.0.0.1', 'root', '', 'maplestats');
 if ($__database->connect_errno != 0) {
-include '../domains.php';
 ?>
-<link href='/inc/css/style.min.css' rel='stylesheet' type='text/css' />
-<link href='/inc/css/font-awesome.min.css' rel='stylesheet' type='text/css' />
+<link href="/inc/css/style.min.css" rel="stylesheet" type="text/css" />
+<link href="/inc/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 <div class="container">
     <div class="row">
-        <div class="span12" style="margin-top:50px;">
+        <div class="span12" style="margin-top: 50px;">
             <center>
                 <p class="lead alert alert-danger">
-                <span style="font-size:80px;line-height:85px;"><i class="icon-remove"></i>  hi. i'm an error.</span><br/>
+                <span style="font-size: 80px; line-height: 85px;"><i class="icon-remove"></i>  hi. i'm an error.</span><br/>
                 Mapler.me is experiencing some inconstancies.<br />
                 Try reloading your page. If this continues to occur, please <a href="mailto:support@mapler.me">report this to us.</a></p>
             </center>
@@ -91,7 +109,7 @@ include '../domains.php';
     </div>
 </div>
 <?php
-die();
+	die();
 }
 
 function GetServerTime() {
@@ -102,5 +120,10 @@ function GetServerTime() {
 	$q->free();
 	return $tmp[0];
 }
+
+function ConnectCharacterDatabase($inputType = null) {
+	return ExtendedMysqli::TryGetCharacterDbConnection($inputType);
+}
+
 $__server_time = GetServerTime();
 ?>

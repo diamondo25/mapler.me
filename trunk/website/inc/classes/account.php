@@ -23,10 +23,10 @@ class Account {
 		
 		$temp = "
 SELECT 
-	maplestats.accounts.*,
+	accounts.*,
 	TIMESTAMPDIFF(SECOND, last_login, NOW()) AS `last_login_secs_since`
 FROM 
-	maplestats.accounts 
+	accounts 
 WHERE
 ";
 		if (is_numeric($input))
@@ -74,7 +74,7 @@ WHERE
 		global $__database;
 		$__database->query("
 UPDATE
-	maplestats.accounts
+	accounts
 SET
 	full_name = '".$__database->real_escape_string($this->_fullname)."',
 	email = '".$__database->real_escape_string($this->_email)."',
@@ -187,7 +187,7 @@ WHERE
 		$this->_configuration[$name] = $value;
 		
 		if ($save) {
-			$__database->query("UPDATE maplestats.accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
+			$__database->query("UPDATE accounts SET configuration = '".$__database->real_escape_string(json_encode($this->_configuration))."' WHERE id = ".$this->_id);
 		}
 	}
 	
@@ -203,20 +203,33 @@ WHERE
 	// Configuraton functions
 	
 	public function GetMainCharacterName() {
-		global $__database;
-		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
+		$config = $this->GetConfigurationOption('character_config', array('main_character' => null));
 		$name = $config['main_character'];
 		if ($name !== null) {
+			if (strpos($name, ':') === false) {
+				$name = 'gms:'.$name;
+				$config['main_character'] = $name;
+				$this->SetConfigurationOption('character_config', $config);
+			}
+			
+			$parts = explode(':', $name);
+			$name = $parts[1];
+			$locale = $parts[0];
+			
 			// Check if exists
-			$q = $__database->query("SELECT id FROM characters WHERE name = '".$__database->real_escape_string($name)."'");
+			$_char_db = ConnectCharacterDatabase($locale);
+			$q = $_char_db->query("SELECT id FROM characters WHERE name = '".$_char_db->real_escape_string($name)."'");
 			if ($q->num_rows == 0) {
 				$name = null;
 				$config['main_character'] = null;
 				$this->SetConfigurationOption('character_config', $config);
 			}
 			$q->free();
+			
+			if ($name === null) return null;
+			return array('locale' => $locale, 'name' => $name);
 		}
-		return $config['main_character'];
+		return null;
 	}
 	
 	public function GetCharacterDisplayValue($charname) {
@@ -231,7 +244,7 @@ WHERE
 	public function AddAccountNotification($type, $data, $email = true) {
 		$__database->query("
 INSERT INTO
-	maplestats.account_notifications
+	account_notifications
 VALUES
 	(
 		NULL,
@@ -265,7 +278,7 @@ VALUES
 		
 		$__database->query("
 INSERT INTO
-	maplestats.account_tokens
+	account_tokens
 VALUES
 	(
 		".$this->id.",
@@ -315,7 +328,7 @@ ON DUPLICATE KEY
 				$error = "That username is disallowed, please choose another.";
 			}
 			else {
-				$result = $__database->query("SELECT id FROM maplestats.accounts WHERE username = '".$__database->real_escape_string($username)."'");
+				$result = $__database->query("SELECT id FROM ".DB_ACCOUNTS.".accounts WHERE username = '".$__database->real_escape_string($username)."'");
 				if ($result->num_rows == 1) {
 					$error = "This username has already been taken, please try another.";
 				}

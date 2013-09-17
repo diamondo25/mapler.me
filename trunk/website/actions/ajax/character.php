@@ -3,12 +3,13 @@ require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/functions.loginaccount.php';
 require_once __DIR__.'/../../inc/classes/database.php';
 
-CheckSupportedTypes('visibility', 'face', 'statistics');
+CheckSupportedTypes('visibility', 'statistics');
+$_char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
 
 function IsOwnCharacter($charname) {
-	global $__database;
-	global $_loginaccount;
-	$q = $__database->query("
+	global $_loginaccount, $_char_db;
+	
+	$q = $_char_db->query("
 SELECT
 	c.internal_id
 FROM
@@ -18,9 +19,9 @@ LEFT JOIN
 	ON
 		u.id = c.userid
 WHERE
-	c.name = '".$__database->real_escape_string($charname)."'
+	c.name = '".$_char_db->real_escape_string($charname)."'
 	AND
-	u.account_id = ".$_loginaccount->GetID());
+	u.account_id = ".$_char_db->GetID());
 	
 	if ($q->num_rows > 0) {
 		$row = $q->fetch_row();
@@ -38,19 +39,19 @@ if ($request_type == 'visibility') {
 	$internalid = IsOwnCharacter($P['name']);
 	if ($internalid === false) JSONDie('No.');
 	
-	$q = $__database->query("
+	$q = $_char_db->query("
 INSERT INTO
 	character_options
 VALUES
 	(
 		".$internalid.",
-		'display_".$__database->real_escape_string($P['what'])."',
+		'display_".$_char_db->real_escape_string($P['what'])."',
 		".($P['shown'] == 'false' ? 0 : 1)."
 	)
 ON DUPLICATE KEY UPDATE
 	`option_value` = VALUES(`option_value`)");
 	
-	if ($__database->affected_rows != 0) {
+	if ($_char_db->affected_rows != 0) {
 		JSONAnswer(array('result' => 'okay'));
 	}
 	else {
@@ -61,7 +62,7 @@ ON DUPLICATE KEY UPDATE
 elseif ($request_type == 'statistics') {
 	RetrieveInputGET('name');
 	
-	$q = $__database->query("
+	$q = $_char_db->query("
 SELECT 
 	chr.name,
 	chr.world_id,
@@ -88,7 +89,7 @@ LEFT JOIN
 	ON
 		w.world_id = chr.world_id
 WHERE 
-	chr.name = '".$__database->real_escape_string($P['name'])."'");
+	chr.name = '".$_char_db->real_escape_string($P['name'])."'");
 	
 	if ($q->num_rows == 0) {
 		JSONDie('Character not found', 404);

@@ -5,7 +5,7 @@ require_once __DIR__.'/../inc/functions.php';
 $success = null;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm'])) {
-	$query = $__database->query("SELECT password, salt FROM maplestats.accounts WHERE id = ".$_loginaccount->GetId());
+	$query = $__database->query("SELECT password, salt FROM accounts WHERE id = ".$_loginaccount->GetId());
 	if ($query->num_rows == 1) {
 		$row = $query->fetch_assoc();
 		
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm'])) {
 		session_destroy();
 		SetMaplerCookie('login_session', '', -100);
 
-		$finish = $__database->query("DELETE FROM maplestats.accounts WHERE id = ".$_loginaccount->GetId());
+		$finish = $__database->query("DELETE FROM accounts WHERE id = ".$_loginaccount->GetId());
 		$finish->free();
 		require_once __DIR__.'/../inc/header.php';
 		

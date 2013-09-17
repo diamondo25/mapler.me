@@ -148,8 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$username = $__database->real_escape_string($_POST['username']);
 		$password = $_POST['password'];
 		
-		// $query = $__database->query("SELECT * FROM maplestats.accounts WHERE username = '".$username."'");
-		$query = $__database->query("SELECT * FROM maplestats.accounts WHERE email = '".$username."'");
+		// $query = $__database->query("SELECT * FROM accounts WHERE username = '".$username."'");
+		$query = $__database->query("SELECT * FROM accounts WHERE email = '".$username."'");
 		if ($query->num_rows == 1) {
 			$row = $query->fetch_assoc();
 			
@@ -160,12 +160,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				
 				$_loggedin = true;
 				
-				$__database->query("UPDATE maplestats.accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
+				$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 				/*
 				$code = md5(time().' -- -- -- -- - '.$_loginaccount->GetID().' - '.$_loginaccount->GetUsername());
 				$__database->query("
 INSERT INTO 
-	maplestats.account_tokens 
+	account_tokens 
 VALUES 
 	(".$_loginaccount->GetID().", 'login_token', '".$code."', DATE_ADD(NOW(), INTERVAL 10 YEAR))
 ON DUPLICATE KEY UPDATE

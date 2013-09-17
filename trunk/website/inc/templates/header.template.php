@@ -231,7 +231,7 @@ endif;
 <?php
 	if ($_loggedin) {
 		// Shouldn't be here...
-		$main_char = $_loginaccount->GetMainCharacterName();
+		$__login_main_character = $_loginaccount->GetMainCharacterName();
 		
 		if (!$_loginaccount->IsMuted()):
 ?>

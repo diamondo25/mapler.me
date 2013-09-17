@@ -43,4 +43,14 @@ if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], $domain) !
 	header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
 }
 
+
+define('GMS', $subdomain == 'gms');
+define('EMS', $subdomain == 'ems');
+define('KMS', false && $subdomain == 'kms');
+
+if (EMS)		define('CURRENT_LOCALE', 'ems');
+elseif (GMS)	define('CURRENT_LOCALE', 'gms');
+elseif (KMS)	define('CURRENT_LOCALE', 'kms');
+else			define('CURRENT_LOCALE', 'fail');
+
 ?>
