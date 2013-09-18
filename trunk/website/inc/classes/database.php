@@ -7,7 +7,7 @@ class ExtendedMysqli extends mysqli {
 	public $queries = array();
 	private static $_character_db_connections = array();
 	
-	public function TryGetCharacterDbConnection($locale) {
+	public static function TryGetCharacterDbConnection($locale) {
 		global $subdomain;
 		
 		$type = $locale === null ? $subdomain : $locale;

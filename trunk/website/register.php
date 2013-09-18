@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$fullname = $__database->real_escape_string($_POST['fullname']);
 			$nickname = $__database->real_escape_string($_POST['nickname']);
 			
-			$statement = $__database->prepare('INSERT INTO ".DB_ACCOUNTS.".accounts 
+			$statement = $__database->prepare('INSERT INTO accounts 
 				(id, username, password, salt, full_name, email, nickname, last_login, last_ip, registered_on) VALUES
 				(NULL,?,?,?,?,?,?,NOW(),?,NOW())');
 			$statement->bind_param('sssssss', $username, $encryptedpassword, 
