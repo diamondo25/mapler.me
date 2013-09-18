@@ -5,6 +5,7 @@ $main_character_image = $main_character !== null ? '//'.$main_character['locale'
 $is_self = $_loggedin && $__url_useraccount->GetID() == $_loginaccount->GetID();
 $friend_status = $_loggedin ? GetFriendStatus($_loginaccount->GetID(), $__url_useraccount->GetID()) : '';
 
+$playerrank = $__url_useraccount->GetAccountRank();
 ?>
 
 <style type="text/css">
@@ -79,7 +80,7 @@ endif;
 ?>
 		<div class="invert-box">
 			<p class="name">
-				<?php echo $__url_useraccount->GetNickname(); ?> <span class="rank"><?php echo GetRankTitle($rank); ?></span><br />
+				<?php echo $__url_useraccount->GetNickname(); ?> <span class="rank"><?php echo GetRankTitle($playerrank); ?></span><br />
 			</p>
 			<p class="name_extra">last seen <?php echo time_elapsed_string($__url_useraccount->GetLastLoginSeconds()); ?> ago...<br/></p>
 <?php if ($_loggedin && $_loginaccount->GetAccountRank() >= RANK_ADMIN): ?>
