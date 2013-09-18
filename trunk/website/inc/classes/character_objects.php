@@ -105,7 +105,7 @@ WHERE
 	AND
 	cashid = ".$cashid."
 	");
-		$pet = new Pet($q->fetch_assoc(), $petslot);
+		$pet = new Pet($q->fetch_assoc(), $petslot, $locale);
 		$q->free();
 		return $pet;
 	}
@@ -125,7 +125,7 @@ WHERE
 			$data = $q->fetch_row();
 			for ($i = 0; $i < 3; $i++) {
 				if ($data[$i] != 0)
-					$ret[$i] = Pet::LoadPet($character_id, $data[$i], $i + 1);
+					$ret[$i] = Pet::LoadPet($character_id, $locale, $data[$i], $i + 1);
 			}
 		}
 		$q->free();

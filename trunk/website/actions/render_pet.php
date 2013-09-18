@@ -27,7 +27,7 @@ imagefill($image, 0, 0, $trans);
 $x = 128;
 $y = 128 - 10;
 
-$info = GetItemWZInfo($petid);
+$info = GetItemWZInfo($petid, CURRENT_LOCALE);
 
 $image_offset = array(0, 0);
 if ($info['stand0'] !== null) {

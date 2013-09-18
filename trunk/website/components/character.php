@@ -1805,7 +1805,7 @@ ORDER BY
 			$row['maxlevel'] = ($potentialMaxLevel == NULL ? '-' : $potentialMaxLevel);
 		}
 		if ($row['skillid'] < 90000000 && $row['level'] >= 100) {
-			$playername = GetCharacterName($row['level']);
+			$playername = GetCharacterName($row['level'], CURRENT_LOCALE);
 			$row['level'] = '<a href="/player/'.$playername.'">'.$playername.'</a>';
 		}
 		elseif (strpos($name, 'Blessing of the Fairy') !== FALSE && strlen($character_info['blessingoffairy']) > 1) {
