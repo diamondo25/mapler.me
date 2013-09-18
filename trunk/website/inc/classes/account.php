@@ -203,7 +203,7 @@ WHERE
 	// Configuraton functions
 	
 	public function GetMainCharacterName() {
-		$config = $this->GetConfigurationOption('character_config', array('main_character' => null));
+		$config = $this->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
 		$name = $config['main_character'];
 		if ($name !== null) {
 			if (strpos($name, ':') === false) {

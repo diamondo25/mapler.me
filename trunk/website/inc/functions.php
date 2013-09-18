@@ -388,9 +388,8 @@ function GetAccountID($name) {
 function Logging($type, $person, $action, $extra) {
     global $__database;
 	
-	if($type == 'admin') {
-        $statement = $__database->prepare('INSERT INTO admin_log (id, username, action, extra_info, at) VALUES
-        (NULL,?,?,?,NOW())');
+	if ($type == 'admin') {
+        $statement = $__database->prepare('INSERT INTO admin_log (id, username, action, extra_info, at) VALUES (NULL,?,?,?,NOW())');
         
         $statement->bind_param('sss', $person, $action, $extra);
         

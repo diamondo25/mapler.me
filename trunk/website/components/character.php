@@ -1882,8 +1882,6 @@ WHERE
 
 <!-- /End content block -->
 	</div>
-	
-</div>
 
 <?php
 }
