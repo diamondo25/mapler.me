@@ -91,7 +91,7 @@ table tr:hover {
 <?php
 while ($row = $rs->fetch_assoc()) {
 ?>
-	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
+	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $locale_domain; ?>/player/<?php echo $row['name']; ?>'">
 	
 		<td style="vertical-align: middle">
 			<?php MakePlayerAvatar($row['name'], CURRENT_LOCALE, array('styleappend' => 'float: none;')); ?>
