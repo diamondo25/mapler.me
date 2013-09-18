@@ -7,6 +7,15 @@ require_once 'pagination.php';
 // Feel free to completely clean this entire thing up.
 // It's put together poorly.
 
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+
+$localepls = 'gms';
+//how do support moar w/ MakePlayerAvatar.
+
 $sql = 'SELECT *,
 	w.world_name,
 	`GetCharacterAccountID`(id) AS account_id
@@ -19,7 +28,7 @@ LEFT JOIN
 WHERE NOT job BETWEEN 800 AND 1000 ORDER BY `level` DESC, `exp` DESC';
 
 // top 5
-$q = $__database->query("
+$q = $__char_db->query("
 SELECT *,
 	w.world_name,
 	`GetCharacterAccountID`(id) AS account_id
@@ -36,7 +45,7 @@ ORDER BY
 LIMIT
 	0, 5
 ");
-$pager = new PS_Pagination($__database, $sql, 5, 5, "");
+$pager = new PS_Pagination($__char_db, $sql, 5, 5, "");
 
 $pager->setDebug(true);
 $rs = $pager->paginate();
@@ -88,7 +97,7 @@ while ($row = $rs->fetch_assoc()) {
 	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 	
 		<td style="vertical-align: middle">
-			<?php MakePlayerAvatar($row['name'], array('styleappend' => 'float: none;')); ?>
+			<?php MakePlayerAvatar($row['name'], $localepls, array('styleappend' => 'float: none;')); ?>
 		</td>
 		<td style="vertical-align: middle">
 			<img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: sub" title="<?php echo $row['world_name']; ?>" /> <?php echo $row['name']; ?>
@@ -108,7 +117,7 @@ while ($row = $rs->fetch_assoc()) {
 while ($row = $q->fetch_assoc()) {
 ?>
 			<div class="status">
-				<?php MakePlayerAvatar($row['name']); ?>
+				<?php MakePlayerAvatar($row['name'], $localepls); ?>
 				<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
 				<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
 				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?> Fame</small></p>
