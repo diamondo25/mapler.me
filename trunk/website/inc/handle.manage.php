@@ -41,6 +41,7 @@ else {
 				<?php require_once $page; ?>
 			</div>
 		</div>
+</div>
 <?php 
 	require_once __DIR__.'/footer.php';
 }

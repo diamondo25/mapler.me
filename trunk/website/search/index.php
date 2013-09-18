@@ -48,7 +48,7 @@ WHERE
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 6
+	0, 21
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
@@ -90,7 +90,7 @@ LEFT JOIN
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 6
+	0, 60
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
