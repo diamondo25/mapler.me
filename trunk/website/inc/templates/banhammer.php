@@ -33,6 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$account = Account::Load($id);
 			$account->SetMute(1);
 			$account->Save();
+			
+Logging('admin', $_loginaccount->GetUsername(), 'account_mute', 'Muted '.$name.'');
 ?>
 <p class="alert-info alert fademeout">Successfully muted @<?php echo $name; ?>.<p>
 <?php
@@ -46,8 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$account = Account::Load($id);
 			$account->SetMute(0);
 			$account->Save();
+			
+Logging('admin', $_loginaccount->GetUsername(), 'account_unmute', 'Unmuted '.$name.'.');
 ?>
-<p class="alert-info alert fademeout">Successfully muted @<?php echo $name; ?>.<p>
+<p class="alert-info alert fademeout">Successfully unmuted @<?php echo $name; ?>.<p>
 <?php
 		}
 	}
@@ -58,6 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$account = Account::Load($id);
 			$account->SetAccountRank(RANK_BANNED);
 			$account->Save();
+			
+Logging('admin', $_loginaccount->GetUsername(), 'account_ban', 'Banned '.$name.'.');
 ?>
 <p class="alert-info alert fademeout">Successfully banned @<?php echo $name; ?>.<p>
 <?php
@@ -70,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$account = Account::Load($id);
 			$account->SetAccountRank(RANK_BANNED);
 			$account->Save();
+
+Logging('admin', $_loginaccount->GetUsername(), 'account_ban', 'Banned '.$name.'.');
 ?>
 <p class="alert-info alert fademeout">Successfully banned @<?php echo $name; ?>.<p>
 <?php
@@ -89,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 		)");
 			if ($__database->affected_rows == 1) {
 			// Send mail?
+Logging('admin', $_loginaccount->GetUsername(), 'account_ipban', 'IP Banned '.$name.'.');
 ?>
 <p class="alert-info alert fademeout">Successfully IP banned @<?php echo $name; ?>.<p>
 <?php

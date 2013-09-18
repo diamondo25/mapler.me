@@ -385,6 +385,19 @@ function GetAccountID($name) {
 	return $tmp[0];
 }
 
+function Logging($type, $person, $action, $extra) {
+    global $__database;
+	
+	if($type == 'admin') {
+        $statement = $__database->prepare('INSERT INTO admin_log (id, username, action, extra_info, at) VALUES
+        (NULL,?,?,?,NOW())');
+        
+        $statement->bind_param('sss', $person, $action, $extra);
+        
+        $statement->execute();
+	}
+}
+
 // only notifications will be friend requests for now.
 function GetNotification() {
 	global $__database, $_loginaccount;

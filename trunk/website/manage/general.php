@@ -14,22 +14,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updatetxt'])) {
 		chmod($notice_filename, 0755);
 	}
 	file_put_contents('notice.txt', $updatetxt);
+	Logging('admin', $_loginaccount->GetUsername(), 'notice_update', 'Updated notice on Stream.');
 ?>
 	<p class="alert alert-success">Successfully updated notice!</p>
 <?php
 }
 ?>
-		<h4>Change the stream notice:</h4>
+		<h2>General</h2>
+		
+		<p>Welcome to the administrative panel of Mapler.me. You can control many aspects of the site including monitoring status messages and our listening servers.</p>
+		
+		<p><i class="icon-exclamation-sign"></i> <b>Please be aware some actions or changes are logged.</b></p>
 
 		<form method="post">
-			<textarea name="updatetxt" id="updatetxt" style="height:50px;" rows="5"><?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?></textarea>
-			<button type="submit" class="btn">Update!</button>
+			<textarea name="updatetxt" class="input-xxlarge" id="updatetxt" style="height:200px;" rows="5"><?php echo (file_exists($notice_filename) ? file_get_contents($notice_filename) : ''); ?></textarea>
+			<button type="submit" class="btn btn-success">Update</button>
 		</form>
 
 		<h4>Various functions and information:</h4>
-		<button type="button" class="btn" onclick="location.href = '?clear_cache'">Clear Cache</button>
-		<button type="button" class="btn" onclick="location.href = '/internal/php/'">PHP Information</button>
-		<button type="button" class="btn" onclick="location.href = '/internal/apc/'">APC(Cache) Information</button>
+		<button type="button" class="btn btn-warning" onclick="location.href = '?clear_cache'">Clear Cache</button>
+		<button type="button" class="btn btn-warning" onclick="location.href = '/internal/php/'">PHP Information</button>
+		<button type="button" class="btn btn-warning" onclick="location.href = '/internal/apc/'">APC(Cache) Information</button>
 		<br />
 		<br />
 <?php
@@ -52,8 +57,8 @@ if (isset($_GET['clear_cache'])) {
 ?>
 
 	<h4>Signup Control</h4>
-	<button type="button" class="btn" onclick="location.href = '?signupon'">Allow Registering</button>
-	<button type="button" class="btn" onclick="location.href = '?signupoff'">Disable Registering</button>
+	<button type="button" class="btn btn-success" onclick="location.href = '?signupon'">Allow Registering</button>
+	<button type="button" class="btn btn-danger" onclick="location.href = '?signupoff'">Disable Registering</button>
 	<br/><br/>
 	<?php
 if (isset($_GET['signupon'])) {

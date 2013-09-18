@@ -146,6 +146,7 @@ if ($_loggedin && $_loginaccount->IsRankORHigher(RANK_ADMIN)) {
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['setrankpls'])) {
 		$__url_useraccount->SetAccountRank(intval($_POST['setrankpls']));
 		$__url_useraccount->Save();
+		Logging('admin', $_loginaccount->GetUsername(), 'account_rank', 'Changed '.$__url_useraccount->GetUserName().'\'s rank.');
 	}
 	$currentrank = $__url_useraccount->GetAccountRank();
 ?>

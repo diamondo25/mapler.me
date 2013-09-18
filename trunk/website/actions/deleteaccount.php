@@ -20,14 +20,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm'])) {
 
 	if ($success == 2) {
 		$wastheirid = $_loginaccount->GetId();
-		unset($_SESSION['username']);
-		session_destroy();
-		SetMaplerCookie('login_session', '', -100);
+        $username = $_loginaccount->GetUsername();
+        $ip = $_loginaccount->GetLastIP();
 
 		$finish = $__database->query("DELETE FROM accounts WHERE id = ".$_loginaccount->GetId());
 		$finish->free();
-		require_once __DIR__.'/../inc/header.php';
 		
+		$statement = $__database->prepare('INSERT INTO account_deletion_log (id, username, ip, at) VALUES
+			(?,?,?,NOW())');
+			
+		$statement->bind_param('sss', $wastheirid, $username, $ip);
+		$statement->execute();
+
+		unset($_SESSION['username']);
+		session_destroy();
+		SetMaplerCookie('login_session', '', -100);
+			
+		require_once __DIR__.'/../inc/header.php';
+		if ($statement->affected_rows == 1) {
 		
 ?>
 		<p class="lead alert alert-info"><i class="icon-exlamation-sign"></i> Your account has been removed.</p>
@@ -40,6 +50,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm'])) {
 		<p>If you have any feedback for our team, send us an email at support@mapler.me! :)</p>
 		<p><b>We wish you a great day, and happy mapling!</b></p>
 <?php
+	    }
+	    else {
+?>
+        <p class="lead alert alert-info"><i class="icon-exlamation-sign"></i> Something went wrong while deleting your account. Please contact support.</p>
+<?php
+	    }
 	}
 	elseif ($success == 1) {
 		require_once __DIR__.'/../inc/header.php';
