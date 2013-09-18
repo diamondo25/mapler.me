@@ -13,9 +13,6 @@ if (GMS) $locale_domain = 'gms.'.$locale_domain;
 elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
 elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
 
-$localepls = 'gms';
-//how do support moar w/ MakePlayerAvatar.
-
 $sql = 'SELECT *,
 	w.world_name,
 	`GetCharacterAccountID`(id) AS account_id
@@ -97,7 +94,7 @@ while ($row = $rs->fetch_assoc()) {
 	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'">
 	
 		<td style="vertical-align: middle">
-			<?php MakePlayerAvatar($row['name'], $localepls, array('styleappend' => 'float: none;')); ?>
+			<?php MakePlayerAvatar($row['name'], CURRENT_LOCALE, array('styleappend' => 'float: none;')); ?>
 		</td>
 		<td style="vertical-align: middle">
 			<img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: sub" title="<?php echo $row['world_name']; ?>" /> <?php echo $row['name']; ?>
@@ -117,7 +114,7 @@ while ($row = $rs->fetch_assoc()) {
 while ($row = $q->fetch_assoc()) {
 ?>
 			<div class="status">
-				<?php MakePlayerAvatar($row['name'], $localepls); ?>
+				<?php MakePlayerAvatar($row['name'], CURRENT_LOCALE); ?>
 				<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br/>
 				<span class="faded">Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></span><br/>
 				<small><i class="icon-heart"></i> <?php echo $row['fame']; ?> Fame</small></p>
