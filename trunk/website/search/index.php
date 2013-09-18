@@ -2,6 +2,12 @@
 require_once __DIR__.'/../inc/header.php';
 require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/templates/search.header.template.php';
+
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
 ?>
 <div class="span9">
 
@@ -21,13 +27,9 @@ require_once __DIR__.'/../inc/templates/search.header.template.php';
 
 <div id="character_list">
 <?php
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'character') {
-
-$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$locale_domain = $domain;
-if (GMS) $locale_domain = 'gms.'.$locale_domain;
-elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
-elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+if (!$check == '0') {
+?>
+<?php
 
 $q = $__char_db->query("
 SELECT 
@@ -46,24 +48,11 @@ WHERE
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 21
+	0, 6
 ");
-
-	if ($q->num_rows == 0) {
-		$q->free();
-?>
-	<center>
-		<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
-		<p>No characters were found matching your request!</p>
-		</center>
-	</div>
-<?php
-		require_once __DIR__.'/../inc/footer.php';
-		die;
-	}
 	while ($row = $q->fetch_assoc()) {
 ?>
-<div class="character-brick clickable-brick span3 <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;margin-top:10px;">
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;margin-top:10px;">
 		<center>
 			<br />
 			<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>
@@ -73,15 +62,18 @@ LIMIT
 </div>
 <?php
 }
+?>
+</div>
+</div>
+</div>
+</div>
+<?php
+require_once __DIR__.'/../inc/footer.php';
+die;
 }
+?>
 
-else {
-
-$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$locale_domain = $domain;
-if (GMS) $locale_domain = 'gms.'.$locale_domain;
-elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
-elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+<?php
 
 	$q = $__char_db->query("
 SELECT 
@@ -98,7 +90,7 @@ LEFT JOIN
 ORDER BY
 	last_update DESC
 LIMIT
-	0, 60
+	0, 6
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
@@ -112,12 +104,9 @@ LIMIT
 			</div>
 <?php
 }
-}
 ?>
 </div>
-<?php
-
-?>
+</div>
 </div>
 </div>
 <?php require_once __DIR__.'/../inc/footer.php'; ?>

@@ -1,3 +1,4 @@
+		</div>
 		<div style="clear:both;"></div>
 		<footer>
 			<p><span><i class="icon-asterisk"></i> 2012-<?php echo date('Y'); ?> Mapler.me</span></p>
