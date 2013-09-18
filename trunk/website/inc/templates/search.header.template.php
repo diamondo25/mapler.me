@@ -72,12 +72,11 @@ $check = strlen($searching);
 <div class="row">
 	<div class="span3" style="height:100% !important; float: left;">
 		<p class="lead">Search</p>
-        <form method="post" action="http://<?php echo $domain; ?>/search/">
+        <form method="post" action="">
 			<input type="text" name="search" placeholder="Search for a character?" />
 			<input type="hidden" name="type" id="stype" value="character"/>
 			<p>Tip: Type nothing to view all recent characters!</p>
 		</form>
-		<?php if ($check == '0') { ?>
 		<hr />
 		<ul id="filters" class="nav nav-list sidebar">
 			<li><a href="#" data-filter="*">Show all.</a></li>
@@ -90,5 +89,4 @@ $check = strlen($searching);
 			<li><a href="#" data-filter=".galicia, .arcania, .zenith, .el nido, .demethos">Galicia, Arcania, Zenith, El Nido, Demethos</a></li>
 			<li><a href="#" data-filter=".renegades">Renegades</a></li>
 		</ul>
-		<?php } ?>
 	</div>

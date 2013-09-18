@@ -21,44 +21,15 @@ require_once __DIR__.'/../inc/templates/search.header.template.php';
 
 <div id="character_list">
 <?php
-if ($check == '0') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['type']) && $_POST['type'] == 'character') {
-	$q = $__database->query("
-SELECT 
-	*,
-	w.world_name,
-	`GetCharacterAccountID`(id) AS account_id,
-	TIMESTAMPDIFF(SECOND, last_update, NOW()) AS `secs_since`
-FROM
-	`characters` chr
-LEFT JOIN 
-	world_data w
-	ON
-		w.world_id = chr.world_id
-ORDER BY
-	last_update DESC
-LIMIT
-	0, 60
-");
-	while ($row = $q->fetch_assoc()) {
-?>
-<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
-				<center>
-					<br />
-						<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/><br/>
-						<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br />
-						<small>Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></small></p>
-				</center>
-			</div>
-<?php
-}
-}
-}
-?>
-</div>
-<?php
-if (!$check == '0') {
-$q = $__database->query("
+
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+
+$q = $__char_db->query("
 SELECT 
 	*,
 	w.world_name,
@@ -71,7 +42,7 @@ LEFT JOIN
 	ON
 		w.world_id = chr.world_id
 WHERE 
-	name LIKE '%".$__database->real_escape_string($searching)."%'
+	name LIKE '%".$__char_db->real_escape_string($searching)."%'
 ORDER BY
 	last_update DESC
 LIMIT
@@ -95,7 +66,7 @@ LIMIT
 <div class="character-brick clickable-brick span3 <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;margin-top:10px;">
 		<center>
 			<br />
-			<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/><br/>
+			<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>
 			<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br />
 			<small>Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></small></p>
 		</center>
@@ -103,6 +74,49 @@ LIMIT
 <?php
 }
 }
+
+else {
+
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+
+	$q = $__char_db->query("
+SELECT 
+	*,
+	w.world_name,
+	`GetCharacterAccountID`(id) AS account_id,
+	TIMESTAMPDIFF(SECOND, last_update, NOW()) AS `secs_since`
+FROM
+	`characters` chr
+LEFT JOIN 
+	world_data w
+	ON
+		w.world_id = chr.world_id
+ORDER BY
+	last_update DESC
+LIMIT
+	0, 60
+");
+	while ($row = $q->fetch_assoc()) {
+?>
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
+				<center>
+					<br />
+						<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>
+						<p class="lead"><img src="//<?php echo $domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" /> <?php echo $row['name']; ?><br />
+						<small>Level <?php echo $row['level']; ?> <?php echo GetJobname($row['job']); ?></small></p>
+				</center>
+			</div>
+<?php
+}
+}
+?>
+</div>
+<?php
+
 ?>
 </div>
 </div>
