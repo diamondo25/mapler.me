@@ -232,22 +232,16 @@ LIMIT
 	15
 ";
 
-		$_gms_db = ConnectCharacterDatabase('gms');
-		$_ems_db = ConnectCharacterDatabase('ems');
-		
-		// GMS
-		$q = $_gms_db->query($query);
-		
-		while ($row = $q->fetch_row())
-			$found_rows[] = $row;
-		$q->free();
-		
-		// EMS
-		$q = $_ems_db->query($query);
-		
-		while ($row = $q->fetch_row())
-			$found_rows[] = $row;
-		$q->free();
+		foreach (array('gms', 'ems') as $locale) {
+			$_db = ConnectCharacterDatabase($locale);
+			$q = $_db->query($query);
+			
+			while ($row = $q->fetch_row()) {
+				$row['locale'] = $locale;
+				$found_rows[] = $row;
+			}
+			$q->free();
+		}
 		
 		$stream = array();
 		$timestamp = $__server_time;
@@ -270,7 +264,7 @@ LIMIT
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
 					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
-					<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+					<a href="//<?php echo $row['locale']; ?>.mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
@@ -281,7 +275,7 @@ LIMIT
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
 					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
-					<a href="//mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
+					<a href="//<?php echo $row['locale']; ?>.mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
