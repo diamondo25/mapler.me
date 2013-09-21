@@ -44,7 +44,7 @@ if ($q->num_rows != 0) {
 require_once __DIR__.'/classes/form.php';
 require_once __DIR__.'/classes/account.php';
 require_once __DIR__.'/classes/inventory.php';
-require_once __DIR__.'/classes/statusses.php';
+require_once __DIR__.'/classes/statuses.php';
 require_once __DIR__.'/domains.php';
 require_once __DIR__.'/ranks.php';
 require_once __DIR__.'/functions.datastorage.php';
@@ -682,7 +682,9 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 	
 	$notfound = $name === null || $name == '';
 	$image = 'http://mapler.me/inc/img/no-character.gif';
+	$y_offset = '-15px';
 	if (!$notfound) {
+		$y_offset = '-2px';
 		$image = 'http://'.$locale.'.'.$domain.'/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
 	}
 	
@@ -691,7 +693,7 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 		return;
 	}
 ?>
-	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center -2px; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
+	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center <?php echo $y_offset; ?>; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 
@@ -699,6 +701,9 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 function GetMaplerServerInfo() {
 	global $maplerme_servers;
 	$result = array();
+	
+	if (IsCachedObject('server_info', 'all')) return GetCachedObject('server_info', 'all');
+	
 	foreach ($maplerme_servers as $servername => $data) {
 		$socket = @fsockopen($data[0], $data[1], $errno, $errstr, 5);
 		$data = array('state' => 'offline', 'locale' => '?', 'version' => '?', 'players' => 0);
@@ -732,6 +737,7 @@ function GetMaplerServerInfo() {
 		$result[$servername] = $data;
 	}
 	
+	SetCachedObject('server_info', $result, 'all', 3);
 	return $result;
 }
 

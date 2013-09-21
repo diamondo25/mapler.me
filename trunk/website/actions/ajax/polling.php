@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__.'/../../inc/functions.php';
 require_once __DIR__.'/../../inc/functions.ajax.php';
-require_once __DIR__.'/../../inc/classes/statusses.php';
+require_once __DIR__.'/../../inc/classes/statuses.php';
 require_once __DIR__.'/../../inc/job_list.php';
 
 CheckSupportedTypes('info');
@@ -21,12 +21,9 @@ if ($request_type == 'info') {
 		$res['membername'] = $_loginaccount->GetUsername();
 		$__database->query("UPDATE accounts SET last_login = NOW(), last_ip = '".$_SERVER['REMOTE_ADDR']."' WHERE id = ".$_loginaccount->GetID());
 		
-		$statuscount = $__database->query("SELECT id FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
-		$statuscounter = array();
-		while ($statusarray = $statuscount->fetch_assoc()) {
-    		$statuscounter[] = $statusarray;
-        }
-        $res['memberstatuses'] = count($statuscounter);
+		$statuscount = $__database->query("SELECT COUNT(*) FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
+		$row = $statuscount->fetch_row();
+        $res['memberstatuses'] = $row[0];
 	}
 	
 	
@@ -83,9 +80,9 @@ WHERE
 	$res['status_info'] = $status_info;
 	
 	
-	if ($is_ok_url && isset($_POST['has-statusses']) && $_POST['has-statusses'] != 0) {
+	if ($is_ok_url && isset($_POST['has-statuses']) && $_POST['has-statuses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
-		$is_maindomain = $subdomain == '' || $subdomain == 'www';
+		$is_maindomain = $subdomain == '' || $subdomain == 'www' || $subdomain == 'ems' || $subdomain == 'gms' || $subdomain == 'kms';
 		
 		// NOTE FOR SELF
 		// Get 10 statuses. Then, use the oldest time as 'AND TIME > OLDEST TIME' for timeline. woop
@@ -94,21 +91,12 @@ WHERE
 		if (isset($_POST['older-than']) && $_client_time > 0) {
 			$whereq = '< FROM_UNIXTIME('.$_client_time.')';
 		}
-		$whereq_1 = '`when` '.$whereq; //.($_client_time == 0 ? ' AND `when` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		$whereq_2 = '`ss`.`timestamp` '.$whereq; //.($_client_time == 0 ? ' AND `ss`.`timestamp` > DATE_SUB(NOW(), INTERVAL 2 DAY)' : '');
-		if (isset($_POST['older-than'])) {
-			//$whereq_1 .= ' AND `when` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY)';
-			//$whereq_2 .= ' AND `ss`.`timestamp` > DATE_SUB(FROM_UNIXTIME('.$_client_time.'), INTERVAL 2 DAY';
-		}
-		
-		if (strpos($url, '/'.$domain.'/blog/') !== false) {
-			// No time thingies, only blog posts
-			$whereq_1 = ' 1 = 0 '; // heh
-			$whereq_2 .= ' AND `ss`.blog = 1';
-		}
+		$whereq_1 = '`when` '.$whereq;
+		$whereq_2 = '`ss`.`timestamp` '.$whereq;
 		
 		
-		// Get statusses
+		
+		// Get statuses
 		
 		$q = "
 SELECT 
@@ -150,9 +138,13 @@ WHERE
 		if ($_loggedin && $is_maindomain) { // Main screen
 			$q .= "
 	AND
-	`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+	(
+		`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+		OR
+		`ss`.override = 1
+		".(strpos($url, '/'.$domain.'/discover/') !== false ? ' OR 1' : '')."
+	)
 	AND
-	
 	IF(
 		`ss_reply`.`id` IS NOT NULL,
 		`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
@@ -218,7 +210,11 @@ WHERE
 		if ($_loggedin && $is_maindomain) { // Main screen
 			$query .= "
 	AND
-	`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')";
+	(
+		`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+		".(strpos($url, '/'.$domain.'/discover/') !== false ? ' OR 1' : '')."
+	)
+	";
 		}
 		if (!$is_maindomain) {
 			$query .= ' AND ';

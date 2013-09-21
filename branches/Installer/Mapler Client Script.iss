@@ -72,9 +72,12 @@ Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: 
 [Run]
 Filename: "{app}\{#WinPcapInstallerName}"; Flags: shellexec waituntilterminated; Check: InstallWinPcap
 Filename: "http://www.microsoft.com/en-us/download/details.aspx?id=24872"; Check: GotoDotNetInstall
+#if TestBuild
+Filename: "{app}\Mapler Client.exe"; Parameters: "/updated"; Flags: nowait postinstall
+#else
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 Filename: "{app}\{#MyAppExeName}"; Flags: nowait postinstall skipifnotsilent
-
+#endif
 
 
 [Code]

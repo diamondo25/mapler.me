@@ -18,8 +18,8 @@ SELECT
 $tmp = $s->fetch_row(); 
 $s->free();
 
-$statusses = new Statusses();
-$statusses->Load("s.blog = 0","5");
+$statuses = new Statuses();
+$statuses->Load("s.blog = 0","5");
 ?>
 <style>
 .woah {
@@ -83,7 +83,7 @@ $statusses->Load("s.blog = 0","5");
 	
 	<div class="span7 hidemobile">
 <?php
-	foreach ($statusses->data as $status) {
+	foreach ($statuses->data as $status) {
 		$status->PrintAsHTML();
 	}
 ?>
@@ -99,7 +99,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
 	_AddHeaderLink('js', 'script.player');
 }
 _AddHeaderLink('js', 'jquery.isotope.min');
-_AddHeaderLink('js', 'maplerme.min');
+_AddHeaderLink('js', 'maplerme');
 _AddHeaderLink('js', 'keypress')
 ?>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>	

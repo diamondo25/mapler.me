@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__.'/../inc/header.php';
 
-$statusses = new Statusses();
-$statusses->Load('blog = 0', '30');
+$statuses = new Statuses();
+$statuses->Load('blog = 0', '30');
 
-foreach ($statusses->data as $status) {
+foreach ($statuses->data as $status) {
 	$status->PrintAsHTML('');
 }
 

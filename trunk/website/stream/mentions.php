@@ -8,8 +8,8 @@ if (!$_loggedin) {
 else {
 	$mentioned = '@'.$_loginaccount->GetUsername();
 
-	$statusses = new Statusses();
-	$statusses->Load("s.content LIKE '%".$__database->real_escape_string($mentioned)."%'","35");
+	$statuses = new Statuses();
+	$statuses->Load("s.content LIKE '%".$__database->real_escape_string($mentioned)."%'","35");
 
 	require_once __DIR__.'/../inc/templates/stream.sidebar.template.php';
 ?>
@@ -27,7 +27,7 @@ else {
 <div class="span8">
 <h1>Mentions</h1>
 <?php
-	foreach ($statusses->data as $status) {
+	foreach ($statuses->data as $status) {
 		$status->PrintAsHTML();
 	}
 ?>

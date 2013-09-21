@@ -5,14 +5,14 @@ require_once __DIR__.'/../../inc/functions.loginaccount.php';
 CheckSupportedTypes('responses', 'list', 'blog', 'post', 'delete');
 
 require_once __DIR__.'/../../inc/classes/database.php';
-require_once __DIR__.'/../../inc/classes/statusses.php';
+require_once __DIR__.'/../../inc/classes/statuses.php';
 require_once __DIR__.'/../../inc/avatar_faces.php';
 require_once __DIR__.'/../../inc/codebird.php';
 
 if ($request_type == 'responses') {
 	RetrieveInputGET('statusid');
 	
-	$statuses = new Statusses();
+	$statuses = new Statuses();
 	$statuses->Load("s.reply_to = ".intval($P['statusid']), '10');
 	
 	// Buffer all results
@@ -27,7 +27,7 @@ if ($request_type == 'responses') {
 
 elseif ($request_type == 'blog') {
 	
-	$statuses = new Statusses();
+	$statuses = new Statuses();
 	$statuses->Load("s.blog = 1");
 	
 	// Buffer all results
@@ -49,7 +49,7 @@ elseif ($request_type == 'list') {
 	
 	$P['lastpost'] = intval($P['lastpost']);
 	
-	$statuses = new Statusses();
+	$statuses = new Statuses();
 	$statuses->Load(
 	($P['lastpost'] == -1 ? '' : (" s.timestamp ".($P['mode'] == 'back' ? '<' : '>')." FROM_UNIXTIME(".$P['lastpost']).") AND")."
 	(

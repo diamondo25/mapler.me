@@ -155,7 +155,7 @@ $(document).ready(function() {
 		});
 
 		// $('*[status-post-time]').last()
-		var request_data = { 'shown-statuses': statuses, 'client-time': serverTickCount, 'url': document.location.href, 'has-statusses': $('#statuslist').length > 0 ? 1 : 0 };
+		var request_data = { 'shown-statuses': statuses, 'client-time': serverTickCount, 'url': document.location.href, 'has-statuses': $('#statuslist').length > 0 ? 1 : 0 };
 		if (requestOlder) {
 			var oldeststatus = serverTickCount;
 			$('*[status-post-time]').each(function () {

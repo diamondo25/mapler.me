@@ -94,6 +94,7 @@ namespace Mapler_Client
 
             using (WebClient wc = new WebClient())
             {
+                wc.Proxy = null;
                 string URL = "http://mapler.me/api/login/";
                 URL += "?type=" + pMode;
                 wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";

@@ -77,6 +77,7 @@
             this.label1.Size = new System.Drawing.Size(54, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Global";
+            this.label1.DoubleClick += new System.EventHandler(this.dotGMS_DoubleClick);
             // 
             // tooltipEMS
             // 
@@ -100,6 +101,8 @@
             this.label2.Size = new System.Drawing.Size(60, 18);
             this.label2.TabIndex = 0;
             this.label2.Text = "Europe";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            this.label2.DoubleClick += new System.EventHandler(this.dotEMS_DoubleClick);
             // 
             // dotEMS
             // 
@@ -135,6 +138,7 @@
             this.label3.Size = new System.Drawing.Size(52, 18);
             this.label3.TabIndex = 0;
             this.label3.Text = "Korea";
+            this.label3.DoubleClick += new System.EventHandler(this.dotKMS_DoubleClick);
             // 
             // dotKMS
             // 
@@ -153,18 +157,19 @@
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Verdana", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(192, 9);
+            this.label4.Location = new System.Drawing.Point(154, 9);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(481, 18);
+            this.label4.Size = new System.Drawing.Size(529, 18);
             this.label4.TabIndex = 6;
-            this.label4.Text = "Please select the MapleStory locale you are going to play";
+            this.label4.Text = "Please double-click the MapleStory locale you are going to play";
             // 
             // frmGateway
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Mapler_Client.Properties.Resources.gateway_bg;
-            this.ClientSize = new System.Drawing.Size(868, 533);
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.ClientSize = new System.Drawing.Size(885, 565);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tooltipKMS);
             this.Controls.Add(this.tooltipEMS);
@@ -174,8 +179,8 @@
             this.Controls.Add(this.dotGMS);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximumSize = new System.Drawing.Size(884, 567);
-            this.MinimumSize = new System.Drawing.Size(884, 567);
+            this.MaximumSize = new System.Drawing.Size(901, 599);
+            this.MinimumSize = new System.Drawing.Size(901, 599);
             this.Name = "frmGateway";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Mapler.me Gateway Screen";

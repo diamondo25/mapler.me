@@ -26,6 +26,7 @@ namespace CraftNetTools
             try
             {
                 WebClient wc = new WebClient();
+                wc.Proxy = null;
                 string responseText = wc.DownloadString(string.Format("http://direct.craftnet.nl/app_updates/updates.php?appname={0}&appver={1}&v=2", ApplicationName, ApplicationVersion));
                 string[] lines = responseText.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 

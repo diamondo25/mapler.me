@@ -33,6 +33,7 @@ namespace Mapler_Client
         private void frmGateway_Load(object sender, EventArgs e)
         {
             WebClient wc = new WebClient();
+            wc.Proxy = null;
             string responseText = wc.DownloadString("http://i.mapler.me/mapler_servers.php");
             string[] lines = responseText.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -76,6 +77,11 @@ namespace Mapler_Client
         private void dotKMS_DoubleClick(object sender, EventArgs e)
         {
             TryConnect(2);
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

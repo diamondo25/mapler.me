@@ -47,36 +47,6 @@ namespace Mapler_Client
                 return;
             }
 
-            try
-            {
-                // Get executable path
-                if (Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet") != null &&
-                    Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory") != null &&
-                    Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable") != null)
-                {
-                    _mapleEXE = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable");
-                }
-
-                _keyboardHook = new KeyboardHook();
-                _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
-                _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
-
-                ServerConnection.Initialize(frmGateway.GatewayHostname, frmGateway.GatewayPort);
-                Sniffer.Init();
-            }
-            catch (Exception ex)
-            {
-                if (ex.ToString().Contains("Unable to connect"))
-                {
-                    MessageBox.Show("It looks like Mapler.me has a server check or update ongoing! Please check the website for more information.\r\n\r\nThe program will now exit.", "Mapler.me connection error!", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    MessageBox.Show(string.Format("An error occurred while initializing everything!\r\nContact us at support@mapler.me if you want more information about this error.\r\n{0}\r\n\r\nThe program will now exit.", ex.ToString()), "ERROR");
-                }
-                Program.Closing = true;
-                Environment.Exit(1);
-            }
         }
 
         void _keyboardHook_KeyPressed(object sender, KeyPressedEventArgs e)
@@ -309,7 +279,60 @@ namespace Mapler_Client
         private void picStart_MouseHover(object sender, EventArgs e)
         {
             picStart.Image = global::Mapler_Client.Properties.Resources.launch_hover;
+        }
 
+        private void frmMain_Shown(object sender, EventArgs e)
+        {
+            this.Refresh();
+
+            try
+            {
+                // Get executable path
+                if (Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet") != null &&
+                    Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory") != null &&
+                    Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable") != null)
+                {
+                    _mapleEXE = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE").OpenSubKey("Wizet").OpenSubKey("MapleStory").GetValue("Executable");
+                }
+
+                _keyboardHook = new KeyboardHook();
+                _keyboardHook.KeyPressed += _keyboardHook_KeyPressed;
+                _keyboardHook.RegisterHotKey(Mapler_Client.ModifierKeys.Alt, Keys.R);
+
+                ServerConnection.Initialize(frmGateway.GatewayHostname, frmGateway.GatewayPort);
+                lblConnecting.Text = "Initializing main routine...";
+                Sniffer.Init();
+
+                lblConnecting.Visible = false;
+            }
+            catch (Exception ex)
+            {
+                if (ex.ToString().Contains("Unable to connect"))
+                {
+                    MessageBox.Show("It looks like Mapler.me has a server check or update ongoing! Please check the website for more information.\r\n\r\nThe program will now exit.", "Mapler.me connection error!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("An error occurred while initializing everything!\r\nContact us at support@mapler.me if you want more information about this error.\r\n{0}\r\n\r\nThe program will now exit.", ex.ToString()), "ERROR");
+                }
+                Program.Closing = true;
+                Environment.Exit(1);
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon1_DoubleClick(sender, e);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void goToMaplermeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("http://www.mapler.me");
         }
     }
 }

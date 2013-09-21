@@ -5,10 +5,10 @@ $statusid = intval($_GET['id']);
 	<div class="row">
 
 <?php
-$statusses = new Statusses();
-$statusses->Load("s.id = ".$statusid);
+$statuses = new Statuses();
+$statuses->Load("s.id = ".$statusid);
 
-if ($statusses->Count() == 0) {
+if ($statuses->Count() == 0) {
 ?>
 	<div class="span12">
 		<center>
@@ -18,14 +18,14 @@ if ($statusses->Count() == 0) {
 <?php
 }
 else {
-	$status = $statusses->data[0]; // Get first
+	$status = $statuses->data[0]; // Get first
 	
 	$prestatuses = array();
 	$curid = $status->reply_to;
 	while (true) {
 		// Oh god.
 
-		$sss = new Statusses();
+		$sss = new Statuses();
 		$sss->Load("s.id = ".$curid);
 		
 		if ($sss->Count() == 0)
@@ -40,11 +40,11 @@ else {
 
 	
 	// Get replies
-	$statusses = new Statusses();
-	$statusses->Load('s.reply_to = '.$statusid);
+	$statuses = new Statuses();
+	$statuses->Load('s.reply_to = '.$statusid);
 
-	if ($statusses->Count() !== 0) {
-		foreach ($statusses->data as $tmp) {
+	if ($statuses->Count() !== 0) {
+		foreach ($statuses->data as $tmp) {
 			$tmp->PrintAsHTML(' span8');
 		}
 	}
