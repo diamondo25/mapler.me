@@ -15,8 +15,12 @@ endif;
 			<div class="status">
 			<h1>Mapler.me Client Installer</h1>
 			<p>Simplistic, easy to use, and always there for you, the Mapler.me client is used to update your characters, items, and more.</p>
-			<a href="http://cdn.mapler.me/installers/setup_2.0.1.1.exe" class="btn btn-success btn-large download-button">Download the latest client installer!</a>
-			<blockquote>Note: WinPcap is required for the client to function correctly. This will be installed when you run the installer.</blockquote>
+			<a href="http://cdn.mapler.me/installers/setup_2.0.2.2.exe" class="btn btn-success btn-large download-button">Download the latest client installer!</a>
+			<blockquote>
+			Requirements:<br />
+			 - .NET Framework 4.0 (Client Profile) -> <a href="http://www.microsoft.com/en-us/download/details.aspx?id=24872">Download</a><br />
+			 - WinPcap (will be installed with Mapler.me)<br />
+			</blockquote>
 			</div>
 			
 			<div class="status">

@@ -1,0 +1,24 @@
+Mapler.me server layout
+
+Currently:
+	- MapleStory Global server (all connections accepted)
+ 
+Could be:
+	- Mapler.me Gateway
+	|	-	MapleStory Global
+	|	-	MapleStory Europe
+	|	-	MapleStory Korea
+
+
+The Mapler.me Gateway could accept all connections (multiple instances like the NX Loginserver?), 
+and sends a 'connect to this server' packet when a client has started for a specific version?
+
+Or.. maybe just acts as a NGINX server; redirecting all input packets through its (fast) network?
+
+
+
+Also could be:
+	-	Mapler.me Gateway 1	(located in Korea?)				\								 /	MapleStory Korea handler (located in Korea?)
+	-	Mapler.me Gateway 2	(located in Europe)	 			 -	Mapler.me Center server 	-	MapleStory Europe handler (located in Europe)
+	-	Mapler.me Gateway N	(located in America/Europe?)	/			Located in EU		 \	MapleStory Global handler (located in America/Europe?)
+	

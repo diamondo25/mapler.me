@@ -2,7 +2,8 @@
 
 $maplerme_servers = array();
 $maplerme_servers['global'] = array('direct.mapler.me', 23711);
-//$maplerme_servers['europe'] = array('ems.s.mapler.me', 23711);
+$maplerme_servers['europe'] = array('direct.mapler.me', 23721);
+//$maplerme_servers['korea'] = array('direct.mapler.me', 23731);
 
 if (strpos($_SERVER['DOCUMENT_ROOT'], '/var/www/maplestats_svn/') !== FALSE) {
 	define('SERVER_MYSQL_ADDR', '127.0.0.1');

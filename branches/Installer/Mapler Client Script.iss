@@ -2,13 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Mapler.me Client"
-#define MyAppVersion "2.0.2.2"
+#define MyAppVersion "2.0.3.0"
 #define MyAppPublisher "Mapler.me"
 #define MyAppURL "http://www.mapler.me/"
 #define MyAppExeName "MaplerUpdater.exe"
 #define DebugBuild False
+#define TestBuild False
 
 #define WinPcapInstallerName "WinPcap_4_1_3.exe"
+; Installation found at HKLM\Software\WinPcap
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -17,6 +19,7 @@
 AppId={{279273DF-7BC8-4F21-BD05-EFA5824895D6}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+VersionInfoVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -28,6 +31,8 @@ AllowNoIcons=yes
 OutputDir=.\
 #if DebugBuild
 OutputBaseFilename=setup_{#MyAppVersion}_debug
+#elif TestBuild
+OutputBaseFilename=setup_{#MyAppVersion}_test
 #else
 OutputBaseFilename=setup_{#MyAppVersion}
 #endif
@@ -60,12 +65,105 @@ Source: ".\..\WinPcap Installer\{#WinPcapInstallerName}"; DestDir: "{app}"; Flag
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
+;Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 ; Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
 
 [Run]
-Filename: "{app}\{#WinPcapInstallerName}"; Flags: shellexec waituntilterminated
+Filename: "{app}\{#WinPcapInstallerName}"; Flags: shellexec waituntilterminated; Check: InstallWinPcap
+Filename: "http://www.microsoft.com/en-us/download/details.aspx?id=24872"; Check: GotoDotNetInstall
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 Filename: "{app}\{#MyAppExeName}"; Flags: nowait postinstall skipifnotsilent
 
+
+
+[Code]
+
+type
+  //
+  // Enumeration used to specify a .NET framework version 
+  //
+  TDotNetFramework = (
+    DotNet_v11_4322,  // .NET Framework 1.1
+    DotNet_v20_50727, // .NET Framework 2.0
+    DotNet_v30,       // .NET Framework 3.0
+    DotNet_v35,       // .NET Framework 3.5
+    DotNet_v4_Client, // .NET Framework 4.0 Client Profile
+    DotNet_v4_Full,   // .NET Framework 4.0 Full Installation
+    DotNet_v45);      // .NET Framework 4.5
+
+//
+// Checks whether the specified .NET Framework version and service pack
+// is installed (See: http://www.kynosarges.de/DotNetVersion.html)
+//
+// Parameters:
+//   Version     - Required .NET Framework version
+//   ServicePack - Required service pack level (0: None, 1: SP1, 2: SP2 etc.)
+//
+function IsDotNetInstalled(Version: TDotNetFramework; ServicePack: cardinal): boolean;
+  var
+    KeyName      : string;
+    Check45      : boolean;
+    Success      : boolean;
+    InstallFlag  : cardinal; 
+    ReleaseVer   : cardinal;
+    ServiceCount : cardinal;
+  begin
+    // Registry path for the requested .NET Version
+    KeyName := 'SOFTWARE\Microsoft\NET Framework Setup\NDP\';
+
+    case Version of
+      DotNet_v11_4322:  KeyName := KeyName + 'v1.1.4322';
+      DotNet_v20_50727: KeyName := KeyName + 'v2.0.50727';
+      DotNet_v30:       KeyName := KeyName + 'v3.0';
+      DotNet_v35:       KeyName := KeyName + 'v3.5';
+      DotNet_v4_Client: KeyName := KeyName + 'v4\Client';
+      DotNet_v4_Full:   KeyName := KeyName + 'v4\Full';
+      DotNet_v45:       KeyName := KeyName + 'v4\Full';
+    end;
+
+    // .NET 3.0 uses "InstallSuccess" key in subkey Setup
+    if (Version = DotNet_v30) then
+      Success := RegQueryDWordValue(HKLM, KeyName + '\Setup', 'InstallSuccess', InstallFlag) else
+      Success := RegQueryDWordValue(HKLM, KeyName, 'Install', InstallFlag);
+
+    // .NET 4.0/4.5 uses "Servicing" key instead of "SP"
+    if (Version = DotNet_v4_Client) or
+       (Version = DotNet_v4_Full) or
+       (Version = DotNet_v45) then
+      Success := Success and RegQueryDWordValue(HKLM, KeyName, 'Servicing', ServiceCount) else
+      Success := Success and RegQueryDWordValue(HKLM, KeyName, 'SP', ServiceCount);
+
+    // .NET 4.5 is distinguished from .NET 4.0 by the Release key
+    if (Version = DotNet_v45) then
+      begin
+        Success := Success and RegQueryDWordValue(HKLM, KeyName, 'Release', ReleaseVer);
+        Success := Success and (ReleaseVer >= 378389);
+      end;
+    Result := Success and (InstallFlag = 1) and (ServiceCount >= ServicePack);
+  end;
+
+function GotoDotNetInstall(): boolean;
+begin
+  Result := False;
+  if (not IsDotNetInstalled(DotNet_V4_Client, 0)) and (MsgBox('.NET Framework 4.0 Client Profile was not found on your system. Would you like to go to the download page to download it?', mbConfirmation, MB_YESNO) = idYes) then
+    Result := True;
+end;
+  
+function InstallWinPcap(): boolean;
+  var
+    KeyName      : string;
+    Temp : Boolean;
+    Directory  : String; 
+  begin
+    Temp := True;
+    KeyName := 'SOFTWARE\WinPcap';
+    if not RegQueryStringValue(HKLM, KeyName, '', Directory) then
+    begin
+      if MsgBox('We did not find WinPcap on your PC. This is needed in order to run Mapler.me Client. Install now?', mbConfirmation, MB_YESNO) = idYes then
+      begin
+        Temp := False;
+      end;
+    end;
+    Result := not Temp;
+  end;

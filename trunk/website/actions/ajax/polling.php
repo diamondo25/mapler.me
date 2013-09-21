@@ -166,7 +166,7 @@ WHERE
 
 		$q .= "
 ORDER BY
-	`ss`.`timestamp` DESC
+	`ss`.`id` DESC
 LIMIT
 	15
 ";
@@ -227,7 +227,7 @@ WHERE
 	
 		$query .= "
 ORDER BY
-	`when` DESC
+	`timeline`.`id` DESC
 LIMIT
 	15
 ";

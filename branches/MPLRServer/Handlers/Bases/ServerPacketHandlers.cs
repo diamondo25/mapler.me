@@ -618,7 +618,6 @@ namespace MPLRServer
                 didsomething = true;
                 pConnection.CharData.Stats.Mesos = pPacket.ReadLong();
             }
-
             if (CheckFlag(updateFlag, 0x200000))
             {
                 var value = pPacket.ReadInt();
@@ -683,7 +682,7 @@ namespace MPLRServer
 
             if (CheckFlag(updateFlag, 0x80000000))
             {
-                for (byte i = 0; i < 6; i++)
+                for (byte i = 0; i < 9; i++)
                 {
                     pPacket.ReadInt();
                     pPacket.ReadByte();
