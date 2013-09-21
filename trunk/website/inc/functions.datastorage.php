@@ -9,10 +9,10 @@ define('APC_INSTALLED', isset($_GET['IGNORE_APC']) ? false : function_exists('ap
 
 gc_disable(); // Disable Garbage Collection (T_T). Prevents Memfaulting apache...
 
-function SetCachedObject($key, $value, $locale) {
+function SetCachedObject($key, $value, $locale, $ttl = 0) {
 	global $subdomain;
 	$tmp = $key.'_'.$locale;
-	if (APC_INSTALLED) apc_add($tmp, $value);
+	if (APC_INSTALLED) apc_add($tmp, $value, $ttl);
 }
 
 function IsCachedObject($key, $locale) {
