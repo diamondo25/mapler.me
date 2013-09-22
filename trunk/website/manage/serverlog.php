@@ -27,9 +27,11 @@ function RunCMD($cmd) {
 
 $searchfor = '';
 $lines = 30;
+$type = 'GMS';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['searchfor'], $_POST['lines'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['searchfor'], $_POST['lines'], $_POST['type'])) {
 	$searchfor = $_POST['searchfor'];
+	$type = $_POST['type'];
 	$lines = intval($_POST['lines']);
 	if ($lines == 0) $lines = 30;
 }
@@ -41,13 +43,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['searchfor'], $_POST['l
 <form method="post">
 Search for? <input type="text" name="searchfor" value="<?php echo $searchfor; ?>" />
 Lines <input type="text" name="lines" value="<?php echo $lines; ?>" style="width:100px;" />
+Type:
+<select name="type">
+	<option<?php echo $type == 'EMS' ? ' selected="selected"' : ''; ?>>EMS</option>
+	<option<?php echo $type == 'GMS' ? ' selected="selected"' : ''; ?>>GMS</option>
+	<option<?php echo $type == 'KMS' ? ' selected="selected"' : ''; ?>>KMS</option>
+</select>
 <input type="submit" class="btn btn-success" value="Search"/>
 </form>
 <?php
 
 $oldestTime = 0;
 $name = '';
-foreach (glob('/mplrserver/logs/*') as $filename) {
+$dir = '';
+if ($type == 'EMS') $dir = 'EMS/';
+elseif ($type == 'KMS') $dir = 'KMS/';
+foreach (glob('/mplrserver/'.$dir.'logs/*') as $filename) {
 	$t = filectime($filename);
 	if ($t > $oldestTime) {
 		$oldestTime = $t;
