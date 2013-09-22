@@ -25,7 +25,7 @@ else {
 
 <div class="stream_display row">
 <div class="span8">
-<h1>Mentions</h1>
+		<p class="lead alert alert-info"><i class="icon-comments"></i> Mentions <small>Any statuses that mention you, @<?php echo $_loginaccount->GetUsername(); ?>.</small></p>
 <?php
 	foreach ($statuses->data as $status) {
 		$status->PrintAsHTML();

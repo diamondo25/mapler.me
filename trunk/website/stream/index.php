@@ -32,7 +32,12 @@ if ($_loginaccount->GetConfigurationOption('last_status_sent') == '') {
 <div class="row">
 <?php if (isset($_GET['discover'])): ?>
 	<div class="span8">
-		<p class="lead alert alert-info">This is a realtime list of streamposts of other maplers!</p>
+		<p class="lead alert alert-info"><i class="icon-question-sign"></i> Discover <small>This is a realtime list of statuses and screenshots posted publicly.</small></p>
+	</div>
+<?php endif; ?>
+<?php if (!isset($_GET['discover'])): ?>
+	<div class="span8">
+		<p class="lead alert alert-info"><i class="icon-reorder"></i> Stream <small> Statuses, screenshots, and progress from friends.</small></p>
 	</div>
 <?php endif; ?>
 

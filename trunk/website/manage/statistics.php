@@ -8,7 +8,8 @@ SELECT
 	(SELECT COUNT(*) FROM strings),
 	(SELECT COUNT(*) FROM timeline WHERE type = 'levelup'),
 	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".social_statuses),
-	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".friend_list WHERE accepted_on IS NOT NULL)
+	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".friend_list WHERE accepted_on IS NOT NULL),
+	(SELECT COUNT(*) FROM faq)
 ");
 $tmp = $q->fetch_row(); 
 $q->free();
@@ -29,29 +30,63 @@ for ($i = 0; $i < 31; $i++) {
 }
 ?>
 <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css">
+<style>
+.alert-number {
+	color: inherit;
+}
+
+.a {
+	width: 275px;
+	float: left;
+	margin-right: 20px;
+}
+</style>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
 
-		<center><h1>Mapler.me Statistics</h1></center>
-			<h1><?php echo $tmp[0]; ?> <span class="faded">accounts registered on Mapler.me.</span></h1>
+		<h2>Statisics</h2>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[0]); ?></h1>
+				<span class="faded">accounts registered on Mapler.me.</span>
+			</div>
 			
-			<h1><?php echo $tmp[1]; ?> <span class="faded">characters added by maplers.</span></h1>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[1]); ?></h1>
+				<span class="faded">characters added by maplers.</span>
+			</div>
 			
-			<h1><?php echo $tmp[2]; ?> <span class="faded">items stored between all characters.</span></h1>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[2]); ?></h1>
+				<span class="faded">items stored between all characters.</span>
+			</div>
 			
-			<h1><?php echo $tmp[3]; ?> <span class="faded"> different items exist in MapleStory.</span></h1>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[3]); ?></h1>
+				<span class="faded">different items exist in MapleStory.</span>
+			</div>
 			
-			<hr/>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[4]); ?></h1>
+				<span class="faded">Mapler.me characters have leveled collaboratively.</span>
+			</div>
 			
-			<h1><span class="faded">Mapler.me characters have leveled</span> <?php echo $tmp[4]; ?> <span class="faded">times collaboratively.</span></h1>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[5]); ?></h1>
+				<span class="faded">statuses posted between all members.</span>
+			</div>
 			
-			<hr/>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[6]); ?></h1>
+				<span class="faded">friendships have been formed.</span>
+			</div>
 			
-			<h1><?php echo $tmp[5]; ?> <span class="faded">statuses posted between all members.</span></h1>
+			<div class="lead alert alert-info a">
+				<h1 class="alert-number"><?php AddCommas($tmp[7]); ?></h1>
+				<span class="faded">questions in the FAQ.</span>
+			</div>
 			
-			<h1><?php echo $tmp[6]; ?> <span class="faded">friendships have been formed.</span></h1>
-			
-			<hr />
+<br />
 <?php
 
 $values = array_flip(array_reverse($dates));
@@ -80,9 +115,11 @@ while ($row = $q->fetch_row()) {
 }
 
 ?>
+<div style="clear:both;">&nbsp;</div>
 
-			<h1>Chart of new Mapler.me accounts in 2 months</h1>
-			<div id="joinchart" style="height: 250px;"></div>
+<h1>Chart of new Mapler.me accounts in 2 months</h1>
+<div id="joinchart" class="span8" style="height: 250px;"></div>
+
 <script>
 new Morris.Bar({
   // ID of the element in which to draw the chart.

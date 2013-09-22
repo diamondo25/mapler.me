@@ -221,8 +221,13 @@ else:
 endif;
 ?>
 
-        <nav id="menu">
-        	<ul id="menu-nav">
+<?php if ($_loggedin): ?>
+		<nav id="menu">
+			<ul id="menu-nav" class="extra-nav">
+				<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> <span class="hidden-tablet hidemobile">Stream</span></a></li>
+				<li><a href="//<?php echo $domain; ?>/discover/"><i class="icon-question-sign"></i> <span class="hidden-tablet hidemobile">Discover</span></a></li>
+				<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> <span class="hidden-tablet hidemobile">Mentions</span></a></li>
+				
 <?php
 	if ($_loggedin) {
 		// Shouldn't be here...
@@ -238,14 +243,6 @@ endif;
 		}
 	}
 ?>
-            </ul>
-        </nav>
-<?php if ($_loggedin): ?>
-		<nav id="menu" class="hidemobile">
-			<ul id="menu-nav">
-				<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> Stream</a></li>
-				<li><a href="//<?php echo $domain; ?>/discover/"><i class="icon-question-sign"></i> Discover</a></li>
-				<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> Mentions</a></li>
 			</ul>
 		</nav>
 <?php endif; ?>

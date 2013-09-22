@@ -110,6 +110,10 @@ function time_elapsed_string($etime) {
 	return '0 seconds';
 }
 
+function AddCommas($number) {
+	echo number_format($number);
+}
+
 function Explode2($seperator, $subseperator, $value) {
 	$result = array();
 	foreach (explode($seperator, $value) as $chunk) {

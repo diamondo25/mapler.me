@@ -35,10 +35,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['searchfor'], $_POST['l
 }
 
 ?>
+
+<h2>Server Log</h2>
+
 <form method="post">
-Text to search <input type="text" name="searchfor" value="<?php echo $searchfor; ?>" /><br />
-Lines <input type="text" name="lines" value="<?php echo $lines; ?>" /><br />
-<input type="submit" />
+Search for? <input type="text" name="searchfor" value="<?php echo $searchfor; ?>" />
+Lines <input type="text" name="lines" value="<?php echo $lines; ?>" style="width:100px;" />
+<input type="submit" class="btn btn-success" value="Search"/>
 </form>
 <?php
 
