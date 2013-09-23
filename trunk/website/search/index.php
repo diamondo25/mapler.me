@@ -94,7 +94,7 @@ LIMIT
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
-<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $locale_domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
 				<center>
 					<br />
 						<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>
