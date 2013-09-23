@@ -324,7 +324,7 @@ function SetItemInfo(event, obj, values) {
 		}
 		
 		// GMS has only 1 neb, but can hold 3 lol.
-		if ((item.statusflag & 0x0003) != 0 && (item.statusflag & 0x0010) == 0) {
+		if ((item.statusflag & 0x0002) != 0 && (item.statusflag & 0x0010) == 0) {
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
