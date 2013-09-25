@@ -689,7 +689,7 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 	$y_offset = '-15px';
 	if (!$notfound) {
 		$y_offset = '-2px';
-		$image = 'http://'.$locale.'.'.$domain.'/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
+		$image = 'http://'.$locale.'.mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
 	}
 	
 	if (isset($options['onlyurl'])) {

@@ -113,6 +113,7 @@ namespace MPLRServer
         void connection_StateChange(object sender, System.Data.StateChangeEventArgs e)
         {
             if (Stop) return;
+            _connection = sender as MySqlConnection;
 
             if (e.OriginalState != System.Data.ConnectionState.Connecting && e.CurrentState == System.Data.ConnectionState.Closed)
             {

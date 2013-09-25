@@ -15,7 +15,7 @@ namespace MPLRServer
         public const ushort MAPLER_PORT_SERVER_INFO = 23711;
 #elif LOCALE_EMS
         public const byte LOCALE = 9;
-        public const ushort VERSION = 94;
+        public const ushort VERSION = 95;
         public const int KEYMAP_SLOTS = 91;
         public const ushort MAPLER_PORT = 23720;
         public const ushort MAPLER_PORT_SERVER_INFO = 23721;

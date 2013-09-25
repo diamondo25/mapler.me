@@ -83,6 +83,7 @@ WHERE
 	if ($is_ok_url && isset($_POST['has-statuses']) && $_POST['has-statuses'] != 0) {
 		$subdomain = trim(substr($parsed_url['host'], 0, strpos($parsed_url['host'], $domain)), '.');
 		$is_maindomain = $subdomain == '' || $subdomain == 'www' || $subdomain == 'ems' || $subdomain == 'gms' || $subdomain == 'kms';
+		$is_discover = strpos($url, '/'.$domain.'/discover/') !== false;
 		
 		// NOTE FOR SELF
 		// Get 10 statuses. Then, use the oldest time as 'AND TIME > OLDEST TIME' for timeline. woop
@@ -122,7 +123,8 @@ SELECT
 	CONVERT(`ss`.`content` USING utf8) AS `col2`,
 	a.username,
 	a.nickname,
-	a.account_rank
+	a.account_rank,
+	ss.`id`
 FROM
 	`social_statuses` ss
 LEFT JOIN
@@ -139,16 +141,20 @@ WHERE
 			$q .= "
 	AND
 	(
+		".($is_discover ? ' 1 OR' : '')."
 		`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 		OR
 		`ss`.override = 1
-		".(strpos($url, '/'.$domain.'/discover/') !== false ? ' OR 1' : '')."
 	)
 	AND
-	IF(
-		`ss_reply`.`id` IS NOT NULL,
-		`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
-		1
+	(
+		".($is_discover ? ' 1 OR ' : '')."
+		IF(
+			`ss_reply`.`id` IS NOT NULL,
+			`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
+			1
+		)
+	
 	)";
 		}
 		if (!$is_maindomain) {
@@ -191,7 +197,8 @@ SELECT
 	CONVERT(`data` USING utf8) AS `col2`,
 	a.username,
 	a.nickname,
-	a.account_rank
+	a.account_rank,
+	`timeline`.`id`
 FROM
 	`timeline`
 LEFT JOIN
@@ -211,8 +218,8 @@ WHERE
 			$query .= "
 	AND
 	(
+		".($is_discover ? ' 1 OR' : '')."
 		`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
-		".(strpos($url, '/'.$domain.'/discover/') !== false ? ' OR 1' : '')."
 	)
 	";
 		}
@@ -227,6 +234,7 @@ ORDER BY
 LIMIT
 	15
 ";
+		$res['query'] = $query;
 
 		foreach (array('gms', 'ems') as $locale) {
 			$_db = ConnectCharacterDatabase($locale);
@@ -243,14 +251,16 @@ LIMIT
 		$timestamp = $__server_time;
 		$lowest_date = 0;
 		foreach ($found_rows as $row) {
-			$timestamp = $row[0];
+			$timestamp = (int)$row[0];
 			$type = $row[1];
 			$content = explode(chr(0x02), $row[2]);
 			$info = $row[3];
 			$username = $row[4];
 			$nickname = $row[5];
 			$account_rank = $row[6];
+			$object_id = $row[7];
 			$seconds_since = $__server_time - $timestamp;
+			$uniqueid = ($timestamp * 1000) + ($object_id % 1000);
 			if (count($stream) == 0)
 				$lowest_date = $timestamp;
 			ob_start();
@@ -259,8 +269,8 @@ LIMIT
 ?>
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
-					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
-					<a href="//<?php echo $row['locale']; ?>.mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/">@<?php echo $username; ?></a>'s character 
+					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
@@ -270,8 +280,8 @@ LIMIT
 ?>
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
-					<a href="//<?php echo $username; ?>.mapler.me/">@<?php echo $username; ?></a>'s character 
-					<a href="//<?php echo $row['locale']; ?>.mapler.me/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
+					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/">@<?php echo $username; ?></a>'s character 
+					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
@@ -295,7 +305,7 @@ LIMIT
 				));
 				
 				// If maindomain and loggedin and status is not from self
-				if ($is_maindomain && $_loggedin && $status->account_id != $_loginaccount->GetID()) {
+				if ($is_maindomain && !$is_discover && $_loggedin && $status->account_id != $_loginaccount->GetID()) {
 					// Check if mention is at someone who isn't a friend of $_loginaccount
 					if (strpos($info, '@') == 0 && count($status->mention_list) > 0) { // Check if it's really a mention
 						// Check if is friend...
@@ -327,7 +337,7 @@ WHERE
 				unset($status);
 			}
 			$level_info = ob_get_clean();
-			$stream[] = array((int)$timestamp, $level_info);
+			$stream[] = array((int)$timestamp, $level_info, $uniqueid);
 		}
 		$highest_date = $timestamp;
 

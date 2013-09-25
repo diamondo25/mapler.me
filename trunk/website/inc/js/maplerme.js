@@ -243,18 +243,21 @@ $(document).ready(function() {
 					for (var index in e.statuses) {
 						var status = e.statuses[index];
 
-						var addAfter = $($('*[status-post-time]').get().reverse()).filter(function() {
-							return $(this).attr('status-post-time') > status[0];
+						var addAfter = $($('*[uniqueid]').get().reverse()).filter(function() {
+							return $(this).attr('uniqueid') > status[2];
 						});
 						
+						var statusAsHTML = $(status[1]);
+						statusAsHTML.attr('uniqueid', status[2]);
+						
 						if (addAfter.length > 0) {
-							$(status[1]).insertAfter(addAfter.first().closest('div[class~="status"]'));
+							statusAsHTML.insertAfter(addAfter.first().closest('div[class~="status"]'));
 						}
 						else {
 							if (requestOlder)
-								$('#statuslist').append(status[1]);
+								$('#statuslist').append(statusAsHTML);
 							else
-								$('#statuslist').prepend(status[1]);
+								$('#statuslist').prepend(statusAsHTML);
 						}
 					}
 					
