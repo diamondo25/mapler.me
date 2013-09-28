@@ -367,8 +367,6 @@ function SetItemInfo(event, obj, values) {
 	var potentialName = obj.getAttribute('potential');
 	GetObj('item_info').setAttribute('class', potentialName != null ? 'potential' + potentialName : '');
 
-	GetObj('extra_item_info').innerHTML += '';
-	
 	var starstext = '';
 	var i = 0;
 	for (; i < stars; i++)

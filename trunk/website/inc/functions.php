@@ -238,6 +238,10 @@ function IGTextToWeb($data, $extraOptions = array()) {
 			$result .= $c;
 		}
 	}
+		
+	if ($end && $endTag != '') {
+		$result .= $endTag;
+	}
 
 	return $result;
 }
