@@ -5,12 +5,7 @@ require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/exp_table.php';
 require_once __DIR__.'/../inc/classes/character_objects.php';
 
-
 $__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$locale_domain = $domain;
-if (GMS) $locale_domain = 'gms.'.$locale_domain;
-elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
-elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
 
 set_time_limit(0);
 

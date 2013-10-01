@@ -72,7 +72,7 @@ else {
 		}
 		$i++;
 ?>
-			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $row['locale'].'.'.$domain; ?>/player/<?php echo $row['name']; ?>'">
+			<div class="character-brick profilec span3 clickable-brick" onclick="document.location = '//<?php echo $row['locale'].'.'.$domain; ?>/character/<?php echo $row['name']; ?>'">
 				<center>
 					<br />
 						<img src="//<?php echo $row['locale'].'.'.$domain; ?>/avatar/<?php echo $row['name']; ?>"/>

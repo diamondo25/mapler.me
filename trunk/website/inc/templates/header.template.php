@@ -3,9 +3,21 @@ $title = 'Mapler.me &middot; MapleStory Social Network';
 if (isset($__url_useraccount)) {
 	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
 }
-elseif (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
+elseif (strpos($_SERVER['REQUEST_URI'], '/character/') !== FALSE) {
 	$title = urldecode(substr($_SERVER['REQUEST_URI'], strrpos($_SERVER['REQUEST_URI'], '/') + 1)).' &middot; '.$title;
 }
+
+$locale_domain = $domain;
+if (GMS) $locale_domain = 'gms.'.$locale_domain;
+elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
+elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
+
+if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
+$character_name = $_GET['name'];
+header('Location: http://'.$locale_domain.'/character/'.$character_name.'');
+die;
+}
+
 /*
 elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
 	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
@@ -75,7 +87,7 @@ function _AddHeaderLink($what, $filename) {
 _AddHeaderLink('css', 'style');
 _AddHeaderLink('css', 'animate.min');
 _AddHeaderLink('css', 'font-awesome.min');
-if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE ||
+if (strpos($_SERVER['REQUEST_URI'], '/character/') !== FALSE ||
 	strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
 	_AddHeaderLink('css', 'style.player');
 }
@@ -94,7 +106,7 @@ if (strpos($_SERVER['REQUEST_URI'], '/settings/') !== FALSE ||
 	
 <?php
 _AddHeaderLink('js', 'scripts');
-if (strpos($_SERVER['REQUEST_URI'], '/player/') !== FALSE) {
+if (strpos($_SERVER['REQUEST_URI'], '/character/') !== FALSE) {
 	_AddHeaderLink('js', 'script.player');
 }
 _AddHeaderLink('js', 'jquery.isotope.min');

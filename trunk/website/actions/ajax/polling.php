@@ -270,7 +270,7 @@ LIMIT
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
 					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/">@<?php echo $username; ?></a>'s character 
-					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
+					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/character/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> reached Level <span style="font-size: 13px"><?php echo $info; ?>!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>
@@ -281,7 +281,7 @@ LIMIT
 			<div class="status">
 				<p style="margin:0px;"><i class="icon-check-sign"></i>
 					<a href="//<?php echo $username; ?>.<?php echo $domain; ?>/">@<?php echo $username; ?></a>'s character 
-					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/player/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
+					<a href="//<?php echo $row['locale']; ?>.<?php echo $domain; ?>/character/<?php echo $content[0]; ?>"><?php echo $content[0]; ?></a> advanced to a '<span style="font-size: 13px"><?php echo GetJobname($info); ?>' (<?php echo MakeOrdinalNumberSuffix(GetJobRank($info)); ?> job)!</span>
 					<span status-post-time="<?php echo $timestamp; ?>" style="float:right;"><?php echo time_elapsed_string($seconds_since); ?> ago - Auto</span>
 				</p>
 			</div>

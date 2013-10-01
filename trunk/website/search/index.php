@@ -4,10 +4,6 @@ require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/templates/search.header.template.php';
 
 $__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$locale_domain = $domain;
-if (GMS) $locale_domain = 'gms.'.$locale_domain;
-elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
-elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
 ?>
 <div class="span9">
 
@@ -52,7 +48,7 @@ LIMIT
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
-<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;margin-top:10px;">
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $domain; ?>/character/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;margin-top:10px;">
 		<center>
 			<br />
 			<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>
@@ -94,7 +90,7 @@ LIMIT
 ");
 	while ($row = $q->fetch_assoc()) {
 ?>
-<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $locale_domain; ?>/player/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
+<div class="character-brick clickable-brick span3 char <?php echo strtolower($row['world_name']); ?>" onclick="document.location = '//<?php echo $locale_domain; ?>/character/<?php echo $row['name']; ?>'" style="width:210px !important;margin-bottom:10px;">
 				<center>
 					<br />
 						<img src="//<?php echo $locale_domain; ?>/avatar/<?php echo $row['name']; ?>"/><br/>

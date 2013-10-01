@@ -2,7 +2,6 @@
 	Options +FollowSymLinks
 	Options +Indexes
 	RewriteEngine On
-	
 
 	RedirectMatch 403 /cache(/|$)
 	
@@ -75,6 +74,7 @@
 	
 	# character / player rewrites
 	RewriteRule ^player/([^/]+)$ 				/components/character.php?name=$1 [L]
+	RewriteRule ^character/([^/]+)$ 			/components/character.php?name=$1 [L]
 	RewriteRule ^guild/([^/]+)/([^/]+)$ 		/components/guild.php?world=$1&name=$2 [L]
 	
 	# reporting

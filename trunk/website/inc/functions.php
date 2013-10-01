@@ -701,7 +701,7 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 		return;
 	}
 ?>
-	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/player/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center <?php echo $y_offset; ?>; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
+	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/character/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center <?php echo $y_offset; ?>; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 

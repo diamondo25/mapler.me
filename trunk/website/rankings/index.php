@@ -8,10 +8,6 @@ require_once 'pagination.php';
 // It's put together poorly.
 
 $__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$locale_domain = $domain;
-if (GMS) $locale_domain = 'gms.'.$locale_domain;
-elseif (EMS) $locale_domain = 'ems.'.$locale_domain;
-elseif (KMS) $locale_domain = 'kms.'.$locale_domain;
 
 $sql = 'SELECT *,
 	w.world_name,
@@ -91,7 +87,7 @@ table tr:hover {
 <?php
 while ($row = $rs->fetch_assoc()) {
 ?>
-	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $locale_domain; ?>/player/<?php echo $row['name']; ?>'">
+	<tr class="span3" style="overflow:visible!important; cursor: pointer;" onclick="document.location = '//<?php echo $locale_domain; ?>/character/<?php echo $row['name']; ?>'">
 	
 		<td style="vertical-align: middle">
 			<?php MakePlayerAvatar($row['name'], CURRENT_LOCALE, array('styleappend' => 'float: none;')); ?>
