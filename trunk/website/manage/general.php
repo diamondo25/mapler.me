@@ -6,6 +6,8 @@ SELECT
 	*
 FROM
 	notes
+WHERE
+	fixed IS NULL
 ");
 
 $notes = array();
