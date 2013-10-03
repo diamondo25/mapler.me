@@ -5,6 +5,8 @@ require_once __DIR__.'/../inc/job_list.php';
 require_once __DIR__.'/../inc/exp_table.php';
 require_once __DIR__.'/caching.php';
 
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+
 $font = "arial.ttf";
 $font_size = "9.25";
 
@@ -31,7 +33,7 @@ if ($len < 4 || $len > 12) {
 	die();
 }
 
-$q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
+$q = $__char_db->query("SELECT * FROM characters WHERE name = '".$__char_db->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	$im = imagecreatetruecolor (192, 345);
 	$bgc = imagecolorallocate ($im, 255, 255, 255);
@@ -60,7 +62,7 @@ AddCacheImage($internal_id, 'stats', $row['last_update'], $id);
 
 $row['guildname'] = '-';
 
-$q2 = $__database->query("
+$q2 = $__char_db->query("
 SELECT
 	g.name
 FROM
@@ -85,11 +87,11 @@ if ($q2->num_rows == 1) {
 $q2->free();
 
 
-$stat_addition = GetCorrectStat($row['internal_id']);
+$stat_addition = GetCorrectStat($row['internal_id'], CURRENT_LOCALE);
 
-$potential_stat_addition = GetItemPotentialBuffs($row['internal_id']);
+$potential_stat_addition = GetItemPotentialBuffs($row['internal_id'], CURRENT_LOCALE);
 
-$skill_stat_addition = GetSkillBuffs($row['internal_id']);
+$skill_stat_addition = GetSkillBuffs($row['internal_id'], CURRENT_LOCALE);
 
 $before = array(
 	'str' => $row['str'],
