@@ -1,4 +1,6 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+
 require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/functions.loginaccount.php';
 require_once __DIR__.'/../../inc/classes/database.php';
