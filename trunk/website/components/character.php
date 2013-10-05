@@ -199,7 +199,7 @@ SELECT
 		<button class="btn" style="margin-bottom:10px;" onclick="ToggleTogglers()">Display/Hide Visibility</button>
 <?php endif; ?>
 		<div class="location">
-			<img src="http://mapler.me/ignavatar/timbervvoif?size=big&flip" class="h" /><br />
+			<img src="<?php echo $avatarurl ?>" class="h" /><br />
 		</div>
 		<div class="invert-box">
 		<p class="name"><?php echo $character_info['name']; ?><br />
