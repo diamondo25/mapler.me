@@ -897,7 +897,6 @@ function AddInventoryItems(&$inventory) {
 }
 
 .full-bits {
-	float: left;
 	width: 420px;
 }
 
@@ -1530,7 +1529,7 @@ $inv_extra_offx = $inv_extra_offy = 8;
 		</div>
 	</div>
 <?php endif; ?>
-
+<br/>
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
 <?php
