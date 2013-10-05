@@ -1531,7 +1531,7 @@ $inv_extra_offx = $inv_extra_offy = 8;
 		</div>
 	</div>
 <?php endif; ?>
-<br /><br />
+<br/>
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
 <?php
@@ -1687,7 +1687,7 @@ foreach ($optionlist as $option => $desc) {
 	<div class="bottom"></div>
 </div>
 
-<br /><br />
+<hr />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
 <style type="text/css">
