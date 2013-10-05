@@ -365,11 +365,22 @@ featurette-divider {
 
 
 footer {
-	padding: 40px 0;
+	padding: 10px 0px 30px 0px;
 	text-align: center;
 	margin-top: 40px;
-	color: #DDD;
 }
+
+footer ul {margin-top:20px;font-size: 16px;
+line-height: 24px;
+font-weight: 300;
+margin-bottom: 20px;
+text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+color:#FFF;
+}
+footer ul li{display:inline-block;margin-right:40px;vertical-align:top;font-weight:600;}
+footer ul li a{color:#FFF;}
+footer ul li a:hover{color:#FFF;opacity: 0.4;}
+.copyright {font-size:14px;font-weight: 200;}
 
 .label {
 	font-weight: 200;
