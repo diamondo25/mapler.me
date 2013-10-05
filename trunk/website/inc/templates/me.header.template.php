@@ -69,7 +69,7 @@ hr {
 </style>
 
 <div class="row">
-	<div class="span3" style="text-align:center;">
+	<div class="span3 pull-right" style="text-align:center;">
 <?php
 if ($main_character !== null):
 ?>

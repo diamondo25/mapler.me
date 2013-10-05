@@ -22,15 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['confirm'])) {
 		$wastheirid = $_loginaccount->GetId();
         $username = $_loginaccount->GetUsername();
         $ip = $_loginaccount->GetLastIP();
-
-		$finish = $__database->query("DELETE FROM accounts WHERE id = ".$_loginaccount->GetId());
-		$finish->free();
-		
+        
 		$statement = $__database->prepare('INSERT INTO account_deletion_log (id, username, ip, at) VALUES
 			(?,?,?,NOW())');
 			
 		$statement->bind_param('sss', $wastheirid, $username, $ip);
 		$statement->execute();
+
+		$finish = $__database->query("DELETE FROM accounts WHERE id = ".$_loginaccount->GetId());
+		$finish->free();
 
 		unset($_SESSION['username']);
 		session_destroy();

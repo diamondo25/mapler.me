@@ -12,7 +12,7 @@
 }
 
 .location {
-	background: url('http://puu.sh/3cc4q.png');
+	background: url('/inc/img/display.png');
 	background-position: center -30px;
 	max-width:210px;
 	width: 100%;

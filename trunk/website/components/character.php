@@ -194,12 +194,12 @@ SELECT
 </div>
 
 <div class="row">
-	<div class="span3" style="text-align:center;">
+	<div class="span3 pull-right" style="text-align:center;">
 <?php if ($__is_viewing_self): ?>
-		<button class="btn" style="margin-bottom:10px;" onclick="ToggleTogglers()">Display/hide Visibility</button>
+		<button class="btn" style="margin-bottom:10px;" onclick="ToggleTogglers()">Display/Hide Visibility</button>
 <?php endif; ?>
 		<div class="location">
-			<img src="<?php echo $avatarurl ?>" class="h" /><br />
+			<img src="http://mapler.me/ignavatar/timbervvoif?size=big&flip" class="h" /><br />
 		</div>
 		<div class="invert-box">
 		<p class="name"><?php echo $character_info['name']; ?><br />
@@ -305,7 +305,7 @@ else if ($status == 2 && ($_loggedin && IsOwnAccount())) {
 }
 ?>
 	
-	<div class="span9" style="margin-left:10px;">
+	<div class="span9">
 		<p class="lead">Equipment</p>
 <?php
 
@@ -1156,15 +1156,6 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 }
 
 ?>
-
-
-<?php 	if ($__is_viewing_self || !IsHiddenObject('equip_totems')): ?>
-		<div class="character_totems">
-<?php 		MakeHideToggleButton('equip_totems'); ?>
-<?php 		AddInventoryItems($normalequips['Totem']); ?>
-		</div>
-<?php 	endif; ?>
-
 
 <?php
 $job_css_class = '';

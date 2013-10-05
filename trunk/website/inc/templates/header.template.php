@@ -77,12 +77,7 @@ function _AddHeaderLink($what, $filename) {
 	<meta name="description" content="Mapler.me is a MapleStory social network and service providing innovative features to enhance your gaming experience!" />
 
 	<link href="http://fonts.googleapis.com/css?family=Muli:300,400,300italic,400italic" rel="stylesheet" type="text/css" />
-
-<?php if ($_loggedin): ?>
-	<link href="http://<?php echo $domain; ?>/inc/css/themes/<?php echo $_loginaccount->GetTheme(); ?>.css" rel="stylesheet" type="text/css" />
-<?php else: ?>
     <link href="http://<?php echo $domain; ?>/inc/css/themes/light.css" rel="stylesheet" type="text/css" />
-<?php endif; ?>
 <?php
 _AddHeaderLink('css', 'style');
 _AddHeaderLink('css', 'animate.min');
