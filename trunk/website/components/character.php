@@ -747,6 +747,7 @@ function AddInventoryItems(&$inventory) {
 .new-inventory-container > div {
 	width: 321px;
 	height: 288px;
+	margin: 0px 10px 10px 0px;
 }
 
 .new-inventory-container > select {
@@ -928,9 +929,9 @@ function AddInventoryItems(&$inventory) {
 	width: 248px;
 	height: 229px;
 	position: relative;
-    margin: 0;
     overflow: hidden;
 	float: left;
+	margin: 0px 10px 10px 0px;
 }
 
 .bits {
@@ -948,6 +949,7 @@ function AddInventoryItems(&$inventory) {
 	position: relative;
 	display: inline-block;
 	float: left;
+	margin: 10px 10px 0px 0px;
 }
 
 .teleport-rock > span {
@@ -1529,7 +1531,7 @@ $inv_extra_offx = $inv_extra_offy = 8;
 		</div>
 	</div>
 <?php endif; ?>
-<br/>
+<br /><br />
 <?php if ($__is_viewing_self || !IsHiddenObject('teleport_rocks')): ?>
 <?php 	MakeHideToggleButton('teleport_rocks'); ?>
 <?php
@@ -1685,7 +1687,7 @@ foreach ($optionlist as $option => $desc) {
 	<div class="bottom"></div>
 </div>
 
-<hr />
+<br /><br />
 
 <?php if ($__is_viewing_self || !IsHiddenObject('skills')): ?>
 <style type="text/css">
