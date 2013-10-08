@@ -1707,7 +1707,6 @@ foreach ($optionlist as $option => $desc) {
 </style>
 
 <?php
-if (false):
 	// Initialize SP
 	
 	$q = $__char_db->query("
@@ -1745,6 +1744,7 @@ ORDER BY
 	
 	
 	
+if (false):
 	
 	$groups = array();
 	$i = 0;
