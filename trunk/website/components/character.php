@@ -1743,13 +1743,13 @@ ORDER BY
 	$first_skill = true;
 	
 	
-	
-if (false):
-	
 	$groups = array();
 	$i = 0;
 	$jobtreeid = 0;
 	$skills = array();
+	
+if (false):
+	
 	while ($row = $q->fetch_assoc()) {
 		$name = GetMapleStoryString('skill', $row['skillid'], 'name', CURRENT_LOCALE);
 		if ($name == NULL) continue;
