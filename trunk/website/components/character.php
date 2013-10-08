@@ -1890,7 +1890,7 @@ SELECT
 FROM
 	familiars f
 LEFT JOIN
-	phpVana_familiar_info fi
+	phpvana_familiar_info fi
 	ON
 		fi.familiar_id = f.mobid
 WHERE

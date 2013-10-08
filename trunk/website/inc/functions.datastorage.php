@@ -93,7 +93,7 @@ function GetItemDefaultStats($id, $locale) {
 		return GetCachedObject($key_name, $locale);
 	}
 
-	$q = $db->query("SELECT * FROM `phpVana_iteminfo` WHERE `itemid` = ".intval($id));
+	$q = $db->query("SELECT * FROM `phpvana_iteminfo` WHERE `itemid` = ".intval($id));
 	if ($q->num_rows >= 1) {
 		$row = $q->fetch_array();
 
@@ -120,7 +120,7 @@ function GetPotentialInfo($id, $locale) {
 	$data = array();
 	$data['name'] = GetMapleStoryString('item_option', $id, 'desc', $locale);
 
-	$q = $db->query("SELECT level, options FROM `phpVana_itemoptions_levels` WHERE `id` = ".intval($id));
+	$q = $db->query("SELECT level, options FROM `phpvana_itemoptions_levels` WHERE `id` = ".intval($id));
 	while ($row = $q->fetch_row()) {
 		$data['levels'][$row[0]] = Explode2(';', '=', $row[1]);
 	}
@@ -144,7 +144,7 @@ function GetNebuliteInfo($itemid, $locale) {
 
 	$data = array();
 
-	$q = $db->query("SELECT description, options FROM `phpVana_socket_info` WHERE `itemid` = ".intval($itemid));
+	$q = $db->query("SELECT description, options FROM `phpvana_socket_info` WHERE `itemid` = ".intval($itemid));
 	$row = $q->fetch_row();
 	$data['description'] = $row[0];
 	$data['info'] = Explode2(';', '=', $row[1]);
@@ -171,7 +171,7 @@ SELECT
 	`key`,
 	`value`
 FROM
-	`phpVana_characterwz`
+	`phpvana_characterwz`
 WHERE
 	`itemid` = ".intval($itemid)
 );
@@ -250,7 +250,7 @@ SELECT
 FROM
 	`items` i
 LEFT JOIN
-	`phpVana_iteminfo` ii
+	`phpvana_iteminfo` ii
 		ON
 	ii.itemid = i.itemid
 WHERE

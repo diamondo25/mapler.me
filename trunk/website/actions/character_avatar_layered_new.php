@@ -57,7 +57,8 @@ if ($len < 4 || $len > 12) {
 	
 }
 
-$q = $__database->query("SELECT * FROM characters WHERE name = '".$__database->real_escape_string($charname)."'");
+$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+$q = $__char_db->query("SELECT * FROM characters WHERE name = '".$__char_db->real_escape_string($charname)."'");
 if ($q->num_rows == 0) {
 	
 }
@@ -106,7 +107,7 @@ $weaponThingType = -1;
 $shown_items = array();
 
 // Get character equipment
-$character_equipment = $__database->query("
+$character_equipment = $__char_db->query("
 SELECT 
 	itemid, slot, display_id 
 FROM 
