@@ -220,7 +220,7 @@ SELECT
 
 ?>
 <?php if ($character_info['guildname'] != ''): ?>
-		<p class="side"><i class="icon-tag faded"></i> Guild: <a href="//<?php echo $locale_domain; ?>/guild/<?php echo $character_info['world_name']; ?>/<?php echo $character_info['guildname']; ?>"><?php echo $character_info['guildname']; ?></a></p>
+		<p class="side"><i class="icon-tag faded"></i> Guild: <a href="//<?php echo $locale_domain; ?>/guild/<?php echo GetAlliancedWorldName($character_info['world_id'], CURRENT_LOCALE); ?>/<?php echo $character_info['guildname']; ?>"><?php echo $character_info['guildname']; ?></a></p>
 <?php endif; ?>
 <?php
 $born_quest = Quest::GetQuest($internal_id, CURRENT_LOCALE, 13261, true);
@@ -1537,20 +1537,22 @@ $inv_extra_offx = $inv_extra_offy = 8;
 <?php
 	$q = $__char_db->query("
 SELECT
-	`index`,
-	map
+	*
 FROM
 	teleport_rock_locations
 WHERE
 	character_id = ".$internal_id."
-	AND
-	map <> 999999999
 ");
 
 	$lastgroup = '';
 	$curgroup = '';
-	while ($row = $q->fetch_assoc()) {
-		$index = $row['index'];
+	$row = $q->fetch_row();
+	$rocks = array();
+	for ($i = 1; $i < 41 + 1; $i++) // 41 rocks + 1 offset
+		$rocks[] = $row[$i];
+
+	foreach ($rocks as $index => $map) {
+		if ($map == 999999999) continue;
 		if ($index < 5) $curgroup = 'Regular';
 		elseif ($index < 5 + 10) $curgroup = 'VIP';
 		elseif ($index < 5 + 10 + 13) $curgroup = 'Hyper';
@@ -1574,7 +1576,7 @@ WHERE
 		}
 ?>
 					<tr>
-						<td><?php echo GetMapname($row['map'], CURRENT_LOCALE); ?></td>
+						<td><?php echo GetMapname($map, CURRENT_LOCALE); ?></td>
 					</tr>
 <?php
 	}
@@ -1704,8 +1706,6 @@ foreach ($optionlist as $option => $desc) {
 }
 </style>
 
-<div id="skill_list">
-<?php 	MakeHideToggleButton('skills'); ?>
 <?php
 	
 	// Initialize SP
@@ -1732,6 +1732,8 @@ FROM
 	skills
 WHERE
 	character_id = ".$internal_id."
+	AND
+	FLOOR(skillid / 10000) < 9200
 ORDER BY
 	skillid / 1000 ASC
 ");
@@ -1747,6 +1749,46 @@ ORDER BY
 	$groups = array();
 	$i = 0;
 	$jobtreeid = 0;
+	$skills = array();
+	while ($row = $q->fetch_assoc()) {
+		$name = GetMapleStoryString('skill', $row['skillid'], 'name', CURRENT_LOCALE);
+		if ($name == NULL) continue;
+		$potentialMaxLevel = GetMapleStoryString('skill', $row['skillid'], 'mlvl', CURRENT_LOCALE);
+		$block = floor($row['skillid'] / 10000);
+		
+		$extra = '';
+		
+		if ($row['maxlevel'] === NULL) {
+			$row['maxlevel'] = ($potentialMaxLevel == NULL ? '-' : $potentialMaxLevel);
+		}
+		
+		$skills[$block][$row['skillid']] = array($row['level'], $row['maxlevel']);
+	}
+	
+	// Build skill groups.
+	
+	$skill_pages = array();
+	for ($i = 0; $i < 5; $i++) {
+		$skill_pages[$i] = array(
+			'attack' => array(),
+			'passive' => array(),
+			'active' => array(),
+		);
+	}
+	
+?>
+
+<div class="skills">
+<?php 	MakeHideToggleButton('skills'); ?>
+	
+
+</div>
+
+<div id="skill_list">
+<?php 	MakeHideToggleButton('skills'); ?>
+<?php
+	
+	$q->data_seek(0);
 	
 	while ($row = $q->fetch_assoc()) {
 		$name = GetMapleStoryString('skill', $row['skillid'], 'name', CURRENT_LOCALE);

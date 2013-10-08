@@ -89,7 +89,7 @@ foreach ($this->queries as $query) {
 }
 
 // Connect to the database
-$__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, DB_ACCOUNTS, 'maplederp', 'maplestats', SERVER_MYSQL_PORT);
+$__database = new ExtendedMysqli(SERVER_MYSQL_ADDR, 'maplestats', 'maplederp', DB_ACCOUNTS, SERVER_MYSQL_PORT);
 
 if ($__database->connect_errno != 0) {
 ?>
@@ -111,6 +111,7 @@ if ($__database->connect_errno != 0) {
     </div>
 </div>
 <?php
+	echo $__database->connect_error;
 	die();
 }
 

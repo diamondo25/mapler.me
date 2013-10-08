@@ -68,8 +68,11 @@ if (!empty($notice)) {
 	foreach ($serverinfo as $servername => $data) {
 ?>
 		<p mapler-locale="<?php echo $servername; ?>" class="lead alert alert-info">
-			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>><span><strong>MapleStory <?php echo $data['locale']; ?></strong> – </span></span> <span><span players><?php echo $data['players']; ?></span> maplers currently updating their character(s) in real-time.</span></span>
-			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>>Mapler.me server '<?php echo $servername; ?>' is offline...</span>
+			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>>
+				<span><i class="icon-ok-sign"></i> <strong>MapleStory <?php echo $data['locale']; ?></strong> – </span> 
+				<span players><?php echo $data['players']; ?></span> maplers are currently updating their character(s) in real-time.</span>
+			</span>
+			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>><i class="icon-exclamation-sign"></i> Mapler.me server '<?php echo $servername; ?>' is offline...</span>
 		</p>
 <?php
 	}

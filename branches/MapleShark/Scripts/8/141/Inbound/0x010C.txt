@@ -317,12 +317,14 @@ using (ScriptAPI) {
 		v = AddByte("DUNNO");
 		
 	    amount = AddShort("Quests");
+		StartNode("Quests: " + amount);
 		for (i = 1; i <= amount; i++) {
 			StartNode("Quest " + i);
 			AddShort("ID");
 			AddString("Data");
 			EndNode(false);
 		}
+        EndNode(false);
 		
 		if (v == 0) {
 			amount = AddShort("?");
@@ -344,6 +346,7 @@ using (ScriptAPI) {
 	   
 		hurr = AddByte("val2");
 		amount = AddShort("NEW STUFFS");
+		StartNode("Quests: " + amount);
 		for (i = 1; i <= amount; i++) {
 			StartNode("NEW " + i);
 			AddShort("ID");
@@ -351,15 +354,18 @@ using (ScriptAPI) {
 			EndNode(false);
 		}
 		EndNode(false);
+		EndNode(false);
 		
 		StartNode("2");
 		if (hurr == 0) {
 	    	amount = AddShort("Done Quests");
+			StartNode("Quests: " + amount);
 			for (i = 1; i <= amount; i++) {
 				StartNode("Done " + i);
 				AddShort("ID");
 				EndNode(false);
 			}
+            EndNode(false);
 		}
 		EndNode(false);
 		EndNode(false);

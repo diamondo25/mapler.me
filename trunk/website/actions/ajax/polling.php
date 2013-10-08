@@ -23,7 +23,7 @@ if ($request_type == 'info') {
 		
 		$statuscount = $__database->query("SELECT COUNT(*) FROM social_statuses WHERE account_id = ".$_loginaccount->GetID());
 		$row = $statuscount->fetch_row();
-        $res['memberstatuses'] = $row[0];
+		$res['memberstatuses'] = (int)$row[0];
 	}
 	
 	
@@ -142,7 +142,7 @@ WHERE
 	AND
 	(
 		".($is_discover ? ' 1 OR' : '')."
-		`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+		".DB_ACCOUNTS.".`FriendStatus`(`ss`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 		OR
 		`ss`.override = 1
 	)
@@ -151,7 +151,7 @@ WHERE
 		".($is_discover ? ' 1 OR ' : '')."
 		IF(
 			`ss_reply`.`id` IS NOT NULL,
-			`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
+			".DB_ACCOUNTS.".`FriendStatus`(`ss_reply`.`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE'),
 			1
 		)
 	
@@ -219,7 +219,7 @@ WHERE
 	AND
 	(
 		".($is_discover ? ' 1 OR' : '')."
-		`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+		".DB_ACCOUNTS.".`FriendStatus`(`account_id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 	)
 	";
 		}
@@ -234,7 +234,6 @@ ORDER BY
 LIMIT
 	15
 ";
-		$res['query'] = $query;
 
 		foreach (array('gms', 'ems') as $locale) {
 			$_db = ConnectCharacterDatabase($locale);
@@ -312,7 +311,7 @@ LIMIT
 						$mentioning = $status->mention_list[0];
 						$q_temp = $__database->query("
 SELECT
-	`FriendStatus`(`id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
+	".DB_ACCOUNTS.".`FriendStatus`(`id`, ".$_loginaccount->GetID().") IN ('FRIENDS', 'FOREVER_ALONE')
 FROM
 	".DB_ACCOUNTS.".accounts
 WHERE

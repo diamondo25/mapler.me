@@ -62,10 +62,10 @@
 	# image / ranking rewrites
 	RewriteRule ^card/([^\./]+)$ 				/actions/character_image.php?name=$1 [L,QSA]
 	# RewriteRule ^avatar/([^\./]+)$ 			/actions/character_avatar.php?name=$1 [L,QSA]
-	RewriteRule ^avatar/([^\./]+)$ 				/actions/character_avatar_layered.php?name=$1 [L,QSA]
-	RewriteRule ^avatar2/([^\./]+)$ 			/actions/character_avatar_layered.php?name=$1 [L,QSA]
+	RewriteRule ^avatar/([^\./]+)$ 				/actions/character_avatar_layered_new.php?name=$1 [L,QSA]
+	RewriteRule ^avatar2/([^\./]+)$ 			/actions/character_avatar_layered_new.php?name=$1 [L,QSA]
 	# RewriteRule ^ignavatar/([^\./]+)$ 		/actions/character_avatar.php?name=$1&show_name [L,QSA]
-	RewriteRule ^ignavatar/([^\./]+)$ 			/actions/character_avatar_layered.php?name=$1&show_name [L,QSA]
+	RewriteRule ^ignavatar/([^\./]+)$ 			/actions/character_avatar_layered_new.php?name=$1&show_name [L,QSA]
 	RewriteRule ^infopic/([^\./]+)$ 			/actions/character_stats.php?name=$1 [L,QSA]
 	RewriteRule ^guildemblem/(.+)/(.+)/$ 		/actions/guild_emblem.php?world=$1&guild=$2 [L,QSA]
 	RewriteRule ^ui/bits/(\d+)/(\d+)/$ 			/actions/create_bits_ui.php?rows=$1&cols=$2 [L,QSA]

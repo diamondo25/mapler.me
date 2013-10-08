@@ -12,7 +12,7 @@ if (!$guild->LoadByName($name, $world, CURRENT_LOCALE)) {
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
 	<img src="//<?php echo $domain; ?>/inc/img/no-character.gif" />
-	<p>Guild not found! The guild you are looking for was eaten by Horntail.</p>
+	<p>Guild '<?php echo $name; ?>' not found! The guild you are looking for was eaten by Horntail.</p>
 </center>
 <?php
 	require_once __DIR__.'/../inc/footer.php';

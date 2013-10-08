@@ -39,7 +39,7 @@ if ($request_type == 'login') {
 SELECT 
 	at.`code`
 FROM 
-	".DB_ACCOUNTS.".account_tokens at
+	account_tokens at
 WHERE
 	at.account_id = ".$row[0]."
 	AND
@@ -53,7 +53,7 @@ WHERE
 		$code = md5(time().' --- '.$row[0].' - '.$P['email']);
 		$__database->query("
 INSERT INTO 
-	".DB_ACCOUNTS.".account_tokens 
+	account_tokens 
 VALUES 
 	(".$row[0].", 'client_token', '".$code."', DATE_ADD(NOW(), INTERVAL 1 YEAR))
 ON DUPLICATE KEY UPDATE
@@ -87,7 +87,7 @@ elseif ($request_type == 'check_code') {
 SELECT 
 	at.`code`
 FROM 
-	".DB_ACCOUNTS.".account_tokens at
+	account_tokens at
 WHERE
 	at.`code` = '".$__database->real_escape_string($P['code'])."'
 	AND

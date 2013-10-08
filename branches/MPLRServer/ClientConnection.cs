@@ -272,31 +272,33 @@ namespace MPLRServer
                                 {
                                     Logger_ErrorLog("Failed parsing {0:X4} for {1}", opcode, type);
                                     Logger_WriteLine(ex.ToString());
-
-                                    LogFilename += "ERROR";
-                                    SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
-
-                                    // Save exception to packet
-                                    using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0x9999))
+                                    if (!IsFake)
                                     {
-                                        mp.WriteString(ex.ToString());
-                                        if (ex.ToString().Contains("MySql.Data.MySqlClient.MySqlException"))
+                                        LogFilename += "ERROR";
+                                        SendInfoText("An error occurred on the Mapler.me server! Please report this :)");
+
+                                        // Save exception to packet
+                                        using (MaplePacket mp = new MaplePacket(MaplePacket.CommunicationType.ServerPacket, 0x9999))
                                         {
-                                            Logger_ErrorLog("MySQL exception!");
-                                            var queries = MySQL_Connection.Instance.GetRanQueries();
-                                            mp.WriteInt(queries.Count);
-                                            foreach (var kvp in queries)
+                                            mp.WriteString(ex.ToString());
+                                            if (ex.ToString().Contains("MySql.Data.MySqlClient.MySqlException"))
                                             {
-                                                mp.WriteString(kvp.Key);
-                                                mp.WriteString(kvp.Value);
+                                                Logger_ErrorLog("MySQL exception!");
+                                                var queries = MySQL_Connection.Instance.GetRanQueries();
+                                                mp.WriteInt(queries.Count);
+                                                foreach (var kvp in queries)
+                                                {
+                                                    mp.WriteString(kvp.Key);
+                                                    mp.WriteString(kvp.Value);
+                                                }
+
                                             }
-
+                                            mp.SwitchOver(); // Make read packet
+                                            _exporter.AddPacket(mp);
                                         }
-                                        mp.SwitchOver(); // Make read packet
-                                        _exporter.AddPacket(mp);
-                                    }
 
-                                    Save(false, false);
+                                        Save(false, false);
+                                    }
                                 }
                             }
                             else

@@ -28,9 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['email_content'])) {
 	$message = $contentpls;
 
 	// To send HTML mail, the Content-type header must be set
-	$headers  = 'MIME-Version: 1.0' . "\r\n";
-	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-	$headers .= 'From: '.$theirname.' <'.$theiremail.'>' . "\r\n";
+	$headers  = 'MIME-Version: 1.0' . "\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\n";
+	$headers .= 'From: '.$theirname.' <'.$theiremail.'>' . "\n";
 
 	// Mail it
 	mail($to, $subject, $message, $headers);

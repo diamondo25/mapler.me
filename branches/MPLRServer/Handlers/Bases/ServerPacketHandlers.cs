@@ -153,7 +153,8 @@ namespace MPLRServer
             pConnection.LogFilename += pConnection.AccountID.ToString();
 
             // Save IP of loginserver
-            Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, 0, 0);
+            if (pConnection.ConnectedToIP != null)
+                Queries.SaveServerIP(pConnection.ConnectedToIP, pConnection.ConnectedToPort, 0, 0);
         }
 
 

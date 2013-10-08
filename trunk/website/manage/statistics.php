@@ -2,13 +2,13 @@
 require_once __DIR__.'/../inc/header.php';
 $q = $__database->query("
 SELECT
-	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".accounts),
+	(SELECT COUNT(*) FROM accounts),
 	(SELECT COUNT(*) FROM ".DB_GMS.".characters) + (SELECT COUNT(*) FROM ".DB_EMS.".characters),
 	(SELECT COUNT(*) FROM ".DB_GMS.".items) + (SELECT COUNT(*) FROM ".DB_EMS.".items),
-	(SELECT COUNT(*) FROM strings),
-	(SELECT COUNT(*) FROM timeline WHERE type = 'levelup'),
-	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".social_statuses),
-	(SELECT COUNT(*) FROM ".DB_ACCOUNTS.".friend_list WHERE accepted_on IS NOT NULL),
+	(SELECT COUNT(*) FROM ".DB_GMS.".strings) + (SELECT COUNT(*) FROM ".DB_EMS.".strings),
+	(SELECT COUNT(*) FROM ".DB_GMS.".timeline WHERE type = 'levelup') + (SELECT COUNT(*) FROM ".DB_EMS.".timeline WHERE type = 'levelup'),
+	(SELECT COUNT(*) FROM social_statuses),
+	(SELECT COUNT(*) FROM friend_list WHERE accepted_on IS NOT NULL),
 	(SELECT COUNT(*) FROM faq)
 ");
 $tmp = $q->fetch_row(); 
@@ -202,7 +202,7 @@ SELECT
 	COUNT(CASE WHEN account_id = 2 THEN NULL ELSE account_id END),
 	COUNT(CASE WHEN account_id <> 2 THEN NULL ELSE 2 END)
 FROM
-	`users`
+	".DB_GMS.".`users`
 WHERE
 	`creation_date` <> '0000-00-00'
 GROUP BY
@@ -244,7 +244,7 @@ SELECT
 	`level`,
 	COUNT(*)
 FROM
-	`characters`
+	".DB_GMS.".`characters`
 GROUP BY
 	`level`
 ORDER BY
@@ -295,7 +295,7 @@ SELECT
 	COUNT(CASE WHEN `type` = 'skillup' THEN 1 ELSE NULL END),
 	COUNT(CASE WHEN `type` = 'jobup' THEN 1 ELSE NULL END)
 FROM
-	`timeline`
+	".DB_GMS.".`timeline`
 WHERE
 	DATE(`when`) IN ('".implode('\',\'', $dates)."')
 GROUP BY
@@ -328,8 +328,3 @@ foreach ($values as $level => $amount)
 });
 </script>
 
-
-
-<?php
-require_once __DIR__.'/../inc/footer.php';
-?>

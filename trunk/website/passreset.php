@@ -128,10 +128,10 @@ END;
 				$subject = 'Mapler.me - Password reset request';
 
 				// To send HTML mail, the Content-type header must be set
-				$headers  = 'MIME-Version: 1.0' . "\r\n";
-				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-				$headers .= 'From: Mapler.me <no-reply@mapler.me>' . "\r\n";
-				$headers .= 'To: '.$email . "\r\n";
+				$headers  = 'MIME-Version: 1.0' . "\n";
+				$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\n";
+				$headers .= 'From: Mapler.me <no-reply@mapler.me>' . "\n";
+				$headers .= 'To: '.$email . "\n";
 
 				// Mail it
 				mail($email, $subject, $message, $headers);

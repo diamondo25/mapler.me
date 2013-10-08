@@ -453,7 +453,7 @@ function FindAndAddSetEffect() {
 		$effectitemdata = GetItemWZInfo(94000000, CURRENT_LOCALE);
 		
 		if (!isset($effectitemdata[''.$id])) return;
-		$block = $effectitemdata[''.$id];
+		$block = $effectitemdata[''.$id]['0'];
 		
 		$x = $imageoptions['mainx'];
 		$y = $imageoptions['mainy'];
@@ -611,7 +611,7 @@ $options['stance'] = 'stand';
 $options['stance_frame'] = '0';
 $options['stand_type'] = 1;
 $options['tamingmob'] = 0; // 1932016 - Mechanic
-$options['elven_ears'] = 1;
+$options['elven_ears'] = false;
 $options['guild_name'] = 'Mapler.me';
 $options['guild_emblem_fg'] = 400;
 $options['guild_emblem_fgc'] = 16;
@@ -624,7 +624,7 @@ $options['guild_emblem_bgc'] = 16;
 $imageoptions['width'] = 128;
 $imageoptions['height'] = 128;
 $imageoptions['flipped'] = false;
-$imageoptions['show-name'] = true;
+$imageoptions['show-name'] = false;
 $imageoptions['font'] = 'arial.ttf';
 $imageoptions['font_size'] = 9.25;
 
@@ -693,12 +693,14 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 			$options['guild_emblem_fgc'] = intval($embleminfo[3]);
 		}
 	}
-	if (isset($_GET['elf'])) {
+	if (isset($_GET['elf']))
 		$options['elven_ears'] = true;
-	}
-	if (isset($_GET['tamingmob'])) {
+	if (isset($_GET['tamingmob']))
 		$options['tamingmob'] = intval($_GET['tamingmob']);
-	}
+	if (isset($_GET['flip']))
+		$imageoptions['flipped'] = true;
+	if (isset($_GET['showname']))
+		$imageoptions['show-name'] = true;
 
 	foreach ($slots_input as $id => &$value) {
 		$value = intval($value);

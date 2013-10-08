@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-   public class Program
+    public class Program
     {
 
         public static Random Random { get; private set; }
@@ -61,6 +61,7 @@ namespace MPLRServer
 
                 Clients = new List<ClientConnection>();
                 StartPinger();
+                StartCharacterDeleteQueue();
             }
 
             EXPTable.Load();
@@ -159,9 +160,11 @@ namespace MPLRServer
                             }
                         case "testsession":
                             {
-                                bool raw = arguments.Length > 1;
+                                int accountid = arguments.Length > 1 ? Int32.Parse(arguments[1]) : -1;
+                                bool raw = arguments.Length > 2;
                                 var verp = new MSBLoader();
                                 var connection = new ClientConnection(verp);
+                                connection.AccountID = accountid;
                                 verp.Parse("Savefile.msb", raw);
 
                                 break;
@@ -237,6 +240,52 @@ namespace MPLRServer
             }, null, 0, 20000);
         }
 
+        static System.Threading.Timer _timerCharDeleteQueue;
+        static void StartCharacterDeleteQueue()
+        {
+            _timerCharDeleteQueue = new System.Threading.Timer((obj) =>
+            {
+                MasterThread.Instance.AddCallback(a =>
+                {
+                    // Get characters that must be deleted
+                    List<int> ids;
+                    using (var datareader = MySQL_Connection.Instance.RunQuery("SELECT id FROM character_delete_queue WHERE parsed_at IS NULL") as MySql.Data.MySqlClient.MySqlDataReader)
+                    {
+                        if (!datareader.HasRows) return;
+
+                        ids = new List<int>();
+
+                        while (datareader.Read()) {
+                            int id = datareader.GetInt32(0);
+                            if (!ids.Contains(id))
+                                ids.Add(id);
+                        }
+                    }
+
+                    // Remove those who are logged in...!
+                    Clients.ForEach((c) =>
+                    {
+                        if (ids.Contains(c.CharacterInternalID))
+                            ids.Remove(c.CharacterInternalID);
+                    });
+                    
+                    // First, remove them from the cache
+
+                    int deletes = ids.Count((id) => {
+                        var info = AccountDataCache.Instance.GetCharInfoByInternalID(id);
+                        if (info == null) return false; // weird...
+                        AccountDataCache.Instance.KnownCharlist.Remove(id);
+                        info.SlotHashes.Clear();
+                        MySQL_Connection.Instance.RunQueryFormatted("DELETE FROM characters WHERE internal_id = {0}; UPDATE character_delete_queue SET parsed_at = NOW() WHERE id = {0};", id);
+                        return true;
+                    });
+
+                    Logger.WriteLine("Removed {0} characters from database.", deletes);
+                });
+
+            }, null, 0, 30 * 1000);
+        }
+
         static void InitializeValidHeaders()
         {
             Func<ClientConnection, bool> NotMaplerLoggedin = delegate(ClientConnection a)
@@ -290,8 +339,8 @@ namespace MPLRServer
                     byte status = pPacket.ReadByte();
                     if (status == 1)
                     {
-                        string ip = string.Format("{0}.{1}.{2}.{3} port {4}", 
-                            pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), 
+                        string ip = string.Format("{0}.{1}.{2}.{3} port {4}",
+                            pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(), pPacket.ReadByte(),
                             pPacket.ReadUShort());
                         pConnection.Logger_WriteLine("Client connects to {0}", ip);
                     }

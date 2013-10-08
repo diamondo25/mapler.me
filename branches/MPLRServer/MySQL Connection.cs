@@ -113,7 +113,6 @@ namespace MPLRServer
         void connection_StateChange(object sender, System.Data.StateChangeEventArgs e)
         {
             if (Stop) return;
-            _connection = sender as MySqlConnection;
 
             if (e.OriginalState != System.Data.ConnectionState.Connecting && e.CurrentState == System.Data.ConnectionState.Closed)
             {
@@ -126,6 +125,11 @@ namespace MPLRServer
                 Logger.WriteLine("MySQL connection opened!");
                 Logger.WriteLine("MySQL Server: {0}", _connection.ServerVersion);
             }
+        }
+
+        public object RunQueryFormatted(string pQuery, params object[] pParams)
+        {
+            return RunQuery(string.Format(pQuery, pParams));
         }
 
         public object RunQuery(string pQuery)
@@ -210,7 +214,18 @@ namespace MPLRServer
             string result = "(";
             foreach (object par in pParams)
             {
-                result += Escape(par) + ",";
+                if (par is List<string>)
+                {
+                    foreach (string innerpar in par as List<string>)
+                        result += Escape(innerpar) + ",";
+                }
+                else if (par is List<int>)
+                {
+                    foreach (int innerpar in par as List<int>)
+                        result += innerpar + ",";
+                }
+                else
+                    result += Escape(par) + ",";
             }
 
             result = result.Remove(result.Length - 1) + ")";

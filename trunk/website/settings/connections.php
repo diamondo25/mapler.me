@@ -7,8 +7,8 @@ require_once('../inc/codebird.php');
 error_reporting(0);
 $error = '';
 
-    $CONSUMER_KEY = 'AeH4Ka2jIhiBWASIQUEQ';
-    $CONSUMER_SECRET = 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw';
+$CONSUMER_KEY = 'AeH4Ka2jIhiBWASIQUEQ';
+$CONSUMER_SECRET = 'RjHPE4FXqsznLGohdHzSDnOeIuEucnQ6fPc0aNq8sw';
 
 \Codebird\Codebird::setConsumerKey($CONSUMER_KEY, $CONSUMER_SECRET);
 $cb = \Codebird\Codebird::getInstance();
@@ -17,22 +17,19 @@ $cb->setToken($_SESSION['oauth_token'], $_SESSION['oauth_token_secret']);
 
 $check = $cb->account_verifyCredentials();
 
-if($check->httpstatus == 200)
-{
+if ($check->httpstatus == 200) {
     $oauth_token = htmlentities($_SESSION['oauth_token']);
     $oauth_token_secret = htmlentities($_SESSION['oauth_token_secret']);
     $_loginaccount->SetConfigurationOption('twitter_oauth_token', $oauth_token);
     $_loginaccount->SetConfigurationOption('twitter_oauth_token_secret', $oauth_token_secret);
 }
 
-if($check->httpstatus == 489)
-{
+if ($check->httpstatus == 489) {
 	$error = 'Your account is rate limited. Try again later.';
 	return;
 }
 
-if(isset($_GET['unset'])) 
-{
+if (isset($_GET['unset'])) {
 	unset($_SESSION['oauth_token']);
 	unset($_SESSION['oauth_token_secret']);
     $_loginaccount->SetConfigurationOption('twitter_oauth_token', '');
@@ -55,8 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['topsecret'], $_POST['t
 		//execute
 		$_loginaccount->SetConfigurationOption('twitch_username', $twitchname);
 		$_loginaccount->SetConfigurationOption('twitch_api_code', $twitchtopsecret);
-		
-		echo '<p class="lead alert-info alert"><i class="icon-check"></i> Twitch information updated successfully.</p>';
+?>
+<p class="lead alert-info alert"><i class="icon-check"></i> Twitch information updated successfully.</p>
+<?php
 		
 	}
 }
@@ -67,13 +65,13 @@ if ($error != '') {
 <p class="lead alert-danger alert">Error: <?php echo $error; ?></p>
 <?php
 }
-    $twitterenabled = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
+$twitterenabled = $_loginaccount->GetConfigurationOption('twitter_oauth_token');
 ?>
 
 <style>
 .label {
 	background-color: transparent !important;
-	}
+}
 </style>
 
 			<h2>Twitch.tv</h2>
@@ -113,23 +111,17 @@ if ($error != '') {
 				<div class="item">
 					<div class="row">
 						<div class="span6">
-                        <?php if($twitterenabled == '') {
-                        ?>
+<?php if ($twitterenabled == ''): ?>
 						<button onclick="redir()" class="btn btn-info"><i class="icon-twitter"></i> Connect Twitter</button>
                             <script type="text/javascript">
                             function redir()
                             {
-                                window.location="/callback/process.php";
+                                window.location = "/callback/process.php";
                             }
                             </script>
-                            <?php
-                            }
-                            else {
-                            ?>
+<?php else: ?>
                             <a href="?unset" class="btn btn-info"><i class="icon-remove"></i> Remove Connection</a>
-                            <?php
-                            }
-                            ?>
+<?php endif; ?>
 						</div>
 					</div>
 				</div>

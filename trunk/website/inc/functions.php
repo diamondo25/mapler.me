@@ -671,6 +671,15 @@ function GetAllianceWorldID($worldid, $locale) {
 	return $worldid;
 }
 
+function GetAlliancedWorldName($worldid, $locale) {
+	$realid = GetAllianceWorldID($worldid, $locale);
+	$db = ConnectCharacterDatabase($locale);
+	$q = $db->query('SELECT world_name FROM world_data WHERE world_id = '.intval($realid));
+	$row = $q->fetch_row();
+	$q->free();
+	return $row[0];
+}
+
 function SetMaplerCookie($name, $value, $expiresInDays = 35600) {
 	global $domain;
 	setcookie(
@@ -697,11 +706,12 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 	$flip = isset($options['flip']) && $options['flip'] == true;
 	
 	$notfound = $name === null || $name == '';
-	$image = 'http://mapler.me/inc/img/no-character.gif';
+	$image = '//mapler.me/inc/img/no-character.gif';
 	$y_offset = '-15px';
+	
 	if (!$notfound) {
 		$y_offset = '-2px';
-		$image = 'http://'.$locale.'.mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
+		$image = '//'.$locale.'.mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
 	}
 	
 	if (isset($options['onlyurl'])) {
@@ -709,7 +719,7 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 		return;
 	}
 ?>
-	<div onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/character/<?php echo $name; ?>'" style="background: url('<?php echo $image; ?>') no-repeat center <?php echo $y_offset; ?>; cursor: pointer;<?php echo $styleappend; ?>" class="character"></div>
+	<div <?php if (!$notfound): ?>onclick="document.location.href = '//<?php echo $locale; ?>.<?php echo $domain; ?>/character/<?php echo $name; ?>'"<?php endif; ?> style="background: url('<?php echo $image; ?>') no-repeat center <?php echo $y_offset; ?>;<?php if (!$notfound): ?> cursor: pointer;<?php endif; ?><?php echo $styleappend; ?>" class="character"></div>
 <?php
 }
 

@@ -345,26 +345,22 @@ namespace MPLRServer
 
             {
                 // Newyear cards... meh
-                pPacket.ReadShort();
-                /*
-                    StartNode("Cards");
-                    for (i = 0; i < tmp; i++) {
-                        StartNode("Card " + i);
-                        AddInt("?");
-                        AddInt("?");
-                        AddString("?");
-                        AddByte("?");
-                        AddLong("?");
-                        AddInt("?");
-                        AddString("?");
-                        AddByte("?");
-                        AddByte("?");
-                        AddLong("?");
-                        AddString("?");
-                        EndNode(false);
-                    }
-                    EndNode(false);
-                 */
+                // WHAT MEH, SOMEONE HAS THIS FFS D:!!!
+
+                for (short i = pPacket.ReadShort(); i > 0; i--)
+                {
+                    pPacket.ReadInt(); // Card ID?
+                    pPacket.ReadInt(); // Sender ID
+                    pPacket.ReadString(); // Sender name
+                    pPacket.ReadByte(); // GENDER..?
+                    pPacket.ReadLong(); // Sent at?
+                    pPacket.ReadInt(); // Receiver ID
+                    pPacket.ReadString(); // Receiver name
+                    pPacket.ReadByte();
+                    pPacket.ReadByte();
+                    pPacket.ReadLong(); // Receive date?
+                    pPacket.ReadString(); // Message
+                }
             }
 #else
             for (int i = pPacket.ReadShort(); i > 0; i--)
@@ -993,18 +989,13 @@ namespace MPLRServer
                     teleportRocks.OnDuplicateUpdate = true;
 
                     teleportRocks.AddColumn("character_id");
-                    teleportRocks.AddColumn("index");
-                    teleportRocks.AddColumn("map", true);
+                    for (int i = 0; i < 41; i++)
+                        teleportRocks.AddColumn("map" + i, true);
 
-                    for (int i = 0; i < Inventory.TeleportRocks.Length; i++)
-                    {
-                        teleportRocks.AddRow(
-                            pConnection.CharacterInternalID,
-                            i,
-                            Inventory.TeleportRocks[i]
-                            );
-
-                    }
+                    teleportRocks.AddRow(
+                        pConnection.CharacterInternalID,
+                        Inventory.TeleportRocks.ToList()
+                        );
 
                     teleportRocks.RunQuery();
                 }
