@@ -756,13 +756,13 @@ foreach ($options['slots'] as $slot => $itemid) {
 			echo "Found head: ".$itemid." > ".$skin."\r\n";
 		unset($options['slots'][$slot]);
 	}
-	elseif ($absgroup == 20) {
+	elseif ($absgroup == 20 || $absgroup == 21) {
 		$face = $itemid % 10000;
 		if (DEBUGGING)
 			echo "Found face: ".$itemid." > ".$face."\r\n";
 		unset($options['slots'][$slot]);
 	}
-	elseif ($absgroup == 30) {
+	elseif ($absgroup >= 30 && $absgroup < 40) {
 		$hair = $itemid % 10000;
 		if (DEBUGGING)
 			echo "Found hair: ".$itemid." > ".$hair."\r\n";
@@ -780,7 +780,6 @@ foreach ($options['slots'] as $slot => $itemid) {
 	$used_wz_dirs[GetWZItemTypeName($itemid)] = $itemid;
 }
 // Fix up base position
-
 
 $skin = 2000 + ($skin % 1000);
 

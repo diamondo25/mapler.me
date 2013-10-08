@@ -1707,7 +1707,7 @@ foreach ($optionlist as $option => $desc) {
 </style>
 
 <?php
-	
+if (false):
 	// Initialize SP
 	
 	$q = $__char_db->query("
@@ -1783,7 +1783,9 @@ ORDER BY
 	
 
 </div>
-
+<?php
+endif;
+?>
 <div id="skill_list">
 <?php 	MakeHideToggleButton('skills'); ?>
 <?php
