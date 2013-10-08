@@ -992,7 +992,7 @@ namespace MPLRServer
                     for (int i = 0; i < 41; i++)
                         teleportRocks.AddColumn("map" + i, true);
 
-                    teleportRocks.AddRow(
+                    teleportRocks.AddRowUnsafe(
                         pConnection.CharacterInternalID,
                         Inventory.TeleportRocks.ToList()
                         );

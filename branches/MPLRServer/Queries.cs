@@ -188,7 +188,7 @@ namespace MPLRServer
 
         public static string GetAccountOptionValue(int pAccountID, string pKey)
         {
-            string query = "SELECT option_value FROM maplestats.account_options WHERE account_id = " + pAccountID + " AND option_key = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pKey) + "'";
+            string query = "SELECT option_value FROM maplestats_main.account_options WHERE account_id = " + pAccountID + " AND option_key = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pKey) + "'";
             using (var reader = MySQL_Connection.Instance.RunQuery(query) as MySql.Data.MySqlClient.MySqlDataReader)
             {
                 if (reader.Read())
@@ -204,7 +204,7 @@ namespace MPLRServer
         {
             pAccountID = -1;
 
-            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT account_id FROM maplestats.account_tokens WHERE type = 'client_token' AND code = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pToken) + "'") as MySql.Data.MySqlClient.MySqlDataReader)
+            using (var reader = MySQL_Connection.Instance.RunQuery("SELECT account_id FROM maplestats_main.account_tokens WHERE type = 'client_token' AND code = '" + MySql.Data.MySqlClient.MySqlHelper.EscapeString(pToken) + "'") as MySql.Data.MySqlClient.MySqlDataReader)
             {
                 if (reader.Read())
                 {

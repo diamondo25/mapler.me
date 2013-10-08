@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MPLRServer
 {
-   public class InsertQueryBuilder : IDisposable
+    public class InsertQueryBuilder : IDisposable
     {
         struct Column
         {
@@ -91,6 +91,12 @@ namespace MPLRServer
             _rows.Add(MySQL_Connection.BuildValuesRow(pColumns));
         }
 
+        public void AddRowUnsafe(params object[] pColumns)
+        {
+            // :(
+            _rows.Add(MySQL_Connection.BuildValuesRow(pColumns));
+        }
+
         public bool HasRows() { return _rows.Count > 0 || _rowsColumned.Count > 0; }
 
         public override string ToString()
@@ -160,7 +166,7 @@ namespace MPLRServer
         }
     }
 
-   public class UpdateQueryBuilder : IDisposable
+    public class UpdateQueryBuilder : IDisposable
     {
         private Dictionary<string, string> _columns = new Dictionary<string, string>();
         private Dictionary<string, string> _whereColumns = new Dictionary<string, string>();
@@ -216,7 +222,7 @@ namespace MPLRServer
             foreach (var kvp in _columns)
                 tmp += string.Format("`{0}` = {1},", kvp.Key, kvp.Value);
 
-           
+
             sb.Append(tmp.TrimEnd(','));
             if (_whereColumns.Count > 0)
             {
@@ -239,7 +245,7 @@ namespace MPLRServer
         }
     }
 
-   public class DeleteQueryBuilder : IDisposable
+    public class DeleteQueryBuilder : IDisposable
     {
         private Dictionary<string, string> _whereColumns = new Dictionary<string, string>();
         public string TableName { get; private set; }
