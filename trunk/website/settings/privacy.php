@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['
 	}
 	
 	if ($error == '') {
-		$query = $__database->query("SELECT password, salt FROM maplestats.accounts WHERE id = ".$_loginaccount->GetId());
+		$query = $__database->query("SELECT password, salt FROM accounts WHERE id = ".$_loginaccount->GetId());
 		if ($query->num_rows == 1) {
 			$row = $query->fetch_assoc();
 			
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['passwordOld'],$_POST['
 				
 				$encrypted = GetPasswordHash($_POST['passwordNew2'], $salt);
 				
-				$__database->query("UPDATE maplestats.accounts SET password = '".$encrypted."', salt = '".$salt."' WHERE id = ".$_loginaccount->GetId());
+				$__database->query("UPDATE accounts SET password = '".$encrypted."', salt = '".$salt."' WHERE id = ".$_loginaccount->GetId());
 ?>
 <p class="lead alert-info alert">Your password has been successfully changed!</p>
 <?php
