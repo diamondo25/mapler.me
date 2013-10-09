@@ -70,7 +70,7 @@ if (!empty($notice)) {
 		<p mapler-locale="<?php echo $servername; ?>" class="lead alert alert-info">
 			<span class="online-server"<?php echo ($data['state'] !== 'online' ? ' style="display: none;"' : ''); ?>>
 				<span><i class="icon-ok-sign"></i> <strong>MapleStory <?php echo $data['locale']; ?></strong> – </span> 
-				<span players><?php echo $data['players']; ?></span> maplers are currently updating their character(s) in real-time.</span>
+				<span players><?php echo $data['players']; ?></span> players mapling.</span>
 			</span>
 			<span class="offline-server"<?php echo ($data['state'] !== 'offline' ? ' style="display: none;"' : ''); ?>><i class="icon-exclamation-sign"></i> Mapler.me server '<?php echo $servername; ?>' is offline...</span>
 		</p>

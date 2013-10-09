@@ -4,6 +4,8 @@ header('Access-Control-Allow-Origin: *');
 require_once __DIR__.'/../../inc/functions.ajax.php';
 require_once __DIR__.'/../../inc/functions.loginaccount.php';
 require_once __DIR__.'/../../inc/classes/database.php';
+require_once __DIR__.'/../../inc/exp_table.php';
+require_once __DIR__.'/../../inc/job_list.php';
 
 CheckSupportedTypes('visibility', 'statistics');
 $_char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
@@ -67,7 +69,6 @@ elseif ($request_type == 'statistics') {
 	$q = $_char_db->query("
 SELECT 
 	chr.name,
-	chr.world_id,
 	w.world_name,
 	chr.channel_id AS channel,
 	chr.level,
@@ -82,7 +83,6 @@ SELECT
 	chr.honourlevel AS honorlevel,
 	chr.honourexp AS honorexp,
 	mesos,
-	last_update,
 	TIMESTAMPDIFF(SECOND, last_update, NOW()) AS `seconds_since`
 FROM
 	`characters` chr
@@ -98,9 +98,20 @@ WHERE
 	}
 
 	$row = $q->fetch_assoc();
+	
+	$percenta = GetExpPercentage($row['level'], $row['exp']);
+	$percentb = round($percenta * 100) / 100;
+	
+	$job = GetJobname($row['job']);
+	$map = GetMapname($row['map'], CURRENT_LOCALE);
+	
+	$extra = array('percentage' => "$percentb", 'job_name' => "$job", 'map_name' => "$map");
+	
+	$answer = $row + $extra;
+	
 	$q->free();
 	
-	JSONAnswer(array('result' => $row));
+	JSONAnswer(array('result' => $answer));
 }
 
 ?>
