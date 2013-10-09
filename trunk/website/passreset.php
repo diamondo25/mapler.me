@@ -14,7 +14,7 @@ if (IsLoggedin()) {
 if (isset($_GET['code'])) {
     
     $code = $__database->real_escape_string($_GET['code']);
-    $query = $__database->query("SELECT account_id FROM maplestats.account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
+    $query = $__database->query("SELECT account_id FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
     
     if ($query->num_rows == 0) {
         $query->free();
@@ -28,7 +28,7 @@ if (isset($_GET['code'])) {
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($_POST['password'] == $_POST['password-verify']) {
         $code = $__database->real_escape_string($_GET['code']);
-		$query = $__database->query("SELECT account_id FROM maplestats.account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
+		$query = $__database->query("SELECT account_id FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset' AND till > NOW()");
 		
 		if ($query->num_rows == 1) {
 			$row = $query->fetch_row();
@@ -43,8 +43,8 @@ if (isset($_GET['code'])) {
 			
 			$encryptedpassword = GetPasswordHash($_POST['password'], $salt);
 			
-			$__database->query("DELETE FROM maplestats.account_tokens WHERE code = '".$code."' AND type = 'password_reset'");
-			$__database->query("UPDATE maplestats.accounts SET `password` = '".$encryptedpassword."', salt = '".$__database->real_escape_string($salt)."' WHERE id = ".$id);
+			$__database->query("DELETE FROM account_tokens WHERE code = '".$code."' AND type = 'password_reset'");
+			$__database->query("UPDATE accounts SET `password` = '".$encryptedpassword."', salt = '".$__database->real_escape_string($salt)."' WHERE id = ".$id);
 		
 ?>
 <p class="lead alert-success alert">Password reset!</p>
@@ -90,7 +90,7 @@ else {
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$email = $__database->real_escape_string($_POST['username']);
 		
-		$query = $__database->query("SELECT id, username FROM maplestats.accounts WHERE email = '".$email."'");
+		$query = $__database->query("SELECT id, username FROM accounts WHERE email = '".$email."'");
         
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 			$error = "The email you entered is invalid.";
@@ -102,7 +102,7 @@ else {
 			$username = $row[1];
 			$query->free();
 			// Check if already sent
-			$query = $__database->query("SELECT 1 FROM maplestats.account_tokens WHERE account_id = ".$id." AND type = 'password_reset' AND till > NOW()");
+			$query = $__database->query("SELECT 1 FROM account_tokens WHERE account_id = ".$id." AND type = 'password_reset' AND till > NOW()");
 		
 			if ($query->num_rows == 0) {
 				$code = md5(time().' -- -- -- -- - '.$id.' - '.$username);
@@ -138,7 +138,7 @@ END;
 				
 				$__database->query("
 INSERT INTO 
-	maplestats.account_tokens 
+	account_tokens 
 VALUES 
 	(".$id.", 'password_reset', '".$code."', DATE_ADD(NOW(), INTERVAL 1 DAY))
 ON DUPLICATE KEY UPDATE
