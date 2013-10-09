@@ -1,8 +1,4 @@
 <?php
-function IsActive($name) {
-	echo strpos($_SERVER['REQUEST_URI'], $name) !== false ? ' class="active"' : '';
-}
-
 function BuildURL($name, $url) {
 ?>
 				<li<?php IsActive($url); ?>><a href="<?php echo $url; ?>"><?php echo $name; ?> <i class="icon-chevron-right"></i></a></li>

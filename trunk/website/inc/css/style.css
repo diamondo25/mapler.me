@@ -388,7 +388,7 @@ footer ul li a:hover{color:#FFF;opacity: 0.4;}
 }
 
 .active {
-	color:#333;background:#f4d867 !important;background:rgba(245,241,235,0.25) !important; border-radius: 5px; padding-right: 0px !important;
+	color:#111 !important; border-bottom: 3px solid rgba(0,0,0,0.7);
 }
 
 /* various */

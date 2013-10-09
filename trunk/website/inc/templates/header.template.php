@@ -18,6 +18,10 @@ header('Location: http://'.$locale_domain.'/character/'.$character_name.'');
 die;
 }
 
+function IsActive($name) {
+	echo strpos($_SERVER['REQUEST_URI'], $name) !== false ? ' class="active"' : '';
+}
+
 /*
 elseif (strpos($_SERVER['REQUEST_URI'], '/guild/') !== FALSE) {
 	$title = $__url_useraccount->GetNickname().' &middot; '.$title;
@@ -242,9 +246,9 @@ endif;
 <?php if ($_loggedin): ?>
 		<nav id="menu">
 			<ul id="menu-nav" class="extra-nav">
-				<li><a href="//<?php echo $domain; ?>/stream/"><i class="icon-reorder"></i> <span class="hidden-tablet hidemobile">Stream</span></a></li>
-				<li><a href="//<?php echo $domain; ?>/discover/"><i class="icon-question-sign"></i> <span class="hidden-tablet hidemobile">Discover</span></a></li>
-				<li><a href="//<?php echo $domain; ?>/stream/mentions/"><i class="icon-comments"></i> <span class="hidden-tablet hidemobile">Mentions</span></a></li>
+				<li><a href="//<?php echo $domain; ?>/stream/" <?php IsActive('/stream/'); ?>><i class="icon-reorder"></i> <span class="hidden-tablet hidemobile">Stream</span></a></li>
+				<li><a href="//<?php echo $domain; ?>/discover/" <?php IsActive('/discover/'); ?>><i class="icon-question-sign"></i> <span class="hidden-tablet hidemobile">Discover</span></a></li>
+				<li><a href="//<?php echo $domain; ?>/mentions/" <?php IsActive('/mentions/'); ?>><i class="icon-comments"></i> <span class="hidden-tablet hidemobile">Mentions</span></a></li>
 				
 <?php
 	if ($_loggedin) {

@@ -27,6 +27,7 @@
 	RewriteRule ^developers(/|)$ 				dev.php [L]
 	
 	RewriteRule ^discover/$ 					/stream/index.php?discover [L]
+	RewriteRule ^mentions/$ 					/stream/mentions.php [L]
 	
 	RewriteRule ^faq(/|)$ 						faq.php [L]
 	RewriteRule ^faq/([^\./]*) faq.php?id=$1 [L,QSA]
