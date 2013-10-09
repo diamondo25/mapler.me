@@ -1913,7 +1913,7 @@ WHERE
 
 <!-- /End content block -->
 	</div>
-
+</div>
 <?php
 }
 // $__char_db->GetRanQueries();
