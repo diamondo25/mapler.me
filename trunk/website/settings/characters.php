@@ -136,11 +136,12 @@ foreach ($cache as $row) {
 	}
 ?>
 				<div class="span3 character-brick" style="min-width: 174px;">
-				<div class="caption"><img src="//<?php echo $data_domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: middle;" />&nbsp;<?php echo $row['name']; ?></div>
+				<div class="caption" id="expand" data-toggle="collapse" data-target="#<?php echo $row['name']; ?>" onclick="document.location = '#<?php echo $row['name']; ?>'"><img src="//<?php echo $data_domain; ?>/inc/img/worlds/<?php echo $row['world_name']; ?>.png" style="vertical-align: middle;" />&nbsp;<?php echo $row['name']; ?></div>
+					<div id="<?php echo $row['name']; ?>" class="collapse">
 					<center>
 						<br />
 						<a href="//<?php echo $data_domain; ?>/player/<?php echo $row['name']; ?>" style="text-decoration: none !important; font-weight: 300; color: inherit;">
-							<img src="//<?php echo $data_domain; ?>/avatar/<?php echo $row['name']; ?>"/>
+							<img src="//mapler.me/avatar/<?php echo $row['name']; ?>"/>
 						</a>
 						<br />
 						<br />
@@ -163,6 +164,7 @@ foreach ($cache as $row) {
 						<br />
 						<input type="radio" name="main_character" value="<?php echo $row['internal_name']; ?>"<?php echo $char_config['main_character'] == $row['internal_name'] ? ' checked="checked"' : ''; ?> /> Main character
 					</center>
+					</div>
 				</div>
 <?php
 	$i++;
@@ -174,3 +176,11 @@ foreach ($cache as $row) {
 					<button type="submit" class="btn btn-primary" style="margin-top:20px;">Save changes?</button>
 			</div>
 			</form>
+			
+<script type="text/javascript">
+$('#expand').click(function(e) {
+     // do something fancy
+     return false; // prevent default click action from happening!
+     e.preventDefault(); // same thing as above
+});
+</script>
