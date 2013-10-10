@@ -52,15 +52,22 @@ if (isset($_GET['size'])) {
 
 $charname = isset($_GET['name']) ? $_GET['name'] : 'RoboticOil';
 
+$tmp_ok = true;
 $len = strlen($charname);
 if ($len < 4 || $len > 12) {
-	
+	$tmp_ok = false;
+}
+else {
+	$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
+	$q = $__char_db->query("SELECT * FROM characters WHERE name = '".$__char_db->real_escape_string($charname)."'");
+	if ($q->num_rows == 0) {
+		$tmp_ok = false;
+	}
 }
 
-$__char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
-$q = $__char_db->query("SELECT * FROM characters WHERE name = '".$__char_db->real_escape_string($charname)."'");
-if ($q->num_rows == 0) {
-	
+if (!$tmp_ok) {
+	echo file_get_contents('http://mapler.me/inc/img/no-character.png');
+	die();
 }
 
 // Get character attributes
@@ -81,9 +88,6 @@ $ds_mark = $character_data['demonmark'];
 
 $q->free();
 
-
-
-$image_mode = isset($_GET['show_name']) ? 'avatar_ingame' : 'avatar';
 $show_flipped = isset($_GET['flip']);
 
 
@@ -99,9 +103,7 @@ $char_stance = isset($_GET['stance']) ? $_GET['stance'] : GetCharacterOption($in
 $char_stance_frame = isset($_GET['stance_frame']) ? $_GET['stance_frame'] : '0';
 $stand = 1;
 
-$standardWeapon = -1;
-$cashWeapon = -1;
-$weaponThingType = -1;
+$weapongroup = -1;
 
 
 $shown_items = array();
@@ -144,11 +146,8 @@ while ($row2 = $character_equipment->fetch_assoc()) {
 	}
 	
 	if ($row2['slot'] == -11) {
-		$standardWeapon = $itemid;
-		$weaponThingType = ($standardWeapon / 10000) % 100;
-	}
-	elseif ($row2['slot'] == -111) { // Cash weapon
-		$cashWeapon = $itemid;
+		// Prepare item type for cash item
+		$weapongroup = ($itemid / 10000) % 100;
 	}
 	elseif ($row2['slot'] == -105) { // Cash Shirt
 		if (GetItemType($itemid) == 105 && isset($shown_items[6])) // Is a cash overall and has pants
@@ -219,7 +218,7 @@ if ($jobid == 6000 || $jobid == 6100 || $jobid == 6110 || $jobid == 6111 || $job
 	*/
 }
 
-function BuildCodeString($slots, $size, $name, $guildname, $embleminfo, $elf, $flip, $showname) {
+function BuildCodeString($slots, $size, $name, $weapongroup, $guildname, $embleminfo, $elf, $face, $flip, $showname) {
 	$tmp = '';
 	foreach ($slots AS $key => $value)
 		$tmp .= 'slot['.$key.']='.$value.'&';
@@ -228,6 +227,8 @@ function BuildCodeString($slots, $size, $name, $guildname, $embleminfo, $elf, $f
 	$tmp .= '&size='.$size;
 	$tmp .= '&guildname='.$guildname;
 	$tmp .= '&embleminfo='.join('.', $embleminfo);
+	$tmp .= '&weapongroup='.$weapongroup;
+	$tmp .= '&face='.$face;
 	if ($elf)
 		$tmp .= '&elvenears';
 	if ($flip)
@@ -239,7 +240,7 @@ function BuildCodeString($slots, $size, $name, $guildname, $embleminfo, $elf, $f
 }
 
 
-$url = 'http://'.$domain.'/actions/render_character.php?'.(DEBUGGING ? 'debug&' : '').'code='.BuildCodeString($request_info['slots'], $size, $charname, '', array(0,0,0,0), $is_mercedes, $show_flipped, isset($_GET['show_name']));
+$url = 'http://'.$domain.'/actions/render_character.php?'.(DEBUGGING ? 'debug&' : '').'code='.BuildCodeString($request_info['slots'], $size, $charname, $weapongroup, '', array(0,0,0,0), $is_mercedes, $using_face, $show_flipped, isset($_GET['show_name']));
 
 if (DEBUGGING)
 	echo '-------- REQUESTED FILE ----------------'."\r\n".$url."\r\n";

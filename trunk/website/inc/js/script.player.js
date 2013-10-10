@@ -185,7 +185,8 @@ function SetItemInfo(event, obj, values) {
 	SetObjText('slots', item.slots, undefined, isequip);
 	SetObjText('hammers', item.hammers, undefined, isequip);
 	
-	var stars = parseInt(item.statusflag / 0x100);
+	var state = item.statusflag & 0xFF;
+	var stars = (item.statusflag >> 8) & 0xFF;
 	SetObjText('enchantments', stars, undefined, isequip);
 	
 	GetObj('item_stats_block').style.display = isequip && hasStatsSet ? 'block' : 'none';
@@ -266,7 +267,15 @@ function SetItemInfo(event, obj, values) {
 	
 	if (isequip) {
 		
-		if ((item.flag & 0x0020) == 0) {
+		if (state >= 17 && state <= 20) {
+			var itemstatename = '';
+			switch (state) {
+				case 17: itemstatename = 'Rare'; break;
+				case 18: itemstatename = 'Epic'; break;
+				case 19: itemstatename = 'Unique'; break;
+				case 20: itemstatename = 'Legendary'; break;
+			}
+			extrainfo += '<span color="white">(' + itemstatename + ' Item)</span>';
 			
 		}
 		if (item.max_scissors == 0) {
@@ -324,16 +333,32 @@ function SetItemInfo(event, obj, values) {
 		}
 		
 		// GMS has only 1 neb, but can hold 3 lol.
-		if ((item.statusflag & 0x0002) != 0 && (item.statusflag & 0x0010) == 0) {
+		if ((item.statusflag & 0x0001) == 0x0001) {
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
-		else if ((item.statusflag & 0x0010) != 0 && item.nebulite1 > 0) {
+		if ((item.statusflag & 0x0010) != 0 && item.nebulite1 > 0) {
 			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
-			GetObj('nebulite_info').innerHTML = '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			hasnebulite = true;
+		}
+		if ((item.statusflag & 0x0020) != 0 && item.nebulite2 > 0) {
+			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
+			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
+		
+			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
+			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			hasnebulite = true;
+		}
+		if ((item.statusflag & 0x0040) != 0 && item.nebulite3 > 0) {
+			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
+			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
+		
+			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
+			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
 			hasnebulite = true;
 		}
 

@@ -94,6 +94,14 @@ function ParseItem($id) {
 		echo 'Item section id: '.$item_section_id."\r\n";
 		echo 'Item image at: '.GetItemDataLocation($data_buffer['main-dir'], $id)."\r\n";
 	}
+	
+	if (isset($iteminfo[$options['weapongroup']])) {
+		$weapongroup = $options['weapongroup'];
+		$iteminfo = $iteminfo[$weapongroup];
+		$iteminfo['ITEMID'] = $id;
+		if (DEBUGGING)
+			echo 'NX wep Item: '.$weapongroup."\r\n";
+	}
 
 	$isface = isset($iteminfo[$options['face']]);
 	foreach ($iteminfo as $key => $value) {
@@ -444,6 +452,8 @@ function FindAndAddSetEffect() {
 	}
 	
 	if ($seturi !== null && strpos($seturi, 'SetItemInfoEff.img') !== false) {
+		if (DEBUGGING)
+			echo 'Found Set Item Info Effect '.$seturi.'!!!'."\r\n";
 		// Boom chakalacka...ka?
 		
 		// Get set ID
@@ -484,18 +494,29 @@ function FindAndAddItemEffect() {
 	$effectid = null;
 	foreach ($itemeffdata as $setid => $moredata) {
 		if (!isset($moredata['effect'], $moredata['info'])) continue;
+		
 		foreach ($moredata['info'] as $slotid => $items) {
+			$foundSomething = false;
 			foreach ($items as $idx => $itemid) {
 				if (isset($itemids[$itemid])) {
 					$effectid = $setid;
+					$foundSomething = true;
+					if (DEBUGGING)
+						echo 'Item effect '.$effectid.' for itemid '.$itemid.'!!!'."\r\n";
 					break; // Try next set. lol
 				}
+			}
+			if (!$foundSomething) {
+				$effectid = null;
+				break;
 			}
 		}
 	}
 	
 	if ($effectid !== null) {
-		$block = $itemeffdata[$effectid]['effect']['0'];
+		if (DEBUGGING)
+			echo 'Found Item Effect '.$effectid.'!!!'."\r\n";
+		$block = $itemeffdata[''.$effectid]['effect']['0'];
 		
 		$x = $imageoptions['mainx'];
 		$y = $imageoptions['mainy'];
@@ -505,7 +526,8 @@ function FindAndAddItemEffect() {
 			$x -= $block['origin']['X'];
 			$y -= $block['origin']['Y'];
 		}
-		
+		elseif (DEBUGGING)
+			echo 'Unable to find origin info.'."\r\n";
 		$img_location = $data_buffer['main-dir'].'Effects/SetEff.img/'.$effectid.'/effect.0.png';
 		
 		$layer = -2;
@@ -617,6 +639,7 @@ $options['guild_emblem_fg'] = 400;
 $options['guild_emblem_fgc'] = 16;
 $options['guild_emblem_bg'] = 1028;
 $options['guild_emblem_bgc'] = 16;
+$options['weapongroup'] = -1;
 
 
 
@@ -701,6 +724,10 @@ $data_buffer['main-dir-guildemblem'] = $data_buffer['main-dir'].'GuildEmblem';
 		$imageoptions['flipped'] = true;
 	if (isset($_GET['showname']))
 		$imageoptions['show-name'] = true;
+	if (isset($_GET['face']))
+		$options['face'] = $_GET['face'];
+	if (isset($_GET['weapongroup']))
+		$options['weapongroup'] = intval($_GET['weapongroup']) % 100;
 
 	foreach ($slots_input as $id => &$value) {
 		$value = intval($value);
@@ -777,6 +804,7 @@ foreach ($options['slots'] as $slot => $itemid) {
 			continue;
 		}
 	}
+	
 	$used_wz_dirs[GetWZItemTypeName($itemid)] = $itemid;
 }
 // Fix up base position
