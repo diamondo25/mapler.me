@@ -255,18 +255,7 @@ if ($born_quest !== null && isset($born_quest->data['born'])) {
 	</div>
 	
 <?php	
-if (!$_loggedin) {
-?>
-	<div class="span9" style="margin-left:10px;">
-		<p class="status noclear" style="margin-top:0px;"><i class="icon-ban-circle faded"></i> To view more information and equipment for <?php echo $character_info['name']; ?>, please <a href="//<?php echo $domain; ?>/login/">login</a> or <a href="//<?php echo $domain; ?>/signup/">register!</a></p>
-	</div>
-</div>
-<?php
-	require_once __DIR__.'/../inc/footer.php';
-	die();
-}
-
-elseif ($status == 1 && ($_loggedin && $friend_status = 'FRIENDS' && $friend_status != 'FOREVER_ALONE')) {
+if ($status == 1 && ($_loggedin && $friend_status = 'FRIENDS' && $friend_status != 'FOREVER_ALONE')) {
 ?>
 		<p class="status noclear" style="margin-top:0px;"><i class="icon-ok faded"></i>
 			<?php echo $account->GetNickName(); ?> has allowed you to view this character.
