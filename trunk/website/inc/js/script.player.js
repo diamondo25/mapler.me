@@ -216,6 +216,25 @@ function SetItemInfo(event, obj, values) {
 	var extrainfo = '';
 	// extrainfo += '<span>Quality: ' + otherinfo.quality + '</span>';
 
+	
+	if (isequip) {
+		
+		if ((state & 0x07) != 0) {
+			var itemstatename = '';
+			switch (state & 0x07) {
+				case 1: itemstatename = 'Rare'; break;
+				case 2: itemstatename = 'Epic'; break;
+				case 3: itemstatename = 'Unique'; break;
+				case 4: itemstatename = 'Legendary'; break;
+			}
+			extrainfo += '<span style="color: white">(' + itemstatename + ' Item)</span>';
+			
+		}
+		if (item.max_scissors == 0) {
+			
+		}
+	}
+	
 	if (haspotential)
 		extrainfo += '<span style="color: #FF0066;">(Hidden Potential Item)</span>';
 
@@ -242,7 +261,7 @@ function SetItemInfo(event, obj, values) {
 	if (otherinfo.coldprotection)
 		extrainfo += '<span>Cold prevention</span>';
 	if (otherinfo.tradeblock) {
-		extrainfo += '<span>' + (otherinfo.tradeblock == 0x30 ? 'Trade disabled when equipped' : 'Untradable') + '<span>';
+		extrainfo += '<span>' + (otherinfo.tradeblock == 0x30 ? 'Trade disabled when equipped' : 'Untradable') + '</span>';
 		var tradeInfo = '';
 		switch (otherinfo.tradeblock) {
 			case 0x10: tradeInfo = 'Use the Sharing Tag to move an item to another character on the same account once.'; break;
@@ -263,24 +282,6 @@ function SetItemInfo(event, obj, values) {
 	if (item.name != '' && item.name != undefined) {
 		if (item.moreflags != undefined && item.moreflags.indexOf('crafted') != -1)
 			description += '<span style="color: limegreen;">- Crafted by: ' + item.name + '</span>';
-	}
-	
-	if (isequip) {
-		
-		if (state >= 17 && state <= 20) {
-			var itemstatename = '';
-			switch (state) {
-				case 17: itemstatename = 'Rare'; break;
-				case 18: itemstatename = 'Epic'; break;
-				case 19: itemstatename = 'Unique'; break;
-				case 20: itemstatename = 'Legendary'; break;
-			}
-			extrainfo += '<span color="white">(' + itemstatename + ' Item)</span>';
-			
-		}
-		if (item.max_scissors == 0) {
-			
-		}
 	}
 
 	GetObj('item_info_extra').innerHTML = extrainfo;
@@ -333,12 +334,11 @@ function SetItemInfo(event, obj, values) {
 		}
 		
 		// GMS has only 1 neb, but can hold 3 lol.
-		if ((item.statusflag & 0x0001) == 0x0001) {
+		if ((item.statusflag & 0x0002) == 0x0002 || (item.statusflag & 0x0004) == 0x0004 || (item.statusflag & 0x0008) == 0x0008) { // Neb slot 1,2 or 3 open
 			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
 			hasnebulite = true;
 		}
 		if ((item.statusflag & 0x0010) != 0 && item.nebulite1 > 0) {
-			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
@@ -346,16 +346,14 @@ function SetItemInfo(event, obj, values) {
 			hasnebulite = true;
 		}
 		if ((item.statusflag & 0x0020) != 0 && item.nebulite2 > 0) {
-			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
-			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
+			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite2);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
 			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
 			hasnebulite = true;
 		}
 		if ((item.statusflag & 0x0040) != 0 && item.nebulite3 > 0) {
-			//var nebuliteinfo = nebuliteInfo[item.nebulite1];
-			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
+			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite3);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
 			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
