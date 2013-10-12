@@ -6,27 +6,26 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 
-namespace MPLRServer
+namespace SimpleMapleServer
 {
-   public class MSBExporter
+    public class MSBExporter
     {
-       public class DumpPacket
+        public class DumpPacket
         {
             public byte[] Data { get; set; }
             public bool Outboud { get; set; }
             public DateTime ArrivalTime { get; set; }
             public ushort Opcode { get; set; }
 
-            public DumpPacket(MaplePacket pPacket)
+            public DumpPacket(Packet pPacket, bool pFromServer)
             {
                 pPacket.Reset();
-                MaplePacket.CommunicationType type = (MaplePacket.CommunicationType)pPacket.ReadByte();
-                Outboud = type == MaplePacket.CommunicationType.ClientPacket;
+                Outboud = !pFromServer;
                 Opcode = pPacket.ReadUShort();
 
-                Data = new byte[pPacket.Length - 3];
-                Buffer.BlockCopy(pPacket.ToArray(), 3, Data, 0, Data.Length); // byte + short (header)
-                ArrivalTime = MasterThread.CurrentDate;
+                Data = new byte[pPacket.Length - 2];
+                Buffer.BlockCopy(pPacket.ToArray(), 2, Data, 0, Data.Length); // byte + short (header)
+                ArrivalTime = DateTime.Now;
                 pPacket.Reset();
             }
 
@@ -66,9 +65,9 @@ namespace MPLRServer
             _packets = new List<DumpPacket>();
         }
 
-        public void AddPacket(MaplePacket pPacket)
+        public void AddPacket(Packet pPacket, bool pFromServer)
         {
-            _packets.Add(new DumpPacket(pPacket));
+            _packets.Add(new DumpPacket(pPacket, pFromServer));
         }
 
         public int GetSize()
@@ -93,7 +92,7 @@ namespace MPLRServer
                 writer.Write((ushort)pClient.Port);
                 writer.Write(pHost.Address.ToString());
                 writer.Write((ushort)pHost.Port);
-                writer.Write((byte)ServerMapleInfo.LOCALE);
+                writer.Write((byte)0x08); // MapleStory type
                 writer.Write(pVersion);
 
                 foreach (DumpPacket packet in _packets)
