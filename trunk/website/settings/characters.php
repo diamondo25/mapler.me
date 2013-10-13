@@ -1,8 +1,8 @@
+<h2>Characters</h2>
+<p><b>Tip:</b> For additional options, click on the avatar of a character.</p>
 <?php
 require_once __DIR__.'/../inc/avatar_faces.php';
-
 $char_config = $_loginaccount->GetConfigurationOption('character_config', array('characters' => array(), 'main_character' => null));
-
 
 $characternames = array();
 
@@ -28,7 +28,6 @@ ORDER BY
 	chr.world_id ASC,
 	chr.level DESC
 ";
-
 
 // printing table rows
 $cache = array();
@@ -114,7 +113,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['char_shown_option'], $
 
 ?>
 			<form class="form-horizontal" method="post">
+<script type="text/javascript">
+function DeleteCharacter(id) {
+	if (confirm("Are you sure you want to delete this character?")) {
+		document.location.href = '?deletecharacter=' + id;
+	}
+}
+</script>
+
 <?php
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+	if (isset($_GET['deletecharacter'])) {
+		$id = intval($_GET['deletecharacter']);
+		$name = GetCharacterName($id, CURRENT_LOCALE);
+		$character_account_id = GetCharacterAccountId($id, CURRENT_LOCALE);
+		
+		echo $name;
+		echo $character_account_id;
+		
+		$cerror = '';
+		
+		if($_loginaccount->GetID() !== $character_account_id) {
+			DisplayError(6);
+			$cerror = 'nope';
+		}
+		
+		echo $cerror;
+
+		if ($id != NULL && $cerror = NULL) {
+			
+Logging('characterdeletion', $name, $_loginaccount->GetID(), NULL);
+?>
+<p class="alert-info alert fademeout">Successfully requested deletion of <?php echo $name; ?>.<p>
+<?php
+		}
+	}
+}
+
 $i = 0;
 $chars_per_row = 3;
 foreach ($cache as $row) {
@@ -135,10 +170,9 @@ foreach ($cache as $row) {
 <?php
 	}
 ?>
-
 <script>
 $(function ()
-{ $("#<?php echo $row['name']; ?>").popover({title: 'Additional Options', content: "<a href='#' class='btn btn-danger btn-block'>Delete Character</a>", html: 'true', placement: 'bottom'});
+{ $("#<?php echo $row['name']; ?>").popover({title: 'Additional Options', content: "<a class='btn btn-danger btn-block' onclick='DeleteCharacter(<?php echo $row['internal_id']; ?>)'>Delete Character</a>", html: 'true', placement: 'bottom'});
 });
 </script>
 

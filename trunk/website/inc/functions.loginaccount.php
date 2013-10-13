@@ -15,6 +15,31 @@ function IsOwnAccount() {
 	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
 
+function IsOwnCharacter($charname) {
+	global $_loginaccount, $_char_db;
+	
+	$q = $_char_db->query("
+SELECT
+	c.internal_id
+FROM
+	characters c
+LEFT JOIN
+	users u
+	ON
+		u.id = c.userid
+WHERE
+	c.name = '".$_char_db->real_escape_string($charname)."'
+	AND
+	u.account_id = ".$_char_db->GetID());
+	
+	if ($q->num_rows > 0) {
+		$row = $q->fetch_row();
+		$q->free();
+		return $row[0];
+	}
+	return false;
+}
+
 
 if (strpos($_SERVER['REQUEST_URI'], '/logoff') === FALSE && GetMaplerCookie('login_session') !== null) {
 	$code = $__database->real_escape_string(GetMaplerCookie('login_session'));

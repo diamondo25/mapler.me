@@ -10,32 +10,6 @@ require_once __DIR__.'/../../inc/job_list.php';
 CheckSupportedTypes('visibility', 'statistics');
 $_char_db = ConnectCharacterDatabase(CURRENT_LOCALE);
 
-function IsOwnCharacter($charname) {
-	global $_loginaccount, $_char_db;
-	
-	$q = $_char_db->query("
-SELECT
-	c.internal_id
-FROM
-	characters c
-LEFT JOIN
-	users u
-	ON
-		u.id = c.userid
-WHERE
-	c.name = '".$_char_db->real_escape_string($charname)."'
-	AND
-	u.account_id = ".$_char_db->GetID());
-	
-	if ($q->num_rows > 0) {
-		$row = $q->fetch_row();
-		$q->free();
-		return $row[0];
-	}
-	return false;
-}
-
-
 if ($request_type == 'visibility') {
 	if (!$_loggedin) JSONDie('Not loggedin');
 	RetrieveInputGET('name', 'what', 'shown');

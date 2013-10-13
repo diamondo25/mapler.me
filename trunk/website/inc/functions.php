@@ -403,7 +403,7 @@ function GetAccountID($name) {
 
 function Logging($type, $person, $action, $extra) {
     global $__database;
-	
+    	
 	if ($type == 'admin') {
         $statement = $__database->prepare('INSERT INTO admin_log (id, username, action, extra_info, at) VALUES (NULL,?,?,?,NOW())');
         
@@ -411,6 +411,16 @@ function Logging($type, $person, $action, $extra) {
         
         $statement->execute();
 	}
+	
+	if ($type == 'characterdeletion') {
+		$db = ConnectCharacterDatabase(CURRENT_LOCALE);
+        $statement = $db->prepare('INSERT INTO character_delete_queue (id, name, requested_by, requested_at) VALUES (NULL,?,?,NOW())');
+        
+        $statement->bind_param('ss', $person, $action);
+        
+        $statement->execute();
+	}
+	
 }
 
 // only notifications will be friend requests for now.
@@ -791,6 +801,10 @@ function DisplayError($type) {
     elseif ($type == '5' || $type == 'banned') {
         //Banned (not IP Banned)
         echo '<p class="lead alert alert-danger"><i class="icon-exclamation-sign"></i> You are currently restricted from using Mapler.me. <a href="http://mapler.me/support/">Request support?</a></p>';
+    }
+    elseif ($type == '6' || $type == 'notpermissionaction') {
+        //Banned (not IP Banned)
+        echo '<p class="lead alert alert-danger"><i class="icon-exclamation-sign"></i> You do not have permission to complete that action.</p>';
     }
 }
 
