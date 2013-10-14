@@ -154,6 +154,7 @@ function IGTextToWeb($data, $extraOptions = array()) {
 	$endTag = '';
 	$result = '';
 	$datalen = strlen($data);
+	$end = false;
 	for ($i = 0; $i < $datalen; $i++) {
 		$end = ($i + 1 == $datalen);
 		$c = $data[$i];
@@ -239,16 +240,8 @@ function IGTextToWeb($data, $extraOptions = array()) {
 		}
 	}
 	
-	if(isset($end)) {
-		if ($end && $endTag != '') {
-			$result .= $endTag;
-		}
-	}
-	
-	else {
-		if ($endTag != '') {
-			$result .= $endTag;
-		}
+	if ($end && $endTag != '') {
+		$result .= $endTag;
 	}
 
 	return $result;
@@ -256,11 +249,11 @@ function IGTextToWeb($data, $extraOptions = array()) {
 
 function GetInventoryName($id) {
 	switch ($id) {
-		case 0: return "Equipment";
-		case 1: return "Usage";
-		case 2: return "Set-Up";
-		case 3: return "Etc";
-		case 4: return "Cash";
+		case 0: return 'Equipment';
+		case 1: return 'Usage';
+		case 2: return 'Set-Up';
+		case 3: return 'Etc';
+		case 4: return 'Cash';
 	}
 }
 

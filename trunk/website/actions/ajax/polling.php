@@ -235,7 +235,7 @@ LIMIT
 	15
 ";
 
-		foreach (array('gms', 'ems') as $locale) {
+		foreach ($_supported_locales as $locale) {
 			$_db = ConnectCharacterDatabase($locale);
 			$q = $_db->query($query);
 			

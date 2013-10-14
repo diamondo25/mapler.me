@@ -221,6 +221,7 @@ function SetItemInfo(event, obj, values) {
 		
 		if ((state & 0x07) != 0) {
 			var itemstatename = '';
+			var border = 0;
 			switch (state & 0x07) {
 				case 1: itemstatename = 'Rare'; break;
 				case 2: itemstatename = 'Epic'; break;
@@ -228,7 +229,10 @@ function SetItemInfo(event, obj, values) {
 				case 4: itemstatename = 'Legendary'; break;
 			}
 			extrainfo += '<span style="color: white">(' + itemstatename + ' Item)</span>';
-			
+			$('.icon_holder > div.quality-border').attr('quality', (state & 0x07) + 1);
+		}
+		else {
+			$('.icon_holder > div.quality-border').attr('quality', haspotential ? 1 : 0);
 		}
 		if (item.max_scissors == 0) {
 			
@@ -279,9 +283,17 @@ function SetItemInfo(event, obj, values) {
 	//description += '<span>ITEMID ' + itemid + '</span>';
 	//description += '<span>Type ' + GetItemCategory(itemid) + '</span>';
 
+	var ownerName = null;
 	if (item.name != '' && item.name != undefined) {
 		if (item.moreflags != undefined && item.moreflags.indexOf('crafted') != -1)
 			description += '<span style="color: limegreen;">- Crafted by: ' + item.name + '</span>';
+		else
+			ownerName = item.name;
+	}
+	$('#item_info center.item-nametag').css('display', ownerName === null ? 'none' : '');
+	if (ownerName !== null) {
+		$('#item_info center.item-nametag').html(ownerName + '<span>\'s</span>');
+		
 	}
 
 	GetObj('item_info_extra').innerHTML = extrainfo;
@@ -326,7 +338,16 @@ function SetItemInfo(event, obj, values) {
 		}
 	};
 	
+	$('.icon_holder > div.item-state').css('display', isequip ? '' : 'none');
+	
 	if (isequip) {
+		for (var i = 1; i <= 3; i++) {
+			$('#item_info .nebulite[index="' + i + '"]').attr('state', $(obj).find('.nebulite[index="' + i + '"]').attr('state'));
+		}
+		$('.icon_holder > div.cashitem').css('display', $(obj).find('.cashitem').length > 0 ? '' : 'none');
+		$('.icon_holder > div.locked').css('display', $(obj).find('.locked').length > 0 ? '' : 'none');
+		$('.icon_holder > div.lucky').css('display', $(obj).find('.lucky').length > 0 ? '' : 'none');
+	
 		if ((item.statusflag & 0x0020) != 0) { // Note that this is the correct code. lol
 			var row = GetObj('bonus_potentials').insertRow(-1);
 			row.innerHTML = '<tr> <td width="150px" style="color: orange;">Hidden(?) Bonus Potential.</td> </tr>';
@@ -334,29 +355,39 @@ function SetItemInfo(event, obj, values) {
 		}
 		
 		// GMS has only 1 neb, but can hold 3 lol.
-		if ((item.statusflag & 0x0002) == 0x0002 || (item.statusflag & 0x0004) == 0x0004 || (item.statusflag & 0x0008) == 0x0008) { // Neb slot 1,2 or 3 open
-			GetObj('nebulite_info').innerHTML = '<span style="color: blue">You can mount a nebulite on this item</span>';
-			hasnebulite = true;
-		}
-		if ((item.statusflag & 0x0010) != 0 && item.nebulite1 > 0) {
+		if ((item.socketstate & 0x0010) != 0 && item.nebulite1 > 0) {
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite1);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
-			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			GetObj('nebulite_info').innerHTML += '<span style="color: #77FF00">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
 			hasnebulite = true;
 		}
-		if ((item.statusflag & 0x0020) != 0 && item.nebulite2 > 0) {
+		if ((item.socketstate & 0x0020) != 0 && item.nebulite2 > 0) {
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite2);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
-			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			GetObj('nebulite_info').innerHTML += '<span style="color: #77FF00">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
 			hasnebulite = true;
 		}
-		if ((item.statusflag & 0x0040) != 0 && item.nebulite3 > 0) {
+		if ((item.socketstate & 0x0040) != 0 && item.nebulite3 > 0) {
 			var nebuliteinfo = RequestItemInfo('nebuliteinfo', item.nebulite3);
 		
 			var text = ReplaceIGNText(nebuliteinfo.description, nebuliteinfo.info);
-			GetObj('nebulite_info').innerHTML += '<span style="color: green">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			GetObj('nebulite_info').innerHTML += '<span style="color: #77FF00">[' + GetNebuliteType(item.nebulite1) + '] ' + text + '</span>';
+			hasnebulite = true;
+		}
+		
+		// If no nebs have been registered AND 'can mount nebulite' AND one of the slots is open
+		if (!hasnebulite && (item.socketstate & 0x0001) == 0x0001 && ((item.socketstate & 0x0002) == 0x0002 || (item.socketstate & 0x0004) == 0x0004 || (item.socketstate & 0x0008) == 0x0008)) { // Neb slot 1,2 or 3 open
+			GetObj('nebulite_info').innerHTML = '<span style="color: #77FF00">You can mount a nebulite on this item</span>';
+			hasnebulite = true;
+		}
+		
+		
+		if (item.display_id > 0) { // Is anvilled
+			// As nebulite info
+			var originalItemName = RequestItemInfo('name', otherinfo.anvil_id);
+			GetObj('nebulite_info').innerHTML += '<span style="color: #77FF00; font-size: 12px;">Your [' + originalItemName + '] was fused.</span>';
 			hasnebulite = true;
 		}
 
@@ -378,7 +409,7 @@ function SetItemInfo(event, obj, values) {
 			var text = ReplaceIGNText(potentialinfo.name, leveldata);
 
 			var row = GetObj(isbonus ? 'bonus_potentials' : 'potentials').insertRow(-1);
-			row.innerHTML = '<tr> <td>' + text + '</td> </tr>';
+			row.innerHTML = '<tr> <td>' + (isbonus ? ' + ' : '') + text + '</td> </tr>';
 		}
 	}
 
@@ -393,7 +424,7 @@ function SetItemInfo(event, obj, values) {
 	var starstext = '';
 	var i = 0;
 	for (; i < stars; i++)
-		starstext += (i % 5 == 0 && i != 0 ? '&nbsp;' : '') + '<img src="/inc/img/ui/Item/Equip/Star/Star.png" />';
+		starstext += (i % 5 == 0 && i != 0 ? '&nbsp;' : '') + '<div class="star"></div>';
 	
 	GetObj('item_info_stars').innerHTML = starstext;
 
@@ -420,8 +451,9 @@ function RequestItemInfo(what, id) {
 			async: false
 		}).responseText
 	);
-	if (ret.result != undefined)
+	if (ret.result != undefined) {
 		ret = ret.result;
+	}
 	else
 		ret = '';
 	window.request_cache[what][id] = ret;
@@ -437,6 +469,11 @@ function GetMaxPotentialLevel(potentialLevels) {
 }
 
 function ReplaceIGNText(input, strings) {
+	input = input.replace(/&/g, "&amp;")
+			.replace(/</g, "&lt;")
+			.replace(/>/g, "&gt;")
+			.replace(/"/g, "&quot;")
+			.replace(/'/g, "&#039;");
 	for (var str in strings) {
 		input = input.replace('#' + str, strings[str]);
 	}

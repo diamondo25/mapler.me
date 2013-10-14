@@ -14,7 +14,7 @@ if ($request_type == 'visibility') {
 	if (!$_loggedin) JSONDie('Not loggedin');
 	RetrieveInputGET('name', 'what', 'shown');
 	
-	$internalid = IsOwnCharacter($P['name']);
+	$internalid = IsOwnCharacter($P['name'], CURRENT_LOCALE);
 	if ($internalid === false) JSONDie('No.');
 	
 	$q = $_char_db->query("
@@ -79,7 +79,7 @@ WHERE
 	$job = GetJobname($row['job']);
 	$map = GetMapname($row['map'], CURRENT_LOCALE);
 	
-	$extra = array('percentage' => "$percentb", 'job_name' => "$job", 'map_name' => "$map");
+	$extra = array('percentage' => $percentb, 'job_name' => $job, 'map_name' => $map);
 	
 	$answer = $row + $extra;
 	

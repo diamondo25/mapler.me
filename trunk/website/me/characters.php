@@ -29,7 +29,7 @@ ORDER BY
 
 $cache = array();
 
-foreach (array('gms', 'ems') as $locale) {
+foreach ($_supported_locales as $locale) {
 	$db = ConnectCharacterDatabase($locale);
 	
 	$q = $db->query(str_replace('{LOCALE}', $locale, $query));

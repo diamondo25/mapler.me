@@ -333,10 +333,10 @@ namespace SimpleMapleServer
                     packet.WriteBool(false); // Item decode if true
 
                     {
-                        packet.WriteInt(0);
-                        packet.WriteInt(0);
-                        packet.WriteInt(0);
-                        packet.WriteByte(0);
+                        packet.WriteInt(1680023);
+                        packet.WriteInt(1680024);
+                        packet.WriteInt(1680025);
+                        packet.WriteByte(1);
                     }
 
                     {

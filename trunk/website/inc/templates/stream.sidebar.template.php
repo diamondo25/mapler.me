@@ -104,7 +104,7 @@ WHERE
 GROUP BY
 	c.internal_id
 ";
-	foreach (array('gms', 'ems') as $locale) {
+	foreach ($_supported_locales as $locale) {
 		$db = ConnectCharacterDatabase($locale);
 		$q = $db->query($query);
 		while ($row = $q->fetch_row()) {

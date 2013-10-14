@@ -464,6 +464,7 @@ function GetItemDialogInfo($item, $isequip) {
 		'quality' => $quality
 	);
 	$info_array['other_info']['locked'] = ($isequip ? $item->HasLock() : 0);
+	$info_array['other_info']['luckyscrolled'] = ($isequip ? $item->IsLuckyScrolled() : 0);
 	$info_array['other_info']['spiked'] = ($isequip ? $item->HasSpikes() : 0);
 	$info_array['other_info']['coldprotection'] = ($isequip ? $item->HasColdProtection() : 0);
 	$info_array['other_info']['questitem'] = (int)ValueOrDefault($stats['quest'], 0);
@@ -483,24 +484,40 @@ function GetItemDialogInfo($item, $isequip) {
 			$potential = 1; // Default color
 		}
 		else {
-			if ($item->potential1 != 0 || $item->potential4 != 0) $potential++;
+			//if ($item->potential1 != 0 || $item->potential4 != 0) $potential++;
 			//if ($item->potential2 != 0) $potential++;
 			//if ($item->potential3 != 0) $potential++;
 			//if ($item->potential4 != 0) $potential++;
 			//if ($item->potential5 != 0) $potential++;
 			//if ($item->potential6 != 0) $potential++;
+			
+			$statustmp = $item->statusflag & 0xFF;
+			$potential = $statustmp & 0x07;
 		}
 	}
 	
-	$arguments_temp = 'SetItemInfo(event, this, '.json_encode($info_array).')';
 	$iconid = $item->itemid;
 	if ($isequip && $item->display_id != 0) {
 		$iconid -= $iconid % 10000;
 		$iconid += $item->display_id;
+		$info_array['other_info']['anvil_id'] = $iconid;
+	}
+	else {
+		$info_array['other_info']['anvil_id'] = -1;
 	}
 	
+	$arguments_temp = 'SetItemInfo(event, this, '.json_encode($info_array).')';
+	
 
-	return array('mouseover' => $arguments_temp, 'potentials' => $potential, 'iconid' => $iconid, 'iscash' => $iscash, 'islocked' => $info_array['other_info']['locked']);
+	return array(
+		'mouseover' => $arguments_temp, 
+		'potentials' => $potential, 
+		'iconid' => $iconid, 
+		'iscash' => $iscash, 
+		'islocked' => $info_array['other_info']['locked'], 
+		'isluckyscrolled' => $info_array['other_info']['luckyscrolled'], 
+		'info' => $info_array
+		);
 }
 
 
@@ -674,7 +691,7 @@ function AddInventoryItems(&$inventory) {
 <?php
 		}
 ?>
-				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
+				<img class="item-icon slot<?php echo $slot; ?>" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name', CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()" />
 <?php
 	}
 }
@@ -684,48 +701,6 @@ function AddInventoryItems(&$inventory) {
 <!-- New inventories -->
 <style type="text/css">
 
-.item-slot {
-	z-index: inherit !important;
-	overflow: visible;
-	position: absolute;
-	width: 32px;
-	height: 32px;
-}
-
-.item-slot > .icon {
-	max-width: inherit;
-}
-
-.item-slot > .amount {
-	bottom: -3px;
-	color: white;
-	position: absolute;
-	left: 1px;
-	z-index: 3;
-	font-family: Arial;
-	font-size: 12px;
-	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-}
-
-.item-slot > .cashitem {
-	background: url('/inc/img/ui/Item/Equip/cash.png') no-repeat;
-	width: 13px;
-	height: 13px;
-	position: absolute;
-	bottom: 1px;
-	right: 0;
-	z-index: 3;
-}
-
-.item-slot > .locked {
-	background: url('/inc/img/ui/Item/Equip/lock.png') no-repeat;
-	width: 13px;
-	height: 14px;
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 3;
-}
 
 .new-inventory-container {
 	background: url('/inc/img/ui/new_inventory/background.png') no-repeat;
@@ -1058,18 +1033,52 @@ function RenderItems(&$itemset, $slotmap_name) {
 		
 		$itemwzinfo = GetItemWZInfo($info['iconid'], CURRENT_LOCALE);
 ?>
-			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
-				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($item->itemid, CURRENT_LOCALE); ?>" />
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name', CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE); ?>" />
 
-<?php if ($info['iscash'] == 1): ?>
-				<div class="cashitem"></div>
-<?php endif; ?>
-<?php if ($info['islocked'] == 1): ?>
-				<div class="locked"></div>
-<?php endif; ?>
+<?php if ($info['iscash'] == 1): ?><div class="cashitem"></div><?php endif; ?>
+<?php if ($info['islocked'] == 1): ?><div class="locked"></div><?php endif; ?>
+<?php if ($info['isluckyscrolled'] == 1): ?><div class="lucky"></div><?php endif; ?>
+<?php AddNebulite($info, 1); ?>
+<?php AddNebulite($info, 2); ?>
+<?php AddNebulite($info, 3); ?>
 			</div>
 <?php
 	}
+}
+
+function GetNebuliteType($id) {
+	$id = floor($id / 1000);
+	switch ($id) {
+		case 0: return 'd';
+		case 1: return 'c';
+		case 2: return 'b';
+		case 3: return 'a';
+		case 4: return 's';
+		default: return '?';
+	}
+}
+
+function AddNebulite($item, $index) {
+	$iteminfo = $item['info']['iteminfo'];
+	if (!($iteminfo instanceof ItemEquip)) return;
+	$state = 'closed';
+	$flag = 0x00;
+	if (($iteminfo->socketstate & 0x0001) != 0) {
+		if ($index == 1) $flag = 0x0002;
+		elseif ($index == 2) $flag = 0x0004;
+		elseif ($index == 3) $flag = 0x0008;
+		
+		if (($iteminfo->socketstate & $flag) != 0) {
+			$state = 'open';
+			if ($index == 1 && $iteminfo->nebulite1 > 0) $state = GetNebuliteType($iteminfo->nebulite1);
+			elseif ($index == 2 && $iteminfo->nebulite2 > 0) $state = GetNebuliteType($iteminfo->nebulite2);
+			elseif ($index == 3 && $iteminfo->nebulite3 > 0) $state = GetNebuliteType($iteminfo->nebulite3);
+		}
+	}
+?>
+				<div class="nebulite" index="<?php echo $index; ?>" state="<?php echo $state; ?>"></div>
+<?php
 }
 
 function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) {
@@ -1091,22 +1100,22 @@ function RenderItemsTable(&$itemset, $slots, $items_per_row, $max_slots = null) 
 			$itemIcon = '';
 			if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
 			
-			$display_id = GetItemIconID($item->itemid, CURRENT_LOCALE); // For nebulites
+			$display_id = GetItemIconID($info['iconid'], CURRENT_LOCALE); // For nebulites
 
 			$itemwzinfo = GetItemWZInfo($display_id, CURRENT_LOCALE);
 ?>
-			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString("item", $item->itemid, "name", CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
+			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($row, $col); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name', CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
 			
 				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($display_id, CURRENT_LOCALE, $itemIcon); ?>" />
 <?php if (!$isequip): ?>
 				<span class="amount"><?php echo $item->amount; ?></span>
 <?php endif; ?>
-<?php if ($info['iscash'] == 1): ?>
-				<div class="cashitem"></div>
-<?php endif; ?>
-<?php if ($info['islocked'] == 1): ?>
-				<div class="locked"></div>
-<?php endif; ?>
+<?php if ($info['iscash'] == 1): ?><div class="cashitem"></div><?php endif; ?>
+<?php if ($info['islocked'] == 1): ?><div class="locked"></div><?php endif; ?>
+<?php if ($info['isluckyscrolled'] == 1): ?><div class="lucky"></div><?php endif; ?>
+<?php AddNebulite($info, 1); ?>
+<?php AddNebulite($info, 2); ?>
+<?php AddNebulite($info, 3); ?>
 			</div>
 <?php
 		}
@@ -1125,7 +1134,7 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 	$itemIcon = '';
 	if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
 	
-	$display_id = GetItemIconID($item->itemid, CURRENT_LOCALE); // For nebulites
+	$display_id = GetItemIconID($info['iconid'], CURRENT_LOCALE); // For nebulites
 
 	$itemwzinfo = GetItemWZInfo($display_id, CURRENT_LOCALE);
 	$uid = substr(uniqid(), -5);
@@ -1135,12 +1144,12 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 <?php if (!$isequip && $amount): ?>
 				<span class="amount"><?php echo $item->amount; ?></span>
 <?php endif; ?>
-<?php if ($info['iscash'] == 1): ?>
-				<div class="cashitem"></div>
-<?php endif; ?>
-<?php if ($info['islocked'] == 1): ?>
-				<div class="locked"></div>
-<?php endif; ?>
+<?php if ($info['iscash'] == 1): ?><div class="cashitem"></div><?php endif; ?>
+<?php if ($info['islocked'] == 1): ?><div class="locked"></div><?php endif; ?>
+<?php if ($info['isluckyscrolled'] == 1): ?><div class="lucky"></div><?php endif; ?>
+<?php AddNebulite($info, 1); ?>
+<?php AddNebulite($info, 2); ?>
+<?php AddNebulite($info, 3); ?>
 			</div>
 <?php
 }
@@ -1591,6 +1600,7 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 	<div class="top"></div>
 	
 	<center id="item_info_stars"></center>
+	<center class="item-nametag"></center>
 	<div id="item_info_title"></div>
 	
 	<div id="item_info_extra"></div>
@@ -1598,7 +1608,16 @@ var nebuliteInfo = <?php echo json_encode($NebuliteList); ?>;
 	<div class="dotline"></div>
 	
 	<div class="icon_holder">
+		<div class="quality-border" quality="5"></div>
 		<img id="item_info_icon" src="" title="" />
+		
+		<div class="item-state nebulite" index="1" state="closed"></div>
+		<div class="item-state nebulite" index="2" state="closed"></div>
+		<div class="item-state nebulite" index="3" state="closed"></div>
+		<div class="item-state locked"></div>
+		<div class="item-state cashitem"></div>
+		<div class="item-state lucky"></div>
+		
 		<div class="cover"></div>
 	</div>
 	
@@ -1665,14 +1684,14 @@ foreach ($optionlist as $option => $desc) {
 		<table border="0" tablepadding="3" tablespacing="3" id="potentials">
 		</table>
 	</div>
-	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
-		<div class="dotline"></div>
-		<span id="nebulite_info"></span>
-	</div>
 	<div class="item_potential_stats" id="item_info_bonus_potentials">
 		<div class="dotline"></div>
 		<table border="0" tablepadding="3" tablespacing="3" id="bonus_potentials">
 		</table>
+	</div>
+	<div class="item_potential_stats" id="item_nebulite_info_block" style="display: none;">
+		<div class="dotline"></div>
+		<span id="nebulite_info"></span>
 	</div>
 	<div id="extra_item_info"></div>
 	<div class="bottom"></div>

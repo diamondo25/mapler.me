@@ -15,8 +15,10 @@ function IsOwnAccount() {
 	return (IsLoggedin() && (strtolower($subdomain) == strtolower($_loginaccount->GetUsername()) || $_loginaccount->GetAccountRank() >= RANK_MODERATOR));
 }
 
-function IsOwnCharacter($charname) {
-	global $_loginaccount, $_char_db;
+function IsOwnCharacter($charname, $locale) {
+	global $_loginaccount;
+	
+	$_char_db = ConnectCharacterDatabase($locale);
 	
 	$q = $_char_db->query("
 SELECT

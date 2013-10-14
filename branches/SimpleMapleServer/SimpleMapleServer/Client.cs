@@ -45,18 +45,93 @@ namespace SimpleMapleServer
                 // Version? > lets get rollin
                 ServerPackets.EnterMapPacket(this, true, 180000000);
 
-                ServerPackets.SendTestItem(this, 1003142, 1);
-                ServerPackets.SendTestItem(this, 1102275, 2);
+                short slot = 1;
 
-                ItemEquip equip = new ItemEquip(1102275)
+                foreach (var kvp in Program.ITEMS)
+                    ServerPackets.SendTestItem(this, kvp.Value, kvp.Key);
+
+                /*
+
+                ServerPackets.SendTestItem(this, 1003142, slot++);
+                ServerPackets.SendTestItem(this, 1102275, slot++);
+
+                ItemEquip equip = new ItemEquip(1222009)
                 {
                     BattleModeDamage = 20,
                     BossDamageRate = 30,
-                    Durability = 40,
+                    Durability = 500000,
                     IgnoreDamageRate = 50,
-                    IncreasesSkills = 60,
                 };
-                ServerPackets.SendTestItem(this, equip, 3);
+                ServerPackets.SendTestItem(this, equip, slot++);
+
+                equip = new ItemEquip(1003142)
+                {
+                    AllStatsPercentage = 11,
+                    TotalDamagePercentage = 22,
+                    IncreasesSkills = 33
+                };
+
+                ushort statusflag = 0;
+                statusflag |= 0x0020;
+                //statusflag |= 0x2000;
+
+                equip.StatusFlags = statusflag;
+
+                ServerPackets.SendTestItem(this, equip, slot++);
+
+
+                equip = new ItemEquip(1003142)
+                {
+                    Durability = 100,
+                };
+                ServerPackets.SendTestItem(this, equip, slot++);
+
+
+
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0001 }, slot++); // Potential?
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0002 }, slot++); // Potential?
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0004 }, slot++); // Potential?
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0008 }, slot++); // Potential?
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0010 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0020 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0040 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113015) { StatusFlags = 0x0080 }, slot++);
+
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x0001 }, slot++); 
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x0002 }, slot++); 
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x0004 }, slot++); 
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x0008 }, slot++); 
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x001F }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x002F }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x004F }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113016) { SocketState = 0x008F }, slot++);
+
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x0100 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x0200 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x0400 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x0800 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x1000 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x2000 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x4000 }, slot++);
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017) { SocketState = 0x8000 }, slot++);
+
+                ServerPackets.SendTestItem(this, new ItemEquip(1113017)
+                {
+                    StatusFlags = 0x0714,
+                    Potential1 = 40356,
+                    Potential2 = 30041,
+                    Potential3 = 30044,
+                    Potential4 = 12011,
+                    Potential5 = 2014,
+                    Potential6 = 2014,
+                    SocketState = 0x00FF,
+                    Nebulite2 = 1001,
+                    Nebulite1 = 2001,
+                    Nebulite3 = 3400,
+
+                }, slot++);
+                */
+
             }
             else if (header == 0x0030)
             {

@@ -281,7 +281,8 @@ hr {
 
 #item_info .icon_holder {
 	margin: 0 auto;
-	background: url('http://mapler.me/inc/img/ui/Item/ItemIcon/base.png');
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: 0px -223px;
 	width: 82px;
 	height: 82px;
 	margin-right: 5px;
@@ -291,22 +292,20 @@ hr {
 	position: relative;
 }
 
-#item_info .icon_holder > .potential1 {
-	
-}
-
 #item_info .icon_holder > .cover {
-	background: url('http://mapler.me/inc/img/ui/Item/ItemIcon/cover.png') center center;
-	background-repeat: no-repeat;
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: -83px -223px;
 	position: absolute;
-	left: 0;
-	top: 0;
+	left: 5px;
+	top: 5px;
 	width: 82px;
 	height: 82px;
+	z-index: 5;
 }
 
 #item_info_icon {
-	padding:5px;
+	padding: 5px;
+	z-index: 2;
 }
 
 #item_info .item_stats, #item_info .item_potential_stats {
@@ -331,13 +330,27 @@ hr {
 	line-height: 10px;
 }
 
+#item_info #nebulite_info > span {
+	display: block;
+}
+
+#item_info .item-nametag {
+	color: #FFB400;
+}
+
+#item_info .item-nametag > span {
+	color: white;
+}
+
 #item_info #bonus_potentials {
 	color: white;
+	width: 260px;
 }
 
 #item_info #potentials {
 	color: white;
 	font-size: 11px;
+	width: 260px;
 }
 
 #item_info .req_job {
@@ -348,6 +361,32 @@ hr {
 	position: absolute;
 	margin: 0 auto;
 }
+
+#item_info #item_info_stars > .star {
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: -35px -21px;
+	display: inline-block;
+	width: 11px;
+	height: 10px;
+}
+
+.icon_holder > .quality-border {
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	width: 90px;
+	height: 80px;
+	display: block;
+	position: absolute;
+	left: 2px;
+	top: 2px;
+	z-index: 1;
+}
+
+.icon_holder > .quality-border[quality="0"] { background: none !important; }
+.icon_holder > .quality-border[quality="1"] { background-position: 0px -63px; }
+.icon_holder > .quality-border[quality="2"] { background-position: -90px -63px; }
+.icon_holder > .quality-border[quality="3"] { background-position: -180px -63px; }
+.icon_holder > .quality-border[quality="4"] { background-position: 0px -143px; }
+.icon_holder > .quality-border[quality="5"] { background-position: -90px -143px; }
 
 #item_info .req_job[job="0"] { top: 7px; left: 11px; }
 #item_info .req_job[job="1"] { top: 7px; left: 52px; }
@@ -463,6 +502,31 @@ hr {
 #item_info div.digit[nr="+"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/+.png'); }
 #item_info div.digit[nr="-"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/-.png'); }
 #item_info div.digit[nr="%"][disabled] { background-image: url('/inc/img/ui/Item/Equip/Disabled/%.png'); }
+
+div.nebulite { position: absolute; left: 2px; z-index: 3; width: 14px; height: 14px; }
+div.nebulite[state] { background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat; }
+div.nebulite[state="closed"] { background-image: none !important; }
+div.nebulite[index="1"] { top: 1px; }
+#item_info div.nebulite { left: 6px; }
+#item_info div.nebulite[index="1"] { top: 6px; }
+#item_info div.nebulite[index="2"] { top: 21px; }
+#item_info div.nebulite[index="3"] { top: 36px; }
+#item_info div.nebulite[state="open"] { background-position: 0px 0px; }
+#item_info div.nebulite[state="d"] { background-position: -14px 0px; }
+#item_info div.nebulite[state="c"] { background-position: -28px 0px; }
+#item_info div.nebulite[state="b"] { background-position: -42px 0px; }
+#item_info div.nebulite[state="a"] { background-position: -56px 0px; }
+#item_info div.nebulite[state="s"] { background-position: -70px 0px; }
+
+.item-slot div.nebulite { width: 7px; height: 7px; }
+.item-slot div.nebulite[index="2"] { top: 9px; }
+.item-slot div.nebulite[index="3"] { top: 20px; }
+.item-slot div.nebulite[state="open"] { background-position: 0px -14px; }
+.item-slot div.nebulite[state="d"] { background-position: -7px -14px; }
+.item-slot div.nebulite[state="c"] { background-position: -14px -14px; }
+.item-slot div.nebulite[state="b"] { background-position: -21px -14px; }
+.item-slot div.nebulite[state="a"] { background-position: -28px -14px; }
+.item-slot div.nebulite[state="s"] { background-position: -35px -14px; }
 
 #item_info #req_job_list {
 	clear: both;
@@ -607,3 +671,73 @@ hr {
 .fb_iframe_widget span {
 	vertical-align: inherit !important;
 }
+
+
+
+/* ***************************** Item slots ***************************** */
+
+.item-slot {
+	z-index: inherit !important;
+	overflow: visible;
+	position: absolute;
+	width: 32px;
+	height: 32px;
+}
+
+.item-slot > .icon {
+	max-width: inherit;
+}
+
+.item-slot > .amount {
+	bottom: -3px;
+	color: white;
+	position: absolute;
+	left: 1px;
+	z-index: 3;
+	font-family: Arial;
+	font-size: 12px;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.item-slot > .cashitem {
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: 0px -21px;
+	width: 13px;
+	height: 13px;
+	position: absolute;
+	bottom: 1px;
+	right: 0;
+	z-index: 3;
+}
+
+.item-slot > .locked {
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: -13px -21px;
+	width: 13px;
+	height: 14px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 3;
+}
+
+.item-slot > .lucky {
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+	background-position: -26px -21px;
+	width: 9px;
+	height: 9px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 3;
+}
+
+.icon_holder > div.item-state {
+	position: absolute;
+	z-index: 3; 
+	background: url('/inc/img/ui/Item/Equip/item_image_map.png') no-repeat;
+}
+
+.icon_holder > div.cashitem { background-position: 0px -35px; width: 26px; height: 26px; right: 5px; bottom: 5px; }
+.icon_holder > div.locked { background-position: -26px -35px; width: 26px; height: 28px; right: 5px; bottom: 5px; }
+.icon_holder > div.lucky { background-position: -52px -35px; width: 18px; height: 18px; left: 5px; bottom: 5px; }

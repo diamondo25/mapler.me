@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/database.php';
+require_once __DIR__.'/../functions.php';
 
 define("ITEM_RECHARGE", 1);
 define("ITEM_EQUIP", 2);
@@ -205,27 +206,31 @@ class ItemEquip extends ItemBase {
 	}
 
 	public function HasLock() {
-		return ($this->flags & 0x01) != 0 ? 1 : 0;
+		return ($this->flags & 0x0001) > 0 ? 1 : 0;
 	}
 
 	public function HasSpikes() {
-		return ($this->flags & 0x02) != 0 ? 1 : 0;
+		return ($this->flags & 0x0002) > 0 ? 1 : 0;
 	}
 
 	public function HasColdProtection() {
-		return ($this->flags & 0x04) != 0 ? 1 : 0;
+		return ($this->flags & 0x0004) > 0 ? 1 : 0;
 	}
 
 	public function TradeBlocked() {
-		return ($this->flags & 0x08) != 0 ? 1 : 0;
+		return ($this->flags & 0x0008) > 0 ? 1 : 0;
 	}
 
 	public function IsKarmad() {
-		return ($this->flags & 0x10) != 0 ? 1 : 0;
+		return ($this->flags & 0x0010) > 0 ? 1 : 0;
+	}
+
+	public function IsLuckyScrolled() {
+		return ($this->flags & 0x0200) > 0 ? 1 : 0;
 	}
 
 	public function HasClosedPotential() {
-		return ($this->statusflag & 0x0001) != 0 ? 1 : 0;
+		return ($this->statusflag & 0x0001) > 0 ? 1 : 0;
 	}
 }
 
