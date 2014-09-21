@@ -704,9 +704,10 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 	global $domain, $subdomain;
 	$size = isset($options['size']) ? $options['size'] : 'small';
 	$styleappend = isset($options['styleappend']) ? $options['styleappend'] : '';
-	$face = isset($options['face']) ? $options['face'] : '';
+	$face = !empty($options['face']) ? '&face='.$options['face'] : '';
 	$type = isset($options['ign']) && $options['ign'] == true ? 'ignavatar' : 'avatar';
 	$flip = isset($options['flip']) && $options['flip'] == true;
+	$tamingmob = isset($options['tamingmob']) ? '&tamingmob='.$options['tamingmob'] : '';
 	
 	$notfound = $name === null || $name == '';
 	$image = '//mapler.me/inc/img/no-character.gif';
@@ -714,7 +715,7 @@ function MakePlayerAvatar($name, $locale, $options = array()) {
 	
 	if (!$notfound) {
 		$y_offset = '-2px';
-		$image = '//'.$locale.'.mapler.me/'.$type.'/'.$name.'?size='.$size.'&face='.$face.($flip ? '&flip' : '');
+		$image = '//'.$locale.'.mapler.me/'.$type.'/'.$name.'?size='.$size.$face.($flip ? '&flip' : '').$tamingmob;
 	}
 	
 	if (isset($options['onlyurl'])) {

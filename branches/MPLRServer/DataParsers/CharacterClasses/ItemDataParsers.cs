@@ -163,20 +163,20 @@ namespace MPLRServer
 
                     this.BattleModeDamage = FlaggedValue(pConnection, this.ItemID, flag, 0x800000, pPacket, this.BattleModeDamage);
 
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x1000000, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x2000000, pPacket, (short)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x1000000, pPacket, (byte)0, true); // Item level changer?
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x2000000, pPacket, (short)0, true); // Enhancement buff?
                     FlaggedValue(pConnection, this.ItemID, flag, 0x4000000, pPacket, (int)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x8000000, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x10000000, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x20000000, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x40000000, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x80000000, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x8000000, pPacket, (byte)0, true); // Required level changer?!
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x10000000, pPacket, (byte)0, true); // Yggdrasil Wisdom?
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x20000000, pPacket, (byte)0, true); // Final Strike?
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x40000000, pPacket, (byte)0, true); // Boss Damage %?
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x80000000, pPacket, (byte)0, true); // Ignore Damage %?
                 }
 
                 {
                     uint flag = pPacket.ReadUInt();
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x01, pPacket, (byte)0, true);
-                    FlaggedValue(pConnection, this.ItemID, flag, 0x02, pPacket, (byte)0, true);
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x01, pPacket, (byte)0, true); // Total damage?
+                    FlaggedValue(pConnection, this.ItemID, flag, 0x02, pPacket, (byte)0, true); // All stats?
                     this.MaxScissors = FlaggedValue(pConnection, this.ItemID, flag, 0x04, pPacket, this.MaxScissors);
                     FlaggedValue(pConnection, this.ItemID, flag, 0x08, pPacket, (long)0, true);
                     FlaggedValue(pConnection, this.ItemID, flag, 0x10, pPacket, (int)0, true);
@@ -216,9 +216,10 @@ namespace MPLRServer
 
             pPacket.ReadInt(); // always -1?
 
-#if LOCALE_EMS
+#if (LOCALE_EMS || LOCALE_GMS)
+            // Prolly RED patch related
             pPacket.ReadLong();
-            pPacket.ReadLong();
+            pPacket.ReadLong(); // This is 94354848000000000; a default date for no expiration. 
             pPacket.ReadInt();
             for (int i = 0; i < 3; i++)
                 pPacket.ReadInt();

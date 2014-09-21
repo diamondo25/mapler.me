@@ -484,13 +484,6 @@ function GetItemDialogInfo($item, $isequip) {
 			$potential = 1; // Default color
 		}
 		else {
-			//if ($item->potential1 != 0 || $item->potential4 != 0) $potential++;
-			//if ($item->potential2 != 0) $potential++;
-			//if ($item->potential3 != 0) $potential++;
-			//if ($item->potential4 != 0) $potential++;
-			//if ($item->potential5 != 0) $potential++;
-			//if ($item->potential6 != 0) $potential++;
-			
 			$statustmp = $item->statusflag & 0xFF;
 			$potential = $statustmp & 0x07;
 		}
@@ -1032,9 +1025,14 @@ function RenderItems(&$itemset, $slotmap_name) {
 		$info = GetItemDialogInfo($item, CURRENT_LOCALE, true);
 		
 		$itemwzinfo = GetItemWZInfo($info['iconid'], CURRENT_LOCALE);
+		
+		$itemIcon = '';
+		if (floor($item->itemid / 10000) == 166) {
+			$itemIcon = 'D';
+		}
 ?>
 			<div class="item-slot<?php echo $info['potentials'] != 0 ? ' potential'.$info['potentials'] : ''; ?>" style="<?php InventoryPosCalc($pos[0], $pos[1]); ?>" item-name="<?php echo IGTextToWeb(GetMapleStoryString('item', $item->itemid, 'name', CURRENT_LOCALE)); ?>" onmouseover='<?php echo $info['mouseover']; ?>' onmousemove="MoveWindow(event)" onmouseout="HideItemInfo()">
-				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE); ?>" />
+				<img class="icon" potential="<?php echo $info['potentials']; ?>" style="margin-top: <?php echo (32 - $itemwzinfo['info']['icon']['origin']['Y']); ?>px; margin-left: <?php  echo -$itemwzinfo['info']['icon']['origin']['X']; ?>px;" src="<?php echo GetItemIcon($info['iconid'], CURRENT_LOCALE, $itemIcon); ?>" />
 
 <?php if ($info['iscash'] == 1): ?><div class="cashitem"></div><?php endif; ?>
 <?php if ($info['islocked'] == 1): ?><div class="locked"></div><?php endif; ?>
@@ -1133,6 +1131,9 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 	$pos = 'left: '.$x.'px; top: '.$y.'px;';
 	$itemIcon = '';
 	if ($item->bagid != -1 || ($item->type == ITEM_PET && $item->IsExpired())) $itemIcon = 'D';
+	if (floor($item->itemid / 10000) == 166) {
+		$itemIcon = 'D';
+	}
 	
 	$display_id = GetItemIconID($info['iconid'], CURRENT_LOCALE); // For nebulites
 
@@ -1154,9 +1155,6 @@ function RenderItemAtPosition($item, $x, $y, $bgicon = false, $amount = true) {
 <?php
 }
 
-?>
-
-<?php
 $job_css_class = '';
 $jobid = $character_info['job'];
 $jobid_group = floor($jobid / 100);
@@ -1311,7 +1309,7 @@ RenderItems($normalequips['Coordinate'], 'coordinate');
 			<span class="top-col lb"><?php echo GetJobname($character_info['job']); ?></span>
 			<span class="top-col rt"><?php echo $character_info['guildname']; ?></span>
 			<span class="top-col rb"><?php echo $character_info['fame']; ?></span>
-			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], CURRENT_LOCALE, array('size' => 'big', 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
+			<div class="avatar-container" style="background-image: url('<?php MakePlayerAvatar($character_info['name'], CURRENT_LOCALE, array('size' => 'big', 'tamingmob' => 1932016, 'onlyurl' => true)); ?>');"><span><?php echo $character_info['name']; ?></span></div>
 
 <?php
 $inv_pos_offx = 18;

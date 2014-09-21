@@ -217,6 +217,8 @@ function SetItemInfo(event, obj, values) {
 	// extrainfo += '<span>Quality: ' + otherinfo.quality + '</span>';
 
 	
+	$('.icon_holder > div.quality-border').css('display', isequip ? '' : 'none');
+	
 	if (isequip) {
 		
 		if ((state & 0x07) != 0) {

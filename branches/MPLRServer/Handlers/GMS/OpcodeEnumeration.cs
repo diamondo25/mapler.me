@@ -20,7 +20,7 @@
 
         BUDDYLIST = 0x005D,
         GUILD = 0x005F,
-        ALLIANCE,
+        ALLIANCE, // Obfuscated in V.142?
 
         FAMILIARS = 0x0081,
 
@@ -28,21 +28,21 @@
 
         MAPLEPOINTS = 0x00E6,
 
-        SKILL_MACROS = 0x010B,
+        SKILL_MACROS = 0x010C,
         CHANGE_MAP,
 
-        SPAWN_PLAYER = 0x0143,
+        SPAWN_PLAYER = 0x0144,
 
-        SPAWN_ANDROID = 0x0177,
-
-        KEYMAP_UPDATE = 0x030E,
+        SPAWN_ANDROID = 0x0178,
+        // Huge gap, increased by 0x11 between 141 and 142!!!
+        KEYMAP_UPDATE = 0x0320, 
     }
 
     public enum ClientOpcodes : ushort
     {
+        CHARACTER_LOAD = 0x0027,
         VERSION_INFO = 0x003F,
         SELECT_CHANNEL = 0x0043,
-        CHARACTER_LOAD = 0x0027,
         PONG = 0x0046,
         CHANGE_CHANNEL_REQUEST = 0x0052,
 

@@ -9,7 +9,7 @@ namespace MPLRServer
     {
 #if LOCALE_GMS
         public const byte LOCALE = 8;
-        public const ushort VERSION = 141;
+        public const ushort VERSION = 142;
         public const int KEYMAP_SLOTS = 89;
         public const ushort MAPLER_PORT = 23710;
         public const ushort MAPLER_PORT_SERVER_INFO = 23711;

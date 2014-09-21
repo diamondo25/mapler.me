@@ -225,6 +225,14 @@ class ItemEquip extends ItemBase {
 		return ($this->flags & 0x0010) > 0 ? 1 : 0;
 	}
 
+	public function IsCharmed() {
+		return ($this->flags & 0x0020) > 0 ? 1 : 0;
+	}
+
+	public function IsAndroidActivated() {
+		return ($this->flags & 0x0040) > 0 ? 1 : 0;
+	}
+
 	public function IsLuckyScrolled() {
 		return ($this->flags & 0x0200) > 0 ? 1 : 0;
 	}

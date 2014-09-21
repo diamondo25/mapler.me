@@ -194,6 +194,69 @@ namespace MPLRServer
 #endif
 
 
+#if LOCALE_GMS
+            // V.142 - RED stuff?
+
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadByte();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+            }
+
+            {
+                pPacket.ReadInt();
+                for (int i = 3; i > 0; i--)
+                {
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                }
+            }
+
+
+            for (int i = pPacket.ReadInt(); i > 0; i--)
+                pPacket.ReadInt();
+
+            if (pPacket.ReadBool())
+            {
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadInt();
+                pPacket.ReadLong();
+                pPacket.ReadLong();
+                pPacket.ReadLong();
+            }
+
+            for (int j = 0; j < 2; j++) // called 2 times under each other!
+            {
+                for (int i = pPacket.ReadByte(); i > 0; i--)
+                {
+                    pPacket.ReadByte();
+                    pPacket.ReadInt();
+                    pPacket.ReadByte();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadInt();
+                    pPacket.ReadString();
+                }
+            }
+#endif
+
 #if LOCALE_EMS
             // REMOVED GMS V.141?!
             for (int i = pPacket.ReadInt(); i > 0; i--) // V.137

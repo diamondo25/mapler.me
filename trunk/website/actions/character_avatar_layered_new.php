@@ -218,7 +218,7 @@ if ($jobid == 6000 || $jobid == 6100 || $jobid == 6110 || $jobid == 6111 || $job
 	*/
 }
 
-function BuildCodeString($slots, $size, $name, $weapongroup, $guildname, $embleminfo, $elf, $face, $flip, $showname) {
+function BuildCodeString($slots, $size, $name, $weapongroup, $guildname, $embleminfo, $elf, $face, $flip, $showname, $tamingmob) {
 	$tmp = '';
 	foreach ($slots AS $key => $value)
 		$tmp .= 'slot['.$key.']='.$value.'&';
@@ -229,6 +229,7 @@ function BuildCodeString($slots, $size, $name, $weapongroup, $guildname, $emblem
 	$tmp .= '&embleminfo='.join('.', $embleminfo);
 	$tmp .= '&weapongroup='.$weapongroup;
 	$tmp .= '&face='.$face;
+	$tmp .= '&tamingmob='.$tamingmob;
 	if ($elf)
 		$tmp .= '&elvenears';
 	if ($flip)
@@ -240,7 +241,14 @@ function BuildCodeString($slots, $size, $name, $weapongroup, $guildname, $emblem
 }
 
 
-$url = 'http://'.$domain.'/actions/render_character.php?'.(DEBUGGING ? 'debug&' : '').'code='.BuildCodeString($request_info['slots'], $size, $charname, $weapongroup, '', array(0,0,0,0), $is_mercedes, $using_face, $show_flipped, isset($_GET['show_name']));
+$url = 'http://'.$domain.'/actions/render_character.php?'.(DEBUGGING ? 'debug&' : '').'code='.
+	BuildCodeString(
+		$request_info['slots'], $size, $charname, $weapongroup, 
+		'', array(0,0,0,0), 
+		$is_mercedes, $using_face, $show_flipped, 
+		isset($_GET['show_name']), 
+		!empty($_GET['tamingmob']) ? intval($_GET['tamingmob']) : ''
+	);
 
 if (DEBUGGING)
 	echo '-------- REQUESTED FILE ----------------'."\r\n".$url."\r\n";
